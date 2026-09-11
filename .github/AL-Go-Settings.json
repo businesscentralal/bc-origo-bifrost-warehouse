@@ -2,5 +2,17 @@
   "$schema": "https://raw.githubusercontent.com/microsoft/AL-Go-Actions/v9.0/.Modules/settings.schema.json",
   "type": "AppSource App",
   "templateUrl": "https://github.com/cosmoconsult/Alpaca-AppSource@main",
-  "templateSha": "2b90d7000c9d1ec513ed38b41786c07bebf29fd0"
+  "templateSha": "2b90d7000c9d1ec513ed38b41786c07bebf29fd0",
+  "Environments": [
+    "Bifrost"
+  ],
+  "DeployToBifrost": {
+    "EnvironmentType": "SaaS",
+    "EnvironmentName": "Bifrost",
+    "Branches": [
+      "main"
+    ],
+    "ContinuousDeployment": true,
+    "Scope": "Dev"
+  }
 }

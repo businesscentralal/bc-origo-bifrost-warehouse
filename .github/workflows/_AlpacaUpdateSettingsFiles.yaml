@@ -1,0 +1,88 @@
+name: '_COSMO Alpaca - Update Settings Files'
+
+on:
+  workflow_call:
+    inputs:
+      caller:
+        description: Name of the calling workflow (use github.workflow as value when calling)
+        type: string
+        required: true
+      branch:
+        description: Branch to update
+        required: true
+        type: string
+      directCommit:
+        description: Direct Commit?
+        type: boolean
+        default: false
+      dryRun:
+        description: Only check if settings are in sync without making changes
+        type: boolean
+        default: false
+
+defaults:
+  run:
+    shell: pwsh
+
+permissions:
+  contents: read
+
+env:
+  WorkflowEventName: ${{ inputs.caller && 'workflow_call' || github.event_name }}
+  ALGoOrgSettings: ${{ vars.ALGoOrgSettings }}
+  ALGoRepoSettings: ${{ vars.ALGoRepoSettings }}
+
+jobs:
+  UpdateSettingsFiles:
+    name: "COSMO Alpaca Settings Files ${{ inputs.dryRun && 'Check' || 'Update' }}"
+    runs-on: [ ubuntu-latest ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ inputs.branch }}
+
+      - name: Initialize the workflow
+        id: init
+        uses: microsoft/AL-Go-Actions/WorkflowInitialize@v9.0
+        with:
+          shell: pwsh
+
+      - name: Read settings
+        uses: microsoft/AL-Go-Actions/ReadSettings@v9.0
+        with:
+          shell: pwsh
+          get: commitOptions
+
+      - name: Read secrets
+        id: ReadSecrets
+        uses: microsoft/AL-Go-Actions/ReadSecrets@v9.0
+        with:
+          shell: pwsh
+          gitHubSecrets: ${{ toJson(secrets) }}
+          getSecrets: 'ghTokenWorkflow'
+
+      - name: Calculate Commit Options
+        env:
+          directCommit: '${{ inputs.directCommit }}'
+        run: |
+          $errorActionPreference = "Stop"; $ProgressPreference = "SilentlyContinue"; Set-StrictMode -Version 2.0
+          if($env:WorkflowEventName -in 'workflow_dispatch', 'workflow_call') {
+            Write-Host "Using inputs from $($env:WorkflowEventName) event"
+            $directCommit = $env:directCommit
+          }
+          else {
+            Write-Host "Using inputs from commitOptions setting"
+            $commitOptions = $env:commitOptions | ConvertFrom-Json # Available from ReadSettings step
+            $directCommit=$(-not $commitOptions.createPullRequest)
+          }
+          Add-Content -Encoding UTF8 -Path $env:GITHUB_ENV -Value "directCommit=$directCommit"
+
+      - name: "${{ inputs.dryRun && 'Check' || 'Update' }} Settings Files"
+        uses: cosmoconsult/Alpaca-Actions/Actions/UpdateSettingsFiles@v2.10
+        with:
+          shell: pwsh
+          token: ${{ fromJson(steps.ReadSecrets.outputs.Secrets).ghTokenWorkflow }}
+          branch: ${{ inputs.branch }}
+          directCommit: ${{ env.directCommit }}
+          dryRun: ${{ inputs.dryRun }}

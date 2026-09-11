@@ -1,0 +1,37 @@
+name: '_COSMO Alpaca - Create Containers'
+
+on:
+  workflow_call:
+    inputs:
+      backendUrl:
+        description: COSMO Alpaca backend Url
+        required: true
+        type: string
+      buildOrderJson:
+        description:  An array of objects that determine that build order, including build dimensions
+        required: true
+        type: string
+
+defaults:
+  run:
+    shell: pwsh
+
+env:
+  ALPACA_BACKEND_URL: ${{ inputs.backendUrl }}
+  ALGoOrgSettings: ${{ vars.ALGoOrgSettings }}
+  ALGoRepoSettings: ${{ vars.ALGoRepoSettings }}
+
+jobs:
+  CreateAlpacaContainers:
+    name: Create COSMO Alpaca Containers
+    runs-on: [ ubuntu-latest ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: CreateContainers
+        name: Create Containers
+        uses: cosmoconsult/Alpaca-Actions/Actions/CreateContainers@v2.10
+        with:
+          shell: pwsh
+          token: ${{ secrets.GITHUB_TOKEN }}
+          buildOrderJson: ${{ inputs.buildOrderJson }}

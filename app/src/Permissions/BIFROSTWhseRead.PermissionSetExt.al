@@ -9,5 +9,9 @@ permissionsetextension 10036944 "BIFROST Whse - Read ori" extends "BIFROST Read 
 {
     Permissions =
         codeunit "Warehouse Install ori" = X,
-        codeunit "Warehouse Upgrade ori" = X;
+        codeunit "Warehouse Upgrade ori" = X,
+        codeunit "Whse BinContent Get Impl ori" = X,
+        codeunit "Whse BinContent Get Help ori" = X,
+        codeunit "Whse Activity Get Impl ori" = X,
+        codeunit "Whse Activity Get Help ori" = X;
 }

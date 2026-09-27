@@ -1,0 +1,21 @@
+{
+  "mandatoryAffixes": [
+    "ori"
+  ],
+  "supportedCountries": [
+    "IS",
+    "GB",
+    "DK",
+    "NO",
+    "SE",
+    "FI",
+    "DE",
+    "FR",
+    "NL",
+    "AT",
+    "CH",
+    "IE",
+    "PT",
+    "ES"
+  ]
+}

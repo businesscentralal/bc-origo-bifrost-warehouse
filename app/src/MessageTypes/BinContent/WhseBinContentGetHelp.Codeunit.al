@@ -3,7 +3,7 @@ namespace Origo.Bifrost.Warehouse;
 /// <summary>
 /// Markdown help for Warehouse.BinContent.Get.
 /// </summary>
-codeunit 10036939 "Whse BinContent Get Help ori"
+codeunit 10078389 "Whse BinContent Get Help ori"
 {
     Access = Internal;
 

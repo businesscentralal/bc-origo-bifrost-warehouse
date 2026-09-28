@@ -6,7 +6,7 @@ using Origo.Bifrost;
 /// <summary>
 /// Implements Warehouse.BinContent.Get as a filtered, paged read of Bin Content.
 /// </summary>
-codeunit 10036938 "Whse BinContent Get Impl ori" implements "Msg Interface ori"
+codeunit 10078388 "Whse BinContent Get Impl ori" implements "Msg Interface ori"
 {
     Access = Internal;
 

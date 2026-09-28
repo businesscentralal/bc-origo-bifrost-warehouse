@@ -3,7 +3,7 @@ namespace Origo.Bifrost.Warehouse;
 /// <summary>
 /// Markdown help for Warehouse.Activity.Get.
 /// </summary>
-codeunit 10036941 "Whse Activity Get Help ori"
+codeunit 10078391 "Whse Activity Get Help ori"
 {
     Access = Internal;
 
@@ -86,7 +86,7 @@ codeunit 10036941 "Whse Activity Get Help ori"
         HelpBuilder.AppendLine('}');
         HelpBuilder.AppendLine('```');
         HelpBuilder.AppendLine('');
-        HelpBuilder.AppendLine('`noOfRecords` counts matching open headers before paging. When a supplied `no` or `systemId` does not match, the response is a structured `Error`.');
+        HelpBuilder.AppendLine('`noOfRecords` counts matching open headers before paging. When a supplied `no` or `systemId` does not match, the response is a structured `Error` with code `RecordNotFound`.');
         exit(HelpBuilder.ToText());
     end;
 }

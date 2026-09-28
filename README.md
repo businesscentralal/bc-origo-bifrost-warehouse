@@ -4,7 +4,7 @@ Bifrost feature app for warehouse message types on Bifrost Foundation.
 
 ## Scope
 
-The app provides read-only warehouse message types for bin content and open warehouse activities:
+The app provides warehouse message types for bin content and open warehouse activities:
 
 - `Warehouse.BinContent.Get` reads bin content by item, location, bin, and variant, with paging.
 - `Warehouse.Activity.Get` reads open warehouse activities, with optional line details and filters for activity type, source warehouse document, location, and assigned user.
@@ -13,7 +13,7 @@ Warehouse movement message types are planned for a later phase.
 
 ## Object ID ranges
 
-- App: `10036935–10036984`
+- App: `10078385–10078484`
 - Tests: `97000–97099`
 
 ## Dependency

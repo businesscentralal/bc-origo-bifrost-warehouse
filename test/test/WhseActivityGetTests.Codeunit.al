@@ -58,6 +58,8 @@ codeunit 97001 "Whse Activity Get Tests ori"
         ExecuteActivityGet('{"no":"DOES-NOT-EXIST"}', '', ResponseJson);
 
         Assert.IsTrue(GetTextProperty(ResponseJson, 'status') = 'Error', 'A missing activity number should return a structured error.');
+        Assert.IsTrue(GetTextProperty(ResponseJson, 'code') = 'RecordNotFound', 'A missing activity number should return RecordNotFound.');
+        Assert.IsTrue(GetTextProperty(ResponseJson, 'parameter') = 'no', 'A missing activity number should name the no parameter.');
     end;
 
     /// <summary>Verifies that an unknown activity SystemId returns a structured error.</summary>
@@ -70,6 +72,8 @@ codeunit 97001 "Whse Activity Get Tests ori"
         ExecuteActivityGet('{"systemId":"00000000-0000-0000-0000-000000000000"}', '', ResponseJson);
 
         Assert.IsTrue(GetTextProperty(ResponseJson, 'status') = 'Error', 'A missing activity SystemId should return a structured error.');
+        Assert.IsTrue(GetTextProperty(ResponseJson, 'code') = 'RecordNotFound', 'A missing activity SystemId should return RecordNotFound.');
+        Assert.IsTrue(GetTextProperty(ResponseJson, 'parameter') = 'systemId', 'A missing activity SystemId should name the systemId parameter.');
     end;
 
     /// <summary>Verifies that activity type, document, location, and assigned-user filters combine.</summary>
@@ -128,6 +132,18 @@ codeunit 97001 "Whse Activity Get Tests ori"
         Assert.IsTrue(Token.AsValue().AsText() = 'WHSE-PAGE-002', 'Skip should advance to the second header.');
     end;
 
+    /// <summary>Verifies that IsEnabled is false when the caller cannot read warehouse activities.</summary>
+    [Test]
+    [TestPermissions(TestPermissions::Restrictive)]
+    procedure IsDisabledWithoutReadPermission()
+    var
+        Assert: Codeunit "Library Assert";
+        MessageTypeInterface: Interface "Msg Interface ori";
+    begin
+        MessageTypeInterface := Enum::"Message Type ori"::"Warehouse.Activity.Get";
+        Assert.IsFalse(MessageTypeInterface.IsEnabled(), 'Warehouse.Activity.Get must be disabled without read permission on Warehouse Activity Header.');
+    end;
+
     local procedure ExecuteActivityGet(RequestText: Text; Subject: Text[250]; var ResponseJson: JsonObject)
     var
         Dispatcher: Codeunit "Dispatcher ori";
@@ -171,4 +187,4 @@ codeunit 97001 "Whse Activity Get Tests ori"
             exit(-1);
         exit(Token.AsValue().AsInteger());
     end;
-+}
+}

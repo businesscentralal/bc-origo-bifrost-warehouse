@@ -7,7 +7,7 @@ using Origo.Bifrost;
 /// <summary>
 /// Implements Warehouse.Activity.Get as a filtered, paged read of open warehouse activities.
 /// </summary>
-codeunit 10036940 "Whse Activity Get Impl ori" implements "Msg Interface ori"
+codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori"
 {
     Access = Internal;
 
@@ -79,6 +79,11 @@ codeunit 10036940 "Whse Activity Get Impl ori" implements "Msg Interface ori"
         ActivityTypeSpecified: Boolean;
         HasDocumentFilter: Boolean;
         SingleLookup: Boolean;
+        NotFoundErr: Label '%1 "%2" was not found (from %3).', Comment = '%1 = table caption, %2 = value received, %3 = JSON key, is-IS=%1 "%2" fannst ekki (úr %3).';
+        NotFoundNextStepTxt: Label 'Check the number with Data.Records.Get on table %1.', Comment = '%1 = table caption, is-IS=Athugaðu númerið með Data.Records.Get á töflunni %1.';
+        InvalidFormatErr: Label '"%1" is not a valid %2 (from %3).', Comment = '%1 = value received, %2 = expected format, %3 = JSON key or subject, is-IS="%1" er ekki gilt %2 (úr %3).';
+        InvalidActivityTypeErr: Label '"%1" is not a valid warehouse activity type (from activityType).', Comment = '%1 = received value, is-IS="%1" er ekki gild tegund vöruhúsavirkni (úr activityType).';
+        GuidTok: Label 'GUID', Locked = true;
     begin
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
@@ -89,7 +94,7 @@ codeunit 10036940 "Whse Activity Get Impl ori" implements "Msg Interface ori"
         if TryGetRequestText(RequestJson, 'activityType', ActivityTypeText) then begin
             ActivityTypeSpecified := true;
             if not TryParseActivityType(ActivityTypeText, ActivityType) then begin
-                Argument.RespondWithError(StrSubstNo('Unknown warehouse activity type: %1.', ActivityTypeText));
+                Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(InvalidActivityTypeErr, ActivityTypeText), 'activityType', ActivityTypeText, '', '');
                 exit;
             end;
         end;
@@ -104,7 +109,7 @@ codeunit 10036940 "Whse Activity Get Impl ori" implements "Msg Interface ori"
             if TryGetRequestText(RequestJson, 'systemId', SystemIdText) then
                 if SystemIdText <> '' then begin
                     if not Evaluate(ActivitySystemId, SystemIdText, 9) then begin
-                        Argument.RespondWithError(StrSubstNo('Invalid systemId: %1.', SystemIdText));
+                        Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(InvalidFormatErr, SystemIdText, GuidTok, 'systemId'), 'systemId', SystemIdText, GuidTok, '');
                         exit;
                     end;
                     SingleLookup := true;
@@ -114,7 +119,7 @@ codeunit 10036940 "Whse Activity Get Impl ori" implements "Msg Interface ori"
             if Argument.SubjectIsGuid() then begin
                 SystemIdText := Argument.Subject;
                 if not Evaluate(ActivitySystemId, SystemIdText, 9) then begin
-                    Argument.RespondWithError(StrSubstNo('Invalid activity subject: %1.', SystemIdText));
+                    Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(InvalidFormatErr, SystemIdText, GuidTok, 'subject'), 'subject', SystemIdText, GuidTok, '');
                     exit;
                 end;
             end else
@@ -168,9 +173,9 @@ codeunit 10036940 "Whse Activity Get Impl ori" implements "Msg Interface ori"
 
         if SingleLookup and (NoOfRecords = 0) then begin
             if ActivityNo <> '' then
-                Argument.RespondWithError(StrSubstNo('Warehouse Activity %1 does not exist.', ActivityNo))
+                Argument.RespondWithError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(NotFoundErr, ActivityHeader.TableCaption(), ActivityNo, 'no'), 'no', ActivityNo, '', StrSubstNo(NotFoundNextStepTxt, ActivityHeader.TableCaption()))
             else
-                Argument.RespondWithError(StrSubstNo('Warehouse Activity %1 does not exist.', SystemIdText));
+                Argument.RespondWithError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(NotFoundErr, ActivityHeader.TableCaption(), SystemIdText, 'systemId'), 'systemId', SystemIdText, '', StrSubstNo(NotFoundNextStepTxt, ActivityHeader.TableCaption()));
             exit;
         end;
 

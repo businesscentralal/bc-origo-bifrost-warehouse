@@ -5,7 +5,7 @@ using System.Upgrade;
 /// <summary>
 /// Upgrade entry point for Bifrost Warehouse. Ensures the initial-release tag is present.
 /// </summary>
-codeunit 10036943 "Warehouse Upgrade ori"
+codeunit 10078393 "Warehouse Upgrade ori"
 {
     Subtype = Upgrade;
     Access = Internal;

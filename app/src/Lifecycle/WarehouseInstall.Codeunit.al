@@ -6,7 +6,7 @@ using System.Upgrade;
 /// <summary>
 /// Fresh-install entry point for Bifrost Warehouse. Registers the initial release upgrade tag.
 /// </summary>
-codeunit 10036942 "Warehouse Install ori"
+codeunit 10078392 "Warehouse Install ori"
 {
     Subtype = Install;
     Access = Internal;

@@ -1,6 +1,6 @@
 # Bifrost: never ship the test app's internalsVisibleTo grant.
-# COSMO Alpaca replaces .AL-Go/PreCompileApp.ps1 with its own override and never calls ours.
-# Only the Test build mode keeps the grant.
+# COSMO Alpaca replaces .AL-Go/PreCompileApp.ps1 with its own override and never calls ours,
+# so the strip happens here, before anything compiles. Only the Test build mode keeps the grant.
 if ($env:BuildMode -ne 'Test') {
     $appJsonPath = Join-Path $env:GITHUB_WORKSPACE 'app/app.json'
     if (Test-Path -LiteralPath $appJsonPath) {

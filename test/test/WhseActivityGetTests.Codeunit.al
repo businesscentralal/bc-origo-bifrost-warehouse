@@ -12,6 +12,7 @@ codeunit 97001 "Whse Activity Get Tests ori"
 {
     Subtype = Test;
     TestPermissions = Disabled;
+    Permissions = codeunit "Whse Activity Get Impl ori" = X;
 
     /// <summary>Verifies that lookup by number returns the activity header and requested lines.</summary>
     [Test]

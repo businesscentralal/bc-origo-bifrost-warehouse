@@ -12,7 +12,6 @@ codeunit 97001 "Whse Activity Get Tests ori"
 {
     Subtype = Test;
     TestPermissions = Disabled;
-    Permissions = codeunit "Whse Activity Get Impl ori" = X;
 
     /// <summary>Verifies that lookup by number returns the activity header and requested lines.</summary>
     [Test]
@@ -139,8 +138,11 @@ codeunit 97001 "Whse Activity Get Tests ori"
     procedure IsDisabledWithoutReadPermission()
     var
         Assert: Codeunit "Library Assert";
+        LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         MessageTypeInterface: Interface "Msg Interface ori";
     begin
+        LibraryLowerPermissions.PushPermissionSetWithoutDefaults('Whse Test No Read ori');
+
         MessageTypeInterface := Enum::"Message Type ori"::"Warehouse.Activity.Get";
         Assert.IsFalse(MessageTypeInterface.IsEnabled(), 'Warehouse.Activity.Get must be disabled without read permission on Warehouse Activity Header.');
     end;

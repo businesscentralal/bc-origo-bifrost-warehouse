@@ -37,4 +37,5 @@ Test range: `97000–97099`.
 | 97001 | `Whse Activity Get Tests ori` |
 | 97002 | `Whse Test Data ori` |
 | 97003–97009 | Reserved for P2 Warehouse Movement tests |
-| 97010–97099 | Free |
+| 97010 | `Whse Test No Read ori` |
+| 97011–97099 | Free |

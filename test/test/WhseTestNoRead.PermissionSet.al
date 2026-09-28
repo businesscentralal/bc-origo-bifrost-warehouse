@@ -5,7 +5,7 @@ using Origo.Bifrost.Warehouse;
 /// <summary>
 /// Restrictive permission set that can run Warehouse.Activity.Get without table read permission.
 /// </summary>
-permissionset 97010 "Whse Test No Read ori"
+permissionset 97010 "Whse No Read ori"
 {
     Assignable = true;
     Caption = 'Whse Test No Read', MaxLength = 30;

@@ -220,7 +220,6 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori"
             "Line No.", "Item No.", "Bin Code", "Zone Code", "Unit of Measure Code",
             "Qty. to Handle", "Qty. Handled", "Qty. Outstanding", "Action Type",
             "Whse. Document Type", "Whse. Document No.", "Whse. Document Line No.");
-        ActivityLine.SetAutoCalcFields("Qty. Outstanding");
         ActivityLine.SetRange("Activity Type", ActivityHeader.Type);
         ActivityLine.SetRange("No.", ActivityHeader."No.");
         ActivityLine.SetPermissionFilter();

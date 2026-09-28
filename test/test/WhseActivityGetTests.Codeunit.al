@@ -118,10 +118,10 @@ codeunit 97001 "Whse Activity Get Tests ori"
         ResultArray: JsonArray;
         Token: JsonToken;
     begin
-        TestData.CreateActivityHeader(ActivityType::Pick, 'WHSE-PAGE-001', 'WHITE', 'ALICE');
-        TestData.CreateActivityHeader(ActivityType::Pick, 'WHSE-PAGE-002', 'WHITE', 'ALICE');
+        TestData.CreateActivityHeader(ActivityType::Pick, 'WHSE-PAGE-001', 'PAGELC', 'PAGEUSER');
+        TestData.CreateActivityHeader(ActivityType::Pick, 'WHSE-PAGE-002', 'PAGELC', 'PAGEUSER');
 
-        ExecuteActivityGet('{"skip":1,"take":1}', '', ResponseJson);
+        ExecuteActivityGet('{"locationCode":"PAGELC","assignedUserId":"PAGEUSER","skip":1,"take":1}', '', ResponseJson);
 
         Assert.IsTrue(GetIntegerProperty(ResponseJson, 'noOfRecords') = 2, 'The count should include both matching headers.');
         Assert.IsTrue(ResponseJson.Get('result', Token), 'The response should contain results.');

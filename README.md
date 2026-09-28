@@ -8,7 +8,7 @@ The app owns dedicated warehouse message types for bin content and open warehous
 
 ## Object ID ranges
 
-- App: `10036935–10036984`
+- App: `10078385–10078484`
 - Tests: `97000–97099`
 
 ## Dependency

@@ -141,7 +141,7 @@ codeunit 97001 "Whse Activity Get Tests ori"
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         MessageTypeInterface: Interface "Msg Interface ori";
     begin
-        LibraryLowerPermissions.PushPermissionSetWithoutDefaults('Whse No Read ori');
+        LibraryLowerPermissions.PushPermissionSetWithoutDefaults('Whse NoRead Test ori');
 
         MessageTypeInterface := Enum::"Message Type ori"::"Warehouse.Activity.Get";
         Assert.IsFalse(MessageTypeInterface.IsEnabled(), 'Warehouse.Activity.Get must be disabled without read permission on Warehouse Activity Header.');

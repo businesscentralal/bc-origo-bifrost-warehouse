@@ -81,6 +81,21 @@ codeunit 97000 "Whse BinContent Get Tests ori"
         Assert.IsTrue(ResultArray.Count() = 0, 'The zero-match result array should be empty.');
     end;
 
+    /// <summary>Verifies that IsEnabled is false when the caller cannot read Bin Content.</summary>
+    [Test]
+    [TestPermissions(TestPermissions::Restrictive)]
+    procedure IsDisabledWithoutReadPermission()
+    var
+        Assert: Codeunit "Library Assert";
+        LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
+        MessageTypeInterface: Interface "Msg Interface ori";
+    begin
+        LibraryLowerPermissions.PushPermissionSetWithoutDefaults('Whse NoRead Test ori');
+
+        MessageTypeInterface := Enum::"Message Type ori"::"Warehouse.BinContent.Get";
+        Assert.IsFalse(MessageTypeInterface.IsEnabled(), 'Warehouse.BinContent.Get must be disabled without read permission on Bin Content.');
+    end;
+
     local procedure ExecuteBinContentGet(RequestText: Text; var ResponseJson: JsonObject)
     var
         Dispatcher: Codeunit "Dispatcher ori";

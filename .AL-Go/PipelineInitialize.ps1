@@ -1,3 +1,21 @@
+# Bifrost: never ship the test app's internalsVisibleTo grant.
+# COSMO Alpaca replaces .AL-Go/PreCompileApp.ps1 with its own override and never calls ours,
+# so the strip happens here, before anything compiles. Only the Test build mode keeps the grant.
+if ($env:BuildMode -ne 'Test') {
+    $appJsonPath = Join-Path $env:GITHUB_WORKSPACE 'app/app.json'
+    if (Test-Path -LiteralPath $appJsonPath) {
+        $appJson = Get-Content -LiteralPath $appJsonPath -Raw -Encoding UTF8 | ConvertFrom-Json
+        if ($appJson.PSObject.Properties.Name -contains 'internalsVisibleTo') {
+            $appJson.PSObject.Properties.Remove('internalsVisibleTo')
+        }
+        if ($appJson.PSObject.Properties.Name -contains 'suppressWarnings') {
+            $appJson.suppressWarnings = @($appJson.suppressWarnings | Where-Object { $_ -ne 'AS0081' })
+        }
+        $appJson | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $appJsonPath -Encoding UTF8
+        Write-Host "Bifrost: build mode '$($env:BuildMode)' - removed internalsVisibleTo and the AS0081 suppression from app/app.json."
+    }
+}
+
 Write-Host "::group::PipelineInitialize"
 
 if (Test-Path -LiteralPath "$($env:NeedsContext)" -PathType Leaf) {

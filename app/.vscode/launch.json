@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "al",
+      "request": "launch",
+      "name": "launch: bc28-w1",
+      "server": "https://cosmo-alpaca-enterprise.westeurope.cloudapp.azure.com",
+      "serverInstance": "f089d7daffb9dev",
+      "port": 443,
+      "authentication": "UserPassword",
+      "environmentType": "OnPrem",
+      "tenant": "default",
+      "startupObjectType": "Page",
+      "startupObjectId": 22,
+      "breakOnError": "All",
+      "launchBrowser": true,
+      "enableLongRunningSqlStatements": true,
+      "enableSqlInformationDebugger": true,
+      "validateServerCertificate": false
+    }
+  ]
+}

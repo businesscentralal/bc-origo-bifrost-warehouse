@@ -1,0 +1,72 @@
+{
+  "id": "6ae41d19-d457-4d62-bd87-0413ff18de75",
+  "name": "Bifrost Warehouse - Tests",
+  "publisher": "Origo",
+  "version": "28.0.0.0",
+  "brief": "Bifrost Warehouse - Tests",
+  "description": "Automated tests for Bifrost Warehouse.",
+  "url": "https://www.origo.is/",
+  "help": "https://bifrost.origo.is/warehouse/",
+  "privacyStatement": "https://businesscentralal.github.io/bifrost/en-us/foundation/privacy/",
+  "EULA": "https://businesscentralal.github.io/bifrost/en-us/foundation/eula/",
+  "logo": "assets/Logo250x250.png",
+  "dependencies": [
+    {
+      "id": "7505e808-6e52-4b96-a328-82573391297a",
+      "name": "Bifrost Foundation",
+      "publisher": "Origo",
+      "version": "28.0.0.0"
+    },
+    {
+      "id": "47acac54-3873-496f-9e88-157f36413e89",
+      "name": "Bifrost Warehouse",
+      "publisher": "Origo",
+      "version": "28.0.0.0"
+    },
+    {
+      "id": "5d86850b-0d76-4eca-bd7b-951ad998e997",
+      "publisher": "Microsoft",
+      "name": "Tests-TestLibraries",
+      "version": "1.0.0.0"
+    },
+    {
+      "id": "dd0be2ea-f733-4d65-bb34-a28f4624fb14",
+      "publisher": "Microsoft",
+      "name": "Library Assert",
+      "version": "1.0.0.0"
+    },
+    {
+      "id": "23de40a6-dfe8-4f80-80db-d70f83ce8caf",
+      "publisher": "Microsoft",
+      "name": "Test Runner",
+      "version": "1.0.0.0"
+    },
+    {
+      "id": "e7320ebb-08b3-4406-b1ec-b4927d3e280b",
+      "publisher": "Microsoft",
+      "name": "Any",
+      "version": "1.0.0.0"
+    },
+    {
+      "id": "5095f467-0a01-4b99-99d1-9ff1237d286f",
+      "publisher": "Microsoft",
+      "name": "Library Variable Storage",
+      "version": "1.0.0.0"
+    }
+  ],
+  "application": "28.0.0.0",
+  "platform": "28.0.0.0",
+  "idRanges": [
+    {
+      "from": 97000,
+      "to": 97099
+    }
+  ],
+  "resourceExposurePolicy": {
+    "allowDebugging": true,
+    "allowDownloadingSource": true,
+    "includeSourceInSymbolFile": true
+  },
+  "target": "Cloud",
+  "runtime": "17.0"
+}

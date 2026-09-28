@@ -1,0 +1,55 @@
+{
+  "id": "47acac54-3873-496f-9e88-157f36413e89",
+  "name": "Bifrost Warehouse",
+  "publisher": "Origo",
+  "version": "28.0.0.0",
+  "brief": "Bifrost Warehouse message types",
+  "description": "Bifrost Warehouse provides first-class warehouse message types on top of Bifrost Foundation.",
+  "url": "https://www.origo.is/",
+  "help": "https://bifrost.origo.is/warehouse/",
+  "privacyStatement": "https://businesscentralal.github.io/bifrost/en-us/foundation/privacy/",
+  "EULA": "https://businesscentralal.github.io/bifrost/en-us/foundation/eula/",
+  "logo": "assets/Logo250x250.png",
+  "contextSensitiveHelpUrl": "https://bifrost.origo.is/{0}/help/warehouse/",
+  "supportedLocales": [
+    "en-US",
+    "is-IS"
+  ],
+  "dependencies": [
+    {
+      "id": "7505e808-6e52-4b96-a328-82573391297a",
+      "name": "Bifrost Foundation",
+      "publisher": "Origo",
+      "version": "28.0.0.0"
+    }
+  ],
+  "application": "28.0.0.0",
+  "platform": "28.0.0.0",
+  "internalsVisibleTo": [
+    {
+      "id": "6ae41d19-d457-4d62-bd87-0413ff18de75",
+      "name": "Bifrost Warehouse - Tests",
+      "publisher": "Origo"
+    }
+  ],
+  "idRanges": [
+    {
+      "from": 10078385,
+      "to": 10078484
+    }
+  ],
+  "resourceExposurePolicy": {
+    "allowDebugging": true,
+    "allowDownloadingSource": true,
+    "includeSourceInSymbolFile": true
+  },
+  "target": "Cloud",
+  "features": [
+    "NoImplicitWith",
+    "TranslationFile"
+  ],
+  "runtime": "17.0",
+  "suppressWarnings": [
+    "AS0081"
+  ]
+}

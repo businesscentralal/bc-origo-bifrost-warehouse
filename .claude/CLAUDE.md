@@ -2,10 +2,10 @@
 
 - Namespace: `Origo.Bifrost.Warehouse`
 - Test namespace: `Origo.Bifrost.Warehouse.Test`
-- Foundation dependency: Bifrost Foundation `28.0.0.0`
+- Foundation dependency: Bifrost Foundation `28.0.0.0` (core#196 is included in this release)
 - Permissions: PermissionSetExtensions onto `BIFROST Read ori` / `BIFROST Full ori`
 - No own assignable permission set; no direct `Setup ori` tabledata access.
-- Message types: `Warehouse.BinContent.Get` and `Warehouse.Activity.Get`.
+- Message types: all twelve `Warehouse.*` types in `app/src/MessageTypes/`.
 - The 100-ID range fits the warehouse#4 move (~32 objects) and P2 Warehouse Movement.
 
 ## Object ID Ledger
@@ -27,7 +27,8 @@ App range: `10078385–10078484` (private block, 100 IDs).
 | 10078395 | `BIFROST Whse - Full ori` |
 | 10078396–10078427 | Reserved for warehouse#4 (move of the Foundation `Warehouse.*` message types, ~32 objects) |
 | 10078428–10078451 | Reserved for P2 Warehouse Movement objects |
-| 10078452–10078484 | Free |
+| 10078459 | `Whse Contract Parts ori` (warehouse#10) |
+| 10078452–10078458, 10078460–10078484 | Free |
 
 Test range: `97000–97099`.
 
@@ -38,4 +39,5 @@ Test range: `97000–97099`.
 | 97002 | `Whse Test Data ori` |
 | 97003–97009 | Reserved for P2 Warehouse Movement tests |
 | 97010 | `Whse NoRead Test ori` |
-| 97011–97099 | Free |
+| 97027 | `Whse Message Contract Tests ori` (warehouse#10) |
+| 97011–97026, 97028–97099 | Free |

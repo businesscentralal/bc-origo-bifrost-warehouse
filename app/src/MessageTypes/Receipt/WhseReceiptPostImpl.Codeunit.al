@@ -15,7 +15,7 @@ using Microsoft.Warehouse.Posting;
 
 using Origo.Bifrost;
 
-codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "Msg Discovery ori"
+codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
 {
     Access = Internal;
     procedure IsEnabled(): Boolean
@@ -46,8 +46,84 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
     end;
 
     procedure GetSelectionDescription(): Text
+    var
+        SelectionLbl: Label 'Irreversible. Posts an existing Warehouse Receipt; use Warehouse.Receipt.Post.Preview to inspect the result first.', Comment = 'is-IS=Óafturkræft. Bókar fyrirliggjandi vöruhúsamóttöku; notaðu Warehouse.Receipt.Post.Preview til að skoða niðurstöðuna fyrst.';
     begin
-        exit(GetDescription());
+        exit(SelectionLbl);
+    end;
+
+    procedure GetEnvelope(var Envelope: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+        Forms: List of [Text];
+    begin
+        Forms.Add('guid');
+        Forms.Add('document no.');
+        Envelope := Parts.RecordEnvelope(Forms, 'The Warehouse Receipt to post: its SystemId or No.', false);
+        exit(true);
+    end;
+
+    procedure GetTarget(var Target: JsonArray): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Target := Parts.RecordTarget('Warehouse Receipt Header', 'systemId, recordSystemId, id, receiptNo, no');
+        exit(true);
+    end;
+
+    procedure GetResponse(var Response: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
+        Fields: JsonArray;
+    begin
+        Parts.AddStatusField(Fields);
+        Fields.Add(ContractMgt.ResponseField('receiptNo', 'string', 'The posted Warehouse Receipt source number.'));
+        Fields.Add(ContractMgt.ResponseField('postedWhseReceiptNo', 'string', 'Posted Warehouse Receipt number when available.'));
+        Fields.Add(ContractMgt.ResponseField('postedWhseReceiptSystemId', 'string', 'Posted Warehouse Receipt SystemId when available.'));
+        Fields.Add(ContractMgt.ResponseField('postedDocuments', 'array', 'Distinct posted source-document summaries.'));
+        Parts.Response(Response, Fields);
+        exit(true);
+    end;
+
+    procedure GetErrors(var Errors: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.AddLookupErrors(Errors, 'Warehouse Receipt Header');
+        Parts.AddPermissionError(Errors, 'BIFROST WhsePost ori');
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, 'The Warehouse Receipt has no lines to post.', 'Add receivable lines to the receipt.'));
+        Parts.AddBusinessCentralError(Errors, 'invalid quantities, posting setup or source-document state');
+        exit(true);
+    end;
+
+    procedure GetEffect(var Effect: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.IrreversibleEffect(Effect, 'Posts the Warehouse Receipt and moves it to history; source documents are received but not invoiced.', 'BIFROST WhsePost ori');
+        exit(true);
+    end;
+
+    procedure GetMetering(var Metering: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetRelated(var Related: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.Receipt.Post.Preview', 'Use it to inspect predicted entries without committing before posting.'));
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.Putaway.Create', 'Use it after posting when the received goods require put-away.'));
+        exit(true);
+    end;
+
+    procedure GetOverview(var Overview: Text): Boolean
+    begin
+        Overview := 'Irreversibly posts a Warehouse Receipt. Source-document invoicing is a separate later action.';
+        exit(true);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"
@@ -56,10 +132,8 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
     end;
 
     procedure GetMessageHelpAsMarkdownDocument(var Argument: Record "Message Argument ori")
-    var
-        HelpCodeunit: Codeunit "Whse Receipt Post Help ori";
     begin
-        Argument.SetResponseMarkdown(HelpCodeunit.GetHelpText());
+        Argument.SetResponseMarkdown('');
     end;
 
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")

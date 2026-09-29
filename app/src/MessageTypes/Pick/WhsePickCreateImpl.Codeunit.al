@@ -17,7 +17,7 @@ using Microsoft.Warehouse.Document;
 
 using Origo.Bifrost;
 
-codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "Msg Discovery ori"
+codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
 {
     Access = Internal;
 
@@ -46,8 +46,97 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
     end;
 
     procedure GetSelectionDescription(): Text
+    var
+        SelectionLbl: Label 'Creates a Warehouse Pick from an existing shipment; use Warehouse.Pick.Register after quantities are picked.', Comment = 'is-IS=Stofnar tínslu úr fyrirliggjandi afhendingu; notaðu Warehouse.Pick.Register eftir að vörur hafa verið tíndar.';
     begin
-        exit(GetDescription());
+        exit(SelectionLbl);
+    end;
+
+    procedure GetEnvelope(var Envelope: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+        Forms: List of [Text];
+    begin
+        Forms.Add('guid');
+        Forms.Add('document no.');
+        Envelope := Parts.RecordEnvelope(Forms, 'The Warehouse Shipment from which the pick is created: its SystemId or No.', false);
+        exit(true);
+    end;
+
+    procedure GetTarget(var Target: JsonArray): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Target := Parts.RecordTarget('Warehouse Shipment Header', 'systemId, recordSystemId, id, whseShipmentNo, shipmentNo, no');
+        exit(true);
+    end;
+
+    procedure GetParameters(var Parameters: JsonArray): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.AddActivityParameters(Parameters, true);
+        exit(true);
+    end;
+
+    procedure GetResponse(var Response: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
+        Fields: JsonArray;
+    begin
+        Parts.AddStatusField(Fields);
+        Fields.Add(ContractMgt.ResponseField('whseShipmentNo', 'string', 'Source Warehouse Shipment number.'));
+        Fields.Add(ContractMgt.ResponseField('pickNo', 'string', 'Created Warehouse Pick number.'));
+        Fields.Add(ContractMgt.ResponseField('pickSystemId', 'string', 'Created Warehouse Pick SystemId.'));
+        Fields.Add(ContractMgt.ResponseField('locationCode', 'string', 'Warehouse location code.'));
+        Fields.Add(ContractMgt.ResponseField('assignedUserId', 'string', 'Assigned user.'));
+        Fields.Add(ContractMgt.ResponseField('sortingMethod', 'string', 'Sorting method.'));
+        Fields.Add(ContractMgt.ResponseField('totalPickLines', 'integer', 'Number of pick lines.'));
+        Fields.Add(ContractMgt.ResponseField('totalQtyToHandle', 'number', 'Total quantity to handle.'));
+        Fields.Add(ContractMgt.ResponseField('message', 'string', 'Human-readable result.'));
+        Parts.Response(Response, Fields);
+        exit(true);
+    end;
+
+    procedure GetErrors(var Errors: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.AddLookupErrors(Errors, 'Warehouse Shipment Header');
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, 'A sortingMethod or report option is not valid.', 'Use a valid sorting method and leave unsupported report options false.'));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, 'No Warehouse Pick was created for the shipment.', 'Ensure the shipment has lines requiring a pick and no pick already exists.'));
+        Parts.AddBusinessCentralError(Errors, 'missing warehouse setup, no quantities to pick or report validation failure');
+        exit(true);
+    end;
+
+    procedure GetEffect(var Effect: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.WriteEffect(Effect, 'Creates Warehouse Activity Header and Line records of type Pick and applies optional activity fields.', 'BIFROST Full ori', false);
+        exit(true);
+    end;
+
+    procedure GetMetering(var Metering: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetRelated(var Related: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.Shipment.Create', 'Use it first when the Warehouse Shipment does not exist.'));
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.Pick.Register', 'Use it after picking to register the created pick.'));
+        exit(true);
+    end;
+
+    procedure GetOverview(var Overview: Text): Boolean
+    begin
+        Overview := 'Creates a Warehouse Pick from an existing Warehouse Shipment using BC report 7318 and applies optional activity fields.';
+        exit(true);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"
@@ -56,10 +145,8 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
     end;
 
     procedure GetMessageHelpAsMarkdownDocument(var Argument: Record "Message Argument ori")
-    var
-        HelpCodeunit: Codeunit "Whse Pick Create Help ori";
     begin
-        Argument.SetResponseMarkdown(HelpCodeunit.GetHelpText());
+        Argument.SetResponseMarkdown('');
     end;
 
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")

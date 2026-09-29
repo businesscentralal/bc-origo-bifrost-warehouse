@@ -13,7 +13,7 @@ using Microsoft.Warehouse.Posting;
 
 using Origo.Bifrost;
 
-codeunit 10078407 "Whse Shipment Post Impl ori" implements "Msg Interface ori", "Msg Discovery ori"
+codeunit 10078407 "Whse Shipment Post Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
 {
     Access = Internal;
     procedure IsEnabled(): Boolean
@@ -44,8 +44,93 @@ codeunit 10078407 "Whse Shipment Post Impl ori" implements "Msg Interface ori", 
     end;
 
     procedure GetSelectionDescription(): Text
+    var
+        SelectionLbl: Label 'Irreversible. Posts an existing Warehouse Shipment; use Warehouse.Shipment.PreviewPost to inspect the result first.', Comment = 'is-IS=Óafturkræft. Bókar fyrirliggjandi vöruhúsaafhendingu; notaðu Warehouse.Shipment.PreviewPost til að skoða niðurstöðuna fyrst.';
     begin
-        exit(GetDescription());
+        exit(SelectionLbl);
+    end;
+
+    procedure GetEnvelope(var Envelope: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+        Forms: List of [Text];
+    begin
+        Forms.Add('guid');
+        Forms.Add('document no.');
+        Envelope := Parts.RecordEnvelope(Forms, 'The Warehouse Shipment to post: its SystemId or No.', false);
+        exit(true);
+    end;
+
+    procedure GetTarget(var Target: JsonArray): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Target := Parts.RecordTarget('Warehouse Shipment Header', 'systemId, recordSystemId, id, shipmentNo, no');
+        exit(true);
+    end;
+
+    procedure GetParameters(var Parameters: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Parameters.Add(ContractMgt.Parameter('invoice', 'boolean', false, 'Also invoice the shipped source documents. Defaults to false and requires BIFROST WhseInv ori when true.'));
+        exit(true);
+    end;
+
+    procedure GetResponse(var Response: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
+        Fields: JsonArray;
+    begin
+        Parts.AddStatusField(Fields);
+        Fields.Add(ContractMgt.ResponseField('shipmentNo', 'string', 'The posted Warehouse Shipment source number.'));
+        Fields.Add(ContractMgt.ResponseField('invoice', 'boolean', 'Whether the invoice pass was requested.'));
+        Fields.Add(ContractMgt.ResponseField('postedWhseShipmentNo', 'string', 'Posted Warehouse Shipment number when available.'));
+        Fields.Add(ContractMgt.ResponseField('postedWhseShipmentSystemId', 'string', 'Posted Warehouse Shipment SystemId when available.'));
+        Fields.Add(ContractMgt.ResponseField('postedDocuments', 'array', 'Distinct posted source-document summaries.'));
+        Parts.Response(Response, Fields);
+        exit(true);
+    end;
+
+    procedure GetErrors(var Errors: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.AddLookupErrors(Errors, 'Warehouse Shipment Header');
+        Parts.AddPermissionError(Errors, 'BIFROST WhsePost ori');
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, 'The Warehouse Shipment has no lines to post.', 'Add shippable lines to the shipment.'));
+        Parts.AddBusinessCentralError(Errors, 'invalid quantities, posting setup or source-document state');
+        exit(true);
+    end;
+
+    procedure GetEffect(var Effect: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.IrreversibleEffect(Effect, 'Posts the Warehouse Shipment and optionally invoices its source documents. The warehouse shipment is moved to history.', 'BIFROST WhsePost ori; BIFROST WhseInv ori when invoice is true');
+        exit(true);
+    end;
+
+    procedure GetMetering(var Metering: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetRelated(var Related: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.Shipment.PreviewPost', 'Use it to inspect predicted entries without committing before posting.'));
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.Pick.Register', 'Use it to register a pick before posting when a pick was created.'));
+        exit(true);
+    end;
+
+    procedure GetOverview(var Overview: Text): Boolean
+    begin
+        Overview := 'Irreversibly posts a Warehouse Shipment. Invoicing is optional and is a separate permission-gated pass.';
+        exit(true);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"
@@ -54,10 +139,8 @@ codeunit 10078407 "Whse Shipment Post Impl ori" implements "Msg Interface ori", 
     end;
 
     procedure GetMessageHelpAsMarkdownDocument(var Argument: Record "Message Argument ori")
-    var
-        HelpCodeunit: Codeunit "Whse Shipment Post Help ori";
     begin
-        Argument.SetResponseMarkdown(HelpCodeunit.GetHelpText());
+        Argument.SetResponseMarkdown('');
     end;
 
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")

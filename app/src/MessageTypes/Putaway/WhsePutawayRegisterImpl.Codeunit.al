@@ -13,7 +13,7 @@ using Microsoft.Warehouse.History;
 
 using Origo.Bifrost;
 
-codeunit 10078417 "Whse Putaway Register Impl ori" implements "Msg Interface ori", "Msg Discovery ori"
+codeunit 10078417 "Whse Putaway Register Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
 {
     Access = Internal;
 
@@ -41,8 +41,89 @@ codeunit 10078417 "Whse Putaway Register Impl ori" implements "Msg Interface ori
     end;
 
     procedure GetSelectionDescription(): Text
+    var
+        SelectionLbl: Label 'Irreversible. Registers an existing Warehouse Put-away and updates bin contents.', Comment = 'is-IS=Óafturkræft. Skráir fyrirliggjandi frágang og uppfærir innihald hólfa.';
     begin
-        exit(GetDescription());
+        exit(SelectionLbl);
+    end;
+
+    procedure GetEnvelope(var Envelope: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+        Forms: List of [Text];
+    begin
+        Forms.Add('guid');
+        Forms.Add('activity no.');
+        Envelope := Parts.RecordEnvelope(Forms, 'The Warehouse Put-away to register: its SystemId or put-away number.', false);
+        exit(true);
+    end;
+
+    procedure GetTarget(var Target: JsonArray): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Target := Parts.ActivityTarget('Warehouse Put-away', 'putawayNo');
+        exit(true);
+    end;
+
+    procedure GetResponse(var Response: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
+        Fields: JsonArray;
+    begin
+        Parts.AddStatusField(Fields);
+        Fields.Add(ContractMgt.ResponseField('putawayNo', 'string', 'Registered put-away number.'));
+        Fields.Add(ContractMgt.ResponseField('linesRegistered', 'integer', 'Number of put-away lines registered.'));
+        Fields.Add(ContractMgt.ResponseField('totalQtyRegistered', 'number', 'Total quantity registered.'));
+        Fields.Add(ContractMgt.ResponseField('postedWhseReceiptNo', 'string', 'Source Posted Warehouse Receipt number when available.'));
+        Fields.Add(ContractMgt.ResponseField('postedWhseReceiptSystemId', 'string', 'Source Posted Warehouse Receipt SystemId when available.'));
+        Fields.Add(ContractMgt.ResponseField('receiptLines', 'array', 'Source posted receipt line summaries.'));
+        Fields.Add(ContractMgt.ResponseField('registeredPutawayNo', 'string', 'Registered activity number when available.'));
+        Fields.Add(ContractMgt.ResponseField('registeredPutawaySystemId', 'string', 'Registered activity SystemId when available.'));
+        Fields.Add(ContractMgt.ResponseField('message', 'string', 'Human-readable result.'));
+        Parts.Response(Response, Fields);
+        exit(true);
+    end;
+
+    procedure GetErrors(var Errors: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.AddLookupErrors(Errors, 'Warehouse Activity Header');
+        Parts.AddPermissionError(Errors, 'BIFROST WhsePost ori');
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, 'The Warehouse Put-away has no lines or the identified activity is not a Put-away.', 'Send a Warehouse Put-away with lines.'));
+        Parts.AddBusinessCentralError(Errors, 'invalid quantities or warehouse activity state');
+        exit(true);
+    end;
+
+    procedure GetEffect(var Effect: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.IrreversibleEffect(Effect, 'Registers the Warehouse Put-away, moves it to history and updates bin contents.', 'BIFROST WhsePost ori');
+        exit(true);
+    end;
+
+    procedure GetMetering(var Metering: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetRelated(var Related: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.Putaway.Create', 'Use it first when a Warehouse Put-away does not exist.'));
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.Receipt.Post', 'Use it to post the receipt before creating a put-away.'));
+        exit(true);
+    end;
+
+    procedure GetOverview(var Overview: Text): Boolean
+    begin
+        Overview := 'Irreversibly registers a Warehouse Put-away and updates the involved bin contents.';
+        exit(true);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"
@@ -51,10 +132,8 @@ codeunit 10078417 "Whse Putaway Register Impl ori" implements "Msg Interface ori
     end;
 
     procedure GetMessageHelpAsMarkdownDocument(var Argument: Record "Message Argument ori")
-    var
-        HelpCodeunit: Codeunit "Whse Putaway Register Help ori";
     begin
-        Argument.SetResponseMarkdown(HelpCodeunit.GetHelpText());
+        Argument.SetResponseMarkdown('');
     end;
 
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")

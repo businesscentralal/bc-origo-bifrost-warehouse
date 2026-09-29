@@ -17,7 +17,7 @@ using Microsoft.Warehouse.Request;
 
 using Origo.Bifrost;
 
-codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori", "Msg Discovery ori"
+codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
 {
     Access = Internal;
     procedure IsEnabled(): Boolean
@@ -45,8 +45,88 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
     end;
 
     procedure GetSelectionDescription(): Text
+    var
+        SelectionLbl: Label 'Creates inbound warehouse receipts from released sales return, purchase, or transfer orders; use Warehouse.Receipt.Post to receive one.', Comment = 'is-IS=Stofnar innleiðarmóttökur úr útgefnum söluskila-, innkaupa- eða millifærslupöntunum; notaðu Warehouse.Receipt.Post til að móttaka.';
     begin
-        exit(GetDescription());
+        exit(SelectionLbl);
+    end;
+
+    procedure GetEnvelope(var Envelope: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+        Forms: List of [Text];
+    begin
+        Forms.Add('data only');
+        Envelope := Parts.RecordEnvelope(Forms, 'The request must contain one or more source documents under data.', true);
+        exit(true);
+    end;
+
+    procedure GetTarget(var Target: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Target.Add(ContractMgt.TargetEntry('data.sourceDocuments[].documentNo', 'document no.', 'The released Sales Return Order, Purchase Order or inbound Transfer Order from which a Warehouse Receipt is created.'));
+        exit(true);
+    end;
+
+    procedure GetParameters(var Parameters: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Parameters.Add(ContractMgt.Parameter('sourceDocuments', 'array', true, 'One or more source documents. Each child has sourceType (SalesReturnOrder, PurchaseOrder or TransferOrder) and documentNo.'));
+        Parameters.Add(ContractMgt.Parameter('locationCode', 'string', false, 'Optional source-location check. It does not override the source document.'));
+        Parameters.Add(ContractMgt.Parameter('assignedUserId', 'string', false, 'User assigned to each created Warehouse Receipt Header.'));
+        Parameters.Add(ContractMgt.Parameter('postingDate', 'string', false, 'Posting date applied to each created Warehouse Receipt Header.'));
+        exit(true);
+    end;
+
+    procedure GetResponse(var Response: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
+        Fields: JsonArray;
+    begin
+        Parts.AddStatusField(Fields);
+        Fields.Add(ContractMgt.ResponseField('noOfReceipts', 'integer', 'Number of Warehouse Receipts created.'));
+        Fields.Add(ContractMgt.ResponseField('receipts', 'array', 'Created Warehouse Receipt summaries with recordSystemId, no, locationCode, assignedUserId, sourceType, sourceDocumentNo and linesCreated.'));
+        Parts.Response(Response, Fields);
+        exit(true);
+    end;
+
+    procedure GetErrors(var Errors: JsonArray): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.AddSourceDocumentErrors(Errors, 'SalesReturnOrder, PurchaseOrder, TransferOrder');
+        exit(true);
+    end;
+
+    procedure GetEffect(var Effect: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.WriteEffect(Effect, 'Creates Warehouse Receipt Header and Line records and applies requested header fields.', 'BIFROST Full ori', false);
+        exit(true);
+    end;
+
+    procedure GetMetering(var Metering: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetRelated(var Related: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.Receipt.Post', 'Use it after creation to receive the Warehouse Receipt.'));
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.Putaway.Create', 'Use it after posting when the received goods require put-away.'));
+        exit(true);
+    end;
+
+    procedure GetOverview(var Overview: Text): Boolean
+    begin
+        Overview := 'Creates one Warehouse Receipt for each released Sales Return Order, Purchase Order or inbound Transfer Order supplied in sourceDocuments.';
+        exit(true);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"
@@ -55,10 +135,8 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
     end;
 
     procedure GetMessageHelpAsMarkdownDocument(var Argument: Record "Message Argument ori")
-    var
-        HelpCodeunit: Codeunit "Whse Receipt Create Help ori";
     begin
-        Argument.SetResponseMarkdown(HelpCodeunit.GetHelpText());
+        Argument.SetResponseMarkdown('');
     end;
 
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")

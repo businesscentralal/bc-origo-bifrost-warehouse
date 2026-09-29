@@ -10,3 +10,5 @@
 - Foundation read/full permission-set extensions and lifecycle codeunits.
 
 ### Added (2026-09-29) - Warehouse message types moved from Foundation (#4)
+
+- Write-block subscriber refuses generic data-record writes to warehouse shipment, receipt, and activity headers and lines.

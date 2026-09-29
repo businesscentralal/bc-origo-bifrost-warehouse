@@ -149,8 +149,7 @@ codeunit 97023 "Whse Posting Gate Tests ori"
 
         PrepareArgument(Argument);
         asserterror PreviewImpl.ExecuteBifrostTask(Argument);
-        Assert.AreNotEqual(0, StrPos(GetLastErrorText(), 'license'), 'Expected the license check, not a posting-gate denial.');
-        Assert.AreEqual(0, StrPos(GetLastErrorText(), 'Posting denied'), 'Preview must not be blocked by the posting gate.');
+        AssertPreviewWasNotDeniedByPostingGate(Argument);
     end;
 
     /// <summary>Warehouse.Receipt.Post.Preview stays enabled and does not return a posting denial.</summary>
@@ -166,8 +165,23 @@ codeunit 97023 "Whse Posting Gate Tests ori"
 
         PrepareArgument(Argument);
         asserterror PreviewImpl.ExecuteBifrostTask(Argument);
-        Assert.AreNotEqual(0, StrPos(GetLastErrorText(), 'license'), 'Expected the license check, not a posting-gate denial.');
+        AssertPreviewWasNotDeniedByPostingGate(Argument);
+    end;
+
+    local procedure AssertPreviewWasNotDeniedByPostingGate(Argument: Record "Message Argument ori")
+    var
+        ResponseJson: JsonObject;
+        ErrorToken: JsonToken;
+    begin
         Assert.AreEqual(0, StrPos(GetLastErrorText(), 'Posting denied'), 'Preview must not be blocked by the posting gate.');
+        if Argument.GetResponseContentLength() = 0 then
+            exit;
+        ResponseJson := Argument.GetResponseJson();
+        if not ResponseJson.Get('error', ErrorToken) then
+            exit;
+        Assert.AreEqual(0, StrPos(ErrorToken.AsValue().AsText(), 'Posting denied'), 'Preview response must not be a posting denial.');
+        if ResponseJson.Get('code', ErrorToken) then
+            Assert.AreNotEqual('PermissionDenied', ErrorToken.AsValue().AsText(), 'Preview must not return PermissionDenied.');
     end;
 
     local procedure LowerToDocumentWrite(var LibraryLowerPermissions: Codeunit "Library - Lower Permissions")

@@ -7,7 +7,7 @@ using Origo.Bifrost;
 using System.TestLibraries.Utilities;
 
 /// <summary>
-/// Proves generic data-record writes are refused for warehouse document tables and left open for other tables.
+/// Proves generic data-record writes are refused for warehouse document tables, reads stay allowed, and other tables are left open.
 /// </summary>
 codeunit 97026 "Whse Write Restrict Tests ori"
 {
@@ -43,5 +43,23 @@ codeunit 97026 "Whse Write Restrict Tests ori"
         Argument.Insert(true);
 
         Assert.IsFalse(Argument.IsTableWriteRestrictedForDataRecords(Database::Item), 'Item must not be restricted by the warehouse subscriber.');
+    end;
+
+    /// <summary>Generic reads of the warehouse document tables stay allowed.</summary>
+    [Test]
+    procedure GenericRead_WarehouseDocumentTables_StaysAllowed()
+    var
+        Argument: Record "Message Argument ori";
+        Assert: Codeunit "Library Assert";
+    begin
+        Argument.Init();
+        Argument.Insert(true);
+
+        Assert.IsFalse(Argument.IsTableReadRestrictedForDataRecords(Database::"Warehouse Shipment Header"), 'Warehouse Shipment Header');
+        Assert.IsFalse(Argument.IsTableReadRestrictedForDataRecords(Database::"Warehouse Shipment Line"), 'Warehouse Shipment Line');
+        Assert.IsFalse(Argument.IsTableReadRestrictedForDataRecords(Database::"Warehouse Receipt Header"), 'Warehouse Receipt Header');
+        Assert.IsFalse(Argument.IsTableReadRestrictedForDataRecords(Database::"Warehouse Receipt Line"), 'Warehouse Receipt Line');
+        Assert.IsFalse(Argument.IsTableReadRestrictedForDataRecords(Database::"Warehouse Activity Header"), 'Warehouse Activity Header');
+        Assert.IsFalse(Argument.IsTableReadRestrictedForDataRecords(Database::"Warehouse Activity Line"), 'Warehouse Activity Line');
     end;
 }

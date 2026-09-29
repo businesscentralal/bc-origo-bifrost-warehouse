@@ -1,0 +1,107 @@
+namespace Origo.Bifrost.Warehouse;
+
+codeunit 10078419 "Whse Shipment Post Help ori"
+{
+    Access = Internal;
+
+    internal procedure GetHelpText() HelpText: Text
+    var
+        HelpBuilder: TextBuilder;
+    begin
+        HelpBuilder.AppendLine('# Warehouse.Shipment.Post - Help');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('## Overview');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('Posts a Warehouse Shipment (ship, optionally invoice). Wraps BC''s `Whse.-Post Shipment` (codeunit 5763) and returns the resulting Posted Whse. Shipment plus any Posted Sales Shipments that were created.');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('**Direction**: Inbound (state change)  **Content-Type**: `text/json`');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('## Preconditions');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('Posting depends on the Location of the Warehouse Shipment lines:');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('- **`Require Pick = false`** — the Warehouse Shipment Line has `Qty. to Ship` already populated by `Warehouse.Shipment.Create`. Post immediately.');
+        HelpBuilder.AppendLine('- **`Require Pick = true`** (including Directed Put-away and Pick) — the Warehouse Shipment Line starts with `Qty. to Ship = 0`. A Warehouse Pick must be created, picked, and **registered** via `Warehouse.Pick.Create` then `Warehouse.Pick.Register` before this message type will succeed. Without a registered pick BC errors with `There is nothing to post because the document does not contain a quantity or amount.`');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('Manually writing `Qty. to Ship` on a `Warehouse Shipment Line` to bypass the pick step is rejected by BC (`Qty. to Ship must not be greater than 0 units ...`).');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('## Identifier Resolution Order');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('1. `subject` — GUID = `Warehouse Shipment Header.SystemId`, otherwise `Warehouse Shipment Header."No."`.');
+        HelpBuilder.AppendLine('2. JSON `systemId` / `recordSystemId` / `id` — `SystemId`.');
+        HelpBuilder.AppendLine('3. JSON `shipmentNo` / `no` — `Warehouse Shipment Header."No."`.');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('## Request Parameters');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('| Parameter | Type | Required | Notes |');
+        HelpBuilder.AppendLine('|---|---|---|---|');
+        HelpBuilder.AppendLine('| identifier | various | **Yes** | See resolution order. |');
+        HelpBuilder.AppendLine('| `invoice` | boolean | No | Default `false` (ship only). When `true`, requires `BIFROST WhseInv ori` in addition to `BIFROST WhsePost ori`. |');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('### Request Example');
+        HelpBuilder.AppendLine('```json');
+        HelpBuilder.AppendLine('{');
+        HelpBuilder.AppendLine('  "shipmentNo": "WS001001",');
+        HelpBuilder.AppendLine('  "invoice": true');
+        HelpBuilder.AppendLine('}');
+        HelpBuilder.AppendLine('```');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('## Response Shape');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('```json');
+        HelpBuilder.AppendLine('{');
+        HelpBuilder.AppendLine('  "status": "Success",');
+        HelpBuilder.AppendLine('  "shipmentNo": "WS001001",');
+        HelpBuilder.AppendLine('  "invoice": true,');
+        HelpBuilder.AppendLine('  "postedWhseShipmentNo": "PWS001001",');
+        HelpBuilder.AppendLine('  "postedWhseShipmentSystemId": "00000000-0000-0000-0000-000000000000",');
+        HelpBuilder.AppendLine('  "postedDocuments": [');
+        HelpBuilder.AppendLine('    {');
+        HelpBuilder.AppendLine('      "postedSourceDocument": "Posted Sales Shipment",');
+        HelpBuilder.AppendLine('      "postedSourceNo": "PS-SHP103001",');
+        HelpBuilder.AppendLine('      "sourceDocument": "Sales Order",');
+        HelpBuilder.AppendLine('      "sourceNo": "SO-0001"');
+        HelpBuilder.AppendLine('    }');
+        HelpBuilder.AppendLine('  ]');
+        HelpBuilder.AppendLine('}');
+        HelpBuilder.AppendLine('```');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('`postedWhseShipmentNo` and `postedWhseShipmentSystemId` are only present when the underlying `Whse.-Post Shipment` produced a `Posted Whse. Shipment Header`. `postedDocuments` is derived from `Posted Whse. Shipment Line`, de-duplicated by `(postedSourceDocument, postedSourceNo)`, and generalises across source types (Sales Order → Posted Sales Shipment, Transfer Order → Posted Transfer Shipment, etc.).');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('## Posting Gate');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('- **Always**: `BIFROST WhsePost ori` permission set.');
+        HelpBuilder.AppendLine('- **Additionally when `invoice = true`**: `BIFROST WhseInv ori` permission set.');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('## Field Restrictions');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('No per-field restriction check — the entire operation is gated by the permission sets above.');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('## Errors');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('| Error | Cause |');
+        HelpBuilder.AppendLine('|---|---|');
+        HelpBuilder.AppendLine('| `Posting denied: missing ''BIFROST WhsePost ori'' permission set.` | Caller lacks the warehouse posting permission. |');
+        HelpBuilder.AppendLine('| `Posting denied: missing ''BIFROST WhseInv ori'' permission set.` | `invoice = true` and caller lacks G/L posting. |');
+        HelpBuilder.AppendLine('| `Warehouse Shipment Header identifier is missing. Pass it as the subject, or as one of: systemId, recordSystemId, id, shipmentNo, no.` (`MissingParameter`) | No identifier in `subject` or the request JSON. |');
+        HelpBuilder.AppendLine('| `Warehouse Shipment Header "{value}" was not found (from {subject or key}).` (`RecordNotFound`) | An identifier was given but matches no record; `parameter` and `received` name it. Every identifier supplied is tried. |');
+        HelpBuilder.AppendLine('| `The identifiers in {a} and {b} point to different records.` (`ConflictingIdentifiers`) | Two identifiers were given that resolve to different records. |');
+        HelpBuilder.AppendLine('| `"{value}" is not a valid GUID` / `integer` `(from {key}).` (`InvalidParameterFormat`) | A SystemId or entry number that cannot be read. |');
+        HelpBuilder.AppendLine('| `Warehouse Shipment {n} has no lines to post.` | Header exists with zero lines. |');
+        HelpBuilder.AppendLine('| `There is nothing to post because the document does not contain a quantity or amount.` | All Warehouse Shipment Lines have `Qty. to Ship = 0`. At a `Require Pick = true` location this means no pick has been registered yet — see Preconditions. |');
+        HelpBuilder.AppendLine('| BC posting errors | Bubble up from `Whse.-Post Shipment` (e.g. open pick exists, item tracking incomplete, posting date locked). |');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('## End-to-End Workflow');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('See `Warehouse.Shipment.Create` help for the full chain: `Sales.Document.Create` → `Data.Records.Set` (Sales Line) → `Sales.Document.Release` → `Warehouse.Shipment.Create` → `Warehouse.Pick.Create` → `Warehouse.Pick.Register` (when `Require Pick = true`) → `Warehouse.Shipment.Post`.');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('## Related Message Types');
+        HelpBuilder.AppendLine('');
+        HelpBuilder.AppendLine('- `Warehouse.Shipment.Create` — create the Warehouse Shipment from source documents.');
+        HelpBuilder.AppendLine('- `Warehouse.Pick.Create` — create the Warehouse Pick when `Require Pick = true`.');
+        HelpBuilder.AppendLine('- `Warehouse.Pick.Register` — register the pick so `Qty. to Ship` is populated.');
+        HelpBuilder.AppendLine('- `Sales.Document.Post` — for the G/L invoice side without the warehouse step.');
+
+        HelpText := HelpBuilder.ToText();
+    end;
+}

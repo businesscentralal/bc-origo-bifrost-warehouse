@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+### Added (2026-09-29) - Warehouse message contracts (#10)
+
+- All twelve Warehouse message types now expose structured `Msg Contract ori` chapters for envelope, target, parameters, response, errors, effect, metering and related workflows.
+- Warehouse discovery now provides distinct English and Icelandic selection descriptions and keywords for every type.
+- Replaced the single-type markdown help codeunits with structured contracts; the legacy markdown interface remains as an empty compatibility response until the follow-up removal issue.
+- Added warehouse contract conformance tests and shared contract parts.
+
 ### Added
 
 - Bifrost Warehouse app and test-app scaffold with registered object ID ranges.

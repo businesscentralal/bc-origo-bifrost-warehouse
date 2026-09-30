@@ -20,7 +20,7 @@ using Microsoft.Warehouse.Posting;
 
 using Origo.Bifrost;
 
-codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori", "Msg Discovery ori"
+codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
 {
     Access = Internal;
     Permissions = tabledata "Warehouse Shipment Header" = R,
@@ -50,8 +50,91 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
     end;
 
     procedure GetSelectionDescription(): Text
+    var
+        SelectionLbl: Label 'Read-only. Simulates Ship + Invoice and rolls back; use Warehouse.Shipment.Post to commit the posting.', Comment = 'is-IS=Lesaðgangur. Hermir Sending + Reikning og afturkallar; notaðu Warehouse.Shipment.Post til að framkvæma bókunina.';
     begin
-        exit(GetDescription());
+        exit(SelectionLbl);
+    end;
+
+    procedure GetEnvelope(var Envelope: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+        Forms: List of [Text];
+    begin
+        Forms.Add('guid');
+        Forms.Add('document no.');
+        Envelope := Parts.RecordEnvelope(Forms, 'The Warehouse Shipment to preview: its SystemId or No.', false);
+        exit(true);
+    end;
+
+    procedure GetTarget(var Target: JsonArray): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Target := Parts.RecordTarget('Warehouse Shipment Header', 'systemId, recordSystemId, id, shipmentNo, no');
+        exit(true);
+    end;
+
+    procedure GetResponse(var Response: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
+        Fields: JsonArray;
+    begin
+        Parts.AddStatusField(Fields);
+        Fields.Add(ContractMgt.ResponseField('entryCount', 'integer', 'Number of predicted ledger entries.'));
+        Fields.Add(ContractMgt.ResponseField('glEntryCount', 'integer', 'Number of predicted G/L entries.'));
+        Fields.Add(ContractMgt.ResponseField('rollback', 'boolean', 'Always true; the preview is rolled back.'));
+        Fields.Add(ContractMgt.ResponseField('summary', 'string', 'Human-readable preview summary.'));
+        Fields.Add(ContractMgt.ResponseField('shipmentNo', 'string', 'Warehouse Shipment number.'));
+        Fields.Add(ContractMgt.ResponseField('locationCode', 'string', 'Warehouse location code.'));
+        Fields.Add(ContractMgt.ResponseField('invoice', 'boolean', 'Always true because the BC preview path simulates Ship + Invoice.'));
+        Fields.Add(ContractMgt.ResponseField('linesToPost', 'integer', 'Number of Warehouse Shipment lines considered.'));
+        Fields.Add(ContractMgt.ResponseField('postingDate', 'string', 'Posting date used by the preview.'));
+        Fields.Add(ContractMgt.ResponseField('lcyCode', 'string', 'Local currency code.'));
+        Fields.Add(ContractMgt.ResponseField('predictedNumbers', 'array', 'Predicted posted document numbers.'));
+        Fields.Add(ContractMgt.ResponseField('totals', 'object', 'Preview totals.'));
+        Fields.Add(ContractMgt.ResponseField('preview', 'array', 'Captured preview entries grouped by table.'));
+        Parts.Response(Response, Fields);
+        exit(true);
+    end;
+
+    procedure GetErrors(var Errors: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.AddLookupErrors(Errors, 'Warehouse Shipment Header');
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::NothingToPreview, 'The Warehouse Shipment has no lines or no quantities to post.', 'Add lines and quantities to ship.'));
+        Parts.AddBusinessCentralError(Errors, 'invalid quantities, posting setup or source-document state');
+        exit(true);
+    end;
+
+    procedure GetEffect(var Effect: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.ReadEffect(Effect, 'Simulates Ship + Invoice and rolls the transaction back; no persistent records are changed.', 'BIFROST Read ori');
+        exit(true);
+    end;
+
+    procedure GetMetering(var Metering: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetRelated(var Related: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.Shipment.Post', 'Use it to commit the shipment posting after reviewing the preview.'));
+        exit(true);
+    end;
+
+    procedure GetOverview(var Overview: Text): Boolean
+    begin
+        Overview := 'Read-only posting preview for a Warehouse Shipment. It captures predicted ledger entries and rolls back the transaction.';
+        exit(true);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"
@@ -60,10 +143,8 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
     end;
 
     procedure GetMessageHelpAsMarkdownDocument(var Argument: Record "Message Argument ori")
-    var
-        HelpCodeunit: Codeunit "Whse Ship. Prev. Post Help ori";
     begin
-        Argument.SetResponseMarkdown(HelpCodeunit.GetHelpText());
+        Argument.SetResponseMarkdown('');
     end;
 
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")

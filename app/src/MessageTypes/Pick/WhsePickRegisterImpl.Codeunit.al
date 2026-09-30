@@ -13,7 +13,7 @@ using Microsoft.Warehouse.Document;
 
 using Origo.Bifrost;
 
-codeunit 10078414 "Whse Pick Register Impl ori" implements "Msg Interface ori", "Msg Discovery ori"
+codeunit 10078414 "Whse Pick Register Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
 {
     Access = Internal;
 
@@ -41,8 +41,89 @@ codeunit 10078414 "Whse Pick Register Impl ori" implements "Msg Interface ori", 
     end;
 
     procedure GetSelectionDescription(): Text
+    var
+        SelectionLbl: Label 'Irreversible. Registers an existing Warehouse Pick and updates shipment quantities.', Comment = 'is-IS=Óafturkræft. Skráir fyrirliggjandi tínslu og uppfærir magn í afhendingu.';
     begin
-        exit(GetDescription());
+        exit(SelectionLbl);
+    end;
+
+    procedure GetEnvelope(var Envelope: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+        Forms: List of [Text];
+    begin
+        Forms.Add('guid');
+        Forms.Add('activity no.');
+        Envelope := Parts.RecordEnvelope(Forms, 'The Warehouse Pick to register: its SystemId or pick number.', false);
+        exit(true);
+    end;
+
+    procedure GetTarget(var Target: JsonArray): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Target := Parts.ActivityTarget('Warehouse Pick', 'pickNo');
+        exit(true);
+    end;
+
+    procedure GetResponse(var Response: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
+        Fields: JsonArray;
+    begin
+        Parts.AddStatusField(Fields);
+        Fields.Add(ContractMgt.ResponseField('pickNo', 'string', 'Registered pick number.'));
+        Fields.Add(ContractMgt.ResponseField('linesRegistered', 'integer', 'Number of pick lines registered.'));
+        Fields.Add(ContractMgt.ResponseField('totalQtyRegistered', 'number', 'Total quantity registered.'));
+        Fields.Add(ContractMgt.ResponseField('shipmentNo', 'string', 'Source Warehouse Shipment number when available.'));
+        Fields.Add(ContractMgt.ResponseField('shipmentSystemId', 'string', 'Source Warehouse Shipment SystemId when available.'));
+        Fields.Add(ContractMgt.ResponseField('shipmentLines', 'array', 'Source shipment line summaries.'));
+        Fields.Add(ContractMgt.ResponseField('registeredPickNo', 'string', 'Registered activity number when available.'));
+        Fields.Add(ContractMgt.ResponseField('registeredPickSystemId', 'string', 'Registered activity SystemId when available.'));
+        Fields.Add(ContractMgt.ResponseField('message', 'string', 'Human-readable result.'));
+        Parts.Response(Response, Fields);
+        exit(true);
+    end;
+
+    procedure GetErrors(var Errors: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.AddLookupErrors(Errors, 'Warehouse Activity Header');
+        Parts.AddPermissionError(Errors, 'BIFROST WhsePost ori');
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, 'The Warehouse Pick has no lines or the identified activity is not a Pick.', 'Send a Warehouse Pick with lines.'));
+        Parts.AddBusinessCentralError(Errors, 'invalid quantities or warehouse activity state');
+        exit(true);
+    end;
+
+    procedure GetEffect(var Effect: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.IrreversibleEffect(Effect, 'Registers the Warehouse Pick, moves it to history and updates the source shipment quantities.', 'BIFROST WhsePost ori');
+        exit(true);
+    end;
+
+    procedure GetMetering(var Metering: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetRelated(var Related: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.Pick.Create', 'Use it first when a Warehouse Pick does not exist.'));
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.Shipment.Post', 'Use it after registering the pick to post the shipment.'));
+        exit(true);
+    end;
+
+    procedure GetOverview(var Overview: Text): Boolean
+    begin
+        Overview := 'Irreversibly registers a Warehouse Pick and updates its source Warehouse Shipment quantities.';
+        exit(true);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"
@@ -51,10 +132,8 @@ codeunit 10078414 "Whse Pick Register Impl ori" implements "Msg Interface ori", 
     end;
 
     procedure GetMessageHelpAsMarkdownDocument(var Argument: Record "Message Argument ori")
-    var
-        HelpCodeunit: Codeunit "Whse Pick Register Help ori";
     begin
-        Argument.SetResponseMarkdown(HelpCodeunit.GetHelpText());
+        Argument.SetResponseMarkdown('');
     end;
 
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")

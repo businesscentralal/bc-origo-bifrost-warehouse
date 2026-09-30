@@ -16,7 +16,7 @@ using Microsoft.Warehouse.Request;
 
 using Origo.Bifrost;
 
-codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori", "Msg Discovery ori"
+codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
 {
     Access = Internal;
     procedure IsEnabled(): Boolean
@@ -44,8 +44,88 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
     end;
 
     procedure GetSelectionDescription(): Text
+    var
+        SelectionLbl: Label 'Creates outbound warehouse shipments from released sales or transfer orders; use Warehouse.Shipment.Post to post one.', Comment = 'is-IS=Stofnar útleiðarafhendingar úr útgefnum sölu- eða millifærslupöntunum; notaðu Warehouse.Shipment.Post til að bóka afhendingu.';
     begin
-        exit(GetDescription());
+        exit(SelectionLbl);
+    end;
+
+    procedure GetEnvelope(var Envelope: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+        Forms: List of [Text];
+    begin
+        Forms.Add('data only');
+        Envelope := Parts.RecordEnvelope(Forms, 'The request must contain one or more source documents under data.', true);
+        exit(true);
+    end;
+
+    procedure GetTarget(var Target: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Target.Add(ContractMgt.TargetEntry('data.sourceDocuments[].documentNo', 'document no.', 'The released Sales Order or outbound Transfer Order from which a Warehouse Shipment is created.'));
+        exit(true);
+    end;
+
+    procedure GetParameters(var Parameters: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Parameters.Add(ContractMgt.Parameter('sourceDocuments', 'array', true, 'One or more source documents. Each child has sourceType (SalesOrder or TransferOrder) and documentNo.'));
+        Parameters.Add(ContractMgt.Parameter('locationCode', 'string', false, 'Optional source-location check. It does not override the source document.'));
+        Parameters.Add(ContractMgt.Parameter('assignedUserId', 'string', false, 'User assigned to each created Warehouse Shipment Header.'));
+        Parameters.Add(ContractMgt.Parameter('postingDate', 'string', false, 'Posting date applied to each created Warehouse Shipment Header.'));
+        exit(true);
+    end;
+
+    procedure GetResponse(var Response: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
+        Fields: JsonArray;
+    begin
+        Parts.AddStatusField(Fields);
+        Fields.Add(ContractMgt.ResponseField('noOfShipments', 'integer', 'Number of Warehouse Shipments created.'));
+        Fields.Add(ContractMgt.ResponseField('shipments', 'array', 'Created Warehouse Shipment summaries with recordSystemId, no, locationCode, assignedUserId, sourceType, sourceDocumentNo and linesCreated.'));
+        Parts.Response(Response, Fields);
+        exit(true);
+    end;
+
+    procedure GetErrors(var Errors: JsonArray): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.AddSourceDocumentErrors(Errors, 'SalesOrder, TransferOrder');
+        exit(true);
+    end;
+
+    procedure GetEffect(var Effect: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.WriteEffect(Effect, 'Creates Warehouse Shipment Header and Line records and applies requested header fields.', 'BIFROST Full ori', false);
+        exit(true);
+    end;
+
+    procedure GetMetering(var Metering: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetRelated(var Related: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.Shipment.Post', 'Use it after creation to ship the Warehouse Shipment.'));
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.Pick.Create', 'Use it to create a pick for the shipment when warehouse picking is required.'));
+        exit(true);
+    end;
+
+    procedure GetOverview(var Overview: Text): Boolean
+    begin
+        Overview := 'Creates one Warehouse Shipment for each released Sales Order or outbound Transfer Order supplied in sourceDocuments.';
+        exit(true);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"
@@ -54,10 +134,8 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
     end;
 
     procedure GetMessageHelpAsMarkdownDocument(var Argument: Record "Message Argument ori")
-    var
-        HelpCodeunit: Codeunit "Whse Shipment Create Help ori";
     begin
-        Argument.SetResponseMarkdown(HelpCodeunit.GetHelpText());
+        Argument.SetResponseMarkdown('');
     end;
 
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")

@@ -7,7 +7,7 @@ using Origo.Bifrost;
 /// <summary>
 /// Implements Warehouse.Activity.Get as a filtered, paged read of open warehouse activities.
 /// </summary>
-codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori"
+codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
 {
     Access = Internal;
 
@@ -35,6 +35,138 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori"
         exit('Reads open warehouse activities with optional header, document and line filters.');
     end;
 
+    procedure GetKeywords(): Text
+    var
+        KeywordsLbl: Label 'warehouse activity, open pick, open put-away, warehouse lines, activity header, activity lines', Comment = 'is-IS=vöruhúsavirkni, opin tínsla, opinn frágangur, vöruhúslínur, haus virkni, línur virkni';
+    begin
+        exit(KeywordsLbl);
+    end;
+
+    procedure GetSelectionDescription(): Text
+    var
+        SelectionLbl: Label 'Read-only. Reads open warehouse picks and put-aways; use Warehouse.BinContent.Get for bin stock.', Comment = 'is-IS=Lesaðgangur. Les opnar tínslur og fráganga í vöruhúsi; notaðu Warehouse.BinContent.Get fyrir birgðir í hólfum.';
+    begin
+        exit(SelectionLbl);
+    end;
+
+    procedure GetEnvelope(var Envelope: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+        Forms: List of [Text];
+    begin
+        Forms.Add('guid');
+        Forms.Add('activity no.');
+        Envelope := Parts.RecordEnvelope(Forms, 'Optional Warehouse Activity Header SystemId or activity number; omit it to read a collection.', false);
+        exit(true);
+    end;
+
+    procedure GetTarget(var Target: JsonArray): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Target := Parts.ActivityTarget('Warehouse Activity', 'activityNo');
+        exit(true);
+    end;
+
+    procedure GetParameters(var Parameters: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.AddPagingParameters(Parameters);
+        Parameters.Add(ContractMgt.Parameter('activityType', 'string', false, 'Warehouse activity type, for example Pick or Put-away.'));
+        Parameters.Add(ContractMgt.Parameter('no', 'string', false, 'Warehouse activity number.'));
+        Parameters.Add(ContractMgt.Parameter('systemId', 'string', false, 'Warehouse Activity Header SystemId. recordSystemId and id are accepted too.'));
+        Parameters.Add(ContractMgt.Parameter('locationCode', 'string', false, 'Filter by location code.'));
+        Parameters.Add(ContractMgt.Parameter('assignedUserId', 'string', false, 'Filter by assigned user.'));
+        Parameters.Add(ContractMgt.Parameter('whseDocumentNo', 'string', false, 'Filter activities by source warehouse document number.'));
+        Parameters.Add(ContractMgt.Parameter('includeLines', 'boolean', false, 'Include the activity lines in each result.'));
+        exit(true);
+    end;
+
+    procedure GetResponse(var Response: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
+        Fields: JsonArray;
+        ActivityFields: JsonArray;
+        LineFields: JsonArray;
+        Activity: JsonObject;
+        Lines: JsonObject;
+    begin
+        Parts.AddStatusField(Fields);
+        Fields.Add(ContractMgt.ResponseField('noOfRecords', 'integer', 'Total matching open activities before paging.'));
+        Fields.Add(ContractMgt.ResponseField('skip', 'integer', 'Number of activities skipped.'));
+        Fields.Add(ContractMgt.ResponseField('take', 'integer', 'Maximum number of activities requested.'));
+        LineFields.Add(ContractMgt.ResponseField('lineNo', 'integer', 'Activity line number.'));
+        LineFields.Add(ContractMgt.ResponseField('itemNo', 'string', 'Item number.'));
+        LineFields.Add(ContractMgt.ResponseField('binCode', 'string', 'Bin code.'));
+        LineFields.Add(ContractMgt.ResponseField('zoneCode', 'string', 'Zone code.'));
+        LineFields.Add(ContractMgt.ResponseField('unitOfMeasureCode', 'string', 'Unit of measure code.'));
+        LineFields.Add(ContractMgt.ResponseField('qtyToHandle', 'number', 'Quantity to handle.'));
+        LineFields.Add(ContractMgt.ResponseField('qtyHandled', 'number', 'Quantity already handled.'));
+        LineFields.Add(ContractMgt.ResponseField('qtyOutstanding', 'number', 'Quantity outstanding.'));
+        LineFields.Add(ContractMgt.ResponseField('actionType', 'string', 'Warehouse action type.'));
+        LineFields.Add(ContractMgt.ResponseField('whseDocumentType', 'string', 'Source warehouse document type.'));
+        LineFields.Add(ContractMgt.ResponseField('whseDocumentNo', 'string', 'Source warehouse document number.'));
+        LineFields.Add(ContractMgt.ResponseField('whseDocumentLineNo', 'integer', 'Source warehouse document line number.'));
+        ActivityFields.Add(ContractMgt.ResponseField('no', 'string', 'Warehouse activity number.'));
+        ActivityFields.Add(ContractMgt.ResponseField('systemId', 'string', 'Warehouse Activity Header SystemId.'));
+        ActivityFields.Add(ContractMgt.ResponseField('activityType', 'string', 'Warehouse activity type.'));
+        ActivityFields.Add(ContractMgt.ResponseField('locationCode', 'string', 'Location code.'));
+        ActivityFields.Add(ContractMgt.ResponseField('assignedUserId', 'string', 'Assigned user ID.'));
+        ActivityFields.Add(ContractMgt.ResponseField('sortingMethod', 'string', 'Warehouse activity sorting method.'));
+        Lines.Add('name', 'lines');
+        Lines.Add('type', 'array');
+        Lines.Add('description', 'Included when includeLines is true.');
+        Lines.Add('children', LineFields);
+        ActivityFields.Add(Lines);
+        Activity.Add('name', 'result');
+        Activity.Add('type', 'array');
+        Activity.Add('description', 'The paged open Warehouse Activity Header rows.');
+        Activity.Add('children', ActivityFields);
+        Fields.Add(Activity);
+        Parts.Response(Response, Fields);
+        exit(true);
+    end;
+
+    procedure GetErrors(var Errors: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.AddLookupErrors(Errors, 'Warehouse Activity Header');
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, 'activityType is not a valid warehouse activity type.', 'Use a value from the Warehouse Activity Type enum.'));
+        exit(true);
+    end;
+
+    procedure GetEffect(var Effect: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.ReadEffect(Effect, 'Reads open Warehouse Activity Header and Line records and changes nothing.', 'BIFROST Read ori');
+        exit(true);
+    end;
+
+    procedure GetMetering(var Metering: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetRelated(var Related: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.BinContent.Get', 'Use it to read bin stock rather than open warehouse activities.'));
+        exit(true);
+    end;
+
+    procedure GetOverview(var Overview: Text): Boolean
+    begin
+        Overview := 'Read-only access to open Warehouse Activity Header records, optionally including their lines and source-document filter.';
+        exit(true);
+    end;
+
     /// <summary>Returns the outbound direction of this message type.</summary>
     /// <returns>Outbound.</returns>
     procedure GetMessageDirection(): Enum "Msg Direction ori"
@@ -45,10 +177,8 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori"
     /// <summary>Returns the request and response help for the message type.</summary>
     /// <param name="Argument">The message argument receiving the help.</param>
     procedure GetMessageHelpAsMarkdownDocument(var Argument: Record "Message Argument ori")
-    var
-        HelpCodeunit: Codeunit "Whse Activity Get Help ori";
     begin
-        Argument.SetResponseMarkdown(HelpCodeunit.GetHelpText());
+        Argument.SetResponseMarkdown('');
     end;
 
     /// <summary>Reads matching open warehouse activities and returns a paged JSON result.</summary>

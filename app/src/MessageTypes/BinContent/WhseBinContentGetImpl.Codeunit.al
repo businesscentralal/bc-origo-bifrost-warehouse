@@ -6,7 +6,7 @@ using Origo.Bifrost;
 /// <summary>
 /// Implements Warehouse.BinContent.Get as a filtered, paged read of Bin Content.
 /// </summary>
-codeunit 10078388 "Whse BinContent Get Impl ori" implements "Msg Interface ori"
+codeunit 10078388 "Whse BinContent Get Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
 {
     Access = Internal;
 
@@ -34,6 +34,118 @@ codeunit 10078388 "Whse BinContent Get Impl ori" implements "Msg Interface ori"
         exit('Reads Bin Content rows with item, location, bin and variant filters.');
     end;
 
+    procedure GetKeywords(): Text
+    var
+        KeywordsLbl: Label 'bin content, bin quantity, item in bin, warehouse stock, stock by bin, inventory by location', Comment = 'is-IS=birgðainnihald hólfs, magn í hólfi, vara í hólfi, vöruhúsabirgðir, birgðir eftir hólfi, birgðir eftir staðsetningu';
+    begin
+        exit(KeywordsLbl);
+    end;
+
+    procedure GetSelectionDescription(): Text
+    var
+        SelectionLbl: Label 'Read-only. Reads paged Bin Content; use Warehouse.Activity.Get for open warehouse picks and put-aways.', Comment = 'is-IS=Lesaðgangur. Les blaðsíðuskipt birgðainnihald hólfa; notaðu Warehouse.Activity.Get fyrir opnar tínslur og fráganga í vöruhúsi.';
+    begin
+        exit(SelectionLbl);
+    end;
+
+    procedure GetEnvelope(var Envelope: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+        Forms: List of [Text];
+    begin
+        Forms.Add('filter only');
+        Envelope := Parts.RecordEnvelope(Forms, 'No single record is required; filters under data select the Bin Content rows.', false);
+        exit(true);
+    end;
+
+    procedure GetTarget(var Target: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Target.Add(ContractMgt.TargetEntry('data.itemNo, data.locationCode, data.binCode, data.variantCode', 'filter', 'Optional filters for the Bin Content collection.'));
+        exit(true);
+    end;
+
+    procedure GetParameters(var Parameters: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.AddPagingParameters(Parameters);
+        Parameters.Add(ContractMgt.Parameter('itemNo', 'string', false, 'Filter by item number.'));
+        Parameters.Add(ContractMgt.Parameter('locationCode', 'string', false, 'Filter by location code.'));
+        Parameters.Add(ContractMgt.Parameter('binCode', 'string', false, 'Filter by bin code.'));
+        Parameters.Add(ContractMgt.Parameter('variantCode', 'string', false, 'Filter by item variant code.'));
+        exit(true);
+    end;
+
+    procedure GetResponse(var Response: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
+        Fields: JsonArray;
+        ResultFields: JsonArray;
+        Result: JsonObject;
+    begin
+        Parts.AddStatusField(Fields);
+        Fields.Add(ContractMgt.ResponseField('noOfRecords', 'integer', 'Total number of matching Bin Content records before paging.'));
+        Fields.Add(ContractMgt.ResponseField('skip', 'integer', 'Number of records skipped.'));
+        Fields.Add(ContractMgt.ResponseField('take', 'integer', 'Maximum number of records requested.'));
+        ResultFields.Add(ContractMgt.ResponseField('locationCode', 'string', 'Location code.'));
+        ResultFields.Add(ContractMgt.ResponseField('binCode', 'string', 'Bin code.'));
+        ResultFields.Add(ContractMgt.ResponseField('itemNo', 'string', 'Item number.'));
+        ResultFields.Add(ContractMgt.ResponseField('variantCode', 'string', 'Variant code.'));
+        ResultFields.Add(ContractMgt.ResponseField('unitOfMeasureCode', 'string', 'Unit of measure code.'));
+        ResultFields.Add(ContractMgt.ResponseField('quantity', 'number', 'Bin quantity.'));
+        ResultFields.Add(ContractMgt.ResponseField('dedicated', 'boolean', 'Whether the content is dedicated.'));
+        ResultFields.Add(ContractMgt.ResponseField('fixed', 'boolean', 'Whether the bin is fixed for the item.'));
+        ResultFields.Add(ContractMgt.ResponseField('zoneCode', 'string', 'Zone code.'));
+        ResultFields.Add(ContractMgt.ResponseField('binTypeCode', 'string', 'Bin type code.'));
+        Result.Add('name', 'result');
+        Result.Add('type', 'array');
+        Result.Add('description', 'The paged Bin Content rows.');
+        Result.Add('children', ResultFields);
+        Fields.Add(Result);
+        Parts.Response(Response, Fields);
+        exit(true);
+    end;
+
+    procedure GetErrors(var Errors: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidFilterField, 'A table-view filter names a field that cannot be filtered.', 'Use a valid Bin Content field name.'));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameterFormat, 'A paging or filter value cannot be read.', 'Send integer paging values and text filter values.'));
+        exit(true);
+    end;
+
+    procedure GetEffect(var Effect: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.ReadEffect(Effect, 'Reads Bin Content and changes nothing.', 'BIFROST Read ori');
+        exit(true);
+    end;
+
+    procedure GetMetering(var Metering: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetRelated(var Related: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.Activity.Get', 'Use it to read open warehouse picks and put-aways instead of Bin Content.'));
+        exit(true);
+    end;
+
+    procedure GetOverview(var Overview: Text): Boolean
+    begin
+        Overview := 'Read-only, paged access to Bin Content with optional item, location, bin and variant filters.';
+        exit(true);
+    end;
+
     /// <summary>Returns the outbound direction of this message type.</summary>
     /// <returns>Outbound.</returns>
     procedure GetMessageDirection(): Enum "Msg Direction ori"
@@ -44,10 +156,8 @@ codeunit 10078388 "Whse BinContent Get Impl ori" implements "Msg Interface ori"
     /// <summary>Returns the request and response help for this message type.</summary>
     /// <param name="Argument">The message argument receiving the help.</param>
     procedure GetMessageHelpAsMarkdownDocument(var Argument: Record "Message Argument ori")
-    var
-        HelpCodeunit: Codeunit "Whse BinContent Get Help ori";
     begin
-        Argument.SetResponseMarkdown(HelpCodeunit.GetHelpText());
+        Argument.SetResponseMarkdown('');
     end;
 
     /// <summary>Reads matching Bin Content records and returns a paged JSON result.</summary>

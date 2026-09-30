@@ -59,6 +59,55 @@ codeunit 97027 "Whse Message Contract Tests ori"
         Assert.IsTrue(Keywords <> '', MessageTypeName(MessageType) + ' keywords');
     end;
 
+    [Test]
+    procedure ActivityContractDescribesHeadersAndLines()
+    var
+        Assert: Codeunit "Library Assert";
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Contract: JsonObject;
+        Response: JsonObject;
+        Field: JsonObject;
+        Child: JsonObject;
+        Token: JsonToken;
+        Fields: JsonArray;
+        Children: JsonArray;
+        Index: Integer;
+        FieldName: Text;
+        HasHeaderField: Boolean;
+        HasLines: Boolean;
+    begin
+        Assert.IsTrue(ContractMgt.GetContract("Message Type ori"::"Warehouse.Activity.Get", Contract), 'Activity contract should exist');
+        Assert.IsTrue(Contract.Get('response', Token), 'Activity contract should have a response');
+        Response := Token.AsObject();
+        Assert.IsTrue(Response.Get('fields', Token), 'Activity response should have fields');
+        Fields := Token.AsArray();
+
+        for Index := 0 to Fields.Count() - 1 do begin
+            Fields.Get(Index, Token);
+            Field := Token.AsObject();
+            if not Field.Get('name', Token) then
+                continue;
+            FieldName := Token.AsValue().AsText();
+            if FieldName <> 'result' then
+                continue;
+            Assert.IsTrue(Field.Get('children', Token), 'Activity result should describe its children');
+            Children := Token.AsArray();
+            for Index := 0 to Children.Count() - 1 do begin
+                Children.Get(Index, Token);
+                Child := Token.AsObject();
+                if not Child.Get('name', Token) then
+                    continue;
+                FieldName := Token.AsValue().AsText();
+                HasHeaderField := HasHeaderField or (FieldName = 'no');
+                HasLines := HasLines or (FieldName = 'lines');
+            end;
+            break;
+        end;
+
+        Assert.IsTrue(HasHeaderField, 'Activity result should describe activity header fields');
+        Assert.IsTrue(HasLines, 'Activity result should describe its nested lines array');
+    end;
+
     local procedure MessageTypeName(MessageType: Enum "Message Type ori"): Text
     begin
         exit(Enum::"Message Type ori".Names().Get(Enum::"Message Type ori".Ordinals().IndexOf(MessageType.AsInteger())));

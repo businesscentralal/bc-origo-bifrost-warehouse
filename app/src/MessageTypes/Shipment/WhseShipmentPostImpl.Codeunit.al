@@ -195,10 +195,15 @@ codeunit 10078407 "Whse Shipment Post Impl ori" implements "Msg Interface ori", 
         WhseShipmentLine.FindFirst();
 
         WhsePostShipment.SetPostingSettings(Invoice);
-        if not WhsePostShipment.Run(WhseShipmentLine) then begin
-            Argument.RespondWithError(GetLastErrorText());
-            exit;
-        end;
+        // Inside a caller's transaction (Omit Commit) the posting runs without a return value, so a posting
+        // error reaches the caller as it is; Codeunit.Run with a return value is not allowed there.
+        if Argument."Omit Commit" then
+            WhsePostShipment.Run(WhseShipmentLine)
+        else
+            if not WhsePostShipment.Run(WhseShipmentLine) then begin
+                Argument.RespondWithError(GetLastErrorText());
+                exit;
+            end;
 
         ResponseJson.Add('status', 'Success');
         ResponseJson.Add('shipmentNo', WhseShipmentHeader."No.");

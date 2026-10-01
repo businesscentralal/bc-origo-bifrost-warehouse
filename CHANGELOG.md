@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+### Fixed (2026-10-01) - posting, put-away and preview types inside a caller's transaction (#18)
+
+- `Warehouse.Receipt.Post` and `Warehouse.Shipment.Post` run the posting without a return value when they are called inside the caller's transaction (Omit Commit), as Foundation's posting types do since core#243; a posting error then reaches the caller as it is. Before, they failed with "An error occurred and the transaction is stopped".
+- `Warehouse.Putaway.Create` inside a caller's transaction returns an open put-away that already exists without running the report, and otherwise runs it without a return value.
+- `Warehouse.Receipt.Post.Preview` and `Warehouse.Shipment.PreviewPost` answer `PreconditionFailed` inside a caller's transaction: a posting preview rolls itself back with an error, which would roll back the caller. Their errors chapter names it.
+- The test helpers dispatch the way the Bifrost API does (the message task owns the transaction); `RunMessageInCallerTransaction` covers the chained-call path, with new tests for Receipt.Post and Receipt.Post.Preview.
+
 ### Changed (2026-10-01) - Warehouse.Putaway.Create declares effect irreversible (#14)
 
 - `Warehouse.Putaway.Create` runs Business Central's `Whse.-Source - Create Document` report, which commits each put-away it creates, so the type now declares effect `irreversible` (still idempotent: it returns an already-open put-away). The Orchestrator's Omit Commit guard refuses it in a rollback chain. Its selection description and overview say so.

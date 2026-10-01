@@ -255,7 +255,8 @@ codeunit 97022 "Whse Receipt Test Helper ori"
 
 
     /// <summary>
-    /// Dispatches a message type through public Dispatcher ori and returns whether the response parsed.
+    /// Dispatches a message type through public Dispatcher ori the way the Bifrost API does (the message task
+    /// owns and commits the transaction) and returns whether the response parsed.
     /// </summary>
     /// <param name="MessageType">The message type to run.</param>
     /// <param name="Subject">The message subject. Pass empty when the type does not read it.</param>
@@ -263,6 +264,25 @@ codeunit 97022 "Whse Receipt Test Helper ori"
     /// <param name="ResponseJson">Receives the parsed response JSON.</param>
     /// <returns>True when the response parsed as JSON.</returns>
     internal procedure RunMessage(MessageType: Enum "Message Type ori"; Subject: Text; RequestText: Text; var ResponseJson: JsonObject): Boolean
+    begin
+        exit(DispatchMessage(MessageType, Subject, RequestText, false, ResponseJson));
+    end;
+
+    /// <summary>
+    /// Dispatches a message type inside the caller's transaction (Omit Commit), the way a chained call runs it,
+    /// and returns whether the response parsed.
+    /// </summary>
+    /// <param name="MessageType">The message type to run.</param>
+    /// <param name="Subject">The message subject. Pass empty when the type does not read it.</param>
+    /// <param name="RequestText">The request payload. Pass empty when no payload is required.</param>
+    /// <param name="ResponseJson">Receives the parsed response JSON.</param>
+    /// <returns>True when the response parsed as JSON.</returns>
+    internal procedure RunMessageInCallerTransaction(MessageType: Enum "Message Type ori"; Subject: Text; RequestText: Text; var ResponseJson: JsonObject): Boolean
+    begin
+        exit(DispatchMessage(MessageType, Subject, RequestText, true, ResponseJson));
+    end;
+
+    local procedure DispatchMessage(MessageType: Enum "Message Type ori"; Subject: Text; RequestText: Text; OmitCommit: Boolean; var ResponseJson: JsonObject): Boolean
     var
         Dispatcher: Codeunit "Dispatcher ori";
         RequestContent: BigText;
@@ -284,7 +304,8 @@ codeunit 97022 "Whse Receipt Test Helper ori"
             'text/json',
             RequestContent,
             ResponseContent,
-            ResponseContentType);
+            ResponseContentType,
+            OmitCommit);
         if ResponseContent.Length() = 0 then
             exit(false);
         ResponseContent.GetSubText(ResponseText, 1, ResponseContent.Length());

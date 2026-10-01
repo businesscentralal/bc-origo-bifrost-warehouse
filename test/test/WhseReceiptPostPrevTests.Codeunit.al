@@ -105,4 +105,30 @@ codeunit 97016 "Whse Rcpt Post Prev Tests ori"
         Assert.IsTrue(ResponseJson.Get('nextStep', Token), 'nextStep');
         Assert.IsTrue(Token.AsValue().AsText().Contains('Qty. to Receive'), 'nextStep names Qty. to Receive');
     end;
+
+    [Test]
+    procedure PreviewPost_InCallerTransaction_ReturnsPreconditionFailed()
+    var
+        Location: Record Location;
+        Item: Record Item;
+        PurchaseHeader: Record "Purchase Header";
+        WhseReceiptHeader, AfterWhseReceiptHeader : Record "Warehouse Receipt Header";
+        RequestJson, ResponseJson : JsonObject;
+        Token: JsonToken;
+        RequestText: Text;
+    begin
+        // [SCENARIO] #18: a preview inside a caller's transaction (Omit Commit) is refused with a clear answer, not a platform error
+        Initialize();
+        Helper.SetupLocationAndItem(Location, Item, 0);
+        Helper.CreateReleasedPurchaseOrder(PurchaseHeader, Item."No.", Location.Code, 10);
+        Helper.CreateWhseReceiptFromPurchaseOrder(WhseReceiptHeader, PurchaseHeader);
+
+        RequestJson.WriteTo(RequestText);
+        Assert.IsTrue(Helper.RunMessageInCallerTransaction(Enum::"Message Type ori"::"Warehouse.Receipt.Post.Preview", WhseReceiptHeader."No.", RequestText, ResponseJson), 'Response JSON should parse');
+        Assert.IsTrue(ResponseJson.Get('status', Token), 'status missing');
+        Assert.AreEqual('Error', Token.AsValue().AsText(), 'Status should be Error');
+        Assert.IsTrue(ResponseJson.Get('code', Token), 'code');
+        Assert.AreEqual('PreconditionFailed', Token.AsValue().AsText(), 'code');
+        Assert.IsTrue(AfterWhseReceiptHeader.Get(WhseReceiptHeader."No."), 'The refused preview must leave the Warehouse Receipt untouched');
+    end;
 }

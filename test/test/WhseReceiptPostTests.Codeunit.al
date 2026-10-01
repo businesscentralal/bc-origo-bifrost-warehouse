@@ -116,4 +116,29 @@ codeunit 97015 "Whse Receipt Post Tests ori"
         MessageTypeInterface := Enum::"Message Type ori"::"Warehouse.Receipt.Post";
         Assert.IsFalse(MessageTypeInterface.IsEnabled(), 'Warehouse.Receipt.Post must be disabled without write permission on Warehouse Receipt Header.');
     end;
+
+    [Test]
+    procedure Post_InCallerTransaction_PostsTheReceipt()
+    var
+        Location: Record Location;
+        Item: Record Item;
+        PurchaseHeader: Record "Purchase Header";
+        WhseReceiptHeader: Record "Warehouse Receipt Header";
+        RequestJson, ResponseJson : JsonObject;
+        StatusToken, PostedNoToken : JsonToken;
+        RequestText: Text;
+    begin
+        // [SCENARIO] #18: inside a caller's transaction (Omit Commit) the receipt posts without using Codeunit.Run's return value
+        Initialize();
+        Helper.SetupLocationAndItem(Location, Item, 0);
+        Helper.CreateReleasedPurchaseOrder(PurchaseHeader, Item."No.", Location.Code, 5);
+        Helper.CreateWhseReceiptFromPurchaseOrder(WhseReceiptHeader, PurchaseHeader);
+
+        RequestJson.WriteTo(RequestText);
+        Assert.IsTrue(Helper.RunMessageInCallerTransaction(Enum::"Message Type ori"::"Warehouse.Receipt.Post", WhseReceiptHeader."No.", RequestText, ResponseJson), 'Response JSON should parse');
+        Assert.IsTrue(ResponseJson.Get('status', StatusToken), 'status missing');
+        Assert.AreEqual('Success', StatusToken.AsValue().AsText(), 'Status should be Success');
+        Assert.IsTrue(ResponseJson.Get('postedWhseReceiptNo', PostedNoToken), 'postedWhseReceiptNo missing');
+        Assert.AreNotEqual('', PostedNoToken.AsValue().AsText(), 'postedWhseReceiptNo should be populated');
+    end;
 }

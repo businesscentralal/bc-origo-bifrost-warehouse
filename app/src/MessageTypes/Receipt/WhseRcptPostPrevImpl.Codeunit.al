@@ -104,6 +104,7 @@ codeunit 10078411 "Whse Rcpt Post Prev. Impl ori" implements "Msg Interface ori"
         Parts: Codeunit "Whse Contract Parts ori";
     begin
         Parts.AddLookupErrors(Errors, 'Warehouse Receipt Header');
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, 'The preview is called inside the caller''s transaction (Omit Commit), for example as a step of a chained call.', 'Call the preview as a message of its own.'));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::NothingToPreview, 'The Warehouse Receipt has no lines or no quantities to post.', 'Add lines and quantities to receive.'));
         Parts.AddBusinessCentralError(Errors, 'invalid quantities, posting setup or source-document state');
         exit(true);
@@ -182,6 +183,8 @@ codeunit 10078411 "Whse Rcpt Post Prev. Impl ori" implements "Msg Interface ori"
         PreviewErrorText: Text;
         PreviewFieldNames: List of [Text];
         NoLinesToPostErr: Label 'Warehouse Receipt %1 has no lines to post.', Comment = '%1 = Whse. Receipt No.', Locked = true;
+        PreviewInCallerTransactionErr: Label 'A posting preview cannot run inside the caller''s transaction (Omit Commit).', Comment = 'is-IS=Bókunarforsýning getur ekki keyrt innan færslu kallandans (Omit Commit).';
+        PreviewInCallerTransactionNextStepTok: Label 'Call the preview as a message of its own, not as a step of a chained call.', Comment = 'is-IS=Kallaðu á forsýninguna sem sjálfstæð skilaboð, ekki sem skref í keðjukalli.';
         PreviewFailedErr: Label 'Posting preview failed and no entries were captured. The warehouse receipt cannot be posted in its current state.', Comment = 'is-IS=Bókunarforsýning mistókst og engar færslur voru teknar. Vöruhúsamóttakan getur ekki verið bókuð í núverandi stöðu.';
         NothingToPostNextStepTok: Label 'No receipt line has Qty. to Receive. Set quantities on the receipt lines.', Comment = 'is-IS=Engin móttökulína hefur Magn til móttöku. Setjið magn á móttökulínurnar.';
     begin
@@ -201,6 +204,13 @@ codeunit 10078411 "Whse Rcpt Post Prev. Impl ori" implements "Msg Interface ori"
 
         GLSetup.Get();
         LCYCode := GLSetup."LCY Code";
+
+        // The preview ends in an error that rolls it back, which can only be caught outside the caller's
+        // transaction. Inside it (Omit Commit) the preview would roll back the caller, so it is refused.
+        if Argument."Omit Commit" then begin
+            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, PreviewInCallerTransactionErr, '', '', '', PreviewInCallerTransactionNextStepTok);
+            exit;
+        end;
 
         if not PreviewWhseReceipt(WhseReceiptLine, PostingPreviewEventHandler, PreviewErrorText) then begin
             if PreviewErrorText = '' then

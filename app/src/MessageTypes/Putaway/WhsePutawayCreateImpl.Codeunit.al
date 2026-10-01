@@ -230,10 +230,22 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
             exit;
         end;
 
-        // Delegate the report invocation to an isolated codeunit so report-time errors are
-        // caught here without aborting the outer message-task transaction.
-        PutawayWasCreated := Codeunit.Run(Codeunit::"Whse Putaway Create Proc. ori", PostedWhseReceiptHeader);
-        ReportErrorText := GetLastErrorText();
+        if Argument."Omit Commit" then begin
+            // Inside a caller's transaction (Omit Commit) a report error cannot be caught, so an open
+            // put-away that already exists is returned without running the report (see below for why
+            // it may exist), and otherwise the report runs without a return value.
+            if FindCreatedPutaway(PostedWhseReceiptHeader."No.", WarehouseActivityHeader) then
+                PutawayWasCreated := false
+            else begin
+                Codeunit.Run(Codeunit::"Whse Putaway Create Proc. ori", PostedWhseReceiptHeader);
+                PutawayWasCreated := true;
+            end;
+        end else begin
+            // Delegate the report invocation to an isolated codeunit so report-time errors are
+            // caught here without aborting the outer message-task transaction.
+            PutawayWasCreated := Codeunit.Run(Codeunit::"Whse Putaway Create Proc. ori", PostedWhseReceiptHeader);
+            ReportErrorText := GetLastErrorText();
+        end;
 
         // Locate the put-away for this Posted Whse. Receipt. A put-away may already exist even
         // when the report failed: on a Require Put-away location that is NOT a "Use Put-away

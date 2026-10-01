@@ -184,10 +184,15 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
         end;
         WhseReceiptLine.FindFirst();
 
-        if not WhsePostReceipt.Run(WhseReceiptLine) then begin
-            Argument.RespondWithError(GetLastErrorText());
-            exit;
-        end;
+        // Inside a caller's transaction (Omit Commit) the posting runs without a return value, so a posting
+        // error reaches the caller as it is; Codeunit.Run with a return value is not allowed there.
+        if Argument."Omit Commit" then
+            WhsePostReceipt.Run(WhseReceiptLine)
+        else
+            if not WhsePostReceipt.Run(WhseReceiptLine) then begin
+                Argument.RespondWithError(GetLastErrorText());
+                exit;
+            end;
 
         ResponseJson.Add('status', 'Success');
         ResponseJson.Add('receiptNo', WhseReceiptHeader."No.");

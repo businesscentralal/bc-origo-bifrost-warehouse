@@ -2,9 +2,9 @@
 
 - Namespace: `Origo.Bifrost.Warehouse`
 - Test namespace: `Origo.Bifrost.Warehouse.Test`
-- Foundation dependency: Bifrost Foundation `28.0.0.0` (core#196 is included in this release)
+- Foundation dependency: Bifrost Foundation `28.0.0.186` (first build without `GetMessageHelpAsMarkdownDocument`, core#198)
 - Permissions: PermissionSetExtensions onto `BIFROST Read ori` / `BIFROST Full ori`
-- No own assignable permission set; no direct `Setup ori` tabledata access.
+- Own permission sets only for the posting and invoicing gates (`BIFROST WhsePost ori`, `BIFROST WhseInv ori`); no direct `Setup ori` tabledata access.
 - Message types: all twelve `Warehouse.*` types in `app/src/MessageTypes/`.
 - The 100-ID range fits the warehouse#4 move (~32 objects) and P2 Warehouse Movement.
 

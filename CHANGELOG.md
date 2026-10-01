@@ -7,6 +7,7 @@
 - AL-Go workflows updated to the same template as Bifrost Inventory (AL-Go Actions v9.2) for continuous deployment of `main` to the Bifrost sandbox.
 - Builds on `main` are now code-signed from Azure Key Vault on a Windows runner and versioned with AL-Go versioning strategy 3 (`app.json` stays at `X.Y.0.0`); pull-request builds stay unsigned.
 - Removed the docs-only Deploy Reference Documentation workflow; documentation lives in businesscentralal/bifrost.
+- Telemetry now goes to the shared Bifröst Application Insights resource, like every other Bifröst app.
 
 ### Added (2026-09-29) - Warehouse message contracts (#10)
 

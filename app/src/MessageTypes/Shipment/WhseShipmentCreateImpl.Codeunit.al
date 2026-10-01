@@ -122,10 +122,26 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
         exit(true);
     end;
 
+    procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetExamples(var Examples: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
     procedure GetOverview(var Overview: Text): Boolean
     begin
         Overview := 'Creates one Warehouse Shipment for each released Sales Order or outbound Transfer Order supplied in sourceDocuments.';
         exit(true);
+    end;
+
+    procedure GetNotes(var Notes: Text): Boolean
+    begin
+        Clear(Notes);
+        exit(false);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"

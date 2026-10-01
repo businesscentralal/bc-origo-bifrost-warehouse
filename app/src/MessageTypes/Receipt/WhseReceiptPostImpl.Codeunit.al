@@ -71,6 +71,11 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
         exit(true);
     end;
 
+    procedure GetParameters(var Parameters: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
     procedure GetResponse(var Response: JsonObject): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
@@ -120,10 +125,26 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
         exit(true);
     end;
 
+    procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetExamples(var Examples: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
     procedure GetOverview(var Overview: Text): Boolean
     begin
         Overview := 'Irreversibly posts a Warehouse Receipt. Source-document invoicing is a separate later action.';
         exit(true);
+    end;
+
+    procedure GetNotes(var Notes: Text): Boolean
+    begin
+        Clear(Notes);
+        exit(false);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"

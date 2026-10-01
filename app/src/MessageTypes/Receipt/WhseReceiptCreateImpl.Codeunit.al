@@ -123,10 +123,26 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
         exit(true);
     end;
 
+    procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetExamples(var Examples: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
     procedure GetOverview(var Overview: Text): Boolean
     begin
         Overview := 'Creates one Warehouse Receipt for each released Sales Return Order, Purchase Order or inbound Transfer Order supplied in sourceDocuments.';
         exit(true);
+    end;
+
+    procedure GetNotes(var Notes: Text): Boolean
+    begin
+        Clear(Notes);
+        exit(false);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"

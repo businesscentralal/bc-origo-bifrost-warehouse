@@ -127,10 +127,26 @@ codeunit 10078407 "Whse Shipment Post Impl ori" implements "Msg Interface ori", 
         exit(true);
     end;
 
+    procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetExamples(var Examples: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
     procedure GetOverview(var Overview: Text): Boolean
     begin
         Overview := 'Irreversibly posts a Warehouse Shipment. Invoicing is optional and is a separate permission-gated pass.';
         exit(true);
+    end;
+
+    procedure GetNotes(var Notes: Text): Boolean
+    begin
+        Clear(Notes);
+        exit(false);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"

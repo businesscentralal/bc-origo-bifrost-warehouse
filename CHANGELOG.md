@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Changed (2026-10-01) - Warehouse.Putaway.Create declares effect irreversible (#14)
+
+- `Warehouse.Putaway.Create` runs Business Central's `Whse.-Source - Create Document` report, which commits each put-away it creates, so the type now declares effect `irreversible` (still idempotent: it returns an already-open put-away). The Orchestrator's Omit Commit guard refuses it in a rollback chain. Its selection description and overview say so.
+- `Warehouse.Pick.Create` stays `write`: its report commits only when a print option is set, which Bifröst never does.
+
 ### Changed (2026-10-01) - complete the Warehouse message contracts and remove the markdown help procedure (#10, #11)
 
 - The twelve Warehouse message types implement every chapter of the current `Msg Contract ori`, so the app builds against Foundation again (`main` failed with AL0582 on `GetWorkflow`, `GetExamples`, `GetNotes` and, for five types, `GetParameters`).

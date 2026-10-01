@@ -1,11 +1,12 @@
 namespace Origo.Bifrost.Warehouse.Test;
 
 using Origo.Bifrost;
+using System.TestLibraries.Utilities;
 
 /// <summary>
 /// Conformance tests for the twelve Warehouse message type contracts.
 /// </summary>
-codeunit 97027 "Whse Message Contract Tests ori"
+codeunit 97027 "Whse Msg Contract Tests ori"
 {
     Subtype = Test;
     TestPermissions = Disabled;

@@ -39,5 +39,5 @@ Test range: `97000–97099`.
 | 97002 | `Whse Test Data ori` |
 | 97003–97009 | Reserved for P2 Warehouse Movement tests |
 | 97010 | `Whse NoRead Test ori` |
-| 97027 | `Whse Message Contract Tests ori` (warehouse#10) |
+| 97027 | `Whse Msg Contract Tests ori` (warehouse#10) |
 | 97011–97026, 97028–97099 | Free |

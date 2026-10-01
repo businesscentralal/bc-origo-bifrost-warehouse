@@ -5,7 +5,7 @@
 ### Changed (2026-10-01) - Warehouse.Putaway.Create declares effect irreversible (#14)
 
 - `Warehouse.Putaway.Create` runs Business Central's `Whse.-Source - Create Document` report, which commits each put-away it creates, so the type now declares effect `irreversible` (still idempotent: it returns an already-open put-away). The Orchestrator's Omit Commit guard refuses it in a rollback chain. Its selection description and overview say so.
-- `Warehouse.Pick.Create` stays `write`: its report commits only when a print option is set, which Bifröst never does.
+- `Warehouse.Receipt.Create` (Business Central's Get Source Documents report commits each receipt header) and `Warehouse.Pick.Create` (created through `Codeunit.Run` with a return value, which commits) declare `irreversible` too, with their selection descriptions and overviews. `Warehouse.Shipment.Create` stays `write`: report 5753 has no commit on the shipment path.
 
 ### Changed (2026-10-01) - complete the Warehouse message contracts and remove the markdown help procedure (#10, #11)
 

@@ -47,7 +47,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
 
     procedure GetSelectionDescription(): Text
     var
-        SelectionLbl: Label 'Creates a Warehouse Pick from an existing shipment; use Warehouse.Pick.Register after quantities are picked.', Comment = 'is-IS=Stofnar tínslu úr fyrirliggjandi afhendingu; notaðu Warehouse.Pick.Register eftir að vörur hafa verið tíndar.';
+        SelectionLbl: Label 'Irreversible. Creates a Warehouse Pick from an existing shipment; use Warehouse.Pick.Register after quantities are picked.', Comment = 'is-IS=Óafturkræft. Stofnar tínslu úr fyrirliggjandi afhendingu; notaðu Warehouse.Pick.Register eftir að vörur hafa verið tíndar.';
     begin
         exit(SelectionLbl);
     end;
@@ -115,7 +115,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.WriteEffect(Effect, 'Creates Warehouse Activity Header and Line records of type Pick and applies optional activity fields.', 'BIFROST Full ori', false);
+        Parts.IrreversibleEffect(Effect, 'Creates Warehouse Activity Header and Line records of type Pick and applies optional activity fields. Outside Omit Commit the pick is created in its own transaction (Codeunit.Run with a return value), which commits it, so it is not rolled back with the caller''s transaction.', 'BIFROST Full ori');
         exit(true);
     end;
 
@@ -148,7 +148,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
 
     procedure GetOverview(var Overview: Text): Boolean
     begin
-        Overview := 'Creates a Warehouse Pick from an existing Warehouse Shipment using BC report 7318 and applies optional activity fields.';
+        Overview := 'Irreversibly creates a Warehouse Pick from an existing Warehouse Shipment using BC report 7318 (committed in its own transaction) and applies optional activity fields.';
         exit(true);
     end;
 

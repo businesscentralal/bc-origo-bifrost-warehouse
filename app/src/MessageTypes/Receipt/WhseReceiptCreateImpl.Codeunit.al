@@ -46,7 +46,7 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
 
     procedure GetSelectionDescription(): Text
     var
-        SelectionLbl: Label 'Creates inbound warehouse receipts from released sales return, purchase, or transfer orders; use Warehouse.Receipt.Post to receive one.', Comment = 'is-IS=Stofnar innleiðarmóttökur úr útgefnum söluskila-, innkaupa- eða millifærslupöntunum; notaðu Warehouse.Receipt.Post til að móttaka.';
+        SelectionLbl: Label 'Irreversible. Creates inbound warehouse receipts from released sales return, purchase, or transfer orders; use Warehouse.Receipt.Post to receive one.', Comment = 'is-IS=Óafturkræft. Stofnar innleiðarmóttökur úr útgefnum söluskila-, innkaupa- eða millifærslupöntunum; notaðu Warehouse.Receipt.Post til að móttaka.';
     begin
         exit(SelectionLbl);
     end;
@@ -105,7 +105,7 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.WriteEffect(Effect, 'Creates Warehouse Receipt Header and Line records and applies requested header fields.', 'BIFROST Full ori', false);
+        Parts.IrreversibleEffect(Effect, 'Creates Warehouse Receipt Header and Line records and applies requested header fields. Business Central''s Get Source Documents report commits after each receipt header it creates, so the receipts are not rolled back with the caller''s transaction.', 'BIFROST Full ori');
         exit(true);
     end;
 
@@ -138,7 +138,7 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
 
     procedure GetOverview(var Overview: Text): Boolean
     begin
-        Overview := 'Creates one Warehouse Receipt for each released Sales Return Order, Purchase Order or inbound Transfer Order supplied in sourceDocuments.';
+        Overview := 'Irreversibly creates one Warehouse Receipt for each released Sales Return Order, Purchase Order or inbound Transfer Order supplied in sourceDocuments (Business Central commits each new receipt).';
         exit(true);
     end;
 

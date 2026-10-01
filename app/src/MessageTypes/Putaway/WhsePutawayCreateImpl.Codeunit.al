@@ -47,7 +47,7 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
 
     procedure GetSelectionDescription(): Text
     var
-        SelectionLbl: Label 'Creates or returns a Warehouse Put-away from a posted receipt; use Warehouse.Putaway.Register after the goods are put away.', Comment = 'is-IS=Stofnar eða skilar frágangi úr bókaðri móttöku; notaðu Warehouse.Putaway.Register eftir að gengið hefur verið frá vörunum.';
+        SelectionLbl: Label 'Irreversible. Creates or returns a Warehouse Put-away from a posted receipt; use Warehouse.Putaway.Register after the goods are put away.', Comment = 'is-IS=Óafturkræft. Stofnar eða skilar frágangi úr bókaðri móttöku; notaðu Warehouse.Putaway.Register eftir að gengið hefur verið frá vörunum.';
     begin
         exit(SelectionLbl);
     end;
@@ -117,7 +117,9 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.WriteEffect(Effect, 'Creates or returns Warehouse Activity Header and Line records of type Put-away and applies optional activity fields.', 'BIFROST Full ori', true);
+        Parts.IrreversibleEffect(Effect, 'Creates or returns Warehouse Activity Header and Line records of type Put-away and applies optional activity fields. Business Central''s Whse.-Source - Create Document report commits each put-away it creates, so the put-away is not rolled back with the caller''s transaction.', 'BIFROST Full ori');
+        // Returning an already-created open put-away makes a repeated call safe.
+        Effect.Replace('idempotent', true);
         exit(true);
     end;
 
@@ -135,20 +137,34 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
         exit(true);
     end;
 
+    procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.InboundWorkflow(Workflow);
+        exit(true);
+    end;
+
+    procedure GetExamples(var Examples: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
     procedure GetOverview(var Overview: Text): Boolean
     begin
-        Overview := 'Creates a Warehouse Put-away from a Posted Warehouse Receipt, or returns an already-created open put-away.';
+        Overview := 'Irreversibly creates a Warehouse Put-away from a Posted Warehouse Receipt (Business Central commits the new put-away), or returns an already-created open put-away.';
         exit(true);
+    end;
+
+    procedure GetNotes(var Notes: Text): Boolean
+    begin
+        Notes := '';
+        exit(false);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"
     begin
         exit(Enum::"Msg Direction ori"::Inbound);
-    end;
-
-    procedure GetMessageHelpAsMarkdownDocument(var Argument: Record "Message Argument ori")
-    begin
-        Argument.SetResponseMarkdown('');
     end;
 
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")

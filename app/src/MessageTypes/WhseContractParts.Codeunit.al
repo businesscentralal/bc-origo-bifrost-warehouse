@@ -142,4 +142,38 @@ codeunit 10078459 "Whse Contract Parts ori"
     begin
         Fields.Add(ContractMgt.ResponseField('status', 'string', 'Success on a successful call; Error responses use the standard error envelope.'));
     end;
+
+    /// <summary>
+    /// The inbound warehouse flow: receipt, receive posting, put-away.
+    /// </summary>
+    /// <param name="Workflow">Receives the workflow chapter.</param>
+    internal procedure InboundWorkflow(var Workflow: JsonObject)
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Steps: JsonArray;
+    begin
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Receipt.Create', 'Create the Warehouse Receipt from a released Purchase Order, Sales Return Order or inbound Transfer Order.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Receipt.Post.Preview', 'Inspect the predicted entries without committing.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Receipt.Post', 'Post the receive; the source document is received, not invoiced.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Putaway.Create', 'Create the put-away from the Posted Warehouse Receipt when the location uses put-away.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Putaway.Register', 'Register the put-away to place the goods in their bins.'));
+        Workflow.Add('steps', Steps);
+    end;
+
+    /// <summary>
+    /// The outbound warehouse flow: shipment, pick, shipment posting.
+    /// </summary>
+    /// <param name="Workflow">Receives the workflow chapter.</param>
+    internal procedure OutboundWorkflow(var Workflow: JsonObject)
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Steps: JsonArray;
+    begin
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Shipment.Create', 'Create the Warehouse Shipment from a released Sales Order or outbound Transfer Order.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Pick.Create', 'Create the pick from the Warehouse Shipment when the location uses picks.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Pick.Register', 'Register the pick; it updates the shipment quantities.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Shipment.PreviewPost', 'Inspect the predicted entries without committing.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Shipment.Post', 'Post the shipment, and optionally invoice the source document.'));
+        Workflow.Add('steps', Steps);
+    end;
 }

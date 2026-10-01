@@ -1,8 +1,25 @@
 {
-  "$schema": "https://raw.githubusercontent.com/microsoft/AL-Go-Actions/v9.0/.Modules/settings.schema.json",
+  "$schema": "https://raw.githubusercontent.com/microsoft/AL-Go-Actions/v9.2/.Modules/settings.schema.json",
   "type": "AppSource App",
   "templateUrl": "https://github.com/cosmoconsult/Alpaca-AppSource@main",
-  "templateSha": "2b90d7000c9d1ec513ed38b41786c07bebf29fd0",
+  "templateSha": "4cd474c40c167da7b929d5032d30c23a6bb3b225",
+  "versioningStrategy": 3,
+  "keyVaultName": "kv-kjarni-hsm-prod",
+  "keyVaultCodesignCertificateName": "CodeSigning-2025",
+  "doNotSignApps": true,
+  "shortLivedArtifactsRetentionDays": 30,
+  "ConditionalSettings": [
+    {
+      "branches": [
+        "main"
+      ],
+      "settings": {
+        "doNotSignApps": false,
+        "githubRunner": "windows-latest",
+        "githubRunnerShell": "pwsh"
+      }
+    }
+  ],
   "Environments": [
     "Bifrost"
   ],

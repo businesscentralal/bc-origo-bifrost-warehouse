@@ -10,6 +10,7 @@
   "privacyStatement": "https://businesscentralal.github.io/bifrost/en-us/foundation/privacy/",
   "EULA": "https://businesscentralal.github.io/bifrost/en-us/foundation/eula/",
   "logo": "assets/Logo250x250.png",
+  "applicationInsightsConnectionString": "InstrumentationKey=af411133-5e22-486f-b23a-081b79ed4168;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/;ApplicationId=c4476f32-5dfb-490a-8ad0-fb8ffad1c050",
   "contextSensitiveHelpUrl": "https://bifrost.origo.is/{0}/help/warehouse/",
   "supportedLocales": [
     "en-US",

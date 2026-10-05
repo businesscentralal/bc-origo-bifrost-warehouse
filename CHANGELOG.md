@@ -1,3 +1,12 @@
+## Unreleased
+
+### Changed (2026-10-05) - align with Bifrost Foundation 28.0.1
+
+- The Foundation dependency floor is **28.0.1.0** in `app/app.json` and `test/app.json`, the same floor as Bifrost Language Models and Bifrost Attachments.
+- Every table and page now declares `Extensible`. Objects nothing extends are `Extensible = false`; opening one later is non-breaking.
+- `tools/` carries Foundation's source guards. The Source Guards workflow runs the checks that already pass on Attachments: no call stack in answers, validated table views, no obsolete, permission coverage, and Icelandic keyword counts. Contract-parameter and mixed-language guards are copied but not wired in.
+- Help Links is not wired in until `businesscentralal/bifrost` main has `help/warehouse/`.
+
 # Changelog
 
 ## [Unreleased]

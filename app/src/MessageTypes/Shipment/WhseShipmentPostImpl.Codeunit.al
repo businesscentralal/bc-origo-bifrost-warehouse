@@ -38,7 +38,7 @@ codeunit 10078407 "Whse Shipment Post Impl ori" implements "Msg Interface ori", 
 
     procedure GetKeywords(): Text
     var
-        KeywordsLbl: Label 'post warehouse shipment, ship goods, goods left the warehouse, dispatch goods, send the goods out', Comment = 'is-IS=bóka vöruhúsaafhendingu, afhenda vörur, vörur farnar úr vöruhúsi, senda vörur út';
+        KeywordsLbl: Label 'post warehouse shipment, ship goods, goods left the warehouse, dispatch goods, send the goods out', Comment = 'is-IS=bóka vöruhúsaafhendingu, afhenda vörur, vörur farnar úr vöruhúsi, senda vörur út, viðbót1';
     begin
         exit(KeywordsLbl);
     end;

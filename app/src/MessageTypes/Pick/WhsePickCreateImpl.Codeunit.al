@@ -40,7 +40,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
 
     procedure GetKeywords(): Text
     var
-        KeywordsLbl: Label 'create pick, pick list, picking, pick the goods, pick for shipment, pick the items, pick for the order, picking list', Comment = 'is-IS=stofna tínslu, tínslulisti, tína, tína vörur, tínsla fyrir afhendingu, tína vörur, tína í pöntun, tínslulisti fyrir pöntun';
+        KeywordsLbl: Label 'create pick, pick list, picking, pick the goods, pick for shipment, pick the items, pick for the order, picking list', Comment = 'is-IS=stofna tínslu, tínslulisti, tína, tína vörur, tínsla fyrir afhendingu, tína vörur, tína í pöntun, tínslulisti fyrir pöntun, viðbót1';
     begin
         exit(KeywordsLbl);
     end;

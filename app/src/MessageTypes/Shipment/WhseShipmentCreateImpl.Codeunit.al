@@ -38,7 +38,7 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
 
     procedure GetKeywords(): Text
     var
-        KeywordsLbl: Label 'warehouse shipment, create shipment, prepare shipment, ship the order from the warehouse, outbound shipment, dispatch', Comment = 'is-IS=vöruhúsaafhending, stofna afhendingu, undirbúa afhendingu, senda pöntun frá vöruhúsi, útsending';
+        KeywordsLbl: Label 'warehouse shipment, create shipment, prepare shipment, ship the order from the warehouse, outbound shipment, dispatch', Comment = 'is-IS=vöruhúsaafhending, stofna afhendingu, undirbúa afhendingu, senda pöntun frá vöruhúsi, útsending, viðbót1';
     begin
         exit(KeywordsLbl);
     end;

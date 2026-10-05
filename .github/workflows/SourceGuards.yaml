@@ -1,0 +1,89 @@
+name: Source Guards
+
+# Source rules that the AL compiler cannot check, the same guards Bifrost Foundation runs (copied from
+# bc-origo-bifrost-core/tools, 05.10.2026): an error response never carries the AL call stack, every caller-supplied
+# tableView is validated before SetView, the parameter names a contract declares are the keys the code reads and the
+# other way round, nothing is declared obsolete, every page, query and report is granted by an assignable permission
+# set, no answer mixes a Locked English sentence with translated text, and every Icelandic keyword list is complete.
+# Contract parameter keys and mixed-language labels are copied in tools/ but not run here yet:
+# the shared contract chapters declare keys individual list types do not read, and several Locked
+# telemetry and refusal labels predate the Foundation rule. Enabling those two jobs would fail on main.
+# The Icelandic xlf check (tools/Test-IcelandicXlfInSync.ps1) needs a build and is run by hand before a PR.
+
+on:
+  pull_request:
+    paths:
+      - 'app/src/**'
+      - 'app/Translations/**'
+      - 'tools/**'
+      - '.github/workflows/SourceGuards.yaml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  NoClientCallstack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: No call stack in client responses
+        shell: pwsh
+        run: ./tools/Test-NoClientCallstack.ps1
+
+  ValidatedTableView:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Every applied tableView is validated first
+        shell: pwsh
+        run: ./tools/Test-ValidatedTableView.ps1
+
+
+  NoObsolete:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: The guard checks itself
+        shell: pwsh
+        run: ./tools/Test-NoObsolete.ps1 -SelfTest
+
+      - name: Nothing obsolete in the app
+        shell: pwsh
+        run: ./tools/Test-NoObsolete.ps1
+
+  PermissionCoverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: The guard checks itself
+        shell: pwsh
+        run: ./tools/Test-PermissionCoverage.ps1 -SelfTest
+
+      - name: Every page and query is granted by a permission set
+        shell: pwsh
+        run: ./tools/Test-PermissionCoverage.ps1
+
+
+
+  IcelandicKeywordCounts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: The guard checks itself
+        shell: pwsh
+        run: ./tools/Test-IcelandicKeywordCounts.ps1 -SelfTest
+
+      - name: Every Icelandic keyword list is complete
+        shell: pwsh
+        run: ./tools/Test-IcelandicKeywordCounts.ps1

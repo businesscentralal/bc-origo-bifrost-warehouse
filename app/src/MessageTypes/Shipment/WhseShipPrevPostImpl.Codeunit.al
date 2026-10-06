@@ -173,7 +173,7 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
         GLSetup: Record "General Ledger Setup";
         TempDocumentEntry: Record "Document Entry" temporary;
         PostingPreviewEventHandler: Codeunit "Posting Preview Event Handler";
-        Dispatcher: Codeunit "Dispatcher ori";
+        PostingPreviewHelper: Codeunit "Posting Preview Helper ori";
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
         TotalsJson: JsonObject;
@@ -217,28 +217,28 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
         if not PreviewWhseShipment(WhseShipmentLine, PostingPreviewEventHandler, PreviewErrorText) then begin
             if PreviewErrorText = '' then
                 PreviewErrorText := PreviewFailedErr;
-            Dispatcher.RespondWithPreviewError(Argument, PreviewErrorText, NothingToPostNextStepTok);
+            PostingPreviewHelper.RespondWithPreviewError(Argument, PreviewErrorText, NothingToPostNextStepTok);
             exit;
         end;
 
-        Dispatcher.GetPreviewFieldNames(PreviewFieldNames);
+        PostingPreviewHelper.GetPreviewFieldNames(PreviewFieldNames);
 
         PostingPreviewEventHandler.FillDocumentEntry(TempDocumentEntry);
         if TempDocumentEntry.FindSet() then
             repeat
-                Dispatcher.AddTableToPreview(PreviewArray, PostingPreviewEventHandler, TempDocumentEntry."Table ID", TempDocumentEntry."Table Name", PreviewFieldNames);
+                PostingPreviewHelper.AddTableToPreview(PreviewArray, PostingPreviewEventHandler, TempDocumentEntry."Table ID", TempDocumentEntry."Table Name", PreviewFieldNames);
             until TempDocumentEntry.Next() = 0;
 
-        if not Dispatcher.EvaluatePreviewOutcome(Argument, PreviewArray, PostingPreviewEventHandler, NothingToPostNextStepTok, TotalsJson, Balanced, EntryCount, GLEntryCount) then
+        if not PostingPreviewHelper.EvaluatePreviewOutcome(Argument, PreviewArray, PostingPreviewEventHandler, NothingToPostNextStepTok, TotalsJson, Balanced, EntryCount, GLEntryCount) then
 
             exit;
 
         CollectDistinctGLDocumentNos(PostingPreviewEventHandler, PredictedNumbersArray);
 
-        Summary := BuildShipmentPreviewSummary(WhseShipmentHeader."No.", LinesToPost, PreviewArray, Dispatcher.GLStatusSentence(GLEntryCount, Balanced));
+        Summary := BuildShipmentPreviewSummary(WhseShipmentHeader."No.", LinesToPost, PreviewArray, PostingPreviewHelper.GLStatusSentence(GLEntryCount, Balanced));
 
         ResponseJson.Add('status', 'Success');
-        Dispatcher.AddEntryCounts(ResponseJson, EntryCount, GLEntryCount);
+        PostingPreviewHelper.AddEntryCounts(ResponseJson, EntryCount, GLEntryCount);
         ResponseJson.Add('rollback', true);
         ResponseJson.Add('summary', Summary);
         ResponseJson.Add('shipmentNo', WhseShipmentHeader."No.");
@@ -287,11 +287,11 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
 
     local procedure BuildShipmentPreviewSummary(ShipmentNo: Code[20]; LinesToPost: Integer; PreviewArray: JsonArray; GLStatusText: Text): Text
     var
-        Dispatcher: Codeunit "Dispatcher ori";
+        PostingPreviewHelper: Codeunit "Posting Preview Helper ori";
         TotalEntries: Integer;
         SummaryTxt: Label 'Preview-posting warehouse shipment %1 (%2 lines, Ship + Invoice) would create %3 ledger entries across %4 tables. %5', Comment = '%1 = shipment no, %2 = lines to post, %3 = total entry count, %4 = number of tables, %5 = balanced status sentence, is-IS=Forsýning bókunar vöruhúsasendingar %1 (%2 línur, Sending + Reikningur) myndi búa til %3 fjárhagsfærslur í %4 töflum. %5';
     begin
-        TotalEntries := Dispatcher.CountPreviewEntries(PreviewArray);
+        TotalEntries := PostingPreviewHelper.CountPreviewEntries(PreviewArray);
         exit(StrSubstNo(SummaryTxt, ShipmentNo, LinesToPost, TotalEntries, PreviewArray.Count(), GLStatusText));
     end;
 

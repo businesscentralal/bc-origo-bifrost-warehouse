@@ -24,12 +24,12 @@ codeunit 97026 "Whse Write Restrict Tests ori"
         Argument.Init();
         Argument.Insert(true);
 
-        Assert.IsTrue(Argument.IsTableWriteRestrictedForDataRecords(Database::"Warehouse Shipment Header"), 'Warehouse Shipment Header');
-        Assert.IsTrue(Argument.IsTableWriteRestrictedForDataRecords(Database::"Warehouse Shipment Line"), 'Warehouse Shipment Line');
-        Assert.IsTrue(Argument.IsTableWriteRestrictedForDataRecords(Database::"Warehouse Receipt Header"), 'Warehouse Receipt Header');
-        Assert.IsTrue(Argument.IsTableWriteRestrictedForDataRecords(Database::"Warehouse Receipt Line"), 'Warehouse Receipt Line');
-        Assert.IsTrue(Argument.IsTableWriteRestrictedForDataRecords(Database::"Warehouse Activity Header"), 'Warehouse Activity Header');
-        Assert.IsTrue(Argument.IsTableWriteRestrictedForDataRecords(Database::"Warehouse Activity Line"), 'Warehouse Activity Line');
+        Assert.IsTrue(Argument.IsTableWriteRestrictedForDataRecords(Database::"Warehouse Shipment Header", false), 'Warehouse Shipment Header');
+        Assert.IsTrue(Argument.IsTableWriteRestrictedForDataRecords(Database::"Warehouse Shipment Line", false), 'Warehouse Shipment Line');
+        Assert.IsTrue(Argument.IsTableWriteRestrictedForDataRecords(Database::"Warehouse Receipt Header", false), 'Warehouse Receipt Header');
+        Assert.IsTrue(Argument.IsTableWriteRestrictedForDataRecords(Database::"Warehouse Receipt Line", false), 'Warehouse Receipt Line');
+        Assert.IsTrue(Argument.IsTableWriteRestrictedForDataRecords(Database::"Warehouse Activity Header", false), 'Warehouse Activity Header');
+        Assert.IsTrue(Argument.IsTableWriteRestrictedForDataRecords(Database::"Warehouse Activity Line", false), 'Warehouse Activity Line');
     end;
 
     /// <summary>A table outside the warehouse document set is not write-restricted by this subscriber.</summary>
@@ -42,7 +42,7 @@ codeunit 97026 "Whse Write Restrict Tests ori"
         Argument.Init();
         Argument.Insert(true);
 
-        Assert.IsFalse(Argument.IsTableWriteRestrictedForDataRecords(Database::Item), 'Item must not be restricted by the warehouse subscriber.');
+        Assert.IsFalse(Argument.IsTableWriteRestrictedForDataRecords(Database::Item, false), 'Item must not be restricted by the warehouse subscriber.');
     end;
 
     /// <summary>Generic reads of the warehouse document tables stay allowed.</summary>

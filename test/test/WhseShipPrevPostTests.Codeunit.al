@@ -33,6 +33,7 @@ codeunit 97013 "Whse Ship Prev Post Tests ori"
         WhseShipmentHeader: Record "Warehouse Shipment Header";
         ResponseJson: JsonObject;
         Token: JsonToken;
+        CountToken: JsonToken;
     begin
         // [SCENARIO] PreviewPost of a postable warehouse shipment returns Success with rollback=true;
         //            the shipment header remains afterwards.
@@ -46,6 +47,12 @@ codeunit 97013 "Whse Ship Prev Post Tests ori"
         AssertStatus(ResponseJson, 'Success');
         Assert.IsTrue(ResponseJson.Get('rollback', Token), 'rollback flag should be present');
         Assert.IsTrue(Token.AsValue().AsBoolean(), 'rollback should be true');
+
+        // [THEN] Public preview helper preserves populated ledger counts.
+        Assert.IsTrue(ResponseJson.Get('entryCount', CountToken), 'entryCount missing');
+        Assert.IsTrue(CountToken.AsValue().AsInteger() > 0, 'Preview must count captured entries');
+        Assert.IsTrue(ResponseJson.Get('glEntryCount', CountToken), 'glEntryCount missing');
+        Assert.IsTrue(CountToken.AsValue().AsInteger() > 0, 'Postable preview must include G/L entries');
 
         WhseShipmentHeader.SetRecFilter();
         Assert.RecordIsNotEmpty(WhseShipmentHeader);

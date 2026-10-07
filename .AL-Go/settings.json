@@ -42,8 +42,15 @@
         "Test"
       ],
       "settings": {
-        "doNotSignApps": true
+        "doNotSignApps": true,
+        "skipUpgrade": true
       }
     }
+  ],
+  "fullBuildPatterns": [
+    ".AL-Go/*.ps1",
+    "tools/Get-SharedAlpacaBuildOrder.ps1",
+    "tools/SharedAlpacaContainer.ps1",
+    "tools/Test-SharedAlpacaContainer.ps1"
   ]
 }

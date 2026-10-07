@@ -31,8 +31,6 @@ env:
   ALGoOrgSettings: ${{ vars.ALGoOrgSettings }}
   ALGoRepoSettings: ${{ vars.ALGoRepoSettings }}
   ALPACA_BACKEND_URL: ${{ inputs.backendUrl }}
-  # Settings must contain at least one property for ReadSecrets to function correctly.
-  Settings: '{"keyVaultName": ""}'
 
 jobs:
   SyncAlpacaConfigs:
@@ -41,6 +39,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      # Load merged settings, including keyVaultName, before ReadSecrets.
+      - name: Read settings
+        uses: microsoft/AL-Go-Actions/ReadSettings@v9.0
+        with:
+          shell: pwsh
 
       - name: Determine Configs To Sync
         id: DetermineConfigsToSync

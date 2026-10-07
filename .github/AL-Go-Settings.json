@@ -8,7 +8,7 @@
   ],
   "DeployToBifrost": {
     "EnvironmentType": "SaaS",
-    "EnvironmentName": "Bifrost",
+    "EnvironmentName": "UAT",
     "Branches": [
       "main"
     ],

@@ -160,7 +160,7 @@ codeunit 97021 "Whse Shipment Test Helper ori"
         Dispatcher: Codeunit "Dispatcher ori";
         RequestContent: BigText;
         ResponseContent: BigText;
-        ResponseContentType: Text[50];
+        ResponseContentType: Text[100];
         ResponseText: Text;
         SubjectText: Text[250];
     begin
@@ -177,7 +177,8 @@ codeunit 97021 "Whse Shipment Test Helper ori"
             'text/json',
             RequestContent,
             ResponseContent,
-            ResponseContentType);
+            ResponseContentType,
+            false);
         if ResponseContent.Length() = 0 then
             exit(false);
         ResponseContent.GetSubText(ResponseText, 1, ResponseContent.Length());

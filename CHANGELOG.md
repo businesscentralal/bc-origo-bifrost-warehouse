@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed (2026-10-09) - Warehouse test transaction mode (#19)
+
+- Whse Shipment Test Helper ori (97021) and Whse Receipt Test Helper ori (97022) explicitly use committing Dispatcher execution for posting, preview and put-away tests and match its Text[100] response content type. The existing restricted dispatcher gate tests remain unchanged; their Foundation Company-read prerequisite is still pending.
+
 ### Changed (2026-10-04) - CI/CD builds only main; every pull request gets a Pull Request Build
 
 - Build policy only, no app change. `CI/CD` runs on pushes to `main` only, and `Pull Request Build` runs for pull requests into any branch. `.github/AL-Go-Settings.json` sets `CICDPushBranches` to `main` and `CICDPullRequestBranches` to `**`, so Update AL-Go System Files keeps the triggers.

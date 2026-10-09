@@ -32,7 +32,7 @@ env:
   ALGoRepoSettings: ${{ vars.ALGoRepoSettings }}
   ALPACA_BACKEND_URL: ${{ inputs.backendUrl }}
   # Settings must contain at least one property for ReadSecrets to function correctly.
-  Settings: '{"placeholder": "value"}'
+  Settings: '{"keyVaultName": ""}'
 
 jobs:
   SyncAlpacaConfigs:

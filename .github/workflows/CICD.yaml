@@ -8,7 +8,7 @@ on:
       - '**.md'
       - '.github/workflows/*.yaml'
       - '!.github/workflows/CICD.yaml'
-    branches: [ 'main', 'release/*', 'feature/*' ]
+    branches: [ 'main' ]
 
 defaults:
   run:
@@ -45,6 +45,7 @@ jobs:
       skippedProjects: ${{ steps.determineProjectsToBuild.outputs.SkippedProjectsJson }}
       projectDependenciesJson: ${{ steps.determineProjectsToBuild.outputs.ProjectDependenciesJson }}
       buildOrderJson: ${{ steps.determineProjectsToBuild.outputs.BuildOrderJson }}
+      sharedBuildOrderJson: ${{ steps.sharedPlan.outputs.buildOrderJson }}
       baselineWorkflowRunId: ${{ steps.determineProjectsToBuild.outputs.BaselineWorkflowRunId }}
       baselineWorkflowSHA: ${{ steps.determineProjectsToBuild.outputs.BaselineWorkflowSHA }}
       workflowDepth: ${{ steps.DetermineWorkflowDepth.outputs.WorkflowDepth }}
@@ -108,6 +109,12 @@ jobs:
         with:
           shell: pwsh
           maxBuildDepth: ${{ env.workflowDepth }}
+
+      - name: Plan sequential Default and Test builds
+        id: sharedPlan
+        env:
+          BUILD_ORDER_JSON: ${{ steps.determineProjectsToBuild.outputs.BuildOrderJson }}
+        run: ./tools/Get-SharedAlpacaBuildOrder.ps1 -BuildOrderJson $env:BUILD_ORDER_JSON
 
       - name: Determine PowerPlatform Solution Folder
         id: DeterminePowerPlatformSolutionFolder
@@ -187,17 +194,16 @@ jobs:
     if: (!failure()) && (!cancelled()) && fromJson(needs.Initialization.outputs.buildOrderJson)[0].projectsCount > 0
     strategy:
       matrix:
-        include: ${{ fromJson(needs.Initialization.outputs.buildOrderJson)[0].buildDimensions }}
+        include: ${{ fromJson(needs.Initialization.outputs.sharedBuildOrderJson)[0].buildDimensions }}
       fail-fast: false
-    name: Build ${{ matrix.projectName }} (${{ matrix.buildMode }})
-    uses: ./.github/workflows/_BuildALGoProject.yaml
+    name: Build ${{ matrix.projectName }} (Default then Test)
+    uses: ./.github/workflows/_BuildSharedALGoProject.yaml
     secrets: inherit
     with:
       shell: ${{ matrix.githubRunnerShell }}
       runsOn: ${{ matrix.githubRunner }}
       project: ${{ matrix.project }}
       projectName: ${{ matrix.projectName }}
-      buildMode: ${{ matrix.buildMode }}
       skippedProjectsJson: ${{ needs.Initialization.outputs.skippedProjects }}
       projectDependenciesJson: ${{ needs.Initialization.outputs.projectDependenciesJson }}
       baselineWorkflowRunId: ${{ needs.Initialization.outputs.baselineWorkflowRunId }}
@@ -435,13 +441,13 @@ jobs:
     secrets: inherit
     with:
       backendUrl: ${{ needs.CustomJob-Alpaca-Initialization.outputs.backendUrl }}
-      buildOrderJson: ${{ needs.Initialization.outputs.buildOrderJson }}
+      buildOrderJson: ${{ needs.Initialization.outputs.sharedBuildOrderJson }}
 
   # DO NOT EDIT. The following job was added through a custom template.
   CustomJob-RemoveAlpaca-Container:
     name: 'Remove COSMO Alpaca Containers'
     needs: [ Build, CustomJob-Alpaca-Initialization, CustomJob-CreateAlpaca-Container ]
-    if: always() && needs.CustomJob-CreateAlpaca-Container.result == 'success'
+    if: always() && needs.CustomJob-Alpaca-Initialization.result == 'success' && needs.CustomJob-CreateAlpaca-Container.result != 'skipped'
     uses: ./.github/workflows/_AlpacaRemoveContainers.yaml
     secrets: inherit
     with:

@@ -167,7 +167,7 @@ codeunit 10078411 "Whse Rcpt Post Prev. Impl ori" implements "Msg Interface ori"
         GLSetup: Record "General Ledger Setup";
         TempDocumentEntry: Record "Document Entry" temporary;
         PostingPreviewEventHandler: Codeunit "Posting Preview Event Handler";
-        Dispatcher: Codeunit "Dispatcher ori";
+        PostingPreviewHelper: Codeunit "Posting Preview Helper ori";
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
         TotalsJson: JsonObject;
@@ -205,28 +205,28 @@ codeunit 10078411 "Whse Rcpt Post Prev. Impl ori" implements "Msg Interface ori"
         if not PreviewWhseReceipt(WhseReceiptLine, PostingPreviewEventHandler, PreviewErrorText) then begin
             if PreviewErrorText = '' then
                 PreviewErrorText := PreviewFailedErr;
-            Dispatcher.RespondWithPreviewError(Argument, PreviewErrorText, NothingToPostNextStepTok);
+            PostingPreviewHelper.RespondWithPreviewError(Argument, PreviewErrorText, NothingToPostNextStepTok);
             exit;
         end;
 
-        Dispatcher.GetPreviewFieldNames(PreviewFieldNames);
+        PostingPreviewHelper.GetPreviewFieldNames(PreviewFieldNames);
 
         PostingPreviewEventHandler.FillDocumentEntry(TempDocumentEntry);
         if TempDocumentEntry.FindSet() then
             repeat
-                Dispatcher.AddTableToPreview(PreviewArray, PostingPreviewEventHandler, TempDocumentEntry."Table ID", TempDocumentEntry."Table Name", PreviewFieldNames);
+                PostingPreviewHelper.AddTableToPreview(PreviewArray, PostingPreviewEventHandler, TempDocumentEntry."Table ID", TempDocumentEntry."Table Name", PreviewFieldNames);
             until TempDocumentEntry.Next() = 0;
 
-        if not Dispatcher.EvaluatePreviewOutcome(Argument, PreviewArray, PostingPreviewEventHandler, NothingToPostNextStepTok, TotalsJson, Balanced, EntryCount, GLEntryCount) then
+        if not PostingPreviewHelper.EvaluatePreviewOutcome(Argument, PreviewArray, PostingPreviewEventHandler, NothingToPostNextStepTok, TotalsJson, Balanced, EntryCount, GLEntryCount) then
 
             exit;
 
         BuildSourceDocuments(WhseReceiptHeader."No.", SourceArray);
         BuildPredictedNumbers(PredictedJson, PostingPreviewEventHandler);
-        Summary := BuildSummary(WhseReceiptHeader."No.", WhseReceiptHeader."Location Code", PreviewArray, Dispatcher.GLStatusSentence(GLEntryCount, Balanced));
+        Summary := BuildSummary(WhseReceiptHeader."No.", WhseReceiptHeader."Location Code", PreviewArray, PostingPreviewHelper.GLStatusSentence(GLEntryCount, Balanced));
 
         ResponseJson.Add('status', 'Success');
-        Dispatcher.AddEntryCounts(ResponseJson, EntryCount, GLEntryCount);
+        PostingPreviewHelper.AddEntryCounts(ResponseJson, EntryCount, GLEntryCount);
         ResponseJson.Add('rollback', true);
         ResponseJson.Add('summary', Summary);
         ResponseJson.Add('receiptNo', WhseReceiptHeader."No.");
@@ -340,11 +340,11 @@ codeunit 10078411 "Whse Rcpt Post Prev. Impl ori" implements "Msg Interface ori"
 
     local procedure BuildSummary(ReceiptNo: Code[20]; LocationCode: Code[10]; var PreviewArray: JsonArray; GLStatusText: Text): Text
     var
-        Dispatcher: Codeunit "Dispatcher ori";
+        PostingPreviewHelper: Codeunit "Posting Preview Helper ori";
         Summary: Text;
         SummaryTok: Label 'Warehouse Receipt %1 at %2 preview produced %3 entries. %4', Comment = '%1=Receipt No., %2=Location Code, %3=entry count, %4=G/L status sentence', Locked = true;
     begin
-        Summary := StrSubstNo(SummaryTok, ReceiptNo, LocationCode, Dispatcher.CountPreviewEntries(PreviewArray), GLStatusText);
+        Summary := StrSubstNo(SummaryTok, ReceiptNo, LocationCode, PostingPreviewHelper.CountPreviewEntries(PreviewArray), GLStatusText);
         exit(Summary);
     end;
 

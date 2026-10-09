@@ -37,6 +37,7 @@ codeunit 97016 "Whse Rcpt Post Prev Tests ori"
         StatusToken, PredictedToken : JsonToken;
         RequestText: Text;
         ReceiptNoBefore: Code[20];
+        CountToken: JsonToken;
     begin
         // [SCENARIO] PreviewPost returns predicted numbers and does not actually post (header still exists)
         Initialize();
@@ -50,6 +51,12 @@ codeunit 97016 "Whse Rcpt Post Prev Tests ori"
         Assert.IsTrue(ResponseJson.Get('status', StatusToken), 'status missing');
         Assert.AreEqual('Success', StatusToken.AsValue().AsText(), 'Status should be Success');
         Assert.IsTrue(ResponseJson.Get('predictedNumbers', PredictedToken), 'predictedNumbers missing');
+
+        // [THEN] Public preview helper preserves populated ledger counts.
+        Assert.IsTrue(ResponseJson.Get('entryCount', CountToken), 'entryCount missing');
+        Assert.IsTrue(CountToken.AsValue().AsInteger() > 0, 'Preview must count captured entries');
+        Assert.IsTrue(ResponseJson.Get('glEntryCount', CountToken), 'glEntryCount missing');
+        Assert.IsTrue(CountToken.AsValue().AsInteger() >= 0, 'Receipt preview may receive without invoicing; G/L count cannot be negative');
 
         // [THEN] Warehouse Receipt Header should still exist (preview rolled back — post would have deleted it)
         Assert.IsTrue(AfterWhseReceiptHeader.Get(ReceiptNoBefore), 'Preview should not have consumed the Warehouse Receipt Header');

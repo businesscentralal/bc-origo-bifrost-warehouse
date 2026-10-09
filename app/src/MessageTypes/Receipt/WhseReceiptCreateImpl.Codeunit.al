@@ -156,7 +156,7 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var
         WhseReceiptHeader: Record "Warehouse Receipt Header";
-        Dispatcher: Codeunit "Dispatcher ori";
+        RequestValueReader: Codeunit "Request Value Reader ori";
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
         SourceToken: JsonToken;
@@ -188,7 +188,7 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
         // Optional locationCode — used only to validate sources match (no override on the header).
         LocationFilter := ReadCode10(RequestJson, 'locationCode');
         if LocationFilter <> '' then
-            if Dispatcher.IsFieldWriteRestricted(Database::"Warehouse Receipt Header", WhseReceiptHeader.FieldNo("Location Code")) then begin
+            if RequestValueReader.IsFieldWriteRestricted(Database::"Warehouse Receipt Header", WhseReceiptHeader.FieldNo("Location Code")) then begin
                 Argument.RespondWithError(StrSubstNo(FieldWriteRestrictedErr, WhseReceiptHeader.FieldCaption("Location Code"), WhseReceiptHeader.TableCaption()));
                 exit;
             end;
@@ -196,7 +196,7 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
         // Optional header overrides
         AssignedUserIdValue := ReadCode50(RequestJson, 'assignedUserId');
         HasAssignedUserId := AssignedUserIdValue <> '';
-        if not Dispatcher.TryReadDate(Argument, RequestJson, 'postingDate', false, PostingDateValue) then
+        if not RequestValueReader.TryReadDate(Argument, RequestJson, 'postingDate', false, PostingDateValue) then
             exit;
         HasPostingDate := PostingDateValue <> 0D;
 

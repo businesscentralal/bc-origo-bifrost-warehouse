@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+
+### Fixed (2026-10-10) - UAT dependency installation
+
+- UAT feature-app deployment uses the Foundation app already deployed by its own pipeline in Dev scope, avoiding an unauthorized AppSource Foundation installation. `.github/AL-Go-Settings.json`: `DeployToBifrost.DependencyInstallMode = "ignore"`. AppSource delivery is unchanged; no AL objects or IDs change.
+
 ### Changed (2026-10-04) - CI/CD builds only main; every pull request gets a Pull Request Build
 
 - Build policy only, no app change. `CI/CD` runs on pushes to `main` only, and `Pull Request Build` runs for pull requests into any branch. `.github/AL-Go-Settings.json` sets `CICDPushBranches` to `main` and `CICDPullRequestBranches` to `**`, so Update AL-Go System Files keeps the triggers.

@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Changed (2026-10-07) - preserve the Bifrost pipeline across AL-Go and Alpaca updates
+
+- `Bifrost Pipeline Guards` runs `tools/Test-BifrostPipeline.ps1` and `tools/Test-SharedAlpacaContainer.ps1` when workflows, AL-Go settings, Alpaca scripts, or `AGENTS.md` change.
+- `_AlpacaSyncConfigs.yaml` loads merged AL-Go settings, including `keyVaultName`, before ReadSecrets. Existing AL-Go v9.0 and Alpaca v2.10 action pins stay in place.
+
 ### Changed (2026-10-04) - CI/CD builds only main; every pull request gets a Pull Request Build
 
 - Build policy only, no app change. `CI/CD` runs on pushes to `main` only, and `Pull Request Build` runs for pull requests into any branch. `.github/AL-Go-Settings.json` sets `CICDPushBranches` to `main` and `CICDPullRequestBranches` to `**`, so Update AL-Go System Files keeps the triggers.

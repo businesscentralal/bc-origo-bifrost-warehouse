@@ -4,7 +4,11 @@
 
 ### Fixed (2026-10-09) - Warehouse test transaction mode (#19)
 
-- Whse Shipment Test Helper ori (97021) and Whse Receipt Test Helper ori (97022) explicitly use committing Dispatcher execution for posting, preview and put-away tests and match its Text[100] response content type. The existing restricted dispatcher gate tests remain unchanged; their Foundation Company-read prerequisite is still pending.
+- Whse Shipment Test Helper ori (97021) and Whse Receipt Test Helper ori (97022) explicitly use committing Dispatcher execution for posting, preview and put-away tests and match its Text[100] response content type.
+
+### Fixed (2026-10-11) - posting-gate tests grant the dispatcher Company read (#19)
+
+- Whse Gate Test ori (97025) grants indirect read on Company (table 2000000006). The two restrictive gate tests call `Dispatcher.Execute`, and Foundation `Eula Consent ori` reads Company while building the consent key. This is not a direct Company read, not a `Setup ori` grant, and not another version change.
 
 ### Changed (2026-10-04) - CI/CD builds only main; every pull request gets a Pull Request Build
 

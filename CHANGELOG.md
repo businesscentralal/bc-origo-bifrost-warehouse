@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Changed (2026-10-11) - current build compiles against BC 28.5
+
+- `.AL-Go/settings.json` sets `artifact` to `/sandbox/28.5.54151.55751/w1/latest`. AL-Go splits that value into storage, type, version, country, and select, so CI/CD and pull request builds use sandbox 28.5.54151.55751 for w1. A second leading slash would put `w1` in select, and container creation rejects that.
+- Test Next Minor stays `////nextminor` and Test Next Major stays `////nextmajor`. `.github/AL-Go-Settings.json` does not set `artifact`.
+- `app/app.json` and `test/app.json` already use runtime `17.0` with application and platform `28.0.0.0`. App versions stay `28.0.0.0`.
+
 ### Changed (2026-10-04) - CI/CD builds only main; every pull request gets a Pull Request Build
 
 - Build policy only, no app change. `CI/CD` runs on pushes to `main` only, and `Pull Request Build` runs for pull requests into any branch. `.github/AL-Go-Settings.json` sets `CICDPushBranches` to `main` and `CICDPullRequestBranches` to `**`, so Update AL-Go System Files keeps the triggers.

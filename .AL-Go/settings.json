@@ -1,6 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/microsoft/AL-Go-Actions/v9.2/.Modules/settings.schema.json",
   "country": "w1",
+  "artifact": "/sandbox/28.5.54151.55751/w1/latest",
   "appSourceCopMandatoryAffixes": [
     "ori"
   ],

@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Changed (2026-10-12) - AL-Go v9.2 signs on Windows and Current compiles on BC 28.5
+
+- CI/CD on `main` signs with AL-Go-Actions v9.2 on `windows-latest`. Run 38238977303 compiled, then `Sign@v9.0` failed on the Linux runner with `Failed to install signing tool`. `.github/AL-Go-Settings.json` matches Language Models: signing stays on for `main`, with `githubRunner` `windows-latest` and `githubRunnerShell` `pwsh`. System files and workflows are Alpaca-AppSource `4cd474c40c167da7b929d5032d30c23a6bb3b225` (AL-Go-Actions v9.2, Alpaca Actions v2.11).
+- Current builds use sandbox artifact `/sandbox/28.5.54151.55751/w1/latest` in `.AL-Go/settings.json` and `.github/Test Current.settings.json`. `.AL-Go/settings.json` is listed in `fullBuildPatterns`. Next Minor and Next Major stay on `////nextminor` and `////nextmajor`. Runtime stays 17.0. The app version stays 28.0.0.0.
+
 ### Fixed (2026-10-09) - Warehouse test transaction mode (#19)
 
 - Whse Shipment Test Helper ori (97021) and Whse Receipt Test Helper ori (97022) explicitly use committing Dispatcher execution for posting, preview and put-away tests and match its Text[100] response content type.

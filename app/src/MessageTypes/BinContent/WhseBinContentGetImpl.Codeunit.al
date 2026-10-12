@@ -140,10 +140,26 @@ codeunit 10078388 "Whse BinContent Get Impl ori" implements "Msg Interface ori",
         exit(true);
     end;
 
+    procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetExamples(var Examples: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
     procedure GetOverview(var Overview: Text): Boolean
     begin
         Overview := 'Read-only, paged access to Bin Content with optional item, location, bin and variant filters.';
         exit(true);
+    end;
+
+    procedure GetNotes(var Notes: Text): Boolean
+    begin
+        Notes := '';
+        exit(false);
     end;
 
     /// <summary>Returns the outbound direction of this message type.</summary>
@@ -151,13 +167,6 @@ codeunit 10078388 "Whse BinContent Get Impl ori" implements "Msg Interface ori",
     procedure GetMessageDirection(): Enum "Msg Direction ori"
     begin
         exit(Enum::"Msg Direction ori"::Outbound);
-    end;
-
-    /// <summary>Returns the request and response help for this message type.</summary>
-    /// <param name="Argument">The message argument receiving the help.</param>
-    procedure GetMessageHelpAsMarkdownDocument(var Argument: Record "Message Argument ori")
-    begin
-        Argument.SetResponseMarkdown('');
     end;
 
     /// <summary>Reads matching Bin Content records and returns a paged JSON result.</summary>

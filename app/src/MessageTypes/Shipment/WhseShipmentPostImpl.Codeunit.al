@@ -38,7 +38,7 @@ codeunit 10078407 "Whse Shipment Post Impl ori" implements "Msg Interface ori", 
 
     procedure GetKeywords(): Text
     var
-        KeywordsLbl: Label 'post warehouse shipment, ship goods, goods left the warehouse, dispatch goods, send the goods out', Comment = 'is-IS=bóka vöruhúsaafhendingu, afhenda vörur, vörur farnar úr vöruhúsi, senda vörur út';
+        KeywordsLbl: Label 'post warehouse shipment, ship goods, goods left the warehouse, dispatch goods, send the goods out', Comment = 'is-IS=bóka vöruhúsaafhendingu, afhenda vörur, vörur farnar úr vöruhúsi, senda vörur út, senda vörur af stað';
     begin
         exit(KeywordsLbl);
     end;
@@ -127,20 +127,34 @@ codeunit 10078407 "Whse Shipment Post Impl ori" implements "Msg Interface ori", 
         exit(true);
     end;
 
+    procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.OutboundWorkflow(Workflow);
+        exit(true);
+    end;
+
+    procedure GetExamples(var Examples: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
     procedure GetOverview(var Overview: Text): Boolean
     begin
         Overview := 'Irreversibly posts a Warehouse Shipment. Invoicing is optional and is a separate permission-gated pass.';
         exit(true);
     end;
 
+    procedure GetNotes(var Notes: Text): Boolean
+    begin
+        Notes := '';
+        exit(false);
+    end;
+
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"
     begin
         exit(Enum::"Msg Direction ori"::Inbound);
-    end;
-
-    procedure GetMessageHelpAsMarkdownDocument(var Argument: Record "Message Argument ori")
-    begin
-        Argument.SetResponseMarkdown('');
     end;
 
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
@@ -150,7 +164,7 @@ codeunit 10078407 "Whse Shipment Post Impl ori" implements "Msg Interface ori", 
         PostedWhseShipmentHeader: Record "Posted Whse. Shipment Header";
         WhsePostShipment: Codeunit "Whse.-Post Shipment";
         WhsePostingGate: Codeunit "Whse Posting Gate ori";
-        Dispatcher: Codeunit "Dispatcher ori";
+        RequestValueReader: Codeunit "Request Value Reader ori";
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
         PostedDocsArray: JsonArray;
@@ -163,7 +177,7 @@ codeunit 10078407 "Whse Shipment Post Impl ori" implements "Msg Interface ori", 
             exit;
 
         RequestJson := Argument.GetRequestJson();
-        if not Dispatcher.TryReadBoolean(Argument, RequestJson, 'invoice', false, Invoice) then
+        if not RequestValueReader.TryReadBoolean(Argument, RequestJson, 'invoice', false, Invoice) then
             exit;
 
         if Invoice then

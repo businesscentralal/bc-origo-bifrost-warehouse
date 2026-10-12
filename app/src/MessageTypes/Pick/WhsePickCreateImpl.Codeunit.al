@@ -40,14 +40,14 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
 
     procedure GetKeywords(): Text
     var
-        KeywordsLbl: Label 'create pick, pick list, picking, pick the goods, pick for shipment, pick the items, pick for the order, picking list', Comment = 'is-IS=stofna tínslu, tínslulisti, tína, tína vörur, tínsla fyrir afhendingu, tína vörur, tína í pöntun, tínslulisti fyrir pöntun';
+        KeywordsLbl: Label 'create pick, pick list, picking, pick the goods, pick for shipment, pick the items, pick for the order, picking list', Comment = 'is-IS=stofna tínslu, tínslulisti, tína, tína vörur, tínsla fyrir afhendingu, tína vörueiningar, tína í pöntun, tínslulisti fyrir pöntun';
     begin
         exit(KeywordsLbl);
     end;
 
     procedure GetSelectionDescription(): Text
     var
-        SelectionLbl: Label 'Creates a Warehouse Pick from an existing shipment; use Warehouse.Pick.Register after quantities are picked.', Comment = 'is-IS=Stofnar tínslu úr fyrirliggjandi afhendingu; notaðu Warehouse.Pick.Register eftir að vörur hafa verið tíndar.';
+        SelectionLbl: Label 'Irreversible. Creates a Warehouse Pick from an existing shipment; use Warehouse.Pick.Register after quantities are picked.', Comment = 'is-IS=Óafturkræft. Stofnar tínslu úr fyrirliggjandi afhendingu; notaðu Warehouse.Pick.Register eftir að vörur hafa verið tíndar.';
     begin
         exit(SelectionLbl);
     end;
@@ -115,7 +115,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.WriteEffect(Effect, 'Creates Warehouse Activity Header and Line records of type Pick and applies optional activity fields.', 'BIFROST Full ori', false);
+        Parts.IrreversibleEffect(Effect, 'Creates Warehouse Activity Header and Line records of type Pick and applies optional activity fields. Outside Omit Commit the pick is created in its own transaction (Codeunit.Run with a return value), which commits it, so it is not rolled back with the caller''s transaction.', 'BIFROST Full ori');
         exit(true);
     end;
 
@@ -133,10 +133,29 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
         exit(true);
     end;
 
+    procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.OutboundWorkflow(Workflow);
+        exit(true);
+    end;
+
+    procedure GetExamples(var Examples: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
     procedure GetOverview(var Overview: Text): Boolean
     begin
-        Overview := 'Creates a Warehouse Pick from an existing Warehouse Shipment using BC report 7318 and applies optional activity fields.';
+        Overview := 'Irreversibly creates a Warehouse Pick from an existing Warehouse Shipment using BC report 7318 (committed in its own transaction) and applies optional activity fields.';
         exit(true);
+    end;
+
+    procedure GetNotes(var Notes: Text): Boolean
+    begin
+        Notes := '';
+        exit(false);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"
@@ -144,16 +163,11 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
         exit(Enum::"Msg Direction ori"::Inbound);
     end;
 
-    procedure GetMessageHelpAsMarkdownDocument(var Argument: Record "Message Argument ori")
-    begin
-        Argument.SetResponseMarkdown('');
-    end;
-
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var
         WhseShipmentHeader: Record "Warehouse Shipment Header";
         WarehouseActivityHeader: Record "Warehouse Activity Header";
-        Dispatcher: Codeunit "Dispatcher ori";
+        RequestValueReader: Codeunit "Request Value Reader ori";
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
         SortingMethodText: Text;
@@ -177,7 +191,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
         AssignedUserIdValue := ReadCode50(RequestJson, 'assignedUserId');
         HasAssignedUserId := AssignedUserIdValue <> '';
         if HasAssignedUserId then
-            if Dispatcher.IsFieldWriteRestricted(Database::"Warehouse Activity Header", WarehouseActivityHeader.FieldNo("Assigned User ID")) then begin
+            if RequestValueReader.IsFieldWriteRestricted(Database::"Warehouse Activity Header", WarehouseActivityHeader.FieldNo("Assigned User ID")) then begin
                 Argument.RespondWithError(StrSubstNo(FieldWriteRestrictedErr, WarehouseActivityHeader.FieldCaption("Assigned User ID"), WarehouseActivityHeader.TableCaption()));
                 exit;
             end;
@@ -189,7 +203,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
                 Argument.RespondWithError(BuildInvalidSortingMethodErr(SortingMethodText));
                 exit;
             end;
-            if Dispatcher.IsFieldWriteRestricted(Database::"Warehouse Activity Header", WarehouseActivityHeader.FieldNo("Sorting Method")) then begin
+            if RequestValueReader.IsFieldWriteRestricted(Database::"Warehouse Activity Header", WarehouseActivityHeader.FieldNo("Sorting Method")) then begin
                 Argument.RespondWithError(StrSubstNo(FieldWriteRestrictedErr, WarehouseActivityHeader.FieldCaption("Sorting Method"), WarehouseActivityHeader.TableCaption()));
                 exit;
             end;

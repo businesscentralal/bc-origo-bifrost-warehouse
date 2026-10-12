@@ -2,6 +2,47 @@
 
 ## [Unreleased]
 
+### Changed (2026-10-12) - AL-Go v9.2 signs on Windows and Current compiles on BC 28.5
+
+- CI/CD on `main` signs with AL-Go-Actions v9.2 on `windows-latest`. Run 38238977303 compiled, then `Sign@v9.0` failed on the Linux runner with `Failed to install signing tool`. `.github/AL-Go-Settings.json` matches Language Models: signing stays on for `main`, with `githubRunner` `windows-latest` and `githubRunnerShell` `pwsh`. System files and workflows are Alpaca-AppSource `4cd474c40c167da7b929d5032d30c23a6bb3b225` (AL-Go-Actions v9.2, Alpaca Actions v2.11).
+- Current builds use sandbox artifact `/sandbox/28.5.54151.55751/w1/latest` in `.AL-Go/settings.json` and `.github/Test Current.settings.json`. `.AL-Go/settings.json` is listed in `fullBuildPatterns`. Next Minor and Next Major stay on `////nextminor` and `////nextmajor`. Runtime stays 17.0. The app version stays 28.0.0.0.
+
+### Fixed (2026-10-09) - Warehouse test transaction mode (#19)
+
+- Whse Shipment Test Helper ori (97021) and Whse Receipt Test Helper ori (97022) explicitly use committing Dispatcher execution for posting, preview and put-away tests and match its Text[100] response content type.
+
+### Fixed (2026-10-11) - posting-gate tests grant the dispatcher Company read (#19)
+
+- Whse Gate Test ori (97025) grants indirect read on Company (table 2000000006). The two restrictive gate tests call `Dispatcher.Execute`, and Foundation `Eula Consent ori` reads Company while building the consent key. This is not a direct Company read, not a `Setup ori` grant, and not another version change.
+
+### Changed (2026-10-04) - CI/CD builds only main; every pull request gets a Pull Request Build
+
+- Build policy only, no app change. `CI/CD` runs on pushes to `main` only, and `Pull Request Build` runs for pull requests into any branch. `.github/AL-Go-Settings.json` sets `CICDPushBranches` to `main` and `CICDPullRequestBranches` to `**`, so Update AL-Go System Files keeps the triggers.
+
+### Changed (2026-10-05) - align with Bifrost Foundation 28.0.1
+
+- The Foundation dependency floor is **28.0.1.0** in `app/app.json` and `test/app.json`, the same floor as Bifrost Language Models and Bifrost Attachments.
+- The warehouse tables already declare `Extensible`; this alignment changes no table or page extensibility.
+- `tools/` carries Foundation's source guards. The Source Guards workflow runs the five selected source checks: no call stack in answers, validated table views, no obsolete, permission coverage, and Icelandic keyword counts. Contract-parameter and mixed-language guards are copied but not wired in.
+- Migrate 23 removed Dispatcher helper calls in creation/posting/preview implementations (10078406–10078409, 10078411–10078412, 10078415) to Foundation Request Value Reader ori (10078336) and Posting Preview Helper ori (10078335), preserving arguments and responses.
+- Replace repeated/filler discovery keywords in Whse Pick Create Impl ori (10078412), Whse Shipment Create Impl ori (10078406) and Whse Shipment Post Impl ori (10078407) with Icelandic equivalents and regenerate translations.
+- Extend receipt creation tests (97014) and shipment posting tests (97012) for typed-input rejection and persisted date overrides; assert captured entry counts in receipt/shipment preview suites (97016, 97013).
+- Align the seven ordinary (non-forced) write-restriction calls in Whse Write Restrict Tests ori (97026), rename the Whse MsgType EnumExt ori (10078385) file, and preserve contract serialization/paging while removing mechanical warnings in Whse Contract Parts ori (10078459) and Whse Activity Get Impl ori (10078390).
+- Help Links is not wired in until `businesscentralal/bifrost` main has `help/warehouse/`.
+
+### Changed (2026-10-01) - Warehouse.Putaway.Create declares effect irreversible (#14)
+
+- `Warehouse.Putaway.Create` runs Business Central's `Whse.-Source - Create Document` report, which commits each put-away it creates, so the type now declares effect `irreversible` (still idempotent: it returns an already-open put-away). The Orchestrator's Omit Commit guard refuses it in a rollback chain. Its selection description and overview say so.
+- `Warehouse.Receipt.Create` (Business Central's Get Source Documents report commits each receipt header) and `Warehouse.Pick.Create` (created through `Codeunit.Run` with a return value, which commits) declare `irreversible` too, with their selection descriptions and overviews. `Warehouse.Shipment.Create` stays `write`: report 5753 has no commit on the shipment path.
+
+### Changed (2026-10-01) - complete the Warehouse message contracts and remove the markdown help procedure (#10, #11)
+
+- The twelve Warehouse message types implement every chapter of the current `Msg Contract ori`, so the app builds against Foundation again (`main` failed with AL0582 on `GetWorkflow`, `GetExamples`, `GetNotes` and, for five types, `GetParameters`).
+- The receipt, put-away, shipment and pick types return a `workflow` chapter with the inbound (receipt → post → put-away → register) or outbound (shipment → pick → register → post) flow, built once in `Whse Contract Parts ori`.
+- Every message type codeunit drops `GetMessageHelpAsMarkdownDocument`. Foundation removed it from `Msg Interface ori` (core#198); help is the contract chapters that `Help.Implementation.Get` returns.
+- Bifrost Foundation dependency raised to 28.0.0.186, the first Foundation build without the procedure, in `app/app.json` and `test/app.json`.
+- The contract test codeunit 97027 is renamed `Whse Msg Contract Tests ori` (the old name exceeded 30 characters) and declares `System.TestLibraries.Utilities`, so the test app compiles again.
+
 ### Changed (2026-10-01) - Build and deployment aligned with Bifrost Inventory
 
 - AL-Go workflows updated to the same template as Bifrost Inventory (AL-Go Actions v9.2) for continuous deployment of `main` to the Bifrost sandbox.

@@ -1,11 +1,12 @@
 namespace Origo.Bifrost.Warehouse.Test;
 
 using Origo.Bifrost;
+using System.TestLibraries.Utilities;
 
 /// <summary>
 /// Conformance tests for the twelve Warehouse message type contracts.
 /// </summary>
-codeunit 97027 "Whse Message Contract Tests ori"
+codeunit 97027 "Whse Msg Contract Tests ori"
 {
     Subtype = Test;
     TestPermissions = Disabled;
@@ -21,12 +22,12 @@ codeunit 97027 "Whse Message Contract Tests ori"
         AssertContract("Message Type ori"::"Warehouse.Shipment.Create", 'write', true);
         AssertContract("Message Type ori"::"Warehouse.Shipment.Post", 'irreversible', true);
         AssertContract("Message Type ori"::"Warehouse.Shipment.PreviewPost", 'read', false);
-        AssertContract("Message Type ori"::"Warehouse.Receipt.Create", 'write', true);
+        AssertContract("Message Type ori"::"Warehouse.Receipt.Create", 'irreversible', true);
         AssertContract("Message Type ori"::"Warehouse.Receipt.Post", 'irreversible', false);
         AssertContract("Message Type ori"::"Warehouse.Receipt.Post.Preview", 'read', false);
-        AssertContract("Message Type ori"::"Warehouse.Pick.Create", 'write', true);
+        AssertContract("Message Type ori"::"Warehouse.Pick.Create", 'irreversible', true);
         AssertContract("Message Type ori"::"Warehouse.Pick.Register", 'irreversible', false);
-        AssertContract("Message Type ori"::"Warehouse.Putaway.Create", 'write', true);
+        AssertContract("Message Type ori"::"Warehouse.Putaway.Create", 'irreversible', true);
         AssertContract("Message Type ori"::"Warehouse.Putaway.Register", 'irreversible', false);
     end;
 

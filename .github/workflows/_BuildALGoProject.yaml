@@ -73,10 +73,22 @@ on:
         description: Flag determining whether to use the Artifacts Cache
         type: boolean
         default: false
+      sharedContainer:
+        description: Reuse Default's container and defer cleanup to the calling workflow
+        type: boolean
+        default: false
+      expectedContainerId:
+        description: Physical container ID returned by the successful Default phase
+        type: string
+        default: ''
       needsContext:
         description: JSON formatted needs context
         type: string
         default: '{}'
+    outputs:
+      containerId:
+        description: Physical Alpaca container used by this phase
+        value: ${{ jobs.BuildALGoProject.outputs.containerId }}
 
 permissions:
   actions: read
@@ -90,6 +102,8 @@ env:
 
 jobs:
   BuildALGoProject:
+    outputs:
+      containerId: ${{ steps.containerIdentity.outputs.containerId }}
     needs: [ ]
     runs-on: ${{ fromJson(inputs.runsOn) }}
     defaults:
@@ -102,6 +116,11 @@ jobs:
         with:
           ref: ${{ inputs.checkoutRef }}
           lfs: true
+
+      - name: Validate shared pipeline hooks
+        if: inputs.sharedContainer
+        shell: pwsh
+        run: ./tools/Test-SharedAlpacaContainer.ps1
 
       - name: Read settings
         uses: microsoft/AL-Go-Actions/ReadSettings@v9.2
@@ -218,6 +237,8 @@ jobs:
           Secrets: '${{ steps.ReadSecrets.outputs.Secrets }}'
           BuildMode: ${{ inputs.buildMode }}
           NeedsContext: ${{ env.NeedsContext }}
+          BIFROST_SHARED_CONTAINER: ${{ inputs.sharedContainer }}
+          BIFROST_EXPECTED_CONTAINER_ID: ${{ inputs.expectedContainerId }}
         with:
           shell: ${{ inputs.shell }}
           artifact: ${{ env.artifact }}
@@ -228,6 +249,14 @@ jobs:
           baselineWorkflowRunId: ${{ inputs.baselineWorkflowRunId }}
           baselineWorkflowSHA: ${{ inputs.baselineWorkflowSHA }}
           previousAppsPath: ${{ steps.DownloadPreviousRelease.outputs.PreviousAppsPath }}
+
+      - name: Record container identity
+        id: containerIdentity
+        if: inputs.sharedContainer && steps.DetermineBuildProject.outputs.BuildIt == 'True'
+        shell: pwsh
+        run: |
+          if (!$env:BIFROST_CONTAINER_ID) { throw 'The pipeline did not report its shared container ID.' }
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "containerId=$($env:BIFROST_CONTAINER_ID)"
 
       - name: Sign
         id: sign
@@ -390,7 +419,7 @@ jobs:
   CustomJob-Alpaca-RemoveContainers:
     name: 'Remove COSMO Alpaca Containers'
     needs: [ BuildALGoProject ]
-    if: always() && fromJson(inputs.needsContext).CustomJob-CreateAlpaca-Container.result == 'success'
+    if: always() && !inputs.sharedContainer && fromJson(inputs.needsContext).CustomJob-CreateAlpaca-Container.result == 'success'
     uses: ./.github/workflows/_AlpacaRemoveContainers.yaml
     secrets: inherit
     with:

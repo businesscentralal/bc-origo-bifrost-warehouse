@@ -46,7 +46,7 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
 
     procedure GetSelectionDescription(): Text
     var
-        SelectionLbl: Label 'Creates inbound warehouse receipts from released sales return, purchase, or transfer orders; use Warehouse.Receipt.Post to receive one.', Comment = 'is-IS=Stofnar innleiðarmóttökur úr útgefnum söluskila-, innkaupa- eða millifærslupöntunum; notaðu Warehouse.Receipt.Post til að móttaka.';
+        SelectionLbl: Label 'Irreversible. Creates inbound warehouse receipts from released sales return, purchase, or transfer orders; use Warehouse.Receipt.Post to receive one.', Comment = 'is-IS=Óafturkræft. Stofnar innleiðarmóttökur úr útgefnum söluskila-, innkaupa- eða millifærslupöntunum; notaðu Warehouse.Receipt.Post til að móttaka.';
     begin
         exit(SelectionLbl);
     end;
@@ -105,7 +105,7 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.WriteEffect(Effect, 'Creates Warehouse Receipt Header and Line records and applies requested header fields.', 'BIFROST Full ori', false);
+        Parts.IrreversibleEffect(Effect, 'Creates Warehouse Receipt Header and Line records and applies requested header fields. Business Central''s Get Source Documents report commits after each receipt header it creates, so the receipts are not rolled back with the caller''s transaction.', 'BIFROST Full ori');
         exit(true);
     end;
 
@@ -123,10 +123,29 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
         exit(true);
     end;
 
+    procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
+    begin
+        Parts.InboundWorkflow(Workflow);
+        exit(true);
+    end;
+
+    procedure GetExamples(var Examples: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
     procedure GetOverview(var Overview: Text): Boolean
     begin
-        Overview := 'Creates one Warehouse Receipt for each released Sales Return Order, Purchase Order or inbound Transfer Order supplied in sourceDocuments.';
+        Overview := 'Irreversibly creates one Warehouse Receipt for each released Sales Return Order, Purchase Order or inbound Transfer Order supplied in sourceDocuments (Business Central commits each new receipt).';
         exit(true);
+    end;
+
+    procedure GetNotes(var Notes: Text): Boolean
+    begin
+        Notes := '';
+        exit(false);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"
@@ -134,15 +153,10 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
         exit(Enum::"Msg Direction ori"::Inbound);
     end;
 
-    procedure GetMessageHelpAsMarkdownDocument(var Argument: Record "Message Argument ori")
-    begin
-        Argument.SetResponseMarkdown('');
-    end;
-
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var
         WhseReceiptHeader: Record "Warehouse Receipt Header";
-        Dispatcher: Codeunit "Dispatcher ori";
+        RequestValueReader: Codeunit "Request Value Reader ori";
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
         SourceToken: JsonToken;
@@ -174,7 +188,7 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
         // Optional locationCode — used only to validate sources match (no override on the header).
         LocationFilter := ReadCode10(RequestJson, 'locationCode');
         if LocationFilter <> '' then
-            if Dispatcher.IsFieldWriteRestricted(Database::"Warehouse Receipt Header", WhseReceiptHeader.FieldNo("Location Code")) then begin
+            if RequestValueReader.IsFieldWriteRestricted(Database::"Warehouse Receipt Header", WhseReceiptHeader.FieldNo("Location Code")) then begin
                 Argument.RespondWithError(StrSubstNo(FieldWriteRestrictedErr, WhseReceiptHeader.FieldCaption("Location Code"), WhseReceiptHeader.TableCaption()));
                 exit;
             end;
@@ -182,7 +196,7 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
         // Optional header overrides
         AssignedUserIdValue := ReadCode50(RequestJson, 'assignedUserId');
         HasAssignedUserId := AssignedUserIdValue <> '';
-        if not Dispatcher.TryReadDate(Argument, RequestJson, 'postingDate', false, PostingDateValue) then
+        if not RequestValueReader.TryReadDate(Argument, RequestJson, 'postingDate', false, PostingDateValue) then
             exit;
         HasPostingDate := PostingDateValue <> 0D;
 

@@ -40,7 +40,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
 
     procedure GetKeywords(): Text
     var
-        KeywordsLbl: Label 'create pick, pick list, picking, pick the goods, pick for shipment, pick the items, pick for the order, picking list', Comment = 'is-IS=stofna tínslu, tínslulisti, tína, tína vörur, tínsla fyrir afhendingu, tína vörur, tína í pöntun, tínslulisti fyrir pöntun';
+        KeywordsLbl: Label 'create pick, pick list, picking, pick the goods, pick for shipment, pick the items, pick for the order, picking list', Comment = 'is-IS=stofna tínslu, tínslulisti, tína, tína vörur, tínsla fyrir afhendingu, tína vörueiningar, tína í pöntun, tínslulisti fyrir pöntun';
     begin
         exit(KeywordsLbl);
     end;
@@ -167,7 +167,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
     var
         WhseShipmentHeader: Record "Warehouse Shipment Header";
         WarehouseActivityHeader: Record "Warehouse Activity Header";
-        Dispatcher: Codeunit "Dispatcher ori";
+        RequestValueReader: Codeunit "Request Value Reader ori";
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
         SortingMethodText: Text;
@@ -191,7 +191,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
         AssignedUserIdValue := ReadCode50(RequestJson, 'assignedUserId');
         HasAssignedUserId := AssignedUserIdValue <> '';
         if HasAssignedUserId then
-            if Dispatcher.IsFieldWriteRestricted(Database::"Warehouse Activity Header", WarehouseActivityHeader.FieldNo("Assigned User ID")) then begin
+            if RequestValueReader.IsFieldWriteRestricted(Database::"Warehouse Activity Header", WarehouseActivityHeader.FieldNo("Assigned User ID")) then begin
                 Argument.RespondWithError(StrSubstNo(FieldWriteRestrictedErr, WarehouseActivityHeader.FieldCaption("Assigned User ID"), WarehouseActivityHeader.TableCaption()));
                 exit;
             end;
@@ -203,7 +203,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
                 Argument.RespondWithError(BuildInvalidSortingMethodErr(SortingMethodText));
                 exit;
             end;
-            if Dispatcher.IsFieldWriteRestricted(Database::"Warehouse Activity Header", WarehouseActivityHeader.FieldNo("Sorting Method")) then begin
+            if RequestValueReader.IsFieldWriteRestricted(Database::"Warehouse Activity Header", WarehouseActivityHeader.FieldNo("Sorting Method")) then begin
                 Argument.RespondWithError(StrSubstNo(FieldWriteRestrictedErr, WarehouseActivityHeader.FieldCaption("Sorting Method"), WarehouseActivityHeader.TableCaption()));
                 exit;
             end;

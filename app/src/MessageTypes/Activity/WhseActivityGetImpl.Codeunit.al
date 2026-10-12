@@ -303,12 +303,11 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
                 until ActivityLine.Next() = 0;
         end;
 
-        if ActivityHeader.FindSet() then begin
+        if ActivityHeader.FindSet() then
             repeat
                 if not HasDocumentFilter or ActivityHeaderKeys.Contains(GetActivityKey(ActivityHeader.Type, ActivityHeader."No.")) then
                     NoOfRecords += 1;
             until ActivityHeader.Next() = 0;
-        end;
 
         if SingleLookup and (NoOfRecords = 0) then begin
             if ActivityNo <> '' then

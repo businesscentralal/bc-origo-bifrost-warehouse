@@ -2,7 +2,7 @@
 
 - Namespace: `Origo.Bifrost.Warehouse`
 - Test namespace: `Origo.Bifrost.Warehouse.Test`
-- Foundation dependency: Bifrost Foundation `28.0.0.186` (first build without `GetMessageHelpAsMarkdownDocument`, core#198)
+- Foundation dependency: Bifrost Foundation `28.0.1.0`
 - Permissions: PermissionSetExtensions onto `BIFROST Read ori` / `BIFROST Full ori`
 - Own permission sets only for the posting and invoicing gates (`BIFROST WhsePost ori`, `BIFROST WhseInv ori`); no direct `Setup ori` tabledata access.
 - Message types: all twelve `Warehouse.*` types in `app/src/MessageTypes/`.

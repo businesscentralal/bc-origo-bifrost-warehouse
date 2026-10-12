@@ -130,10 +130,10 @@ codeunit 10078459 "Whse Contract Parts ori"
         Effect.Add('permissionSet', PermissionSetName);
     end;
 
-    internal procedure Response(var Response: JsonObject; Fields: JsonArray)
+    internal procedure Response(var ResponseJson: JsonObject; Fields: JsonArray)
     begin
-        Response.Add('contentType', 'text/json');
-        Response.Add('fields', Fields);
+        ResponseJson.Add('contentType', 'text/json');
+        ResponseJson.Add('fields', Fields);
     end;
 
     internal procedure AddStatusField(var Fields: JsonArray)

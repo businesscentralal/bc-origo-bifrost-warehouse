@@ -48,11 +48,10 @@
 - Bifrost Foundation dependency raised to 28.0.0.186, the first Foundation build without the procedure, in `app/app.json` and `test/app.json`.
 - The contract test codeunit 97027 is renamed `Whse Msg Contract Tests ori` (the old name exceeded 30 characters) and declares `System.TestLibraries.Utilities`, so the test app compiles again.
 
-### Changed (2026-10-01) - Build and deployment aligned with Bifrost Inventory
+### Changed (2026-10-12) - Build settings and telemetry aligned with Bifrost Inventory
 
-- AL-Go workflows updated to the same template as Bifrost Inventory (AL-Go Actions v9.2) for continuous deployment of `main` to the Bifrost sandbox.
-- Builds on `main` are now code-signed from Azure Key Vault on a Windows runner and versioned with AL-Go versioning strategy 3 (`app.json` stays at `X.Y.0.0`); pull-request builds stay unsigned.
-- Removed the docs-only Deploy Reference Documentation workflow; documentation lives in businesscentralal/bifrost.
+- Builds use AL-Go versioning strategy 3 (`app.json` stays at `X.Y.0.0`) and retain short-lived artifacts for 30 days.
+- Full builds also match changes to `.github/workflows/**`, `.github/AL-Go-Settings.json` and `tools/Test-BifrostPipeline.ps1`. The guard path is included for future coverage; it does not add or run a pipeline guard in this PR.
 - Telemetry now goes to the shared Bifröst Application Insights resource, like every other Bifröst app.
 
 ### Added (2026-09-29) - Warehouse message contracts (#10)

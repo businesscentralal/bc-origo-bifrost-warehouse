@@ -1,6 +1,52 @@
-param([string] $ProjectPath = (Split-Path -Parent $PSScriptRoot))
+param(
+    [string] $ProjectPath = (Split-Path -Parent $PSScriptRoot),
+    [switch] $SelfTest
+)
 
 $ErrorActionPreference = 'Stop'
+# Exercise the real guard against an isolated copy of its input files. Each
+# missing pattern must fail for its own reason, not for an unrelated fixture gap.
+if ($SelfTest) {
+    $fixturePath = Join-Path ([IO.Path]::GetTempPath()) ("bifrost-pipeline-" + [guid]::NewGuid().ToString('N'))
+    try {
+        foreach ($relativePath in @(
+            '.github/workflows/CICD.yaml',
+            '.github/workflows/PullRequestHandler.yaml',
+            '.github/workflows/_BuildSharedALGoProject.yaml',
+            '.github/workflows/_BuildALGoProject.yaml',
+            '.github/workflows/_AlpacaSyncConfigs.yaml',
+            '.AL-Go/PipelineInitialize.ps1',
+            '.AL-Go/settings.json'
+        )) {
+            $destination = Join-Path $fixturePath $relativePath
+            New-Item -ItemType Directory -Path (Split-Path -Parent $destination) -Force | Out-Null
+            Copy-Item -LiteralPath (Join-Path $ProjectPath $relativePath) -Destination $destination
+        }
+        & $PSCommandPath -ProjectPath $fixturePath
+        Write-Host 'Clean pipeline fixture passed.'
+        $settingsPath = Join-Path $fixturePath '.AL-Go/settings.json'
+        $originalSettings = Get-Content -LiteralPath $settingsPath -Raw
+        foreach ($pattern in @('.github/workflows/**', 'tools/Test-BifrostPipeline.ps1')) {
+            $fixtureSettings = $originalSettings | ConvertFrom-Json
+            $fixtureSettings.fullBuildPatterns = @($fixtureSettings.fullBuildPatterns | Where-Object { $_ -cne $pattern })
+            $fixtureSettings | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath $settingsPath
+            $failureMessage = ''
+            try { & $PSCommandPath -ProjectPath $fixturePath }
+            catch { $failureMessage = $_.Exception.Message }
+            $message = "fullBuildPatterns must include '$pattern' to execute paired builds on pipeline changes."
+            if (!$failureMessage.Contains($message)) {
+                throw "Missing-pattern fixture did not reject '$pattern' correctly: $failureMessage"
+            }
+            Write-Host "Missing-pattern fixture rejected '$pattern'."
+        }
+        Write-Host 'Bifrost pipeline self-test passed: clean fixture and both independent pattern omissions.'
+    }
+    finally {
+        if (Test-Path -LiteralPath $fixturePath) { Remove-Item -LiteralPath $fixturePath -Recurse -Force }
+    }
+    return
+}
+
 $failures = [Collections.Generic.List[string]]::new()
 
 function Require([bool] $Condition, [string] $Message) {
@@ -84,10 +130,13 @@ $readSecrets = $sync.IndexOf('/ReadSecrets@', [StringComparison]::Ordinal)
 Require ($readSettings -ge 0 -and $readSecrets -gt $readSettings) 'Settings sync must load merged settings before reading secrets.'
 
 $settings = Read-ProjectFile '.AL-Go/settings.json' | ConvertFrom-Json
+foreach ($pattern in @('.github/workflows/**', 'tools/Test-BifrostPipeline.ps1')) {
+    Require ($settings.fullBuildPatterns -ccontains $pattern) "fullBuildPatterns must include '$pattern' to execute paired builds on pipeline changes."
+}
 $testSettings = @($settings.conditionalSettings | Where-Object { 'Test' -in $_.buildModes })
 $defaultSettings = @($settings.conditionalSettings | Where-Object { 'Default' -in $_.buildModes })
 Require ($testSettings.settings.skipUpgrade -contains $true) 'Test must skip deployment of the previous release.'
 Require (!$settings.skipUpgrade -and !($defaultSettings.settings.skipUpgrade -contains $true)) 'Default must retain upgrade validation.'
 
 if ($failures.Count) { throw ("Bifrost pipeline contract failed:`n- " + ($failures -join "`n- ")) }
-Write-Host 'Bifrost pipeline contract passed: sequential builds, shared identity, Test republish wiring, production internals stripping, cleanup, signing request, settings sync and upgrade modes.'
+Write-Host 'Bifrost pipeline contract passed: sequential builds, shared identity, Test republish wiring, production internals stripping, cleanup, signing request, settings sync, full-build patterns and upgrade modes.'

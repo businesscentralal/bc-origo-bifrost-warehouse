@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed (2026-10-12) - guard pipeline full-build triggers
+
+- `tools/Test-BifrostPipeline.ps1` requires both `.github/workflows/**` and `tools/Test-BifrostPipeline.ps1` in `fullBuildPatterns`. Its `-SelfTest` fixture verifies a clean configuration passes and removing either pattern separately fails, preventing pipeline-only changes from skipping Default/Test verification. No AL objects or IDs changed.
+
 ### Changed (2026-10-12) - AL-Go v9.2 signs on Windows and Current compiles on BC 28.5
 
 - CI/CD on `main` signs with AL-Go-Actions v9.2 on `windows-latest`. Run 38238977303 compiled, then `Sign@v9.0` failed on the Linux runner with `Failed to install signing tool`. `.github/AL-Go-Settings.json` matches Language Models: signing stays on for `main`, with `githubRunner` `windows-latest` and `githubRunnerShell` `pwsh`. System files and workflows are Alpaca-AppSource `4cd474c40c167da7b929d5032d30c23a6bb3b225` (AL-Go-Actions v9.2, Alpaca Actions v2.11).

@@ -86,6 +86,35 @@ codeunit 97012 "Whse Shipment Post Tests ori"
         Assert.AreEqual('Error', StatusToken.AsValue().AsText(), 'Status should be Error');
     end;
 
+    /// <summary>An invalid invoice value must not post the shipment.</summary>
+    [Test]
+    procedure Post_InvalidInvoice_ReturnsErrorWithoutPosting()
+    var
+        Location: Record Location;
+        Item: Record Item;
+        SalesHeader: Record "Sales Header";
+        WhseShipmentHeader: Record "Warehouse Shipment Header";
+        ResponseJson: JsonObject;
+        StatusToken: JsonToken;
+        ErrorToken: JsonToken;
+    begin
+        // PR #23 B2 | Time: helper uses WorkDate | Risk: None
+        // [SCENARIO] Typed Boolean validation rejects a numeric invoice.
+        Initialize();
+        // [GIVEN] A postable shipment.
+        Helper.SetupLocationAndItem(Location, Item, 100);
+        Helper.CreateReleasedSalesOrder(SalesHeader, Item."No.", Location.Code, 5);
+        Helper.CreateWhseShipmentFromSalesOrder(WhseShipmentHeader, SalesHeader);
+        // [WHEN] Dispatching invalid JSON through the real message path.
+        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Shipment.Post", WhseShipmentHeader."No.", '{"invoice":123}', ResponseJson), 'Response should parse');
+        // [THEN] Error identifies invoice and shipment remains unposted.
+        Assert.IsTrue(ResponseJson.Get('status', StatusToken), 'status missing');
+        Assert.AreEqual('Error', StatusToken.AsValue().AsText(), 'Invalid Boolean must fail');
+        Assert.IsTrue(ResponseJson.Get('error', ErrorToken), 'error missing');
+        Assert.IsTrue(ErrorToken.AsValue().AsText().Contains('invoice'), 'Error must identify invoice');
+        Assert.IsTrue(WhseShipmentHeader.Get(WhseShipmentHeader."No."), 'Invalid invoice must not consume shipment');
+    end;
+
     local procedure CreateMessage(var ResponseJson: JsonObject; WhseShipmentNo: Code[20]; Invoice: Boolean)
     var
         RequestJson: JsonObject;

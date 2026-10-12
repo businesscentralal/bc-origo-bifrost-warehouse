@@ -141,6 +141,85 @@ codeunit 97014 "Whse Receipt Create Tests ori"
         Assert.AreEqual('Error', StatusToken.AsValue().AsText(), 'Status should be Error');
     end;
 
+    /// <summary>A valid optional posting date is persisted on the created receipt.</summary>
+    [Test]
+    procedure Create_ValidPostingDate_PersistsOverride()
+    var
+        Location: Record Location;
+        Item: Record Item;
+        PurchaseHeader: Record "Purchase Header";
+        WhseReceiptHeader: Record "Warehouse Receipt Header";
+        RequestJson: JsonObject;
+        SourceJson: JsonObject;
+        ResponseJson: JsonObject;
+        Sources: JsonArray;
+        Receipts: JsonArray;
+        Token: JsonToken;
+        ReceiptToken: JsonToken;
+    begin
+        // PR #23 B2 | Time: explicit WorkDate ISO override | Risk: None
+        // [SCENARIO] Date reader preserves a valid request override.
+        Initialize();
+        // [GIVEN] A released purchase order and a valid date.
+        Helper.SetupLocationAndItem(Location, Item, 0);
+        Helper.CreateReleasedPurchaseOrder(PurchaseHeader, Item."No.", Location.Code, 5);
+        SourceJson.Add('sourceType', 'PurchaseOrder');
+        SourceJson.Add('documentNo', PurchaseHeader."No.");
+        Sources.Add(SourceJson);
+        RequestJson.Add('sourceDocuments', Sources);
+        RequestJson.Add('postingDate', Format(WorkDate(), 0, 9));
+        // [WHEN] Dispatching the real creation path.
+        CreateMessageWithRequestJson(ResponseJson, RequestJson);
+        // [THEN] A successful receipt has the requested date.
+        Assert.IsTrue(ResponseJson.Get('status', Token), 'status missing');
+        Assert.AreEqual('Success', Token.AsValue().AsText(), 'Valid date must succeed');
+        Assert.IsTrue(ResponseJson.Get('receipts', Token), 'receipts missing');
+        Receipts := Token.AsArray();
+        Assert.AreEqual(1, Receipts.Count(), 'Exactly one receipt expected');
+        Receipts.Get(0, ReceiptToken);
+        Assert.IsTrue(ReceiptToken.AsObject().Get('no', Token), 'no missing');
+        Assert.IsTrue(WhseReceiptHeader.Get(Token.AsValue().AsText()), 'Receipt must exist');
+        Assert.AreEqual(WorkDate(), WhseReceiptHeader."Posting Date", 'Posting date must match request');
+    end;
+
+    /// <summary>Invalid optional posting dates fail before creating a receipt.</summary>
+    [Test]
+    procedure Create_InvalidPostingDate_ReturnsErrorWithoutReceipt()
+    var
+        Location: Record Location;
+        Item: Record Item;
+        PurchaseHeader: Record "Purchase Header";
+        WhseReceiptHeader: Record "Warehouse Receipt Header";
+        RequestJson: JsonObject;
+        SourceJson: JsonObject;
+        ResponseJson: JsonObject;
+        Sources: JsonArray;
+        StatusToken: JsonToken;
+        ErrorToken: JsonToken;
+        CountBefore: Integer;
+    begin
+        // PR #23 B2 | Time: invalid ISO date; WorkDate unchanged | Risk: None
+        // [SCENARIO] The public date reader rejects invalid input before writes.
+        Initialize();
+        // [GIVEN] A released order and an invalid date override.
+        Helper.SetupLocationAndItem(Location, Item, 0);
+        Helper.CreateReleasedPurchaseOrder(PurchaseHeader, Item."No.", Location.Code, 5);
+        CountBefore := WhseReceiptHeader.Count();
+        SourceJson.Add('sourceType', 'PurchaseOrder');
+        SourceJson.Add('documentNo', PurchaseHeader."No.");
+        Sources.Add(SourceJson);
+        RequestJson.Add('sourceDocuments', Sources);
+        RequestJson.Add('postingDate', '2026-02-30');
+        // [WHEN] Dispatching the real message path.
+        CreateMessageWithRequestJson(ResponseJson, RequestJson);
+        // [THEN] A typed error and no receipt creation.
+        Assert.IsTrue(ResponseJson.Get('status', StatusToken), 'status missing');
+        Assert.AreEqual('Error', StatusToken.AsValue().AsText(), 'Invalid date must fail');
+        Assert.IsTrue(ResponseJson.Get('error', ErrorToken), 'error missing');
+        Assert.IsTrue(ErrorToken.AsValue().AsText().Contains('postingDate'), 'Error must identify postingDate');
+        Assert.AreEqual(CountBefore, WhseReceiptHeader.Count(), 'Invalid date must not create receipts');
+    end;
+
     local procedure CreateMessageWithPurchaseOrder(var ResponseJson: JsonObject; PurchaseOrderNo: Code[20])
     var
         RequestJson, SourceObj : JsonObject;

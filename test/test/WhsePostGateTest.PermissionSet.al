@@ -4,10 +4,12 @@ using Microsoft.Warehouse.Activity;
 using Microsoft.Warehouse.Document;
 using Origo.Bifrost;
 using Origo.Bifrost.Warehouse;
+using System.Environment;
 
 /// <summary>
 /// Document and argument permissions for the warehouse posting-gate tests.
 /// Does not grant Whse Posting ori or Whse Invoice ori. Those sets are added only on the grant path.
+/// Grants indirect read on Company. Dispatcher.Execute calls Foundation Eula Consent ori, which reads Company to build the consent key.
 /// </summary>
 permissionset 97025 "Whse Gate Test ori"
 {
@@ -15,6 +17,7 @@ permissionset 97025 "Whse Gate Test ori"
     Caption = 'Whse Gate Test', MaxLength = 30;
 
     Permissions =
+        tabledata Company = r,
         tabledata "Message Argument ori" = RIMD,
         tabledata "Warehouse Shipment Header" = RIMD,
         tabledata "Warehouse Receipt Header" = RIMD,

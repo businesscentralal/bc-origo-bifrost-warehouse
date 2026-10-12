@@ -171,7 +171,7 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
     var
         PostedWhseReceiptHeader: Record "Posted Whse. Receipt Header";
         WarehouseActivityHeader: Record "Warehouse Activity Header";
-        Dispatcher: Codeunit "Dispatcher ori";
+        RequestValueReader: Codeunit "Request Value Reader ori";
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
         SortingMethodText: Text;
@@ -198,7 +198,7 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
         AssignedUserIdValue := ReadCode50(RequestJson, 'assignedUserId');
         HasAssignedUserId := AssignedUserIdValue <> '';
         if HasAssignedUserId then
-            if Dispatcher.IsFieldWriteRestricted(Database::"Warehouse Activity Header", WarehouseActivityHeader.FieldNo("Assigned User ID")) then begin
+            if RequestValueReader.IsFieldWriteRestricted(Database::"Warehouse Activity Header", WarehouseActivityHeader.FieldNo("Assigned User ID")) then begin
                 Argument.RespondWithError(StrSubstNo(FieldWriteRestrictedErr, WarehouseActivityHeader.FieldCaption("Assigned User ID"), WarehouseActivityHeader.TableCaption()));
                 exit;
             end;
@@ -210,7 +210,7 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
                 Argument.RespondWithError(BuildInvalidSortingMethodErr(SortingMethodText));
                 exit;
             end;
-            if Dispatcher.IsFieldWriteRestricted(Database::"Warehouse Activity Header", WarehouseActivityHeader.FieldNo("Sorting Method")) then begin
+            if RequestValueReader.IsFieldWriteRestricted(Database::"Warehouse Activity Header", WarehouseActivityHeader.FieldNo("Sorting Method")) then begin
                 Argument.RespondWithError(StrSubstNo(FieldWriteRestrictedErr, WarehouseActivityHeader.FieldCaption("Sorting Method"), WarehouseActivityHeader.TableCaption()));
                 exit;
             end;

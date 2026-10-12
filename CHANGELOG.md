@@ -17,7 +17,7 @@
 
 ### Changed (2026-10-07) - preserve the Bifrost pipeline across AL-Go and Alpaca updates
 
-- `Bifrost Pipeline Guards` runs `tools/Test-BifrostPipeline.ps1` and `tools/Test-SharedAlpacaContainer.ps1` when workflows, AL-Go settings, Alpaca scripts, or `AGENTS.md` change.
+- `Bifrost Pipeline Guards` runs `tools/Test-BifrostPipeline.ps1` and `tools/Test-SharedAlpacaContainer.ps1` when workflows, AL-Go settings, Alpaca scripts, or `AGENTS.md` change. `fullBuildPatterns` includes `.github/workflows/**` and `tools/Test-BifrostPipeline.ps1`, so a pipeline change runs the full Default and Test build.
 
 ### Changed (2026-10-04) - CI/CD builds only main; every pull request gets a Pull Request Build
 

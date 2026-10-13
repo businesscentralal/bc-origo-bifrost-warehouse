@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed (2026-10-13) - Posting-gate test HTTP setup (#30)
+
+- Prepare registered application HTTP settings before lowering permissions in posting-gate dispatcher tests (97023, 97024). Restricted callers retain the original posting and invoicing permissions and assertions; Foundation setup no longer masks those scenarios.
+
 ### Changed (2026-10-12) - guard pipeline full-build triggers
 
 - `tools/Test-BifrostPipeline.ps1` requires both `.github/workflows/**` and `tools/Test-BifrostPipeline.ps1` in `fullBuildPatterns`. Its `-SelfTest` fixture verifies a clean configuration passes and removing either pattern separately fails, preventing pipeline-only changes from skipping Default/Test verification. No AL objects or IDs changed.

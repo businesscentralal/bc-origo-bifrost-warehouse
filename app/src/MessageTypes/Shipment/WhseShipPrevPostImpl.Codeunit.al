@@ -109,6 +109,7 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Parts: Codeunit "Whse Contract Parts ori";
     begin
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, 'Posting preview cannot run inside a rollback chain (Omit Commit). Run this message type with Omit Commit set to false.', 'Call Dispatcher.Execute with OmitCommit = false, or use the HTTP/MCP API.'));
         Parts.AddLookupErrors(Errors, 'Warehouse Shipment Header');
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::NothingToPreview, 'The Warehouse Shipment has no lines or no quantities to post.', 'Add lines and quantities to ship.'));
         Parts.AddBusinessCentralError(Errors, 'invalid quantities, posting setup or source-document state');
@@ -191,9 +192,15 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
         NoLinesToPostErr: Label 'Warehouse Shipment %1 has no lines to post.', Comment = '%1 = Whse. Shipment No.', Locked = true;
         PreviewFailedErr: Label 'Posting preview failed and no entries were captured. The shipment cannot be posted in its current state.', Comment = 'is-IS=Bókunarforsýning mistókst og engar færslur voru teknar. Sendingin getur ekki verið bókuð í núverandi stöðu.';
         NothingToPostNextStepTok: Label 'No shipment line has Qty. to Ship. Set quantities on the shipment lines.', Comment = 'is-IS=Engin sendingarlína hefur Magn til afhendingar. Setjið magn á sendingarlínurnar.';
+        OmitCommitPreviewErr: Label 'Posting preview cannot run inside a rollback chain (Omit Commit). Run this message type with Omit Commit set to false.', Locked = true;
+        OmitCommitPreviewNextStepTok: Label 'Call Dispatcher.Execute with OmitCommit = false, or use the HTTP/MCP API.', Locked = true;
     begin
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
+        if Argument."Omit Commit" then begin
+            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, OmitCommitPreviewErr, '', '', '', OmitCommitPreviewNextStepTok);
+            exit;
+        end;
 
         RequestJson := Argument.GetRequestJson();
         if not FindWhseShipmentHeader(Argument, WhseShipmentHeader) then

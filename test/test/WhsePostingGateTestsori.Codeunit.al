@@ -126,15 +126,18 @@ codeunit 97023 "Whse Posting Gate Tests ori"
     [Test]
     procedure ShipmentPost_InvoiceWithoutWhseInv_NamesWhseInvSet()
     var
+        AppSetting: Record "NAV App Setting";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         ResponseJson: JsonObject;
         CodeToken: JsonToken;
         ResponseText: Text;
         ErrorToken: JsonToken;
     begin
-        LibraryLowerPermissions.PushPermissionSetWithoutDefaults('SUPER');
+        LibraryLowerPermissions.PushPermissionSetWithoutDefaults('D365 Basic - Edit');
+        LibraryLowerPermissions.AddPermissionSet('BIFROST Full ori');
         EnableRegisteredAppHttp();
         LowerToDocumentWrite(LibraryLowerPermissions);
+        Assert.IsFalse(AppSetting.WritePermission(), 'The caller must not retain HTTP setup write permission.');
         LibraryLowerPermissions.AddPermissionSet('BIFROST WhsePost ori');
 
         Assert.IsTrue(RunShipmentPost('{"invoice":true}', ResponseJson), 'The invoice denial should return JSON.');

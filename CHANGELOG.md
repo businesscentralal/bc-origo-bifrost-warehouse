@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+### Changed (2026-10-13) - Application Insights connection string in app.json (#35)
+
+- Added `applicationInsightsConnectionString` to clear AS0092, using the same value as Inventory and Attachments; the telemetry metadata does not change the app version.
+
+### Fixed (2026-10-13) - Help host and compiler warnings (#25, #35)
+
+- Aligned the Warehouse context-sensitive help host with the documentation site; external Warehouse documentation remains tracked separately in bifrost#99.
+- Explicitly initialized the activity paging counter (codeunit 10078390) and repaired test filename, declaration, response-content-type and format-label diagnostics without changing assertions or permissions (97000–97002, 97010–97027).
+
 ### Changed (2026-10-12) - AL-Go v9.2 signs on Windows and Current compiles on BC 28.5
 
 - CI/CD on `main` signs with AL-Go-Actions v9.2 on `windows-latest`. Run 38238977303 compiled, then `Sign@v9.0` failed on the Linux runner with `Failed to install signing tool`. `.github/AL-Go-Settings.json` matches Language Models: signing stays on for `main`, with `githubRunner` `windows-latest` and `githubRunnerShell` `pwsh`. System files and workflows are Alpaca-AppSource `4cd474c40c167da7b929d5032d30c23a6bb3b225` (AL-Go-Actions v9.2, Alpaca Actions v2.11).

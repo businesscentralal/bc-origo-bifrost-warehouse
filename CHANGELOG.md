@@ -4,7 +4,7 @@
 
 ### Fixed (2026-10-13) - Posting-gate test HTTP setup (#30)
 
-- Prepare registered application HTTP settings before lowering permissions in posting-gate dispatcher tests (97023, 97024). Restricted callers retain the original posting and invoicing permissions and assertions; Foundation setup no longer masks those scenarios.
+- Prepare registered application HTTP settings before lowering permissions in posting-gate dispatcher tests (97023, 97024). Restricted callers receive only indirect settings read (permission set 97025) and retain the original posting and invoicing permissions and assertions; Foundation setup no longer masks those scenarios.
 
 ### Changed (2026-10-12) - guard pipeline full-build triggers
 

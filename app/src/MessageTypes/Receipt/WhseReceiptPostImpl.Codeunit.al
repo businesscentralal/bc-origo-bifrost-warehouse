@@ -65,9 +65,11 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
 
     procedure GetTarget(var Target: JsonArray): Boolean
     var
-        Parts: Codeunit "Whse Contract Parts ori";
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        Target := Parts.RecordTarget('Warehouse Receipt Header', 'systemId, recordSystemId, id, receiptNo, no');
+        Target.Add(ContractMgt.TargetEntry('subject', 'guid', 'The SystemId of the Warehouse Receipt Header.'));
+        Target.Add(ContractMgt.TargetEntry('subject', 'document no.', 'The No. of the Warehouse Receipt Header.'));
+        Target.Add(ContractMgt.TargetEntry('data.systemId, data.recordSystemId, data.id, data.receiptNo, data.no', 'guid or document no.', 'The identifier keys accepted for the Warehouse Receipt Header. Every supplied identifier is tried; conflicting identifiers are refused.'));
         exit(true);
     end;
 
@@ -184,10 +186,14 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
         end;
         WhseReceiptLine.FindFirst();
 
-        if not WhsePostReceipt.Run(WhseReceiptLine) then begin
-            Argument.RespondWithError(GetLastErrorText());
-            exit;
-        end;
+        // Codeunit.Run with a return value is illegal inside the Omit Commit write transaction (#18).
+        if Argument."Omit Commit" then
+            WhsePostReceipt.Run(WhseReceiptLine)
+        else
+            if not WhsePostReceipt.Run(WhseReceiptLine) then begin
+                Argument.RespondWithError(GetLastErrorText());
+                exit;
+            end;
 
         ResponseJson.Add('status', 'Success');
         ResponseJson.Add('receiptNo', WhseReceiptHeader."No.");

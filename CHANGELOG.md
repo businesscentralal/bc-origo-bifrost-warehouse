@@ -11,6 +11,18 @@
 - Aligned the Warehouse context-sensitive help host with the documentation site; external Warehouse documentation remains tracked separately in bifrost#99.
 - Explicitly initialized the activity paging counter (codeunit 10078390) and repaired test filename, declaration, response-content-type and format-label diagnostics without changing assertions or permissions (97000–97002, 97010–97027).
 
+### Changed (2026-10-13) - Warehouse identifier contract keys (#24)
+
+- Each identifier key in the six document lookup contracts now carries its own `data.` prefix, preserving accepted keys and descriptions (codeunits 10078407–10078408, 10078410–10078412 and 10078415; tests 97027).
+
+### Fixed (2026-10-13) - Warehouse posting and put-away (#18)
+
+- Shipment and receipt posting and put-away creation support calls with Omit Commit, including returning an existing put-away.
+- Shipment and receipt previews explain how to run them when called in a rollback chain.
+- Updated codeunits 10078407, 10078408, 10078410, 10078411 and 10078415; test helpers 97021–97022 and regression tests 97028.
+- Retained behavior while clearing existing compiler diagnostics: explicit temporary declarations and test declaration/format cleanup; test filenames now match object names.
+
+
 ### Changed (2026-10-12) - AL-Go v9.2 signs on Windows and Current compiles on BC 28.5
 
 - CI/CD on `main` signs with AL-Go-Actions v9.2 on `windows-latest`. Run 38238977303 compiled, then `Sign@v9.0` failed on the Linux runner with `Failed to install signing tool`. `.github/AL-Go-Settings.json` matches Language Models: signing stays on for `main`, with `githubRunner` `windows-latest` and `githubRunnerShell` `pwsh`. System files and workflows are Alpaca-AppSource `4cd474c40c167da7b929d5032d30c23a6bb3b225` (AL-Go-Actions v9.2, Alpaca Actions v2.11).

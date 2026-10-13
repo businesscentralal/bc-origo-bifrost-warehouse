@@ -65,9 +65,11 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
 
     procedure GetTarget(var Target: JsonArray): Boolean
     var
-        Parts: Codeunit "Whse Contract Parts ori";
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        Target := Parts.RecordTarget('Warehouse Shipment Header', 'systemId, recordSystemId, id, whseShipmentNo, shipmentNo, no');
+        Target.Add(ContractMgt.TargetEntry('subject', 'guid', 'The SystemId of the Warehouse Shipment Header.'));
+        Target.Add(ContractMgt.TargetEntry('subject', 'document no.', 'The No. of the Warehouse Shipment Header.'));
+        Target.Add(ContractMgt.TargetEntry('data.systemId, data.recordSystemId, data.id, data.whseShipmentNo, data.shipmentNo, data.no', 'guid or document no.', 'The identifier keys accepted for the Warehouse Shipment Header. Every supplied identifier is tried; conflicting identifiers are refused.'));
         exit(true);
     end;
 

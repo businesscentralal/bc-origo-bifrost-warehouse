@@ -65,9 +65,11 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
 
     procedure GetTarget(var Target: JsonArray): Boolean
     var
-        Parts: Codeunit "Whse Contract Parts ori";
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        Target := Parts.RecordTarget('Posted Whse. Receipt Header', 'systemId, recordSystemId, id, postedWhseReceiptNo, receiptNo, no');
+        Target.Add(ContractMgt.TargetEntry('subject', 'guid', 'The SystemId of the Posted Whse. Receipt Header.'));
+        Target.Add(ContractMgt.TargetEntry('subject', 'document no.', 'The No. of the Posted Whse. Receipt Header.'));
+        Target.Add(ContractMgt.TargetEntry('data.systemId, data.recordSystemId, data.id, data.postedWhseReceiptNo, data.receiptNo, data.no', 'guid or document no.', 'The identifier keys accepted for the Posted Whse. Receipt Header. Every supplied identifier is tried; conflicting identifiers are refused.'));
         exit(true);
     end;
 
@@ -232,8 +234,16 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
 
         // Delegate the report invocation to an isolated codeunit so report-time errors are
         // caught here without aborting the outer message-task transaction.
-        PutawayWasCreated := Codeunit.Run(Codeunit::"Whse Putaway Create Proc. ori", PostedWhseReceiptHeader);
-        ReportErrorText := GetLastErrorText();
+        // Codeunit.Run with a return value is illegal inside the Omit Commit write transaction (#18).
+        if Argument."Omit Commit" then begin
+            if not FindCreatedPutaway(PostedWhseReceiptHeader."No.", WarehouseActivityHeader) then begin
+                Codeunit.Run(Codeunit::"Whse Putaway Create Proc. ori", PostedWhseReceiptHeader);
+                PutawayWasCreated := true;
+            end;
+        end else begin
+            PutawayWasCreated := Codeunit.Run(Codeunit::"Whse Putaway Create Proc. ori", PostedWhseReceiptHeader);
+            ReportErrorText := GetLastErrorText();
+        end;
 
         // Locate the put-away for this Posted Whse. Receipt. A put-away may already exist even
         // when the report failed: on a Require Put-away location that is NOT a "Use Put-away
@@ -282,6 +292,7 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
     begin
         // Put-away activity lines reference the source Posted Whse. Receipt via
         // "Whse. Document Type" = Receipt and "Whse. Document No.".
+        WarehouseActivityLine.SetLoadFields("No.");
         WarehouseActivityLine.SetRange("Activity Type", WarehouseActivityLine."Activity Type"::"Put-away");
         WarehouseActivityLine.SetRange("Whse. Document Type", WarehouseActivityLine."Whse. Document Type"::Receipt);
         WarehouseActivityLine.SetRange("Whse. Document No.", PostedWhseReceiptNo);

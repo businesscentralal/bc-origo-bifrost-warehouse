@@ -108,6 +108,43 @@ codeunit 97027 "Whse Msg Contract Tests ori"
         Assert.IsTrue(HasLines, 'Activity result should describe its nested lines array');
     end;
 
+    /// <summary>Issue #24 AC04: document targets preserve descriptions and declare each data key.</summary>
+    [Test]
+    procedure DocumentTargets_DeclareEachIdentifierKey()
+    begin
+        // Story #24, AC04 | Time: independent of Today/WorkDate | Risk: contract shape only.
+        AssertDocumentTarget("Message Type ori"::"Warehouse.Shipment.Post", 'Warehouse Shipment Header', 'data.systemId, data.recordSystemId, data.id, data.shipmentNo, data.no');
+        AssertDocumentTarget("Message Type ori"::"Warehouse.Shipment.PreviewPost", 'Warehouse Shipment Header', 'data.systemId, data.recordSystemId, data.id, data.shipmentNo, data.no');
+        AssertDocumentTarget("Message Type ori"::"Warehouse.Receipt.Post", 'Warehouse Receipt Header', 'data.systemId, data.recordSystemId, data.id, data.receiptNo, data.no');
+        AssertDocumentTarget("Message Type ori"::"Warehouse.Receipt.Post.Preview", 'Warehouse Receipt Header', 'data.systemId, data.recordSystemId, data.id, data.receiptNo, data.no');
+        AssertDocumentTarget("Message Type ori"::"Warehouse.Pick.Create", 'Warehouse Shipment Header', 'data.systemId, data.recordSystemId, data.id, data.whseShipmentNo, data.shipmentNo, data.no');
+        AssertDocumentTarget("Message Type ori"::"Warehouse.Putaway.Create", 'Posted Whse. Receipt Header', 'data.systemId, data.recordSystemId, data.id, data.postedWhseReceiptNo, data.receiptNo, data.no');
+    end;
+
+    local procedure AssertDocumentTarget(MessageType: Enum "Message Type ori"; RecordName: Text; DataKeys: Text)
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Contract: JsonObject;
+        ActualTarget: JsonArray;
+        ExpectedTarget: JsonArray;
+        Token: JsonToken;
+        ActualText: Text;
+        ExpectedText: Text;
+    begin
+        // [GIVEN] The public contract for the document type.
+        Assert.IsTrue(ContractMgt.GetContract(MessageType, Contract), 'Contract must exist.');
+        Assert.IsTrue(Contract.Get('target', Token), 'Target chapter must exist.');
+        ActualTarget := Token.AsArray();
+        // [WHEN] Comparing to the three original entries, with each data key prefixed.
+        ExpectedTarget.Add(ContractMgt.TargetEntry('subject', 'guid', 'The SystemId of the ' + RecordName + '.'));
+        ExpectedTarget.Add(ContractMgt.TargetEntry('subject', 'document no.', 'The No. of the ' + RecordName + '.'));
+        ExpectedTarget.Add(ContractMgt.TargetEntry(DataKeys, 'guid or document no.', 'The identifier keys accepted for the ' + RecordName + '. Every supplied identifier is tried; conflicting identifiers are refused.'));
+        ActualTarget.WriteTo(ActualText);
+        ExpectedTarget.WriteTo(ExpectedText);
+        // [THEN] Key order, kinds and descriptions remain unchanged.
+        Assert.AreEqual(ExpectedText, ActualText, MessageTypeName(MessageType) + ' target must match its accepted identifiers.');
+    end;
+
     local procedure MessageTypeName(MessageType: Enum "Message Type ori"): Text
     begin
         exit(Enum::"Message Type ori".Names().Get(Enum::"Message Type ori".Ordinals().IndexOf(MessageType.AsInteger())));

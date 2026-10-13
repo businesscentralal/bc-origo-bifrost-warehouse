@@ -44,7 +44,7 @@ codeunit 97013 "Whse Ship Prev Post Tests ori"
         Helper.CreateReleasedSalesOrder(SalesHeader, Item."No.", Location.Code, 5);
         Helper.CreateWhseShipmentFromSalesOrder(WhseShipmentHeader, SalesHeader);
 
-        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Shipment.PreviewPost", WhseShipmentHeader."No.", '', ResponseJson), 'Response JSON should parse');
+        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Shipment.PreviewPost", WhseShipmentHeader."No.", '', ResponseJson, false), 'Response JSON should parse');
         AssertStatus(ResponseJson, 'Success');
         Assert.IsTrue(ResponseJson.Get('rollback', Token), 'rollback flag should be present');
         Assert.IsTrue(Token.AsValue().AsBoolean(), 'rollback should be true');
@@ -78,7 +78,7 @@ codeunit 97013 "Whse Ship Prev Post Tests ori"
         Helper.CreateWhseShipmentFromSalesOrder(WhseShipmentHeader, SalesHeader);
         PostedCountBefore := PostedWhseShipmentHeader.Count();
 
-        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Shipment.PreviewPost", WhseShipmentHeader."No.", '', ResponseJson), 'Response JSON should parse');
+        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Shipment.PreviewPost", WhseShipmentHeader."No.", '', ResponseJson, false), 'Response JSON should parse');
         AssertStatus(ResponseJson, 'Success');
 
         PostedCountAfter := PostedWhseShipmentHeader.Count();
@@ -103,7 +103,7 @@ codeunit 97013 "Whse Ship Prev Post Tests ori"
         Helper.CreateReleasedSalesOrder(SalesHeader, Item."No.", Location.Code, 5);
         Helper.CreateWhseShipmentFromSalesOrder(WhseShipmentHeader, SalesHeader);
 
-        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Shipment.PreviewPost", WhseShipmentHeader."No.", '', ResponseJson), 'Response JSON should parse');
+        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Shipment.PreviewPost", WhseShipmentHeader."No.", '', ResponseJson, false), 'Response JSON should parse');
         AssertStatus(ResponseJson, 'Success');
 
         Assert.IsTrue(ResponseJson.Get('shipmentNo', Token), 'Should have shipmentNo');
@@ -134,7 +134,7 @@ codeunit 97013 "Whse Ship Prev Post Tests ori"
         Helper.CreateReleasedSalesOrder(SalesHeader, Item."No.", Location.Code, 5);
         Helper.CreateWhseShipmentFromSalesOrder(WhseShipmentHeader, SalesHeader);
 
-        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Shipment.PreviewPost", Format(WhseShipmentHeader.SystemId, 0, 4), '', ResponseJson), 'Response JSON should parse');
+        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Shipment.PreviewPost", Format(WhseShipmentHeader.SystemId, 0, 4), '', ResponseJson, false), 'Response JSON should parse');
         AssertStatus(ResponseJson, 'Success');
     end;
 
@@ -145,7 +145,7 @@ codeunit 97013 "Whse Ship Prev Post Tests ori"
     begin
         Initialize();
 
-        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Shipment.PreviewPost", 'NONEXISTENT-WS', '', ResponseJson), 'Response JSON should parse');
+        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Shipment.PreviewPost", 'NONEXISTENT-WS', '', ResponseJson, false), 'Response JSON should parse');
         AssertStatus(ResponseJson, 'Error');
     end;
 
@@ -156,7 +156,7 @@ codeunit 97013 "Whse Ship Prev Post Tests ori"
     begin
         Initialize();
 
-        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Shipment.PreviewPost", '', '', ResponseJson), 'Response JSON should parse');
+        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Shipment.PreviewPost", '', '', ResponseJson, false), 'Response JSON should parse');
         AssertStatus(ResponseJson, 'Error');
     end;
 
@@ -185,7 +185,7 @@ codeunit 97013 "Whse Ship Prev Post Tests ori"
         until WhseShipmentLine.Next() = 0;
         Commit();
 
-        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Shipment.PreviewPost", WhseShipmentHeader."No.", '', ResponseJson), 'Response JSON should parse');
+        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Shipment.PreviewPost", WhseShipmentHeader."No.", '', ResponseJson, false), 'Response JSON should parse');
         AssertStatus(ResponseJson, 'Error');
         Assert.IsTrue(ResponseJson.Get('code', Token), 'code');
         Assert.AreEqual('NothingToPreview', Token.AsValue().AsText(), 'code');

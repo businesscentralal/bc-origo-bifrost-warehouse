@@ -4,9 +4,9 @@
 
 ### Changed (2026-10-13) - Preserve the Bifrost pipeline across AL-Go updates
 
-- Added pipeline guards for main-only signing, shared Default/Test container hooks and full-build trigger coverage; pipeline and guard changes execute paired Default/Test builds.
-- The guard self-test rejects removal of either `.github/workflows/**` or `tools/Test-BifrostPipeline.ps1` from `fullBuildPatterns`.
-- Retain only posting-gate test fixtures in codeunits 97023/97024 and indirect NAV App Setting read in permission set 97025: the pipeline-only split reproduced two dispatcher test failures (93 executed, 91 passed, 2 failed). HTTP setup occurs before permission lowering; both tests assert that the caller cannot write settings. Response widths and test filenames stay at main.
+- Added pipeline guards in `tools/Test-BifrostPipeline.ps1` and the `.github/workflows/BifrostPipeline.yaml` Bifrost Pipeline Guards workflow for main-only signing, shared Default/Test container hooks and full-build trigger coverage; pipeline and guard changes execute paired Default/Test builds. `AGENTS.md` documents preservation of these Bifrost pipeline requirements during system updates.
+- `.AL-Go/settings.json` adds `.github/workflows/**` and `tools/Test-BifrostPipeline.ps1` to `fullBuildPatterns`; the guard self-test rejects removal of either pattern.
+- Retain only posting-gate test fixtures in codeunits Whse Posting Gate Tests ori (97023) and Whse Post Gate Grant Tests ori (97024), and indirect NAV App Setting read in permission set Whse Gate Test ori (97025): the pipeline-only split reproduced two dispatcher test failures (93 executed, 91 passed, 2 failed). HTTP setup occurs before permission lowering; both tests assert that the caller cannot write settings. Response widths and test filenames stay at main.
 - Native warning, telemetry/help metadata and test-fixture repairs are retained in the separate Warehouse contract batch (#18, #19, #25, #35); they are outside this pipeline-only PR. Architect disposition 1791931022.314599 permits unchanged main baseline warnings for this split; no warning suppressions are added.
 
 ### Changed (2026-10-12) - AL-Go v9.2 signs on Windows and Current compiles on BC 28.5

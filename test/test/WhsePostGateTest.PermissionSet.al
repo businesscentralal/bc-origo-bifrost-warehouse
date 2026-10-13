@@ -5,10 +5,12 @@ using Microsoft.Warehouse.Document;
 using Origo.Bifrost;
 using Origo.Bifrost.Warehouse;
 using System.Environment;
+using System.Environment.Configuration;
 
 /// <summary>
 /// Document and argument permissions for the warehouse posting-gate tests.
 /// Does not grant Whse Posting ori or Whse Invoice ori. Those sets are added only on the grant path.
+/// Grants indirect read on NAV App Setting for HTTP readiness; never settings-write permission.
 /// Grants indirect read on Company. Dispatcher.Execute calls Foundation Eula Consent ori, which reads Company to build the consent key.
 /// </summary>
 permissionset 97025 "Whse Gate Test ori"
@@ -18,6 +20,7 @@ permissionset 97025 "Whse Gate Test ori"
 
     Permissions =
         tabledata Company = r,
+        tabledata "NAV App Setting" = r,
         tabledata "Message Argument ori" = RIMD,
         tabledata "Warehouse Shipment Header" = RIMD,
         tabledata "Warehouse Receipt Header" = RIMD,

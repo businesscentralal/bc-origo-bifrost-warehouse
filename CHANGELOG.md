@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Fixed (2026-10-13) - Current Foundation test prerequisites
+
 - Prepare registered-app HTTP readiness before restrictive posting-gate tests, retain indirect settings read only, and assert the caller cannot write settings (97023–97025).
 
 ### Changed (2026-10-13) - Application Insights connection string in app.json (#35)
@@ -13,6 +14,32 @@
 
 - Aligned the Warehouse context-sensitive help host with the documentation site; external Warehouse documentation remains tracked separately in bifrost#99.
 - Explicitly initialized the activity paging counter (codeunit 10078390) and repaired test filename, declaration, response-content-type and format-label diagnostics without changing assertions or permissions (97000–97002, 97010–97027).
+- Renamed these test files to match their AL object names; IDs remain unchanged:
+
+| Object ID | Filename |
+|---|---|
+| 97000 | `WhseBinContentGetTestsori.Codeunit.al` |
+| 97001 | `WhseActivityGetTestsori.Codeunit.al` |
+| 97002 | `WhseTestDataori.Codeunit.al` |
+| 97010 | `WhseNoReadTestori.PermissionSet.al` |
+| 97011 | `WhseShipmentCreateTestsori.Codeunit.al` |
+| 97012 | `WhseShipmentPostTestsori.Codeunit.al` |
+| 97013 | `WhseShipPrevPostTestsori.Codeunit.al` |
+| 97014 | `WhseReceiptCreateTestsori.Codeunit.al` |
+| 97015 | `WhseReceiptPostTestsori.Codeunit.al` |
+| 97016 | `WhseRcptPostPrevTestsori.Codeunit.al` |
+| 97017 | `WhsePickCreateTestsori.Codeunit.al` |
+| 97018 | `WhsePickRegisterTestsori.Codeunit.al` |
+| 97019 | `WhsePutawayCreateTestsori.Codeunit.al` |
+| 97020 | `WhsePutawayRegTestsori.Codeunit.al` |
+| 97021 | `WhseShipmentTestHelperori.Codeunit.al` |
+| 97022 | `WhseReceiptTestHelperori.Codeunit.al` |
+| 97023 | `WhsePostingGateTestsori.Codeunit.al` |
+| 97024 | `WhsePostGateGrantTestsori.Codeunit.al` |
+| 97025 | `WhseGateTestori.PermissionSet.al` |
+| 97026 | `WhseWriteRestrictTestsori.Codeunit.al` |
+| 97027 | `WhseMsgContractTestsori.Codeunit.al` |
+
 
 ### Fixed (2026-10-13) - Icelandic warehouse refusal text and translation sync (#27, #26)
 

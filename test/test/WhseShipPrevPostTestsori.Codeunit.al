@@ -20,6 +20,7 @@ codeunit 97013 "Whse Ship Prev Post Tests ori"
     TestPermissions = Disabled;
 
     var
+        ExpectedMessage1Tok: Label 'Status should be %1', Locked = true;
         Assert: Codeunit "Library Assert";
         Helper: Codeunit "Whse Shipment Test Helper ori";
         IsInitialized: Boolean;
@@ -204,6 +205,6 @@ codeunit 97013 "Whse Ship Prev Post Tests ori"
         Token: JsonToken;
     begin
         Assert.IsTrue(ResponseJson.Get('status', Token), 'Response should contain status');
-        Assert.AreEqual(ExpectedStatus, Token.AsValue().AsText(), StrSubstNo('Status should be %1', ExpectedStatus));
+        Assert.AreEqual(ExpectedStatus, Token.AsValue().AsText(), StrSubstNo(ExpectedMessage1Tok, ExpectedStatus));
     end;
 }

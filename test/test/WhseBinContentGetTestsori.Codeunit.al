@@ -101,7 +101,7 @@ codeunit 97000 "Whse BinContent Get Tests ori"
         Dispatcher: Codeunit "Dispatcher ori";
         RequestContent: BigText;
         ResponseContent: BigText;
-        ResponseContentType: Text[50];
+        ResponseContentType: Text[100];
         ResponseText: Text;
     begin
         RequestContent.AddText(RequestText);

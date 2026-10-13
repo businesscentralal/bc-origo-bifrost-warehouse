@@ -63,7 +63,6 @@ codeunit 97027 "Whse Msg Contract Tests ori"
     [Test]
     procedure ActivityContractDescribesHeadersAndLines()
     var
-        Assert: Codeunit "Library Assert";
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Contract: JsonObject;
         Response: JsonObject;

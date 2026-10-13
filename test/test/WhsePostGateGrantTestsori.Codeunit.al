@@ -125,7 +125,7 @@ codeunit 97024 "Whse Post Gate Grant Tests ori"
         Dispatcher: Codeunit "Dispatcher ori";
         RequestContent: BigText;
         ResponseContent: BigText;
-        ResponseContentType: Text[50];
+        ResponseContentType: Text[100];
         ResponseText: Text;
     begin
         Clear(ResponseJson);

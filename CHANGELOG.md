@@ -7,6 +7,8 @@
 - Shipment and receipt posting and put-away creation support calls with Omit Commit, including returning an existing put-away.
 - Shipment and receipt previews explain how to run them when called in a rollback chain.
 - Updated codeunits 10078407, 10078408, 10078410, 10078411 and 10078415; test helpers 97021–97022 and regression tests 97028.
+- Retained behavior while clearing existing compiler diagnostics: explicit temporary declarations and test declaration/format cleanup; test filenames now match object names.
+
 
 ### Changed (2026-10-12) - AL-Go v9.2 signs on Windows and Current compiles on BC 28.5
 

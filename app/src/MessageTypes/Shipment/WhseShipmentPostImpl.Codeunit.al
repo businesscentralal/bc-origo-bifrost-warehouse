@@ -172,7 +172,7 @@ codeunit 10078407 "Whse Shipment Post Impl ori" implements "Msg Interface ori", 
         ResponseJson: JsonObject;
         PostedDocsArray: JsonArray;
         Invoice: Boolean;
-        NoLinesToPostErr: Label 'Warehouse Shipment %1 has no lines to post.', Comment = '%1 = Whse. Shipment No.', Locked = true;
+        NoLinesToPostErr: Label 'Warehouse Shipment %1 has no lines to post.', Comment = '%1 = Whse. Shipment No., is-IS=Vöruhúsaafhending %1 hefur engar línur til bókunar.';
     begin
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();

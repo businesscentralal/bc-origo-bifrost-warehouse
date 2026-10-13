@@ -185,11 +185,11 @@ codeunit 10078411 "Whse Rcpt Post Prev. Impl ori" implements "Msg Interface ori"
         Summary: Text;
         PreviewErrorText: Text;
         PreviewFieldNames: List of [Text];
-        NoLinesToPostErr: Label 'Warehouse Receipt %1 has no lines to post.', Comment = '%1 = Whse. Receipt No.', Locked = true;
+        NoLinesToPostErr: Label 'Warehouse Receipt %1 has no lines to post.', Comment = '%1 = Whse. Receipt No., is-IS=Vöruhúsamóttaka %1 hefur engar línur til bókunar.';
         PreviewFailedErr: Label 'Posting preview failed and no entries were captured. The warehouse receipt cannot be posted in its current state.', Comment = 'is-IS=Bókunarforsýning mistókst og engar færslur voru teknar. Vöruhúsamóttakan getur ekki verið bókuð í núverandi stöðu.';
         NothingToPostNextStepTok: Label 'No receipt line has Qty. to Receive. Set quantities on the receipt lines.', Comment = 'is-IS=Engin móttökulína hefur Magn til móttöku. Setjið magn á móttökulínurnar.';
-        OmitCommitPreviewErr: Label 'Posting preview cannot run inside a rollback chain (Omit Commit). Run this message type with Omit Commit set to false.', Locked = true;
-        OmitCommitPreviewNextStepTok: Label 'Call Dispatcher.Execute with OmitCommit = false, or use the HTTP/MCP API.', Locked = true;
+        OmitCommitPreviewErr: Label 'Posting preview cannot run inside a rollback chain (Omit Commit). Run this message type with Omit Commit set to false.', Comment = 'is-IS=Ekki er hægt að forskoða bókun innan afturköllunarkeðju (Omit Commit). Keyrðu þessa skilaboðategund með Omit Commit stillt á false.';
+        OmitCommitPreviewNextStepTok: Label 'Call Dispatcher.Execute with OmitCommit = false, or use the HTTP/MCP API.', Comment = 'is-IS=Kallaðu á Dispatcher.Execute með OmitCommit = false eða notaðu HTTP/MCP API.';
     begin
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();

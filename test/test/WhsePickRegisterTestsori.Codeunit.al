@@ -166,4 +166,51 @@ codeunit 97018 "Whse Pick Register Tests ori"
 
         Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Pick.Register", PickNo, RequestText, ResponseJson);
     end;
+    /// <summary>Issue #27 AC08: refusal text is entirely in the requested language.</summary>
+    [Test]
+    procedure PickRegister_Refusal_IsLocalized()
+    var
+        TestData: Codeunit "Whse Test Data ori";
+        ActivityType: Enum "Warehouse Activity Type";
+        EnglishResponse: JsonObject;
+        IcelandicResponse: JsonObject;
+    begin
+        // Story #27, AC08 | Time: independent of Today/WorkDate | Risk: restores GlobalLanguage before assertions.
+        TestData.CreateActivity(ActivityType::"Put-away", 'W2-IS-PUTAWAY', 'W2LANG', '', 'W2-IS-DOC');
+        ReadLocalizedRefusal(1033, '{"pickNo":"W2-IS-PUTAWAY"}', EnglishResponse);
+        ReadLocalizedRefusal(1039, '{"pickNo":"W2-IS-PUTAWAY"}', IcelandicResponse);
+        AssertLocalizedError(EnglishResponse, 'Warehouse Activity W2-IS-PUTAWAY is not of Type Pick.');
+        AssertLocalizedError(IcelandicResponse, 'Vöruhúsavirkni W2-IS-PUTAWAY er ekki af tegundinni tínsla.');
+    end;
+
+    local procedure ReadLocalizedRefusal(LanguageId: Integer; RequestText: Text; var ResponseJson: JsonObject)
+    var
+        OriginalLanguage: Integer;
+        Succeeded: Boolean;
+        Failure: Text;
+    begin
+        OriginalLanguage := GlobalLanguage();
+        GlobalLanguage(LanguageId);
+        Succeeded := TryRunLocalizedRefusal(RequestText, ResponseJson);
+        Failure := GetLastErrorText();
+        GlobalLanguage(OriginalLanguage);
+        Assert.IsTrue(Succeeded, 'Localized request must return JSON: ' + Failure);
+    end;
+
+    [TryFunction]
+    local procedure TryRunLocalizedRefusal(RequestText: Text; var ResponseJson: JsonObject)
+    var
+        ShipmentHelper: Codeunit "Whse Shipment Test Helper ori";
+    begin
+        Assert.IsTrue(ShipmentHelper.RunMessage("Message Type ori"::"Warehouse.Pick.Register", '', RequestText, ResponseJson, false), 'Response must parse.');
+    end;
+
+    local procedure AssertLocalizedError(ResponseJson: JsonObject; ExpectedText: Text)
+    var
+        Token: JsonToken;
+    begin
+        Assert.IsTrue(ResponseJson.Get('error', Token), 'Refusal must have error text.');
+        Assert.AreEqual(ExpectedText, Token.AsValue().AsText(), 'The entire refusal must match the requested language.');
+    end;
+
 }

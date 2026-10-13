@@ -180,8 +180,8 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
         DoNotFillQtyToHandle: Boolean;
         HasAssignedUserId: Boolean;
         HasSortingMethod: Boolean;
-        FieldWriteRestrictedErr: Label 'Field %1 is restricted for write on table %2.', Comment = '%1 = field caption, %2 = table caption', Locked = true;
-        UnsupportedOptionErr: Label '%1 = true is not supported by this API version. Only the BC defaults (false) are honoured.', Comment = '%1 = option name', Locked = true;
+        FieldWriteRestrictedErr: Label 'Field %1 is restricted for write on table %2.', Comment = '%1 = field caption, %2 = table caption, is-IS=Ekki er heimilt að skrifa í reitinn %1 í töflunni %2.';
+        UnsupportedOptionErr: Label '%1 = true is not supported by this API version. Only the BC defaults (false) are honoured.', Comment = '%1 = option name, is-IS=%1 = true er ekki stutt í þessari útgáfu API. Aðeins sjálfgefin gildi BC (false) eru notuð.';
     begin
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
@@ -361,7 +361,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
         Names: List of [Text];
         Idx: Integer;
         Builder: TextBuilder;
-        InvalidErr: Label 'sortingMethod ''%1'' is not valid. Expected one of: %2.', Comment = '%1 = supplied value, %2 = comma list of valid values', Locked = true;
+        InvalidErr: Label 'sortingMethod ''%1'' is not valid. Expected one of: %2.', Comment = '%1 = supplied value, %2 = comma list of valid values, is-IS=sortingMethod ''%1'' er ekki gilt. Væntanlegt er eitt af: %2.';
     begin
         Names := Enum::"Whse. Activity Sorting Method".Names();
         for Idx := 1 to Names.Count() do begin
@@ -374,7 +374,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
 
     local procedure NoPickCreatedErr() Result: Text
     var
-        Err: Label 'No Warehouse Pick was created for Warehouse Shipment %1. There may be nothing to pick, the shipment may not require a pick, or the pick may already exist.', Comment = '%1 = shipment no.', Locked = true;
+        Err: Label 'No Warehouse Pick was created for Warehouse Shipment %1. There may be nothing to pick, the shipment may not require a pick, or the pick may already exist.', Comment = '%1 = shipment no., is-IS=Engin vöruhúsatínsla var stofnuð fyrir vöruhúsaafhendingu %1. Hugsanlega er ekkert til tínslu, afhendingin krefst ekki tínslu eða tínsla er þegar til.';
     begin
         Result := Err;
     end;

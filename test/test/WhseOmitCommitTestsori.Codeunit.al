@@ -17,6 +17,7 @@ codeunit 97028 "Whse Omit Commit Tests ori"
         Assert: Codeunit "Library Assert";
         ShipmentHelper: Codeunit "Whse Shipment Test Helper ori";
         ReceiptHelper: Codeunit "Whse Receipt Test Helper ori";
+        NoQuantityErr: Label 'There is nothing to post because the document does not contain a quantity or amount.', Locked = true;
 
     /// <summary>Shipment preview refuses Omit Commit before reading a document.</summary>
     [Test]
@@ -49,7 +50,7 @@ codeunit 97028 "Whse Omit Commit Tests ori"
         ShipmentNo := CreateShipmentWithoutQuantity();
         asserterror ShipmentHelper.RunMessage(Enum::"Message Type ori"::"Warehouse.Shipment.Post", ShipmentNo, '', ResponseJson, true);
         ErrorText := GetLastErrorText();
-        Assert.IsTrue(ErrorText.Contains('nothing to handle'), 'Expected the Business Central quantity error: ' + ErrorText);
+        Assert.AreEqual(NoQuantityErr, ErrorText, 'The original Business Central quantity error must propagate unchanged.');
         Assert.IsFalse(ErrorText.Contains('transaction'), 'Posting must not fail on Codeunit.Run transaction rules.');
     end;
 
@@ -66,7 +67,7 @@ codeunit 97028 "Whse Omit Commit Tests ori"
         Assert.IsTrue(ResponseJson.Get('status', Token), 'status missing.');
         Assert.AreEqual('Error', Token.AsValue().AsText(), 'Posting failure must remain isolated.');
         Assert.IsTrue(ResponseJson.Get('error', Token), 'error missing.');
-        Assert.IsTrue(Token.AsValue().AsText().Contains('nothing to handle'), 'Expected the Business Central quantity error.');
+        Assert.AreEqual(NoQuantityErr, Token.AsValue().AsText(), 'The original Business Central quantity error must remain in the JSON response.');
     end;
 
     local procedure AssertPreviewRefused(ResponseJson: JsonObject)

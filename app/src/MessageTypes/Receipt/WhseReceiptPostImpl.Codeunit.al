@@ -168,7 +168,7 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
         PostedDocsArray: JsonArray;
-        NoLinesToPostErr: Label 'Warehouse Receipt %1 has no lines to post.', Comment = '%1 = Whse. Receipt No.', Locked = true;
+        NoLinesToPostErr: Label 'Warehouse Receipt %1 has no lines to post.', Comment = '%1 = Whse. Receipt No., is-IS=Vöruhúsamóttaka %1 hefur engar línur til bókunar.';
     begin
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();

@@ -20,7 +20,7 @@ codeunit 10078416 "Whse Putaway Create Proc. ori"
         PostedWhseReceiptHeader: Record "Posted Whse. Receipt Header";
         PostedWhseReceiptLine: Record "Posted Whse. Receipt Line";
         CreatePutawayDoc: Report "Whse.-Source - Create Document";
-        NoLinesErr: Label 'Posted Whse. Receipt %1 has no lines to put away.', Comment = '%1 = posted receipt no.', Locked = true;
+        NoLinesErr: Label 'Posted Whse. Receipt %1 has no lines to put away.', Comment = '%1 = posted receipt no., is-IS=Bókuð vöruhúsamóttaka %1 hefur engar línur til frágangs.';
     begin
         PostedWhseReceiptHeader := Rec;
 #pragma warning disable AA0181

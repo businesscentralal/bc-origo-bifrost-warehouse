@@ -11,6 +11,10 @@
 - Aligned the Warehouse context-sensitive help host with the documentation site; external Warehouse documentation remains tracked separately in bifrost#99.
 - Explicitly initialized the activity paging counter (codeunit 10078390) and repaired test filename, declaration, response-content-type and format-label diagnostics without changing assertions or permissions (97000–97002, 97010–97027).
 
+### Fixed (2026-10-13) - Icelandic warehouse refusal text and translation sync (#27, #26)
+
+- Warehouse refusals now have Icelandic translations while retaining their English text, placeholders and error codes; preview next steps are translated too. Regenerated the Icelandic XLF from compiler output with the repository generator (message codeunits 10078406–10078417; locale tests 97011, 97014 and 97018).
+
 ### Changed (2026-10-13) - Activity.Get and BinContent.Get help match the code (#34)
 
 - Activity.Get describes only its supported identifiers and error codes; BinContent.Get declares its existing `tableView` filter (codeunits 10078388, 10078390 and 10078459; tests 97027).

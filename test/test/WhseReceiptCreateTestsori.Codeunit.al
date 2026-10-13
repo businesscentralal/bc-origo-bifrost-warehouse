@@ -263,4 +263,48 @@ codeunit 97014 "Whse Receipt Create Tests ori"
         MessageTypeInterface := Enum::"Message Type ori"::"Warehouse.Receipt.Create";
         Assert.IsFalse(MessageTypeInterface.IsEnabled(), 'Warehouse.Receipt.Create must be disabled without write permission on Warehouse Receipt Header.');
     end;
+    /// <summary>Issue #27 AC08: refusal text is entirely in the requested language.</summary>
+    [Test]
+    procedure ReceiptCreate_Refusal_IsLocalized()
+    var
+        EnglishResponse: JsonObject;
+        IcelandicResponse: JsonObject;
+    begin
+        // Story #27, AC08 | Time: independent of Today/WorkDate | Risk: restores GlobalLanguage before assertions.
+        ReadLocalizedRefusal(1033, '{}', EnglishResponse);
+        ReadLocalizedRefusal(1039, '{}', IcelandicResponse);
+        AssertLocalizedError(EnglishResponse, 'sourceDocuments is required and must contain at least one entry.');
+        AssertLocalizedError(IcelandicResponse, 'sourceDocuments er nauðsynlegt og verður að innihalda að minnsta kosti eina færslu.');
+    end;
+
+    local procedure ReadLocalizedRefusal(LanguageId: Integer; RequestText: Text; var ResponseJson: JsonObject)
+    var
+        OriginalLanguage: Integer;
+        Succeeded: Boolean;
+        Failure: Text;
+    begin
+        OriginalLanguage := GlobalLanguage();
+        GlobalLanguage(LanguageId);
+        Succeeded := TryRunLocalizedRefusal(RequestText, ResponseJson);
+        Failure := GetLastErrorText();
+        GlobalLanguage(OriginalLanguage);
+        Assert.IsTrue(Succeeded, 'Localized request must return JSON: ' + Failure);
+    end;
+
+    [TryFunction]
+    local procedure TryRunLocalizedRefusal(RequestText: Text; var ResponseJson: JsonObject)
+    var
+        ShipmentHelper: Codeunit "Whse Shipment Test Helper ori";
+    begin
+        Assert.IsTrue(ShipmentHelper.RunMessage("Message Type ori"::"Warehouse.Receipt.Create", '', RequestText, ResponseJson, false), 'Response must parse.');
+    end;
+
+    local procedure AssertLocalizedError(ResponseJson: JsonObject; ExpectedText: Text)
+    var
+        Token: JsonToken;
+    begin
+        Assert.IsTrue(ResponseJson.Get('error', Token), 'Refusal must have error text.');
+        Assert.AreEqual(ExpectedText, Token.AsValue().AsText(), 'The entire refusal must match the requested language.');
+    end;
+
 }

@@ -2,21 +2,11 @@
 
 ## [Unreleased]
 
-### Fixed (2026-10-13) - Posting-gate test HTTP setup (#30)
+### Changed (2026-10-13) - Preserve the Bifrost pipeline across AL-Go updates
 
-- Prepare registered application HTTP settings before lowering permissions in posting-gate dispatcher tests (97023, 97024). Restricted callers receive only indirect settings read (permission set 97025) and retain the original posting and invoicing permissions and assertions; Foundation setup no longer masks those scenarios.
-
-### Changed (2026-10-12) - guard pipeline full-build triggers
-
-- `tools/Test-BifrostPipeline.ps1` requires both `.github/workflows/**` and `tools/Test-BifrostPipeline.ps1` in `fullBuildPatterns`. Its `-SelfTest` fixture verifies a clean configuration passes and removing either pattern separately fails, preventing pipeline-only changes from skipping Default/Test verification. No AL objects or IDs changed.
-### Changed (2026-10-13) - Application Insights connection string in app.json (#35)
-
-- Added `applicationInsightsConnectionString` to clear AS0092, using the same value as Inventory and Attachments; the telemetry metadata does not change the app version.
-
-### Fixed (2026-10-13) - Help host and compiler warnings (#25, #35)
-
-- Aligned the Warehouse context-sensitive help host with the documentation site; external Warehouse documentation remains tracked separately in bifrost#99.
-- Explicitly initialized the activity paging counter (codeunit 10078390) and repaired test filename, declaration, response-content-type and format-label diagnostics without changing assertions or permissions (97000–97002, 97010–97027).
+- Added pipeline guards for main-only signing, shared Default/Test container hooks and full-build trigger coverage; pipeline and guard changes execute paired Default/Test builds.
+- The guard self-test rejects removal of either `.github/workflows/**` or `tools/Test-BifrostPipeline.ps1` from `fullBuildPatterns`.
+- Native warning, telemetry/help metadata and test-fixture repairs are retained in the separate Warehouse contract batch (#18, #19, #25, #35); they are outside this pipeline-only PR. Architect disposition 1791931022.314599 permits unchanged main baseline warnings for this split; no warning suppressions are added.
 
 ### Changed (2026-10-12) - AL-Go v9.2 signs on Windows and Current compiles on BC 28.5
 
@@ -30,10 +20,6 @@
 ### Fixed (2026-10-11) - posting-gate tests grant the dispatcher Company read (#19)
 
 - Whse Gate Test ori (97025) grants indirect read on Company (table 2000000006). The two restrictive gate tests call `Dispatcher.Execute`, and Foundation `Eula Consent ori` reads Company while building the consent key. This is not a direct Company read, not a `Setup ori` grant, and not another version change.
-
-### Changed (2026-10-07) - preserve the Bifrost pipeline across AL-Go and Alpaca updates
-
-- `Bifrost Pipeline Guards` runs `tools/Test-BifrostPipeline.ps1` and `tools/Test-SharedAlpacaContainer.ps1` when workflows, AL-Go settings, Alpaca scripts, or `AGENTS.md` change. `fullBuildPatterns` includes `.github/workflows/**` and `tools/Test-BifrostPipeline.ps1`, so a pipeline change runs the full Default and Test build.
 
 ### Fixed (2026-10-10) - UAT dependency installation
 

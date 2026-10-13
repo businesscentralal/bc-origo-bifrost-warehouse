@@ -317,6 +317,7 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
             exit;
         end;
 
+        MatchedRecords := 0;
         if (Skip < NoOfRecords) and ActivityHeader.FindSet() then
             repeat
                 if not HasDocumentFilter or ActivityHeaderKeys.Contains(GetActivityKey(ActivityHeader.Type, ActivityHeader."No.")) then begin

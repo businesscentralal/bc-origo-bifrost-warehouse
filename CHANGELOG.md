@@ -5,6 +5,14 @@
 ### Changed (2026-10-12) - guard pipeline full-build triggers
 
 - `tools/Test-BifrostPipeline.ps1` requires both `.github/workflows/**` and `tools/Test-BifrostPipeline.ps1` in `fullBuildPatterns`. Its `-SelfTest` fixture verifies a clean configuration passes and removing either pattern separately fails, preventing pipeline-only changes from skipping Default/Test verification. No AL objects or IDs changed.
+### Changed (2026-10-13) - Application Insights connection string in app.json (#35)
+
+- Added `applicationInsightsConnectionString` to clear AS0092, using the same value as Inventory and Attachments; the telemetry metadata does not change the app version.
+
+### Fixed (2026-10-13) - Help host and compiler warnings (#25, #35)
+
+- Aligned the Warehouse context-sensitive help host with the documentation site; external Warehouse documentation remains tracked separately in bifrost#99.
+- Explicitly initialized the activity paging counter (codeunit 10078390) and repaired test filename, declaration, response-content-type and format-label diagnostics without changing assertions or permissions (97000–97002, 97010–97027).
 
 ### Changed (2026-10-12) - AL-Go v9.2 signs on Windows and Current compiles on BC 28.5
 

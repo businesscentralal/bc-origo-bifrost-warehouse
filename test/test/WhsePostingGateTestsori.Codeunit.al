@@ -77,6 +77,7 @@ codeunit 97023 "Whse Posting Gate Tests ori"
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         ResponseJson: JsonObject;
         CodeToken: JsonToken;
+        ResponseText: Text;
         ErrorToken: JsonToken;
     begin
         LowerToDocumentWrite(LibraryLowerPermissions);
@@ -86,7 +87,8 @@ codeunit 97023 "Whse Posting Gate Tests ori"
         Assert.IsFalse(PostingGate.HasPostingPermission(), 'HasPostingPermission should be false without the token.');
 
         ResponseJson := Argument.GetResponseJson();
-        Assert.IsTrue(ResponseJson.Get('code', CodeToken), 'code missing');
+        ResponseJson.WriteTo(ResponseText);
+        Assert.IsTrue(ResponseJson.Get('code', CodeToken), 'code missing: ' + ResponseText);
         Assert.AreEqual('PermissionDenied', CodeToken.AsValue().AsText(), 'code');
         Assert.IsTrue(ResponseJson.Get('error', ErrorToken), 'error missing');
         Assert.AreNotEqual(0, StrPos(ErrorToken.AsValue().AsText(), 'BIFROST WhsePost ori'), ErrorToken.AsValue().AsText());
@@ -101,6 +103,7 @@ codeunit 97023 "Whse Posting Gate Tests ori"
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         ResponseJson: JsonObject;
         CodeToken: JsonToken;
+        ResponseText: Text;
         ErrorToken: JsonToken;
     begin
         LowerToDocumentWrite(LibraryLowerPermissions);
@@ -110,7 +113,8 @@ codeunit 97023 "Whse Posting Gate Tests ori"
         Assert.IsFalse(PostingGate.HasInvoicePermission(), 'HasInvoicePermission should be false without the token.');
 
         ResponseJson := Argument.GetResponseJson();
-        Assert.IsTrue(ResponseJson.Get('code', CodeToken), 'code missing');
+        ResponseJson.WriteTo(ResponseText);
+        Assert.IsTrue(ResponseJson.Get('code', CodeToken), 'code missing: ' + ResponseText);
         Assert.AreEqual('PermissionDenied', CodeToken.AsValue().AsText(), 'code');
         Assert.IsTrue(ResponseJson.Get('error', ErrorToken), 'error missing');
         Assert.AreNotEqual(0, StrPos(ErrorToken.AsValue().AsText(), 'BIFROST WhseInv ori'), ErrorToken.AsValue().AsText());
@@ -123,13 +127,15 @@ codeunit 97023 "Whse Posting Gate Tests ori"
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         ResponseJson: JsonObject;
         CodeToken: JsonToken;
+        ResponseText: Text;
         ErrorToken: JsonToken;
     begin
         LowerToDocumentWrite(LibraryLowerPermissions);
         LibraryLowerPermissions.AddPermissionSet('BIFROST WhsePost ori');
 
         Assert.IsTrue(RunShipmentPost('{"invoice":true}', ResponseJson), 'The invoice denial should return JSON.');
-        Assert.IsTrue(ResponseJson.Get('code', CodeToken), 'code missing');
+        ResponseJson.WriteTo(ResponseText);
+        Assert.IsTrue(ResponseJson.Get('code', CodeToken), 'code missing: ' + ResponseText);
         Assert.AreEqual('PermissionDenied', CodeToken.AsValue().AsText(), 'code');
         Assert.IsTrue(ResponseJson.Get('error', ErrorToken), 'error missing');
         Assert.AreNotEqual(0, StrPos(ErrorToken.AsValue().AsText(), 'BIFROST WhseInv ori'), ErrorToken.AsValue().AsText());

@@ -93,12 +93,14 @@ codeunit 97024 "Whse Post Gate Grant Tests ori"
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         ResponseJson: JsonObject;
         CodeToken: JsonToken;
+        ResponseText: Text;
         ErrorToken: JsonToken;
     begin
         LowerToWhsePost(LibraryLowerPermissions);
 
         Assert.IsTrue(RunShipmentPost('{"invoice":true}', ResponseJson), 'The lookup response should be JSON.');
-        Assert.IsTrue(ResponseJson.Get('code', CodeToken), 'code missing');
+        ResponseJson.WriteTo(ResponseText);
+        Assert.IsTrue(ResponseJson.Get('code', CodeToken), 'code missing: ' + ResponseText);
         Assert.AreEqual('MissingParameter', CodeToken.AsValue().AsText(), 'An empty subject should fail lookup, not the posting gate.');
         Assert.IsTrue(ResponseJson.Get('error', ErrorToken), 'error missing');
         Assert.AreEqual(0, StrPos(ErrorToken.AsValue().AsText(), 'Posting denied'), ErrorToken.AsValue().AsText());

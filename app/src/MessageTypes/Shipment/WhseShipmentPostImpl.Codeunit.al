@@ -164,6 +164,7 @@ codeunit 10078407 "Whse Shipment Post Impl ori" implements "Msg Interface ori", 
         WhseShipmentHeader: Record "Warehouse Shipment Header";
         WhseShipmentLine: Record "Warehouse Shipment Line";
         PostedWhseShipmentHeader: Record "Posted Whse. Shipment Header";
+        WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         WhsePostShipment: Codeunit "Whse.-Post Shipment";
         WhsePostingGate: Codeunit "Whse Posting Gate ori";
         RequestValueReader: Codeunit "Request Value Reader ori";
@@ -178,7 +179,8 @@ codeunit 10078407 "Whse Shipment Post Impl ori" implements "Msg Interface ori", 
         if not WhsePostingGate.AssertCanPost(Argument) then
             exit;
 
-        RequestJson := Argument.GetRequestJson();
+        if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,shipmentNo=no,no=no', RequestJson) then
+            exit;
         if not RequestValueReader.TryReadBoolean(Argument, RequestJson, 'invoice', false, Invoice) then
             exit;
 

@@ -64,7 +64,7 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Target := Parts.ActivityTarget('Warehouse Activity', 'activityNo');
+        Target := Parts.ActivityGetTarget();
         exit(true);
     end;
 
@@ -76,7 +76,7 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
         Parts.AddPagingParameters(Parameters);
         Parameters.Add(ContractMgt.Parameter('activityType', 'string', false, 'Warehouse activity type, for example Pick or Put-away.'));
         Parameters.Add(ContractMgt.Parameter('no', 'string', false, 'Warehouse activity number.'));
-        Parameters.Add(ContractMgt.Parameter('systemId', 'string', false, 'Warehouse Activity Header SystemId. recordSystemId and id are accepted too.'));
+        Parameters.Add(ContractMgt.Parameter('systemId', 'string', false, 'Warehouse Activity Header SystemId.'));
         Parameters.Add(ContractMgt.Parameter('locationCode', 'string', false, 'Filter by location code.'));
         Parameters.Add(ContractMgt.Parameter('assignedUserId', 'string', false, 'Filter by assigned user.'));
         Parameters.Add(ContractMgt.Parameter('whseDocumentNo', 'string', false, 'Filter activities by source warehouse document number.'));
@@ -135,7 +135,7 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.AddLookupErrors(Errors, 'Warehouse Activity Header');
+        Parts.AddOptionalLookupErrors(Errors, 'Warehouse Activity Header');
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, 'activityType is not a valid warehouse activity type.', 'Use a value from the Warehouse Activity Type enum.'));
         exit(true);
     end;
@@ -196,6 +196,7 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
     var
         ActivityHeader: Record "Warehouse Activity Header";
         ActivityLine: Record "Warehouse Activity Line";
+        WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
         ResultArray: JsonArray;
@@ -227,7 +228,8 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
 
-        RequestJson := Argument.GetRequestJson();
+        if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,no=no', RequestJson) then
+            exit;
         Argument.EvaluateSkipTake(RequestJson, Skip, Take);
 
         if TryGetRequestText(RequestJson, 'activityType', ActivityTypeText) then begin

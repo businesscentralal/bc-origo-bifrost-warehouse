@@ -11,6 +11,14 @@
 - Aligned the Warehouse context-sensitive help host with the documentation site; external Warehouse documentation remains tracked separately in bifrost#99.
 - Explicitly initialized the activity paging counter (codeunit 10078390) and repaired test filename, declaration, response-content-type and format-label diagnostics without changing assertions or permissions (97000–97002, 97010–97027).
 
+### Changed (2026-10-13) - Activity.Get and BinContent.Get help match the code (#34)
+
+- Activity.Get describes only its supported identifiers and error codes; BinContent.Get declares its existing `tableView` filter (codeunits 10078388, 10078390 and 10078459; tests 97027).
+
+### Fixed (2026-10-13) - Strict warehouse identifier validation (#21)
+
+- Invalid request objects and non-string identifier values return structured format errors before document lookup; multiple invalid values are reported in key order (codeunits 10078390, 10078407–10078408, 10078410–10078412, 10078414–10078415, 10078417, 10078455 and 10078459; tests 97029).
+
 ### Changed (2026-10-13) - Warehouse identifier contract keys (#24)
 
 - Each identifier key in the six document lookup contracts now carries its own `data.` prefix, preserving accepted keys and descriptions (codeunits 10078407–10078408, 10078410–10078412 and 10078415; tests 97027).

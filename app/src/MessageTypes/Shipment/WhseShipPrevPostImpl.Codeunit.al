@@ -175,6 +175,7 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
         WhseShipmentLine: Record "Warehouse Shipment Line";
         GLSetup: Record "General Ledger Setup";
         TempDocumentEntry: Record "Document Entry" temporary;
+        WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         PostingPreviewEventHandler: Codeunit "Posting Preview Event Handler";
         PostingPreviewHelper: Codeunit "Posting Preview Helper ori";
         RequestJson: JsonObject;
@@ -204,7 +205,8 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
             exit;
         end;
 
-        RequestJson := Argument.GetRequestJson();
+        if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,shipmentNo=no,no=no', RequestJson) then
+            exit;
         if not FindWhseShipmentHeader(Argument, WhseShipmentHeader) then
             exit;
 

@@ -162,6 +162,7 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
         WhseReceiptHeader: Record "Warehouse Receipt Header";
         WhseReceiptLine: Record "Warehouse Receipt Line";
         PostedWhseReceiptHeader: Record "Posted Whse. Receipt Header";
+        WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         WhsePostReceipt: Codeunit "Whse.-Post Receipt";
         WhsePostingGate: Codeunit "Whse Posting Gate ori";
         RequestJson: JsonObject;
@@ -174,7 +175,8 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
         if not WhsePostingGate.AssertCanPost(Argument) then
             exit;
 
-        RequestJson := Argument.GetRequestJson();
+        if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,receiptNo=no,no=no', RequestJson) then
+            exit;
 
         if not FindWhseReceiptHeader(Argument, WhseReceiptHeader) then
             exit;

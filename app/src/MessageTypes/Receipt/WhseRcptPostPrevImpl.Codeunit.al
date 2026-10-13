@@ -169,6 +169,7 @@ codeunit 10078411 "Whse Rcpt Post Prev. Impl ori" implements "Msg Interface ori"
         WhseReceiptLine: Record "Warehouse Receipt Line";
         GLSetup: Record "General Ledger Setup";
         TempDocumentEntry: Record "Document Entry" temporary;
+        WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         PostingPreviewEventHandler: Codeunit "Posting Preview Event Handler";
         PostingPreviewHelper: Codeunit "Posting Preview Helper ori";
         RequestJson: JsonObject;
@@ -196,7 +197,8 @@ codeunit 10078411 "Whse Rcpt Post Prev. Impl ori" implements "Msg Interface ori"
             Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, OmitCommitPreviewErr, '', '', '', OmitCommitPreviewNextStepTok);
             exit;
         end;
-        RequestJson := Argument.GetRequestJson();
+        if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,receiptNo=no,no=no', RequestJson) then
+            exit;
 
         if not FindWhseReceiptHeader(Argument, WhseReceiptHeader) then
             exit;

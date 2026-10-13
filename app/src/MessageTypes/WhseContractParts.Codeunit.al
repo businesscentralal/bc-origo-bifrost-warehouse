@@ -59,14 +59,50 @@ codeunit 10078459 "Whse Contract Parts ori"
         Parameters.Add(ContractMgt.Parameter('take', 'integer', false, 'Maximum number of records to return. Defaults to the platform page size.'));
     end;
 
+    /// <summary>Lists required document lookup errors, including strict JSON format validation.</summary>
     internal procedure AddLookupErrors(var Errors: JsonArray; RecordName: Text)
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::MissingParameter, 'No ' + RecordName + ' identifier was supplied.', 'Send subject or an identifier under data.'));
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::RecordNotFound, 'The supplied identifier does not match a ' + RecordName + '.', 'Check the value or look the record up first.'));
+        AddRecordNotFoundError(Errors, RecordName);
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::ConflictingIdentifiers, 'Two identifiers point to different records.', 'Send one identifier or identifiers for the same record.'));
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameterFormat, 'An identifier cannot be read in the expected format.', 'Send a GUID for SystemId keys and a document number for No. keys.'));
+        AddIdentifierFormatErrors(Errors);
+    end;
+
+    /// <summary>Lists optional Activity.Get lookup errors without required or conflicting identifiers.</summary>
+    internal procedure AddOptionalLookupErrors(var Errors: JsonArray; RecordName: Text)
+    begin
+        AddRecordNotFoundError(Errors, RecordName);
+        AddIdentifierFormatErrors(Errors);
+    end;
+
+    local procedure AddRecordNotFoundError(var Errors: JsonArray; RecordName: Text)
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::RecordNotFound, 'The supplied identifier does not match a ' + RecordName + '.', 'Check the value or look the record up first.'));
+    end;
+
+    local procedure AddIdentifierFormatErrors(var Errors: JsonArray)
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameterFormat, 'data is not a JSON object, an identifier key under data is not a JSON string, or a SystemId is not a GUID. The parameter names the offending key.', 'Send data as an object, identifier keys as strings, and SystemId keys as GUIDs.'));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::MultipleErrors, 'Several identifier values have an invalid format.', 'Read errors in order and correct each named key.'));
+    end;
+
+    /// <summary>Describes exactly the identifiers read by Warehouse.Activity.Get.</summary>
+    internal procedure ActivityGetTarget(): JsonArray
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Target: JsonArray;
+    begin
+        Target.Add(ContractMgt.TargetEntry('subject', 'guid', 'The SystemId of the Warehouse Activity Header.'));
+        Target.Add(ContractMgt.TargetEntry('subject', 'activity no.', 'The number of the Warehouse Activity.'));
+        Target.Add(ContractMgt.TargetEntry('data.systemId', 'guid', 'The SystemId of the Warehouse Activity Header.'));
+        Target.Add(ContractMgt.TargetEntry('data.no', 'activity no.', 'The number of the Warehouse Activity.'));
+        exit(Target);
     end;
 
     internal procedure AddBusinessCentralError(var Errors: JsonArray; TypicalCauses: Text)

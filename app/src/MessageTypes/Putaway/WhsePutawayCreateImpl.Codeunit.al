@@ -173,6 +173,7 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
     var
         PostedWhseReceiptHeader: Record "Posted Whse. Receipt Header";
         WarehouseActivityHeader: Record "Warehouse Activity Header";
+        WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         RequestValueReader: Codeunit "Request Value Reader ori";
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
@@ -191,7 +192,8 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
     begin
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
-        RequestJson := Argument.GetRequestJson();
+        if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,postedWhseReceiptNo=no,receiptNo=no,no=no', RequestJson) then
+            exit;
 
         if not FindPostedWhseReceiptHeader(Argument, PostedWhseReceiptHeader) then
             exit;

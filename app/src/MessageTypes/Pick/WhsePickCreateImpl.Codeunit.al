@@ -169,6 +169,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
     var
         WhseShipmentHeader: Record "Warehouse Shipment Header";
         WarehouseActivityHeader: Record "Warehouse Activity Header";
+        WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         RequestValueReader: Codeunit "Request Value Reader ori";
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
@@ -184,7 +185,8 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
     begin
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
-        RequestJson := Argument.GetRequestJson();
+        if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,whseShipmentNo=no,shipmentNo=no,no=no', RequestJson) then
+            exit;
 
         if not FindWhseShipmentHeader(Argument, WhseShipmentHeader) then
             exit;

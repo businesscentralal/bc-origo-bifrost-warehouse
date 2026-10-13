@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Fixed (2026-10-13) - Current Foundation test prerequisites
+- Prepare registered-app HTTP readiness before restrictive posting-gate tests, retain indirect settings read only, and assert the caller cannot write settings (97023–97025).
+
 ### Changed (2026-10-13) - Application Insights connection string in app.json (#35)
 
 - Added `applicationInsightsConnectionString` to clear AS0092, using the same value as Inventory and Attachments; the telemetry metadata does not change the app version.

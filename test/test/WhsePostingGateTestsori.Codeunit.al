@@ -3,6 +3,8 @@ namespace Origo.Bifrost.Warehouse.Test;
 using Microsoft.Warehouse.Document;
 using Origo.Bifrost;
 using Origo.Bifrost.Warehouse;
+using System.Apps;
+using System.Environment.Configuration;
 using System.TestLibraries.Utilities;
 
 /// <summary>
@@ -77,6 +79,7 @@ codeunit 97023 "Whse Posting Gate Tests ori"
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         ResponseJson: JsonObject;
         CodeToken: JsonToken;
+        ResponseText: Text;
         ErrorToken: JsonToken;
     begin
         LowerToDocumentWrite(LibraryLowerPermissions);
@@ -86,7 +89,8 @@ codeunit 97023 "Whse Posting Gate Tests ori"
         Assert.IsFalse(PostingGate.HasPostingPermission(), 'HasPostingPermission should be false without the token.');
 
         ResponseJson := Argument.GetResponseJson();
-        Assert.IsTrue(ResponseJson.Get('code', CodeToken), 'code missing');
+        ResponseJson.WriteTo(ResponseText);
+        Assert.IsTrue(ResponseJson.Get('code', CodeToken), 'code missing: ' + ResponseText);
         Assert.AreEqual('PermissionDenied', CodeToken.AsValue().AsText(), 'code');
         Assert.IsTrue(ResponseJson.Get('error', ErrorToken), 'error missing');
         Assert.AreNotEqual(0, StrPos(ErrorToken.AsValue().AsText(), 'BIFROST WhsePost ori'), ErrorToken.AsValue().AsText());
@@ -101,6 +105,7 @@ codeunit 97023 "Whse Posting Gate Tests ori"
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         ResponseJson: JsonObject;
         CodeToken: JsonToken;
+        ResponseText: Text;
         ErrorToken: JsonToken;
     begin
         LowerToDocumentWrite(LibraryLowerPermissions);
@@ -110,7 +115,8 @@ codeunit 97023 "Whse Posting Gate Tests ori"
         Assert.IsFalse(PostingGate.HasInvoicePermission(), 'HasInvoicePermission should be false without the token.');
 
         ResponseJson := Argument.GetResponseJson();
-        Assert.IsTrue(ResponseJson.Get('code', CodeToken), 'code missing');
+        ResponseJson.WriteTo(ResponseText);
+        Assert.IsTrue(ResponseJson.Get('code', CodeToken), 'code missing: ' + ResponseText);
         Assert.AreEqual('PermissionDenied', CodeToken.AsValue().AsText(), 'code');
         Assert.IsTrue(ResponseJson.Get('error', ErrorToken), 'error missing');
         Assert.AreNotEqual(0, StrPos(ErrorToken.AsValue().AsText(), 'BIFROST WhseInv ori'), ErrorToken.AsValue().AsText());
@@ -120,16 +126,23 @@ codeunit 97023 "Whse Posting Gate Tests ori"
     [Test]
     procedure ShipmentPost_InvoiceWithoutWhseInv_NamesWhseInvSet()
     var
+        AppSetting: Record "NAV App Setting";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         ResponseJson: JsonObject;
         CodeToken: JsonToken;
+        ResponseText: Text;
         ErrorToken: JsonToken;
     begin
+        LibraryLowerPermissions.PushPermissionSetWithoutDefaults('D365 Basic - Edit');
+        LibraryLowerPermissions.AddPermissionSet('BIFROST Full ori');
+        EnableRegisteredAppHttp();
         LowerToDocumentWrite(LibraryLowerPermissions);
+        Assert.IsFalse(AppSetting.WritePermission(), 'The caller must not retain HTTP setup write permission.');
         LibraryLowerPermissions.AddPermissionSet('BIFROST WhsePost ori');
 
         Assert.IsTrue(RunShipmentPost('{"invoice":true}', ResponseJson), 'The invoice denial should return JSON.');
-        Assert.IsTrue(ResponseJson.Get('code', CodeToken), 'code missing');
+        ResponseJson.WriteTo(ResponseText);
+        Assert.IsTrue(ResponseJson.Get('code', CodeToken), 'code missing: ' + ResponseText);
         Assert.AreEqual('PermissionDenied', CodeToken.AsValue().AsText(), 'code');
         Assert.IsTrue(ResponseJson.Get('error', ErrorToken), 'error missing');
         Assert.AreNotEqual(0, StrPos(ErrorToken.AsValue().AsText(), 'BIFROST WhseInv ori'), ErrorToken.AsValue().AsText());
@@ -182,6 +195,30 @@ codeunit 97023 "Whse Posting Gate Tests ori"
         Assert.AreEqual(0, StrPos(ErrorToken.AsValue().AsText(), 'Posting denied'), 'Preview response must not be a posting denial.');
         if ResponseJson.Get('code', ErrorToken) then
             Assert.AreNotEqual('PermissionDenied', ErrorToken.AsValue().AsText(), 'Preview must not return PermissionDenied.');
+    end;
+
+    // Administrator setup precedes permission lowering. The caller under test never receives
+    // NAV App Setting write permission, and the posting/invoicing token checks remain restrictive.
+    local procedure EnableRegisteredAppHttp()
+    var
+        AppSetting: Record "NAV App Setting";
+        TempApps: Record "Registered App ori" temporary;
+        AppRegistry: Codeunit "App Registry ori";
+    begin
+        AppRegistry.GetApps(TempApps);
+        if TempApps.FindSet() then
+            repeat
+                if not AppSetting.Get(TempApps."App Id") then begin
+                    AppSetting.Init();
+                    AppSetting."App ID" := TempApps."App Id";
+                    AppSetting."Allow HttpClient Requests" := true;
+                    AppSetting.Insert();
+                end else
+                    if not AppSetting."Allow HttpClient Requests" then begin
+                        AppSetting."Allow HttpClient Requests" := true;
+                        AppSetting.Modify();
+                    end;
+            until TempApps.Next() = 0;
     end;
 
     local procedure LowerToDocumentWrite(var LibraryLowerPermissions: Codeunit "Library - Lower Permissions")

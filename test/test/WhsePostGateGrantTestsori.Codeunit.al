@@ -98,6 +98,7 @@ codeunit 97024 "Whse Post Gate Grant Tests ori"
         ResponseText: Text;
         ErrorToken: JsonToken;
     begin
+        LibraryLowerPermissions.PushPermissionSetWithoutDefaults('SUPER');
         EnableRegisteredAppHttp();
         LowerToWhsePost(LibraryLowerPermissions);
 

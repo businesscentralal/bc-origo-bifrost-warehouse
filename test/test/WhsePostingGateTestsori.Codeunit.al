@@ -132,6 +132,7 @@ codeunit 97023 "Whse Posting Gate Tests ori"
         ResponseText: Text;
         ErrorToken: JsonToken;
     begin
+        LibraryLowerPermissions.PushPermissionSetWithoutDefaults('SUPER');
         EnableRegisteredAppHttp();
         LowerToDocumentWrite(LibraryLowerPermissions);
         LibraryLowerPermissions.AddPermissionSet('BIFROST WhsePost ori');

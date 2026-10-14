@@ -331,6 +331,36 @@ codeunit 97001 "Whse Activity Get Tests ori"
         GlobalLanguage(OriginalLanguage);
     end;
 
+    /// <summary>Verifies that a non-scalar identifier never becomes a collection read.</summary>
+    [Test]
+    procedure Scenario_AC04_IdObject_RejectFormat()
+    var
+        ResponseJson: JsonObject;
+    begin
+        ExecuteActivityGet('{"id":{}}', '', ResponseJson);
+        AssertErrorResponse(ResponseJson, 'InvalidParameterFormat', 'id');
+    end;
+
+    /// <summary>Verifies that a non-scalar identifier never becomes a collection read.</summary>
+    [Test]
+    procedure Scenario_AC04_RecordIdArray_RejectFormat()
+    var
+        ResponseJson: JsonObject;
+    begin
+        ExecuteActivityGet('{"recordSystemId":[]}', '', ResponseJson);
+        AssertErrorResponse(ResponseJson, 'InvalidParameterFormat', 'recordSystemId');
+    end;
+
+    /// <summary>Verifies that a non-scalar identifier never becomes a collection read.</summary>
+    [Test]
+    procedure Scenario_AC05_AliasObjectFilter_RejectFormat()
+    var
+        ResponseJson: JsonObject;
+    begin
+        ExecuteActivityGet('{"activityNo":{},"locationCode":"XWH37-A"}', '', ResponseJson);
+        AssertErrorResponse(ResponseJson, 'InvalidParameterFormat', 'activityNo');
+    end;
+
     local procedure CreateIdentifierFixtures(var FirstActivityNo: Code[20]; var ActivityHeader: Record "Warehouse Activity Header")
     var
         TestData: Codeunit "Whse Test Data ori";

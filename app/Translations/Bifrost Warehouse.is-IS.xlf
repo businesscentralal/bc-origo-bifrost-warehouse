@@ -75,6 +75,12 @@
           <note from="Developer" annotates="general" priority="2">%1 = value received, %2 = expected format, %3 = JSON key, is-IS="%1" er ekki gilt %2 (úr %3).</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Activity Get Impl ori - Method ResolveActivityIdentifiers - NamedType InvalidFormatErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 3969354362 - Method 2318592243 - NamedType 1626925938" size-unit="char" translate="yes" xml:space="preserve">
+          <source>activity number</source>
+          <target>númer vöruhúsavirkni</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=númer vöruhúsavirkni</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Activity Get Impl ori - Method ResolveActivityIdentifiers - NamedType ActivityNumberTxt</note>
+        </trans-unit>
         <trans-unit id="Codeunit 269741545 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>bin content, bin quantity, item in bin, warehouse stock, stock by bin, inventory by location</source>
           <target>birgðainnihald hólfs, magn í hólfi, vara í hólfi, vöruhúsabirgðir, birgðir eftir hólfi, birgðir eftir staðsetningu</target>

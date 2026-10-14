@@ -147,6 +147,255 @@ codeunit 97001 "Whse Activity Get Tests ori"
         Assert.IsFalse(MessageTypeInterface.IsEnabled(), 'Warehouse.Activity.Get must be disabled without read permission on Warehouse Activity Header.');
     end;
 
+    /// <summary>Regression for warehouse#37: Scenario_AC01_NoAndSystemId_RejectConflict.</summary>
+    [Test]
+    procedure Scenario_AC01_NoAndSystemId_RejectConflict()
+    var
+        ActivityHeader: Record "Warehouse Activity Header";
+        ResponseJson: JsonObject;
+    begin
+        CreateIdentifierFixtures(ActivityHeader);
+        ExecuteActivityGet('{"no":"XWH37-A","systemId":"' + Format(ActivityHeader.SystemId, 0, 4) + '"}', '', ResponseJson);
+        AssertConflict(ResponseJson, 'no', 'systemId');
+    end;
+
+    /// <summary>Regression for warehouse#37: Scenario_AC01_SubjectAndSystemId_RejectConflict.</summary>
+    [Test]
+    procedure Scenario_AC01_SubjectAndSystemId_RejectConflict()
+    var
+        ActivityHeader: Record "Warehouse Activity Header";
+        ResponseJson: JsonObject;
+    begin
+        CreateIdentifierFixtures(ActivityHeader);
+        ExecuteActivityGet('{"systemId":"' + Format(ActivityHeader.SystemId, 0, 4) + '"}', 'XWH37-A', ResponseJson);
+        AssertConflict(ResponseJson, 'subject', 'systemId');
+    end;
+
+    /// <summary>Regression for warehouse#37: Scenario_AC01_NoAndSubject_RejectConflict.</summary>
+    [Test]
+    procedure Scenario_AC01_NoAndSubject_RejectConflict()
+    var
+        ActivityHeader: Record "Warehouse Activity Header";
+        ResponseJson: JsonObject;
+    begin
+        CreateIdentifierFixtures(ActivityHeader);
+        ExecuteActivityGet('{"no":"XWH37-A"}', 'XWH37-B', ResponseJson);
+        AssertConflict(ResponseJson, 'subject', 'no');
+    end;
+
+    /// <summary>Regression for warehouse#37: Scenario_AC01_Aliases_RejectConflict.</summary>
+    [Test]
+    procedure Scenario_AC01_Aliases_RejectConflict()
+    var
+        ActivityHeader: Record "Warehouse Activity Header";
+        ResponseJson: JsonObject;
+    begin
+        CreateIdentifierFixtures(ActivityHeader);
+        ExecuteActivityGet('{"activityNo":"XWH37-A","id":"' + Format(ActivityHeader.SystemId, 0, 4) + '"}', '', ResponseJson);
+        AssertConflict(ResponseJson, 'activityNo', 'id');
+    end;
+
+    /// <summary>Regression for warehouse#37: Scenario_AC02_AllIdentifiers_ReturnOneRecord.</summary>
+    [Test]
+    procedure Scenario_AC02_AllIdentifiers_ReturnOneRecord()
+    var
+        ActivityHeader: Record "Warehouse Activity Header";
+        RequestJson: JsonObject;
+        RequestText: Text;
+        ResponseJson: JsonObject;
+    begin
+        CreateIdentifierFixtures(ActivityHeader);
+        RequestJson.Add('no', ActivityHeader."No.");
+        RequestJson.Add('activityNo', ActivityHeader."No.");
+        RequestJson.Add('systemId', Format(ActivityHeader.SystemId, 0, 4));
+        RequestJson.Add('id', Format(ActivityHeader.SystemId, 0, 4));
+        RequestJson.Add('recordSystemId', Format(ActivityHeader.SystemId, 0, 4));
+        RequestJson.WriteTo(RequestText);
+        ExecuteActivityGet(RequestText, ActivityHeader."No.", ResponseJson);
+        AssertSingleActivity(ResponseJson, ActivityHeader."No.");
+    end;
+
+    /// <summary>Regression for warehouse#37: Scenario_AC03_ActivityNo_ReturnRecord.</summary>
+    [Test]
+    procedure Scenario_AC03_ActivityNo_ReturnRecord()
+    var
+        ActivityHeader: Record "Warehouse Activity Header";
+        ResponseJson: JsonObject;
+    begin
+        CreateIdentifierFixtures(ActivityHeader);
+        ExecuteActivityGet('{"activityNo":"XWH37-A"}', '', ResponseJson);
+        AssertSingleActivity(ResponseJson, 'XWH37-A');
+    end;
+
+    /// <summary>Regression for warehouse#37: Scenario_AC03_UnknownAlias_ReturnNotFound.</summary>
+    [Test]
+    procedure Scenario_AC03_UnknownAlias_ReturnNotFound()
+    var
+        ResponseJson: JsonObject;
+    begin
+        ExecuteActivityGet('{"activityNo":"XWH37-MISSING"}', '', ResponseJson);
+        AssertErrorResponse(ResponseJson, 'RecordNotFound', 'activityNo');
+    end;
+
+    /// <summary>Regression for warehouse#37: Scenario_AC04_id_ReturnRecord.</summary>
+    [Test]
+    procedure Scenario_AC04_id_ReturnRecord()
+    var
+        ActivityHeader: Record "Warehouse Activity Header";
+        ResponseJson: JsonObject;
+    begin
+        CreateIdentifierFixtures(ActivityHeader);
+        ExecuteActivityGet('{"id":"' + Format(ActivityHeader.SystemId, 0, 4) + '"}', '', ResponseJson);
+        AssertSingleActivity(ResponseJson, 'XWH37-B');
+    end;
+
+    /// <summary>Regression for warehouse#37: Scenario_AC04_id_RejectNonGuid.</summary>
+    [Test]
+    procedure Scenario_AC04_id_RejectNonGuid()
+    var
+        ResponseJson: JsonObject;
+    begin
+        ExecuteActivityGet('{"id":"not-a-guid"}', '', ResponseJson);
+        AssertErrorResponse(ResponseJson, 'InvalidParameterFormat', 'id');
+    end;
+
+    /// <summary>Regression for warehouse#37: Scenario_AC04_recordSystemId_ReturnRecord.</summary>
+    [Test]
+    procedure Scenario_AC04_recordSystemId_ReturnRecord()
+    var
+        ActivityHeader: Record "Warehouse Activity Header";
+        ResponseJson: JsonObject;
+    begin
+        CreateIdentifierFixtures(ActivityHeader);
+        ExecuteActivityGet('{"recordSystemId":"' + Format(ActivityHeader.SystemId, 0, 4) + '"}', '', ResponseJson);
+        AssertSingleActivity(ResponseJson, 'XWH37-B');
+    end;
+
+    /// <summary>Regression for warehouse#37: Scenario_AC04_recordSystemId_RejectNonGuid.</summary>
+    [Test]
+    procedure Scenario_AC04_recordSystemId_RejectNonGuid()
+    var
+        ResponseJson: JsonObject;
+    begin
+        ExecuteActivityGet('{"recordSystemId":"not-a-guid"}', '', ResponseJson);
+        AssertErrorResponse(ResponseJson, 'InvalidParameterFormat', 'recordSystemId');
+    end;
+
+    /// <summary>Regression for warehouse#37: Scenario_AC04_InvalidAliasWithNo_RejectFormat.</summary>
+    [Test]
+    procedure Scenario_AC04_InvalidAliasWithNo_RejectFormat()
+    var
+        ActivityHeader: Record "Warehouse Activity Header";
+        ResponseJson: JsonObject;
+    begin
+        CreateIdentifierFixtures(ActivityHeader);
+        ExecuteActivityGet('{"no":"XWH37-A","id":"not-a-guid"}', '', ResponseJson);
+        AssertErrorResponse(ResponseJson, 'InvalidParameterFormat', 'id');
+    end;
+
+    /// <summary>Regression for warehouse#37: Scenario_AC05_AliasesWithFilter_NoUnrelatedRow.</summary>
+    [Test]
+    procedure Scenario_AC05_AliasesWithFilter_NoUnrelatedRow()
+    var
+        ActivityHeader: Record "Warehouse Activity Header";
+        ResponseJson: JsonObject;
+    begin
+        CreateIdentifierFixtures(ActivityHeader);
+        ExecuteActivityGet('{"activityNo":"XWH37-A","locationCode":"XWH37-B"}', '', ResponseJson);
+        AssertErrorResponse(ResponseJson, 'RecordNotFound', 'systemId');
+        ExecuteActivityGet('{"id":"' + Format(ActivityHeader.SystemId, 0, 4) + '","locationCode":"XWH37-B"}', '', ResponseJson);
+        AssertSingleActivity(ResponseJson, 'XWH37-B');
+        ExecuteActivityGet('{"recordSystemId":"' + Format(ActivityHeader.SystemId, 0, 4) + '","locationCode":"XWH37-A"}', '', ResponseJson);
+        AssertErrorResponse(ResponseJson, 'RecordNotFound', 'systemId');
+    end;
+
+    /// <summary>Regression for warehouse#37: Scenario_AC06_BilingualHelp_DeclaresContract.</summary>
+    [Test]
+    procedure Scenario_AC06_BilingualHelp_DeclaresContract()
+    var
+        OriginalLanguage: Integer;
+    begin
+        OriginalLanguage := GlobalLanguage();
+        AssertIdentifierHelp(1033);
+        AssertIdentifierHelp(1039);
+        GlobalLanguage(OriginalLanguage);
+    end;
+
+    local procedure CreateIdentifierFixtures(var ActivityHeader: Record "Warehouse Activity Header")
+    var
+        TestData: Codeunit "Whse Test Data ori";
+    begin
+        TestData.CreateActivityHeader(Enum::"Warehouse Activity Type"::Pick, 'XWH37-A', 'XWH37-A', '');
+        TestData.CreateActivityHeader(Enum::"Warehouse Activity Type"::Pick, 'XWH37-B', 'XWH37-B', '');
+        ActivityHeader.Get(Enum::"Warehouse Activity Type"::Pick, 'XWH37-B');
+    end;
+
+    local procedure AssertSingleActivity(ResponseJson: JsonObject; ExpectedNo: Text)
+    var
+        Assert: Codeunit "Library Assert";
+        Token: JsonToken;
+        Results: JsonArray;
+    begin
+        Assert.AreEqual('Success', GetTextProperty(ResponseJson, 'status'), 'The identifier lookup must succeed.');
+        Assert.AreEqual(1, GetIntegerProperty(ResponseJson, 'noOfRecords'), 'Exactly the identified record must match.');
+        Assert.IsTrue(ResponseJson.Get('result', Token), 'The result array must be present.');
+        Results := Token.AsArray();
+        Assert.AreEqual(1, Results.Count(), 'Exactly one record must be returned.');
+        Results.Get(0, Token);
+        Assert.AreEqual(ExpectedNo, GetTextProperty(Token.AsObject(), 'no'), 'An unrelated activity must never be returned.');
+    end;
+
+    local procedure AssertErrorResponse(ResponseJson: JsonObject; ExpectedCode: Text; ExpectedParameter: Text)
+    var
+        Assert: Codeunit "Library Assert";
+        Token: JsonToken;
+    begin
+        Assert.AreEqual('Error', GetTextProperty(ResponseJson, 'status'), 'The request must return a structured error.');
+        Assert.AreEqual(ExpectedCode, GetTextProperty(ResponseJson, 'code'), 'The stable error code must match.');
+        Assert.AreEqual(ExpectedParameter, GetTextProperty(ResponseJson, 'parameter'), 'The error must name the source parameter.');
+        Assert.IsFalse(ResponseJson.Get('result', Token), 'Errors must not return activity records.');
+    end;
+
+    local procedure AssertConflict(ResponseJson: JsonObject; FirstParameter: Text; SecondParameter: Text)
+    var
+        Assert: Codeunit "Library Assert";
+    begin
+        AssertErrorResponse(ResponseJson, 'ConflictingIdentifiers', SecondParameter);
+        Assert.IsTrue(GetTextProperty(ResponseJson, 'error').Contains(FirstParameter), 'The conflict must name the first parameter.');
+        Assert.IsTrue(GetTextProperty(ResponseJson, 'error').Contains(SecondParameter), 'The conflict must name the second parameter.');
+        Assert.IsTrue(GetTextProperty(ResponseJson, 'nextStep') <> '', 'Conflicts must describe how to correct the request.');
+    end;
+
+    local procedure AssertIdentifierHelp(LanguageId: Integer)
+    var
+        Assert: Codeunit "Library Assert";
+        Contract: Interface "Msg Contract ori";
+        Errors: JsonArray;
+        Targets: JsonArray;
+        Entry: JsonToken;
+        ErrorJson: JsonObject;
+        TargetText: Text;
+        FoundConflict: Boolean;
+    begin
+        GlobalLanguage(LanguageId);
+        Contract := Enum::"Message Type ori"::"Warehouse.Activity.Get";
+        Assert.IsTrue(Contract.GetErrors(Errors), 'Help must declare errors in both languages.');
+        foreach Entry in Errors do begin
+            ErrorJson := Entry.AsObject();
+            if GetTextProperty(ErrorJson, 'code') = 'ConflictingIdentifiers' then begin
+                FoundConflict := true;
+                Assert.IsTrue(GetTextProperty(ErrorJson, 'when') <> '', 'Conflict help must describe when it occurs.');
+                Assert.IsTrue(GetTextProperty(ErrorJson, 'nextStep') <> '', 'Conflict help must describe the next step.');
+            end;
+        end;
+        Assert.IsTrue(FoundConflict, 'Help must declare ConflictingIdentifiers.');
+        Assert.IsTrue(Contract.GetTarget(Targets), 'Help must declare the target aliases.');
+        Targets.WriteTo(TargetText);
+        Assert.IsTrue(TargetText.Contains('data.activityNo'), 'Help must declare the activityNo alias.');
+        Assert.IsTrue(TargetText.Contains('data.id'), 'Help must declare the id alias.');
+        Assert.IsTrue(TargetText.Contains('data.recordSystemId'), 'Help must declare the recordSystemId alias.');
+    end;
+
     local procedure ExecuteActivityGet(RequestText: Text; Subject: Text[250]; var ResponseJson: JsonObject)
     var
         Dispatcher: Codeunit "Dispatcher ori";

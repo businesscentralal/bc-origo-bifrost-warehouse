@@ -61,16 +61,14 @@
 - Bifrost Foundation dependency raised to 28.0.0.186, the first Foundation build without the procedure, in `app/app.json` and `test/app.json`.
 - The contract test codeunit 97027 is renamed `Whse Msg Contract Tests ori` (the old name exceeded 30 characters) and declares `System.TestLibraries.Utilities`, so the test app compiles again.
 
-### Fixed (2026-10-14) - Zero-warning Foundation helper migration acceptance (#20)
+### Fixed (2026-10-14) - Test compilation alignment for Foundation helper migration (#20)
 
-- Initialize the activity paging counter in codeunit 10078390 without changing its default value or lookup behavior.
 - Rename test files to match existing objects 97000–97002 and 97010–97027; align response content-type buffers in 97000, 97001, 97023 and 97024 to the dispatcher’s Text[100] parameter, remove the shadowed assertion variable in 97027 and label the assertion format in 97013. Test assertions, permission grants and message contracts are unchanged.
 
-### Changed (2026-10-14) - Build settings and telemetry aligned with Bifrost Inventory
+### Changed (2026-10-14) - Build settings aligned with Bifrost Inventory
 
 - Builds use AL-Go versioning strategy 3 (`app.json` stays at `X.Y.0.0`) and retain short-lived artifacts for 30 days.
 - Full builds also match changes to `.github/AL-Go-Settings.json`, so repository build settings trigger a full build.
-- Telemetry now goes to the shared Bifröst Application Insights resource, like every other Bifröst app.
 
 ### Added (2026-09-29) - Warehouse message contracts (#10)
 

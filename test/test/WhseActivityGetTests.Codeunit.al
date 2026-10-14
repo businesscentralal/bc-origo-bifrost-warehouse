@@ -152,10 +152,11 @@ codeunit 97001 "Whse Activity Get Tests ori"
     procedure Scenario_AC01_NoAndSystemId_RejectConflict()
     var
         ActivityHeader: Record "Warehouse Activity Header";
+        FirstActivityNo: Code[20];
         ResponseJson: JsonObject;
     begin
-        CreateIdentifierFixtures(ActivityHeader);
-        ExecuteActivityGet('{"no":"XWH37-A","systemId":"' + Format(ActivityHeader.SystemId, 0, 4) + '"}', '', ResponseJson);
+        CreateIdentifierFixtures(FirstActivityNo, ActivityHeader);
+        ExecuteActivityGet('{"no":"' + FirstActivityNo + '","systemId":"' + Format(ActivityHeader.SystemId, 0, 4) + '"}', '', ResponseJson);
         AssertConflict(ResponseJson, 'no', 'systemId');
     end;
 
@@ -164,10 +165,11 @@ codeunit 97001 "Whse Activity Get Tests ori"
     procedure Scenario_AC01_SubjectAndSystemId_RejectConflict()
     var
         ActivityHeader: Record "Warehouse Activity Header";
+        FirstActivityNo: Code[20];
         ResponseJson: JsonObject;
     begin
-        CreateIdentifierFixtures(ActivityHeader);
-        ExecuteActivityGet('{"systemId":"' + Format(ActivityHeader.SystemId, 0, 4) + '"}', 'XWH37-A', ResponseJson);
+        CreateIdentifierFixtures(FirstActivityNo, ActivityHeader);
+        ExecuteActivityGet('{"systemId":"' + Format(ActivityHeader.SystemId, 0, 4) + '"}', FirstActivityNo, ResponseJson);
         AssertConflict(ResponseJson, 'subject', 'systemId');
     end;
 
@@ -176,10 +178,11 @@ codeunit 97001 "Whse Activity Get Tests ori"
     procedure Scenario_AC01_NoAndSubject_RejectConflict()
     var
         ActivityHeader: Record "Warehouse Activity Header";
+        FirstActivityNo: Code[20];
         ResponseJson: JsonObject;
     begin
-        CreateIdentifierFixtures(ActivityHeader);
-        ExecuteActivityGet('{"no":"XWH37-A"}', 'XWH37-B', ResponseJson);
+        CreateIdentifierFixtures(FirstActivityNo, ActivityHeader);
+        ExecuteActivityGet('{"no":"' + FirstActivityNo + '"}', ActivityHeader."No.", ResponseJson);
         AssertConflict(ResponseJson, 'subject', 'no');
     end;
 
@@ -188,10 +191,11 @@ codeunit 97001 "Whse Activity Get Tests ori"
     procedure Scenario_AC01_Aliases_RejectConflict()
     var
         ActivityHeader: Record "Warehouse Activity Header";
+        FirstActivityNo: Code[20];
         ResponseJson: JsonObject;
     begin
-        CreateIdentifierFixtures(ActivityHeader);
-        ExecuteActivityGet('{"activityNo":"XWH37-A","id":"' + Format(ActivityHeader.SystemId, 0, 4) + '"}', '', ResponseJson);
+        CreateIdentifierFixtures(FirstActivityNo, ActivityHeader);
+        ExecuteActivityGet('{"activityNo":"' + FirstActivityNo + '","id":"' + Format(ActivityHeader.SystemId, 0, 4) + '"}', '', ResponseJson);
         AssertConflict(ResponseJson, 'activityNo', 'id');
     end;
 
@@ -200,11 +204,12 @@ codeunit 97001 "Whse Activity Get Tests ori"
     procedure Scenario_AC02_AllIdentifiers_ReturnOneRecord()
     var
         ActivityHeader: Record "Warehouse Activity Header";
+        FirstActivityNo: Code[20];
         RequestJson: JsonObject;
         RequestText: Text;
         ResponseJson: JsonObject;
     begin
-        CreateIdentifierFixtures(ActivityHeader);
+        CreateIdentifierFixtures(FirstActivityNo, ActivityHeader);
         RequestJson.Add('no', ActivityHeader."No.");
         RequestJson.Add('activityNo', ActivityHeader."No.");
         RequestJson.Add('systemId', Format(ActivityHeader.SystemId, 0, 4));
@@ -220,11 +225,12 @@ codeunit 97001 "Whse Activity Get Tests ori"
     procedure Scenario_AC03_ActivityNo_ReturnRecord()
     var
         ActivityHeader: Record "Warehouse Activity Header";
+        FirstActivityNo: Code[20];
         ResponseJson: JsonObject;
     begin
-        CreateIdentifierFixtures(ActivityHeader);
-        ExecuteActivityGet('{"activityNo":"XWH37-A"}', '', ResponseJson);
-        AssertSingleActivity(ResponseJson, 'XWH37-A');
+        CreateIdentifierFixtures(FirstActivityNo, ActivityHeader);
+        ExecuteActivityGet('{"activityNo":"' + FirstActivityNo + '"}', '', ResponseJson);
+        AssertSingleActivity(ResponseJson, FirstActivityNo);
     end;
 
     /// <summary>Regression for warehouse#37: Scenario_AC03_UnknownAlias_ReturnNotFound.</summary>
@@ -242,11 +248,12 @@ codeunit 97001 "Whse Activity Get Tests ori"
     procedure Scenario_AC04_id_ReturnRecord()
     var
         ActivityHeader: Record "Warehouse Activity Header";
+        FirstActivityNo: Code[20];
         ResponseJson: JsonObject;
     begin
-        CreateIdentifierFixtures(ActivityHeader);
+        CreateIdentifierFixtures(FirstActivityNo, ActivityHeader);
         ExecuteActivityGet('{"id":"' + Format(ActivityHeader.SystemId, 0, 4) + '"}', '', ResponseJson);
-        AssertSingleActivity(ResponseJson, 'XWH37-B');
+        AssertSingleActivity(ResponseJson, ActivityHeader."No.");
     end;
 
     /// <summary>Regression for warehouse#37: Scenario_AC04_id_RejectNonGuid.</summary>
@@ -264,11 +271,12 @@ codeunit 97001 "Whse Activity Get Tests ori"
     procedure Scenario_AC04_recordSystemId_ReturnRecord()
     var
         ActivityHeader: Record "Warehouse Activity Header";
+        FirstActivityNo: Code[20];
         ResponseJson: JsonObject;
     begin
-        CreateIdentifierFixtures(ActivityHeader);
+        CreateIdentifierFixtures(FirstActivityNo, ActivityHeader);
         ExecuteActivityGet('{"recordSystemId":"' + Format(ActivityHeader.SystemId, 0, 4) + '"}', '', ResponseJson);
-        AssertSingleActivity(ResponseJson, 'XWH37-B');
+        AssertSingleActivity(ResponseJson, ActivityHeader."No.");
     end;
 
     /// <summary>Regression for warehouse#37: Scenario_AC04_recordSystemId_RejectNonGuid.</summary>
@@ -286,10 +294,11 @@ codeunit 97001 "Whse Activity Get Tests ori"
     procedure Scenario_AC04_InvalidAliasWithNo_RejectFormat()
     var
         ActivityHeader: Record "Warehouse Activity Header";
+        FirstActivityNo: Code[20];
         ResponseJson: JsonObject;
     begin
-        CreateIdentifierFixtures(ActivityHeader);
-        ExecuteActivityGet('{"no":"XWH37-A","id":"not-a-guid"}', '', ResponseJson);
+        CreateIdentifierFixtures(FirstActivityNo, ActivityHeader);
+        ExecuteActivityGet('{"no":"' + FirstActivityNo + '","id":"not-a-guid"}', '', ResponseJson);
         AssertErrorResponse(ResponseJson, 'InvalidParameterFormat', 'id');
     end;
 
@@ -298,13 +307,14 @@ codeunit 97001 "Whse Activity Get Tests ori"
     procedure Scenario_AC05_AliasesWithFilter_NoUnrelatedRow()
     var
         ActivityHeader: Record "Warehouse Activity Header";
+        FirstActivityNo: Code[20];
         ResponseJson: JsonObject;
     begin
-        CreateIdentifierFixtures(ActivityHeader);
-        ExecuteActivityGet('{"activityNo":"XWH37-A","locationCode":"XWH37-B"}', '', ResponseJson);
+        CreateIdentifierFixtures(FirstActivityNo, ActivityHeader);
+        ExecuteActivityGet('{"activityNo":"' + FirstActivityNo + '","locationCode":"XWH37-B"}', '', ResponseJson);
         AssertErrorResponse(ResponseJson, 'RecordNotFound', 'systemId');
         ExecuteActivityGet('{"id":"' + Format(ActivityHeader.SystemId, 0, 4) + '","locationCode":"XWH37-B"}', '', ResponseJson);
-        AssertSingleActivity(ResponseJson, 'XWH37-B');
+        AssertSingleActivity(ResponseJson, ActivityHeader."No.");
         ExecuteActivityGet('{"recordSystemId":"' + Format(ActivityHeader.SystemId, 0, 4) + '","locationCode":"XWH37-A"}', '', ResponseJson);
         AssertErrorResponse(ResponseJson, 'RecordNotFound', 'systemId');
     end;
@@ -321,13 +331,18 @@ codeunit 97001 "Whse Activity Get Tests ori"
         GlobalLanguage(OriginalLanguage);
     end;
 
-    local procedure CreateIdentifierFixtures(var ActivityHeader: Record "Warehouse Activity Header")
+    local procedure CreateIdentifierFixtures(var FirstActivityNo: Code[20]; var ActivityHeader: Record "Warehouse Activity Header")
     var
         TestData: Codeunit "Whse Test Data ori";
+        SecondActivityNo: Code[20];
+        FixtureKey: Text;
     begin
-        TestData.CreateActivityHeader(Enum::"Warehouse Activity Type"::Pick, 'XWH37-A', 'XWH37-A', '');
-        TestData.CreateActivityHeader(Enum::"Warehouse Activity Type"::Pick, 'XWH37-B', 'XWH37-B', '');
-        ActivityHeader.Get(Enum::"Warehouse Activity Type"::Pick, 'XWH37-B');
+        FixtureKey := CopyStr(Format(CreateGuid(), 0, 4), 1, 12);
+        FirstActivityNo := CopyStr('XWH37A-' + FixtureKey, 1, MaxStrLen(FirstActivityNo));
+        SecondActivityNo := CopyStr('XWH37B-' + FixtureKey, 1, MaxStrLen(SecondActivityNo));
+        TestData.CreateActivityHeader(Enum::"Warehouse Activity Type"::Pick, FirstActivityNo, 'XWH37-A', '');
+        TestData.CreateActivityHeader(Enum::"Warehouse Activity Type"::Pick, SecondActivityNo, 'XWH37-B', '');
+        ActivityHeader.Get(Enum::"Warehouse Activity Type"::Pick, SecondActivityNo);
     end;
 
     local procedure AssertSingleActivity(ResponseJson: JsonObject; ExpectedNo: Text)
@@ -386,6 +401,13 @@ codeunit 97001 "Whse Activity Get Tests ori"
                 FoundConflict := true;
                 Assert.IsTrue(GetTextProperty(ErrorJson, 'when') <> '', 'Conflict help must describe when it occurs.');
                 Assert.IsTrue(GetTextProperty(ErrorJson, 'nextStep') <> '', 'Conflict help must describe the next step.');
+                if LanguageId = 1039 then begin
+                    Assert.AreEqual('Tvö innsend auðkenni vísa á mismunandi vöruhúsavirkni.', GetTextProperty(ErrorJson, 'when'), 'Icelandic help must use its translated conflict text.');
+                    Assert.AreEqual('Sendu eitt auðkenni eða auðkenni fyrir sömu vöruhúsavirkni.', GetTextProperty(ErrorJson, 'nextStep'), 'Icelandic help must translate the next step.');
+                end else begin
+                    Assert.AreEqual('Two supplied identifiers point to different warehouse activities.', GetTextProperty(ErrorJson, 'when'), 'English help must use its conflict text.');
+                    Assert.AreEqual('Send one identifier or identifiers for the same warehouse activity.', GetTextProperty(ErrorJson, 'nextStep'), 'English help must describe the next step.');
+                end;
             end;
         end;
         Assert.IsTrue(FoundConflict, 'Help must declare ConflictingIdentifiers.');

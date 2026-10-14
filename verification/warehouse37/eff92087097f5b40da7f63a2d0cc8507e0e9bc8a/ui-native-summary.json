@@ -1,0 +1,45 @@
+{
+  "sha": "eff92087097f5b40da7f63a2d0cc8507e0e9bc8a",
+  "containerId": "f0104bc64587",
+  "nativeStepComplete": true,
+  "nativeVerified": true,
+  "nativeScenarios": 2,
+  "nativePassed": 2,
+  "nativeFailed": 0,
+  "nativeSkipped": 0,
+  "languages": [
+    "en-US",
+    "is-IS"
+  ],
+  "languageSelection": "My Settings, actual1039 selection persisted and fresh-session Stillingar/M\u00ednar stillingar/Bifr\u00f6st skilabo\u00f0 captions confirmed",
+  "scenarios": [
+    {
+      "language": "en-US",
+      "result": "passed native inspection",
+      "checks": [
+        "Authenticated Messages10077907 page",
+        "Select own Warehouse.Activity.Get queue row",
+        "Native Response > Download File preserves EULA_REQUIRED response"
+      ]
+    },
+    {
+      "language": "is-IS",
+      "result": "passed native inspection",
+      "checks": [
+        "Actual Icelandic shell and Messages captions",
+        "Select own row",
+        "Svar > S\u00e6kja skr\u00e1 preserves same response",
+        "Bei\u00f0ni > S\u00e6kja skr\u00e1 preserves own id=not-a-guid payload"
+      ]
+    }
+  ],
+  "identifierAcceptanceVerified": false,
+  "mcpPassed": 0,
+  "licensedBehaviorPendingOwner": "Claude Code",
+  "licensedBehaviorPendingEnvironment": "bc28-w1",
+  "authority": "1791992534.885059",
+  "reexecutedBlockedRequests": false,
+  "recordExecutionSourceSha": "96f8cba72a20f5c0ddd00b445d2cecb5bfe0aa5d",
+  "note": "UI read/display plumbing was checked on eff9208 using an existing own request/response. This is not positive shipping identifier or licence acceptance at eff9208. No expired/new-tip pass is inferred from the recorded old response. Native AL107/107 separately proves current handler assertions; licensed shipping ACs remain pending Claude.",
+  "verifiedAt": "2026-10-14T16:14:45.791784+00:00"
+}

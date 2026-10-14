@@ -1,0 +1,35 @@
+[
+  {
+    "app": "default-app",
+    "sha": "eff92087097f5b40da7f63a2d0cc8507e0e9bc8a",
+    "uncommittedSource": false,
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 0,
+    "output": "/workspace/evidence/tasks/1791991209.294879/Warehouse.Default.app",
+    "sha256": "90374bb304c1f6c219658c9c58707acaa9b5f7db6d23ccd6c51bdec782624b00",
+    "finishedAt": "2026-10-14T15:50:56.613858+00:00"
+  },
+  {
+    "app": "test-product",
+    "sha": "eff92087097f5b40da7f63a2d0cc8507e0e9bc8a",
+    "uncommittedSource": false,
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 0,
+    "output": "/workspace/evidence/tasks/1791991209.294879/symbols/Origo_Bifrost_Warehouse_28.0.0.0.app",
+    "sha256": "3bffa155e421da8df03b2326f6f6c33a43d87de352e29b5307c2b334668eee47",
+    "finishedAt": "2026-10-14T15:51:07.463001+00:00"
+  },
+  {
+    "app": "test",
+    "sha": "eff92087097f5b40da7f63a2d0cc8507e0e9bc8a",
+    "uncommittedSource": false,
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 0,
+    "output": "/workspace/evidence/tasks/1791991209.294879/Warehouse.Tests.app",
+    "sha256": "f603e68469bffafd16f10675fa268456d128b818deed667d876770147c943339",
+    "finishedAt": "2026-10-14T15:51:16.716534+00:00"
+  }
+]

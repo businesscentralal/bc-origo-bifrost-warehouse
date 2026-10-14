@@ -1,0 +1,226 @@
+{
+  "configuredRange": "97000..97099",
+  "testAppId": "6ae41d19-d457-4d62-bd87-0413ff18de75",
+  "expected": 107,
+  "codeunits": [
+    {
+      "id": 97001,
+      "name": "Whse Activity Get Tests ori",
+      "tests": [
+        "GetByNumberReturnsHeaderAndLines",
+        "MissingNumberReturnsStructuredError",
+        "MissingSystemIdReturnsStructuredError",
+        "FiltersByActivityTypeDocumentLocationAndAssignedUser",
+        "PagesHeadersAndReportsUnpagedCount",
+        "IsDisabledWithoutReadPermission",
+        "Scenario_AC01_NoAndSystemId_RejectConflict",
+        "Scenario_AC01_SubjectAndSystemId_RejectConflict",
+        "Scenario_AC01_NoAndSubject_RejectConflict",
+        "Scenario_AC01_Aliases_RejectConflict",
+        "Scenario_AC02_AllIdentifiers_ReturnOneRecord",
+        "Scenario_AC03_ActivityNo_ReturnRecord",
+        "Scenario_AC03_UnknownAlias_ReturnNotFound",
+        "Scenario_AC04_id_ReturnRecord",
+        "Scenario_AC04_id_RejectNonGuid",
+        "Scenario_AC04_recordSystemId_ReturnRecord",
+        "Scenario_AC04_recordSystemId_RejectNonGuid",
+        "Scenario_AC04_InvalidAliasWithNo_RejectFormat",
+        "Scenario_AC05_AliasesWithFilter_NoUnrelatedRow",
+        "Scenario_AC06_BilingualHelp_DeclaresContract"
+      ],
+      "count": 20
+    },
+    {
+      "id": 97000,
+      "name": "Whse BinContent Get Tests ori",
+      "tests": [
+        "GetReturnsMatchingBinContent",
+        "GetPagesRowsAndReportsUnpagedCount",
+        "GetWithNoMatchesReturnsEmptySuccess",
+        "IsDisabledWithoutReadPermission"
+      ],
+      "count": 4
+    },
+    {
+      "id": 97027,
+      "name": "Whse Msg Contract Tests ori",
+      "tests": [
+        "EveryWarehouseType_HasContractAndDiscovery",
+        "ActivityContractDescribesHeadersAndLines"
+      ],
+      "count": 2
+    },
+    {
+      "id": 97017,
+      "name": "Whse Pick Create Tests ori",
+      "tests": [
+        "PickCreate_HappyPath_ReturnsPickNo",
+        "PickCreate_WithAssignedUserId_AppliesToHeader",
+        "PickCreate_InvalidSortingMethod_ReturnsError",
+        "PickCreate_ShipmentNotFound_ReturnsError",
+        "PickCreate_MissingIdentifier_ReturnsError",
+        "PickCreate_SetBreakbulkFilterTrue_ReturnsError",
+        "IsEnabledWithWritePermission",
+        "IsDisabledWithoutWritePermission"
+      ],
+      "count": 8
+    },
+    {
+      "id": 97018,
+      "name": "Whse Pick Register Tests ori",
+      "tests": [
+        "PickRegister_HappyPath_ReturnsRegisteredPickNo",
+        "PickRegister_HappyPath_UpdatesShipmentLineQtyPicked",
+        "PickRegister_ResponseIncludesShipmentLines",
+        "PickRegister_PickNotFound_ReturnsError",
+        "PickRegister_MissingIdentifier_ReturnsError"
+      ],
+      "count": 5
+    },
+    {
+      "id": 97024,
+      "name": "Whse Post Gate Grant Tests ori",
+      "tests": [
+        "ShipmentPost_WithWhsePost_IsEnabled",
+        "ReceiptPost_WithWhsePost_IsEnabled",
+        "PickRegister_WithWhsePost_IsEnabled",
+        "PutawayRegister_WithWhsePost_IsEnabled",
+        "AssertCanPost_WithBothSets_WritesNoError",
+        "ShipmentPost_InvoiceWithWhseInv_ReachesLookup"
+      ],
+      "count": 6
+    },
+    {
+      "id": 97023,
+      "name": "Whse Posting Gate Tests ori",
+      "tests": [
+        "ShipmentPost_WithoutWhsePost_IsDisabled",
+        "ReceiptPost_WithoutWhsePost_IsDisabled",
+        "PickRegister_WithoutWhsePost_IsDisabled",
+        "PutawayRegister_WithoutWhsePost_IsDisabled",
+        "AssertCanPost_WithoutWhsePost_NamesWhsePostSet",
+        "AssertCanInvoice_WithoutWhseInv_NamesWhseInvSet",
+        "ShipmentPost_InvoiceWithoutWhseInv_NamesWhseInvSet",
+        "ShipmentPreview_WithoutWhsePost_StaysEnabled",
+        "ReceiptPreview_WithoutWhsePost_StaysEnabled"
+      ],
+      "count": 9
+    },
+    {
+      "id": 97019,
+      "name": "Whse Putaway Create Tests ori",
+      "tests": [
+        "PutawayCreate_HappyPath_ReturnsPutawayNo",
+        "PutawayCreate_AutoCreatedOnPosting_ReturnsExisting",
+        "PutawayCreate_WithAssignedUserId_AppliesToHeader",
+        "PutawayCreate_InvalidSortingMethod_ReturnsError",
+        "PutawayCreate_ReceiptNotFound_ReturnsError",
+        "PutawayCreate_MissingIdentifier_ReturnsError",
+        "PutawayCreate_SetBreakbulkFilterTrue_ReturnsError",
+        "IsEnabledWithWritePermission",
+        "IsDisabledWithoutWritePermission"
+      ],
+      "count": 9
+    },
+    {
+      "id": 97020,
+      "name": "Whse Putaway Reg Tests ori",
+      "tests": [
+        "PutawayRegister_HappyPath_ReturnsRegisteredPutawayNo",
+        "PutawayRegister_HappyPath_UpdatesPostedReceiptQtyPutAway",
+        "PutawayRegister_ResponseIncludesReceiptLines",
+        "PutawayRegister_PutawayNotFound_ReturnsError",
+        "PutawayRegister_MissingIdentifier_ReturnsError"
+      ],
+      "count": 5
+    },
+    {
+      "id": 97016,
+      "name": "Whse Rcpt Post Prev Tests ori",
+      "tests": [
+        "PreviewPost_PurchaseReceipt_ReturnsPreviewAndRollsBack",
+        "PreviewPost_MissingReceipt_ReturnsError",
+        "PreviewPost_NothingToReceive_ReturnsNothingToPreview"
+      ],
+      "count": 3
+    },
+    {
+      "id": 97014,
+      "name": "Whse Receipt Create Tests ori",
+      "tests": [
+        "Create_PurchaseOrder_ReturnsReceiptNo",
+        "Create_MissingSourceDocuments_ReturnsError",
+        "Create_UnsupportedSourceType_ReturnsError",
+        "Create_PurchaseOrderNotReleased_ReturnsError",
+        "Create_LocationCodeMismatch_ReturnsError",
+        "Create_ValidPostingDate_PersistsOverride",
+        "Create_InvalidPostingDate_ReturnsErrorWithoutReceipt",
+        "IsEnabledWithWritePermission",
+        "IsDisabledWithoutWritePermission"
+      ],
+      "count": 9
+    },
+    {
+      "id": 97015,
+      "name": "Whse Receipt Post Tests ori",
+      "tests": [
+        "Post_PurchaseReceipt_ReturnsPostedWhseReceiptNo",
+        "Post_MissingReceipt_ReturnsError",
+        "Post_ReturnsEchoedReceiptNo",
+        "IsEnabledWithWritePermission",
+        "IsDisabledWithoutWritePermission"
+      ],
+      "count": 5
+    },
+    {
+      "id": 97011,
+      "name": "Whse Shipment Create Tests ori",
+      "tests": [
+        "Create_SalesOrder_ReturnsShipmentNo",
+        "Create_MissingSourceDocuments_ReturnsError",
+        "Create_UnsupportedSourceType_ReturnsError",
+        "Create_SalesOrderNotReleased_ReturnsError",
+        "IsEnabledWithWritePermission",
+        "IsDisabledWithoutWritePermission"
+      ],
+      "count": 6
+    },
+    {
+      "id": 97012,
+      "name": "Whse Shipment Post Tests ori",
+      "tests": [
+        "Post_Ship_ReturnsPostedWhseShipmentNo",
+        "Post_ShipAndInvoice_ReturnsSuccess",
+        "Post_MissingShipment_ReturnsError",
+        "Post_InvalidInvoice_ReturnsErrorWithoutPosting",
+        "IsEnabledWithWritePermission",
+        "IsDisabledWithoutWritePermission"
+      ],
+      "count": 6
+    },
+    {
+      "id": 97013,
+      "name": "Whse Ship Prev Post Tests ori",
+      "tests": [
+        "PreviewPost_PostableShipment_ReturnsSuccessAndRollback",
+        "PreviewPost_PostableShipment_DoesNotCreatePostedShipment",
+        "PreviewPost_PostableShipment_ReturnsContextAndAlwaysInvoiceTrue",
+        "PreviewPost_SystemIdSubject_ReturnsSuccess",
+        "PreviewPost_ShipmentNotFound_ReturnsError",
+        "PreviewPost_MissingIdentification_ReturnsError",
+        "PreviewPost_NothingToShip_ReturnsNothingToPreview"
+      ],
+      "count": 7
+    },
+    {
+      "id": 97026,
+      "name": "Whse Write Restrict Tests ori",
+      "tests": [
+        "GenericWrite_WarehouseDocumentTables_IsRefused",
+        "GenericWrite_NonWarehouseTable_IsNotRestricted",
+        "GenericRead_WarehouseDocumentTables_StaysAllowed"
+      ],
+      "count": 3
+    }
+  ]
+}

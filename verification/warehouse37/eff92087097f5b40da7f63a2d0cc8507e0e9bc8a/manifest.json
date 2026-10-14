@@ -1,0 +1,165 @@
+{
+  "candidateSha": "eff92087097f5b40da7f63a2d0cc8507e0e9bc8a",
+  "owner": "worker-6",
+  "issue": "https://github.com/businesscentralal/bc-origo-bifrost-warehouse/issues/37",
+  "sourceBranch": "fix/worker6-warehouse37-identifiers",
+  "sourceTipUnchangedByEvidenceBranch": true,
+  "createdAt": "2026-10-14T16:17:41.930292+00:00",
+  "files": [
+    {
+      "file": "acceptance-matrix.json",
+      "bytes": 6736,
+      "sha256": "7f9d99bedf1bc783c44e0aa97f548b1c1f41eb80aa64b34c1f8ffd083f484dab"
+    },
+    {
+      "file": "artifact-provenance.json",
+      "bytes": 1636,
+      "sha256": "023c45483544d52551cb08b2d015568537a6ed843097a9388d8ee6c4df32086b"
+    },
+    {
+      "file": "Bifrost Warehouse.g.xlf",
+      "bytes": 32510,
+      "sha256": "6eb7fb7922ab0fe58700f19c48e94b51f497c535c0965c4f8477b3d15a35a8cc"
+    },
+    {
+      "file": "Bifrost Warehouse.is-IS.xlf",
+      "bytes": 38320,
+      "sha256": "1329f8b61f403977de7f7b9414d1421ea2068819b10fbb1c98d62f367be9668f"
+    },
+    {
+      "file": "cleanup-delete.json",
+      "bytes": 157,
+      "sha256": "037120707c1035117493b1aa40d041eef5ed2daa3c4ce873d25bc38200be7de3"
+    },
+    {
+      "file": "cleanup-verified.json",
+      "bytes": 249,
+      "sha256": "d79b26f8b1d755d21972ee61720582277ecbe0a5e1b532ebd8a50157bb19cf1e"
+    },
+    {
+      "file": "compile-default-app.log",
+      "bytes": 239,
+      "sha256": "1b59cd0e91f7e261ad266ca7dc5bd590b69819dd07b77740ad2c4ffc5c50494b"
+    },
+    {
+      "file": "compile-summary.json",
+      "bytes": 1202,
+      "sha256": "f42820c0e6bc17eab236d734196499676c6503fa644eed725d4c580a76b2b8fb"
+    },
+    {
+      "file": "compile-test-product.log",
+      "bytes": 239,
+      "sha256": "c03e3efbbf17b0a2d1f3a1d1585ee074e9e8b3e4abaf8b464c3dcd02326320a3"
+    },
+    {
+      "file": "compile-test.log",
+      "bytes": 247,
+      "sha256": "d565dbaa8d3403201e9c84b9ad37d12631ef33ce87ec2dcd0aa9c223c3295d05"
+    },
+    {
+      "file": "configured-suite-catalog.json",
+      "bytes": 7691,
+      "sha256": "28ef8828a2aef82249d06c1e84c38c9182c64fe46b738ef5e35861e45331e350"
+    },
+    {
+      "file": "full-suite-summary.json",
+      "bytes": 521,
+      "sha256": "976bcc0d4a50dca0fd48e2efde174a391263b9047ebe90f2ca0ecf7547876902"
+    },
+    {
+      "file": "full-suite.xml",
+      "bytes": 53797,
+      "sha256": "1ff583ac4b82c9f6c1ccc0349433f6a2d64f8aad7cf51976895544d59b781617"
+    },
+    {
+      "file": "github-candidate-readback-final.json",
+      "bytes": 468,
+      "sha256": "c955d3c54636cd382389d06ea4116b39b0f3377ad456ce331e4cb70104830242"
+    },
+    {
+      "file": "lesson-application.json",
+      "bytes": 488,
+      "sha256": "c82d4c796058876cc75c75078c53517c0b4e98446d7ddd68a82707e2fb240b1a"
+    },
+    {
+      "file": "local-owned-cleanup.json",
+      "bytes": 147,
+      "sha256": "e8b89227d8ef4a8c540e1a825fdb52a2ee3f8bd5d9249ffc23318baba3a412d7"
+    },
+    {
+      "file": "source-guards-summary.json",
+      "bytes": 321,
+      "sha256": "120e5e725e55920c33fde1089f1c91c320935ad4f45e44484119cb1f6d60fa9a"
+    },
+    {
+      "file": "test-analyzer-audit.json",
+      "bytes": 1549,
+      "sha256": "6abd3afcc582c57d8df7d4f4a75926d5de726bcd20572f09fa06ca27a822ef59"
+    },
+    {
+      "file": "Test-IcelandicKeywordCounts.log",
+      "bytes": 112,
+      "sha256": "fa457a6f157732c4a7af806c76716264b728af6b43fbc367f4b209b001510091"
+    },
+    {
+      "file": "Test-NoClientCallstack.log",
+      "bytes": 52,
+      "sha256": "f99bfb700e1496e53102fc10de770a8a72ccf8a4a4e46891c0f0b3d9ef927b0d"
+    },
+    {
+      "file": "Test-NoObsolete.log",
+      "bytes": 117,
+      "sha256": "cce0c215c0afdff4acbe4f7c934c22ef41e6e088a0dade0f8ab94f1826a5b45e"
+    },
+    {
+      "file": "Test-PermissionCoverage.log",
+      "bytes": 82,
+      "sha256": "eb62e5f4e0d617534642d0d26d570d03d1dd1ad8ff7489d61303cc26cc691adc"
+    },
+    {
+      "file": "Test-ValidatedTableView.log",
+      "bytes": 44,
+      "sha256": "846e425f93209a0aba64e73a51b66d7704e1b69b572d61815f8824e60b31cba4"
+    },
+    {
+      "file": "ui-is-messages-localized.png",
+      "bytes": 50042,
+      "sha256": "fefb3e3c42e613b10ae38bb26f77d26604a7e920102e91db0d985097c1b9a5ed"
+    },
+    {
+      "file": "ui-is-settings-persisted.png",
+      "bytes": 41204,
+      "sha256": "e8e26b008956cd45ac7f36ee826ea79bf5043452bd3ba16bcc5443d7e535e74f"
+    },
+    {
+      "file": "ui-native-summary.json",
+      "bytes": 1801,
+      "sha256": "6bd28a11cfd76ada0178234d36cce40879ad6fc444809675a416dbd7de01df07"
+    },
+    {
+      "file": "ui-request-is.json",
+      "bytes": 19,
+      "sha256": "d5cdb45c4eb668444a16a1921a568a35eefecbce33b5be5947090e171edd67cc"
+    },
+    {
+      "file": "ui-response-en.json",
+      "bytes": 442,
+      "sha256": "938e8b2f2d1f5076d2c77e8f728e62456216b5c40af72f06b173301664877eda"
+    },
+    {
+      "file": "ui-response-is.json",
+      "bytes": 442,
+      "sha256": "938e8b2f2d1f5076d2c77e8f728e62456216b5c40af72f06b173301664877eda"
+    },
+    {
+      "file": "ui-response-is.png",
+      "bytes": 62391,
+      "sha256": "7601d5c3a24155b5a5ede4d9b500e550f82543b1d61c471ea5793cbcd72c47ce"
+    },
+    {
+      "file": "ui-response-menu.png",
+      "bytes": 65963,
+      "sha256": "423fd4c585892e00da27b492d355178a6be0bb6dec7477bada9e2ed4fa9c235d"
+    }
+  ]
+}

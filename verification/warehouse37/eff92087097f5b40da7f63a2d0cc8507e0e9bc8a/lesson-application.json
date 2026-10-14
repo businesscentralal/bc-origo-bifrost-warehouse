@@ -1,0 +1,9 @@
+{
+  "applied": [
+    "core896-worker10-restore-alias-runtime-20261006",
+    "green-handoff-businesscentralal_bc-origo-bifrost-warehouse-30-0b18ebf593ca7fb92e97122891e809b70b8da6ac-zero-warning-evidence-audit",
+    "warehouse15-review-followup-1791969047-worker5",
+    "warehouse37-claude6171262071-identifier-precedence"
+  ],
+  "sourceEvidence": "14 new dispatcher regressions; exact-tip compiler artifacts/counts; locale must be selected and captions checked before bilingual UI claim"
+}

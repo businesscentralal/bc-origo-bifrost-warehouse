@@ -1,0 +1,170 @@
+{
+  "issueUrl": "https://github.com/businesscentralal/bc-origo-bifrost-warehouse/issues/37",
+  "sha": "eff92087097f5b40da7f63a2d0cc8507e0e9bc8a",
+  "branchUrl": "https://github.com/businesscentralal/bc-origo-bifrost-warehouse/tree/fix/worker6-warehouse37-identifiers",
+  "commitUrl": "https://github.com/businesscentralal/bc-origo-bifrost-warehouse/commit/eff92087097f5b40da7f63a2d0cc8507e0e9bc8a",
+  "sourceBase": "938dcb0edda1f6d31f46f7f92d62e920996a10d6",
+  "prCreated": false,
+  "dependency": "PR15 zero-warning baseline retained; no change to foreign source",
+  "rows": [
+    {
+      "ac": 1,
+      "requirement": "Reject conflicting identifiers and name both inputs",
+      "implemented": true,
+      "tests": [
+        "Scenario_AC01_NoAndSystemId_RejectConflict",
+        "Scenario_AC01_SubjectAndSystemId_RejectConflict",
+        "Scenario_AC01_NoAndSubject_RejectConflict",
+        "Scenario_AC01_Aliases_RejectConflict"
+      ],
+      "unitVerification": "passed at current SHA",
+      "mcpVerification": "PENDING Claude Code bc28-w1, LCIDs1033/1039, under Architect1791992534.885059; worker6 shipping gate EULA_REQUIRED, no repeated probes",
+      "unitExecuted": 4,
+      "unitPassed": 4,
+      "unitFailed": 0,
+      "unitSkipped": 0
+    },
+    {
+      "ac": 2,
+      "requirement": "Matching identifiers return exactly one activity",
+      "implemented": true,
+      "tests": [
+        "Scenario_AC02_AllIdentifiers_ReturnOneRecord"
+      ],
+      "unitVerification": "passed at current SHA",
+      "mcpVerification": "PENDING Claude Code bc28-w1, LCIDs1033/1039, under Architect1791992534.885059; worker6 shipping gate EULA_REQUIRED, no repeated probes",
+      "unitExecuted": 1,
+      "unitPassed": 1,
+      "unitFailed": 0,
+      "unitSkipped": 0
+    },
+    {
+      "ac": 3,
+      "requirement": "activityNo lookup and unknown-number error",
+      "implemented": true,
+      "tests": [
+        "Scenario_AC03_ActivityNo_ReturnRecord",
+        "Scenario_AC03_UnknownAlias_ReturnNotFound"
+      ],
+      "unitVerification": "passed at current SHA",
+      "mcpVerification": "PENDING Claude Code bc28-w1, LCIDs1033/1039, under Architect1791992534.885059; worker6 shipping gate EULA_REQUIRED, no repeated probes",
+      "unitExecuted": 2,
+      "unitPassed": 2,
+      "unitFailed": 0,
+      "unitSkipped": 0
+    },
+    {
+      "ac": 4,
+      "requirement": "id/recordSystemId GUID lookup and malformed input errors",
+      "implemented": true,
+      "tests": [
+        "Scenario_AC04_id_ReturnRecord",
+        "Scenario_AC04_id_RejectNonGuid",
+        "Scenario_AC04_recordSystemId_ReturnRecord",
+        "Scenario_AC04_recordSystemId_RejectNonGuid",
+        "Scenario_AC04_InvalidAliasWithNo_RejectFormat"
+      ],
+      "unitVerification": "passed at current SHA",
+      "mcpVerification": "PENDING Claude Code bc28-w1, LCIDs1033/1039, under Architect1791992534.885059; worker6 shipping gate EULA_REQUIRED, no repeated probes",
+      "unitExecuted": 5,
+      "unitPassed": 5,
+      "unitFailed": 0,
+      "unitSkipped": 0
+    },
+    {
+      "ac": 5,
+      "requirement": "Alias plus filters never returns an unrelated collection",
+      "implemented": true,
+      "tests": [
+        "Scenario_AC05_AliasesWithFilter_NoUnrelatedRow"
+      ],
+      "unitVerification": "passed at current SHA",
+      "mcpVerification": "PENDING Claude Code bc28-w1, LCIDs1033/1039, under Architect1791992534.885059; worker6 shipping gate EULA_REQUIRED, no repeated probes",
+      "unitExecuted": 1,
+      "unitPassed": 1,
+      "unitFailed": 0,
+      "unitSkipped": 0
+    },
+    {
+      "ac": 6,
+      "requirement": "Help target aliases and ConflictingIdentifiers when/nextStep in 1033/1039",
+      "implemented": true,
+      "tests": [
+        "Scenario_AC06_BilingualHelp_DeclaresContract"
+      ],
+      "unitVerification": "passed at current SHA",
+      "mcpVerification": "PENDING Claude Code bc28-w1, LCIDs1033/1039, under Architect1791992534.885059; worker6 shipping gate EULA_REQUIRED, no repeated probes",
+      "unitExecuted": 1,
+      "unitPassed": 1,
+      "unitFailed": 0,
+      "unitSkipped": 0
+    }
+  ],
+  "unchangedConstraints": [
+    "No-identifier collection paging/includeLines/filters",
+    "Top-level app version28.0.0.0",
+    "No licence/EULA/backend writes",
+    "No new analyzer/test exclusions"
+  ],
+  "updatedAt": "2026-10-14T16:15:56.656861+00:00",
+  "licensingDisposition": {
+    "sourceTs": "1791992534.885059",
+    "owner": "Claude Code",
+    "environment": "bc28-w1",
+    "beforeMerge": true,
+    "verified": false,
+    "passed": 0
+  },
+  "nativeUi": {
+    "sha": "eff92087097f5b40da7f63a2d0cc8507e0e9bc8a",
+    "containerId": "f0104bc64587",
+    "nativeStepComplete": true,
+    "nativeVerified": true,
+    "nativeScenarios": 2,
+    "nativePassed": 2,
+    "nativeFailed": 0,
+    "nativeSkipped": 0,
+    "languages": [
+      "en-US",
+      "is-IS"
+    ],
+    "languageSelection": "My Settings, actual1039 selection persisted and fresh-session Stillingar/M\u00ednar stillingar/Bifr\u00f6st skilabo\u00f0 captions confirmed",
+    "scenarios": [
+      {
+        "language": "en-US",
+        "result": "passed native inspection",
+        "checks": [
+          "Authenticated Messages10077907 page",
+          "Select own Warehouse.Activity.Get queue row",
+          "Native Response > Download File preserves EULA_REQUIRED response"
+        ]
+      },
+      {
+        "language": "is-IS",
+        "result": "passed native inspection",
+        "checks": [
+          "Actual Icelandic shell and Messages captions",
+          "Select own row",
+          "Svar > S\u00e6kja skr\u00e1 preserves same response",
+          "Bei\u00f0ni > S\u00e6kja skr\u00e1 preserves own id=not-a-guid payload"
+        ]
+      }
+    ],
+    "identifierAcceptanceVerified": false,
+    "mcpPassed": 0,
+    "licensedBehaviorPendingOwner": "Claude Code",
+    "licensedBehaviorPendingEnvironment": "bc28-w1",
+    "authority": "1791992534.885059",
+    "reexecutedBlockedRequests": false,
+    "recordExecutionSourceSha": "96f8cba72a20f5c0ddd00b445d2cecb5bfe0aa5d",
+    "note": "UI read/display plumbing was checked on eff9208 using an existing own request/response. This is not positive shipping identifier or licence acceptance at eff9208. No expired/new-tip pass is inferred from the recorded old response. Native AL107/107 separately proves current handler assertions; licensed shipping ACs remain pending Claude.",
+    "verifiedAt": "2026-10-14T16:14:45.791784+00:00"
+  },
+  "ci": {
+    "sha": "eff92087097f5b40da7f63a2d0cc8507e0e9bc8a",
+    "started": false,
+    "owner": "Architect",
+    "requestPath": "/team-queue/architect-requests/warehouse37-worker6-prepr-ci-eff9208.json"
+  },
+  "delivery": "not delivered; PR still not opened"
+}

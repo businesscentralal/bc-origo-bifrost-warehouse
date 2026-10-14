@@ -1,0 +1,38 @@
+{
+  "observedAt": "2026-10-14T15:31:45.400024+00:00",
+  "sourceBaseSha": "938dcb0edda1f6d31f46f7f92d62e920996a10d6",
+  "uncommittedIssue37Source": true,
+  "configuredGate": false,
+  "analyzers": "CodeCop/UICop/AppSourceCop applied experimentally to the test app, unlike retained AL-Go configuration",
+  "errors": 3,
+  "warnings": 9,
+  "findings": [
+    {
+      "rule": "AS0051",
+      "scope": "inherited test/app.json",
+      "finding": "contextSensitiveHelpUrl missing for hypothetical AppSource test app"
+    },
+    {
+      "rule": "AS0084",
+      "scope": "inherited test/app.json",
+      "finding": "Existing test IDs97000..97099 are not AppSource product IDs"
+    },
+    {
+      "rule": "AS0015",
+      "scope": "inherited test/app.json",
+      "finding": "TranslationFile not set on inherited test app"
+    },
+    {
+      "rule": "AS0092",
+      "scope": "inherited test/app.json",
+      "finding": "Telemetry connection string not set on test app"
+    },
+    {
+      "rule": "AA0073",
+      "scope": "Eight inherited temporary Argument variables in97023/97024/97026",
+      "finding": "Temporary variable name not prefixed Temp"
+    }
+  ],
+  "actualConfiguredCompile": "At eff9208, all3configured compiles0errors0warnings; productall3analyzers; testapp existing enableCodeAnalyzersOnTestApps=false unchanged. No new exclusions or pipeline settings changes.",
+  "rawDiagnosticsRetention": "Original execution tool output records the diagnostic locations; this file preserves its diagnosis without claiming a new-tip all-analyzer test pass."
+}

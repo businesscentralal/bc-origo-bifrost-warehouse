@@ -1,0 +1,54 @@
+{
+  "sha": "eff92087097f5b40da7f63a2d0cc8507e0e9bc8a",
+  "branch": "fix/worker6-warehouse37-identifiers",
+  "containerId": "f0104bc64587",
+  "foundationSourceSha": "f8d53b4bd8ec8409048524bb5689515db898e04d",
+  "foundationVersion": "28.0.4.556",
+  "foundationCiRun": "https://github.com/OrigoSoftwareSolutions/bc-origo-bifrost-core/actions/runs/38531018790",
+  "productVersion": "28.0.0.0",
+  "testVersion": "28.0.0.0",
+  "bcVersion": "28.5.54151.56267",
+  "packages": [
+    {
+      "sha": "eff92087097f5b40da7f63a2d0cc8507e0e9bc8a",
+      "app": "default-app",
+      "errors": 0,
+      "warnings": 0,
+      "file": "Warehouse.Default.app",
+      "sha256": "90374bb304c1f6c219658c9c58707acaa9b5f7db6d23ccd6c51bdec782624b00"
+    },
+    {
+      "sha": "eff92087097f5b40da7f63a2d0cc8507e0e9bc8a",
+      "app": "test-product",
+      "errors": 0,
+      "warnings": 0,
+      "file": "Origo_Bifrost_Warehouse_28.0.0.0.app",
+      "sha256": "3bffa155e421da8df03b2326f6f6c33a43d87de352e29b5307c2b334668eee47"
+    },
+    {
+      "sha": "eff92087097f5b40da7f63a2d0cc8507e0e9bc8a",
+      "app": "test",
+      "errors": 0,
+      "warnings": 0,
+      "file": "Warehouse.Tests.app",
+      "sha256": "f603e68469bffafd16f10675fa268456d128b818deed667d876770147c943339"
+    }
+  ],
+  "fullSuite": {
+    "executed": 107,
+    "passed": 107,
+    "failed": 0,
+    "skipped": 0,
+    "errors": 0
+  },
+  "nativeAcceptanceTests": 14,
+  "shippingMcp": {
+    "verified": false,
+    "passed": 0,
+    "pendingOwner": "Claude Code",
+    "environment": "bc28-w1",
+    "disposition": "1791992534.885059"
+  },
+  "licenceWrites": false,
+  "foundationTestsInstalled": false
+}

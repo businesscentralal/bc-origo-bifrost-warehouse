@@ -1,0 +1,14 @@
+{
+  "sha": "eff92087097f5b40da7f63a2d0cc8507e0e9bc8a",
+  "passed": 5,
+  "failed": 0,
+  "guards": [
+    "Test-NoClientCallstack",
+    "Test-ValidatedTableView",
+    "Test-NoObsolete",
+    "Test-PermissionCoverage",
+    "Test-IcelandicKeywordCounts"
+  ],
+  "xlfSyncPassed": true,
+  "checkedAt": "2026-10-14T16:01:15.989Z"
+}

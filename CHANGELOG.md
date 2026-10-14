@@ -63,6 +63,7 @@
 
 ### Fixed (2026-10-14) - Test compilation alignment for Foundation helper migration (#20)
 
+- Prefix the temporary message-argument variables in test codeunits 97023, 97024 and 97026 with `Temp` to satisfy CodeCop AA0073 on AL 18.1; test behavior and assertions are unchanged.
 - Rename test files to match existing objects 97000–97002 and 97010–97027; align response content-type buffers in 97000, 97001, 97023 and 97024 to the dispatcher’s Text[100] parameter, remove the shadowed assertion variable in 97027 and label the assertion format in 97013. Test assertions, permission grants and message contracts are unchanged.
 
 ### Changed (2026-10-14) - Build settings aligned with Bifrost Inventory

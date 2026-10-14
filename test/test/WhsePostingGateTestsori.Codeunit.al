@@ -74,7 +74,7 @@ codeunit 97023 "Whse Posting Gate Tests ori"
     [Test]
     procedure AssertCanPost_WithoutWhsePost_NamesWhsePostSet()
     var
-        Argument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori";
         PostingGate: Codeunit "Whse Posting Gate ori";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         ResponseJson: JsonObject;
@@ -82,12 +82,12 @@ codeunit 97023 "Whse Posting Gate Tests ori"
         ErrorToken: JsonToken;
     begin
         LowerToDocumentWrite(LibraryLowerPermissions);
-        PrepareArgument(Argument);
+        PrepareArgument(TempArgument);
 
-        Assert.IsFalse(PostingGate.AssertCanPost(Argument), 'AssertCanPost should deny without the token.');
+        Assert.IsFalse(PostingGate.AssertCanPost(TempArgument), 'AssertCanPost should deny without the token.');
         Assert.IsFalse(PostingGate.HasPostingPermission(), 'HasPostingPermission should be false without the token.');
 
-        ResponseJson := Argument.GetResponseJson();
+        ResponseJson := TempArgument.GetResponseJson();
         Assert.IsTrue(ResponseJson.Get('code', CodeToken), 'code missing');
         Assert.AreEqual('PermissionDenied', CodeToken.AsValue().AsText(), 'code');
         Assert.IsTrue(ResponseJson.Get('error', ErrorToken), 'error missing');
@@ -98,7 +98,7 @@ codeunit 97023 "Whse Posting Gate Tests ori"
     [Test]
     procedure AssertCanInvoice_WithoutWhseInv_NamesWhseInvSet()
     var
-        Argument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori";
         PostingGate: Codeunit "Whse Posting Gate ori";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         ResponseJson: JsonObject;
@@ -106,12 +106,12 @@ codeunit 97023 "Whse Posting Gate Tests ori"
         ErrorToken: JsonToken;
     begin
         LowerToDocumentWrite(LibraryLowerPermissions);
-        PrepareArgument(Argument);
+        PrepareArgument(TempArgument);
 
-        Assert.IsFalse(PostingGate.AssertCanInvoice(Argument), 'AssertCanInvoice should deny without the token.');
+        Assert.IsFalse(PostingGate.AssertCanInvoice(TempArgument), 'AssertCanInvoice should deny without the token.');
         Assert.IsFalse(PostingGate.HasInvoicePermission(), 'HasInvoicePermission should be false without the token.');
 
-        ResponseJson := Argument.GetResponseJson();
+        ResponseJson := TempArgument.GetResponseJson();
         Assert.IsTrue(ResponseJson.Get('code', CodeToken), 'code missing');
         Assert.AreEqual('PermissionDenied', CodeToken.AsValue().AsText(), 'code');
         Assert.IsTrue(ResponseJson.Get('error', ErrorToken), 'error missing');
@@ -149,43 +149,43 @@ codeunit 97023 "Whse Posting Gate Tests ori"
     [Test]
     procedure ShipmentPreview_WithoutWhsePost_StaysEnabled()
     var
-        Argument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori";
         PreviewImpl: Codeunit "Whse Ship. Prev. Post Impl ori";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
     begin
         LowerToDocumentWrite(LibraryLowerPermissions);
         Assert.IsTrue(PreviewImpl.IsEnabled(), 'Shipment preview should stay enabled without BIFROST WhsePost ori.');
 
-        PrepareArgument(Argument);
-        asserterror PreviewImpl.ExecuteBifrostTask(Argument);
-        AssertPreviewWasNotDeniedByPostingGate(Argument);
+        PrepareArgument(TempArgument);
+        asserterror PreviewImpl.ExecuteBifrostTask(TempArgument);
+        AssertPreviewWasNotDeniedByPostingGate(TempArgument);
     end;
 
     /// <summary>Warehouse.Receipt.Post.Preview stays enabled and does not return a posting denial.</summary>
     [Test]
     procedure ReceiptPreview_WithoutWhsePost_StaysEnabled()
     var
-        Argument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori";
         PreviewImpl: Codeunit "Whse Rcpt Post Prev. Impl ori";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
     begin
         LowerToDocumentWrite(LibraryLowerPermissions);
         Assert.IsTrue(PreviewImpl.IsEnabled(), 'Receipt preview should stay enabled without BIFROST WhsePost ori.');
 
-        PrepareArgument(Argument);
-        asserterror PreviewImpl.ExecuteBifrostTask(Argument);
-        AssertPreviewWasNotDeniedByPostingGate(Argument);
+        PrepareArgument(TempArgument);
+        asserterror PreviewImpl.ExecuteBifrostTask(TempArgument);
+        AssertPreviewWasNotDeniedByPostingGate(TempArgument);
     end;
 
-    local procedure AssertPreviewWasNotDeniedByPostingGate(Argument: Record "Message Argument ori")
+    local procedure AssertPreviewWasNotDeniedByPostingGate(TempArgument: Record "Message Argument ori")
     var
         ResponseJson: JsonObject;
         ErrorToken: JsonToken;
     begin
         Assert.AreEqual(0, StrPos(GetLastErrorText(), 'Posting denied'), 'Preview must not be blocked by the posting gate.');
-        if Argument.GetResponseContentLength() = 0 then
+        if TempArgument.GetResponseContentLength() = 0 then
             exit;
-        ResponseJson := Argument.GetResponseJson();
+        ResponseJson := TempArgument.GetResponseJson();
         if not ResponseJson.Get('error', ErrorToken) then
             exit;
         Assert.AreEqual(0, StrPos(ErrorToken.AsValue().AsText(), 'Posting denied'), 'Preview response must not be a posting denial.');
@@ -224,11 +224,11 @@ codeunit 97023 "Whse Posting Gate Tests ori"
         LibraryLowerPermissions.AddPermissionSet('Whse Gate Test ori');
     end;
 
-    local procedure PrepareArgument(var Argument: Record "Message Argument ori")
+    local procedure PrepareArgument(var TempArgument: Record "Message Argument ori")
     begin
-        Argument.Init();
-        Argument.Version := "Message Version ori"::"1.0";
-        Argument.Insert(true);
+        TempArgument.Init();
+        TempArgument.Version := "Message Version ori"::"1.0";
+        TempArgument.Insert(true);
     end;
 
     local procedure RunShipmentPost(RequestText: Text; var ResponseJson: JsonObject): Boolean

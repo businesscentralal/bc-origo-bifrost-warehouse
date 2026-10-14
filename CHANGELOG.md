@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Fixed (2026-10-14) - Warehouse activity identifier contract (#37)
+
+- Whse Activity Get Impl ori (10078390) resolves all supplied identifiers with Whse Record Lookup ori (10078455), rejects conflicting activities, and reads documented `activityNo`, `id` and `recordSystemId` aliases. GUID aliases reject invalid formats; identifier lookups remain single-record reads when combined with filters. Collection paging and line/filter behavior stay unchanged.
+- Whse Activity Get Tests ori (97001) adds dispatcher regressions for conflicting/matching identifiers, aliases, invalid and unknown identifiers, filter isolation and existing help chapters in LCIDs 1033/1039. Conflict help now includes localized when/fix/nextStep in en-US/is-IS, with synchronized XLF. The top-level app version stays unchanged.
+
 ### Changed (2026-10-13) - Preserve the Bifrost pipeline across AL-Go updates
 
 - Added pipeline guards in `tools/Test-BifrostPipeline.ps1` and the `.github/workflows/BifrostPipeline.yaml` Bifrost Pipeline Guards workflow for main-only signing, shared Default/Test container hooks and full-build trigger coverage; pipeline and guard changes execute paired Default/Test builds. `AGENTS.md` documents preservation of these Bifrost pipeline requirements during system updates.

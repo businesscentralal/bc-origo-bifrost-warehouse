@@ -134,8 +134,24 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Parts: Codeunit "Whse Contract Parts ori";
+        ErrorEntry: JsonObject;
+        Token: JsonToken;
+        Index: Integer;
+        ConflictWhenLbl: Label 'Two supplied identifiers point to different warehouse activities.', Comment = 'is-IS=Tvö innsend auðkenni vísa á mismunandi vöruhúsavirkni.';
+        ConflictNextStepLbl: Label 'Send one identifier or identifiers for the same warehouse activity.', Comment = 'is-IS=Sendu eitt auðkenni eða auðkenni fyrir sömu vöruhúsavirkni.';
     begin
         Parts.AddLookupErrors(Errors, 'Warehouse Activity Header');
+        for Index := 0 to Errors.Count() - 1 do begin
+            Errors.Get(Index, Token);
+            ErrorEntry := Token.AsObject();
+            if ErrorEntry.Get('code', Token) then
+                if Token.AsValue().AsText() = 'ConflictingIdentifiers' then begin
+                    ErrorEntry.Replace('when', ConflictWhenLbl);
+                    ErrorEntry.Replace('fix', ConflictNextStepLbl);
+                    ErrorEntry.Add('nextStep', ConflictNextStepLbl);
+                    Errors.Set(Index, ErrorEntry);
+                end;
+        end;
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, 'activityType is not a valid warehouse activity type.', 'Use a value from the Warehouse Activity Type enum.'));
         exit(true);
     end;
@@ -202,10 +218,8 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
         ResultJson: JsonObject;
         ActivityHeaderKeys: List of [Text];
         ActivityType: Enum "Warehouse Activity Type";
-        ActivityNo: Code[20];
         ActivityTypeText: Text;
         RequestValue: Text;
-        SystemIdText: Text;
         WhseDocumentNo: Code[20];
         LocationCode: Code[10];
         AssignedUserId: Code[50];
@@ -220,9 +234,7 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
         SingleLookup: Boolean;
         NotFoundErr: Label '%1 "%2" was not found (from %3).', Comment = '%1 = table caption, %2 = value received, %3 = JSON key, is-IS=%1 "%2" fannst ekki (úr %3).';
         NotFoundNextStepTxt: Label 'Check the number with Data.Records.Get on table %1.', Comment = '%1 = table caption, is-IS=Athugaðu númerið með Data.Records.Get á töflunni %1.';
-        InvalidFormatErr: Label '"%1" is not a valid %2 (from %3).', Comment = '%1 = value received, %2 = expected format, %3 = JSON key or subject, is-IS="%1" er ekki gilt %2 (úr %3).';
         InvalidActivityTypeErr: Label '"%1" is not a valid warehouse activity type (from activityType).', Comment = '%1 = received value, is-IS="%1" er ekki gild tegund vöruhúsavirkni (úr activityType).';
-        GuidTok: Label 'GUID', Locked = true;
     begin
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
@@ -238,37 +250,9 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
             end;
         end;
 
-        if TryGetRequestText(RequestJson, 'no', RequestValue) then
-            if RequestValue <> '' then begin
-                ActivityNo := CopyStr(RequestValue, 1, MaxStrLen(ActivityNo));
-                SingleLookup := true;
-            end;
-
-        if ActivityNo = '' then
-            if TryGetRequestText(RequestJson, 'systemId', SystemIdText) then
-                if SystemIdText <> '' then begin
-                    if not Evaluate(ActivitySystemId, SystemIdText, 9) then begin
-                        Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(InvalidFormatErr, SystemIdText, GuidTok, 'systemId'), 'systemId', SystemIdText, GuidTok, '');
-                        exit;
-                    end;
-                    SingleLookup := true;
-                end;
-
-        if (ActivityNo = '') and (SystemIdText = '') and (Argument.Subject <> '') then begin
-            if Argument.SubjectIsGuid() then begin
-                SystemIdText := Argument.Subject;
-                if not Evaluate(ActivitySystemId, SystemIdText, 9) then begin
-                    Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(InvalidFormatErr, SystemIdText, GuidTok, 'subject'), 'subject', SystemIdText, GuidTok, '');
-                    exit;
-                end;
-            end else
-                ActivityNo := CopyStr(Argument.Subject, 1, MaxStrLen(ActivityNo));
-            SingleLookup := true;
-        end;
-
-        if ActivityNo <> '' then
-            ActivityHeader.SetRange("No.", ActivityNo);
-        if SystemIdText <> '' then
+        if not ResolveActivityIdentifiers(Argument, RequestJson, ActivityTypeSpecified, ActivityType, ActivitySystemId, SingleLookup) then
+            exit;
+        if SingleLookup then
             ActivityHeader.SetRange(SystemId, ActivitySystemId);
         if ActivityTypeSpecified then
             ActivityHeader.SetRange(Type, ActivityType);
@@ -310,10 +294,7 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
             until ActivityHeader.Next() = 0;
 
         if SingleLookup and (NoOfRecords = 0) then begin
-            if ActivityNo <> '' then
-                Argument.RespondWithError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(NotFoundErr, ActivityHeader.TableCaption(), ActivityNo, 'no'), 'no', ActivityNo, '', StrSubstNo(NotFoundNextStepTxt, ActivityHeader.TableCaption()))
-            else
-                Argument.RespondWithError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(NotFoundErr, ActivityHeader.TableCaption(), SystemIdText, 'systemId'), 'systemId', SystemIdText, '', StrSubstNo(NotFoundNextStepTxt, ActivityHeader.TableCaption()));
+            Argument.RespondWithError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(NotFoundErr, ActivityHeader.TableCaption(), Format(ActivitySystemId, 0, 4), 'systemId'), 'systemId', Format(ActivitySystemId, 0, 4), '', StrSubstNo(NotFoundNextStepTxt, ActivityHeader.TableCaption()));
             exit;
         end;
 
@@ -346,6 +327,45 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
         ResponseJson.Add('result', ResultArray);
         Argument.SetResponseJson(ResponseJson);
         Argument."Content Type" := Argument.GetContentTypeJson();
+    end;
+
+    local procedure ResolveActivityIdentifiers(var Argument: Record "Message Argument ori"; RequestJson: JsonObject; ActivityTypeSpecified: Boolean; ActivityType: Enum "Warehouse Activity Type"; var ActivitySystemId: Guid; var SingleLookup: Boolean): Boolean
+    var
+        WhseRecordLookup: Codeunit "Whse Record Lookup ori";
+        IdentifierKey: Text;
+        IdentifierValue: Text;
+        NumberKinds: Text;
+        KeySpec: Text;
+        Ordinal: Integer;
+        ParsedSystemId: Guid;
+        InvalidFormatErr: Label '"%1" is not a valid %2 (from %3).', Comment = '%1 = value received, %2 = expected format, %3 = JSON key, is-IS="%1" er ekki gilt %2 (úr %3).';
+        GuidTok: Label 'GUID', Locked = true;
+    begin
+        SingleLookup := Argument.Subject <> '';
+        foreach IdentifierKey in 'no,activityNo,systemId,recordSystemId,id'.Split(',') do
+            if TryGetRequestText(RequestJson, IdentifierKey, IdentifierValue) then
+                if IdentifierValue <> '' then begin
+                    SingleLookup := true;
+                    if (IdentifierKey <> 'no') and (IdentifierKey <> 'activityNo') then
+                        if not Evaluate(ParsedSystemId, IdentifierValue, 9) then begin
+                            Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(InvalidFormatErr, IdentifierValue, GuidTok, IdentifierKey), IdentifierKey, IdentifierValue, GuidTok, '');
+                            exit(false);
+                        end;
+                end;
+        if not SingleLookup then
+            exit(true);
+
+        // The activity primary key includes Type before No.; never look up No. as the first key field.
+        if ActivityTypeSpecified then
+            NumberKinds := 'doc' + Format(ActivityType.AsInteger(), 0, 9) + ':activityNo'
+        else
+            foreach Ordinal in Enum::"Warehouse Activity Type".Ordinals() do begin
+                if NumberKinds <> '' then
+                    NumberKinds += '|';
+                NumberKinds += 'doc' + Format(Ordinal, 0, 9) + ':activityNo';
+            end;
+        KeySpec := 'no=' + NumberKinds + ',activityNo=' + NumberKinds + ',systemId=guid,recordSystemId=guid,id=guid';
+        exit(WhseRecordLookup.FindRecord(Argument, Database::"Warehouse Activity Header", 'guid|' + NumberKinds, KeySpec, ActivitySystemId));
     end;
 
     local procedure AddActivityLines(var ActivityJson: JsonObject; ActivityHeader: Record "Warehouse Activity Header")

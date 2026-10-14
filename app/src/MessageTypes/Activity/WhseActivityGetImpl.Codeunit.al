@@ -336,13 +336,24 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
         IdentifierValue: Text;
         NumberKinds: Text;
         KeySpec: Text;
+        ExpectedFormat: Text;
+        IdentifierToken: JsonToken;
         Ordinal: Integer;
         ParsedSystemId: Guid;
         InvalidFormatErr: Label '"%1" is not a valid %2 (from %3).', Comment = '%1 = value received, %2 = expected format, %3 = JSON key, is-IS="%1" er ekki gilt %2 (úr %3).';
         GuidTok: Label 'GUID', Locked = true;
+        ActivityNumberTxt: Label 'activity number', Comment = 'is-IS=númer vöruhúsavirkni';
     begin
         SingleLookup := Argument.Subject <> '';
-        foreach IdentifierKey in 'no,activityNo,systemId,recordSystemId,id'.Split(',') do
+        foreach IdentifierKey in 'no,activityNo,systemId,recordSystemId,id'.Split(',') do begin
+            if RequestJson.Get(IdentifierKey, IdentifierToken) then
+                if not IdentifierToken.IsValue() then begin
+                    ExpectedFormat := GuidTok;
+                    if (IdentifierKey = 'no') or (IdentifierKey = 'activityNo') then
+                        ExpectedFormat := ActivityNumberTxt;
+                    Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(InvalidFormatErr, IdentifierKey, ExpectedFormat, IdentifierKey), IdentifierKey, '', ExpectedFormat, '');
+                    exit(false);
+                end;
             if TryGetRequestText(RequestJson, IdentifierKey, IdentifierValue) then
                 if IdentifierValue <> '' then begin
                     SingleLookup := true;
@@ -352,6 +363,7 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
                             exit(false);
                         end;
                 end;
+        end;
         if not SingleLookup then
             exit(true);
 

@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="97000 Whse BinContent Get Tests ori" timestamp="2026-10-14T17:04:50" hostname="f091cce4ffed-business-central-758d9857c5-fx8lc" time="1.162" tests="4" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="6ae41d19-d457-4d62-bd87-0413ff18de75" />
+      <property name="appName" value="Bifrost Warehouse - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;210.375&quot;, &quot;Free Memory (Gb)&quot;: &quot;47.0&quot; }" />
+      <property name="platform.info" value="{ &quot;Version&quot;: &quot;28.0.54946.56222+f9329ea53647018365d908343f9eb47c0dc93bbb&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;VAT Group Management&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_Email Logging Using Graph API&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Bifrost Warehouse - Tests&quot;, &quot;Publisher&quot;: &quot;Origo&quot;, &quot;Version&quot;: &quot;28.0.0.0&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Create Product Information With Copilot&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Recommended Apps&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;E-Document Connector - B2Brouter&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Intelligent Cloud Base&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Statistical Accounts&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_Connectivity Apps&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Business Foundation Test Libraries&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Business Foundation&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Bank Account Reconciliation With AI&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Send remittance advice by email&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;API Reports - Finance&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Bifrost Foundation&quot;, &quot;Publisher&quot;: &quot;Origo&quot;, &quot;Version&quot;: &quot;28.0.4.556&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Troubleshoot FA Ledger Entries&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;E-Document Core Demo Data&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Email - SMTP Connector&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;E-Document Connector - Microsoft 365&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Payment Links to PayPal&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Send To Email Printer&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Test Runner&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Business Central Cloud Migration - Previous Release&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;EU 3-Party Trade Purchase&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Service Management&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Czech language (Czechia)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Bifrost Warehouse&quot;, &quot;Publisher&quot;: &quot;Origo&quot;, &quot;Version&quot;: &quot;28.0.0.0&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;E-Document Connector - Continia&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_Business_Events_&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;German language (Germany)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Base Application&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;E-Document Connector - FORNAV&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Performance Toolkit Samples&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Sustainability&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Review General Ledger Entries&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_ReportLayouts&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Power BI Report embeddings for Dynamics 365 Business Central&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Permissions Mock&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Danish language (Denmark)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Microsoft Pay Payments&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;English language (New Zealand)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Enforced Digital Vouchers&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;E-Document Core&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Library Variable Storage&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;E-Document Connector - SignUp&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Business Central Intelligent Cloud&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_ClientAddIns_&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Dutch language (Netherlands)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Subscription Billing Demo Data&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Email - Current User Connector&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Universal Print Integration&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Agent Design Experience&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Dynamics 365 Business Central v14 Reimplementation&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_PlanConfiguration_&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Icelandic language (Iceland)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_APIV2_&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Dutch language (Belgium)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Agent Test Library&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Quality Management Contoso Coffee Demo Dataset&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Audit File Export&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Company Hub&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;E-Document Connector - Logiq&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Agent Samples&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;External Storage - Document Attachments&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Late Payment Prediction&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Essential Business Headlines&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Italian language (Italy)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;French language (France)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Error Messages with Recommendations&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Intrastat Core&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Spanish language (Spain)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Intrastat Core Demo Data&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Payment Practices&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;External File Storage - SharePoint Connector&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Manufacturing&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Russian language (Russia)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Sustainability Contoso Coffee Demo Dataset&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;External File Storage - Azure File Service Connector&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Service Declaration&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;English language (United Kingdom)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Email - Microsoft 365 Connector&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;English language (Australia)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_SyncBaseApp_&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;German language (Switzerland)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Subscription Billing&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;External File Storage - Azure Blob Service Connector&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;English language (United States)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Performance Toolkit Tests&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;ESG Statistical Accounts Demo Tool&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Payables Agent&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Sales and Inventory Forecast&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Contoso Coffee Demo Dataset&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Norwegian language (Norway)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Application Test Library&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Data Search&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Email - Outlook REST API&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Swedish language (Sweden)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Business Central 14 Historical Data&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;E-Document Connector - Pagero&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Finnish language (Finland)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_Microsoft Dynamics 365 - SmartList&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;E-Document Connector - Avalara&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Withholding Tax&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Performance Toolkit&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Excise Taxes&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;PEPPOL&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_Master_Data_Management&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;System Application&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;System Application Test Library&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;External File Storage - SFTP Connector&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;AI Development Toolkit - Design&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Sales Lines Suggestions&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Agent Test Internal Library&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Any&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Tests-TestLibraries&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Business Central Cloud Migration API&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_Onboarding Signals&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Email - SMTP API&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Simplified Bank Statement Import&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Data Archive&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Subcontracting&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;AI Development Toolkit&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Shopify Connector&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Application&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Dynamics BC Excel Reports&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;AI Test Toolkit&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;AI Development Toolkit - Evaluation&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;English language (Canada)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_Bank Deposits&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;French language (Belgium)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Quality Management&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;French language (Canada)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Calculate Sustainability Emission with Copilot&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Agent Samples Tests&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Sales Order Agent&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Field Service Integration&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_APIV1_&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;SAF-T&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Spanish language (Mexico)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;API - Cross Environment Intercompany&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;French language (Switzerland)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;German language (Austria)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Italian language (Switzerland)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Library Assert&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56267&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;211.766&quot;, &quot;Free Memory (Gb)&quot;: &quot;47.0&quot; }" />
+    </properties>
+    <testcase classname="97000 Whse BinContent Get Tests ori" name="GetReturnsMatchingBinContent" time="1.036" />
+    <testcase classname="97000 Whse BinContent Get Tests ori" name="GetPagesRowsAndReportsUnpagedCount" time="0.03" />
+    <testcase classname="97000 Whse BinContent Get Tests ori" name="GetWithNoMatchesReturnsEmptySuccess" time="0.013" />
+    <testcase classname="97000 Whse BinContent Get Tests ori" name="IsDisabledWithoutReadPermission" time="0.083" />
+  </testsuite>
+  <testsuite name="97001 Whse Activity Get Tests ori" timestamp="2026-10-14T17:04:51" hostname="f091cce4ffed-business-central-758d9857c5-fx8lc" time="0.687" tests="23" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="6ae41d19-d457-4d62-bd87-0413ff18de75" />
+      <property name="appName" value="Bifrost Warehouse - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;211.766&quot;, &quot;Free Memory (Gb)&quot;: &quot;47.0&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;212.375&quot;, &quot;Free Memory (Gb)&quot;: &quot;47.0&quot; }" />
+    </properties>
+    <testcase classname="97001 Whse Activity Get Tests ori" name="GetByNumberReturnsHeaderAndLines" time="0.223" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="MissingNumberReturnsStructuredError" time="0.05" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="MissingSystemIdReturnsStructuredError" time="0.024" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="FiltersByActivityTypeDocumentLocationAndAssignedUser" time="0.057" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="PagesHeadersAndReportsUnpagedCount" time="0.02" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="IsDisabledWithoutReadPermission" time="0.017" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC01_NoAndSystemId_RejectConflict" time="0.026" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC01_SubjectAndSystemId_RejectConflict" time="0.017" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC01_NoAndSubject_RejectConflict" time="0.02" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC01_Aliases_RejectConflict" time="0.017" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC02_AllIdentifiers_ReturnOneRecord" time="0.02" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC03_ActivityNo_ReturnRecord" time="0.016" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC03_UnknownAlias_ReturnNotFound" time="0.017" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC04_id_ReturnRecord" time="0.014" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC04_id_RejectNonGuid" time="0.016" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC04_recordSystemId_ReturnRecord" time="0.013" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC04_recordSystemId_RejectNonGuid" time="0.017" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC04_InvalidAliasWithNo_RejectFormat" time="0.014" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC05_AliasesWithFilter_NoUnrelatedRow" time="0.027" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC06_BilingualHelp_DeclaresContract" time="0.02" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC04_IdObject_RejectFormat" time="0.014" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC04_RecordIdArray_RejectFormat" time="0.014" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC05_AliasObjectFilter_RejectFormat" time="0.014" />
+  </testsuite>
+  <testsuite name="97011 Whse Shipment Create Tests ori" timestamp="2026-10-14T17:05:13" hostname="f091cce4ffed-business-central-758d9857c5-fx8lc" time="20.927" tests="6" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="6ae41d19-d457-4d62-bd87-0413ff18de75" />
+      <property name="appName" value="Bifrost Warehouse - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;212.406&quot;, &quot;Free Memory (Gb)&quot;: &quot;47.0&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;226.156&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.9&quot; }" />
+    </properties>
+    <testcase classname="97011 Whse Shipment Create Tests ori" name="Create_SalesOrder_ReturnsShipmentNo" time="20.59" />
+    <testcase classname="97011 Whse Shipment Create Tests ori" name="Create_MissingSourceDocuments_ReturnsError" time="0.017" />
+    <testcase classname="97011 Whse Shipment Create Tests ori" name="Create_UnsupportedSourceType_ReturnsError" time="0.013" />
+    <testcase classname="97011 Whse Shipment Create Tests ori" name="Create_SalesOrderNotReleased_ReturnsError" time="0.29" />
+    <testcase classname="97011 Whse Shipment Create Tests ori" name="IsEnabledWithWritePermission" time="0.007" />
+    <testcase classname="97011 Whse Shipment Create Tests ori" name="IsDisabledWithoutWritePermission" time="0.01" />
+  </testsuite>
+  <testsuite name="97012 Whse Shipment Post Tests ori" timestamp="2026-10-14T17:05:20" hostname="f091cce4ffed-business-central-758d9857c5-fx8lc" time="6.361" tests="6" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="6ae41d19-d457-4d62-bd87-0413ff18de75" />
+      <property name="appName" value="Bifrost Warehouse - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;226.188&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.9&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;230.734&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.8&quot; }" />
+    </properties>
+    <testcase classname="97012 Whse Shipment Post Tests ori" name="Post_Ship_ReturnsPostedWhseShipmentNo" time="2.893" />
+    <testcase classname="97012 Whse Shipment Post Tests ori" name="Post_ShipAndInvoice_ReturnsSuccess" time="3.16" />
+    <testcase classname="97012 Whse Shipment Post Tests ori" name="Post_MissingShipment_ReturnsError" time="0.017" />
+    <testcase classname="97012 Whse Shipment Post Tests ori" name="Post_InvalidInvoice_ReturnsErrorWithoutPosting" time="0.274" />
+    <testcase classname="97012 Whse Shipment Post Tests ori" name="IsEnabledWithWritePermission" time="0.01" />
+    <testcase classname="97012 Whse Shipment Post Tests ori" name="IsDisabledWithoutWritePermission" time="0.007" />
+  </testsuite>
+  <testsuite name="97013 Whse Ship Prev Post Tests ori" timestamp="2026-10-14T17:05:24" hostname="f091cce4ffed-business-central-758d9857c5-fx8lc" time="4.109" tests="7" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="6ae41d19-d457-4d62-bd87-0413ff18de75" />
+      <property name="appName" value="Bifrost Warehouse - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;230.766&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.8&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;234.375&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.8&quot; }" />
+    </properties>
+    <testcase classname="97013 Whse Ship Prev Post Tests ori" name="PreviewPost_PostableShipment_ReturnsSuccessAndRollback" time="1.377" />
+    <testcase classname="97013 Whse Ship Prev Post Tests ori" name="PreviewPost_PostableShipment_DoesNotCreatePostedShipment" time="1.203" />
+    <testcase classname="97013 Whse Ship Prev Post Tests ori" name="PreviewPost_PostableShipment_ReturnsContextAndAlwaysInvoiceTrue" time="0.596" />
+    <testcase classname="97013 Whse Ship Prev Post Tests ori" name="PreviewPost_SystemIdSubject_ReturnsSuccess" time="0.61" />
+    <testcase classname="97013 Whse Ship Prev Post Tests ori" name="PreviewPost_ShipmentNotFound_ReturnsError" time="0.02" />
+    <testcase classname="97013 Whse Ship Prev Post Tests ori" name="PreviewPost_MissingIdentification_ReturnsError" time="0.013" />
+    <testcase classname="97013 Whse Ship Prev Post Tests ori" name="PreviewPost_NothingToShip_ReturnsNothingToPreview" time="0.29" />
+  </testsuite>
+  <testsuite name="97014 Whse Receipt Create Tests ori" timestamp="2026-10-14T17:05:30" hostname="f091cce4ffed-business-central-758d9857c5-fx8lc" time="5.133" tests="9" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="6ae41d19-d457-4d62-bd87-0413ff18de75" />
+      <property name="appName" value="Bifrost Warehouse - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;234.406&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.8&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;238.344&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.8&quot; }" />
+    </properties>
+    <testcase classname="97014 Whse Receipt Create Tests ori" name="Create_PurchaseOrder_ReturnsReceiptNo" time="4.303" />
+    <testcase classname="97014 Whse Receipt Create Tests ori" name="Create_MissingSourceDocuments_ReturnsError" time="0.016" />
+    <testcase classname="97014 Whse Receipt Create Tests ori" name="Create_UnsupportedSourceType_ReturnsError" time="0.017" />
+    <testcase classname="97014 Whse Receipt Create Tests ori" name="Create_PurchaseOrderNotReleased_ReturnsError" time="0.184" />
+    <testcase classname="97014 Whse Receipt Create Tests ori" name="Create_LocationCodeMismatch_ReturnsError" time="0.226" />
+    <testcase classname="97014 Whse Receipt Create Tests ori" name="Create_ValidPostingDate_PersistsOverride" time="0.207" />
+    <testcase classname="97014 Whse Receipt Create Tests ori" name="Create_InvalidPostingDate_ReturnsErrorWithoutReceipt" time="0.164" />
+    <testcase classname="97014 Whse Receipt Create Tests ori" name="IsEnabledWithWritePermission" time="0.006" />
+    <testcase classname="97014 Whse Receipt Create Tests ori" name="IsDisabledWithoutWritePermission" time="0.01" />
+  </testsuite>
+  <testsuite name="97015 Whse Receipt Post Tests ori" timestamp="2026-10-14T17:05:32" hostname="f091cce4ffed-business-central-758d9857c5-fx8lc" time="2.111" tests="5" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="6ae41d19-d457-4d62-bd87-0413ff18de75" />
+      <property name="appName" value="Bifrost Warehouse - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;238.375&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.8&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;240.812&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.7&quot; }" />
+    </properties>
+    <testcase classname="97015 Whse Receipt Post Tests ori" name="Post_PurchaseReceipt_ReturnsPostedWhseReceiptNo" time="1.644" />
+    <testcase classname="97015 Whse Receipt Post Tests ori" name="Post_MissingReceipt_ReturnsError" time="0.014" />
+    <testcase classname="97015 Whse Receipt Post Tests ori" name="Post_ReturnsEchoedReceiptNo" time="0.43" />
+    <testcase classname="97015 Whse Receipt Post Tests ori" name="IsEnabledWithWritePermission" time="0.013" />
+    <testcase classname="97015 Whse Receipt Post Tests ori" name="IsDisabledWithoutWritePermission" time="0.01" />
+  </testsuite>
+  <testsuite name="97016 Whse Rcpt Post Prev Tests ori" timestamp="2026-10-14T17:05:33" hostname="f091cce4ffed-business-central-758d9857c5-fx8lc" time="0.803" tests="3" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="6ae41d19-d457-4d62-bd87-0413ff18de75" />
+      <property name="appName" value="Bifrost Warehouse - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;240.859&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.7&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;241.719&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.7&quot; }" />
+    </properties>
+    <testcase classname="97016 Whse Rcpt Post Prev Tests ori" name="PreviewPost_PurchaseReceipt_ReturnsPreviewAndRollsBack" time="0.556" />
+    <testcase classname="97016 Whse Rcpt Post Prev Tests ori" name="PreviewPost_MissingReceipt_ReturnsError" time="0.017" />
+    <testcase classname="97016 Whse Rcpt Post Prev Tests ori" name="PreviewPost_NothingToReceive_ReturnsNothingToPreview" time="0.23" />
+  </testsuite>
+  <testsuite name="97017 Whse Pick Create Tests ori" timestamp="2026-10-14T17:05:36" hostname="f091cce4ffed-business-central-758d9857c5-fx8lc" time="2.218" tests="8" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="6ae41d19-d457-4d62-bd87-0413ff18de75" />
+      <property name="appName" value="Bifrost Warehouse - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;241.734&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.7&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;243.797&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.7&quot; }" />
+    </properties>
+    <testcase classname="97017 Whse Pick Create Tests ori" name="PickCreate_HappyPath_ReturnsPickNo" time="1.177" />
+    <testcase classname="97017 Whse Pick Create Tests ori" name="PickCreate_WithAssignedUserId_AppliesToHeader" time="0.433" />
+    <testcase classname="97017 Whse Pick Create Tests ori" name="PickCreate_InvalidSortingMethod_ReturnsError" time="0.276" />
+    <testcase classname="97017 Whse Pick Create Tests ori" name="PickCreate_ShipmentNotFound_ReturnsError" time="0.017" />
+    <testcase classname="97017 Whse Pick Create Tests ori" name="PickCreate_MissingIdentifier_ReturnsError" time="0.014" />
+    <testcase classname="97017 Whse Pick Create Tests ori" name="PickCreate_SetBreakbulkFilterTrue_ReturnsError" time="0.284" />
+    <testcase classname="97017 Whse Pick Create Tests ori" name="IsEnabledWithWritePermission" time="0.01" />
+    <testcase classname="97017 Whse Pick Create Tests ori" name="IsDisabledWithoutWritePermission" time="0.007" />
+  </testsuite>
+  <testsuite name="97018 Whse Pick Register Tests ori" timestamp="2026-10-14T17:05:39" hostname="f091cce4ffed-business-central-758d9857c5-fx8lc" time="2.446" tests="5" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="6ae41d19-d457-4d62-bd87-0413ff18de75" />
+      <property name="appName" value="Bifrost Warehouse - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;243.797&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.7&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;246.375&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.7&quot; }" />
+    </properties>
+    <testcase classname="97018 Whse Pick Register Tests ori" name="PickRegister_HappyPath_ReturnsRegisteredPickNo" time="1.45" />
+    <testcase classname="97018 Whse Pick Register Tests ori" name="PickRegister_HappyPath_UpdatesShipmentLineQtyPicked" time="0.523" />
+    <testcase classname="97018 Whse Pick Register Tests ori" name="PickRegister_ResponseIncludesShipmentLines" time="0.433" />
+    <testcase classname="97018 Whse Pick Register Tests ori" name="PickRegister_PickNotFound_ReturnsError" time="0.02" />
+    <testcase classname="97018 Whse Pick Register Tests ori" name="PickRegister_MissingIdentifier_ReturnsError" time="0.02" />
+  </testsuite>
+  <testsuite name="97019 Whse Putaway Create Tests ori" timestamp="2026-10-14T17:05:43" hostname="f091cce4ffed-business-central-758d9857c5-fx8lc" time="3.147" tests="9" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="6ae41d19-d457-4d62-bd87-0413ff18de75" />
+      <property name="appName" value="Bifrost Warehouse - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;246.406&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.7&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;250.328&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.6&quot; }" />
+    </properties>
+    <testcase classname="97019 Whse Putaway Create Tests ori" name="PutawayCreate_HappyPath_ReturnsPutawayNo" time="1.35" />
+    <testcase classname="97019 Whse Putaway Create Tests ori" name="PutawayCreate_AutoCreatedOnPosting_ReturnsExisting" time="0.496" />
+    <testcase classname="97019 Whse Putaway Create Tests ori" name="PutawayCreate_WithAssignedUserId_AppliesToHeader" time="0.373" />
+    <testcase classname="97019 Whse Putaway Create Tests ori" name="PutawayCreate_InvalidSortingMethod_ReturnsError" time="0.437" />
+    <testcase classname="97019 Whse Putaway Create Tests ori" name="PutawayCreate_ReceiptNotFound_ReturnsError" time="0.017" />
+    <testcase classname="97019 Whse Putaway Create Tests ori" name="PutawayCreate_MissingIdentifier_ReturnsError" time="0.02" />
+    <testcase classname="97019 Whse Putaway Create Tests ori" name="PutawayCreate_SetBreakbulkFilterTrue_ReturnsError" time="0.437" />
+    <testcase classname="97019 Whse Putaway Create Tests ori" name="IsEnabledWithWritePermission" time="0.007" />
+    <testcase classname="97019 Whse Putaway Create Tests ori" name="IsDisabledWithoutWritePermission" time="0.01" />
+  </testsuite>
+  <testsuite name="97020 Whse Putaway Reg Tests ori" timestamp="2026-10-14T17:05:44" hostname="f091cce4ffed-business-central-758d9857c5-fx8lc" time="1.496" tests="5" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="6ae41d19-d457-4d62-bd87-0413ff18de75" />
+      <property name="appName" value="Bifrost Warehouse - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;250.359&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.6&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;252.469&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.6&quot; }" />
+    </properties>
+    <testcase classname="97020 Whse Putaway Reg Tests ori" name="PutawayRegister_HappyPath_ReturnsRegisteredPutawayNo" time="0.636" />
+    <testcase classname="97020 Whse Putaway Reg Tests ori" name="PutawayRegister_HappyPath_UpdatesPostedReceiptQtyPutAway" time="0.4" />
+    <testcase classname="97020 Whse Putaway Reg Tests ori" name="PutawayRegister_ResponseIncludesReceiptLines" time="0.427" />
+    <testcase classname="97020 Whse Putaway Reg Tests ori" name="PutawayRegister_PutawayNotFound_ReturnsError" time="0.017" />
+    <testcase classname="97020 Whse Putaway Reg Tests ori" name="PutawayRegister_MissingIdentifier_ReturnsError" time="0.016" />
+  </testsuite>
+  <testsuite name="97023 Whse Posting Gate Tests ori" timestamp="2026-10-14T17:05:46" hostname="f091cce4ffed-business-central-758d9857c5-fx8lc" time="1.41" tests="9" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="6ae41d19-d457-4d62-bd87-0413ff18de75" />
+      <property name="appName" value="Bifrost Warehouse - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;252.531&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.6&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;253.766&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.6&quot; }" />
+    </properties>
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="ShipmentPost_WithoutWhsePost_IsDisabled" time="0.034" />
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="ReceiptPost_WithoutWhsePost_IsDisabled" time="0.01" />
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="PickRegister_WithoutWhsePost_IsDisabled" time="0.007" />
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="PutawayRegister_WithoutWhsePost_IsDisabled" time="0.01" />
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="AssertCanPost_WithoutWhsePost_NamesWhsePostSet" time="0.013" />
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="AssertCanInvoice_WithoutWhseInv_NamesWhseInvSet" time="0.01" />
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="ShipmentPost_InvoiceWithoutWhseInv_NamesWhseInvSet" time="1.3" />
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="ShipmentPreview_WithoutWhsePost_StaysEnabled" time="0.016" />
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="ReceiptPreview_WithoutWhsePost_StaysEnabled" time="0.01" />
+  </testsuite>
+  <testsuite name="97024 Whse Post Gate Grant Tests ori" timestamp="2026-10-14T17:05:47" hostname="f091cce4ffed-business-central-758d9857c5-fx8lc" time="0.08" tests="6" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="6ae41d19-d457-4d62-bd87-0413ff18de75" />
+      <property name="appName" value="Bifrost Warehouse - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;253.797&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.6&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;254.000&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.6&quot; }" />
+    </properties>
+    <testcase classname="97024 Whse Post Gate Grant Tests ori" name="ShipmentPost_WithWhsePost_IsEnabled" time="0.02" />
+    <testcase classname="97024 Whse Post Gate Grant Tests ori" name="ReceiptPost_WithWhsePost_IsEnabled" time="0.01" />
+    <testcase classname="97024 Whse Post Gate Grant Tests ori" name="PickRegister_WithWhsePost_IsEnabled" time="0.006" />
+    <testcase classname="97024 Whse Post Gate Grant Tests ori" name="PutawayRegister_WithWhsePost_IsEnabled" time="0.007" />
+    <testcase classname="97024 Whse Post Gate Grant Tests ori" name="AssertCanPost_WithBothSets_WritesNoError" time="0.01" />
+    <testcase classname="97024 Whse Post Gate Grant Tests ori" name="ShipmentPost_InvoiceWithWhseInv_ReachesLookup" time="0.027" />
+  </testsuite>
+  <testsuite name="97026 Whse Write Restrict Tests ori" timestamp="2026-10-14T17:05:47" hostname="f091cce4ffed-business-central-758d9857c5-fx8lc" time="0.039" tests="3" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="6ae41d19-d457-4d62-bd87-0413ff18de75" />
+      <property name="appName" value="Bifrost Warehouse - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;254.047&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.6&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;254.328&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.6&quot; }" />
+    </properties>
+    <testcase classname="97026 Whse Write Restrict Tests ori" name="GenericWrite_WarehouseDocumentTables_IsRefused" time="0.016" />
+    <testcase classname="97026 Whse Write Restrict Tests ori" name="GenericWrite_NonWarehouseTable_IsNotRestricted" time="0.013" />
+    <testcase classname="97026 Whse Write Restrict Tests ori" name="GenericRead_WarehouseDocumentTables_StaysAllowed" time="0.01" />
+  </testsuite>
+  <testsuite name="97027 Whse Msg Contract Tests ori" timestamp="2026-10-14T17:05:48" hostname="f091cce4ffed-business-central-758d9857c5-fx8lc" time="0.129" tests="2" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="6ae41d19-d457-4d62-bd87-0413ff18de75" />
+      <property name="appName" value="Bifrost Warehouse - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;254.359&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.6&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;254.688&quot;, &quot;Free Memory (Gb)&quot;: &quot;46.6&quot; }" />
+    </properties>
+    <testcase classname="97027 Whse Msg Contract Tests ori" name="EveryWarehouseType_HasContractAndDiscovery" time="0.116" />
+    <testcase classname="97027 Whse Msg Contract Tests ori" name="ActivityContractDescribesHeadersAndLines" time="0.013" />
+  </testsuite>
+</testsuites>

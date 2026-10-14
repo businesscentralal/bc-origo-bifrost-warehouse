@@ -1,0 +1,61 @@
+{
+  "candidateSourceSha": "c163f793d6abec01eb0ce02cb345cc6e1cb63b5e",
+  "evidenceOnly": true,
+  "sourceBranch": "fix/worker6-warehouse37-main",
+  "ownedCleanupVerified": true,
+  "fullSuite": {
+    "total": 110,
+    "passed": 110,
+    "failed": 0,
+    "skipped": 0
+  },
+  "ui": {
+    "passed": 2,
+    "languages": [
+      "en-US",
+      "is-IS"
+    ],
+    "shippingMcpAcceptance": false
+  },
+  "mcp": {
+    "verified": false,
+    "executed": 0,
+    "passed": 0,
+    "pendingOwner": "Claude Code",
+    "environment": "bc28-w1",
+    "beforeMerge": true
+  },
+  "ci": "pending current-tip Architect dispatch",
+  "createdAt": "2026-10-14T17:08:41.103560+00:00",
+  "files": [
+    "compile-summary.json",
+    "compile-default-app.log",
+    "compile-test-product.log",
+    "compile-test.log",
+    "full-suite.xml",
+    "full-suite-summary.json",
+    "configured-suite-catalog.json",
+    "source-guards-summary.json",
+    "Test-IcelandicXlfInSync.log",
+    "Test-NoObsolete.log",
+    "Test-NoClientCallstack.log",
+    "Test-IcelandicKeywordCounts.log",
+    "Test-ValidatedTableView.log",
+    "Test-PermissionCoverage.log",
+    "github-candidate-readback.json",
+    "ui-help-summary-en.json",
+    "ui-help-summary-is.json",
+    "ui-help-en.json",
+    "ui-help-is.json",
+    "ui-help-row-en.png",
+    "ui-help-row-is.png",
+    "ui-is-language-selected.png",
+    "ui-language-dialog.png",
+    "ui-help-contract-language-evidence.json",
+    "cleanup-delete.json",
+    "cleanup-verified.json",
+    "local-owned-cleanup.json",
+    "artifact-provenance.json",
+    "acceptance-matrix.json"
+  ]
+}

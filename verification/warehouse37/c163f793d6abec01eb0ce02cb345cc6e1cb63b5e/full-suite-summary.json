@@ -1,0 +1,21 @@
+{
+  "sha": "c163f793d6abec01eb0ce02cb345cc6e1cb63b5e",
+  "containerId": "f091cce4ffed",
+  "foundationVersion": "28.0.4.556",
+  "warehouseVersion": "28.0.0.0",
+  "testAppVersion": "28.0.0.0",
+  "startedAt": "2026-10-14T17:02:49.321Z",
+  "finishedAt": "2026-10-14T17:05:50.711Z",
+  "fullSuite": true,
+  "expected": 110,
+  "total": 110,
+  "passed": 110,
+  "failed": 0,
+  "skipped": 0,
+  "errors": 0,
+  "exitCode": 0,
+  "ok": true,
+  "xmlSaved": true,
+  "licensingInitialization": false,
+  "foundationTestsInstalled": false
+}

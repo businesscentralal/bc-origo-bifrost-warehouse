@@ -1,0 +1,28 @@
+{
+  "sha": "c163f793d6abec01eb0ce02cb345cc6e1cb63b5e",
+  "passed": 5,
+  "failed": 0,
+  "guards": [
+    {
+      "guard": "Test-NoObsolete",
+      "exitCode": 0
+    },
+    {
+      "guard": "Test-NoClientCallstack",
+      "exitCode": 0
+    },
+    {
+      "guard": "Test-IcelandicKeywordCounts",
+      "exitCode": 0
+    },
+    {
+      "guard": "Test-ValidatedTableView",
+      "exitCode": 0
+    },
+    {
+      "guard": "Test-PermissionCoverage",
+      "exitCode": 0
+    }
+  ],
+  "xlfSyncPassed": true
+}

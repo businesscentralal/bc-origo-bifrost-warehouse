@@ -1,0 +1,150 @@
+{
+  "issueUrl": "https://github.com/businesscentralal/bc-origo-bifrost-warehouse/issues/37",
+  "sha": "c163f793d6abec01eb0ce02cb345cc6e1cb63b5e",
+  "branchUrl": "https://github.com/businesscentralal/bc-origo-bifrost-warehouse/tree/fix/worker6-warehouse37-main",
+  "commitUrl": "https://github.com/businesscentralal/bc-origo-bifrost-warehouse/commit/c163f793d6abec01eb0ce02cb345cc6e1cb63b5e",
+  "sourceBase": "93df2ce0b85994002763ddd37e54d8d52eae9ba8",
+  "prCreated": false,
+  "dependency": "NoPR15commits; independent main candidate; PR15 untouched",
+  "rows": [
+    {
+      "ac": 1,
+      "requirement": "Reject conflicting identifiers and name both inputs",
+      "implemented": true,
+      "tests": [
+        "Scenario_AC01_NoAndSystemId_RejectConflict",
+        "Scenario_AC01_SubjectAndSystemId_RejectConflict",
+        "Scenario_AC01_NoAndSubject_RejectConflict",
+        "Scenario_AC01_Aliases_RejectConflict"
+      ],
+      "unitVerification": "passed atc163f793d6abec01eb0ce02cb345cc6e1cb63b5e",
+      "mcpVerification": "pending Claude ownbc28-w1 beforemerge all6ACs1033/1039;0acceptance passed",
+      "unitExecuted": 4,
+      "unitPassed": 4,
+      "unitFailed": 0,
+      "unitSkipped": 0
+    },
+    {
+      "ac": 2,
+      "requirement": "Matching identifiers return exactly one activity",
+      "implemented": true,
+      "tests": [
+        "Scenario_AC02_AllIdentifiers_ReturnOneRecord"
+      ],
+      "unitVerification": "passed atc163f793d6abec01eb0ce02cb345cc6e1cb63b5e",
+      "mcpVerification": "pending Claude ownbc28-w1 beforemerge all6ACs1033/1039;0acceptance passed",
+      "unitExecuted": 1,
+      "unitPassed": 1,
+      "unitFailed": 0,
+      "unitSkipped": 0
+    },
+    {
+      "ac": 3,
+      "requirement": "activityNo lookup and unknown-number error",
+      "implemented": true,
+      "tests": [
+        "Scenario_AC03_ActivityNo_ReturnRecord",
+        "Scenario_AC03_UnknownAlias_ReturnNotFound"
+      ],
+      "unitVerification": "passed atc163f793d6abec01eb0ce02cb345cc6e1cb63b5e",
+      "mcpVerification": "pending Claude ownbc28-w1 beforemerge all6ACs1033/1039;0acceptance passed",
+      "unitExecuted": 2,
+      "unitPassed": 2,
+      "unitFailed": 0,
+      "unitSkipped": 0
+    },
+    {
+      "ac": 4,
+      "requirement": "id/recordSystemId GUID lookup and malformed input errors",
+      "implemented": true,
+      "tests": [
+        "Scenario_AC04_id_ReturnRecord",
+        "Scenario_AC04_id_RejectNonGuid",
+        "Scenario_AC04_recordSystemId_ReturnRecord",
+        "Scenario_AC04_recordSystemId_RejectNonGuid",
+        "Scenario_AC04_InvalidAliasWithNo_RejectFormat",
+        "Scenario_AC04_IdObject_RejectFormat",
+        "Scenario_AC04_RecordIdArray_RejectFormat"
+      ],
+      "unitVerification": "passed atc163f793d6abec01eb0ce02cb345cc6e1cb63b5e",
+      "mcpVerification": "pending Claude ownbc28-w1 beforemerge all6ACs1033/1039;0acceptance passed",
+      "unitExecuted": 7,
+      "unitPassed": 7,
+      "unitFailed": 0,
+      "unitSkipped": 0
+    },
+    {
+      "ac": 5,
+      "requirement": "Alias plus filters never returns an unrelated collection",
+      "implemented": true,
+      "tests": [
+        "Scenario_AC05_AliasesWithFilter_NoUnrelatedRow",
+        "Scenario_AC05_AliasObjectFilter_RejectFormat"
+      ],
+      "unitVerification": "passed atc163f793d6abec01eb0ce02cb345cc6e1cb63b5e",
+      "mcpVerification": "pending Claude ownbc28-w1 beforemerge all6ACs1033/1039;0acceptance passed",
+      "unitExecuted": 2,
+      "unitPassed": 2,
+      "unitFailed": 0,
+      "unitSkipped": 0
+    },
+    {
+      "ac": 6,
+      "requirement": "Help target aliases and ConflictingIdentifiers when/nextStep in 1033/1039",
+      "implemented": true,
+      "tests": [
+        "Scenario_AC06_BilingualHelp_DeclaresContract"
+      ],
+      "unitVerification": "passed atc163f793d6abec01eb0ce02cb345cc6e1cb63b5e",
+      "mcpVerification": "pending Claude ownbc28-w1 beforemerge all6ACs1033/1039;0acceptance passed",
+      "unitExecuted": 1,
+      "unitPassed": 1,
+      "unitFailed": 0,
+      "unitSkipped": 0
+    }
+  ],
+  "unchangedConstraints": [
+    "No-identifier collection paging/includeLines/filters",
+    "Top-level app version28.0.0.0",
+    "No licence/EULA/backend writes",
+    "No new analyzer/test exclusions"
+  ],
+  "updatedAt": "2026-10-14T17:07:45.551288+00:00",
+  "licensingDisposition": {
+    "sourceTs": "1791992534.885059",
+    "owner": "Claude Code",
+    "environment": "bc28-w1",
+    "beforeMerge": true,
+    "verified": false,
+    "passed": 0
+  },
+  "nativeUi": {
+    "sha": "c163f793d6abec01eb0ce02cb345cc6e1cb63b5e",
+    "verified": true,
+    "executed": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "languages": [
+      "en-US",
+      "is-IS"
+    ],
+    "summary": "Localized Available Message Types/Download Help UI; alias/conflict English chapters checked per Foundation contract. Unit directly verifies translated1033/1039when/nextStep. ShippingMCPall6ACspendingClaude bc28-w1."
+  },
+  "ci": {
+    "sha": "c163f793d6abec01eb0ce02cb345cc6e1cb63b5e",
+    "started": false,
+    "owner": "Architect",
+    "requestPath": "/team-queue/architect-requests/warehouse37-worker6-prepr-ci-c163f79.json"
+  },
+  "delivery": "not delivered; PR still not opened",
+  "nativeUnitSuite": {
+    "sha": "c163f793d6abec01eb0ce02cb345cc6e1cb63b5e",
+    "total": 110,
+    "passed": 110,
+    "failed": 0,
+    "skipped": 0,
+    "fullSuite": true,
+    "acceptanceRegressions": 17
+  }
+}

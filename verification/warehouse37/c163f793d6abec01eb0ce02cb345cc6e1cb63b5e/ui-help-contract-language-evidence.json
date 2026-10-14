@@ -1,0 +1,9 @@
+{
+  "foundationSourceSha": "f8d53b4bd8ec8409048524bb5689515db898e04d",
+  "contractEvidence": "data.lcid controls keywords and selectionDescription; chapters and markdown are English whatever language",
+  "nativeUiExpectation": "Verify localized EN/IS heading/action and identical English contract chapters. Native direct contract regression verifies translated when/nextStep in1033/1039 separately; Claude still must verify shipping MCP allACs.",
+  "priorFailure": "Previous IS check incorrectly assumed export chapter language tracks Web Client language; no prior IS pass claimed.",
+  "sourceUrl": "https://github.com/OrigoSoftwareSolutions/bc-origo-bifrost-core/blob/f8d53b4bd8ec8409048524bb5689515db898e04d/app/src/Message%20Type/Implementations/Metadata/HelpImplGetImpl.Codeunit.al",
+  "contractSnippet": "Windows language id for keywords and selectionDescription of every row (1039 Icelandic, 1033 English). Omitted: the language of the call. The chapters and the markdown are English whatever the language.",
+  "artifactShaValidatedAgainstSource": true
+}

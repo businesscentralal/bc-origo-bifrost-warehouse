@@ -1,0 +1,17 @@
+{
+  "sha": "c163f793d6abec01eb0ce02cb345cc6e1cb63b5e",
+  "containerId": "f091cce4ffed",
+  "language": "en-US",
+  "scenario": "Native Setup > localized Available Message Types > Warehouse.Activity.Get > localized Download Help; aliases/conflict when/nextStep verified in English chapters per Foundation public contract",
+  "passed": 1,
+  "failed": 0,
+  "skipped": 0,
+  "exportChapterLanguage": "en-US",
+  "chapterLanguageByDesign": true,
+  "bilingualShippingMcpAcceptance": false,
+  "licensedShippingAcceptance": false,
+  "noLicenceWrites": true,
+  "noBlockedMcpReplay": true,
+  "file": "/workspace/evidence/tasks/1791992534.885059/ui-help-en.json",
+  "checkedAt": "2026-10-14T17:05:47.670Z"
+}

@@ -1,0 +1,39 @@
+name: Bifrost Pipeline Guards
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+      - '.github/AL-Go-Settings.json'
+      - '.AL-Go/**'
+      - 'tools/*Alpaca*.ps1'
+      - 'tools/Test-BifrostPipeline.ps1'
+      - 'AGENTS.md'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/**'
+      - '.github/AL-Go-Settings.json'
+      - '.AL-Go/**'
+      - 'tools/*Alpaca*.ps1'
+      - 'tools/Test-BifrostPipeline.ps1'
+      - 'AGENTS.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  BifrostPipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Preserve Bifrost pipeline contracts across template updates
+        shell: pwsh
+        run: ./tools/Test-BifrostPipeline.ps1
+
+      - name: Verify shared-container behavior with isolated fixtures
+        shell: pwsh
+        run: ./tools/Test-SharedAlpacaContainer.ps1

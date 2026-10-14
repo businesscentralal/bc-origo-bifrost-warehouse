@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+### Changed (2026-10-13) - Preserve the Bifrost pipeline across AL-Go updates
+
+- Added pipeline guards in `tools/Test-BifrostPipeline.ps1` and the `.github/workflows/BifrostPipeline.yaml` Bifrost Pipeline Guards workflow for main-only signing, shared Default/Test container hooks and full-build trigger coverage; pipeline and guard changes execute paired Default/Test builds. `AGENTS.md` documents preservation of these Bifrost pipeline requirements during system updates.
+- `.AL-Go/settings.json` adds `.github/workflows/**` and `tools/Test-BifrostPipeline.ps1` to `fullBuildPatterns`; the guard self-test rejects removal of either pattern.
+- Retain only posting-gate test fixtures in codeunits Whse Posting Gate Tests ori (97023) and Whse Post Gate Grant Tests ori (97024), and indirect NAV App Setting read in permission set Whse Gate Test ori (97025): the pipeline-only split reproduced two dispatcher test failures (93 executed, 91 passed, 2 failed). HTTP setup occurs before permission lowering; both tests assert that the caller cannot write settings. Response widths and test filenames stay at main.
+- Native warning, telemetry/help metadata and test-fixture repairs are retained in the separate Warehouse contract batch (#18, #19, #25, #35); they are outside this pipeline-only PR. Architect disposition 1791931022.314599 permits unchanged main baseline warnings for this split; no warning suppressions are added.
+
 ### Changed (2026-10-12) - AL-Go v9.2 signs on Windows and Current compiles on BC 28.5
 
 - CI/CD on `main` signs with AL-Go-Actions v9.2 on `windows-latest`. Run 38238977303 compiled, then `Sign@v9.0` failed on the Linux runner with `Failed to install signing tool`. `.github/AL-Go-Settings.json` matches Language Models: signing stays on for `main`, with `githubRunner` `windows-latest` and `githubRunnerShell` `pwsh`. System files and workflows are Alpaca-AppSource `4cd474c40c167da7b929d5032d30c23a6bb3b225` (AL-Go-Actions v9.2, Alpaca Actions v2.11).
@@ -14,7 +21,6 @@
 ### Fixed (2026-10-11) - posting-gate tests grant the dispatcher Company read (#19)
 
 - Whse Gate Test ori (97025) grants indirect read on Company (table 2000000006). The two restrictive gate tests call `Dispatcher.Execute`, and Foundation `Eula Consent ori` reads Company while building the consent key. This is not a direct Company read, not a `Setup ori` grant, and not another version change.
-
 
 ### Fixed (2026-10-10) - UAT dependency installation
 
@@ -48,10 +54,10 @@
 - Bifrost Foundation dependency raised to 28.0.0.186, the first Foundation build without the procedure, in `app/app.json` and `test/app.json`.
 - The contract test codeunit 97027 is renamed `Whse Msg Contract Tests ori` (the old name exceeded 30 characters) and declares `System.TestLibraries.Utilities`, so the test app compiles again.
 
-### Changed (2026-10-12) - Build settings and telemetry aligned with Bifrost Inventory
+### Changed (2026-10-14) - Build settings and telemetry aligned with Bifrost Inventory
 
 - Builds use AL-Go versioning strategy 3 (`app.json` stays at `X.Y.0.0`) and retain short-lived artifacts for 30 days.
-- Full builds also match changes to `.github/workflows/**`, `.github/AL-Go-Settings.json` and `tools/Test-BifrostPipeline.ps1`. The guard path is included for future coverage; it does not add or run a pipeline guard in this PR.
+- Full builds also match changes to `.github/AL-Go-Settings.json`, so repository build settings trigger a full build.
 - Telemetry now goes to the shared Bifröst Application Insights resource, like every other Bifröst app.
 
 ### Added (2026-09-29) - Warehouse message contracts (#10)

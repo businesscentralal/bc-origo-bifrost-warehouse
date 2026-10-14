@@ -15,7 +15,13 @@
       "id": "7505e808-6e52-4b96-a328-82573391297a",
       "name": "Bifrost Foundation",
       "publisher": "Origo",
-      "version": "28.0.1.0"
+      "version": "28.0.4.0"
+    },
+    {
+      "id": "9db1a0c9-c503-4793-a9e4-bcda3d3f3c94",
+      "name": "Bifrost Foundation - Tests",
+      "publisher": "Origo",
+      "version": "28.0.4.0"
     },
     {
       "id": "47acac54-3873-496f-9e88-157f36413e89",

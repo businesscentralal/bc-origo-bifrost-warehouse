@@ -9,6 +9,7 @@ permissionsetextension 10078395 "BIFROST Whse - Full ori" extends "BIFROST Full 
 {
     Permissions =
         codeunit "Warehouse Install ori" = X,
+        codeunit "Whse PermSet Pairs ori" = X,
         codeunit "Warehouse Upgrade ori" = X,
         codeunit "Whse BinContent Get Impl ori" = X,
         codeunit "Whse Activity Get Impl ori" = X,

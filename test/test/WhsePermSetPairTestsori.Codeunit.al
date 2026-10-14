@@ -28,6 +28,21 @@ codeunit 97035 "Whse PermSet Pair Tests ori"
         VerifyMigration('');
     end;
 
+    /// <summary>Provides a real foreign-caller refusal telemetry control without granting permissions.</summary>
+    [Test]
+    procedure Scenario_AC02_ForeignCaller_ReturnsWithoutError()
+    var
+        Registry: Codeunit "TakeOver PermSet Registry ori";
+    begin
+        // Story #9, AC02 | Time: no date dependency | Risk: foreign app ownership refusal.
+        // [GIVEN] Warehouse Tests does not own Warehouse's permission set.
+        // [WHEN] A foreign module calls the public API.
+        Registry.Add('W2 WH9 FOREIGN', 'BIFROST WhsePost ori');
+        // [THEN] The API returns without raising; no permission-assignment fixture is written.
+        // The external telemetry observer must also see ORI-BIF-0230 for this foreign caller.
+        // A passing AL test alone does not establish that telemetry was captured.
+    end;
+
     local procedure VerifyMigration(FixtureCompany: Text[30])
     var
         Assert: Codeunit "Library Assert";

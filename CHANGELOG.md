@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed (2026-10-15) - Test record declarations
+
+- Declare temporary message arguments explicitly in posting-gate and write-restriction tests (97023, 97024, 97026), keeping AL17 and AL18 CodeCop builds warning-free.
+
 ### Added (2026-10-14) - Warehouse permission-set take-over (#9)
 
 - Whse PermSet Pairs ori (10078460) subscribes to Foundation's public registration event and registers `CE Whse Post ori` -> `BIFROST WhsePost ori`; Foundation continues to enforce caller ownership and refusal rules.

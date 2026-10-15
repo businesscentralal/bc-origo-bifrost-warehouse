@@ -4,27 +4,12 @@
 
 ### Fixed (2026-10-15) - Warehouse help host (#25)
 
-- Point `contextSensitiveHelpUrl` at `docs.bifrost.origo.is`, carrying the retained app-only fix into this batch. The real bilingual Warehouse help pages and unchanged HelpLinks guard remain pending under bifrost#99; this does not close #25.
+- Point `contextSensitiveHelpUrl` at `docs.bifrost.origo.is`, carrying the retained app-only fix into this batch. Real bilingual Warehouse help pages and the unchanged HelpLinks guard remain pending under bifrost#99; this does not close #25.
 
-### Fixed (2026-10-15) - Test record declarations
+### Fixed (2026-10-15) - Test compiler diagnostics
 
 - Declare temporary message arguments explicitly in posting-gate and write-restriction tests (97023, 97024, 97026), keeping AL17 and AL18 CodeCop builds warning-free.
-
-### Fixed (2026-10-13) - Current Foundation test prerequisites
-
-- Prepare registered-app HTTP readiness before restrictive posting-gate tests, retain indirect settings read only, and assert the caller cannot write settings (97023–97025).
-
-### Changed (2026-10-13) - Application Insights connection string in app.json (#35)
-### Fixed (2026-10-14) - Warehouse activity identifier contract (#37)
-
-- Main-based native compile: configure the existing Bifrost application telemetry endpoint and explicitly initialize activity paging counter in codeunit 10078390; no PR15 commits or test-file renames included.
-
-- Whse Activity Get Impl ori (10078390) resolves all supplied identifiers with Whse Record Lookup ori (10078455), rejects conflicting activities, and reads documented `activityNo`, `id` and `recordSystemId` aliases. GUID aliases reject invalid formats and non-scalar identifier values are refused before lookup; identifier lookups remain single-record reads when combined with filters. Collection paging and line/filter behavior stay unchanged.
-- Whse Activity Get Tests ori (97001) adds dispatcher regressions with unique per-test fixtures for conflicting/matching identifiers, aliases, invalid and unknown identifiers, filter isolation and exact translated help in LCIDs 1033/1039. Conflict help now includes localized when/fix/nextStep in en-US/is-IS, with synchronized XLF. The top-level app version stays unchanged.
-
-- Aligned the Warehouse context-sensitive help host with the documentation site; external Warehouse documentation remains tracked separately in bifrost#99.
-- Explicitly initialized the activity paging counter (codeunit 10078390) and repaired test filename, declaration, response-content-type and format-label diagnostics without changing assertions or permissions (97000–97002, 97010–97027).
-- Renamed these test files to match their AL object names; IDs remain unchanged:
+- Match response content-type widths, remove a shadowed assertion variable, use a label for the status assertion, and align test filenames with their object names without changing assertions (97000–97002, 97010–97027). Object IDs stay unchanged:
 
 | Object ID | Filename |
 |---|---|
@@ -50,7 +35,6 @@
 | 97026 | `WhseWriteRestrictTestsori.Codeunit.al` |
 | 97027 | `WhseMsgContractTestsori.Codeunit.al` |
 
-
 ### Fixed (2026-10-13) - Icelandic warehouse refusal text and translation sync (#27, #26)
 
 - Warehouse refusals now have Icelandic translations while retaining their English text, placeholders and error codes; preview next steps are translated too. Regenerated the Icelandic XLF from compiler output with the repository generator (message codeunits 10078406–10078417; locale tests 97011, 97014 and 97018).
@@ -73,6 +57,14 @@
 - Shipment and receipt previews explain how to run them when called in a rollback chain.
 - Updated codeunits 10078407, 10078408, 10078410, 10078411 and 10078415; test helpers 97021–97022 and regression tests 97028.
 - Retained behavior while clearing existing compiler diagnostics: explicit temporary declarations and test declaration/format cleanup; test filenames now match object names.
+
+
+### Fixed (2026-10-14) - Warehouse activity identifier contract (#37)
+
+- Main-based native compile: configure the existing Bifrost application telemetry endpoint and explicitly initialize activity paging counter in codeunit 10078390; no PR15 commits or test-file renames included.
+
+- Whse Activity Get Impl ori (10078390) resolves all supplied identifiers with Whse Record Lookup ori (10078455), rejects conflicting activities, and reads documented `activityNo`, `id` and `recordSystemId` aliases. GUID aliases reject invalid formats and non-scalar identifier values are refused before lookup; identifier lookups remain single-record reads when combined with filters. Collection paging and line/filter behavior stay unchanged.
+- Whse Activity Get Tests ori (97001) adds dispatcher regressions with unique per-test fixtures for conflicting/matching identifiers, aliases, invalid and unknown identifiers, filter isolation and exact translated help in LCIDs 1033/1039. Conflict help now includes localized when/fix/nextStep in en-US/is-IS, with synchronized XLF. The top-level app version stays unchanged.
 
 ### Changed (2026-10-13) - Preserve the Bifrost pipeline across AL-Go updates
 

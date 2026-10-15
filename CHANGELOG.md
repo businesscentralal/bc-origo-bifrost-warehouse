@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed (2026-10-15) - Warehouse help host (#25)
+
+- Point `contextSensitiveHelpUrl` at `docs.bifrost.origo.is`, carrying the retained app-only fix into this batch. The real bilingual Warehouse help pages and unchanged HelpLinks guard remain pending under bifrost#99; this does not close #25.
+
 ### Fixed (2026-10-15) - Test record declarations
 
 - Declare temporary message arguments explicitly in posting-gate and write-restriction tests (97023, 97024, 97026), keeping AL17 and AL18 CodeCop builds warning-free.

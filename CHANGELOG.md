@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed (2026-10-15) - Test record declarations
+
+- Declare temporary message arguments explicitly in posting-gate and write-restriction tests (97023, 97024, 97026), keeping AL17 and AL18 CodeCop builds warning-free.
+
 ### Fixed (2026-10-13) - Current Foundation test prerequisites
 
 - Prepare registered-app HTTP readiness before restrictive posting-gate tests, retain indirect settings read only, and assert the caller cannot write settings (97023–97025).

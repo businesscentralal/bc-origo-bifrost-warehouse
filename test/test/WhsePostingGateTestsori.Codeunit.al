@@ -74,7 +74,7 @@ codeunit 97023 "Whse Posting Gate Tests ori"
     [Test]
     procedure AssertCanPost_WithoutWhsePost_NamesWhsePostSet()
     var
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         PostingGate: Codeunit "Whse Posting Gate ori";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         ResponseJson: JsonObject;
@@ -100,7 +100,7 @@ codeunit 97023 "Whse Posting Gate Tests ori"
     [Test]
     procedure AssertCanInvoice_WithoutWhseInv_NamesWhseInvSet()
     var
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         PostingGate: Codeunit "Whse Posting Gate ori";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         ResponseJson: JsonObject;
@@ -153,7 +153,7 @@ codeunit 97023 "Whse Posting Gate Tests ori"
     [Test]
     procedure ShipmentPreview_WithoutWhsePost_StaysEnabled()
     var
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         PreviewImpl: Codeunit "Whse Ship. Prev. Post Impl ori";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
     begin
@@ -169,7 +169,7 @@ codeunit 97023 "Whse Posting Gate Tests ori"
     [Test]
     procedure ReceiptPreview_WithoutWhsePost_StaysEnabled()
     var
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         PreviewImpl: Codeunit "Whse Rcpt Post Prev. Impl ori";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
     begin

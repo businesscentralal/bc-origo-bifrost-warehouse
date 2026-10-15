@@ -453,7 +453,7 @@ codeunit 97001 "Whse Activity Get Tests ori"
         Dispatcher: Codeunit "Dispatcher ori";
         RequestContent: BigText;
         ResponseContent: BigText;
-        ResponseContentType: Text[50];
+        ResponseContentType: Text[100];
         ResponseText: Text;
     begin
         RequestContent.AddText(RequestText);

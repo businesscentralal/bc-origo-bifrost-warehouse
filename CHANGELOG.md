@@ -7,6 +7,12 @@
 - Whse PermSet Pairs ori (10078460) subscribes to Foundation's public registration event and registers `CE Whse Post ori` -> `BIFROST WhsePost ori`; Foundation continues to enforce caller ownership and refusal rules.
 - Whse PermSet Pair Tests ori (97035) seeds isolated legacy assignments, provides a foreign test-app refusal telemetry control, and checks company-specific and all-company migration to Warehouse's App ID using the existing Foundation test harness. Only the test app depends on Foundation Tests; no Foundation friend grant or callable production API is added.
 - Retain the accepted #20 zero-warning prerequisites from PR15: explicit Activity.Get counter initialization (10078390), test filenames, response-buffer widths, shadowed variable and locked assertion label. AL18 temporary-record naming diagnostics in tests 97023, 97024 and 97026 are fixed by renaming local variables; no assertions or permissions are weakened.
+### Fixed (2026-10-14) - Warehouse activity identifier contract (#37)
+
+- Main-based native compile: configure the existing Bifrost application telemetry endpoint and explicitly initialize activity paging counter in codeunit 10078390; no PR15 commits or test-file renames included.
+
+- Whse Activity Get Impl ori (10078390) resolves all supplied identifiers with Whse Record Lookup ori (10078455), rejects conflicting activities, and reads documented `activityNo`, `id` and `recordSystemId` aliases. GUID aliases reject invalid formats and non-scalar identifier values are refused before lookup; identifier lookups remain single-record reads when combined with filters. Collection paging and line/filter behavior stay unchanged.
+- Whse Activity Get Tests ori (97001) adds dispatcher regressions with unique per-test fixtures for conflicting/matching identifiers, aliases, invalid and unknown identifiers, filter isolation and exact translated help in LCIDs 1033/1039. Conflict help now includes localized when/fix/nextStep in en-US/is-IS, with synchronized XLF. The top-level app version stays unchanged.
 
 ### Changed (2026-10-13) - Preserve the Bifrost pipeline across AL-Go updates
 

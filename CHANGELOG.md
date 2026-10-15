@@ -2,15 +2,17 @@
 
 ## [Unreleased]
 
-### Fixed (2026-10-15) - Test record declarations
+### Fixed (2026-10-15) - Test compiler diagnostics
 
-- Declare temporary message arguments explicitly in posting-gate and write-restriction tests (97023, 97024, 97026), keeping AL17 and AL18 CodeCop builds warning-free.
+- Explicitly declare temporary message arguments in posting-gate and write-restriction tests (97023, 97024, 97026), keeping AL17 and AL18 CodeCop builds warning-free.
+- Align test filenames, response-content-type widths, assertion variable declarations and the status assertion label with compiler requirements (97000–97002, 97010–97027); assertions and permission boundaries are unchanged.
 
 ### Added (2026-10-14) - Warehouse permission-set take-over (#9)
 
 - Whse PermSet Pairs ori (10078460) subscribes to Foundation's public registration event and registers `CE Whse Post ori` -> `BIFROST WhsePost ori`; Foundation continues to enforce caller ownership and refusal rules.
 - Whse PermSet Pair Tests ori (97035) seeds isolated legacy assignments, provides a foreign test-app refusal telemetry control, and checks company-specific and all-company migration to Warehouse's App ID using the existing Foundation test harness. Only the test app depends on Foundation Tests; no Foundation friend grant or callable production API is added.
-- Retain the accepted #20 zero-warning prerequisites from PR15: explicit Activity.Get counter initialization (10078390), test filenames, response-buffer widths, shadowed variable and locked assertion label. AL18 temporary-record naming diagnostics in tests 97023, 97024 and 97026 are fixed by renaming local variables; no assertions or permissions are weakened.
+
+
 ### Fixed (2026-10-14) - Warehouse activity identifier contract (#37)
 
 - Main-based native compile: configure the existing Bifrost application telemetry endpoint and explicitly initialize activity paging counter in codeunit 10078390; no PR15 commits or test-file renames included.

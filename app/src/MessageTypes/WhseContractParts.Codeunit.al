@@ -70,7 +70,7 @@ codeunit 10078459 "Whse Contract Parts ori"
         AddIdentifierFormatErrors(Errors);
     end;
 
-    /// <summary>Lists optional Activity.Get lookup errors without required or conflicting identifiers.</summary>
+    /// <summary>Lists optional lookup errors; callers add any supported conflict error.</summary>
     internal procedure AddOptionalLookupErrors(var Errors: JsonArray; RecordName: Text)
     begin
         AddRecordNotFoundError(Errors, RecordName);
@@ -90,19 +90,6 @@ codeunit 10078459 "Whse Contract Parts ori"
     begin
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameterFormat, 'data is not a JSON object, an identifier key under data is not a JSON string, or a SystemId is not a GUID. The parameter names the offending key.', 'Send data as an object, identifier keys as strings, and SystemId keys as GUIDs.'));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::MultipleErrors, 'Several identifier values have an invalid format.', 'Read errors in order and correct each named key.'));
-    end;
-
-    /// <summary>Describes exactly the identifiers read by Warehouse.Activity.Get.</summary>
-    internal procedure ActivityGetTarget(): JsonArray
-    var
-        ContractMgt: Codeunit "Msg Contract Mgt ori";
-        Target: JsonArray;
-    begin
-        Target.Add(ContractMgt.TargetEntry('subject', 'guid', 'The SystemId of the Warehouse Activity Header.'));
-        Target.Add(ContractMgt.TargetEntry('subject', 'activity no.', 'The number of the Warehouse Activity.'));
-        Target.Add(ContractMgt.TargetEntry('data.systemId', 'guid', 'The SystemId of the Warehouse Activity Header.'));
-        Target.Add(ContractMgt.TargetEntry('data.no', 'activity no.', 'The number of the Warehouse Activity.'));
-        exit(Target);
     end;
 
     internal procedure AddBusinessCentralError(var Errors: JsonArray; TypicalCauses: Text)

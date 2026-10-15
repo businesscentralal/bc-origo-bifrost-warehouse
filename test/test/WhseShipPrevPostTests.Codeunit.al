@@ -23,7 +23,6 @@ codeunit 97013 "Whse Ship Prev Post Tests ori"
         Assert: Codeunit "Library Assert";
         Helper: Codeunit "Whse Shipment Test Helper ori";
         IsInitialized: Boolean;
-        ExpectedMessage1Tok: Label 'Status should be %1', Locked = true;
 
     [Test]
     procedure PreviewPost_PostableShipment_ReturnsSuccessAndRollback()
@@ -205,6 +204,6 @@ codeunit 97013 "Whse Ship Prev Post Tests ori"
         Token: JsonToken;
     begin
         Assert.IsTrue(ResponseJson.Get('status', Token), 'Response should contain status');
-        Assert.AreEqual(ExpectedStatus, Token.AsValue().AsText(), StrSubstNo(ExpectedMessage1Tok, ExpectedStatus));
+        Assert.AreEqual(ExpectedStatus, Token.AsValue().AsText(), StrSubstNo('Status should be %1', ExpectedStatus));
     end;
 }

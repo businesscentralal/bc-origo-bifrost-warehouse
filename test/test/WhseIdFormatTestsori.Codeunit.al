@@ -122,6 +122,26 @@ codeunit 97029 "Whse Id Format Tests ori"
         AssertProperty(Response, 'parameter', 'systemId');
     end;
 
+    /// <summary>All Activity.Get aliases reject non-string values before record lookup.</summary>
+    [Test]
+    procedure ActivityAliases_WrongJsonTypes_AreInvalidFormat()
+    var
+        Keys: List of [Text];
+        Values: List of [Text];
+        KeyName: Text;
+        Value: Text;
+        Response: JsonObject;
+    begin
+        // Issues #21/#37: keep strict validation for the newly supported aliases.
+        Keys.AddRange('no', 'activityNo', 'systemId', 'recordSystemId', 'id');
+        Values.AddRange('null', '12', 'true', '{}', '[]');
+        foreach KeyName in Keys do
+            foreach Value in Values do begin
+                SendRequest("Message Type ori"::"Warehouse.Activity.Get", '', '{"' + KeyName + '":' + Value + '}', Response);
+                AssertFormatResponse(Response, 'InvalidParameterFormat', KeyName, 'a JSON string');
+            end;
+    end;
+
     local procedure SendRequest(MessageType: Enum "Message Type ori"; Subject: Text; RequestText: Text; var Response: JsonObject)
     begin
         Assert.IsTrue(Helper.RunMessage(MessageType, Subject, RequestText, Response, false), 'Response must be JSON.');

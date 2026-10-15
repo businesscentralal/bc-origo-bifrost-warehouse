@@ -63,6 +63,7 @@ codeunit 97027 "Whse Msg Contract Tests ori"
     [Test]
     procedure ActivityContractDescribesHeadersAndLines()
     var
+        Assert: Codeunit "Library Assert";
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Contract: JsonObject;
         Response: JsonObject;
@@ -160,18 +161,18 @@ codeunit 97027 "Whse Msg Contract Tests ori"
         Token.WriteTo(TargetText);
         Assert.IsTrue(TargetText.Contains('data.systemId'), 'systemId is supported.');
         Assert.IsTrue(TargetText.Contains('data.no'), 'no is supported.');
-        Assert.IsFalse(TargetText.Contains('recordSystemId'), 'recordSystemId is not read.');
-        Assert.IsFalse(TargetText.Contains('data.id'), 'id is not read.');
-        Assert.IsFalse(TargetText.Contains('activityNo'), 'activityNo is not read.');
+        Assert.IsTrue(TargetText.Contains('recordSystemId'), 'recordSystemId remains supported after #37/#38.');
+        Assert.IsTrue(TargetText.Contains('data.id'), 'id remains supported after #37/#38.');
+        Assert.IsTrue(TargetText.Contains('activityNo'), 'activityNo remains supported after #37/#38.');
     end;
 
-    /// <summary>Issues #21 and #34: optional Activity.Get has its actual strict-format errors only.</summary>
+    /// <summary>Issues #21 and #34: optional Activity.Get has strict-format and supported conflict errors.</summary>
     [Test]
     procedure ActivityGet_ErrorsDoNotListUnanswerableCodes()
     begin
-        // Story #34, AC02 | Time: independent of Today/WorkDate | Risk: supersedes #21 AC6 for Activity.Get.
+        // Story #34, AC02 | Time: independent of Today/WorkDate | Risk: retains #37/#38 conflicts; a missing identifier still allows collection reads.
         AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'MissingParameter', 0);
-        AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'ConflictingIdentifiers', 0);
+        AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'ConflictingIdentifiers', 1);
         AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'RecordNotFound', 1);
         AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'InvalidParameterFormat', 1);
         AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'InvalidParameter', 1);

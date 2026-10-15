@@ -39,17 +39,23 @@
           <note from="Developer" annotates="general" priority="2">%1 = table caption, is-IS=Athugaðu númerið með Data.Records.Get á töflunni %1.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Activity Get Impl ori - Method ExecuteBifrostTask - NamedType NotFoundNextStepTxt</note>
         </trans-unit>
-        <trans-unit id="Codeunit 3969354362 - Method 3571782927 - NamedType 411844913" size-unit="char" translate="yes" xml:space="preserve">
-          <source>"%1" is not a valid %2 (from %3).</source>
-          <target>"%1" er ekki gilt %2 (úr %3).</target>
-          <note from="Developer" annotates="general" priority="2">%1 = value received, %2 = expected format, %3 = JSON key or subject, is-IS="%1" er ekki gilt %2 (úr %3).</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Activity Get Impl ori - Method ExecuteBifrostTask - NamedType InvalidFormatErr</note>
-        </trans-unit>
         <trans-unit id="Codeunit 3969354362 - Method 3571782927 - NamedType 2777203235" size-unit="char" translate="yes" xml:space="preserve">
           <source>"%1" is not a valid warehouse activity type (from activityType).</source>
           <target>"%1" er ekki gild tegund vöruhúsavirkni (úr activityType).</target>
           <note from="Developer" annotates="general" priority="2">%1 = received value, is-IS="%1" er ekki gild tegund vöruhúsavirkni (úr activityType).</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Activity Get Impl ori - Method ExecuteBifrostTask - NamedType InvalidActivityTypeErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3969354362 - Method 1158096087 - NamedType 3964979788" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Two supplied identifiers point to different warehouse activities.</source>
+          <target>Tvö innsend auðkenni vísa á mismunandi vöruhúsavirkni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tvö innsend auðkenni vísa á mismunandi vöruhúsavirkni.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Activity Get Impl ori - Method GetErrors - NamedType ConflictWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3969354362 - Method 1158096087 - NamedType 1132247979" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send one identifier or identifiers for the same warehouse activity.</source>
+          <target>Sendu eitt auðkenni eða auðkenni fyrir sömu vöruhúsavirkni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu eitt auðkenni eða auðkenni fyrir sömu vöruhúsavirkni.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Activity Get Impl ori - Method GetErrors - NamedType ConflictNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3969354362 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>warehouse activity, open pick, open put-away, warehouse lines, activity header, activity lines</source>
@@ -62,6 +68,18 @@
           <target>Lesaðgangur. Les opnar tínslur og fráganga í vöruhúsi; notaðu Warehouse.BinContent.Get fyrir birgðir í hólfum.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Lesaðgangur. Les opnar tínslur og fráganga í vöruhúsi; notaðu Warehouse.BinContent.Get fyrir birgðir í hólfum.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Activity Get Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3969354362 - Method 2318592243 - NamedType 411844913" size-unit="char" translate="yes" xml:space="preserve">
+          <source>"%1" is not a valid %2 (from %3).</source>
+          <target>"%1" er ekki gilt %2 (úr %3).</target>
+          <note from="Developer" annotates="general" priority="2">%1 = value received, %2 = expected format, %3 = JSON key, is-IS="%1" er ekki gilt %2 (úr %3).</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Activity Get Impl ori - Method ResolveActivityIdentifiers - NamedType InvalidFormatErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3969354362 - Method 2318592243 - NamedType 1626925938" size-unit="char" translate="yes" xml:space="preserve">
+          <source>activity number</source>
+          <target>númer vöruhúsavirkni</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=númer vöruhúsavirkni</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Activity Get Impl ori - Method ResolveActivityIdentifiers - NamedType ActivityNumberTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 269741545 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>bin content, bin quantity, item in bin, warehouse stock, stock by bin, inventory by location</source>

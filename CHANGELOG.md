@@ -7,10 +7,12 @@
 - Prepare registered-app HTTP readiness before restrictive posting-gate tests, retain indirect settings read only, and assert the caller cannot write settings (97023–97025).
 
 ### Changed (2026-10-13) - Application Insights connection string in app.json (#35)
+### Fixed (2026-10-14) - Warehouse activity identifier contract (#37)
 
-- Added `applicationInsightsConnectionString` to clear AS0092, using the same value as Inventory and Attachments; the telemetry metadata does not change the app version.
+- Main-based native compile: configure the existing Bifrost application telemetry endpoint and explicitly initialize activity paging counter in codeunit 10078390; no PR15 commits or test-file renames included.
 
-### Fixed (2026-10-13) - Help host and compiler warnings (#25, #35)
+- Whse Activity Get Impl ori (10078390) resolves all supplied identifiers with Whse Record Lookup ori (10078455), rejects conflicting activities, and reads documented `activityNo`, `id` and `recordSystemId` aliases. GUID aliases reject invalid formats and non-scalar identifier values are refused before lookup; identifier lookups remain single-record reads when combined with filters. Collection paging and line/filter behavior stay unchanged.
+- Whse Activity Get Tests ori (97001) adds dispatcher regressions with unique per-test fixtures for conflicting/matching identifiers, aliases, invalid and unknown identifiers, filter isolation and exact translated help in LCIDs 1033/1039. Conflict help now includes localized when/fix/nextStep in en-US/is-IS, with synchronized XLF. The top-level app version stays unchanged.
 
 - Aligned the Warehouse context-sensitive help host with the documentation site; external Warehouse documentation remains tracked separately in bifrost#99.
 - Explicitly initialized the activity paging counter (codeunit 10078390) and repaired test filename, declaration, response-content-type and format-label diagnostics without changing assertions or permissions (97000–97002, 97010–97027).
@@ -45,9 +47,9 @@
 
 - Warehouse refusals now have Icelandic translations while retaining their English text, placeholders and error codes; preview next steps are translated too. Regenerated the Icelandic XLF from compiler output with the repository generator (message codeunits 10078406–10078417; locale tests 97011, 97014 and 97018).
 
-### Changed (2026-10-13) - Activity.Get and BinContent.Get help match the code (#34)
+### Changed (2026-10-15) - Activity.Get and BinContent.Get help match the code (#34)
 
-- Activity.Get describes only its supported identifiers and error codes; BinContent.Get declares its existing `tableView` filter (codeunits 10078388, 10078390 and 10078459; tests 97027).
+- Activity.Get retains the aliases and conflict errors delivered by #37/#38, validates every alias before lookup, and allows identifier-free collection reads; BinContent.Get declares its existing `tableView` filter (codeunits 10078388, 10078390 and 10078459; tests 97027).
 
 ### Fixed (2026-10-13) - Strict warehouse identifier validation (#21)
 
@@ -64,6 +66,12 @@
 - Updated codeunits 10078407, 10078408, 10078410, 10078411 and 10078415; test helpers 97021–97022 and regression tests 97028.
 - Retained behavior while clearing existing compiler diagnostics: explicit temporary declarations and test declaration/format cleanup; test filenames now match object names.
 
+### Changed (2026-10-13) - Preserve the Bifrost pipeline across AL-Go updates
+
+- Added pipeline guards in `tools/Test-BifrostPipeline.ps1` and the `.github/workflows/BifrostPipeline.yaml` Bifrost Pipeline Guards workflow for main-only signing, shared Default/Test container hooks and full-build trigger coverage; pipeline and guard changes execute paired Default/Test builds. `AGENTS.md` documents preservation of these Bifrost pipeline requirements during system updates.
+- `.AL-Go/settings.json` adds `.github/workflows/**` and `tools/Test-BifrostPipeline.ps1` to `fullBuildPatterns`; the guard self-test rejects removal of either pattern.
+- Retain only posting-gate test fixtures in codeunits Whse Posting Gate Tests ori (97023) and Whse Post Gate Grant Tests ori (97024), and indirect NAV App Setting read in permission set Whse Gate Test ori (97025): the pipeline-only split reproduced two dispatcher test failures (93 executed, 91 passed, 2 failed). HTTP setup occurs before permission lowering; both tests assert that the caller cannot write settings. Response widths and test filenames stay at main.
+- Native warning, telemetry/help metadata and test-fixture repairs are retained in the separate Warehouse contract batch (#18, #19, #25, #35); they are outside this pipeline-only PR. Architect disposition 1791931022.314599 permits unchanged main baseline warnings for this split; no warning suppressions are added.
 
 ### Changed (2026-10-12) - AL-Go v9.2 signs on Windows and Current compiles on BC 28.5
 
@@ -77,7 +85,6 @@
 ### Fixed (2026-10-11) - posting-gate tests grant the dispatcher Company read (#19)
 
 - Whse Gate Test ori (97025) grants indirect read on Company (table 2000000006). The two restrictive gate tests call `Dispatcher.Execute`, and Foundation `Eula Consent ori` reads Company while building the consent key. This is not a direct Company read, not a `Setup ori` grant, and not another version change.
-
 
 ### Fixed (2026-10-10) - UAT dependency installation
 

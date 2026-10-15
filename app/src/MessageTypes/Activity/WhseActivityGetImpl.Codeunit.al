@@ -111,7 +111,7 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
         LineFields.Add(ContractMgt.ResponseField('whseDocumentNo', 'string', 'Source warehouse document number.'));
         LineFields.Add(ContractMgt.ResponseField('whseDocumentLineNo', 'integer', 'Source warehouse document line number.'));
         ActivityFields.Add(ContractMgt.ResponseField('no', 'string', 'Warehouse activity number.'));
-        ActivityFields.Add(ContractMgt.ResponseField('systemId', 'string', 'Warehouse Activity Header SystemId. recordSystemId and id are accepted too.'));
+        ActivityFields.Add(ContractMgt.ResponseField('systemId', 'string', 'Warehouse Activity Header SystemId.'));
         ActivityFields.Add(ContractMgt.ResponseField('activityType', 'string', 'Warehouse activity type.'));
         ActivityFields.Add(ContractMgt.ResponseField('locationCode', 'string', 'Location code.'));
         ActivityFields.Add(ContractMgt.ResponseField('assignedUserId', 'string', 'Assigned user ID.'));

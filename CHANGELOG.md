@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Fixed (2026-10-16) - Raise Warehouse app version above UAT to unblock Deploy to Bifrost
+
+- Warehouse main CI/CD #19 (run 38900771455, tip `3fc5293c`, shipping #15) failed on Deploy to Bifrost with `UnprocessableEntity`: the CI/CD build produced appVersion `28.0.0.19` (app.json `28.0.0.0` plus versioningStrategy 3 run revision 19), while UAT already held `28.0.18.0`, so Business Central refused the downgrade.
+- Raise the top-level `Bifrost Warehouse` app and `Bifrost Warehouse - Tests` app versions from `28.0.0.0` to `28.0.19.0` in `app/app.json` and `test/app.json` (and the test app's `Bifrost Warehouse` dependency to `28.0.19.0`), keeping the Foundation `28.0.1.0` floor and the sibling app.json version scheme. With versioningStrategy 3 the CI/CD run revision remains the 4th segment, so the next build deploys as `28.0.19.N` - above UAT `28.0.18.0`.
+- Version/metadata only: no AL objects, message types, XLF, permissions or IDs change.
+
 ### Fixed (2026-10-14) - Warehouse activity identifier contract (#37)
 
 - Main-based native compile: configure the existing Bifrost application telemetry endpoint and explicitly initialize activity paging counter in codeunit 10078390; no PR15 commits or test-file renames included.

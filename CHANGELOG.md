@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed (2026-10-16) - Preview refusal regression coverage (#18)
+
+- Verify rollback-chain preview refusals using postable shipment and receipt fixtures, and assert that their headers and outstanding quantities remain unchanged (Whse Omit Commit Tests ori, codeunit 97028).
+
 ### Fixed (2026-10-15) - Warehouse help host (#25)
 
 - Point `contextSensitiveHelpUrl` at `docs.bifrost.origo.is`, carrying the retained app-only fix into this batch. Real bilingual Warehouse help pages and the unchanged HelpLinks guard remain pending under bifrost#99; this does not close #25.

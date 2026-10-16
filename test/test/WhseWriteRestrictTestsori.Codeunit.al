@@ -4,6 +4,7 @@ using Microsoft.Inventory.Item;
 using Microsoft.Warehouse.Activity;
 using Microsoft.Warehouse.Document;
 using Microsoft.Warehouse.Structure;
+using Microsoft.Warehouse.Worksheet;
 using Origo.Bifrost;
 using System.TestLibraries.Utilities;
 
@@ -94,6 +95,40 @@ codeunit 97026 "Whse Write Restrict Tests ori"
 
         Assert.AreEqual('Warehouse.DefaultBin.Set', TempArgument.GetDedicatedMessageTypeHintForField(Database::"Bin Content", BinContent.FieldNo(Default)), 'Default field hint.');
         AssertGenericSetRefused('Bin Content', '{"tableName":"Bin Content","force":true,"data":[{"primaryKey":{"Location Code":"LOC","Bin Code":"A-01","Item No.":"ITEM","Variant Code":"","Unit of Measure Code":"PCS"},"fields":{"Default":true}}]}', 'Warehouse.DefaultBin.Set');
+    end;
+
+    /// <summary>Movement worksheet quantity and bin fields point at Warehouse.Movement.Create.</summary>
+    [Test]
+    procedure GenericWrite_MovementWorksheetFields_IsRefusedAndHinted()
+    var
+        WorksheetLine: Record "Whse. Worksheet Line";
+        TempArgument: Record "Message Argument ori";
+        Assert: Codeunit "Library Assert";
+    begin
+        TempArgument.Init();
+        TempArgument.Insert(true);
+
+        Assert.AreEqual('Warehouse.Movement.Create', TempArgument.GetDedicatedMessageTypeHintForField(Database::"Whse. Worksheet Line", WorksheetLine.FieldNo("From Bin Code")), 'From Bin Code hint.');
+        Assert.AreEqual('Warehouse.Movement.Create', TempArgument.GetDedicatedMessageTypeHintForField(Database::"Whse. Worksheet Line", WorksheetLine.FieldNo("To Bin Code")), 'To Bin Code hint.');
+        Assert.AreEqual('Warehouse.Movement.Create', TempArgument.GetDedicatedMessageTypeHintForField(Database::"Whse. Worksheet Line", WorksheetLine.FieldNo("Qty. to Handle")), 'Qty. to Handle hint.');
+        AssertGenericSetRefused('Whse. Worksheet Line', '{"tableName":"Whse. Worksheet Line","force":true,"data":[{"primaryKey":{"Worksheet Template Name":"MOVE","Name":"DEFAULT","Location Code":"LOC","Line No.":10000},"fields":{"From Bin Code":"A-01"}}]}', 'Warehouse.Movement.Create');
+    end;
+
+    /// <summary>Movement activity quantity, bin and zone fields point at Warehouse.Movement.Register.</summary>
+    [Test]
+    procedure GenericWrite_MovementActivityFields_IsHinted()
+    var
+        ActivityLine: Record "Warehouse Activity Line";
+        TempArgument: Record "Message Argument ori";
+        Assert: Codeunit "Library Assert";
+    begin
+        TempArgument.Init();
+        TempArgument.Insert(true);
+
+        Assert.AreEqual('Warehouse.Movement.Register', TempArgument.GetDedicatedMessageTypeHintForField(Database::"Warehouse Activity Line", ActivityLine.FieldNo("Qty. to Handle")), 'Qty. to Handle hint.');
+        Assert.AreEqual('Warehouse.Movement.Register', TempArgument.GetDedicatedMessageTypeHintForField(Database::"Warehouse Activity Line", ActivityLine.FieldNo("Bin Code")), 'Bin Code hint.');
+        Assert.AreEqual('Warehouse.Movement.Register', TempArgument.GetDedicatedMessageTypeHintForField(Database::"Warehouse Activity Line", ActivityLine.FieldNo("Zone Code")), 'Zone Code hint.');
+        Assert.IsTrue(TempArgument.IsTableWriteRestrictedForDataRecords(Database::"Warehouse Activity Line", true), 'The activity line table stays closed, including force.');
     end;
 
     local procedure AssertGenericSetRefused(Subject: Text; RequestText: Text; ExpectedHint: Text)

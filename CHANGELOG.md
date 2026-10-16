@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Added (2026-10-16) - Warehouse movement create and register (#41)
+
+- Warehouse.Movement.Create (codeunit 10078466, process 10078467) creates a movement at a directed put-away and pick location from a movement worksheet or from inline lines. A location without directed put-away and pick returns PreconditionFailed and writes nothing.
+- Warehouse.Movement.Register (codeunit 10078468, process 10078469) registers by number or SystemId, including a partial quantity. Zero quantity to handle on every line is refused. Isolation uses codeunit 10078475.
+- Enum values 10078473–10078474. Field write blocks for the movement worksheet quantity and bins, and for the activity quantity, bin and zone, live in Whse Data Restrict ori (10078458). Tests 97083–97084.
+
 ### Added (2026-10-16) - Bin master and default bin (#45, #46)
 
 - Warehouse.Bin.Create (codeunit 10078461, process 10078462) and Warehouse.Bin.Get (codeunit 10078460) create and read bins. Warehouse.Bin.Get is an outbound read. The story text called it an inbound write; that wording is not how the type behaves.

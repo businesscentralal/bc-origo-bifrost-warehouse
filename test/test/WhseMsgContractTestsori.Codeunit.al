@@ -4,7 +4,7 @@ using Origo.Bifrost;
 using System.TestLibraries.Utilities;
 
 /// <summary>
-/// Conformance tests for the fifteen Warehouse message type contracts.
+/// Conformance tests for the Warehouse message type contracts.
 /// </summary>
 codeunit 97027 "Whse Msg Contract Tests ori"
 {
@@ -32,6 +32,8 @@ codeunit 97027 "Whse Msg Contract Tests ori"
         AssertContract("Message Type ori"::"Warehouse.Bin.Get", 'read', true);
         AssertContract("Message Type ori"::"Warehouse.Bin.Create", 'write', true);
         AssertContract("Message Type ori"::"Warehouse.DefaultBin.Set", 'write', true);
+        AssertContract("Message Type ori"::"Warehouse.Movement.Create", 'irreversible', true);
+        AssertContract("Message Type ori"::"Warehouse.Movement.Register", 'irreversible', true);
     end;
 
     local procedure AssertContract(MessageType: Enum "Message Type ori"; ExpectedEffect: Text; HasParameters: Boolean)

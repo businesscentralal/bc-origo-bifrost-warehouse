@@ -30,5 +30,10 @@ permissionsetextension 10078395 "BIFROST Whse - Full ori" extends "BIFROST Full 
         codeunit "Whse DefaultBin Set Impl ori" = X,
         codeunit "Whse Def. Bin Set Proc. ori" = X,
         codeunit "Whse Bin Write Context ori" = X,
+        codeunit "Whse Movement Create Impl ori" = X,
+        codeunit "Whse Movement Create Proc ori" = X,
+        codeunit "Whse Movement Reg Impl ori" = X,
+        codeunit "Whse Movement Reg Proc ori" = X,
+        codeunit "Whse Movement Context ori" = X,
         codeunit "Whse Data Restrict ori" = X;
 }

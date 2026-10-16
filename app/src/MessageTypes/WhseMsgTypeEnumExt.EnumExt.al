@@ -140,4 +140,22 @@ enumextension 10078385 "Whse MsgType EnumExt ori" extends "Message Type ori"
         Caption = 'Warehouse.DefaultBin.Set', Locked = true;
         Implementation = "Msg Interface ori" = "Whse DefaultBin Set Impl ori", "Msg Contract ori" = "Whse DefaultBin Set Impl ori", "Msg Discovery ori" = "Whse DefaultBin Set Impl ori";
     }
+
+    /// <summary>
+    /// Creates a warehouse movement at a directed put-away and pick location.
+    /// </summary>
+    value(10078473; "Warehouse.Movement.Create")
+    {
+        Caption = 'Warehouse.Movement.Create', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Movement Create Impl ori", "Msg Contract ori" = "Whse Movement Create Impl ori", "Msg Discovery ori" = "Whse Movement Create Impl ori";
+    }
+
+    /// <summary>
+    /// Registers a warehouse movement.
+    /// </summary>
+    value(10078474; "Warehouse.Movement.Register")
+    {
+        Caption = 'Warehouse.Movement.Register', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Movement Reg Impl ori", "Msg Contract ori" = "Whse Movement Reg Impl ori", "Msg Discovery ori" = "Whse Movement Reg Impl ori";
+    }
 }

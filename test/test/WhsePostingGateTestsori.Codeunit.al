@@ -161,7 +161,7 @@ codeunit 97023 "Whse Posting Gate Tests ori"
         AssertPreviewWasNotDeniedByPostingGate(TempArgument);
     end;
 
-    /// <summary>Warehouse.Receipt.Post.Preview stays enabled and does not return a posting denial.</summary>
+    /// <summary>Warehouse.Receipt.PreviewPost stays enabled and does not return a posting denial.</summary>
     [Test]
     procedure ReceiptPreview_WithoutWhsePost_StaysEnabled()
     var

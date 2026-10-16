@@ -72,9 +72,9 @@ enumextension 10078385 "Whse MsgType EnumExt ori" extends "Message Type ori"
     /// Simulates posting a Warehouse Receipt and returns the captured ledger entries
     /// without committing. Rolls back the transaction after capture.
     /// </summary>
-    value(10078401; "Warehouse.Receipt.Post.Preview")
+    value(10078401; "Warehouse.Receipt.PreviewPost")
     {
-        Caption = 'Warehouse.Receipt.Post.Preview', Locked = true;
+        Caption = 'Warehouse.Receipt.PreviewPost', Locked = true;
         Implementation = "Msg Interface ori" = "Whse Rcpt Post Prev. Impl ori", "Msg Discovery ori" = "Whse Rcpt Post Prev. Impl ori", "Msg Contract ori" = "Whse Rcpt Post Prev. Impl ori";
     }
 

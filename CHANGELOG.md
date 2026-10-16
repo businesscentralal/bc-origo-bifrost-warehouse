@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Changed (2026-10-16) - Three-part receipt preview name (#40)
+
+- Rename `Warehouse.Receipt.Post.Preview` to `Warehouse.Receipt.PreviewPost` in enumextension Whse MsgType EnumExt ori (10078385), preserving ordinal 10078401 and the implementation Whse Rcpt Post Prev. Impl ori (10078411). Update callers to use the new message type name.
+- Update receipt posting help in en-US/is-IS, synchronized Icelandic XLF, related contracts and inbound workflows in Whse Receipt Post Impl ori (10078410) and Whse Contract Parts ori (10078459), plus README examples.
+- Whse Msg Contract Tests ori (97027) checks the persisted ordinal, canonical name and bilingual help references. Receipt preview tests (97016) and posting-gate tests (97023) use the new name and retain rollback/error coverage.
+
 ### Fixed (2026-10-14) - Warehouse activity identifier contract (#37)
 
 - Main-based native compile: configure the existing Bifrost application telemetry endpoint and explicitly initialize activity paging counter in codeunit 10078390; no PR15 commits or test-file renames included.

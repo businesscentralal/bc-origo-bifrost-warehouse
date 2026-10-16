@@ -1,7 +1,7 @@
 namespace Origo.Bifrost.Warehouse;
 
 /// <summary>
-/// Implementation of the Warehouse.Receipt.Post.Preview message type.
+/// Implementation of the Warehouse.Receipt.PreviewPost message type.
 /// Simulates posting a Warehouse Receipt and returns the captured ledger entries
 /// (Item Ledger, Value Entry, Posted Whse. Receipt, and any G/L impact) without committing.
 /// The transaction is rolled back after capture via the Posting Preview Event Handler.

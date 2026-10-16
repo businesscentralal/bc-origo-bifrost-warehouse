@@ -153,7 +153,7 @@ codeunit 10078459 "Whse Contract Parts ori"
         Steps: JsonArray;
     begin
         Steps.Add(ContractMgt.WorkflowStep('Warehouse.Receipt.Create', 'Create the Warehouse Receipt from a released Purchase Order, Sales Return Order or inbound Transfer Order.'));
-        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Receipt.Post.Preview', 'Inspect the predicted entries without committing.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Receipt.PreviewPost', 'Inspect the predicted entries without committing.'));
         Steps.Add(ContractMgt.WorkflowStep('Warehouse.Receipt.Post', 'Post the receive; the source document is received, not invoiced.'));
         Steps.Add(ContractMgt.WorkflowStep('Warehouse.Putaway.Create', 'Create the put-away from the Posted Warehouse Receipt when the location uses put-away.'));
         Steps.Add(ContractMgt.WorkflowStep('Warehouse.Putaway.Register', 'Register the put-away to place the goods in their bins.'));

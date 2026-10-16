@@ -36,5 +36,7 @@
     "ContinuousDeployment": true,
     "Scope": "Dev",
     "DependencyInstallMode": "ignore"
-  }
+  },
+  "versioningStrategy": 3,
+  "shortLivedArtifactsRetentionDays": 30
 }

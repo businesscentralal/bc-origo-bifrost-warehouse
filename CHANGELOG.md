@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed (2026-10-16) - Posting-gate HTTP test workaround (#39)
+
+- Remove `EnableRegisteredAppHttp` and its setup calls from Whse Posting Gate Tests ori (97023) and Whse Post Gate Grant Tests ori (97024). The dispatcher tests now rely on Foundation's evaluation-sandbox gate fix, while retaining restrictive posting/invoicing permissions and assertions that callers cannot write NAV App Setting.
+
 ### Fixed (2026-10-14) - Warehouse activity identifier contract (#37)
 
 - Main-based native compile: configure the existing Bifrost application telemetry endpoint and explicitly initialize activity paging counter in codeunit 10078390; no PR15 commits or test-file renames included.

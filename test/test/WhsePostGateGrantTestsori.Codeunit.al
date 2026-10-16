@@ -99,9 +99,6 @@ codeunit 97024 "Whse Post Gate Grant Tests ori"
         ResponseText: Text;
         ErrorToken: JsonToken;
     begin
-        LibraryLowerPermissions.PushPermissionSetWithoutDefaults('D365 Basic - Edit');
-        LibraryLowerPermissions.AddPermissionSet('BIFROST Full ori');
-        EnableRegisteredAppHttp();
         LowerToWhsePost(LibraryLowerPermissions);
         Assert.IsFalse(AppSetting.WritePermission(), 'The caller must not retain HTTP setup write permission.');
 
@@ -111,30 +108,6 @@ codeunit 97024 "Whse Post Gate Grant Tests ori"
         Assert.AreEqual('MissingParameter', CodeToken.AsValue().AsText(), 'An empty subject should fail lookup, not the posting gate.');
         Assert.IsTrue(ResponseJson.Get('error', ErrorToken), 'error missing');
         Assert.AreEqual(0, StrPos(ErrorToken.AsValue().AsText(), 'Posting denied'), ErrorToken.AsValue().AsText());
-    end;
-
-    // Administrator setup precedes permission lowering. The caller under test never receives
-    // NAV App Setting write permission, and the posting/invoicing token checks remain restrictive.
-    local procedure EnableRegisteredAppHttp()
-    var
-        AppSetting: Record "NAV App Setting";
-        TempApps: Record "Registered App ori" temporary;
-        AppRegistry: Codeunit "App Registry ori";
-    begin
-        AppRegistry.GetApps(TempApps);
-        if TempApps.FindSet() then
-            repeat
-                if not AppSetting.Get(TempApps."App Id") then begin
-                    AppSetting.Init();
-                    AppSetting."App ID" := TempApps."App Id";
-                    AppSetting."Allow HttpClient Requests" := true;
-                    AppSetting.Insert();
-                end else
-                    if not AppSetting."Allow HttpClient Requests" then begin
-                        AppSetting."Allow HttpClient Requests" := true;
-                        AppSetting.Modify();
-                    end;
-            until TempApps.Next() = 0;
     end;
 
     local procedure LowerToWhsePost(var LibraryLowerPermissions: Codeunit "Library - Lower Permissions")

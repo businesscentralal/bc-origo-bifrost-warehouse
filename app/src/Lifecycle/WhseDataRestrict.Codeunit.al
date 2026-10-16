@@ -28,7 +28,7 @@ codeunit 10078458 "Whse Data Restrict ori"
     begin
         if (TableNo = Database::"Bin Content") and (FieldNo = BinContent.FieldNo(Default)) then
             IsRestricted := true;
-        if IsMovementCreateField(TableNo, FieldNo) or IsMovementRegisterField(TableNo, FieldNo) then
+        if IsMovementCreateField(TableNo, FieldNo) or IsActivityQuantityOrBinField(TableNo, FieldNo) or IsActivityZoneField(TableNo, FieldNo) or IsInventoryPickTrackingField(TableNo, FieldNo) then
             IsRestricted := true;
     end;
 
@@ -37,6 +37,10 @@ codeunit 10078458 "Whse Data Restrict ori"
     begin
         if TableNo = Database::Bin then
             Hint := 'Warehouse.Bin.Create, Warehouse.Bin.Get';
+        // The activity line stays wholly write-restricted. Foundation answers that table block before a field hint,
+        // so the generic write names every dedicated activity type. The field hint below stays the precise pointer.
+        if TableNo = Database::"Warehouse Activity Line" then
+            Hint := 'Warehouse.Pick.Register, Warehouse.Putaway.Register, Warehouse.Movement.Register, Warehouse.InventoryPick.Create, Warehouse.InventoryPick.Post';
     end;
 
     [EventSubscriber(ObjectType::Table, Database::"Message Argument ori", 'OnGetDedicatedMessageTypeHintForField', '', false, false)]
@@ -48,8 +52,12 @@ codeunit 10078458 "Whse Data Restrict ori"
             Hint := 'Warehouse.DefaultBin.Set';
         if IsMovementCreateField(TableNo, FieldNo) then
             Hint := 'Warehouse.Movement.Create';
-        if IsMovementRegisterField(TableNo, FieldNo) then
+        if IsActivityQuantityOrBinField(TableNo, FieldNo) then
+            Hint := 'Warehouse.Movement.Register, Warehouse.InventoryPick.Create, Warehouse.InventoryPick.Post';
+        if IsActivityZoneField(TableNo, FieldNo) then
             Hint := 'Warehouse.Movement.Register';
+        if IsInventoryPickTrackingField(TableNo, FieldNo) then
+            Hint := 'Warehouse.InventoryPick.Create, Warehouse.InventoryPick.Post';
     end;
 
     local procedure IsMovementCreateField(TableNo: Integer; FieldNo: Integer): Boolean
@@ -64,7 +72,7 @@ codeunit 10078458 "Whse Data Restrict ori"
             WorksheetLine.FieldNo("To Bin Code")]);
     end;
 
-    local procedure IsMovementRegisterField(TableNo: Integer; FieldNo: Integer): Boolean
+    local procedure IsActivityQuantityOrBinField(TableNo: Integer; FieldNo: Integer): Boolean
     var
         ActivityLine: Record "Warehouse Activity Line";
     begin
@@ -72,8 +80,27 @@ codeunit 10078458 "Whse Data Restrict ori"
             exit(false);
         exit(FieldNo in [
             ActivityLine.FieldNo("Qty. to Handle"),
-            ActivityLine.FieldNo("Bin Code"),
-            ActivityLine.FieldNo("Zone Code")]);
+            ActivityLine.FieldNo("Bin Code")]);
+    end;
+
+    local procedure IsActivityZoneField(TableNo: Integer; FieldNo: Integer): Boolean
+    var
+        ActivityLine: Record "Warehouse Activity Line";
+    begin
+        if TableNo <> Database::"Warehouse Activity Line" then
+            exit(false);
+        exit(FieldNo = ActivityLine.FieldNo("Zone Code"));
+    end;
+
+    local procedure IsInventoryPickTrackingField(TableNo: Integer; FieldNo: Integer): Boolean
+    var
+        ActivityLine: Record "Warehouse Activity Line";
+    begin
+        if TableNo <> Database::"Warehouse Activity Line" then
+            exit(false);
+        exit(FieldNo in [
+            ActivityLine.FieldNo("Lot No."),
+            ActivityLine.FieldNo("Serial No.")]);
     end;
 
     local procedure IsWarehouseDocumentTable(TableNo: Integer): Boolean

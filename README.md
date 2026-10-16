@@ -12,10 +12,11 @@ The app provides warehouse message types for bin content, open warehouse activit
 - `Warehouse.Receipt.Create`, `Warehouse.Receipt.Post`, and `Warehouse.Receipt.Post.Preview`.
 - `Warehouse.Pick.Create` and `Warehouse.Pick.Register`.
 - `Warehouse.Putaway.Create` and `Warehouse.Putaway.Register`.
+- `Warehouse.Bin.Get`, `Warehouse.Bin.Create`, and `Warehouse.DefaultBin.Set`.
+- `Warehouse.Movement.Create` and `Warehouse.Movement.Register` for directed put-away and pick locations.
+- `Warehouse.InventoryPick.Create` and `Warehouse.InventoryPick.Post` for a location that requires pick and does not use warehouse shipments.
 
-Shipment post, receipt post, pick register, and put-away register require the assignable permission set `BIFROST WhsePost ori`. `Warehouse.Shipment.Post` with `invoice` true also requires `BIFROST WhseInv ori`. Neither set is included in the read or full extensions. Preview types do not consult the posting gate.
-
-Warehouse movement message types are planned for a later phase.
+Shipment post, receipt post, pick register, and put-away register require the assignable permission set `BIFROST WhsePost ori`. `Warehouse.Shipment.Post` with `invoice` true also requires `BIFROST WhseInv ori`. Neither set is included in the read or full extensions. Preview types do not consult the posting gate. Inventory pick post uses the full permission extension and does not add a new assignable set.
 
 ## Object ID ranges
 

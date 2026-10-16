@@ -114,7 +114,7 @@ codeunit 97026 "Whse Write Restrict Tests ori"
         AssertGenericSetRefused('Whse. Worksheet Line', '{"tableName":"Whse. Worksheet Line","force":true,"data":[{"primaryKey":{"Worksheet Template Name":"MOVE","Name":"DEFAULT","Location Code":"LOC","Line No.":10000},"fields":{"From Bin Code":"A-01"}}]}', 'Warehouse.Movement.Create');
     end;
 
-    /// <summary>Movement activity quantity, bin and zone fields point at Warehouse.Movement.Register.</summary>
+    /// <summary>Activity quantity and bin point at movement and inventory pick. Zone stays on movement. Lot and serial point at inventory pick.</summary>
     [Test]
     procedure GenericWrite_MovementActivityFields_IsHinted()
     var
@@ -125,10 +125,14 @@ codeunit 97026 "Whse Write Restrict Tests ori"
         TempArgument.Init();
         TempArgument.Insert(true);
 
-        Assert.AreEqual('Warehouse.Movement.Register', TempArgument.GetDedicatedMessageTypeHintForField(Database::"Warehouse Activity Line", ActivityLine.FieldNo("Qty. to Handle")), 'Qty. to Handle hint.');
-        Assert.AreEqual('Warehouse.Movement.Register', TempArgument.GetDedicatedMessageTypeHintForField(Database::"Warehouse Activity Line", ActivityLine.FieldNo("Bin Code")), 'Bin Code hint.');
+        Assert.AreEqual('Warehouse.Movement.Register, Warehouse.InventoryPick.Create, Warehouse.InventoryPick.Post', TempArgument.GetDedicatedMessageTypeHintForField(Database::"Warehouse Activity Line", ActivityLine.FieldNo("Qty. to Handle")), 'Qty. to Handle hint.');
+        Assert.AreEqual('Warehouse.Movement.Register, Warehouse.InventoryPick.Create, Warehouse.InventoryPick.Post', TempArgument.GetDedicatedMessageTypeHintForField(Database::"Warehouse Activity Line", ActivityLine.FieldNo("Bin Code")), 'Bin Code hint.');
         Assert.AreEqual('Warehouse.Movement.Register', TempArgument.GetDedicatedMessageTypeHintForField(Database::"Warehouse Activity Line", ActivityLine.FieldNo("Zone Code")), 'Zone Code hint.');
+        Assert.AreEqual('Warehouse.InventoryPick.Create, Warehouse.InventoryPick.Post', TempArgument.GetDedicatedMessageTypeHintForField(Database::"Warehouse Activity Line", ActivityLine.FieldNo("Lot No.")), 'Lot No. hint.');
+        Assert.AreEqual('Warehouse.InventoryPick.Create, Warehouse.InventoryPick.Post', TempArgument.GetDedicatedMessageTypeHintForField(Database::"Warehouse Activity Line", ActivityLine.FieldNo("Serial No.")), 'Serial No. hint.');
+        Assert.AreEqual('Warehouse.Pick.Register, Warehouse.Putaway.Register, Warehouse.Movement.Register, Warehouse.InventoryPick.Create, Warehouse.InventoryPick.Post', TempArgument.GetDedicatedMessageTypeHintForWrite(Database::"Warehouse Activity Line"), 'Activity line write hint.');
         Assert.IsTrue(TempArgument.IsTableWriteRestrictedForDataRecords(Database::"Warehouse Activity Line", true), 'The activity line table stays closed, including force.');
+        AssertGenericSetRefused('Warehouse Activity Line', '{"tableName":"Warehouse Activity Line","force":true,"data":[{"primaryKey":{"Activity Type":"Invt. Pick","No.":"IP","Line No.":10000},"fields":{"Lot No.":"LOT1"}}]}', 'Warehouse.Pick.Register, Warehouse.Putaway.Register, Warehouse.Movement.Register, Warehouse.InventoryPick.Create, Warehouse.InventoryPick.Post');
     end;
 
     local procedure AssertGenericSetRefused(Subject: Text; RequestText: Text; ExpectedHint: Text)

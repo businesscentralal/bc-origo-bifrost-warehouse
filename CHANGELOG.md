@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Added (2026-10-16) - Inventory pick create and post (#42)
+
+- Warehouse.InventoryPick.Create (codeunit 10078479, process 10078480) creates an inventory pick from a released sales order, purchase return order, outbound transfer, assembly consumption or production consumption at a location that requires pick and does not use warehouse shipments. An open inventory pick for the same document is returned with a warning. Report 7323 commits the pick.
+- Warehouse.InventoryPick.Post (codeunit 10078481, process 10078482) posts by number or SystemId, including a partial quantity. Quantity above outstanding or bin content is refused. invoice true is only for a sales order. Codeunit 7324 commits the post. Isolation uses codeunit 10078478.
+- Enum values 10078476–10078477. Warehouse Activity Line quantity and bin hints now name the movement and inventory-pick types. Lot No. and Serial No. name the inventory-pick types. Zone Code stays on Warehouse.Movement.Register. The activity line table hint names the dedicated activity types because a table block is answered before a field hint. Tests 97085–97086.
+
 ### Added (2026-10-16) - Warehouse movement create and register (#41)
 
 - Warehouse.Movement.Create (codeunit 10078466, process 10078467) creates a movement at a directed put-away and pick location from a movement worksheet or from inline lines. A location without directed put-away and pick returns PreconditionFailed and writes nothing.

@@ -158,4 +158,22 @@ enumextension 10078385 "Whse MsgType EnumExt ori" extends "Message Type ori"
         Caption = 'Warehouse.Movement.Register', Locked = true;
         Implementation = "Msg Interface ori" = "Whse Movement Reg Impl ori", "Msg Contract ori" = "Whse Movement Reg Impl ori", "Msg Discovery ori" = "Whse Movement Reg Impl ori";
     }
+
+    /// <summary>
+    /// Creates an inventory pick from a released source document at a basic location that requires pick.
+    /// </summary>
+    value(10078476; "Warehouse.InventoryPick.Create")
+    {
+        Caption = 'Warehouse.InventoryPick.Create', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse InvtPick Create Impl ori", "Msg Contract ori" = "Whse InvtPick Create Impl ori", "Msg Discovery ori" = "Whse InvtPick Create Impl ori";
+    }
+
+    /// <summary>
+    /// Posts an inventory pick and ships the source document.
+    /// </summary>
+    value(10078477; "Warehouse.InventoryPick.Post")
+    {
+        Caption = 'Warehouse.InventoryPick.Post', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse InvtPick Post Impl ori", "Msg Contract ori" = "Whse InvtPick Post Impl ori", "Msg Discovery ori" = "Whse InvtPick Post Impl ori";
+    }
 }

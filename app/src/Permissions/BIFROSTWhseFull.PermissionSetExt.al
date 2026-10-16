@@ -35,5 +35,10 @@ permissionsetextension 10078395 "BIFROST Whse - Full ori" extends "BIFROST Full 
         codeunit "Whse Movement Reg Impl ori" = X,
         codeunit "Whse Movement Reg Proc ori" = X,
         codeunit "Whse Movement Context ori" = X,
+        codeunit "Whse InvtPick Create Impl ori" = X,
+        codeunit "Whse InvtPick Create Proc ori" = X,
+        codeunit "Whse InvtPick Post Impl ori" = X,
+        codeunit "Whse InvtPick Post Proc ori" = X,
+        codeunit "Whse InvtPick Context ori" = X,
         codeunit "Whse Data Restrict ori" = X;
 }

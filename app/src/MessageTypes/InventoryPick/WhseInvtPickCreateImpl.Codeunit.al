@@ -501,13 +501,14 @@ codeunit 10078479 "Whse InvtPick Create Impl ori" implements "Msg Interface ori"
         if not TryReadGuid(Argument, SystemIdText, SystemId, ById) then
             exit(false);
         if ById then begin
-            if not SalesHeader.GetBySystemId(SystemId) then
-                exit(NotFound(Argument, SourceNoText, SystemIdText));
-            if SalesHeader."Document Type" <> SalesHeader."Document Type"::Order then
-                exit(NotFound(Argument, SourceNoText, SystemIdText));
-            if (SourceNoText <> '') and (SalesHeader."No." <> CopyStr(SourceNoText, 1, MaxStrLen(SalesHeader."No."))) then
+            if SalesHeader.GetBySystemId(SystemId) and (SalesHeader."Document Type" = SalesHeader."Document Type"::Order) then begin
+                if (SourceNoText <> '') and (SalesHeader."No." <> CopyStr(SourceNoText, 1, MaxStrLen(SalesHeader."No."))) then
+                    exit(Conflict(Argument, SourceNoText, SystemIdText));
+                exit(true);
+            end;
+            if (SourceNoText <> '') and SalesHeader.Get(SalesHeader."Document Type"::Order, CopyStr(SourceNoText, 1, MaxStrLen(SalesHeader."No."))) then
                 exit(Conflict(Argument, SourceNoText, SystemIdText));
-            exit(true);
+            exit(NotFound(Argument, SourceNoText, SystemIdText));
         end;
         if SalesHeader.Get(SalesHeader."Document Type"::Order, CopyStr(SourceNoText, 1, MaxStrLen(SalesHeader."No."))) then
             exit(true);
@@ -543,13 +544,14 @@ codeunit 10078479 "Whse InvtPick Create Impl ori" implements "Msg Interface ori"
         if not TryReadGuid(Argument, SystemIdText, SystemId, ById) then
             exit(false);
         if ById then begin
-            if not PurchaseHeader.GetBySystemId(SystemId) then
-                exit(NotFound(Argument, SourceNoText, SystemIdText));
-            if PurchaseHeader."Document Type" <> PurchaseHeader."Document Type"::"Return Order" then
-                exit(NotFound(Argument, SourceNoText, SystemIdText));
-            if (SourceNoText <> '') and (PurchaseHeader."No." <> CopyStr(SourceNoText, 1, MaxStrLen(PurchaseHeader."No."))) then
+            if PurchaseHeader.GetBySystemId(SystemId) and (PurchaseHeader."Document Type" = PurchaseHeader."Document Type"::"Return Order") then begin
+                if (SourceNoText <> '') and (PurchaseHeader."No." <> CopyStr(SourceNoText, 1, MaxStrLen(PurchaseHeader."No."))) then
+                    exit(Conflict(Argument, SourceNoText, SystemIdText));
+                exit(true);
+            end;
+            if (SourceNoText <> '') and PurchaseHeader.Get(PurchaseHeader."Document Type"::"Return Order", CopyStr(SourceNoText, 1, MaxStrLen(PurchaseHeader."No."))) then
                 exit(Conflict(Argument, SourceNoText, SystemIdText));
-            exit(true);
+            exit(NotFound(Argument, SourceNoText, SystemIdText));
         end;
         if PurchaseHeader.Get(PurchaseHeader."Document Type"::"Return Order", CopyStr(SourceNoText, 1, MaxStrLen(PurchaseHeader."No."))) then
             exit(true);
@@ -582,11 +584,14 @@ codeunit 10078479 "Whse InvtPick Create Impl ori" implements "Msg Interface ori"
         if not TryReadGuid(Argument, SystemIdText, SystemId, ById) then
             exit(false);
         if ById then begin
-            if not TransferHeader.GetBySystemId(SystemId) then
-                exit(NotFound(Argument, SourceNoText, SystemIdText));
-            if (SourceNoText <> '') and (TransferHeader."No." <> CopyStr(SourceNoText, 1, MaxStrLen(TransferHeader."No."))) then
+            if TransferHeader.GetBySystemId(SystemId) then begin
+                if (SourceNoText <> '') and (TransferHeader."No." <> CopyStr(SourceNoText, 1, MaxStrLen(TransferHeader."No."))) then
+                    exit(Conflict(Argument, SourceNoText, SystemIdText));
+                exit(true);
+            end;
+            if (SourceNoText <> '') and TransferHeader.Get(CopyStr(SourceNoText, 1, MaxStrLen(TransferHeader."No."))) then
                 exit(Conflict(Argument, SourceNoText, SystemIdText));
-            exit(true);
+            exit(NotFound(Argument, SourceNoText, SystemIdText));
         end;
         if TransferHeader.Get(CopyStr(SourceNoText, 1, MaxStrLen(TransferHeader."No."))) then
             exit(true);
@@ -621,13 +626,14 @@ codeunit 10078479 "Whse InvtPick Create Impl ori" implements "Msg Interface ori"
         if not TryReadGuid(Argument, SystemIdText, SystemId, ById) then
             exit(false);
         if ById then begin
-            if not AssemblyHeader.GetBySystemId(SystemId) then
-                exit(NotFound(Argument, SourceNoText, SystemIdText));
-            if AssemblyHeader."Document Type" <> AssemblyHeader."Document Type"::Order then
-                exit(NotFound(Argument, SourceNoText, SystemIdText));
-            if (SourceNoText <> '') and (AssemblyHeader."No." <> CopyStr(SourceNoText, 1, MaxStrLen(AssemblyHeader."No."))) then
+            if AssemblyHeader.GetBySystemId(SystemId) and (AssemblyHeader."Document Type" = AssemblyHeader."Document Type"::Order) then begin
+                if (SourceNoText <> '') and (AssemblyHeader."No." <> CopyStr(SourceNoText, 1, MaxStrLen(AssemblyHeader."No."))) then
+                    exit(Conflict(Argument, SourceNoText, SystemIdText));
+                exit(true);
+            end;
+            if (SourceNoText <> '') and AssemblyHeader.Get(AssemblyHeader."Document Type"::Order, CopyStr(SourceNoText, 1, MaxStrLen(AssemblyHeader."No."))) then
                 exit(Conflict(Argument, SourceNoText, SystemIdText));
-            exit(true);
+            exit(NotFound(Argument, SourceNoText, SystemIdText));
         end;
         if AssemblyHeader.Get(AssemblyHeader."Document Type"::Order, CopyStr(SourceNoText, 1, MaxStrLen(AssemblyHeader."No."))) then
             exit(true);
@@ -661,11 +667,18 @@ codeunit 10078479 "Whse InvtPick Create Impl ori" implements "Msg Interface ori"
         if not TryReadGuid(Argument, SystemIdText, SystemId, ById) then
             exit(false);
         if ById then begin
-            if not ProductionOrder.GetBySystemId(SystemId) then
-                exit(NotFound(Argument, SourceNoText, SystemIdText));
-            if (SourceNoText <> '') and (ProductionOrder."No." <> CopyStr(SourceNoText, 1, MaxStrLen(ProductionOrder."No."))) then
-                exit(Conflict(Argument, SourceNoText, SystemIdText));
-            exit(true);
+            if ProductionOrder.GetBySystemId(SystemId) then begin
+                if (SourceNoText <> '') and (ProductionOrder."No." <> CopyStr(SourceNoText, 1, MaxStrLen(ProductionOrder."No."))) then
+                    exit(Conflict(Argument, SourceNoText, SystemIdText));
+                exit(true);
+            end;
+            if SourceNoText <> '' then begin
+                ProductionOrder.Reset();
+                ProductionOrder.SetRange("No.", CopyStr(SourceNoText, 1, MaxStrLen(ProductionOrder."No.")));
+                if ProductionOrder.FindFirst() then
+                    exit(Conflict(Argument, SourceNoText, SystemIdText));
+            end;
+            exit(NotFound(Argument, SourceNoText, SystemIdText));
         end;
         ProductionOrder.SetRange("No.", CopyStr(SourceNoText, 1, MaxStrLen(ProductionOrder."No.")));
         ProductionOrder.SetRange(Status, ProductionOrder.Status::Released);

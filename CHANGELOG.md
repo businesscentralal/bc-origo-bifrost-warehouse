@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Fixed (2026-10-16) - Inventory quantity, identifier conflict and movement employee (#41, #42, #43)
+
+- Warehouse.InventoryPutAway.Create (codeunit 10078421) and Warehouse.InventoryPick.Create (codeunit 10078480) set Qty. to Handle and Qty. to Handle (Base) to the outstanding quantity after report 7323. The report leaves that field at zero when its request page is suppressed, so a post without lines had nothing to post. The quantity is assigned without Validate, because a tracked line without a lot rejects Validate and a try function cannot write afterwards. Post then refuses the missing lot or serial before posting.
+- Warehouse.InventoryPutAway.Create (codeunit 10078420) and Warehouse.InventoryPick.Create (codeunit 10078479) return ConflictingIdentifiers when sourceNo names a document and systemId does not name that same document. A missing systemId previously returned RecordNotFound before the source number was compared.
+- Movement tests 97083 and 97084 assign the current user as the default warehouse employee on the directed location, and they create a movement worksheet template when the company has none. Business Central otherwise asks to open Warehouse Employees, and inline movement lines need a template of type Movement.
+
 ### Added (2026-10-16) - Inventory put-away create and post (#43)
 
 - Warehouse.InventoryPutAway.Create (codeunit 10078420, process 10078421) creates an inventory put-away from a released purchase order, sales return order or inbound transfer at a location that requires put-away and does not use warehouse receipts. An open inventory put-away for the same document is returned with a warning. Report 7323 commits the put-away.

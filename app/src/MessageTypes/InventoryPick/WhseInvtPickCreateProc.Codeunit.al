@@ -43,6 +43,8 @@ codeunit 10078480 "Whse InvtPick Create Proc ori"
         CreateReport.SuppressMessages(true);
         CreateReport.SetTableView(WarehouseRequest);
         CreateReport.RunModal();
+        // Report 7323 leaves Qty. to Handle at zero when the request page is suppressed.
+        FillQtyToHandle(SourceDocument, SourceNo);
         BuildPicks(SourceDocument, SourceNo, Picks);
         if Picks.Count() = 0 then
             Error(NothingErr);
@@ -101,6 +103,32 @@ codeunit 10078480 "Whse InvtPick Create Proc ori"
             LineJson.Add('qtyOutstanding', ActivityLine."Qty. Outstanding");
             Lines.Add(LineJson);
         until ActivityLine.Next() = 0;
+    end;
+
+    local procedure FillQtyToHandle(SourceDocument: Enum "Warehouse Request Source Document"; SourceNo: Code[20])
+    var
+        ActivityHeader: Record "Warehouse Activity Header";
+        ActivityLine: Record "Warehouse Activity Line";
+    begin
+        ActivityHeader.SetRange(Type, ActivityHeader.Type::"Invt. Pick");
+        ActivityHeader.SetRange("Source Document", ToActivitySource(SourceDocument));
+        ActivityHeader.SetRange("Source No.", SourceNo);
+        if not ActivityHeader.FindSet() then
+            exit;
+        repeat
+            ActivityLine.SetRange("Activity Type", ActivityHeader.Type);
+            ActivityLine.SetRange("No.", ActivityHeader."No.");
+            if ActivityLine.FindSet() then
+                repeat
+                    if (ActivityLine."Qty. to Handle" = 0) and (ActivityLine."Qty. Outstanding" > 0) then begin
+                        // Assign without Validate. A tracked line without a lot rejects Validate,
+                        // and a try function cannot write the quantity afterwards.
+                        ActivityLine."Qty. to Handle" := ActivityLine."Qty. Outstanding";
+                        ActivityLine."Qty. to Handle (Base)" := ActivityLine."Qty. Outstanding (Base)";
+                        ActivityLine.Modify(true);
+                    end;
+                until ActivityLine.Next() = 0;
+        until ActivityHeader.Next() = 0;
     end;
 
     local procedure ParseSourceDocument(SourceText: Text) SourceDocument: Enum "Warehouse Request Source Document"

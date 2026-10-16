@@ -4,7 +4,9 @@ using Microsoft.Inventory.Item;
 using Microsoft.Inventory.Location;
 using Microsoft.Warehouse.Activity;
 using Microsoft.Warehouse.Activity.History;
+using Microsoft.Warehouse.Setup;
 using Microsoft.Warehouse.Structure;
+using Microsoft.Warehouse.Worksheet;
 using Origo.Bifrost;
 using Origo.Bifrost.Warehouse;
 using System.TestLibraries.Utilities;
@@ -38,6 +40,8 @@ codeunit 97084 "Whse Movement Reg Tests ori"
         MovementNo: Code[20];
     begin
         LibraryWarehouse.CreateFullWMSLocation(Location, 2);
+        EnsureDefaultDirectedEmployee(Location.Code);
+        EnsureMovementWorksheetTemplate();
         LibraryInventory.CreateItem(Item);
         LibraryWarehouse.UpdateInventoryOnLocationWithDirectedPutAwayAndPick(Item."No.", Location.Code, 5, false);
         LibraryWarehouse.FindZone(Zone, Location.Code, LibraryWarehouse.SelectBinType(false, false, true, true), false);
@@ -97,6 +101,8 @@ codeunit 97084 "Whse Movement Reg Tests ori"
         MovementNo: Code[20];
     begin
         LibraryWarehouse.CreateFullWMSLocation(Location, 2);
+        EnsureDefaultDirectedEmployee(Location.Code);
+        EnsureMovementWorksheetTemplate();
         LibraryInventory.CreateItem(Item);
         LibraryWarehouse.UpdateInventoryOnLocationWithDirectedPutAwayAndPick(Item."No.", Location.Code, 5, false);
         LibraryWarehouse.FindZone(Zone, Location.Code, LibraryWarehouse.SelectBinType(false, false, true, true), false);
@@ -143,6 +149,50 @@ codeunit 97084 "Whse Movement Reg Tests ori"
         Helper: Codeunit "Whse Receipt Test Helper ori";
     begin
         Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Movement.Create", '', RequestText, ResponseJson), 'The create response should be JSON.');
+    end;
+
+    local procedure EnsureDefaultDirectedEmployee(LocationCode: Code[10])
+    var
+        WarehouseEmployee: Record "Warehouse Employee";
+        Existing: Record "Warehouse Employee";
+        UserCode: Code[50];
+    begin
+        UserCode := CopyStr(UserId(), 1, MaxStrLen(UserCode));
+        if UserCode = '' then
+            exit;
+        Existing.SetRange("User ID", UserCode);
+        Existing.SetRange(Default, true);
+        Existing.SetFilter("Location Code", '<>%1', LocationCode);
+        while Existing.FindFirst() do begin
+            Existing.Default := false;
+            Existing.Modify(true);
+        end;
+        if WarehouseEmployee.Get(UserCode, LocationCode) then begin
+            if not WarehouseEmployee.Default then begin
+                WarehouseEmployee.Default := true;
+                WarehouseEmployee.Modify(true);
+            end;
+            exit;
+        end;
+        WarehouseEmployee.Init();
+        WarehouseEmployee."User ID" := UserCode;
+        WarehouseEmployee."Location Code" := LocationCode;
+        WarehouseEmployee.Default := true;
+        WarehouseEmployee.Insert(true);
+    end;
+
+    local procedure EnsureMovementWorksheetTemplate()
+    var
+        WorksheetTemplate: Record "Whse. Worksheet Template";
+    begin
+        WorksheetTemplate.SetRange(Type, WorksheetTemplate.Type::Movement);
+        if not WorksheetTemplate.IsEmpty() then
+            exit;
+        WorksheetTemplate.Init();
+        WorksheetTemplate.Name := 'MOVEMENT';
+        WorksheetTemplate.Validate(Type, WorksheetTemplate.Type::Movement);
+        WorksheetTemplate.Description := 'Movement';
+        WorksheetTemplate.Insert(true);
     end;
 
     local procedure Run(RequestText: Text; Subject: Text; var ResponseJson: JsonObject)

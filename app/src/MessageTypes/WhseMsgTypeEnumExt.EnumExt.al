@@ -113,4 +113,31 @@ enumextension 10078385 "Whse MsgType EnumExt ori" extends "Message Type ori"
         Caption = 'Warehouse.Putaway.Register', Locked = true;
         Implementation = "Msg Interface ori" = "Whse Putaway Register Impl ori", "Msg Discovery ori" = "Whse Putaway Register Impl ori", "Msg Contract ori" = "Whse Putaway Register Impl ori";
     }
+
+    /// <summary>
+    /// Reads bin master data, optionally with bin content.
+    /// </summary>
+    value(10078470; "Warehouse.Bin.Get")
+    {
+        Caption = 'Warehouse.Bin.Get', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Bin Get Impl ori", "Msg Contract ori" = "Whse Bin Get Impl ori", "Msg Discovery ori" = "Whse Bin Get Impl ori";
+    }
+
+    /// <summary>
+    /// Creates bins at a bin-mandatory location.
+    /// </summary>
+    value(10078471; "Warehouse.Bin.Create")
+    {
+        Caption = 'Warehouse.Bin.Create', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Bin Create Impl ori", "Msg Contract ori" = "Whse Bin Create Impl ori", "Msg Discovery ori" = "Whse Bin Create Impl ori";
+    }
+
+    /// <summary>
+    /// Sets the default bin for an item at a location.
+    /// </summary>
+    value(10078472; "Warehouse.DefaultBin.Set")
+    {
+        Caption = 'Warehouse.DefaultBin.Set', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse DefaultBin Set Impl ori", "Msg Contract ori" = "Whse DefaultBin Set Impl ori", "Msg Discovery ori" = "Whse DefaultBin Set Impl ori";
+    }
 }

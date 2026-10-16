@@ -81,6 +81,672 @@
           <note from="Developer" annotates="general" priority="2">is-IS=númer vöruhúsavirkni</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Activity Get Impl ori - Method ResolveActivityIdentifiers - NamedType ActivityNumberTxt</note>
         </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 65399750 - NamedType 1719132245" size-unit="char" translate="yes" xml:space="preserve">
+          <source>blockMovement %1 is not supported.</source>
+          <target>blockMovement %1 er ekki stutt.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = value, is-IS=blockMovement %1 er ekki stutt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method AddBlockRefusal - NamedType BlockLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 65399750 - NamedType 174231538" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use Inbound, Outbound, All, or leave it blank.</source>
+          <target>Notaðu Inbound, Outbound, All, eða skildu það eftir autt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notaðu Inbound, Outbound, All, eða skildu það eftir autt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method AddBlockRefusal - NamedType BlockNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 3766271674 - NamedType 436939961" size-unit="char" translate="yes" xml:space="preserve">
+          <source>A new bin cannot be marked not empty.</source>
+          <target>Nýtt hólf er ekki hægt að merkja sem ekki tómt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Nýtt hólf er ekki hægt að merkja sem ekki tómt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method AddEmptyRefusal - NamedType EmptyLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 3766271674 - NamedType 3413976670" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Leave empty out or send true. Business Central keeps a new bin empty until stock is posted.</source>
+          <target>Slepptu empty eða sendu true. Business Central heldur nýju hólfi tómu þar til birgðir eru bókaðar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Slepptu empty eða sendu true. Business Central heldur nýju hólfi tómu þar til birgðir eru bókaðar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method AddEmptyRefusal - NamedType EmptyNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 2092638820 - NamedType 4208121044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location %1 does not use bins.</source>
+          <target>Staðsetning %1 notar ekki hólf.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = location, is-IS=Staðsetning %1 notar ekki hólf.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method EnsureBinMandatory - NamedType BinMandatoryLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 2092638820 - NamedType 1725739631" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Turn on Bin Mandatory on the location first.</source>
+          <target>Kveiktu fyrst á Bin Mandatory á staðsetningunni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Kveiktu fyrst á Bin Mandatory á staðsetningunni.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method EnsureBinMandatory - NamedType BinMandatoryNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to create bins.</source>
+          <target>Þú hefur ekki heimild til að stofna hólf.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að stofna hólf.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ExecuteBifrostTask - NamedType DeniedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 3571782927 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Full ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ExecuteBifrostTask - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 3571782927 - NamedType 1300278838" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Nothing was written.</source>
+          <target>Ekkert var skrifað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekkert var skrifað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ExecuteBifrostTask - NamedType ProblemsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Creates one or more bins at a bin-mandatory location.</source>
+          <target>Stofnar eitt eða fleiri hólf á staðsetningu þar sem hólf eru skyld.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar eitt eða fleiri hólf á staðsetningu þar sem hólf eru skyld.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 4244006160" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The location does not have Bin Mandatory turned on.</source>
+          <target>Staðsetningin er ekki með Bin Mandatory kveikt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Staðsetningin er ekki með Bin Mandatory kveikt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType BinMandatoryWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 1725739631" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Turn on Bin Mandatory on the location first.</source>
+          <target>Kveiktu fyrst á Bin Mandatory á staðsetningunni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Kveiktu fyrst á Bin Mandatory á staðsetningunni.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType BinMandatoryNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 2373461795" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The bin code already exists at the location.</source>
+          <target>Hólfakóðinn er þegar til á staðsetningunni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Hólfakóðinn er þegar til á staðsetningunni.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType DuplicateWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 3268701316" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Read Warehouse.Bin.Get or choose another code.</source>
+          <target>Lestu Warehouse.Bin.Get eða veldu annan kóða.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lestu Warehouse.Bin.Get eða veldu annan kóða.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType DuplicateNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 2442807140" size-unit="char" translate="yes" xml:space="preserve">
+          <source>zoneCode or binTypeCode was sent for a basic location, or the code is unknown.</source>
+          <target>zoneCode eða binTypeCode var sent fyrir einfalda staðsetningu, eða kóðinn er óþekktur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=zoneCode eða binTypeCode var sent fyrir einfalda staðsetningu, eða kóðinn er óþekktur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType ZoneWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 120693827" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Leave them blank for basic warehouse locations.</source>
+          <target>Skildu þau eftir tóm fyrir einfaldar vöruhúsastaðsetningar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skildu þau eftir tóm fyrir einfaldar vöruhúsastaðsetningar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType ZoneNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 3414553558" size-unit="char" translate="yes" xml:space="preserve">
+          <source>A directed location needs both zoneCode and binTypeCode.</source>
+          <target>Beint vöruhús þarf bæði zoneCode og binTypeCode.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Beint vöruhús þarf bæði zoneCode og binTypeCode.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType DirectedWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 3313326517" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send zoneCode and binTypeCode for a directed location.</source>
+          <target>Sendu zoneCode og binTypeCode fyrir beint vöruhús.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu zoneCode og binTypeCode fyrir beint vöruhús.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType DirectedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 497354065" size-unit="char" translate="yes" xml:space="preserve">
+          <source>blockMovement is not blank, Inbound, Outbound or All.</source>
+          <target>blockMovement er ekki autt, Inbound, Outbound eða All.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=blockMovement er ekki autt, Inbound, Outbound eða All.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType BlockWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 174231538" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use Inbound, Outbound, All, or leave it blank.</source>
+          <target>Notaðu Inbound, Outbound, All, eða skildu það eftir autt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notaðu Inbound, Outbound, All, eða skildu það eftir autt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType BlockNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 1624027549" size-unit="char" translate="yes" xml:space="preserve">
+          <source>empty was sent as false.</source>
+          <target>empty var sent sem false.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=empty var sent sem false.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType EmptyWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 3413976670" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Leave empty out or send true. Business Central keeps a new bin empty until stock is posted.</source>
+          <target>Slepptu empty eða sendu true. Business Central heldur nýju hólfi tómu þar til birgðir eru bókaðar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Slepptu empty eða sendu true. Business Central heldur nýju hólfi tómu þar til birgðir eru bókaðar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType EmptyNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 2408295350" size-unit="char" translate="yes" xml:space="preserve">
+          <source>locationCode or the bins array is missing.</source>
+          <target>locationCode eða bins fylkið vantar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=locationCode eða bins fylkið vantar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType MissingWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send locationCode and at least one bin.</source>
+          <target>Sendu locationCode og að minnsta kosti eitt hólf.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu locationCode og að minnsta kosti eitt hólf.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 731885583" size-unit="char" translate="yes" xml:space="preserve">
+          <source>A value has the wrong JSON type or is too long.</source>
+          <target>Gildi er af rangri JSON-gerð eða of langt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gildi er af rangri JSON-gerð eða of langt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType FormatWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send text for codes, an integer for ranking, and true or false for dedicated and empty.</source>
+          <target>Sendu texta fyrir kóða, heiltölu fyrir ranking og true eða false fyrir dedicated og empty.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu texta fyrir kóða, heiltölu fyrir ranking og true eða false fyrir dedicated og empty.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 2469653682" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The request contains a key this type does not accept.</source>
+          <target>Beiðnin inniheldur lykil sem þessi gerð tekur ekki við.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Beiðnin inniheldur lykil sem þessi gerð tekur ekki við.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType UnknownWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType UnknownNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 1399190847" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The location does not exist.</source>
+          <target>Staðsetningin er ekki til.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Staðsetningin er ekki til.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType NotFoundWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check the location with the location setup, or read Warehouse.Bin.Get.</source>
+          <target>Athugaðu staðsetninguna í uppsetningu staðsetningar, eða lestu Warehouse.Bin.Get.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu staðsetninguna í uppsetningu staðsetningar, eða lestu Warehouse.Bin.Get.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 3964979788" size-unit="char" translate="yes" xml:space="preserve">
+          <source>subject and locationCode name different locations.</source>
+          <target>subject og locationCode nefna mismunandi staðsetningar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=subject og locationCode nefna mismunandi staðsetningar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType ConflictWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 1132247979" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send one location: subject or locationCode.</source>
+          <target>Sendu eina staðsetningu: subject eða locationCode.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu eina staðsetningu: subject eða locationCode.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType ConflictNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 3939466531" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The caller cannot write bins.</source>
+          <target>Sá sem kallar getur ekki skrifað hólf.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sá sem kallar getur ekki skrifað hólf.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType DeniedWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Full ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 205103559" size-unit="char" translate="yes" xml:space="preserve">
+          <source>More than one bin failed validation.</source>
+          <target>Fleiri en eitt hólf féll á sannprófun.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fleiri en eitt hólf féll á sannprófun.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType ManyWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 1688599624" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Correct every listed bin and send the request again. Nothing was written.</source>
+          <target>Leiðréttu hvert skráð hólf og sendu beiðnina aftur. Ekkert var skrifað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Leiðréttu hvert skráð hólf og sendu beiðnina aftur. Ekkert var skrifað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType ManyNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 3401735083" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Business Central rejected the bin.</source>
+          <target>Business Central hafnaði hólfinu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Business Central hafnaði hólfinu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType PlatformWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 2685657004" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Read the returned text and correct the bin or the location setup.</source>
+          <target>Lestu textann sem kom til baka og leiðréttu hólfið eða uppsetningu staðsetningar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lestu textann sem kom til baka og leiðréttu hólfið eða uppsetningu staðsetningar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType PlatformNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
+          <source>create bin, new bin, bin setup, add bin, warehouse bin, location bin</source>
+          <target>stofna hólf, nýtt hólf, uppsetning hólfs, bæta við hólfi, vöruhúsahólf, hólf staðsetningar</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=stofna hólf, nýtt hólf, uppsetning hólfs, bæta við hólfi, vöruhúsahólf, hólf staðsetningar</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 2340569551 - NamedType 3593894611" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Creates bins at a bin-mandatory location. One failure writes none of the bins.</source>
+          <target>Stofnar hólf á staðsetningu þar sem hólf eru skyld. Ein villa skrifar ekkert af hólfunum.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar hólf á staðsetningu þar sem hólf eru skyld. Ein villa skrifar ekkert af hólfunum.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetOverview - NamedType OverviewLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Writes bins through field validation. A failed bin writes nothing. Use Warehouse.Bin.Get to read bins afterwards.</source>
+          <target>Skrifar hólf með sannprófun reita. Hólf sem mistekst skrifar ekkert. Notaðu Warehouse.Bin.Get til að lesa hólf á eftir.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skrifar hólf með sannprófun reita. Hólf sem mistekst skrifar ekkert. Notaðu Warehouse.Bin.Get til að lesa hólf á eftir.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1825113720 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>bins must contain at least one bin.</source>
+          <target>bins verður að innihalda að minnsta kosti eitt hólf.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=bins verður að innihalda að minnsta kosti eitt hólf.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ReadBins - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1825113720 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send locationCode and at least one bin.</source>
+          <target>Sendu locationCode og að minnsta kosti eitt hólf.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu locationCode og að minnsta kosti eitt hólf.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ReadBins - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1825113720 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
+          <source>bins must be an array of bin objects.</source>
+          <target>bins verður að vera fylki hólfahluta.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=bins verður að vera fylki hólfahluta.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ReadBins - NamedType FormatLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1825113720 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send text for codes, an integer for ranking, and true or false for dedicated and empty.</source>
+          <target>Sendu texta fyrir kóða, heiltölu fyrir ranking og true eða false fyrir dedicated og empty.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu texta fyrir kóða, heiltölu fyrir ranking og true eða false fyrir dedicated og empty.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ReadBins - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1618419858 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Parameter %1 must be true or false.</source>
+          <target>Færibreytan %1 verður að vera true eða false.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=Færibreytan %1 verður að vera true eða false.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ReadBoolean - NamedType FormatLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1618419858 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send text for codes, an integer for ranking, and true or false for dedicated and empty.</source>
+          <target>Sendu texta fyrir kóða, heiltölu fyrir ranking og true eða false fyrir dedicated og empty.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu texta fyrir kóða, heiltölu fyrir ranking og true eða false fyrir dedicated og empty.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ReadBoolean - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1481450256 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Parameter %1 must be an integer.</source>
+          <target>Færibreytan %1 verður að vera heiltala.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=Færibreytan %1 verður að vera heiltala.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ReadInteger - NamedType FormatLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1481450256 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send text for codes, an integer for ranking, and true or false for dedicated and empty.</source>
+          <target>Sendu texta fyrir kóða, heiltölu fyrir ranking og true eða false fyrir dedicated og empty.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu texta fyrir kóða, heiltölu fyrir ranking og true eða false fyrir dedicated og empty.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ReadInteger - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 2578262509 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Each bin must be an object.</source>
+          <target>Hvert hólf verður að vera hlutur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Hvert hólf verður að vera hlutur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ReadOneBin - NamedType FormatLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 2578262509 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send text for codes, an integer for ranking, and true or false for dedicated and empty.</source>
+          <target>Sendu texta fyrir kóða, heiltölu fyrir ranking og true eða false fyrir dedicated og empty.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu texta fyrir kóða, heiltölu fyrir ranking og true eða false fyrir dedicated og empty.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ReadOneBin - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 2578262509 - NamedType 831365973" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bin code is required.</source>
+          <target>Hólfakóði er nauðsynlegur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Hólfakóði er nauðsynlegur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ReadOneBin - NamedType MissingCodeLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 2578262509 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send locationCode and at least one bin.</source>
+          <target>Sendu locationCode og að minnsta kosti eitt hólf.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu locationCode og að minnsta kosti eitt hólf.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ReadOneBin - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 11078697 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Parameter %1 must be text.</source>
+          <target>Færibreytan %1 verður að vera texti.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=Færibreytan %1 verður að vera texti.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ReadText - NamedType FormatLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 11078697 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send text for codes, an integer for ranking, and true or false for dedicated and empty.</source>
+          <target>Sendu texta fyrir kóða, heiltölu fyrir ranking og true eða false fyrir dedicated og empty.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu texta fyrir kóða, heiltölu fyrir ranking og true eða false fyrir dedicated og empty.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ReadText - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 11078697 - NamedType 1030526512" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Parameter %1 is longer than %2 characters.</source>
+          <target>Færibreytan %1 er lengri en %2 stafir.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter, %2 = maximum, is-IS=Færibreytan %1 er lengri en %2 stafir.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ReadText - NamedType TooLongLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 11078697 - NamedType 637595219" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a shorter value.</source>
+          <target>Sendu styttra gildi.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu styttra gildi.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ReadText - NamedType TooLongNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1591952781 - NamedType 1773691126" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The key %1 is not a parameter of this message type.</source>
+          <target>Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = key, is-IS=Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method RefuseUnknownBinKeys - NamedType UnknownLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 1591952781 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method RefuseUnknownBinKeys - NamedType UnknownNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 2054439282 - NamedType 1773691126" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The key %1 is not a parameter of this message type.</source>
+          <target>Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = key, is-IS=Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 3841850974 - NamedType 776865932" size-unit="char" translate="yes" xml:space="preserve">
+          <source>zoneCode and binTypeCode are only used on a directed location.</source>
+          <target>zoneCode og binTypeCode eru aðeins notuð á beinu vöruhúsi.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=zoneCode og binTypeCode eru aðeins notuð á beinu vöruhúsi.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method RefuseZoneOnBasicLocation - NamedType BasicLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 3841850974 - NamedType 3680719623" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Leave them blank for basic warehouse locations.</source>
+          <target>Skildu þau eftir tóm fyrir einfaldar vöruhúsastaðsetningar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skildu þau eftir tóm fyrir einfaldar vöruhúsastaðsetningar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method RefuseZoneOnBasicLocation - NamedType BasicNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 2251054666 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>locationCode is required.</source>
+          <target>locationCode er nauðsynlegt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=locationCode er nauðsynlegt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method TryResolveLocation - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 2251054666 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send locationCode and at least one bin.</source>
+          <target>Sendu locationCode og að minnsta kosti eitt hólf.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu locationCode og að minnsta kosti eitt hólf.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method TryResolveLocation - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 2251054666 - NamedType 650235816" size-unit="char" translate="yes" xml:space="preserve">
+          <source>subject and locationCode name different locations.</source>
+          <target>subject og locationCode nefna mismunandi staðsetningar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=subject og locationCode nefna mismunandi staðsetningar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method TryResolveLocation - NamedType ConflictLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 2251054666 - NamedType 1132247979" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send one location: subject or locationCode.</source>
+          <target>Sendu eina staðsetningu: subject eða locationCode.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu eina staðsetningu: subject eða locationCode.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method TryResolveLocation - NamedType ConflictNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 2251054666 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location %1 was not found.</source>
+          <target>Staðsetning %1 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = location code, is-IS=Staðsetning %1 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method TryResolveLocation - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 2251054666 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check the location with the location setup, or read Warehouse.Bin.Get.</source>
+          <target>Athugaðu staðsetninguna í uppsetningu staðsetningar, eða lestu Warehouse.Bin.Get.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu staðsetninguna í uppsetningu staðsetningar, eða lestu Warehouse.Bin.Get.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method TryResolveLocation - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 3790325579 - NamedType 4071748223" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bin %1 already exists at location %2.</source>
+          <target>Hólf %1 er þegar til á staðsetningu %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = bin code, %2 = location, is-IS=Hólf %1 er þegar til á staðsetningu %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ValidateBinAgainstLocation - NamedType DuplicateLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 3790325579 - NamedType 3268701316" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Read Warehouse.Bin.Get or choose another code.</source>
+          <target>Lestu Warehouse.Bin.Get eða veldu annan kóða.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lestu Warehouse.Bin.Get eða veldu annan kóða.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ValidateBinAgainstLocation - NamedType DuplicateNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 2876904065 - NamedType 3680719623" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Leave them blank for basic warehouse locations.</source>
+          <target>Skildu þau eftir tóm fyrir einfaldar vöruhúsastaðsetningar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skildu þau eftir tóm fyrir einfaldar vöruhúsastaðsetningar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ValidateDirectedZoneAndType - NamedType BasicNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 2876904065 - NamedType 1773691126" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Zone or bin type %1 was not found.</source>
+          <target>Svæði eða hólfategund %1 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = code, is-IS=Svæði eða hólfategund %1 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ValidateDirectedZoneAndType - NamedType UnknownLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 2876904065 - NamedType 2252517138" size-unit="char" translate="yes" xml:space="preserve">
+          <source>A directed location needs zoneCode and binTypeCode.</source>
+          <target>Beint vöruhús þarf zoneCode og binTypeCode.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Beint vöruhús þarf zoneCode og binTypeCode.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ValidateDirectedZoneAndType - NamedType DirectedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 293481984 - Method 2876904065 - NamedType 3313326517" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send zoneCode and binTypeCode for a directed location.</source>
+          <target>Sendu zoneCode og binTypeCode fyrir beint vöruhús.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu zoneCode og binTypeCode fyrir beint vöruhús.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method ValidateDirectedZoneAndType - NamedType DirectedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 157755801 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The bin create payload was empty.</source>
+          <target>Gögnin til að stofna hólf voru tóm.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gögnin til að stofna hólf voru tóm.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Process ori - Method OnRun - NamedType MissingPayloadErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 1418349569 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to read bin content.</source>
+          <target>Þú hefur ekki heimild til að lesa innihald hólfs.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að lesa innihald hólfs.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method CanReadContent - NamedType DeniedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 1418349569 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Read ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Read ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Read ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method CanReadContent - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to read bins.</source>
+          <target>Þú hefur ekki heimild til að lesa hólf.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að lesa hólf.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method ExecuteBifrostTask - NamedType DeniedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 3571782927 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Read ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Read ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Read ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method ExecuteBifrostTask - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 3571782927 - NamedType 1300278838" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The bin query was refused.</source>
+          <target>Fyrirspurn um hólf var hafnað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fyrirspurn um hólf var hafnað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method ExecuteBifrostTask - NamedType ProblemsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reads bins at a location, with optional bin content.</source>
+          <target>Les hólf á staðsetningu, með valfrjálsu innihaldi hólfs.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Les hólf á staðsetningu, með valfrjálsu innihaldi hólfs.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 1158096087 - NamedType 2408295350" size-unit="char" translate="yes" xml:space="preserve">
+          <source>locationCode was not sent and subject is empty.</source>
+          <target>locationCode var ekki sent og subject er tómt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=locationCode var ekki sent og subject er tómt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method GetErrors - NamedType MissingWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 1158096087 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send locationCode or the location code as the subject.</source>
+          <target>Sendu locationCode eða kóða staðsetningarinnar sem subject.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu locationCode eða kóða staðsetningarinnar sem subject.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method GetErrors - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 1158096087 - NamedType 731885583" size-unit="char" translate="yes" xml:space="preserve">
+          <source>A code was not text, or empty or includeContent was not true or false.</source>
+          <target>Kóði var ekki texti, eða empty eða includeContent var ekki true eða false.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Kóði var ekki texti, eða empty eða includeContent var ekki true eða false.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method GetErrors - NamedType FormatWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 1158096087 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send text for codes and true or false for empty and includeContent.</source>
+          <target>Sendu texta fyrir kóða og true eða false fyrir empty og includeContent.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu texta fyrir kóða og true eða false fyrir empty og includeContent.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method GetErrors - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 1158096087 - NamedType 2469653682" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The request contains a key this type does not accept.</source>
+          <target>Beiðnin inniheldur lykil sem þessi gerð tekur ekki við.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Beiðnin inniheldur lykil sem þessi gerð tekur ekki við.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method GetErrors - NamedType UnknownWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 1158096087 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method GetErrors - NamedType UnknownNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 1158096087 - NamedType 1399190847" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The location does not exist.</source>
+          <target>Staðsetningin er ekki til.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Staðsetningin er ekki til.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method GetErrors - NamedType NotFoundWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 1158096087 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check the location code and try again.</source>
+          <target>Athugaðu kóða staðsetningarinnar og reyndu aftur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu kóða staðsetningarinnar og reyndu aftur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method GetErrors - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 1158096087 - NamedType 3964979788" size-unit="char" translate="yes" xml:space="preserve">
+          <source>subject and locationCode name different locations.</source>
+          <target>subject og locationCode nefna mismunandi staðsetningar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=subject og locationCode nefna mismunandi staðsetningar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method GetErrors - NamedType ConflictWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 1158096087 - NamedType 1132247979" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send one location: subject or locationCode.</source>
+          <target>Sendu eina staðsetningu: subject eða locationCode.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu eina staðsetningu: subject eða locationCode.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method GetErrors - NamedType ConflictNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 1158096087 - NamedType 3939466531" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The caller cannot read bins or, when includeContent is true, bin content.</source>
+          <target>Sá sem kallar getur ekki lesið hólf, eða innihald hólfs þegar includeContent er true.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sá sem kallar getur ekki lesið hólf, eða innihald hólfs þegar includeContent er true.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method GetErrors - NamedType DeniedWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 1158096087 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Read ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Read ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Read ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method GetErrors - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
+          <source>bin, bin master, location bin, warehouse bin, bin list, empty bin</source>
+          <target>hólf, hólfaskrá, hólf staðsetningar, vöruhúsahólf, hólfalisti, tómt hólf</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=hólf, hólfaskrá, hólf staðsetningar, vöruhúsahólf, hólfalisti, tómt hólf</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 2340569551 - NamedType 3593894611" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Read-only, paged access to bins at one location, with optional content.</source>
+          <target>Lesaðgangur, blaðsíðuskiptur, að hólfum á einni staðsetningu, með valfrjálsu innihaldi.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lesaðgangur, blaðsíðuskiptur, að hólfum á einni staðsetningu, með valfrjálsu innihaldi.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method GetOverview - NamedType OverviewLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Read-only. Reads paged bins at one location. Use Warehouse.Bin.Create to add bins and Warehouse.BinContent.Get for item quantities.</source>
+          <target>Lesaðgangur. Les blaðsíðuskipt hólf á einni staðsetningu. Notaðu Warehouse.Bin.Create til að bæta við hólfum og Warehouse.BinContent.Get fyrir magn vöru.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lesaðgangur. Les blaðsíðuskipt hólf á einni staðsetningu. Notaðu Warehouse.Bin.Create til að bæta við hólfum og Warehouse.BinContent.Get fyrir magn vöru.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 3999202575 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location %1 was not found.</source>
+          <target>Staðsetning %1 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = location code, is-IS=Staðsetning %1 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method LocationExists - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 3999202575 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check the location code and try again.</source>
+          <target>Athugaðu kóða staðsetningar og reyndu aftur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu kóða staðsetningar og reyndu aftur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method LocationExists - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 1618419858 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Parameter %1 must be true or false.</source>
+          <target>Færibreytan %1 verður að vera true eða false.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=Færibreytan %1 verður að vera true eða false.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method ReadBoolean - NamedType FormatLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 1618419858 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send text for codes and true or false for empty and includeContent.</source>
+          <target>Sendu texta fyrir kóða og true eða false fyrir empty og includeContent.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu texta fyrir kóða og true eða false fyrir empty og includeContent.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method ReadBoolean - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 11078697 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Parameter %1 must be text.</source>
+          <target>Færibreytan %1 verður að vera texti.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=Færibreytan %1 verður að vera texti.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method ReadText - NamedType FormatLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 11078697 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send text for codes and true or false for empty and includeContent.</source>
+          <target>Sendu texta fyrir kóða og true eða false fyrir empty og includeContent.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu texta fyrir kóða og true eða false fyrir empty og includeContent.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method ReadText - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 11078697 - NamedType 1030526512" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Parameter %1 is longer than %2 characters.</source>
+          <target>Færibreytan %1 er lengri en %2 stafir.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter, %2 = maximum, is-IS=Færibreytan %1 er lengri en %2 stafir.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method ReadText - NamedType TooLongLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 11078697 - NamedType 637595219" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a shorter value.</source>
+          <target>Sendu styttra gildi.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu styttra gildi.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method ReadText - NamedType TooLongNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 2054439282 - NamedType 1773691126" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The key %1 is not a parameter of this message type.</source>
+          <target>Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = key, is-IS=Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 388409952 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>locationCode is required.</source>
+          <target>locationCode er nauðsynlegt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=locationCode er nauðsynlegt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method ResolveLocationCode - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 388409952 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send locationCode or the location code as the subject.</source>
+          <target>Sendu locationCode eða kóða staðsetningar sem subject.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu locationCode eða kóða staðsetningar sem subject.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method ResolveLocationCode - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 388409952 - NamedType 650235816" size-unit="char" translate="yes" xml:space="preserve">
+          <source>subject and locationCode name different locations.</source>
+          <target>subject og locationCode nefna mismunandi staðsetningar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=subject og locationCode nefna mismunandi staðsetningar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method ResolveLocationCode - NamedType ConflictLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 406652802 - Method 388409952 - NamedType 1132247979" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send one location: subject or locationCode.</source>
+          <target>Sendu eina staðsetningu: subject eða locationCode.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu eina staðsetningu: subject eða locationCode.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method ResolveLocationCode - NamedType ConflictNextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 269741545 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>bin content, bin quantity, item in bin, warehouse stock, stock by bin, inventory by location</source>
           <target>birgðainnihald hólfs, magn í hólfi, vara í hólfi, vöruhúsabirgðir, birgðir eftir hólfi, birgðir eftir staðsetningu</target>
@@ -92,6 +758,288 @@
           <target>Lesaðgangur. Les blaðsíðuskipt birgðainnihald hólfa; notaðu Warehouse.Activity.Get fyrir opnar tínslur og fráganga í vöruhúsi.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Lesaðgangur. Les blaðsíðuskipt birgðainnihald hólfa; notaðu Warehouse.Activity.Get fyrir opnar tínslur og fráganga í vöruhúsi.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse BinContent Get Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2516523925 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The default bin payload was empty.</source>
+          <target>Gögnin fyrir sjálfgefið hólf voru tóm.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gögnin fyrir sjálfgefið hólf voru tóm.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Def. Bin Set Proc. ori - Method OnRun - NamedType MissingPayloadErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to set the default bin.</source>
+          <target>Þú hefur ekki heimild til að setja sjálfgefið hólf.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að setja sjálfgefið hólf.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method ExecuteBifrostTask - NamedType DeniedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 3571782927 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Full ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method ExecuteBifrostTask - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 3571782927 - NamedType 1300278838" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Nothing was written.</source>
+          <target>Ekkert var skrifað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekkert var skrifað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method ExecuteBifrostTask - NamedType ProblemsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sets the default bin for an item at a location.</source>
+          <target>Setur sjálfgefið hólf fyrir vöru á staðsetningu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Setur sjálfgefið hólf fyrir vöru á staðsetningu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 1158096087 - NamedType 1399190847" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The item, location, bin or variant does not exist.</source>
+          <target>Varan, staðsetningin, hólfið eða afbrigðið er ekki til.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Varan, staðsetningin, hólfið eða afbrigðið er ekki til.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetErrors - NamedType NotFoundWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 1158096087 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check with Warehouse.Bin.Get.</source>
+          <target>Athugaðu með Warehouse.Bin.Get.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu með Warehouse.Bin.Get.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetErrors - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 1158096087 - NamedType 1219828246" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The location has no bins, or the bin type on a directed location does not allow put-away and pick.</source>
+          <target>Staðsetningin hefur engin hólf, eða hólfategundin á beinu vöruhúsi leyfir ekki frágang og tínslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Staðsetningin hefur engin hólf, eða hólfategundin á beinu vöruhúsi leyfir ekki frágang og tínslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetErrors - NamedType PreconditionWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 1158096087 - NamedType 291721461" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Choose a bin whose bin type allows it.</source>
+          <target>Veldu hólf þar sem hólfategundin leyfir það.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Veldu hólf þar sem hólfategundin leyfir það.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetErrors - NamedType PreconditionNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 1158096087 - NamedType 497354065" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The bin blocks movement.</source>
+          <target>Hólfið hindrar flutning.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Hólfið hindrar flutning.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetErrors - NamedType BlockWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 1158096087 - NamedType 174231538" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Unblock the bin or choose another.</source>
+          <target>Aflæstu hólfinu eða veldu annað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Aflæstu hólfinu eða veldu annað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetErrors - NamedType BlockNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 1158096087 - NamedType 2134736204" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The unit of measure does not exist for the item.</source>
+          <target>Mælieiningin er ekki til fyrir vöruna.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Mælieiningin er ekki til fyrir vöruna.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetErrors - NamedType UnitWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 1158096087 - NamedType 1625869995" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a unit of measure that exists for the item.</source>
+          <target>Sendu mælieiningu sem er til fyrir vöruna.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu mælieiningu sem er til fyrir vöruna.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetErrors - NamedType UnitNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 1158096087 - NamedType 2408295350" size-unit="char" translate="yes" xml:space="preserve">
+          <source>locationCode, itemNo or binCode was not sent.</source>
+          <target>locationCode, itemNo eða binCode var ekki sent.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=locationCode, itemNo eða binCode var ekki sent.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetErrors - NamedType MissingWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 1158096087 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send locationCode, itemNo and binCode.</source>
+          <target>Sendu locationCode, itemNo og binCode.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu locationCode, itemNo og binCode.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetErrors - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 1158096087 - NamedType 731885583" size-unit="char" translate="yes" xml:space="preserve">
+          <source>A code was not text.</source>
+          <target>Kóði var ekki texti.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Kóði var ekki texti.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetErrors - NamedType FormatWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 1158096087 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send text for locationCode, itemNo, variantCode, unitOfMeasureCode and binCode.</source>
+          <target>Sendu texta fyrir locationCode, itemNo, variantCode, unitOfMeasureCode og binCode.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu texta fyrir locationCode, itemNo, variantCode, unitOfMeasureCode og binCode.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetErrors - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 1158096087 - NamedType 2469653682" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The request contains a key this type does not accept.</source>
+          <target>Beiðnin inniheldur lykil sem þessi gerð tekur ekki við.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Beiðnin inniheldur lykil sem þessi gerð tekur ekki við.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetErrors - NamedType UnknownWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 1158096087 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetErrors - NamedType UnknownNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 1158096087 - NamedType 3964979788" size-unit="char" translate="yes" xml:space="preserve">
+          <source>subject and locationCode name different locations.</source>
+          <target>subject og locationCode nefna mismunandi staðsetningar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=subject og locationCode nefna mismunandi staðsetningar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetErrors - NamedType ConflictWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 1158096087 - NamedType 1132247979" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send one location: subject or locationCode.</source>
+          <target>Sendu eina staðsetningu: subject eða locationCode.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu eina staðsetningu: subject eða locationCode.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetErrors - NamedType ConflictNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 1158096087 - NamedType 3939466531" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The caller cannot write bin content.</source>
+          <target>Sá sem kallar getur ekki skrifað innihald hólfs.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sá sem kallar getur ekki skrifað innihald hólfs.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetErrors - NamedType DeniedWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 1158096087 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Full ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetErrors - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 1158096087 - NamedType 3401735083" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Business Central rejected the default bin.</source>
+          <target>Business Central hafnaði sjálfgefna hólfinu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Business Central hafnaði sjálfgefna hólfinu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetErrors - NamedType PlatformWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 1158096087 - NamedType 2685657004" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Read the returned text and correct the item, bin or unit of measure.</source>
+          <target>Lestu textann sem kom til baka og leiðréttu vöruna, hólfið eða mælieininguna.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lestu textann sem kom til baka og leiðréttu vöruna, hólfið eða mælieininguna.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetErrors - NamedType PlatformNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
+          <source>default bin, item default bin, bin content, set default, warehouse default, fixed bin</source>
+          <target>sjálfgefið hólf, sjálfgefið vöruhólf, innihald hólfs, setja sjálfgefið, sjálfgefið vöruhús, fast hólf</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=sjálfgefið hólf, sjálfgefið vöruhólf, innihald hólfs, setja sjálfgefið, sjálfgefið vöruhús, fast hólf</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 2340569551 - NamedType 3593894611" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sets the default bin for an item at a location and reports the previous default bin.</source>
+          <target>Setur sjálfgefið hólf fyrir vöru á staðsetningu og skilar fyrra sjálfgefna hólfinu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Setur sjálfgefið hólf fyrir vöru á staðsetningu og skilar fyrra sjálfgefna hólfinu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetOverview - NamedType OverviewLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sets Default on bin content through field validation and clears the previous default first. A second call for the same bin changes nothing.</source>
+          <target>Setur Default á innihald hólfs með sannprófun reits og hreinsar fyrra sjálfgefið hólf fyrst. Annað kall fyrir sama hólf breytir engu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Setur Default á innihald hólfs með sannprófun reits og hreinsar fyrra sjálfgefið hólf fyrst. Annað kall fyrir sama hólf breytir engu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 11078697 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Parameter %1 must be text.</source>
+          <target>Færibreytan %1 verður að vera texti.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=Færibreytan %1 verður að vera texti.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method ReadText - NamedType FormatLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 11078697 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send text for locationCode, itemNo, variantCode, unitOfMeasureCode and binCode.</source>
+          <target>Sendu texta fyrir locationCode, itemNo, variantCode, unitOfMeasureCode og binCode.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu texta fyrir locationCode, itemNo, variantCode, unitOfMeasureCode og binCode.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method ReadText - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 11078697 - NamedType 1030526512" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Parameter %1 is longer than %2 characters.</source>
+          <target>Færibreytan %1 er lengri en %2 stafir.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter, %2 = maximum, is-IS=Færibreytan %1 er lengri en %2 stafir.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method ReadText - NamedType TooLongLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 11078697 - NamedType 637595219" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a shorter value.</source>
+          <target>Sendu styttra gildi.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu styttra gildi.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method ReadText - NamedType TooLongNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 2054439282 - NamedType 1773691126" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The key %1 is not a parameter of this message type.</source>
+          <target>Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = key, is-IS=Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 3776760185 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 is required.</source>
+          <target>%1 er nauðsynlegt.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=%1 er nauðsynlegt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method TryBuildPayload - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 3776760185 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send locationCode, itemNo and binCode.</source>
+          <target>Sendu locationCode, itemNo og binCode.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu locationCode, itemNo og binCode.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method TryBuildPayload - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 3776760185 - NamedType 650235816" size-unit="char" translate="yes" xml:space="preserve">
+          <source>subject and locationCode name different locations.</source>
+          <target>subject og locationCode nefna mismunandi staðsetningar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=subject og locationCode nefna mismunandi staðsetningar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method TryBuildPayload - NamedType ConflictLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 3776760185 - NamedType 1132247979" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send one location: subject or locationCode.</source>
+          <target>Sendu eina staðsetningu: subject eða locationCode.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu eina staðsetningu: subject eða locationCode.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method TryBuildPayload - NamedType ConflictNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 3776760185 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 %2 was not found.</source>
+          <target>%1 %2 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = record, %2 = code, is-IS=%1 %2 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method TryBuildPayload - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 3776760185 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check with Warehouse.Bin.Get.</source>
+          <target>Athugaðu með Warehouse.Bin.Get.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu með Warehouse.Bin.Get.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method TryBuildPayload - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 3776760185 - NamedType 1296478263" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location %1 has no bins.</source>
+          <target>Staðsetning %1 hefur engin hólf.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = location, is-IS=Staðsetning %1 hefur engin hólf.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method TryBuildPayload - NamedType NoBinsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 3776760185 - NamedType 291721461" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Choose a bin whose bin type allows it.</source>
+          <target>Veldu hólf þar sem hólfategundin leyfir það.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Veldu hólf þar sem hólfategundin leyfir það.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method TryBuildPayload - NamedType PreconditionNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 3776760185 - NamedType 1719132245" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bin %1 blocks movement.</source>
+          <target>Hólf %1 hindrar flutning.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = bin, is-IS=Hólf %1 hindrar flutning.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method TryBuildPayload - NamedType BlockLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 3776760185 - NamedType 174231538" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Unblock the bin or choose another.</source>
+          <target>Aflæstu hólfinu eða veldu annað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Aflæstu hólfinu eða veldu annað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method TryBuildPayload - NamedType BlockNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 3776760185 - NamedType 984818344" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Unit of measure %1 does not exist for item %2.</source>
+          <target>Mælieining %1 er ekki til fyrir vöru %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = unit, %2 = item, is-IS=Mælieining %1 er ekki til fyrir vöru %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method TryBuildPayload - NamedType UnitLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 3776760185 - NamedType 1625869995" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a unit of measure that exists for the item.</source>
+          <target>Sendu mælieiningu sem er til fyrir vöruna.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu mælieiningu sem er til fyrir vöruna.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method TryBuildPayload - NamedType UnitNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2355567171 - Method 3776760185 - NamedType 1104699585" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bin type %1 does not allow put-away and pick.</source>
+          <target>Hólfategund %1 leyfir ekki frágang og tínslu.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = bin type, is-IS=Hólfategund %1 leyfir ekki frágang og tínslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method TryBuildPayload - NamedType BinTypeLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2230900036 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>create pick, pick list, picking, pick the goods, pick for shipment, pick the items, pick for the order, picking list</source>

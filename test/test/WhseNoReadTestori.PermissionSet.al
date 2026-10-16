@@ -13,6 +13,9 @@ permissionset 97010 "Whse NoRead Test ori"
     Permissions =
         codeunit "Whse Activity Get Impl ori" = X,
         codeunit "Whse BinContent Get Impl ori" = X,
+        codeunit "Whse Bin Get Impl ori" = X,
+        codeunit "Whse Bin Create Impl ori" = X,
+        codeunit "Whse DefaultBin Set Impl ori" = X,
         codeunit "Whse Pick Create Impl ori" = X,
         codeunit "Whse Putaway Create Impl ori" = X,
         codeunit "Whse Receipt Create Impl ori" = X,

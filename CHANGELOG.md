@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Added (2026-10-16) - Bin master and default bin (#45, #46)
+
+- Warehouse.Bin.Create (codeunit 10078461, process 10078462) and Warehouse.Bin.Get (codeunit 10078460) create and read bins. Warehouse.Bin.Get is an outbound read. The story text called it an inbound write; that wording is not how the type behaves.
+- Warehouse.DefaultBin.Set (codeunit 10078463, process 10078464) sets Bin Content Default. Business Central rejects a second default in OnValidate, so the previous default row is cleared before Validate. Empty on Bin is not writable.
+- Enum values 10078470–10078472. Write isolation uses codeunit 10078465. Table write block for Bin and field write block for Bin Content Default live in Whse Data Restrict ori (10078458). Tests 97080–97082.
+
 ### Fixed (2026-10-16) - Raise Warehouse app version above UAT to unblock Deploy to Bifrost
 
 - Warehouse main CI/CD #19 (run 38900771455, tip `3fc5293c`, shipping #15) failed on Deploy to Bifrost with `UnprocessableEntity`: the CI/CD build produced appVersion `28.0.0.19` (app.json `28.0.0.0` plus versioningStrategy 3 run revision 19), while UAT already held `28.0.18.0`, so Business Central refused the downgrade.

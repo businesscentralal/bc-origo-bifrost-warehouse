@@ -4,10 +4,21 @@
 
 ### Changed (2026-10-16) - Three-part receipt preview name (#40)
 
+- Adopt Foundation core#1037 guard `tools/Test-MessageTypeNames.ps1` from merge `bce1effcea42d59674b9a0a4d7774da4e04d6b29`; Source Guards runs its self-test and checks shipped `app/` message names. Test apps are exempt. Guard changes trigger a full paired build.
+
 - Rename `Warehouse.Receipt.Post.Preview` to `Warehouse.Receipt.PreviewPost` in enumextension Whse MsgType EnumExt ori (10078385), preserving ordinal 10078401 and the implementation Whse Rcpt Post Prev. Impl ori (10078411). Update callers to use the new message type name.
 - Update receipt posting help in en-US/is-IS, synchronized Icelandic XLF, related contracts and inbound workflows in Whse Receipt Post Impl ori (10078410) and Whse Contract Parts ori (10078459), plus README examples.
 - Whse Msg Contract Tests ori (97027) checks the persisted ordinal, canonical name and bilingual help references. Receipt preview tests (97016) and posting-gate tests (97023) use the new name and retain rollback/error coverage.
 - Explicitly declare the eight temporary Message Argument test variables in codeunits 97023, 97024 and 97026; AL 17 now recognizes their existing temporary-table semantics without AA0237 warnings or suppressed diagnostics.
+### Fixed (2026-10-16) - Raise Warehouse app version above UAT to unblock Deploy to Bifrost
+
+- Warehouse main CI/CD #19 (run 38900771455, tip `3fc5293c`, shipping #15) failed on Deploy to Bifrost with `UnprocessableEntity`: the CI/CD build produced appVersion `28.0.0.19` (app.json `28.0.0.0` plus versioningStrategy 3 run revision 19), while UAT already held `28.0.18.0`, so Business Central refused the downgrade.
+- Raise the top-level `Bifrost Warehouse` app and `Bifrost Warehouse - Tests` app versions from `28.0.0.0` to `28.0.19.0` in `app/app.json` and `test/app.json` (and the test app's `Bifrost Warehouse` dependency to `28.0.19.0`), keeping the Foundation `28.0.1.0` floor and the sibling app.json version scheme. With versioningStrategy 3 the CI/CD run revision remains the 4th segment, so the next build deploys as `28.0.19.N` - above UAT `28.0.18.0`.
+- Version/metadata only: no AL objects, message types, XLF, permissions or IDs change.
+
+### Fixed (2026-10-16) - Posting-gate HTTP test workaround (#39)
+
+- Remove `EnableRegisteredAppHttp` and its setup calls from Whse Posting Gate Tests ori (97023) and Whse Post Gate Grant Tests ori (97024). The dispatcher tests now rely on Foundation's evaluation-sandbox gate fix, while retaining restrictive posting/invoicing permissions and assertions that callers cannot write NAV App Setting.
 
 ### Fixed (2026-10-14) - Warehouse activity identifier contract (#37)
 

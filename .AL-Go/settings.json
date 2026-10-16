@@ -56,6 +56,7 @@
     "tools/Test-SharedAlpacaContainer.ps1",
     ".github/workflows/**",
     ".github/AL-Go-Settings.json",
-    "tools/Test-BifrostPipeline.ps1"
+    "tools/Test-BifrostPipeline.ps1",
+    "tools/Test-MessageTypeNames.ps1"
   ]
 }

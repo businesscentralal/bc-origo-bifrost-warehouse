@@ -129,9 +129,6 @@ codeunit 97023 "Whse Posting Gate Tests ori"
         ResponseText: Text;
         ErrorToken: JsonToken;
     begin
-        LibraryLowerPermissions.PushPermissionSetWithoutDefaults('D365 Basic - Edit');
-        LibraryLowerPermissions.AddPermissionSet('BIFROST Full ori');
-        EnableRegisteredAppHttp();
         LowerToDocumentWrite(LibraryLowerPermissions);
         Assert.IsFalse(AppSetting.WritePermission(), 'The caller must not retain HTTP setup write permission.');
         LibraryLowerPermissions.AddPermissionSet('BIFROST WhsePost ori');
@@ -191,30 +188,6 @@ codeunit 97023 "Whse Posting Gate Tests ori"
         Assert.AreEqual(0, StrPos(ErrorToken.AsValue().AsText(), 'Posting denied'), 'Preview response must not be a posting denial.');
         if ResponseJson.Get('code', ErrorToken) then
             Assert.AreNotEqual('PermissionDenied', ErrorToken.AsValue().AsText(), 'Preview must not return PermissionDenied.');
-    end;
-
-    // Administrator setup precedes permission lowering. The caller under test never receives
-    // NAV App Setting write permission, and the posting/invoicing token checks remain restrictive.
-    local procedure EnableRegisteredAppHttp()
-    var
-        AppSetting: Record "NAV App Setting";
-        TempApps: Record "Registered App ori" temporary;
-        AppRegistry: Codeunit "App Registry ori";
-    begin
-        AppRegistry.GetApps(TempApps);
-        if TempApps.FindSet() then
-            repeat
-                if not AppSetting.Get(TempApps."App Id") then begin
-                    AppSetting.Init();
-                    AppSetting."App ID" := TempApps."App Id";
-                    AppSetting."Allow HttpClient Requests" := true;
-                    AppSetting.Insert();
-                end else
-                    if not AppSetting."Allow HttpClient Requests" then begin
-                        AppSetting."Allow HttpClient Requests" := true;
-                        AppSetting.Modify();
-                    end;
-            until TempApps.Next() = 0;
     end;
 
     local procedure LowerToDocumentWrite(var LibraryLowerPermissions: Codeunit "Library - Lower Permissions")

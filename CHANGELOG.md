@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Added (2026-10-16) - Inventory put-away create and post (#43)
+
+- Warehouse.InventoryPutAway.Create (codeunit 10078420, process 10078421) creates an inventory put-away from a released purchase order, sales return order or inbound transfer at a location that requires put-away and does not use warehouse receipts. An open inventory put-away for the same document is returned with a warning. Report 7323 commits the put-away.
+- Warehouse.InventoryPutAway.Post (codeunit 10078422, process 10078423) posts by number or SystemId, including a quantity and an optional bin. A missing or inbound-blocked bin, a quantity above outstanding, and a tracked line without lot or serial are refused before posting. invoice true is only for a purchase order. Posting commits. Isolation uses codeunit 10078419.
+- Enum values 10078483 and 10078418. Warehouse Activity Line quantity, bin, lot and serial hints now also name the inventory put-away types. Expiration Date names the inventory put-away types. Tests 97087–97088.
+
 ### Added (2026-10-16) - Inventory pick create and post (#42)
 
 - Warehouse.InventoryPick.Create (codeunit 10078479, process 10078480) creates an inventory pick from a released sales order, purchase return order, outbound transfer, assembly consumption or production consumption at a location that requires pick and does not use warehouse shipments. An open inventory pick for the same document is returned with a warning. Report 7323 commits the pick.

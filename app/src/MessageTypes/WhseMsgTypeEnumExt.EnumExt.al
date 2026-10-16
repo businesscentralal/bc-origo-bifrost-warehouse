@@ -176,4 +176,22 @@ enumextension 10078385 "Whse MsgType EnumExt ori" extends "Message Type ori"
         Caption = 'Warehouse.InventoryPick.Post', Locked = true;
         Implementation = "Msg Interface ori" = "Whse InvtPick Post Impl ori", "Msg Contract ori" = "Whse InvtPick Post Impl ori", "Msg Discovery ori" = "Whse InvtPick Post Impl ori";
     }
+
+    /// <summary>
+    /// Creates an inventory put-away from a released inbound source document at a basic location that requires put-away.
+    /// </summary>
+    value(10078483; "Warehouse.InventoryPutAway.Create")
+    {
+        Caption = 'Warehouse.InventoryPutAway.Create', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse InvtPut Create Impl ori", "Msg Contract ori" = "Whse InvtPut Create Impl ori", "Msg Discovery ori" = "Whse InvtPut Create Impl ori";
+    }
+
+    /// <summary>
+    /// Posts an inventory put-away and receives the source document.
+    /// </summary>
+    value(10078418; "Warehouse.InventoryPutAway.Post")
+    {
+        Caption = 'Warehouse.InventoryPutAway.Post', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse InvtPut Post Impl ori", "Msg Contract ori" = "Whse InvtPut Post Impl ori", "Msg Discovery ori" = "Whse InvtPut Post Impl ori";
+    }
 }

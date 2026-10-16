@@ -20,6 +20,8 @@ permissionset 97010 "Whse NoRead Test ori"
         codeunit "Whse Movement Reg Impl ori" = X,
         codeunit "Whse InvtPick Create Impl ori" = X,
         codeunit "Whse InvtPick Post Impl ori" = X,
+        codeunit "Whse InvtPut Create Impl ori" = X,
+        codeunit "Whse InvtPut Post Impl ori" = X,
         codeunit "Whse Pick Create Impl ori" = X,
         codeunit "Whse Putaway Create Impl ori" = X,
         codeunit "Whse Receipt Create Impl ori" = X,

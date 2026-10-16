@@ -73,19 +73,19 @@ codeunit 97024 "Whse Post Gate Grant Tests ori"
     [Test]
     procedure AssertCanPost_WithBothSets_WritesNoError()
     var
-        Argument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori";
         PostingGate: Codeunit "Whse Posting Gate ori";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
     begin
         LowerToWhsePost(LibraryLowerPermissions);
-        PrepareArgument(Argument);
+        PrepareArgument(TempArgument);
 
         Assert.IsTrue(PostingGate.HasPostingPermission(), 'HasPostingPermission should be true with the token.');
         Assert.IsTrue(PostingGate.HasInvoicePermission(), 'HasInvoicePermission should be true with the token.');
-        Assert.IsTrue(PostingGate.AssertCanPost(Argument), 'AssertCanPost should allow the token.');
-        Assert.AreEqual(0, Argument.GetResponseContentLength(), 'AssertCanPost must not write an error.');
-        Assert.IsTrue(PostingGate.AssertCanInvoice(Argument), 'AssertCanInvoice should allow the token.');
-        Assert.AreEqual(0, Argument.GetResponseContentLength(), 'AssertCanInvoice must not write an error.');
+        Assert.IsTrue(PostingGate.AssertCanPost(TempArgument), 'AssertCanPost should allow the token.');
+        Assert.AreEqual(0, TempArgument.GetResponseContentLength(), 'AssertCanPost must not write an error.');
+        Assert.IsTrue(PostingGate.AssertCanInvoice(TempArgument), 'AssertCanInvoice should allow the token.');
+        Assert.AreEqual(0, TempArgument.GetResponseContentLength(), 'AssertCanInvoice must not write an error.');
     end;
 
     /// <summary>Warehouse.Shipment.Post with invoice = true passes both gates and reaches lookup.</summary>
@@ -119,11 +119,11 @@ codeunit 97024 "Whse Post Gate Grant Tests ori"
         LibraryLowerPermissions.AddPermissionSet('BIFROST WhseInv ori');
     end;
 
-    local procedure PrepareArgument(var Argument: Record "Message Argument ori")
+    local procedure PrepareArgument(var TempArgument: Record "Message Argument ori")
     begin
-        Argument.Init();
-        Argument.Version := "Message Version ori"::"1.0";
-        Argument.Insert(true);
+        TempArgument.Init();
+        TempArgument.Version := "Message Version ori"::"1.0";
+        TempArgument.Insert(true);
     end;
 
     local procedure RunShipmentPost(RequestText: Text; var ResponseJson: JsonObject): Boolean
@@ -131,7 +131,7 @@ codeunit 97024 "Whse Post Gate Grant Tests ori"
         Dispatcher: Codeunit "Dispatcher ori";
         RequestContent: BigText;
         ResponseContent: BigText;
-        ResponseContentType: Text[50];
+        ResponseContentType: Text[100];
         ResponseText: Text;
     begin
         Clear(ResponseJson);

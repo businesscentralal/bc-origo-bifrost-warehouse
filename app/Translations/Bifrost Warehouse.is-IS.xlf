@@ -1041,6 +1041,570 @@
           <note from="Developer" annotates="general" priority="2">%1 = bin type, is-IS=Hólfategund %1 leyfir ekki frágang og tínslu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method TryBuildPayload - NamedType BinTypeLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 3488053037 - NamedType 2007763471" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location %1 does not create an inventory movement for assembly consumption.</source>
+          <target>Staðsetning %1 stofnar ekki birgðafærslu fyrir samsetningarnotkun.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = location, is-IS=Staðsetning %1 stofnar ekki birgðafærslu fyrir samsetningarnotkun.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method EnsureAssemblyHandling - NamedType HandlingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 3488053037 - NamedType 1624980852" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set assembly consumption warehouse handling to inventory movement.</source>
+          <target>Stilltu vöruhúsameðhöndlun samsetningarnotkunar á birgðafærslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stilltu vöruhúsameðhöndlun samsetningarnotkunar á birgðafærslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method EnsureAssemblyHandling - NamedType HandlingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2282630890 - NamedType 2252517138" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location %1 uses directed put-away and pick.</source>
+          <target>Staðsetning %1 notar beina innsetningu og tínslu.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = location, is-IS=Staðsetning %1 notar beina innsetningu og tínslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method EnsureBasicBins - NamedType DirectedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2282630890 - NamedType 3313326517" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use Warehouse.Movement.Create.</source>
+          <target>Notaðu Warehouse.Movement.Create.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notaðu Warehouse.Movement.Create.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method EnsureBasicBins - NamedType DirectedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2282630890 - NamedType 761911224" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location %1 does not use bins.</source>
+          <target>Staðsetning %1 notar ekki hólf.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = location, is-IS=Staðsetning %1 notar ekki hólf.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method EnsureBasicBins - NamedType BinsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2282630890 - NamedType 2661802395" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Moves between bins need Bin Mandatory on the location.</source>
+          <target>Færslur milli hólfa þurfa Bin Mandatory á staðsetningunni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Færslur milli hólfa þurfa Bin Mandatory á staðsetningunni.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method EnsureBasicBins - NamedType BinsNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to create an inventory movement.</source>
+          <target>Þú hefur ekki heimild til að stofna birgðafærslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að stofna birgðafærslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method ExecuteBifrostTask - NamedType DeniedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 3571782927 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Full ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method ExecuteBifrostTask - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 3571782927 - NamedType 1300278838" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Nothing was written.</source>
+          <target>Ekkert var skrifað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekkert var skrifað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method ExecuteBifrostTask - NamedType ProblemsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Creates an inventory movement from inline bin lines or from assembly consumption.</source>
+          <target>Stofnar birgðafærslu úr línum milli hólfa eða úr samsetningarnotkun.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar birgðafærslu úr línum milli hólfa eða úr samsetningarnotkun.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
+          <source>inventory movement, move between bins, basic warehouse, internal movement, assembly consumption</source>
+          <target>birgðafærsla, færa milli hólfa, einfalt vöruhús, innri færsla, samsetningarnotkun</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=birgðafærsla, færa milli hólfa, einfalt vöruhús, innri færsla, samsetningarnotkun</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2340569551 - NamedType 3593894611" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Creates an inventory movement at a basic location with bins. One failed line writes nothing on the inline path. Assembly consumption is committed when Business Central creates the movement.</source>
+          <target>Stofnar birgðafærslu á einfaldri staðsetningu með hólfum. Ein lína sem mistekst skrifar ekkert á línuleiðinni. Samsetningarnotkun er staðfest þegar Business Central stofnar færsluna.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar birgðafærslu á einfaldri staðsetningu með hólfum. Ein lína sem mistekst skrifar ekkert á línuleiðinni. Samsetningarnotkun er staðfest þegar Business Central stofnar færsluna.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method GetOverview - NamedType OverviewLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Creates an inventory movement at a location with bins and without directed put-away and pick. Assembly consumption is committed by Business Central. Use Warehouse.Movement.Create for a directed location.</source>
+          <target>Stofnar birgðafærslu á staðsetningu með hólfum og án beinnar innsetningar og tínslu. Business Central staðfestir samsetningarnotkun. Notaðu Warehouse.Movement.Create fyrir beina staðsetningu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar birgðafærslu á staðsetningu með hólfum og án beinnar innsetningar og tínslu. Business Central staðfestir samsetningarnotkun. Notaðu Warehouse.Movement.Create fyrir beina staðsetningu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 3760188529 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
+          <source>lines must be an array of line objects.</source>
+          <target>lines verður að vera fylki línuhluta.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=lines verður að vera fylki línuhluta.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method ReadLines - NamedType FormatLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 3760188529 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send text for codes and numbers for quantities.</source>
+          <target>Sendu texta fyrir kóða og tölur fyrir magn.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu texta fyrir kóða og tölur fyrir magn.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method ReadLines - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2769887436 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Each line must be an object.</source>
+          <target>Hver lína verður að vera hlutur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Hver lína verður að vera hlutur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method ReadOneLine - NamedType FormatLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2769887436 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send text for codes and numbers for quantities.</source>
+          <target>Sendu texta fyrir kóða og tölur fyrir magn.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu texta fyrir kóða og tölur fyrir magn.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method ReadOneLine - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2769887436 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line %1 is missing %2.</source>
+          <target>Línu %1 vantar %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line index, %2 = field, is-IS=Línu %1 vantar %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method ReadOneLine - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2769887436 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send itemNo, quantity, fromBin and toBin on every line.</source>
+          <target>Sendu itemNo, quantity, fromBin og toBin á hverri línu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu itemNo, quantity, fromBin og toBin á hverri línu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method ReadOneLine - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 4249134667 - NamedType 2174691427" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Quantity must be greater than zero.</source>
+          <target>Magn verður að vera stærra en núll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Magn verður að vera stærra en núll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method RefuseQuantity - NamedType QuantityLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 4249134667 - NamedType 2759986912" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a quantity greater than zero.</source>
+          <target>Sendu magn sem er stærra en núll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu magn sem er stærra en núll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method RefuseQuantity - NamedType QuantityNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 3001857367 - NamedType 3962046788" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line %1 uses the same fromBin and toBin.</source>
+          <target>Lína %1 notar sama fromBin og toBin.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line index, is-IS=Lína %1 notar sama fromBin og toBin.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method RefuseSameBin - NamedType SameLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 3001857367 - NamedType 232354367" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a toBin that is different from fromBin.</source>
+          <target>Sendu toBin sem er annað en fromBin.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu toBin sem er annað en fromBin.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method RefuseSameBin - NamedType SameNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2054439282 - NamedType 1773691126" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The key %1 is not a parameter of this message type.</source>
+          <target>Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = key, is-IS=Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2415149068 - NamedType 1773691126" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The key %1 is not a parameter of this message type.</source>
+          <target>Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = key, is-IS=Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method RefuseUnknownLineKeys - NamedType UnknownLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2415149068 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method RefuseUnknownLineKeys - NamedType UnknownNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2242432169 - NamedType 151515437" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send lines or a source document, not both.</source>
+          <target>Sendu línur eða upprunaskjal, ekki bæði.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu línur eða upprunaskjal, ekki bæði.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method ResolveMode - NamedType BothLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2242432169 - NamedType 917665834" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send inline lines or one assembly order, not both.</source>
+          <target>Sendu línur eða eina samsetningarpöntun, ekki bæði.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu línur eða eina samsetningarpöntun, ekki bæði.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method ResolveMode - NamedType BothNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2242432169 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>lines or sourceDocument is required.</source>
+          <target>lines eða sourceDocument er nauðsynlegt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=lines eða sourceDocument er nauðsynlegt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method ResolveMode - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2242432169 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send inline lines or an assembly consumption source document.</source>
+          <target>Sendu línur eða upprunaskjal um samsetningarnotkun.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu línur eða upprunaskjal um samsetningarnotkun.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method ResolveMode - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2242432169 - NamedType 1066607173" size-unit="char" translate="yes" xml:space="preserve">
+          <source>sourceDocument %1 is not supported.</source>
+          <target>sourceDocument %1 er ekki stutt.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = source document, is-IS=sourceDocument %1 er ekki stutt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method ResolveMode - NamedType InvalidLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2242432169 - NamedType 1224751234" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send Assembly Consumption, or inline lines.</source>
+          <target>Sendu Assembly Consumption, eða línur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu Assembly Consumption, eða línur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method ResolveMode - NamedType InvalidNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 837878007 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>sourceNo or systemId is required.</source>
+          <target>sourceNo eða systemId er nauðsynlegt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=sourceNo eða systemId er nauðsynlegt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method TryResolveAssembly - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 837878007 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send sourceDocument and sourceNo or systemId.</source>
+          <target>Sendu sourceDocument og sourceNo eða systemId.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu sourceDocument og sourceNo eða systemId.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method TryResolveAssembly - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 837878007 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
+          <source>systemId is not a GUID.</source>
+          <target>systemId er ekki GUID.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=systemId er ekki GUID.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method TryResolveAssembly - NamedType FormatLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 837878007 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send text for codes and a GUID for systemId.</source>
+          <target>Sendu texta fyrir kóða og GUID fyrir systemId.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu texta fyrir kóða og GUID fyrir systemId.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method TryResolveAssembly - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 837878007 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Assembly order %1 was not found.</source>
+          <target>Samsetningarpöntun %1 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = identifier, is-IS=Samsetningarpöntun %1 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method TryResolveAssembly - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 837878007 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check sourceDocument and the document number or SystemId.</source>
+          <target>Athugaðu sourceDocument og skjalnúmer eða SystemId.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu sourceDocument og skjalnúmer eða SystemId.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method TryResolveAssembly - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 837878007 - NamedType 650235816" size-unit="char" translate="yes" xml:space="preserve">
+          <source>subject, sourceNo and systemId name different documents.</source>
+          <target>subject, sourceNo og systemId nefna mismunandi skjöl.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=subject, sourceNo og systemId nefna mismunandi skjöl.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method TryResolveAssembly - NamedType ConflictLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 837878007 - NamedType 1132247979" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send one assembly order: subject, sourceNo or systemId.</source>
+          <target>Sendu eina samsetningarpöntun: subject, sourceNo eða systemId.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu eina samsetningarpöntun: subject, sourceNo eða systemId.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method TryResolveAssembly - NamedType ConflictNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 837878007 - NamedType 670703763" size-unit="char" translate="yes" xml:space="preserve">
+          <source>locationCode is not the assembly order location.</source>
+          <target>locationCode er ekki staðsetning samsetningarpöntunarinnar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=locationCode er ekki staðsetning samsetningarpöntunarinnar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method TryResolveAssembly - NamedType LocationConflictLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 837878007 - NamedType 3879076534" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Assembly order %1 is not released.</source>
+          <target>Samsetningarpöntun %1 er ekki staðfest.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = order no., is-IS=Samsetningarpöntun %1 er ekki staðfest.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method TryResolveAssembly - NamedType NotReleasedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 837878007 - NamedType 1406329809" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Release the assembly order and send the request again.</source>
+          <target>Staðfestu samsetningarpöntunina og sendu beiðnina aftur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Staðfestu samsetningarpöntunina og sendu beiðnina aftur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method TryResolveAssembly - NamedType NotReleasedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2251054666 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>locationCode is required.</source>
+          <target>locationCode er nauðsynlegt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=locationCode er nauðsynlegt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method TryResolveLocation - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2251054666 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send locationCode and at least one line.</source>
+          <target>Sendu locationCode og að minnsta kosti eina línu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu locationCode og að minnsta kosti eina línu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method TryResolveLocation - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2251054666 - NamedType 650235816" size-unit="char" translate="yes" xml:space="preserve">
+          <source>subject and locationCode name different locations.</source>
+          <target>subject og locationCode nefna mismunandi staðsetningar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=subject og locationCode nefna mismunandi staðsetningar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method TryResolveLocation - NamedType ConflictLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2251054666 - NamedType 1132247979" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send one location: subject or locationCode.</source>
+          <target>Sendu eina staðsetningu: subject eða locationCode.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu eina staðsetningu: subject eða locationCode.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method TryResolveLocation - NamedType ConflictNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2251054666 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location %1 was not found.</source>
+          <target>Staðsetning %1 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = location code, is-IS=Staðsetning %1 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method TryResolveLocation - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 2251054666 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check the location code and send the request again.</source>
+          <target>Athugaðu staðsetningarkóðann og sendu beiðnina aftur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu staðsetningarkóðann og sendu beiðnina aftur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method TryResolveLocation - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 1963828310 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 %2 was not found.</source>
+          <target>%1 %2 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = table, %2 = value, is-IS=%1 %2 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method ValidateLineAgainstLocation - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 1963828310 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check the identifier and send the request again.</source>
+          <target>Athugaðu auðkennið og sendu beiðnina aftur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu auðkennið og sendu beiðnina aftur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method ValidateLineAgainstLocation - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 1963828310 - NamedType 461926420" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bin %1 does not contain enough of item %2.</source>
+          <target>Hólf %1 inniheldur ekki nóg af vöru %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = bin, %2 = item, is-IS=Hólf %1 inniheldur ekki nóg af vöru %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method ValidateLineAgainstLocation - NamedType ShortLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 1963828310 - NamedType 842100143" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Read Warehouse.BinContent.Get and lower the quantity.</source>
+          <target>Lestu Warehouse.BinContent.Get og lækkaðu magnið.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lestu Warehouse.BinContent.Get og lækkaðu magnið.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method ValidateLineAgainstLocation - NamedType ShortNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 3199667842 - NamedType 3528737996" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The inventory movement was created but its number was not returned.</source>
+          <target>Birgðafærslan var stofnuð en númer hennar skilaði sér ekki.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Birgðafærslan var stofnuð en númer hennar skilaði sér ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method WriteCreatedMovement - NamedType MissingResultErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 3199667842 - NamedType 1643528006" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Read the returned text and correct the bins or the assembly order.</source>
+          <target>Lestu textann sem skilaði sér og leiðréttu hólfin eða samsetningarpöntunina.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lestu textann sem skilaði sér og leiðréttu hólfin eða samsetningarpöntunina.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method WriteCreatedMovement - NamedType MissingResultNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2156961749 - Method 1642629281 - NamedType 3917977900" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No inventory movement was created.</source>
+          <target>Engin birgðafærsla var stofnuð.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Engin birgðafærsla var stofnuð.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Proc ori - Method CreateFromLines - NamedType NothingErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2156961749 - Method 1271441521 - NamedType 3917977900" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No inventory movement was created.</source>
+          <target>Engin birgðafærsla var stofnuð.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Engin birgðafærsla var stofnuð.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Proc ori - Method CreateFromSource - NamedType NothingErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2156961749 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The inventory movement create payload was empty.</source>
+          <target>Gögnin til að stofna birgðafærslu voru tóm.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gögnin til að stofna birgðafærslu voru tóm.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Proc ori - Method OnRun - NamedType MissingPayloadErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to register an inventory movement.</source>
+          <target>Þú hefur ekki heimild til að skrá birgðafærslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að skrá birgðafærslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method ExecuteBifrostTask - NamedType DeniedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 3571782927 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Full ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method ExecuteBifrostTask - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 3571782927 - NamedType 1300278838" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Nothing was registered.</source>
+          <target>Ekkert var skráð.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekkert var skráð.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method ExecuteBifrostTask - NamedType ProblemsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 3571782927 - NamedType 1000175713" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Inventory movement %1 has zero quantity to handle on every line.</source>
+          <target>Birgðafærsla %1 er með núllmagn til meðhöndlunar á hverri línu.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = movement no., is-IS=Birgðafærsla %1 er með núllmagn til meðhöndlunar á hverri línu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method ExecuteBifrostTask - NamedType NothingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 3571782927 - NamedType 2480365606" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set Qty. to Handle on at least one movement line.</source>
+          <target>Settu magn til meðhöndlunar á að minnsta kosti eina færslulínu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Settu magn til meðhöndlunar á að minnsta kosti eina færslulínu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method ExecuteBifrostTask - NamedType NothingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Registers an inventory movement and returns the registered quantity.</source>
+          <target>Skráir birgðafærslu og skilar skráða magninu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skráir birgðafærslu og skilar skráða magninu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
+          <source>register inventory movement, move stock, basic warehouse, confirm bin move</source>
+          <target>skrá birgðafærslu, færa birgðir, einfalt vöruhús, staðfesta hólfafærslu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=skrá birgðafærslu, færa birgðir, einfalt vöruhús, staðfesta hólfafærslu</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 2340569551 - NamedType 3593894611" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Registers an inventory movement. Business Central commits the registration. Zero quantity to handle on every line registers nothing.</source>
+          <target>Skráir birgðafærslu. Business Central staðfestir skráninguna. Núllmagn til meðhöndlunar á hverri línu skráir ekkert.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skráir birgðafærslu. Business Central staðfestir skráninguna. Núllmagn til meðhöndlunar á hverri línu skráir ekkert.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method GetOverview - NamedType OverviewLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Irreversible. Registers the inventory movement and Business Central commits the warehouse entries. A partial quantity leaves the rest on the movement.</source>
+          <target>Óafturkræft. Skráir birgðafærsluna og Business Central staðfestir vöruhúsfærslurnar. Hluta magn skilur afganginn eftir á færslunni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Óafturkræft. Skráir birgðafærsluna og Business Central staðfestir vöruhúsfærslurnar. Hluta magn skilur afganginn eftir á færslunni.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 3760188529 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
+          <source>lines must be an array of line objects.</source>
+          <target>lines verður að vera fylki línuhluta.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=lines verður að vera fylki línuhluta.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method ReadLines - NamedType FormatLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 3760188529 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send text for the movement number, an integer line number and a number for the quantity.</source>
+          <target>Sendu texta fyrir færslunúmer, heiltölu fyrir línunúmer og tölu fyrir magnið.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu texta fyrir færslunúmer, heiltölu fyrir línunúmer og tölu fyrir magnið.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method ReadLines - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 2769887436 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Each line must be an object.</source>
+          <target>Hver lína verður að vera hlutur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Hver lína verður að vera hlutur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method ReadOneLine - NamedType FormatLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 2769887436 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send text for the movement number, an integer line number and a number for the quantity.</source>
+          <target>Sendu texta fyrir færslunúmer, heiltölu fyrir línunúmer og tölu fyrir magnið.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu texta fyrir færslunúmer, heiltölu fyrir línunúmer og tölu fyrir magnið.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method ReadOneLine - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 2769887436 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line %1 is missing %2.</source>
+          <target>Línu %1 vantar %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line index, %2 = field, is-IS=Línu %1 vantar %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method ReadOneLine - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 2769887436 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send lineNo and qtyToHandle on every line.</source>
+          <target>Sendu lineNo og qtyToHandle á hverri línu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu lineNo og qtyToHandle á hverri línu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method ReadOneLine - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 2769887436 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Inventory movement line %1 was not found.</source>
+          <target>Lína %1 í birgðafærslu fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line no., is-IS=Lína %1 í birgðafærslu fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method ReadOneLine - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 2769887436 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check the identifier with Warehouse.InventoryMovement.Create.</source>
+          <target>Athugaðu auðkennið með Warehouse.InventoryMovement.Create.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu auðkennið með Warehouse.InventoryMovement.Create.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method ReadOneLine - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 2769887436 - NamedType 2666638023" size-unit="char" translate="yes" xml:space="preserve">
+          <source>qtyToHandle must be from zero up to the outstanding quantity.</source>
+          <target>qtyToHandle verður að vera frá núlli upp í útistandandi magn.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=qtyToHandle verður að vera frá núlli upp í útistandandi magn.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method ReadOneLine - NamedType RangeLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 2769887436 - NamedType 4260795724" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a quantity from zero up to the outstanding quantity.</source>
+          <target>Sendu magn frá núlli upp í útistandandi magn.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu magn frá núlli upp í útistandandi magn.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method ReadOneLine - NamedType RangeNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 2054439282 - NamedType 1773691126" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The key %1 is not a parameter of this message type.</source>
+          <target>Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = key, is-IS=Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 2415149068 - NamedType 1773691126" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The key %1 is not a parameter of this message type.</source>
+          <target>Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = key, is-IS=Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method RefuseUnknownLineKeys - NamedType UnknownLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 2415149068 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method RefuseUnknownLineKeys - NamedType UnknownNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 2887803892 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>movementNo or systemId is required.</source>
+          <target>movementNo eða systemId er nauðsynlegt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=movementNo eða systemId er nauðsynlegt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method TryResolveMovement - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 2887803892 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send the movement number or its SystemId.</source>
+          <target>Sendu númer færslunnar eða SystemId hennar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu númer færslunnar eða SystemId hennar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method TryResolveMovement - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 2887803892 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
+          <source>systemId is not a GUID.</source>
+          <target>systemId er ekki GUID.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=systemId er ekki GUID.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method TryResolveMovement - NamedType FormatLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 2887803892 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send text for the movement number, an integer line number and a number for the quantity.</source>
+          <target>Sendu texta fyrir færslunúmer, heiltölu fyrir línunúmer og tölu fyrir magnið.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu texta fyrir færslunúmer, heiltölu fyrir línunúmer og tölu fyrir magnið.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method TryResolveMovement - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 2887803892 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Inventory movement %1 was not found.</source>
+          <target>Birgðafærsla %1 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = identifier, is-IS=Birgðafærsla %1 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method TryResolveMovement - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 2887803892 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check the identifier with Warehouse.InventoryMovement.Create.</source>
+          <target>Athugaðu auðkennið með Warehouse.InventoryMovement.Create.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu auðkennið með Warehouse.InventoryMovement.Create.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method TryResolveMovement - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 2887803892 - NamedType 650235816" size-unit="char" translate="yes" xml:space="preserve">
+          <source>movementNo and systemId name different movements.</source>
+          <target>movementNo og systemId nefna mismunandi færslur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=movementNo og systemId nefna mismunandi færslur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method TryResolveMovement - NamedType ConflictLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 2887803892 - NamedType 1132247979" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send one movement.</source>
+          <target>Sendu eina færslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu eina færslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method TryResolveMovement - NamedType ConflictNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 2887803892 - NamedType 69645355" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warehouse activity %1 is not an inventory movement.</source>
+          <target>Vöruhúsavirkni %1 er ekki birgðafærsla.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = activity no., is-IS=Vöruhúsavirkni %1 er ekki birgðafærsla.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method TryResolveMovement - NamedType WrongTypeLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 2887803892 - NamedType 3389989672" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use Warehouse.Movement.Register for a directed movement.</source>
+          <target>Notaðu Warehouse.Movement.Register fyrir beina færslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notaðu Warehouse.Movement.Register fyrir beina færslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method TryResolveMovement - NamedType WrongTypeNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1520099593 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The inventory movement register payload was empty.</source>
+          <target>Gögnin til að skrá birgðafærslu voru tóm.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gögnin til að skrá birgðafærslu voru tóm.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Proc ori - Method OnRun - NamedType MissingPayloadErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1520099593 - Method 1665861916 - NamedType 3917977900" size-unit="char" translate="yes" xml:space="preserve">
+          <source>There is nothing to register.</source>
+          <target>Ekkert er til að skrá.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekkert er til að skrá.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Proc ori - Method OnRun - NamedType NothingErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2822529722 - Method 1618419858 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
           <source>Parameter %1 must be true or false.</source>
           <target>Færibreytan %1 verður að vera true eða false.</target>

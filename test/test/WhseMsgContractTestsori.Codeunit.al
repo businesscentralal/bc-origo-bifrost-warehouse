@@ -38,6 +38,8 @@ codeunit 97027 "Whse Msg Contract Tests ori"
         AssertContract("Message Type ori"::"Warehouse.InventoryPick.Post", 'irreversible', true);
         AssertContract("Message Type ori"::"Warehouse.InventoryPutAway.Create", 'irreversible', true);
         AssertContract("Message Type ori"::"Warehouse.InventoryPutAway.Post", 'irreversible', true);
+        AssertContract("Message Type ori"::"Warehouse.InventoryMovement.Create", 'irreversible', true);
+        AssertContract("Message Type ori"::"Warehouse.InventoryMovement.Register", 'irreversible', true);
     end;
 
     local procedure AssertContract(MessageType: Enum "Message Type ori"; ExpectedEffect: Text; HasParameters: Boolean)

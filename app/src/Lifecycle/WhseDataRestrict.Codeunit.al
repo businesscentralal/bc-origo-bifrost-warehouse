@@ -40,7 +40,7 @@ codeunit 10078458 "Whse Data Restrict ori"
         // The activity line stays wholly write-restricted. Foundation answers that table block before a field hint,
         // so the generic write names every dedicated activity type. The field hint below stays the precise pointer.
         if TableNo = Database::"Warehouse Activity Line" then
-            Hint := 'Warehouse.Pick.Register, Warehouse.Putaway.Register, Warehouse.Movement.Register, Warehouse.InventoryPick.Create, Warehouse.InventoryPick.Post, Warehouse.InventoryPutAway.Create, Warehouse.InventoryPutAway.Post';
+            Hint := 'Warehouse.Pick.Register, Warehouse.Putaway.Register, Warehouse.Movement.Register, Warehouse.InventoryPick.Create, Warehouse.InventoryPick.Post, Warehouse.InventoryPutAway.Create, Warehouse.InventoryPutAway.Post, Warehouse.InventoryMovement.Create, Warehouse.InventoryMovement.Register';
     end;
 
     [EventSubscriber(ObjectType::Table, Database::"Message Argument ori", 'OnGetDedicatedMessageTypeHintForField', '', false, false)]
@@ -53,7 +53,7 @@ codeunit 10078458 "Whse Data Restrict ori"
         if IsMovementCreateField(TableNo, FieldNo) then
             Hint := 'Warehouse.Movement.Create';
         if IsActivityQuantityOrBinField(TableNo, FieldNo) then
-            Hint := 'Warehouse.Movement.Register, Warehouse.InventoryPick.Create, Warehouse.InventoryPick.Post, Warehouse.InventoryPutAway.Create, Warehouse.InventoryPutAway.Post';
+            Hint := 'Warehouse.Movement.Register, Warehouse.InventoryPick.Create, Warehouse.InventoryPick.Post, Warehouse.InventoryPutAway.Create, Warehouse.InventoryPutAway.Post, Warehouse.InventoryMovement.Create, Warehouse.InventoryMovement.Register';
         if IsActivityZoneField(TableNo, FieldNo) then
             Hint := 'Warehouse.Movement.Register';
         if IsInventoryPickTrackingField(TableNo, FieldNo) then

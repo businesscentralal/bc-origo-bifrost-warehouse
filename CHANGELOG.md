@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Added (2026-10-16) - Inventory movement create and register (#44)
+
+- Warehouse.InventoryMovement.Create (codeunit 10078441, process 10078442) creates an inventory movement at a location with bins and without directed put-away and pick. Inline lines are written to an internal movement and codeunit "Create Inventory Pick/Movement" creates the activity. Assembly consumption uses report 7323, which commits. A directed location returns PreconditionFailed and tells the caller to use Warehouse.Movement.Create. A location without Bin Mandatory returns PreconditionFailed. Quantity above the from-bin, and fromBin equal to toBin, return InvalidLine and write nothing.
+- Warehouse.InventoryMovement.Register (codeunit 10078443, process 10078444) registers by number or SystemId, including a partial quantity. Codeunit 7307 commits. Isolation uses codeunit 10078440.
+- Enum values 10078445 and 10078446. Warehouse Activity Line quantity and bin hints, and the activity line table hint, now also name the inventory movement types. Tests 97089–97090.
+
 ### Fixed (2026-10-16) - Inventory quantity, identifier conflict and movement employee (#41, #42, #43)
 
 - Warehouse.InventoryPutAway.Create (codeunit 10078421) and Warehouse.InventoryPick.Create (codeunit 10078480) set Qty. to Handle and Qty. to Handle (Base) to the outstanding quantity after report 7323. The report leaves that field at zero when its request page is suppressed, so a post without lines had nothing to post. The quantity is assigned without Validate, because a tracked line without a lot rejects Validate and a try function cannot write afterwards. Post then refuses the missing lot or serial before posting.

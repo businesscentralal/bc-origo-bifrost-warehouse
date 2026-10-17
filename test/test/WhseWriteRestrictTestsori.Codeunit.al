@@ -97,7 +97,7 @@ codeunit 97026 "Whse Write Restrict Tests ori"
         AssertGenericSetRefused('Bin Content', '{"tableName":"Bin Content","force":true,"data":[{"primaryKey":{"Location Code":"LOC","Bin Code":"A-01","Item No.":"ITEM","Variant Code":"","Unit of Measure Code":"PCS"},"fields":{"Default":true}}]}', 'Warehouse.DefaultBin.Set');
     end;
 
-    /// <summary>Movement worksheet quantity and bin fields point at Warehouse.Movement.Create.</summary>
+    /// <summary>Movement worksheet quantity and bin fields point at bin replenishment and movement create.</summary>
     [Test]
     procedure GenericWrite_MovementWorksheetFields_IsRefusedAndHinted()
     var
@@ -108,10 +108,10 @@ codeunit 97026 "Whse Write Restrict Tests ori"
         TempArgument.Init();
         TempArgument.Insert(true);
 
-        Assert.AreEqual('Warehouse.Movement.Create', TempArgument.GetDedicatedMessageTypeHintForField(Database::"Whse. Worksheet Line", WorksheetLine.FieldNo("From Bin Code")), 'From Bin Code hint.');
-        Assert.AreEqual('Warehouse.Movement.Create', TempArgument.GetDedicatedMessageTypeHintForField(Database::"Whse. Worksheet Line", WorksheetLine.FieldNo("To Bin Code")), 'To Bin Code hint.');
-        Assert.AreEqual('Warehouse.Movement.Create', TempArgument.GetDedicatedMessageTypeHintForField(Database::"Whse. Worksheet Line", WorksheetLine.FieldNo("Qty. to Handle")), 'Qty. to Handle hint.');
-        AssertGenericSetRefused('Whse. Worksheet Line', '{"tableName":"Whse. Worksheet Line","force":true,"data":[{"primaryKey":{"Worksheet Template Name":"MOVE","Name":"DEFAULT","Location Code":"LOC","Line No.":10000},"fields":{"From Bin Code":"A-01"}}]}', 'Warehouse.Movement.Create');
+        Assert.AreEqual('Warehouse.BinReplenishment.Calculate, Warehouse.Movement.Create', TempArgument.GetDedicatedMessageTypeHintForField(Database::"Whse. Worksheet Line", WorksheetLine.FieldNo("From Bin Code")), 'From Bin Code hint.');
+        Assert.AreEqual('Warehouse.BinReplenishment.Calculate, Warehouse.Movement.Create', TempArgument.GetDedicatedMessageTypeHintForField(Database::"Whse. Worksheet Line", WorksheetLine.FieldNo("To Bin Code")), 'To Bin Code hint.');
+        Assert.AreEqual('Warehouse.BinReplenishment.Calculate, Warehouse.Movement.Create', TempArgument.GetDedicatedMessageTypeHintForField(Database::"Whse. Worksheet Line", WorksheetLine.FieldNo("Qty. to Handle")), 'Qty. to Handle hint.');
+        AssertGenericSetRefused('Whse. Worksheet Line', '{"tableName":"Whse. Worksheet Line","force":true,"data":[{"primaryKey":{"Worksheet Template Name":"MOVE","Name":"DEFAULT","Location Code":"LOC","Line No.":10000},"fields":{"From Bin Code":"A-01"}}]}', 'Warehouse.BinReplenishment.Calculate, Warehouse.Movement.Create');
     end;
 
     /// <summary>Activity quantity and bin point at movement and inventory pick. Zone stays on movement. Lot and serial point at inventory pick.</summary>

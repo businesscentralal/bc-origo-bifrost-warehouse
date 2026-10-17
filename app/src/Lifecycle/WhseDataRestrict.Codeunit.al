@@ -51,7 +51,7 @@ codeunit 10078458 "Whse Data Restrict ori"
         if (TableNo = Database::"Bin Content") and (FieldNo = BinContent.FieldNo(Default)) then
             Hint := 'Warehouse.DefaultBin.Set';
         if IsMovementCreateField(TableNo, FieldNo) then
-            Hint := 'Warehouse.Movement.Create';
+            Hint := 'Warehouse.BinReplenishment.Calculate, Warehouse.Movement.Create';
         if IsActivityQuantityOrBinField(TableNo, FieldNo) then
             Hint := 'Warehouse.Movement.Register, Warehouse.InventoryPick.Create, Warehouse.InventoryPick.Post, Warehouse.InventoryPutAway.Create, Warehouse.InventoryPutAway.Post, Warehouse.InventoryMovement.Create, Warehouse.InventoryMovement.Register';
         if IsActivityZoneField(TableNo, FieldNo) then

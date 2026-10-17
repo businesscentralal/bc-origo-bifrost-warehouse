@@ -16,6 +16,7 @@ permissionset 97010 "Whse NoRead Test ori"
         codeunit "Whse Bin Get Impl ori" = X,
         codeunit "Whse Bin Create Impl ori" = X,
         codeunit "Whse DefaultBin Set Impl ori" = X,
+        codeunit "Whse Bin Repl Calc Impl ori" = X,
         codeunit "Whse Movement Create Impl ori" = X,
         codeunit "Whse Movement Reg Impl ori" = X,
         codeunit "Whse InvtPick Create Impl ori" = X,

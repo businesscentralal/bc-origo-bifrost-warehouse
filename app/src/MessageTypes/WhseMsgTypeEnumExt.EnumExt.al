@@ -212,4 +212,13 @@ enumextension 10078385 "Whse MsgType EnumExt ori" extends "Message Type ori"
         Caption = 'Warehouse.InventoryMovement.Register', Locked = true;
         Implementation = "Msg Interface ori" = "Whse InvtMove Reg Impl ori", "Msg Contract ori" = "Whse InvtMove Reg Impl ori", "Msg Discovery ori" = "Whse InvtMove Reg Impl ori";
     }
+
+    /// <summary>
+    /// Calculates bin replenishment into a movement worksheet.
+    /// </summary>
+    value(10078447; "Warehouse.BinReplenishment.Calculate")
+    {
+        Caption = 'Warehouse.BinReplenishment.Calculate', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Bin Repl Calc Impl ori", "Msg Contract ori" = "Whse Bin Repl Calc Impl ori", "Msg Discovery ori" = "Whse Bin Repl Calc Impl ori";
+    }
 }

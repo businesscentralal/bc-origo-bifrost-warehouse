@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Added (2026-10-17) - Bin replenishment calculate (#47)
+
+- Warehouse.BinReplenishment.Calculate (codeunit 10078424, process 10078449) runs Calculate Bin Replenishment into a movement worksheet at a directed location. Optional zone, bin and item filters limit the fixed bin content. Nothing to replenish returns success with an empty line list. autoCreateMovement must stay false because this type does not create the warehouse movement. A location without directed put-away and pick returns PreconditionFailed. A missing worksheet template or name returns RecordNotFound. Isolation uses codeunit 10078448.
+- Enum value 10078447. The worksheet line field hint for quantity to handle and the from and to bins now also names Warehouse.BinReplenishment.Calculate. Test 97091.
+
 ### Added (2026-10-16) - Inventory movement create and register (#44)
 
 - Warehouse.InventoryMovement.Create (codeunit 10078441, process 10078442) creates an inventory movement at a location with bins and without directed put-away and pick. Inline lines are written to an internal movement and codeunit "Create Inventory Pick/Movement" creates the activity. Assembly consumption uses report 7323, which commits. A directed location returns PreconditionFailed and tells the caller to use Warehouse.Movement.Create. A location without Bin Mandatory returns PreconditionFailed. Quantity above the from-bin, and fromBin equal to toBin, return InvalidLine and write nothing.

@@ -146,6 +146,42 @@ codeunit 97082 "Whse DefBin Set Tests ori"
         Assert.AreEqual('Send a unit of measure that exists for the item.', TextValue(ResponseJson, 'nextStep'), 'The next step should name a real unit.');
     end;
 
+    /// <summary>An item that does not exist is RecordNotFound and points to Warehouse.Bin.Get.</summary>
+    [Test]
+    procedure Set_UnknownItem_IsNotFound()
+    var
+        Location: Record Location;
+        Item: Record Item;
+        BinContent: Record "Bin Content";
+        ResponseJson: JsonObject;
+    begin
+        CreateBinAndItem(Location, Item, 'A-01', '');
+
+        Run('{"locationCode":"' + Location.Code + '","itemNo":"BIFT-NOITEM","binCode":"A-01"}', '', ResponseJson);
+
+        Assert.AreEqual('RecordNotFound', TextValue(ResponseJson, 'code'), 'An unknown item should be RecordNotFound.');
+        Assert.AreEqual('itemNo', TextValue(ResponseJson, 'parameter'), 'The error should name itemNo.');
+        Assert.AreEqual('Check with Warehouse.Bin.Get.', TextValue(ResponseJson, 'nextStep'), 'The next step should name Warehouse.Bin.Get.');
+        BinContent.SetRange("Location Code", Location.Code);
+        Assert.IsTrue(BinContent.IsEmpty(), 'The refused call must not create bin content.');
+    end;
+
+    /// <summary>A missing binCode is MissingParameter.</summary>
+    [Test]
+    procedure Set_MissingBinCode_IsMissingParameter()
+    var
+        Location: Record Location;
+        Item: Record Item;
+        ResponseJson: JsonObject;
+    begin
+        CreateBinAndItem(Location, Item, 'A-01', '');
+
+        Run('{"locationCode":"' + Location.Code + '","itemNo":"' + Item."No." + '"}', '', ResponseJson);
+
+        Assert.AreEqual('MissingParameter', TextValue(ResponseJson, 'code'), 'A missing binCode should be MissingParameter.');
+        Assert.AreEqual('binCode', TextValue(ResponseJson, 'parameter'), 'The error should name binCode.');
+    end;
+
     /// <summary>DefaultBin.Set is disabled and returns PermissionDenied without bin content write permission.</summary>
     [Test]
     [TestPermissions(TestPermissions::Restrictive)]

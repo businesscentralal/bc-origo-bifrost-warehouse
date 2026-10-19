@@ -29,6 +29,8 @@ codeunit 10078422 "Whse Movement Reg Impl ori" implements "Msg Interface ori", "
         ApplyQuantities(Payload, MovementNo);
         ActivityLine.SetRange("Activity Type", ActivityLine."Activity Type"::Movement);
         ActivityLine.SetRange("No.", MovementNo);
+        // Count the Take side only; every Take line has a matching Place line with the same quantity.
+        ActivityLine.SetRange("Action Type", ActivityLine."Action Type"::Take);
         if not ActivityLine.FindSet() then
             Error(NothingErr);
         RegisteredQty := 0;
@@ -37,6 +39,7 @@ codeunit 10078422 "Whse Movement Reg Impl ori" implements "Msg Interface ori", "
         until ActivityLine.Next() = 0;
         if RegisteredQty = 0 then
             Error(NothingErr);
+        ActivityLine.SetRange("Action Type");
         ActivityLine.FindFirst();
         // The outer Codeunit.Run catches a failure; a return value is not allowed in a write transaction.
         WhseActivityRegister.ShowHideDialog(true);

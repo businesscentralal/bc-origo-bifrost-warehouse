@@ -86,6 +86,30 @@ codeunit 97086 "Whse InvtPick Post Tests ori"
         Assert.AreEqual(0, SalesShipmentHeader.Count(), 'A short quantity must not ship the order.');
     end;
 
+    /// <summary>Zero quantity to handle on every line is refused and nothing is shipped.</summary>
+    [Test]
+    procedure Post_ZeroQuantity_IsRefused()
+    var
+        Location: Record Location;
+        Item: Record Item;
+        SalesHeader: Record "Sales Header";
+        ActivityHeader: Record "Warehouse Activity Header";
+        SalesShipmentHeader: Record "Sales Shipment Header";
+        ResponseJson: JsonObject;
+        PickNo: Code[20];
+        LineNo: Integer;
+    begin
+        PickNo := CreateSalesPick(Location, Item, SalesHeader);
+        LineNo := FirstLineNo(PickNo);
+
+        Run('{"pickNo":"' + PickNo + '","lines":[{"lineNo":' + Format(LineNo) + ',"qtyToHandle":0}]}', '', ResponseJson);
+
+        Assert.AreEqual('PreconditionFailed', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.IsTrue(ActivityHeader.Get(ActivityHeader.Type::"Invt. Pick", PickNo), 'The inventory pick should stay open.');
+        SalesShipmentHeader.SetRange("Order No.", SalesHeader."No.");
+        Assert.AreEqual(0, SalesShipmentHeader.Count(), 'Nothing should be shipped.');
+    end;
+
     /// <summary>invoice true on a purchase return is refused before anything is posted.</summary>
     [Test]
     procedure Post_InvoiceOnPurchaseReturn_IsRefused()

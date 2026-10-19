@@ -814,7 +814,7 @@ codeunit 10078424 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
         PostedQuantity := BuildPostedLines(PostedHeader, Lines);
         Result.Add('pickNo', ActivityHeader."No.");
         Result.Add('postedPickNo', PostedHeader."No.");
-        Result.Add('sourceDocument', Format(ActivityHeader."Source Document"));
+        Result.Add('sourceDocument', ActivitySourceName(ActivityHeader."Source Document"));
         Result.Add('sourceNo', ActivityHeader."Source No.");
         Result.Add('postedDocumentNo', PostedDocumentNo);
         Result.Add('postedInvoiceNo', PostedInvoiceNo);
@@ -916,5 +916,11 @@ codeunit 10078424 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
         PostedHeader: Record "Posted Invt. Pick Header";
     begin
         exit(ActivityLine.WritePermission() and PostedHeader.WritePermission());
+    end;
+
+    local procedure ActivitySourceName(SourceDocument: Enum "Warehouse Activity Source Document"): Text
+    begin
+        // The enum name, not its translated caption, so the answer matches the Create type.
+        exit(SourceDocument.Names().Get(SourceDocument.Ordinals().IndexOf(SourceDocument.AsInteger())));
     end;
 }

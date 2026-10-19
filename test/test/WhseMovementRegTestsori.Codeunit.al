@@ -57,6 +57,7 @@ codeunit 97084 "Whse Movement Reg Tests ori"
         Assert.AreEqual(MovementNo, TextValue(ResponseJson, 'movementNo'), 'The original movement number should be returned.');
         Assert.AreNotEqual('', TextValue(ResponseJson, 'registeredMovementNo'), 'A registered movement number should be returned.');
         Assert.AreEqual(0, IntegerValue(ResponseJson, 'remainingLineCount'), 'A full register should leave no open line.');
+        Assert.AreEqual(1, DecimalValue(ResponseJson, 'totalQtyRegistered'), 'The registered quantity counts the moved quantity once, not Take plus Place.');
         Assert.IsFalse(ActivityHeader.Get(ActivityHeader.Type::Movement, MovementNo), 'The open movement should be gone.');
         Assert.IsTrue(RegisteredHeader.Get(RegisteredHeader.Type::Movement, CopyStr(TextValue(ResponseJson, 'registeredMovementNo'), 1, MaxStrLen(RegisteredHeader."No."))), 'The registered movement should exist.');
     end;
@@ -117,6 +118,44 @@ codeunit 97084 "Whse Movement Reg Tests ori"
         Assert.AreEqual('UnknownParameter', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
         Assert.AreEqual('note', TextValue(ResponseJson, 'parameter'), 'The error should name the unknown key.');
         Assert.IsTrue(ActivityHeader.Get(ActivityHeader.Type::Movement, MovementNo), 'The open movement should stay.');
+    end;
+
+    /// <summary>Zero quantity to handle on every line is refused and the movement stays open.</summary>
+    [Test]
+    procedure Register_ZeroQtyOnEveryLine_IsRefused()
+    var
+        ActivityHeader: Record "Warehouse Activity Header";
+        ResponseJson: JsonObject;
+        MovementNo: Code[20];
+    begin
+        MovementNo := CreateMovement(2);
+
+        Run('{"movementNo":"' + MovementNo + '","lines":' + LinesWithQuantity(MovementNo, 0) + '}', '', ResponseJson);
+
+        Assert.AreEqual('PreconditionFailed', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.IsTrue(ActivityHeader.Get(ActivityHeader.Type::Movement, MovementNo), 'The open movement should stay.');
+    end;
+
+    /// <summary>A partial register leaves the remaining quantity on the movement.</summary>
+    [Test]
+    procedure Register_PartialQuantity_LeavesRemainder()
+    var
+        ActivityLine: Record "Warehouse Activity Line";
+        ResponseJson: JsonObject;
+        MovementNo: Code[20];
+    begin
+        MovementNo := CreateMovement(2);
+
+        Run('{"movementNo":"' + MovementNo + '","lines":' + LinesWithQuantity(MovementNo, 1) + '}', '', ResponseJson);
+
+        Assert.AreEqual('Success', TextValue(ResponseJson, 'status'), ResponseText(ResponseJson));
+        Assert.AreEqual(1, DecimalValue(ResponseJson, 'totalQtyRegistered'), 'One of two units should be registered.');
+        Assert.IsTrue(IntegerValue(ResponseJson, 'remainingLineCount') > 0, 'The movement should keep its open lines.');
+        ActivityLine.SetRange("Activity Type", ActivityLine."Activity Type"::Movement);
+        ActivityLine.SetRange("No.", MovementNo);
+        ActivityLine.SetRange("Action Type", ActivityLine."Action Type"::Take);
+        ActivityLine.FindFirst();
+        Assert.AreEqual(1, ActivityLine."Qty. Outstanding", 'One unit should remain outstanding.');
     end;
 
     /// <summary>Register is disabled and returns PermissionDenied without activity write permission.</summary>
@@ -230,5 +269,58 @@ codeunit 97084 "Whse Movement Reg Tests ori"
         if not Token.IsValue() then
             exit(-1);
         exit(Token.AsValue().AsInteger());
+    end;
+
+    local procedure CreateMovement(Quantity: Decimal): Code[20]
+    var
+        Location: Record Location;
+        Item: Record Item;
+        FromBin: Record Bin;
+        ToBin: Record Bin;
+        Zone: Record Zone;
+        CreateResponse: JsonObject;
+    begin
+        LibraryWarehouse.CreateFullWMSLocation(Location, 2);
+        EnsureDefaultDirectedEmployee(Location.Code);
+        EnsureMovementWorksheetTemplate();
+        LibraryInventory.CreateItem(Item);
+        LibraryWarehouse.UpdateInventoryOnLocationWithDirectedPutAwayAndPick(Item."No.", Location.Code, 5, false);
+        LibraryWarehouse.FindZone(Zone, Location.Code, LibraryWarehouse.SelectBinType(false, false, true, true), false);
+        LibraryWarehouse.FindBin(FromBin, Location.Code, Zone.Code, 1);
+        LibraryWarehouse.FindBin(ToBin, Location.Code, Zone.Code, 2);
+        RunCreate('{"locationCode":"' + Location.Code + '","lines":[{"itemNo":"' + Item."No." + '","quantity":' + Format(Quantity, 0, 9) + ',"fromBin":"' + FromBin.Code + '","toBin":"' + ToBin.Code + '"}]}', CreateResponse);
+        Assert.AreEqual('Success', TextValue(CreateResponse, 'status'), ResponseText(CreateResponse));
+        exit(CopyStr(TextValue(CreateResponse, 'movementNo'), 1, 20));
+    end;
+
+    local procedure LinesWithQuantity(MovementNo: Code[20]; Quantity: Decimal): Text
+    var
+        ActivityLine: Record "Warehouse Activity Line";
+        Lines: JsonArray;
+        LineJson: JsonObject;
+        Written: Text;
+    begin
+        ActivityLine.SetRange("Activity Type", ActivityLine."Activity Type"::Movement);
+        ActivityLine.SetRange("No.", MovementNo);
+        ActivityLine.FindSet();
+        repeat
+            Clear(LineJson);
+            LineJson.Add('lineNo', ActivityLine."Line No.");
+            LineJson.Add('qtyToHandle', Quantity);
+            Lines.Add(LineJson);
+        until ActivityLine.Next() = 0;
+        Lines.WriteTo(Written);
+        exit(Written);
+    end;
+
+    local procedure DecimalValue(Parent: JsonObject; Name: Text): Decimal
+    var
+        Token: JsonToken;
+    begin
+        if not Parent.Get(Name, Token) then
+            exit(-1);
+        if not Token.IsValue() then
+            exit(-1);
+        exit(Token.AsValue().AsDecimal());
     end;
 }

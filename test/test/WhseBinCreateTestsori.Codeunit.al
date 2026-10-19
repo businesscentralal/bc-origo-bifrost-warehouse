@@ -158,6 +158,39 @@ codeunit 97081 "Whse Bin Create Tests ori"
         Assert.AreEqual(0, Bin.Count(), 'Collected failures must not insert a bin.');
     end;
 
+    /// <summary>An unknown key is refused and no bin is written.</summary>
+    [Test]
+    procedure Create_UnknownKey_IsRefused()
+    var
+        Location: Record Location;
+        Bin: Record Bin;
+        ResponseJson: JsonObject;
+    begin
+        LibraryWarehouse.CreateLocationWMS(Location, true, false, false, false, false);
+
+        Run('{"locationCode":"' + Location.Code + '","note":"nope","bins":[{"code":"A-01"}]}', '', ResponseJson);
+
+        Assert.AreEqual('UnknownParameter', TextValue(ResponseJson, 'code'), 'An unknown key should be refused.');
+        Assert.AreEqual('note', TextValue(ResponseJson, 'parameter'), 'The error should name the unknown key.');
+        Bin.SetRange("Location Code", Location.Code);
+        Assert.IsTrue(Bin.IsEmpty(), 'A refused call must not write a bin.');
+    end;
+
+    /// <summary>A request without bins is MissingParameter.</summary>
+    [Test]
+    procedure Create_MissingBins_IsMissingParameter()
+    var
+        Location: Record Location;
+        ResponseJson: JsonObject;
+    begin
+        LibraryWarehouse.CreateLocationWMS(Location, true, false, false, false, false);
+
+        Run('{"locationCode":"' + Location.Code + '"}', '', ResponseJson);
+
+        Assert.AreEqual('MissingParameter', TextValue(ResponseJson, 'code'), 'Missing bins should be MissingParameter.');
+        Assert.AreEqual('bins', TextValue(ResponseJson, 'parameter'), 'The error should name bins.');
+    end;
+
     /// <summary>Create is disabled and returns PermissionDenied without bin write permission.</summary>
     [Test]
     [TestPermissions(TestPermissions::Restrictive)]

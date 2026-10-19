@@ -703,12 +703,13 @@ codeunit 10078421 "Whse Movement Create Impl ori" implements "Msg Interface ori"
         TemplateName: Code[10];
         BatchName: Code[10];
         LocationCode: Code[10];
+        WorksheetCreated: Boolean;
         NothingErr: Label 'No warehouse movement was created.', Comment = 'is-IS=Engin vöruhúsafærsla var stofnuð.';
     begin
         TemplateName := CopyStr(TextValue(Payload, 'worksheetTemplateName'), 1, MaxStrLen(TemplateName));
         BatchName := CopyStr(TextValue(Payload, 'worksheetName'), 1, MaxStrLen(BatchName));
         LocationCode := CopyStr(TextValue(Payload, 'locationCode'), 1, MaxStrLen(LocationCode));
-        EnsureWorksheetName(TemplateName, BatchName, LocationCode);
+        WorksheetCreated := EnsureWorksheetName(TemplateName, BatchName, LocationCode);
         InsertInlineLines(Payload, TemplateName, BatchName, LocationCode);
         WorksheetLine.SetRange("Worksheet Template Name", TemplateName);
         WorksheetLine.SetRange(Name, BatchName);
@@ -724,19 +725,36 @@ codeunit 10078421 "Whse Movement Create Impl ori" implements "Msg Interface ori"
         CreateDocument.GetActivityHeader(ActivityHeader, MovementOption::Movement);
         if ActivityHeader."No." = '' then
             Error(NothingErr);
+        if WorksheetCreated then
+            DeleteWorksheetName(TemplateName, BatchName, LocationCode);
     end;
 
-    local procedure EnsureWorksheetName(TemplateName: Code[10]; BatchName: Code[10]; LocationCode: Code[10])
+    local procedure DeleteWorksheetName(TemplateName: Code[10]; BatchName: Code[10]; LocationCode: Code[10])
+    var
+        WorksheetName: Record "Whse. Worksheet Name";
+        WorksheetLine: Record "Whse. Worksheet Line";
+    begin
+        // The worksheet name was generated for inline lines only; drop it so calls do not leave names behind.
+        WorksheetLine.SetRange("Worksheet Template Name", TemplateName);
+        WorksheetLine.SetRange(Name, BatchName);
+        WorksheetLine.SetRange("Location Code", LocationCode);
+        WorksheetLine.DeleteAll(true);
+        if WorksheetName.Get(TemplateName, BatchName, LocationCode) then
+            WorksheetName.Delete(true);
+    end;
+
+    local procedure EnsureWorksheetName(TemplateName: Code[10]; BatchName: Code[10]; LocationCode: Code[10]): Boolean
     var
         WorksheetName: Record "Whse. Worksheet Name";
     begin
         if WorksheetName.Get(TemplateName, BatchName, LocationCode) then
-            exit;
+            exit(false);
         WorksheetName.Init();
         WorksheetName.Validate("Worksheet Template Name", TemplateName);
         WorksheetName.Validate(Name, BatchName);
         WorksheetName.Validate("Location Code", LocationCode);
         WorksheetName.Insert(true);
+        exit(true);
     end;
 
     local procedure InsertInlineLines(Payload: JsonObject; TemplateName: Code[10]; BatchName: Code[10]; LocationCode: Code[10])

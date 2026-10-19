@@ -495,7 +495,7 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
             if Total <= 0 then
                 Argument.AddError("Bifrost Error Code ori"::PreconditionFailed, NothingLbl, 'lines', '', '', NothingNextStepLbl)
             else
-                RefuseTrackingOnOpenLines(Argument, ActivityHeader);
+                RefuseTrackingOnOpenLines(Argument, ActivityHeader, Planned);
             exit;
         end;
         if not Token.IsArray() then begin
@@ -511,7 +511,9 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
             exit;
         Total := SumPlanned(ActivityHeader, Planned);
         if Total <= 0 then
-            Argument.AddError("Bifrost Error Code ori"::PreconditionFailed, NothingLbl, 'lines', '', '', NothingNextStepLbl);
+            Argument.AddError("Bifrost Error Code ori"::PreconditionFailed, NothingLbl, 'lines', '', '', NothingNextStepLbl)
+        else
+            RefuseTrackingOnOpenLines(Argument, ActivityHeader, Planned);
     end;
 
     local procedure ReadOneLine(Token: JsonToken; Index: Integer; var Argument: Record "Message Argument ori"; ActivityHeader: Record "Warehouse Activity Header"; var Planned: JsonArray)
@@ -563,8 +565,9 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
         end;
         if BinPresent and RefuseInvalidBin(Argument, ActivityLine, Index, BinText) then
             exit;
-        if RefuseMissingTracking(Argument, ActivityHeader, ActivityLine, Index) then
-            exit;
+        if Quantity > 0 then
+            if RefuseMissingTracking(Argument, ActivityHeader, ActivityLine, Index) then
+                exit;
         PlannedLine.Add('lineNo', LineNo);
         PlannedLine.Add('qtyToHandle', Quantity);
         if BinPresent then
@@ -572,20 +575,25 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
         Planned.Add(PlannedLine);
     end;
 
-    local procedure RefuseTrackingOnOpenLines(var Argument: Record "Message Argument ori"; ActivityHeader: Record "Warehouse Activity Header")
+    local procedure RefuseTrackingOnOpenLines(var Argument: Record "Message Argument ori"; ActivityHeader: Record "Warehouse Activity Header"; Planned: JsonArray)
     var
         ActivityLine: Record "Warehouse Activity Line";
-        Index: Integer;
+        PlannedLineNos: List of [Integer];
+        Token: JsonToken;
+        LineToken: JsonToken;
     begin
+        // Lines sent in the request were checked with their planned quantity; check the other open lines
+        // that keep a quantity to handle, so a missing lot or serial is refused before Business Central posts.
+        foreach Token in Planned do
+            if Token.AsObject().Get('lineNo', LineToken) then
+                PlannedLineNos.Add(LineToken.AsValue().AsInteger());
         ActivityLine.SetRange("Activity Type", ActivityHeader.Type);
         ActivityLine.SetRange("No.", ActivityHeader."No.");
         if not ActivityLine.FindSet() then
             exit;
-        Index := 0;
         repeat
-            if ActivityLine."Qty. to Handle" <> 0 then
-                RefuseMissingTracking(Argument, ActivityHeader, ActivityLine, Index);
-            Index += 1;
+            if (ActivityLine."Qty. to Handle" <> 0) and not PlannedLineNos.Contains(ActivityLine."Line No.") then
+                RefuseMissingTracking(Argument, ActivityHeader, ActivityLine, -1);
         until ActivityLine.Next() = 0;
     end;
 
@@ -648,11 +656,11 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
                 end;
         end;
         if NeedsLot and (ActivityLine."Lot No." = '') then begin
-            Argument.AddError("Bifrost Error Code ori"::InvalidLine, StrSubstNo(TrackingLbl, ActivityLine."Line No."), LineParameter(Index, 'lineNo'), Format(ActivityLine."Line No."), '', StrSubstNo(TrackingNextStepLbl, ActivityLine."Line No."));
+            Argument.AddError("Bifrost Error Code ori"::InvalidLine, StrSubstNo(TrackingLbl, ActivityLine."Line No."), TrackingParameter(Index), Format(ActivityLine."Line No."), '', StrSubstNo(TrackingNextStepLbl, ActivityLine."Line No."));
             exit(true);
         end;
         if NeedsSerial and (ActivityLine."Serial No." = '') then begin
-            Argument.AddError("Bifrost Error Code ori"::InvalidLine, StrSubstNo(TrackingLbl, ActivityLine."Line No."), LineParameter(Index, 'lineNo'), Format(ActivityLine."Line No."), '', StrSubstNo(TrackingNextStepLbl, ActivityLine."Line No."));
+            Argument.AddError("Bifrost Error Code ori"::InvalidLine, StrSubstNo(TrackingLbl, ActivityLine."Line No."), TrackingParameter(Index), Format(ActivityLine."Line No."), '', StrSubstNo(TrackingNextStepLbl, ActivityLine."Line No."));
             exit(true);
         end;
         exit(false);
@@ -892,7 +900,7 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
         PostedQuantity := BuildPostedLines(PostedHeader, Lines);
         Result.Add('putawayNo', ActivityHeader."No.");
         Result.Add('postedPutawayNo', PostedHeader."No.");
-        Result.Add('sourceDocument', Format(ActivityHeader."Source Document"));
+        Result.Add('sourceDocument', ActivitySourceName(ActivityHeader."Source Document"));
         Result.Add('sourceNo', ActivityHeader."Source No.");
         Result.Add('postedDocumentNo', PostedDocumentNo);
         Result.Add('postedInvoiceNo', PostedInvoiceNo);
@@ -1007,5 +1015,19 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
         PostedHeader: Record "Posted Invt. Put-away Header";
     begin
         exit(ActivityLine.WritePermission() and PostedHeader.WritePermission());
+    end;
+
+    local procedure TrackingParameter(Index: Integer): Text
+    begin
+        // Index -1 marks an open line that the request did not list.
+        if Index < 0 then
+            exit('lineNo');
+        exit(LineParameter(Index, 'lineNo'));
+    end;
+
+    local procedure ActivitySourceName(SourceDocument: Enum "Warehouse Activity Source Document"): Text
+    begin
+        // The enum name, not its translated caption, so the answer matches the Create type.
+        exit(SourceDocument.Names().Get(SourceDocument.Ordinals().IndexOf(SourceDocument.AsInteger())));
     end;
 }

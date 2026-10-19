@@ -32,6 +32,7 @@ codeunit 97083 "Whse Movement Create Tests ori"
         FromBin: Record Bin;
         ToBin: Record Bin;
         ActivityHeader: Record "Warehouse Activity Header";
+        WorksheetName: Record "Whse. Worksheet Name";
         ResponseJson: JsonObject;
         RequestText: Text;
     begin
@@ -46,6 +47,8 @@ codeunit 97083 "Whse Movement Create Tests ori"
         Assert.IsTrue(ActivityHeader.Get(ActivityHeader.Type::Movement, CopyStr(TextValue(ResponseJson, 'movementNo'), 1, MaxStrLen(ActivityHeader."No."))), 'The movement should exist.');
         Assert.AreEqual(FromBin.Code, TextValue(FirstLine(ResponseJson), 'fromBin'), 'The from-bin should be returned.');
         Assert.AreEqual(ToBin.Code, TextValue(FirstLine(ResponseJson), 'toBin'), 'The to-bin should be returned.');
+        WorksheetName.SetRange("Location Code", Location.Code);
+        Assert.IsTrue(WorksheetName.IsEmpty(), 'The worksheet name generated for inline lines should be removed.');
     end;
 
     /// <summary>A location without directed put-away and pick is refused and writes nothing.</summary>
@@ -140,6 +143,29 @@ codeunit 97083 "Whse Movement Create Tests ori"
         Assert.AreEqual('Read Warehouse.BinContent.Get for the bin and lower the quantity.', TextValue(ResponseJson, 'nextStep'), 'The next step should name BinContent.Get.');
         WorksheetLine.SetRange("Location Code", Location.Code);
         Assert.AreEqual(0, WorksheetLine.Count(), 'A short bin must not write a worksheet line.');
+    end;
+
+    /// <summary>An item that does not exist is RecordNotFound with the activity lookup next step, and nothing is written.</summary>
+    [Test]
+    procedure Create_UnknownItem_IsNotFound()
+    var
+        Location: Record Location;
+        Item: Record Item;
+        FromBin: Record Bin;
+        ToBin: Record Bin;
+        ActivityHeader: Record "Warehouse Activity Header";
+        ResponseJson: JsonObject;
+    begin
+        PrepareDirectedStock(Location, Item, FromBin, ToBin);
+
+        Run('{"locationCode":"' + Location.Code + '","lines":[{"itemNo":"BIFT-NOITEM","quantity":1,"fromBin":"' + FromBin.Code + '","toBin":"' + ToBin.Code + '"}]}', '', ResponseJson);
+
+        Assert.AreEqual('RecordNotFound', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('lines[0].itemNo', TextValue(ResponseJson, 'parameter'), 'The error should name the line item.');
+        Assert.AreEqual('Check the identifier with Warehouse.Activity.Get (activityType Movement).', TextValue(ResponseJson, 'nextStep'), 'The next step should name Activity.Get.');
+        ActivityHeader.SetRange(Type, ActivityHeader.Type::Movement);
+        ActivityHeader.SetRange("Location Code", Location.Code);
+        Assert.IsTrue(ActivityHeader.IsEmpty(), 'No movement should be created.');
     end;
 
     /// <summary>Create is disabled and returns PermissionDenied without worksheet write permission.</summary>

@@ -204,8 +204,8 @@ codeunit 97088 "Whse InvtPut Post Tests ori"
         MessageTypeInterface: Interface "Msg Interface ori";
         ResponseJson: JsonObject;
     begin
+        // Whse Gate Test ori would grant the activity tables, so the posting gate and not the missing write would refuse.
         LibraryLowerPermissions.PushPermissionSetWithoutDefaults('Whse NoRead Test ori');
-        LibraryLowerPermissions.AddPermissionSet('Whse Gate Test ori');
         MessageTypeInterface := Enum::"Message Type ori"::"Warehouse.InventoryPutAway.Post";
         Assert.IsFalse(MessageTypeInterface.IsEnabled(), 'Post must be disabled without activity write permission.');
 

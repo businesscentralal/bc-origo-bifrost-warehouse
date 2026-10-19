@@ -144,8 +144,8 @@ codeunit 97090 "Whse InvtMove Reg Tests ori"
         MessageTypeInterface: Interface "Msg Interface ori";
         ResponseJson: JsonObject;
     begin
+        // Whse Gate Test ori would grant the activity tables, so the posting gate and not the missing write would refuse.
         LibraryLowerPermissions.PushPermissionSetWithoutDefaults('Whse NoRead Test ori');
-        LibraryLowerPermissions.AddPermissionSet('Whse Gate Test ori');
         MessageTypeInterface := Enum::"Message Type ori"::"Warehouse.InventoryMovement.Register";
         Assert.IsFalse(MessageTypeInterface.IsEnabled(), 'Register must be disabled without write permission.');
 

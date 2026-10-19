@@ -28,5 +28,6 @@ permissionset 97010 "Whse NoRead Test ori"
         codeunit "Whse Receipt Create Impl ori" = X,
         codeunit "Whse Receipt Post Impl ori" = X,
         codeunit "Whse Shipment Create Impl ori" = X,
-        codeunit "Whse Shipment Post Impl ori" = X;
+        codeunit "Whse Shipment Post Impl ori" = X,
+        codeunit "Whse Write Context ori" = X;
 }

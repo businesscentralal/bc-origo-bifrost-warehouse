@@ -221,4 +221,103 @@ enumextension 10078385 "Whse MsgType EnumExt ori" extends "Message Type ori"
         Caption = 'Warehouse.BinReplenishment.Calculate', Locked = true;
         Implementation = "Msg Interface ori" = "Whse Bin Repl Calc Impl ori", "Msg Contract ori" = "Whse Bin Repl Calc Impl ori", "Msg Discovery ori" = "Whse Bin Repl Calc Impl ori";
     }
+
+    /// <summary>
+    /// Inserts warehouse item or reclassification journal lines at a directed location.
+    /// </summary>
+    value(10078446; "Warehouse.Journal.Create")
+    {
+        Caption = 'Warehouse.Journal.Create', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Journal Create Impl ori", "Msg Contract ori" = "Whse Journal Create Impl ori", "Msg Discovery ori" = "Whse Journal Create Impl ori";
+    }
+
+    /// <summary>
+    /// Registers a warehouse item or reclassification journal batch.
+    /// </summary>
+    value(10078447; "Warehouse.Journal.Register")
+    {
+        Caption = 'Warehouse.Journal.Register', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Journal Reg Impl ori", "Msg Contract ori" = "Whse Journal Reg Impl ori", "Msg Discovery ori" = "Whse Journal Reg Impl ori";
+    }
+
+    /// <summary>
+    /// Calculates a warehouse physical inventory into a physical inventory journal batch.
+    /// </summary>
+    value(10078448; "Warehouse.PhysInventory.Calculate")
+    {
+        Caption = 'Warehouse.PhysInventory.Calculate', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse PhysInvt Calc Impl ori", "Msg Contract ori" = "Whse PhysInvt Calc Impl ori", "Msg Discovery ori" = "Whse PhysInvt Calc Impl ori";
+    }
+
+    /// <summary>
+    /// Writes counted quantities and registers a warehouse physical inventory journal batch.
+    /// </summary>
+    value(10078449; "Warehouse.PhysInventory.Register")
+    {
+        Caption = 'Warehouse.PhysInventory.Register', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse PhysInvt Reg Impl ori", "Msg Contract ori" = "Whse PhysInvt Reg Impl ori", "Msg Discovery ori" = "Whse PhysInvt Reg Impl ori";
+    }
+
+    /// <summary>
+    /// Calculates the warehouse adjustment into an item journal batch.
+    /// </summary>
+    value(10078450; "Warehouse.Adjustment.Calculate")
+    {
+        Caption = 'Warehouse.Adjustment.Calculate', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Adjustment Calc Impl ori", "Msg Contract ori" = "Whse Adjustment Calc Impl ori", "Msg Discovery ori" = "Whse Adjustment Calc Impl ori";
+    }
+
+    /// <summary>
+    /// Fills a pick or put-away worksheet from released warehouse documents.
+    /// </summary>
+    value(10078460; "Warehouse.Worksheet.GetDocuments")
+    {
+        Caption = 'Warehouse.Worksheet.GetDocuments', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Wksh GetDocs Impl ori", "Msg Contract ori" = "Whse Wksh GetDocs Impl ori", "Msg Discovery ori" = "Whse Wksh GetDocs Impl ori";
+    }
+
+    /// <summary>
+    /// Creates picks or put-aways from a pick or put-away worksheet.
+    /// </summary>
+    value(10078461; "Warehouse.Worksheet.CreateActivities")
+    {
+        Caption = 'Warehouse.Worksheet.CreateActivities', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Wksh CreateAct Impl ori", "Msg Contract ori" = "Whse Wksh CreateAct Impl ori", "Msg Discovery ori" = "Whse Wksh CreateAct Impl ori";
+    }
+
+    /// <summary>
+    /// Splits a warehouse activity line.
+    /// </summary>
+    value(10078462; "Warehouse.ActivityLine.Split")
+    {
+        Caption = 'Warehouse.ActivityLine.Split', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse ActLine Split Impl ori", "Msg Contract ori" = "Whse ActLine Split Impl ori", "Msg Discovery ori" = "Whse ActLine Split Impl ori";
+    }
+
+    /// <summary>
+    /// Changes the bin of a warehouse activity line.
+    /// </summary>
+    value(10078463; "Warehouse.ActivityLine.ChangeBin")
+    {
+        Caption = 'Warehouse.ActivityLine.ChangeBin', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse ActLine ChgBin Impl ori", "Msg Contract ori" = "Whse ActLine ChgBin Impl ori", "Msg Discovery ori" = "Whse ActLine ChgBin Impl ori";
+    }
+
+    /// <summary>
+    /// Sets the quantity to handle on warehouse activity lines.
+    /// </summary>
+    value(10078464; "Warehouse.ActivityLine.SetQtyToHandle")
+    {
+        Caption = 'Warehouse.ActivityLine.SetQtyToHandle', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse ActLine SetQty Impl ori", "Msg Contract ori" = "Whse ActLine SetQty Impl ori", "Msg Discovery ori" = "Whse ActLine SetQty Impl ori";
+    }
+
+    /// <summary>
+    /// Assigns lot, serial and package numbers on warehouse activity lines.
+    /// </summary>
+    value(10078465; "Warehouse.ActivityLine.AssignTracking")
+    {
+        Caption = 'Warehouse.ActivityLine.AssignTracking', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse ActLine Track Impl ori", "Msg Contract ori" = "Whse ActLine Track Impl ori", "Msg Discovery ori" = "Whse ActLine Track Impl ori";
+    }
 }

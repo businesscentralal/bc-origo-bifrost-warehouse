@@ -81,6 +81,690 @@
           <note from="Developer" annotates="general" priority="2">is-IS=númer vöruhúsavirkni</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Activity Get Impl ori - Method ResolveActivityIdentifiers - NamedType ActivityNumberTxt</note>
         </trans-unit>
+        <trans-unit id="Codeunit 3189497968 - Method 731518717 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bin %1 was not found at location %2.</source>
+          <target>Hólf %1 fannst ekki á staðsetningu %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = bin, %2 = location, is-IS=Hólf %1 fannst ekki á staðsetningu %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine ChgBin Impl ori - Method CheckBin - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3189497968 - Method 731518717 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check the bin with Warehouse.Bin.Get.</source>
+          <target>Athugaðu hólfið með Warehouse.Bin.Get.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu hólfið með Warehouse.Bin.Get.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine ChgBin Impl ori - Method CheckBin - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3189497968 - Method 731518717 - NamedType 26742315" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bin %1 holds %2 base units of item %3 that can be taken; line %4 needs %5.</source>
+          <target>Hólf %1 geymir %2 grunneiningar af vöru %3 sem má taka; lína %4 þarf %5.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = bin, %2 = available, %3 = item, %4 = line no., %5 = needed, is-IS=Hólf %1 geymir %2 grunneiningar af vöru %3 sem má taka; lína %4 þarf %5.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine ChgBin Impl ori - Method CheckBin - NamedType TakeLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3189497968 - Method 731518717 - NamedType 3058035731" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bin %1 does not accept stock: it is blocked for inbound movement or it is the adjustment bin.</source>
+          <target>Hólf %1 tekur ekki við birgðum: það er lokað fyrir innfærslu eða það er leiðréttingarhólfið.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = bin, is-IS=Hólf %1 tekur ekki við birgðum: það er lokað fyrir innfærslu eða það er leiðréttingarhólfið.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine ChgBin Impl ori - Method CheckBin - NamedType PlaceLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3189497968 - Method 731518717 - NamedType 1814997181" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Read Warehouse.BinContent.Get.</source>
+          <target>Lestu Warehouse.BinContent.Get.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lestu Warehouse.BinContent.Get.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine ChgBin Impl ori - Method CheckBin - NamedType BinContentNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3189497968 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to change warehouse activity lines.</source>
+          <target>Þú hefur ekki heimild til að breyta línum vöruhúsaaðgerða.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að breyta línum vöruhúsaaðgerða.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine ChgBin Impl ori - Method ExecuteBifrostTask - NamedType DeniedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3189497968 - Method 3571782927 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Full ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine ChgBin Impl ori - Method ExecuteBifrostTask - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3189497968 - Method 3571782927 - NamedType 1300278838" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Nothing was written.</source>
+          <target>Ekkert var skrifað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekkert var skrifað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine ChgBin Impl ori - Method ExecuteBifrostTask - NamedType ProblemsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3189497968 - Method 3571782927 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>binCode is required.</source>
+          <target>binCode er nauðsynlegt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=binCode er nauðsynlegt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine ChgBin Impl ori - Method ExecuteBifrostTask - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3189497968 - Method 3571782927 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send the new bin in binCode.</source>
+          <target>Sendu nýja hólfið í binCode.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu nýja hólfið í binCode.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine ChgBin Impl ori - Method ExecuteBifrostTask - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3189497968 - Method 3571782927 - NamedType 214808739" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Only line %1 was changed; the paired lines %2 keep their bin.</source>
+          <target>Aðeins línu %1 var breytt; paraðar línur %2 halda hólfi sínu.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line no., %2 = paired line nos., is-IS=Aðeins línu %1 var breytt; paraðar línur %2 halda hólfi sínu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine ChgBin Impl ori - Method ExecuteBifrostTask - NamedType PairedNoteLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3189497968 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Changes the bin of one warehouse activity line.</source>
+          <target>Breytir hólfi einnar línu vöruhúsaaðgerðar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Breytir hólfi einnar línu vöruhúsaaðgerðar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine ChgBin Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3189497968 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
+          <source>change bin, take from another bin, place in another bin, pick bin, put-away bin, bin code</source>
+          <target>breyta hólfi, taka úr öðru hólfi, setja í annað hólf, tínsluhólf, frágangshólf, hólfakóði</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=breyta hólfi, taka úr öðru hólfi, setja í annað hólf, tínsluhólf, frágangshólf, hólfakóði</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine ChgBin Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3189497968 - Method 2340569551 - NamedType 3593894611" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Validates a new bin on one warehouse activity line. A Take line is refused when the bin does not hold the outstanding quantity; a Place line is refused when the bin does not accept stock. Changing the Take line of a pair leaves the Place line unchanged and the answer says so.</source>
+          <target>Staðfestir nýtt hólf á einni línu vöruhúsaaðgerðar. Taka-línu er hafnað þegar hólfið geymir ekki útistandandi magn; Setja-línu er hafnað þegar hólfið tekur ekki við birgðum. Breyting á Taka-línu pars lætur Setja-línuna óbreytta og svarið segir það.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Staðfestir nýtt hólf á einni línu vöruhúsaaðgerðar. Taka-línu er hafnað þegar hólfið geymir ekki útistandandi magn; Setja-línu er hafnað þegar hólfið tekur ekki við birgðum. Breyting á Taka-línu pars lætur Setja-línuna óbreytta og svarið segir það.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine ChgBin Impl ori - Method GetOverview - NamedType OverviewLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3189497968 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Changes the bin of one warehouse activity line through Validate. A Take line needs a bin with enough content; a Place line needs a bin that accepts stock. The paired line of the other action type is not changed.</source>
+          <target>Breytir hólfi einnar línu vöruhúsaaðgerðar með Validate. Taka-lína þarf hólf með nægu innihaldi; Setja-lína þarf hólf sem tekur við birgðum. Paraðri línu hinnar aðgerðartegundarinnar er ekki breytt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Breytir hólfi einnar línu vöruhúsaaðgerðar með Validate. Taka-lína þarf hólf með nægu innihaldi; Setja-lína þarf hólf sem tekur við birgðum. Paraðri línu hinnar aðgerðartegundarinnar er ekki breytt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine ChgBin Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3189497968 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The activity line payload was empty.</source>
+          <target>Gögn aðgerðarlínunnar voru tóm.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gögn aðgerðarlínunnar voru tóm.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine ChgBin Impl ori - Method OnRun - NamedType MissingPayloadErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2675597613 - Method 2053511923 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>activityNo or systemId is required.</source>
+          <target>activityNo eða systemId er nauðsynlegt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=activityNo eða systemId er nauðsynlegt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Helper ori - Method ResolveActivity - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2675597613 - Method 2053511923 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send activityType and activityNo, or the SystemId of the activity.</source>
+          <target>Sendu activityType og activityNo, eða SystemId aðgerðarinnar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu activityType og activityNo, eða SystemId aðgerðarinnar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Helper ori - Method ResolveActivity - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2675597613 - Method 2053511923 - NamedType 961827798" size-unit="char" translate="yes" xml:space="preserve">
+          <source>activityType %1 is not a warehouse activity type.</source>
+          <target>activityType %1 er ekki tegund vöruhúsaaðgerðar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = value, is-IS=activityType %1 er ekki tegund vöruhúsaaðgerðar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Helper ori - Method ResolveActivity - NamedType TypeLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2675597613 - Method 2053511923 - NamedType 1246002417" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send Put-away, Pick, Movement, Invt. Put-away, Invt. Pick or Invt. Movement.</source>
+          <target>Sendu Put-away, Pick, Movement, Invt. Put-away, Invt. Pick eða Invt. Movement.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu Put-away, Pick, Movement, Invt. Put-away, Invt. Pick eða Invt. Movement.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Helper ori - Method ResolveActivity - NamedType TypeNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2675597613 - Method 2053511923 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
+          <source>systemId is not a GUID.</source>
+          <target>systemId er ekki GUID.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=systemId er ekki GUID.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Helper ori - Method ResolveActivity - NamedType FormatLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2675597613 - Method 2053511923 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send the SystemId as a GUID.</source>
+          <target>Sendu SystemId sem GUID.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu SystemId sem GUID.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Helper ori - Method ResolveActivity - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2675597613 - Method 2053511923 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warehouse activity %1 was not found.</source>
+          <target>Vöruhúsaaðgerð %1 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = identifier, is-IS=Vöruhúsaaðgerð %1 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Helper ori - Method ResolveActivity - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2675597613 - Method 2053511923 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check the activity with Warehouse.Activity.Get.</source>
+          <target>Athugaðu aðgerðina með Warehouse.Activity.Get.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu aðgerðina með Warehouse.Activity.Get.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Helper ori - Method ResolveActivity - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2675597613 - Method 2053511923 - NamedType 644283978" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Activity number %1 exists for more than one activity type.</source>
+          <target>Aðgerðarnúmer %1 er til fyrir fleiri en eina tegund aðgerðar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = activity no., is-IS=Aðgerðarnúmer %1 er til fyrir fleiri en eina tegund aðgerðar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Helper ori - Method ResolveActivity - NamedType AmbiguousLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2675597613 - Method 2053511923 - NamedType 3127681293" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send activityType with activityNo.</source>
+          <target>Sendu activityType með activityNo.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu activityType með activityNo.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Helper ori - Method ResolveActivity - NamedType AmbiguousNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2675597613 - Method 2053511923 - NamedType 650235816" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The activity identifiers name different activities.</source>
+          <target>Auðkenni aðgerðarinnar nefna mismunandi aðgerðir.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Auðkenni aðgerðarinnar nefna mismunandi aðgerðir.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Helper ori - Method ResolveActivity - NamedType ConflictLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2675597613 - Method 2053511923 - NamedType 1132247979" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use the activity no. answered by Warehouse.Activity.Get.</source>
+          <target>Notaðu aðgerðarnúmerið sem Warehouse.Activity.Get skilaði.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notaðu aðgerðarnúmerið sem Warehouse.Activity.Get skilaði.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Helper ori - Method ResolveActivity - NamedType ConflictNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2675597613 - Method 1706654006 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>lineNo or lineSystemId is required.</source>
+          <target>lineNo eða lineSystemId er nauðsynlegt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=lineNo eða lineSystemId er nauðsynlegt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Helper ori - Method ResolveLine - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2675597613 - Method 1706654006 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send the line number of the activity line.</source>
+          <target>Sendu línunúmer aðgerðarlínunnar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu línunúmer aðgerðarlínunnar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Helper ori - Method ResolveLine - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2675597613 - Method 1706654006 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
+          <source>lineSystemId is not a GUID.</source>
+          <target>lineSystemId er ekki GUID.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=lineSystemId er ekki GUID.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Helper ori - Method ResolveLine - NamedType FormatLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2675597613 - Method 1706654006 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send the SystemId as a GUID.</source>
+          <target>Sendu SystemId sem GUID.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu SystemId sem GUID.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Helper ori - Method ResolveLine - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2675597613 - Method 1706654006 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line %1 was not found in warehouse activity %2.</source>
+          <target>Lína %1 fannst ekki í vöruhúsaaðgerð %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line, %2 = activity no., is-IS=Lína %1 fannst ekki í vöruhúsaaðgerð %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Helper ori - Method ResolveLine - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2675597613 - Method 1706654006 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Read the lines with Warehouse.Activity.Get.</source>
+          <target>Lestu línurnar með Warehouse.Activity.Get.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lestu línurnar með Warehouse.Activity.Get.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Helper ori - Method ResolveLine - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2675597613 - Method 1706654006 - NamedType 3232496173" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line %1 belongs to warehouse activity %2, not to %3.</source>
+          <target>Lína %1 tilheyrir vöruhúsaaðgerð %2, ekki %3.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line, %2 = owning activity, %3 = named activity, is-IS=Lína %1 tilheyrir vöruhúsaaðgerð %2, ekki %3.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Helper ori - Method ResolveLine - NamedType OtherActivityLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2675597613 - Method 1706654006 - NamedType 1132247979" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use the activity no. answered by Warehouse.Activity.Get.</source>
+          <target>Notaðu aðgerðarnúmerið sem Warehouse.Activity.Get skilaði.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notaðu aðgerðarnúmerið sem Warehouse.Activity.Get skilaði.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Helper ori - Method ResolveLine - NamedType ConflictNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 504035205 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to change warehouse activity lines.</source>
+          <target>Þú hefur ekki heimild til að breyta línum vöruhúsaaðgerða.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að breyta línum vöruhúsaaðgerða.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine SetQty Impl ori - Method ExecuteBifrostTask - NamedType DeniedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 504035205 - Method 3571782927 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Full ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine SetQty Impl ori - Method ExecuteBifrostTask - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 504035205 - Method 3571782927 - NamedType 1300278838" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Nothing was written.</source>
+          <target>Ekkert var skrifað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekkert var skrifað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine SetQty Impl ori - Method ExecuteBifrostTask - NamedType ProblemsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 504035205 - Method 3571782927 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send lines, all: true or none: true.</source>
+          <target>Sendu lines, all: true eða none: true.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu lines, all: true eða none: true.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine SetQty Impl ori - Method ExecuteBifrostTask - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 504035205 - Method 3571782927 - NamedType 1490892440" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send exactly one of lines, all: true or none: true.</source>
+          <target>Sendu nákvæmlega eitt af lines, all: true eða none: true.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu nákvæmlega eitt af lines, all: true eða none: true.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine SetQty Impl ori - Method ExecuteBifrostTask - NamedType ChoiceNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 504035205 - Method 3571782927 - NamedType 561129367" size-unit="char" translate="yes" xml:space="preserve">
+          <source>lines, all: true and none: true cannot be combined.</source>
+          <target>Ekki má sameina lines, all: true og none: true.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekki má sameina lines, all: true og none: true.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine SetQty Impl ori - Method ExecuteBifrostTask - NamedType TooManyLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 504035205 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sets the quantity to handle on warehouse activity lines, or fills or clears it on every line.</source>
+          <target>Setur magn til meðhöndlunar á línur vöruhúsaaðgerðar, eða fyllir eða hreinsar það á öllum línum.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Setur magn til meðhöndlunar á línur vöruhúsaaðgerðar, eða fyllir eða hreinsar það á öllum línum.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine SetQty Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 504035205 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
+          <source>quantity to handle, autofill quantity to handle, delete quantity to handle, partial pick, partial put-away, short pick</source>
+          <target>magn til meðhöndlunar, fylla út magn til meðhöndlunar, eyða magni til meðhöndlunar, hlutatínsla, hlutafrágangur, vöntun í tínslu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=magn til meðhöndlunar, fylla út magn til meðhöndlunar, eyða magni til meðhöndlunar, hlutatínsla, hlutafrágangur, vöntun í tínslu</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine SetQty Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 504035205 - Method 2340569551 - NamedType 3593894611" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sets the quantity to handle on named warehouse activity lines, or on every line with all: true or none: true, and answers every line of the activity.</source>
+          <target>Setur magn til meðhöndlunar á nefndar línur vöruhúsaaðgerðar, eða á allar línur með all: true eða none: true, og skilar öllum línum aðgerðarinnar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Setur magn til meðhöndlunar á nefndar línur vöruhúsaaðgerðar, eða á allar línur með all: true eða none: true, og skilar öllum línum aðgerðarinnar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine SetQty Impl ori - Method GetOverview - NamedType OverviewLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 504035205 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Writes Qty. to Handle through Validate on named activity lines, or on every line with all: true (Autofill Qty. to Handle) or none: true (Delete Qty. to Handle). It registers nothing.</source>
+          <target>Skrifar Magn til meðhöndlunar með Validate á nefndar aðgerðarlínur, eða á allar línur með all: true (Fylla út magn til meðhöndlunar) eða none: true (Eyða magni til meðhöndlunar). Hún skráir ekkert.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skrifar Magn til meðhöndlunar með Validate á nefndar aðgerðarlínur, eða á allar línur með all: true (Fylla út magn til meðhöndlunar) eða none: true (Eyða magni til meðhöndlunar). Hún skráir ekkert.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine SetQty Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 504035205 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The activity line payload was empty.</source>
+          <target>Gögn aðgerðarlínunnar voru tóm.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gögn aðgerðarlínunnar voru tóm.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine SetQty Impl ori - Method OnRun - NamedType MissingPayloadErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 504035205 - Method 3760188529 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line %1 is missing qtyToHandle.</source>
+          <target>Línu %1 vantar qtyToHandle.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line index, is-IS=Línu %1 vantar qtyToHandle.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine SetQty Impl ori - Method ReadLines - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 504035205 - Method 3760188529 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send qtyToHandle on every line.</source>
+          <target>Sendu qtyToHandle á hverri línu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu qtyToHandle á hverri línu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine SetQty Impl ori - Method ReadLines - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 504035205 - Method 3760188529 - NamedType 2666638023" size-unit="char" translate="yes" xml:space="preserve">
+          <source>qtyToHandle on line %1 must be from zero up to the outstanding quantity %2.</source>
+          <target>qtyToHandle á línu %1 verður að vera frá núlli upp í útistandandi magn %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line no., %2 = outstanding, is-IS=qtyToHandle á línu %1 verður að vera frá núlli upp í útistandandi magn %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine SetQty Impl ori - Method ReadLines - NamedType RangeLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 504035205 - Method 3760188529 - NamedType 4260795724" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a quantity from zero up to the outstanding quantity.</source>
+          <target>Sendu magn frá núlli upp í útistandandi magn.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu magn frá núlli upp í útistandandi magn.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine SetQty Impl ori - Method ReadLines - NamedType RangeNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2646369881 - Method 3707784576 - NamedType 2358598204" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line %1 has no quantity to handle, so there is nothing to keep on it.</source>
+          <target>Lína %1 hefur ekkert magn til meðhöndlunar, svo ekkert verður eftir á henni.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line no., is-IS=Lína %1 hefur ekkert magn til meðhöndlunar, svo ekkert verður eftir á henni.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Split Impl ori - Method CheckSplit - NamedType ZeroLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2646369881 - Method 3707784576 - NamedType 3942740119" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set qtyToHandle above zero with Warehouse.ActivityLine.SetQtyToHandle first.</source>
+          <target>Settu qtyToHandle yfir núll með Warehouse.ActivityLine.SetQtyToHandle fyrst.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Settu qtyToHandle yfir núll með Warehouse.ActivityLine.SetQtyToHandle fyrst.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Split Impl ori - Method CheckSplit - NamedType ZeroNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2646369881 - Method 3707784576 - NamedType 3249684267" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line %1 has quantity to handle equal to its outstanding quantity %2, so there is nothing to split off.</source>
+          <target>Lína %1 hefur magn til meðhöndlunar jafnt útistandandi magni %2, svo ekkert er til að skipta frá.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line no., %2 = outstanding, is-IS=Lína %1 hefur magn til meðhöndlunar jafnt útistandandi magni %2, svo ekkert er til að skipta frá.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Split Impl ori - Method CheckSplit - NamedType FullLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2646369881 - Method 3707784576 - NamedType 806579752" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Lower qtyToHandle first; BC splits the rest off.</source>
+          <target>Lækkaðu qtyToHandle fyrst; BC skiptir afganginum frá.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lækkaðu qtyToHandle fyrst; BC skiptir afganginum frá.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Split Impl ori - Method CheckSplit - NamedType FullNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2646369881 - Method 3707784576 - NamedType 2967020735" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line %1 is a Take or breakbulk line of a put-away; only a Place line of a put-away is split.</source>
+          <target>Lína %1 er Taka- eða brotlína í frágangi; aðeins Setja-línu frágangs er skipt.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line no., is-IS=Lína %1 er Taka- eða brotlína í frágangi; aðeins Setja-línu frágangs er skipt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Split Impl ori - Method CheckSplit - NamedType PutAwayLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2646369881 - Method 3707784576 - NamedType 3847208644" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Split the Place line of the put-away.</source>
+          <target>Skiptu Setja-línu frágangsins.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skiptu Setja-línu frágangsins.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Split Impl ori - Method CheckSplit - NamedType PutAwayNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2646369881 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to change warehouse activity lines.</source>
+          <target>Þú hefur ekki heimild til að breyta línum vöruhúsaaðgerða.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að breyta línum vöruhúsaaðgerða.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Split Impl ori - Method ExecuteBifrostTask - NamedType DeniedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2646369881 - Method 3571782927 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Full ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Split Impl ori - Method ExecuteBifrostTask - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2646369881 - Method 3571782927 - NamedType 1300278838" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Nothing was written.</source>
+          <target>Ekkert var skrifað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekkert var skrifað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Split Impl ori - Method ExecuteBifrostTask - NamedType ProblemsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2646369881 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Splits a warehouse activity line so the rest of its quantity can go to another bin or lot.</source>
+          <target>Skiptir línu vöruhúsaaðgerðar svo afgangur magnsins geti farið í annað hólf eða aðra lotu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skiptir línu vöruhúsaaðgerðar svo afgangur magnsins geti farið í annað hólf eða aðra lotu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Split Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2646369881 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
+          <source>split line, split pick line, split put-away line, partial bin, two bins, divide quantity</source>
+          <target>skipta línu, skipta tínslulínu, skipta frágangslínu, hluti í hólf, tvö hólf, skipta magni</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=skipta línu, skipta tínslulínu, skipta frágangslínu, hluti í hólf, tvö hólf, skipta magni</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Split Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2646369881 - Method 2340569551 - NamedType 3593894611" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Splits a warehouse activity line in two through Business Central's Split Line. The line keeps its quantity to handle; the new line gets the rest. A line whose quantity to handle equals its outstanding quantity is refused.</source>
+          <target>Skiptir línu vöruhúsaaðgerðar í tvennt með Skipta línu í Business Central. Línan heldur magni sínu til meðhöndlunar; nýja línan fær afganginn. Línu þar sem magn til meðhöndlunar er jafnt útistandandi magni er hafnað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skiptir línu vöruhúsaaðgerðar í tvennt með Skipta línu í Business Central. Línan heldur magni sínu til meðhöndlunar; nýja línan fær afganginn. Línu þar sem magn til meðhöndlunar er jafnt útistandandi magni er hafnað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Split Impl ori - Method GetOverview - NamedType OverviewLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2646369881 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Splits one warehouse activity line in two, like the Split Line action: the line keeps its quantity to handle and a new line takes the rest, without a bin on directed locations. Lower the quantity to handle first with Warehouse.ActivityLine.SetQtyToHandle.</source>
+          <target>Skiptir einni línu vöruhúsaaðgerðar í tvennt, eins og aðgerðin Skipta línu: línan heldur magni sínu til meðhöndlunar og ný lína tekur afganginn, án hólfs á beinum staðsetningum. Lækkaðu fyrst magn til meðhöndlunar með Warehouse.ActivityLine.SetQtyToHandle.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skiptir einni línu vöruhúsaaðgerðar í tvennt, eins og aðgerðin Skipta línu: línan heldur magni sínu til meðhöndlunar og ný lína tekur afganginn, án hólfs á beinum staðsetningum. Lækkaðu fyrst magn til meðhöndlunar með Warehouse.ActivityLine.SetQtyToHandle.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Split Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2646369881 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The activity line payload was empty.</source>
+          <target>Gögn aðgerðarlínunnar voru tóm.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gögn aðgerðarlínunnar voru tóm.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Split Impl ori - Method OnRun - NamedType MissingPayloadErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 3752376489 - NamedType 2375457378" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bin %1 holds %2 base units of item %3 with lot %4, serial %5, package %6 that can be taken; entry %7 needs %8.</source>
+          <target>Hólf %1 geymir %2 grunneiningar af vöru %3 með lotu %4, raðnúmeri %5, pakka %6 sem má taka; færsla %7 þarf %8.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = bin, %2 = available, %3 = item, %4 = lot, %5 = serial, %6 = package, %7 = entry index, %8 = needed, is-IS=Hólf %1 geymir %2 grunneiningar af vöru %3 með lotu %4, raðnúmeri %5, pakka %6 sem má taka; færsla %7 þarf %8.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method CheckAvailable - NamedType NotAvailableLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 3752376489 - NamedType 862394469" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Read Inventory.TrackingAvailability.Get for the item.</source>
+          <target>Lestu Inventory.TrackingAvailability.Get fyrir vöruna.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lestu Inventory.TrackingAvailability.Get fyrir vöruna.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method CheckAvailable - NamedType NotAvailableNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 3354175155 - NamedType 1350387040" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item %1 on line %2 has no item tracking code that requires warehouse tracking.</source>
+          <target>Vara %1 á línu %2 hefur engan vörurakningarkóða sem krefst rakningar í vöruhúsi.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = item, %2 = line no., is-IS=Vara %1 á línu %2 hefur engan vörurakningarkóða sem krefst rakningar í vöruhúsi.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method CheckGroup - NamedType NoTrackingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 3354175155 - NamedType 871285219" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No tracking is needed on this line.</source>
+          <target>Engin rakning er nauðsynleg á þessari línu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Engin rakning er nauðsynleg á þessari línu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method CheckGroup - NamedType NoTrackingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 3354175155 - NamedType 2956098677" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line %1 has several entries, so every entry needs a quantity.</source>
+          <target>Lína %1 hefur margar færslur, svo hver færsla þarf magn.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line no., is-IS=Lína %1 hefur margar færslur, svo hver færsla þarf magn.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method CheckGroup - NamedType NeedQuantityLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 3354175155 - NamedType 1616092434" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send quantity on every entry of the line.</source>
+          <target>Sendu quantity á hverja færslu línunnar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu quantity á hverja færslu línunnar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method CheckGroup - NamedType NeedQuantityNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 3354175155 - NamedType 2153001447" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The entries of line %1 hold %2, more than its outstanding quantity %3.</source>
+          <target>Færslur línu %1 eru samtals %2, meira en útistandandi magn hennar %3.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line no., %2 = total, %3 = outstanding, is-IS=Færslur línu %1 eru samtals %2, meira en útistandandi magn hennar %3.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method CheckGroup - NamedType TooMuchLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 3354175155 - NamedType 353493868" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send at most the outstanding quantity per line.</source>
+          <target>Sendu mest útistandandi magn fyrir hverja línu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu mest útistandandi magn fyrir hverja línu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method CheckGroup - NamedType TooMuchNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 3354175155 - NamedType 887360494" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Entry %1 gives serial number %2 more than one base unit.</source>
+          <target>Færsla %1 gefur raðnúmeri %2 meira en eina grunneiningu.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = entry index, %2 = serial no., is-IS=Færsla %1 gefur raðnúmeri %2 meira en eina grunneiningu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method CheckGroup - NamedType SerialLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 3354175155 - NamedType 2927567657" size-unit="char" translate="yes" xml:space="preserve">
+          <source>One entry per serial no.</source>
+          <target>Ein færsla fyrir hvert raðnúmer.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ein færsla fyrir hvert raðnúmer.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method CheckGroup - NamedType SerialNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to change warehouse activity lines.</source>
+          <target>Þú hefur ekki heimild til að breyta línum vöruhúsaaðgerða.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að breyta línum vöruhúsaaðgerða.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method ExecuteBifrostTask - NamedType DeniedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 3571782927 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Full ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method ExecuteBifrostTask - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 3571782927 - NamedType 1300278838" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Nothing was written.</source>
+          <target>Ekkert var skrifað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekkert var skrifað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method ExecuteBifrostTask - NamedType ProblemsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 3571782927 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>entries is required and must hold at least one entry.</source>
+          <target>entries er nauðsynlegt og verður að innihalda að minnsta kosti eina færslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=entries er nauðsynlegt og verður að innihalda að minnsta kosti eina færslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method ExecuteBifrostTask - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 3571782927 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send at least one entry with lineNo and a lot, serial or package number.</source>
+          <target>Sendu að minnsta kosti eina færslu með lineNo og lotu-, rað- eða pakkanúmeri.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu að minnsta kosti eina færslu með lineNo og lotu-, rað- eða pakkanúmeri.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method ExecuteBifrostTask - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Assigns lot, serial and package numbers on warehouse activity lines, splitting a line per entry.</source>
+          <target>Úthlutar lotu-, rað- og pakkanúmerum á línur vöruhúsaaðgerðar og skiptir línu eftir færslum.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Úthlutar lotu-, rað- og pakkanúmerum á línur vöruhúsaaðgerðar og skiptir línu eftir færslum.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
+          <source>assign lot, assign serial number, item tracking on pick, lot number, serial number, package number, expiration date</source>
+          <target>úthluta lotu, úthluta raðnúmeri, vörurakning í tínslu, lotunúmer, raðnúmer, pakkanúmer, fyrningardagsetning</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=úthluta lotu, úthluta raðnúmeri, vörurakning í tínslu, lotunúmer, raðnúmer, pakkanúmer, fyrningardagsetning</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 2340569551 - NamedType 3593894611" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Assigns lot, serial and package numbers on warehouse activity lines through Validate. Several entries for one line split it, one line per entry. Sending the lot a line already has answers success with changed false.</source>
+          <target>Úthlutar lotu-, rað- og pakkanúmerum á línur vöruhúsaaðgerðar með Validate. Margar færslur fyrir eina línu skipta henni, ein lína fyrir hverja færslu. Ef send er lotan sem línan hefur þegar er svarað með árangri og changed false.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Úthlutar lotu-, rað- og pakkanúmerum á línur vöruhúsaaðgerðar með Validate. Margar færslur fyrir eina línu skipta henni, ein lína fyrir hverja færslu. Ef send er lotan sem línan hefur þegar er svarað með árangri og changed false.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method GetOverview - NamedType OverviewLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Writes lot, serial and package numbers through Validate on warehouse activity lines of an item with warehouse item tracking. Several entries for one line split it, one line per entry. A Take line needs the lot or serial number in its bin. It registers nothing.</source>
+          <target>Skrifar lotu-, rað- og pakkanúmer með Validate á línur vöruhúsaaðgerðar fyrir vöru með vörurakningu í vöruhúsi. Margar færslur fyrir eina línu skipta henni, ein lína fyrir hverja færslu. Taka-lína þarf lotuna eða raðnúmerið í hólfinu sínu. Hún skráir ekkert.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skrifar lotu-, rað- og pakkanúmer með Validate á línur vöruhúsaaðgerðar fyrir vöru með vörurakningu í vöruhúsi. Margar færslur fyrir eina línu skipta henni, ein lína fyrir hverja færslu. Taka-lína þarf lotuna eða raðnúmerið í hólfinu sínu. Hún skráir ekkert.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The activity line payload was empty.</source>
+          <target>Gögn aðgerðarlínunnar voru tóm.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gögn aðgerðarlínunnar voru tóm.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method OnRun - NamedType MissingPayloadErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 3053838156 - NamedType 732553628" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Entry %1 has no lot, serial or package number.</source>
+          <target>Færsla %1 hefur ekkert lotu-, rað- eða pakkanúmer.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = entry index, is-IS=Færsla %1 hefur ekkert lotu-, rað- eða pakkanúmer.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method ReadEntries - NamedType NoNumberLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 3053838156 - NamedType 1388595447" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send lotNo, serialNo or packageNo on every entry.</source>
+          <target>Sendu lotNo, serialNo eða packageNo á hverri færslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu lotNo, serialNo eða packageNo á hverri færslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method ReadEntries - NamedType NoNumberNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 3053838156 - NamedType 2174691427" size-unit="char" translate="yes" xml:space="preserve">
+          <source>quantity on entry %1 must be above zero.</source>
+          <target>quantity á færslu %1 verður að vera stærra en núll.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = entry index, is-IS=quantity á færslu %1 verður að vera stærra en núll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method ReadEntries - NamedType QuantityLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1320428310 - Method 3053838156 - NamedType 2759986912" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a positive quantity.</source>
+          <target>Sendu jákvætt magn.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu jákvætt magn.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method ReadEntries - NamedType QuantityNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 1673206391 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 %2 was not found.</source>
+          <target>%1 %2 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = table caption, %2 = value, is-IS=%1 %2 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method CheckFilters - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 1673206391 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check the value and send the request again.</source>
+          <target>Athugaðu gildið og sendu beiðnina aftur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu gildið og sendu beiðnina aftur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method CheckFilters - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 1673206391 - NamedType 2252517138" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location %1 does not use directed put-away and pick, so it has no warehouse adjustment.</source>
+          <target>Staðsetning %1 notar ekki beina frágangs- og tínsluvinnslu, svo hún hefur enga leiðréttingu vöruhúss.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = location, is-IS=Staðsetning %1 notar ekki beina frágangs- og tínsluvinnslu, svo hún hefur enga leiðréttingu vöruhúss.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method CheckFilters - NamedType DirectedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 1673206391 - NamedType 3313326517" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a directed location, or omit locationCode.</source>
+          <target>Sendu beina staðsetningu, eða slepptu locationCode.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu beina staðsetningu, eða slepptu locationCode.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method CheckFilters - NamedType DirectedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to calculate the warehouse adjustment.</source>
+          <target>Þú hefur ekki heimild til að reikna leiðréttingu vöruhúss.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að reikna leiðréttingu vöruhúss.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method ExecuteBifrostTask - NamedType DeniedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 3571782927 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Full ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method ExecuteBifrostTask - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 3571782927 - NamedType 1300278838" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Nothing was written.</source>
+          <target>Ekkert var skrifað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekkert var skrifað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method ExecuteBifrostTask - NamedType ProblemsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 3571782927 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 is required.</source>
+          <target>%1 er nauðsynlegt.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=%1 er nauðsynlegt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method ExecuteBifrostTask - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 3571782927 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send journalTemplateName and journalBatchName.</source>
+          <target>Sendu journalTemplateName og journalBatchName.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu journalTemplateName og journalBatchName.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method ExecuteBifrostTask - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 3571782927 - NamedType 650235816" size-unit="char" translate="yes" xml:space="preserve">
+          <source>subject and locationCode name different locations.</source>
+          <target>subject og locationCode nefna mismunandi staðsetningar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=subject og locationCode nefna mismunandi staðsetningar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method ExecuteBifrostTask - NamedType ConflictLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 3571782927 - NamedType 1132247979" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send one location: subject or locationCode.</source>
+          <target>Sendu eina staðsetningu: subject eða locationCode.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu eina staðsetningu: subject eða locationCode.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method ExecuteBifrostTask - NamedType ConflictNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Calculates the warehouse adjustment of directed locations into an empty item journal batch.</source>
+          <target>Reiknar leiðréttingu vöruhúss á beinum staðsetningum inn í tóma keyrslu birgðabókar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Reiknar leiðréttingu vöruhúss á beinum staðsetningum inn í tóma keyrslu birgðabókar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
+          <source>calculate warehouse adjustment, adjustment bin, item journal, synchronize item ledger, warehouse to inventory</source>
+          <target>reikna leiðréttingu vöruhúss, leiðréttingarhólf, birgðabók, samstilla birgðahöfuðbók, vöruhús í birgðir</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=reikna leiðréttingu vöruhúss, leiðréttingarhólf, birgðabók, samstilla birgðahöfuðbók, vöruhús í birgðir</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 2340569551 - NamedType 3593894611" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Runs Calculate Warehouse Adjustment into an empty item journal batch, filtered by item and location, and answers the lines it wrote. Nothing to adjust is a success with an empty list. Post the batch with Inventory.ItemJournal.Post.</source>
+          <target>Keyrir Reikna leiðréttingu vöruhúss inn í tóma keyrslu birgðabókar, síað eftir vöru og staðsetningu, og skilar línunum sem hún skrifaði. Ekkert til að leiðrétta er árangur með tómum lista. Bókaðu keyrsluna með Inventory.ItemJournal.Post.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Keyrir Reikna leiðréttingu vöruhúss inn í tóma keyrslu birgðabókar, síað eftir vöru og staðsetningu, og skilar línunum sem hún skrifaði. Ekkert til að leiðrétta er árangur með tómum lista. Bókaðu keyrsluna með Inventory.ItemJournal.Post.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method GetOverview - NamedType OverviewLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Writes item journal lines for the quantity in the adjustment bins of directed locations, so the item ledger can follow registered warehouse adjustments. It posts nothing; post the batch with Inventory.ItemJournal.Post. The batch must be empty.</source>
+          <target>Skrifar línur í birgðabók fyrir magnið í leiðréttingarhólfum beinna staðsetninga, svo birgðahöfuðbókin geti fylgt skráðum leiðréttingum vöruhúss. Hún bókar ekkert; bókaðu keyrsluna með Inventory.ItemJournal.Post. Keyrslan verður að vera tóm.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skrifar línur í birgðabók fyrir magnið í leiðréttingarhólfum beinna staðsetninga, svo birgðahöfuðbókin geti fylgt skráðum leiðréttingum vöruhúss. Hún bókar ekkert; bókaðu keyrsluna með Inventory.ItemJournal.Post. Keyrslan verður að vera tóm.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The warehouse adjustment payload was empty.</source>
+          <target>Gögnin fyrir leiðréttingu vöruhúss voru tóm.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gögnin fyrir leiðréttingu vöruhúss voru tóm.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method OnRun - NamedType MissingPayloadErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 2829573564 - NamedType 2763212475" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item journal template %1 was not found.</source>
+          <target>Birgðabókarsniðmát %1 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = template, is-IS=Birgðabókarsniðmát %1 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method ResolveBatch - NamedType TemplateNotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 2829573564 - NamedType 821963199" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item journal batch %1 %2 was not found.</source>
+          <target>Keyrsla birgðabókar %1 %2 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = template, %2 = batch, is-IS=Keyrsla birgðabókar %1 %2 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method ResolveBatch - NamedType BatchNotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 2829573564 - NamedType 3563690649" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Create the batch first.</source>
+          <target>Stofnaðu keyrsluna fyrst.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnaðu keyrsluna fyrst.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method ResolveBatch - NamedType CreateBatchNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 2829573564 - NamedType 961827798" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item journal template %1 is not of type Item.</source>
+          <target>Birgðabókarsniðmát %1 er ekki af tegundinni Vara.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = template, is-IS=Birgðabókarsniðmát %1 er ekki af tegundinni Vara.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method ResolveBatch - NamedType TypeLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 2829573564 - NamedType 1246002417" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use an item journal template of type Item.</source>
+          <target>Notaðu birgðabókarsniðmát af tegundinni Vara.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notaðu birgðabókarsniðmát af tegundinni Vara.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method ResolveBatch - NamedType TypeNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 2829573564 - NamedType 181879471" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item journal batch %1 %2 already has lines.</source>
+          <target>Keyrsla birgðabókar %1 %2 hefur þegar línur.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = template, %2 = batch, is-IS=Keyrsla birgðabókar %1 %2 hefur þegar línur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method ResolveBatch - NamedType HasLinesLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 2829573564 - NamedType 3807453844" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Post or delete the existing lines first.</source>
+          <target>Bókaðu eða eyddu núverandi línum fyrst.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bókaðu eða eyddu núverandi línum fyrst.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method ResolveBatch - NamedType HasLinesNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 2829573564 - NamedType 1721277456" size-unit="char" translate="yes" xml:space="preserve">
+          <source>documentNo is required because batch %1 has no number series.</source>
+          <target>documentNo er nauðsynlegt því keyrsla %1 hefur enga númeraröð.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = batch, is-IS=documentNo er nauðsynlegt því keyrsla %1 hefur enga númeraröð.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method ResolveBatch - NamedType DocumentNoLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 2829573564 - NamedType 3162635955" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send documentNo, or give the batch a number series.</source>
+          <target>Sendu documentNo, eða gefðu keyrslunni númeraröð.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu documentNo, eða gefðu keyrslunni númeraröð.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method ResolveBatch - NamedType DocumentNoNextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 293481984 - Method 65399750 - NamedType 1719132245" size-unit="char" translate="yes" xml:space="preserve">
           <source>blockMovement %1 is not supported.</source>
           <target>blockMovement %1 er ekki stutt.</target>
@@ -2769,6 +3453,348 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Birgðafrágangurinn var bókaður en bókfærði frágangurinn fannst ekki.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Post Impl ori - Method WritePostedInRun - NamedType MissingPostedErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 1407192230 - NamedType 461926420" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bin %1 holds %2 base units of item %3 that can be taken; line %4 asks for %5.</source>
+          <target>Hólf %1 geymir %2 grunneiningar af vöru %3 sem má taka; lína %4 biður um %5.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = bin, %2 = available, %3 = item, %4 = line index, %5 = requested, is-IS=Hólf %1 geymir %2 grunneiningar af vöru %3 sem má taka; lína %4 biður um %5.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method CheckBinContent - NamedType ShortLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 1407192230 - NamedType 842100143" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Read Warehouse.BinContent.Get.</source>
+          <target>Lestu Warehouse.BinContent.Get.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lestu Warehouse.BinContent.Get.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method CheckBinContent - NamedType ShortNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 3996868099 - NamedType 1350387040" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item %1 does not use warehouse item tracking, so line %2 cannot carry lot, serial or package numbers.</source>
+          <target>Vara %1 notar ekki vörurakningu í vöruhúsi, svo lína %2 getur ekki borið lotu-, rað- eða pakkanúmer.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = item, %2 = line index, is-IS=Vara %1 notar ekki vörurakningu í vöruhúsi, svo lína %2 getur ekki borið lotu-, rað- eða pakkanúmer.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method CheckTracking - NamedType NoTrackingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 3996868099 - NamedType 871285219" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove lotNo, serialNo and packageNo from the line.</source>
+          <target>Fjarlægðu lotNo, serialNo og packageNo af línunni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu lotNo, serialNo og packageNo af línunni.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method CheckTracking - NamedType NoTrackingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 3996868099 - NamedType 887360494" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line %1 carries serial number %2 for more than one base unit.</source>
+          <target>Lína %1 ber raðnúmer %2 fyrir meira en eina grunneiningu.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line index, %2 = serial no., is-IS=Lína %1 ber raðnúmer %2 fyrir meira en eina grunneiningu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method CheckTracking - NamedType SerialLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 3996868099 - NamedType 2927567657" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send one line per serial number with quantity 1.</source>
+          <target>Sendu eina línu fyrir hvert raðnúmer með magnið 1.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu eina línu fyrir hvert raðnúmer með magnið 1.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method CheckTracking - NamedType SerialNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to write warehouse journal lines.</source>
+          <target>Þú hefur ekki heimild til að skrifa línur í birgðabók vöruhúss.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að skrifa línur í birgðabók vöruhúss.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method ExecuteBifrostTask - NamedType DeniedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 3571782927 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Full ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method ExecuteBifrostTask - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 3571782927 - NamedType 1300278838" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Nothing was written.</source>
+          <target>Ekkert var skrifað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekkert var skrifað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method ExecuteBifrostTask - NamedType ProblemsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 3571782927 - NamedType 2914969869" size-unit="char" translate="yes" xml:space="preserve">
+          <source>lines is required and must hold at least one line.</source>
+          <target>lines er nauðsynlegt og verður að innihalda að minnsta kosti eina línu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=lines er nauðsynlegt og verður að innihalda að minnsta kosti eina línu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method ExecuteBifrostTask - NamedType LinesMissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 3571782927 - NamedType 165633162" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send at least one line.</source>
+          <target>Sendu að minnsta kosti eina línu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu að minnsta kosti eina línu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method ExecuteBifrostTask - NamedType LinesMissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 3571782927 - NamedType 3313326517" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use Inventory.ItemJournal.* or Inventory.Reclassification.* for basic locations.</source>
+          <target>Notaðu Inventory.ItemJournal.* eða Inventory.Reclassification.* fyrir einfaldar staðsetningar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notaðu Inventory.ItemJournal.* eða Inventory.Reclassification.* fyrir einfaldar staðsetningar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method ExecuteBifrostTask - NamedType DirectedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Creates warehouse item journal or warehouse reclassification journal lines at a directed location.</source>
+          <target>Stofnar línur í birgðabók vöruhúss eða endurflokkunarbók vöruhúss á beinni staðsetningu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar línur í birgðabók vöruhúss eða endurflokkunarbók vöruhúss á beinni staðsetningu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
+          <source>warehouse item journal, warehouse reclassification journal, bin adjustment, positive adjustment, negative adjustment, move between bins, reclassify lot</source>
+          <target>birgðabók vöruhúss, endurflokkunarbók vöruhúss, leiðrétting hólfs, jákvæð leiðrétting, neikvæð leiðrétting, færa milli hólfa, endurflokka lotu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=birgðabók vöruhúss, endurflokkunarbók vöruhúss, leiðrétting hólfs, jákvæð leiðrétting, neikvæð leiðrétting, færa milli hólfa, endurflokka lotu</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 3650283039 - NamedType 2344026547" size-unit="char" translate="yes" xml:space="preserve">
+          <source>A warehouse item journal line adjusts the bin against the location adjustment bin; the item ledger follows when Warehouse.Adjustment.Calculate and Inventory.ItemJournal.Post run. A reclassification line moves the quantity between two bins and keeps its lot, serial and package numbers.</source>
+          <target>Lína í birgðabók vöruhúss leiðréttir hólfið á móti leiðréttingarhólfi staðsetningarinnar; birgðafærslur fylgja þegar Warehouse.Adjustment.Calculate og Inventory.ItemJournal.Post keyra. Endurflokkunarlína færir magnið milli tveggja hólfa og heldur lotu-, rað- og pakkanúmerum sínum.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lína í birgðabók vöruhúss leiðréttir hólfið á móti leiðréttingarhólfi staðsetningarinnar; birgðafærslur fylgja þegar Warehouse.Adjustment.Calculate og Inventory.ItemJournal.Post keyra. Endurflokkunarlína færir magnið milli tveggja hólfa og heldur lotu-, rað- og pakkanúmerum sínum.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method GetNotes - NamedType NotesLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 2340569551 - NamedType 3593894611" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Inserts warehouse item journal lines (bin adjustments) or warehouse reclassification journal lines (moves between bins, with lot, serial or package numbers) at a directed put-away and pick location. Every line is validated as on the journal page; one failing line writes nothing.</source>
+          <target>Setur inn línur í birgðabók vöruhúss (leiðréttingar hólfa) eða endurflokkunarbók vöruhúss (færslur milli hólfa, með lotu-, rað- eða pakkanúmerum) á staðsetningu með beina frágangs- og tínsluvinnslu. Hver lína er staðfest eins og á bókarsíðunni; ein röng lína skrifar ekkert.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Setur inn línur í birgðabók vöruhúss (leiðréttingar hólfa) eða endurflokkunarbók vöruhúss (færslur milli hólfa, með lotu-, rað- eða pakkanúmerum) á staðsetningu með beina frágangs- og tínsluvinnslu. Hver lína er staðfest eins og á bókarsíðunni; ein röng lína skrifar ekkert.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method GetOverview - NamedType OverviewLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Writes warehouse journal lines at a directed put-away and pick location and registers nothing. Register the batch with Warehouse.Journal.Register. Use Inventory.ItemJournal.* or Inventory.Reclassification.* at a basic location.</source>
+          <target>Skrifar línur í birgðabók vöruhúss á staðsetningu með beina frágangs- og tínsluvinnslu og skráir ekkert. Skráðu keyrsluna með Warehouse.Journal.Register. Notaðu Inventory.ItemJournal.* eða Inventory.Reclassification.* á einfaldri staðsetningu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skrifar línur í birgðabók vöruhúss á staðsetningu með beina frágangs- og tínsluvinnslu og skráir ekkert. Skráðu keyrsluna með Warehouse.Journal.Register. Notaðu Inventory.ItemJournal.* eða Inventory.Reclassification.* á einfaldri staðsetningu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The warehouse journal payload was empty.</source>
+          <target>Gögn birgðabókar vöruhússins voru tóm.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gögn birgðabókar vöruhússins voru tóm.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method OnRun - NamedType MissingPayloadErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 2769887436 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line %1 is missing %2.</source>
+          <target>Línu %1 vantar %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line index, %2 = parameter, is-IS=Línu %1 vantar %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method ReadOneLine - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 2769887436 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send itemNo, quantity and binCode (item journal) or fromBin and toBin (reclassification journal) on every line.</source>
+          <target>Sendu itemNo, quantity og binCode (birgðabók) eða fromBin og toBin (endurflokkunarbók) á hverri línu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu itemNo, quantity og binCode (birgðabók) eða fromBin og toBin (endurflokkunarbók) á hverri línu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method ReadOneLine - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 2769887436 - NamedType 2358598204" size-unit="char" translate="yes" xml:space="preserve">
+          <source>quantity on line %1 must not be zero.</source>
+          <target>quantity á línu %1 má ekki vera núll.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line index, is-IS=quantity á línu %1 má ekki vera núll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method ReadOneLine - NamedType ZeroLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 2769887436 - NamedType 3126481395" size-unit="char" translate="yes" xml:space="preserve">
+          <source>quantity on reclassification line %1 must be positive.</source>
+          <target>quantity á endurflokkunarlínu %1 verður að vera jákvætt.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line index, is-IS=quantity á endurflokkunarlínu %1 verður að vera jákvætt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method ReadOneLine - NamedType NegativeLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 2769887436 - NamedType 2759986912" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a non-zero quantity; a reclassification quantity is positive.</source>
+          <target>Sendu magn sem er ekki núll; magn endurflokkunar er jákvætt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu magn sem er ekki núll; magn endurflokkunar er jákvætt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method ReadOneLine - NamedType QuantityNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 2769887436 - NamedType 2980235149" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line %1 sends %2, which this journal type does not use.</source>
+          <target>Lína %1 sendir %2, sem þessi bókartegund notar ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line index, %2 = parameter, is-IS=Lína %1 sendir %2, sem þessi bókartegund notar ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method ReadOneLine - NamedType WrongBinKeyLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 2769887436 - NamedType 3577207562" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send binCode on an item journal line and fromBin and toBin on a reclassification line.</source>
+          <target>Sendu binCode á línu í birgðabók og fromBin og toBin á endurflokkunarlínu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu binCode á línu í birgðabók og fromBin og toBin á endurflokkunarlínu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method ReadOneLine - NamedType WrongBinKeyNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 2769887436 - NamedType 131080182" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bin %1 is not in zone %2.</source>
+          <target>Hólf %1 er ekki á svæði %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = bin, %2 = zone, is-IS=Hólf %1 er ekki á svæði %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method ReadOneLine - NamedType ZoneConflictLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 2769887436 - NamedType 2673229841" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a zone that holds the bin, or omit zoneCode.</source>
+          <target>Sendu svæði sem inniheldur hólfið, eða slepptu zoneCode.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu svæði sem inniheldur hólfið, eða slepptu zoneCode.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method ReadOneLine - NamedType ZoneConflictNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 2225068083 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bin %1 was not found at location %2.</source>
+          <target>Hólf %1 fannst ekki á staðsetningu %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = bin, %2 = location, is-IS=Hólf %1 fannst ekki á staðsetningu %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method ResolveBin - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 2225068083 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check the bin with Warehouse.Bin.Get.</source>
+          <target>Athugaðu hólfið með Warehouse.Bin.Get.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu hólfið með Warehouse.Bin.Get.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method ResolveBin - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 1535594323 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 %2 was not found.</source>
+          <target>%1 %2 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = table caption, %2 = value, is-IS=%1 %2 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method ResolveItem - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 1535594323 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check the value and send the request again.</source>
+          <target>Athugaðu gildið og sendu beiðnina aftur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu gildið og sendu beiðnina aftur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method ResolveItem - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2000268942 - Method 1274536446 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 is required.</source>
+          <target>%1 er nauðsynlegt.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=%1 er nauðsynlegt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Helper ori - Method ReadBatchKeys - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2000268942 - Method 1274536446 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send journalTemplateName, journalBatchName and locationCode.</source>
+          <target>Sendu journalTemplateName, journalBatchName og locationCode.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu journalTemplateName, journalBatchName og locationCode.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Helper ori - Method ReadBatchKeys - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2000268942 - Method 1274536446 - NamedType 650235816" size-unit="char" translate="yes" xml:space="preserve">
+          <source>subject and locationCode name different locations.</source>
+          <target>subject og locationCode nefna mismunandi staðsetningar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=subject og locationCode nefna mismunandi staðsetningar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Helper ori - Method ReadBatchKeys - NamedType ConflictLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2000268942 - Method 1274536446 - NamedType 1132247979" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send one location: subject or locationCode.</source>
+          <target>Sendu eina staðsetningu: subject eða locationCode.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu eina staðsetningu: subject eða locationCode.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Helper ori - Method ReadBatchKeys - NamedType ConflictNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2000268942 - Method 2166722559 - NamedType 3917977900" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The warehouse journal batch has no lines to register.</source>
+          <target>Bókarkeyrsla vöruhússins hefur engar línur til að skrá.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bókarkeyrsla vöruhússins hefur engar línur til að skrá.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Helper ori - Method RegisterBatch - NamedType NothingErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2000268942 - Method 2829573564 - NamedType 4234785832" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location %1 was not found.</source>
+          <target>Staðsetning %1 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = location code, is-IS=Staðsetning %1 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Helper ori - Method ResolveBatch - NamedType LocationNotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2000268942 - Method 2829573564 - NamedType 1017105382" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check the location code and send the request again.</source>
+          <target>Athugaðu staðsetningarkóðann og sendu beiðnina aftur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu staðsetningarkóðann og sendu beiðnina aftur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Helper ori - Method ResolveBatch - NamedType LocationNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2000268942 - Method 2829573564 - NamedType 2252517138" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location %1 does not use directed put-away and pick.</source>
+          <target>Staðsetning %1 notar ekki beina frágangs- og tínsluvinnslu.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = location, is-IS=Staðsetning %1 notar ekki beina frágangs- og tínsluvinnslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Helper ori - Method ResolveBatch - NamedType DirectedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2000268942 - Method 2829573564 - NamedType 2763212475" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warehouse journal template %1 was not found.</source>
+          <target>Birgðabókarsniðmát vöruhúss %1 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = template, is-IS=Birgðabókarsniðmát vöruhúss %1 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Helper ori - Method ResolveBatch - NamedType TemplateNotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2000268942 - Method 2829573564 - NamedType 821963199" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warehouse journal batch %1 %2 was not found at location %3.</source>
+          <target>Bókarkeyrsla vöruhúss %1 %2 fannst ekki á staðsetningu %3.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = template, %2 = batch, %3 = location, is-IS=Bókarkeyrsla vöruhúss %1 %2 fannst ekki á staðsetningu %3.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Helper ori - Method ResolveBatch - NamedType BatchNotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2000268942 - Method 2829573564 - NamedType 3563690649" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Create the batch first.</source>
+          <target>Stofnaðu keyrsluna fyrst.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnaðu keyrsluna fyrst.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Helper ori - Method ResolveBatch - NamedType CreateBatchNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2000268942 - Method 2829573564 - NamedType 709108652" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warehouse journal template %1 is a physical inventory template.</source>
+          <target>Birgðabókarsniðmát vöruhúss %1 er sniðmát fyrir efnislega birgðatalningu.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = template, is-IS=Birgðabókarsniðmát vöruhúss %1 er sniðmát fyrir efnislega birgðatalningu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Helper ori - Method ResolveBatch - NamedType PhysTemplateLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2000268942 - Method 2829573564 - NamedType 24119463" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use Warehouse.PhysInventory.Calculate and Warehouse.PhysInventory.Register for a physical inventory journal.</source>
+          <target>Notaðu Warehouse.PhysInventory.Calculate og Warehouse.PhysInventory.Register fyrir talningarbók.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notaðu Warehouse.PhysInventory.Calculate og Warehouse.PhysInventory.Register fyrir talningarbók.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Helper ori - Method ResolveBatch - NamedType PhysTemplateNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2000268942 - Method 2829573564 - NamedType 188825815" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warehouse journal template %1 is not a physical inventory template.</source>
+          <target>Birgðabókarsniðmát vöruhúss %1 er ekki sniðmát fyrir efnislega birgðatalningu.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = template, is-IS=Birgðabókarsniðmát vöruhúss %1 er ekki sniðmát fyrir efnislega birgðatalningu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Helper ori - Method ResolveBatch - NamedType NotPhysTemplateLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2000268942 - Method 2829573564 - NamedType 4234137980" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use a physical inventory template, or Warehouse.Journal.Create for item and reclassification journals.</source>
+          <target>Notaðu talningarsniðmát, eða Warehouse.Journal.Create fyrir birgða- og endurflokkunarbækur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notaðu talningarsniðmát, eða Warehouse.Journal.Create fyrir birgða- og endurflokkunarbækur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Helper ori - Method ResolveBatch - NamedType NotPhysTemplateNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3917713592 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to register a warehouse journal.</source>
+          <target>Þú hefur ekki heimild til að skrá birgðabók vöruhúss.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að skrá birgðabók vöruhúss.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Reg Impl ori - Method ExecuteBifrostTask - NamedType DeniedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3917713592 - Method 3571782927 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Full ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Reg Impl ori - Method ExecuteBifrostTask - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3917713592 - Method 3571782927 - NamedType 1300278838" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Nothing was registered.</source>
+          <target>Ekkert var skráð.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekkert var skráð.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Reg Impl ori - Method ExecuteBifrostTask - NamedType ProblemsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3917713592 - Method 3571782927 - NamedType 3313326517" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use Inventory.ItemJournal.* or Inventory.Reclassification.* for basic locations.</source>
+          <target>Notaðu Inventory.ItemJournal.* eða Inventory.Reclassification.* fyrir einfaldar staðsetningar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notaðu Inventory.ItemJournal.* eða Inventory.Reclassification.* fyrir einfaldar staðsetningar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Reg Impl ori - Method ExecuteBifrostTask - NamedType DirectedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3917713592 - Method 3571782927 - NamedType 436939961" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warehouse journal batch %1 %2 has no lines.</source>
+          <target>Bókarkeyrsla vöruhúss %1 %2 hefur engar línur.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = template, %2 = batch, is-IS=Bókarkeyrsla vöruhúss %1 %2 hefur engar línur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Reg Impl ori - Method ExecuteBifrostTask - NamedType EmptyLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3917713592 - Method 3571782927 - NamedType 3413976670" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Add lines with Warehouse.Journal.Create.</source>
+          <target>Bættu við línum með Warehouse.Journal.Create.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bættu við línum með Warehouse.Journal.Create.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Reg Impl ori - Method ExecuteBifrostTask - NamedType EmptyNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3917713592 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Registers a warehouse item or reclassification journal batch and returns the warehouse register.</source>
+          <target>Skráir keyrslu í birgðabók eða endurflokkunarbók vöruhúss og skilar vöruhúsaskránni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skráir keyrslu í birgðabók eða endurflokkunarbók vöruhúss og skilar vöruhúsaskránni.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Reg Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3917713592 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
+          <source>register warehouse journal, register bin adjustment, register reclassification, warehouse register, post warehouse journal</source>
+          <target>skrá birgðabók vöruhúss, skrá leiðréttingu hólfs, skrá endurflokkun, vöruhúsaskrá, bóka birgðabók vöruhúss</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=skrá birgðabók vöruhúss, skrá leiðréttingu hólfs, skrá endurflokkun, vöruhúsaskrá, bóka birgðabók vöruhúss</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Reg Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3917713592 - Method 2340569551 - NamedType 3593894611" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Registers a warehouse item or reclassification journal batch at a directed location and returns the warehouse register and its entry range. Business Central commits the registration. An empty batch is refused.</source>
+          <target>Skráir keyrslu í birgðabók eða endurflokkunarbók vöruhúss á beinni staðsetningu og skilar vöruhúsaskránni og færslubili hennar. Business Central staðfestir skráninguna. Tómri keyrslu er hafnað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skráir keyrslu í birgðabók eða endurflokkunarbók vöruhúss á beinni staðsetningu og skilar vöruhúsaskránni og færslubili hennar. Business Central staðfestir skráninguna. Tómri keyrslu er hafnað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Reg Impl ori - Method GetOverview - NamedType OverviewLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3917713592 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Irreversible. Registers every line of a warehouse item or reclassification journal batch and Business Central commits the warehouse entries. Needs BIFROST WhsePost ori. Use Warehouse.PhysInventory.Register for a physical inventory batch.</source>
+          <target>Óafturkræft. Skráir allar línur keyrslu í birgðabók eða endurflokkunarbók vöruhúss og Business Central staðfestir vöruhúsafærslurnar. Þarf BIFROST WhsePost ori. Notaðu Warehouse.PhysInventory.Register fyrir talningarkeyrslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Óafturkræft. Skráir allar línur keyrslu í birgðabók eða endurflokkunarbók vöruhúss og Business Central staðfestir vöruhúsafærslurnar. Þarf BIFROST WhsePost ori. Notaðu Warehouse.PhysInventory.Register fyrir talningarkeyrslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Reg Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3917713592 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The warehouse journal register payload was empty.</source>
+          <target>Gögnin til að skrá birgðabók vöruhússins voru tóm.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gögnin til að skrá birgðabók vöruhússins voru tóm.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Reg Impl ori - Method OnRun - NamedType MissingPayloadErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 296295310 - Method 1726822361 - NamedType 3917977900" size-unit="char" translate="yes" xml:space="preserve">
           <source>No warehouse movement was created.</source>
           <target>Engin vöruhúsafærsla var stofnuð.</target>
@@ -3224,6 +4250,246 @@
           <target>Vöruhúsavirkni %1 er ekki færsla.</target>
           <note from="Developer" annotates="general" priority="2">%1 = activity no., is-IS=Vöruhúsavirkni %1 er ekki færsla.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Movement Reg Impl ori - Method TryResolveMovement - NamedType WrongTypeLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3990130608 - Method 3082343885 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Parameter %1 must be an array of objects.</source>
+          <target>Færibreytan %1 verður að vera fylki hluta.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=Færibreytan %1 verður að vera fylki hluta.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Msg Values ori - Method ReadArray - NamedType FormatLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3990130608 - Method 3082343885 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send the lines as an array of objects.</source>
+          <target>Sendu línurnar sem fylki hluta.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu línurnar sem fylki hluta.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Msg Values ori - Method ReadArray - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3990130608 - Method 1335579242 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Parameter %1 must be a date written as YYYY-MM-DD.</source>
+          <target>Færibreytan %1 verður að vera dagsetning á sniðinu YYYY-MM-DD.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=Færibreytan %1 verður að vera dagsetning á sniðinu YYYY-MM-DD.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Msg Values ori - Method ReadDate - NamedType FormatLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3990130608 - Method 1335579242 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send the date as YYYY-MM-DD.</source>
+          <target>Sendu dagsetninguna á sniðinu YYYY-MM-DD.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu dagsetninguna á sniðinu YYYY-MM-DD.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Msg Values ori - Method ReadDate - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3990130608 - Method 2054439282 - NamedType 1773691126" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The key %1 is not a parameter of this message type.</source>
+          <target>Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = key, is-IS=Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Msg Values ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3990130608 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Msg Values ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3990130608 - Method 2598010486 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Each entry of %1 must be an object.</source>
+          <target>Hver færsla í %1 verður að vera hlutur.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=Hver færsla í %1 verður að vera hlutur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Msg Values ori - Method TryGetLineObject - NamedType FormatLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3990130608 - Method 2598010486 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send the lines as an array of objects.</source>
+          <target>Sendu línurnar sem fylki hluta.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu línurnar sem fylki hluta.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Msg Values ori - Method TryGetLineObject - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 35908569 - Method 1372926092 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>documentNo is required because batch %1 has no number series.</source>
+          <target>documentNo er nauðsynlegt því keyrsla %1 hefur enga númeraröð.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = batch, is-IS=documentNo er nauðsynlegt því keyrsla %1 hefur enga númeraröð.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Calc Impl ori - Method CheckDocumentNo - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 35908569 - Method 1372926092 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send documentNo, or give the batch a number series.</source>
+          <target>Sendu documentNo, eða gefðu keyrslunni númeraröð.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu documentNo, eða gefðu keyrslunni númeraröð.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Calc Impl ori - Method CheckDocumentNo - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 35908569 - Method 1673206391 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 %2 was not found.</source>
+          <target>%1 %2 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = table caption, %2 = value, is-IS=%1 %2 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Calc Impl ori - Method CheckFilters - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 35908569 - Method 1673206391 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check the value and send the request again.</source>
+          <target>Athugaðu gildið og sendu beiðnina aftur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu gildið og sendu beiðnina aftur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Calc Impl ori - Method CheckFilters - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 35908569 - Method 1673206391 - NamedType 131080182" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bin %1 is not in zone %2.</source>
+          <target>Hólf %1 er ekki á svæði %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = bin, %2 = zone, is-IS=Hólf %1 er ekki á svæði %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Calc Impl ori - Method CheckFilters - NamedType ZoneConflictLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 35908569 - Method 1673206391 - NamedType 2673229841" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a bin in the named zone, or omit one of them.</source>
+          <target>Sendu hólf á nefndu svæði, eða slepptu öðru hvoru.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu hólf á nefndu svæði, eða slepptu öðru hvoru.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Calc Impl ori - Method CheckFilters - NamedType ZoneConflictNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 35908569 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to calculate a warehouse physical inventory.</source>
+          <target>Þú hefur ekki heimild til að reikna talningu vöruhúss.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að reikna talningu vöruhúss.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Calc Impl ori - Method ExecuteBifrostTask - NamedType DeniedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 35908569 - Method 3571782927 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Full ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Calc Impl ori - Method ExecuteBifrostTask - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 35908569 - Method 3571782927 - NamedType 1300278838" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Nothing was written.</source>
+          <target>Ekkert var skrifað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekkert var skrifað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Calc Impl ori - Method ExecuteBifrostTask - NamedType ProblemsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 35908569 - Method 3571782927 - NamedType 3313326517" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use Inventory.PhysInventory.* for basic locations.</source>
+          <target>Notaðu Inventory.PhysInventory.* fyrir einfaldar staðsetningar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notaðu Inventory.PhysInventory.* fyrir einfaldar staðsetningar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Calc Impl ori - Method ExecuteBifrostTask - NamedType DirectedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 35908569 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Calculates the warehouse physical inventory of a directed location into a physical inventory journal batch.</source>
+          <target>Reiknar talningu vöruhúss á beinni staðsetningu inn í keyrslu talningarbókar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Reiknar talningu vöruhúss á beinni staðsetningu inn í keyrslu talningarbókar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Calc Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 35908569 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
+          <source>warehouse physical inventory, calculate inventory, stock count, cycle count, bin count, physical inventory journal</source>
+          <target>talning vöruhúss, reikna birgðir, birgðatalning, lotutalning, talning hólfa, talningarbók</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=talning vöruhúss, reikna birgðir, birgðatalning, lotutalning, talning hólfa, talningarbók</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Calc Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 35908569 - Method 2340569551 - NamedType 3593894611" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Runs Calculate Inventory into a warehouse physical inventory journal batch at a directed location, filtered by zone, bin and item, and answers the lines it wrote with the calculated quantity. Nothing to count is a success with an empty list.</source>
+          <target>Keyrir Reikna birgðir inn í keyrslu talningarbókar vöruhúss á beinni staðsetningu, síað eftir svæði, hólfi og vöru, og skilar línunum sem hún skrifaði með reiknuðu magni. Ekkert til að telja er árangur með tómum lista.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Keyrir Reikna birgðir inn í keyrslu talningarbókar vöruhúss á beinni staðsetningu, síað eftir svæði, hólfi og vöru, og skilar línunum sem hún skrifaði með reiknuðu magni. Ekkert til að telja er árangur með tómum lista.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Calc Impl ori - Method GetOverview - NamedType OverviewLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 35908569 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Writes warehouse physical inventory journal lines with the calculated quantity per bin at a directed put-away and pick location. Nothing is registered; send the counted quantities to Warehouse.PhysInventory.Register. Use Inventory.PhysInventory.* at a basic location.</source>
+          <target>Skrifar línur í talningarbók vöruhúss með reiknuðu magni fyrir hvert hólf á staðsetningu með beina frágangs- og tínsluvinnslu. Ekkert er skráð; sendu talið magn í Warehouse.PhysInventory.Register. Notaðu Inventory.PhysInventory.* á einfaldri staðsetningu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skrifar línur í talningarbók vöruhúss með reiknuðu magni fyrir hvert hólf á staðsetningu með beina frágangs- og tínsluvinnslu. Ekkert er skráð; sendu talið magn í Warehouse.PhysInventory.Register. Notaðu Inventory.PhysInventory.* á einfaldri staðsetningu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Calc Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 35908569 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The physical inventory payload was empty.</source>
+          <target>Gögnin fyrir birgðatalningu voru tóm.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gögnin fyrir birgðatalningu voru tóm.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Calc Impl ori - Method OnRun - NamedType MissingPayloadErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3419876046 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to register a warehouse physical inventory.</source>
+          <target>Þú hefur ekki heimild til að skrá talningu vöruhúss.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að skrá talningu vöruhúss.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Reg Impl ori - Method ExecuteBifrostTask - NamedType DeniedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3419876046 - Method 3571782927 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Full ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Reg Impl ori - Method ExecuteBifrostTask - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3419876046 - Method 3571782927 - NamedType 1300278838" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Nothing was registered.</source>
+          <target>Ekkert var skráð.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekkert var skráð.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Reg Impl ori - Method ExecuteBifrostTask - NamedType ProblemsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3419876046 - Method 3571782927 - NamedType 3313326517" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use Inventory.PhysInventory.* for basic locations.</source>
+          <target>Notaðu Inventory.PhysInventory.* fyrir einfaldar staðsetningar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notaðu Inventory.PhysInventory.* fyrir einfaldar staðsetningar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Reg Impl ori - Method ExecuteBifrostTask - NamedType DirectedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3419876046 - Method 3571782927 - NamedType 436939961" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warehouse physical inventory batch %1 %2 has no lines.</source>
+          <target>Talningarkeyrsla vöruhúss %1 %2 hefur engar línur.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = template, %2 = batch, is-IS=Talningarkeyrsla vöruhúss %1 %2 hefur engar línur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Reg Impl ori - Method ExecuteBifrostTask - NamedType EmptyLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3419876046 - Method 3571782927 - NamedType 3413976670" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Write the lines with Warehouse.PhysInventory.Calculate first.</source>
+          <target>Skrifaðu línurnar með Warehouse.PhysInventory.Calculate fyrst.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skrifaðu línurnar með Warehouse.PhysInventory.Calculate fyrst.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Reg Impl ori - Method ExecuteBifrostTask - NamedType EmptyNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3419876046 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Writes counted quantities and registers a warehouse physical inventory journal batch.</source>
+          <target>Skrifar talið magn og skráir keyrslu talningarbókar vöruhúss.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skrifar talið magn og skráir keyrslu talningarbókar vöruhúss.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Reg Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3419876046 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
+          <source>register physical inventory, counted quantity, stock count result, warehouse count, register count</source>
+          <target>skrá talningu, talið magn, niðurstaða birgðatalningar, vöruhúsatalning, skrá talningu vöruhúss</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=skrá talningu, talið magn, niðurstaða birgðatalningar, vöruhúsatalning, skrá talningu vöruhúss</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Reg Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3419876046 - Method 2340569551 - NamedType 3593894611" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Writes the counted quantity on lines of a warehouse physical inventory batch and registers the whole batch. Business Central commits the registration. A count without differences registers with zero adjustments.</source>
+          <target>Skrifar talið magn á línur í keyrslu talningarbókar vöruhúss og skráir alla keyrsluna. Business Central staðfestir skráninguna. Talning án mismunar er skráð með núll leiðréttingum.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skrifar talið magn á línur í keyrslu talningarbókar vöruhúss og skráir alla keyrsluna. Business Central staðfestir skráninguna. Talning án mismunar er skráð með núll leiðréttingum.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Reg Impl ori - Method GetOverview - NamedType OverviewLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3419876046 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Irreversible. Writes the counted quantities on the lines that Warehouse.PhysInventory.Calculate wrote and registers the whole batch; Business Central commits the warehouse entries. Needs BIFROST WhsePost ori.</source>
+          <target>Óafturkræft. Skrifar talið magn á línurnar sem Warehouse.PhysInventory.Calculate skrifaði og skráir alla keyrsluna; Business Central staðfestir vöruhúsafærslurnar. Þarf BIFROST WhsePost ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Óafturkræft. Skrifar talið magn á línurnar sem Warehouse.PhysInventory.Calculate skrifaði og skráir alla keyrsluna; Business Central staðfestir vöruhúsafærslurnar. Þarf BIFROST WhsePost ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Reg Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3419876046 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The physical inventory register payload was empty.</source>
+          <target>Gögnin til að skrá talningu voru tóm.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gögnin til að skrá talningu voru tóm.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Reg Impl ori - Method OnRun - NamedType MissingPayloadErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3419876046 - Method 3760188529 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line %1 is missing %2.</source>
+          <target>Línu %1 vantar %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line index, %2 = parameter, is-IS=Línu %1 vantar %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Reg Impl ori - Method ReadLines - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3419876046 - Method 3760188529 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send lineNo and qtyPhysInventory on every line.</source>
+          <target>Sendu lineNo og qtyPhysInventory á hverri línu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu lineNo og qtyPhysInventory á hverri línu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Reg Impl ori - Method ReadLines - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3419876046 - Method 3760188529 - NamedType 2452815632" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line %1 is not in warehouse physical inventory batch %2.</source>
+          <target>Lína %1 er ekki í talningarkeyrslu vöruhúss %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line no., %2 = batch, is-IS=Lína %1 er ekki í talningarkeyrslu vöruhúss %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Reg Impl ori - Method ReadLines - NamedType NotInBatchLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3419876046 - Method 3760188529 - NamedType 1710956979" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Read the lines answered by Calculate.</source>
+          <target>Lestu línurnar sem Calculate skilaði.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lestu línurnar sem Calculate skilaði.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Reg Impl ori - Method ReadLines - NamedType NotInBatchNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3419876046 - Method 3760188529 - NamedType 3126481395" size-unit="char" translate="yes" xml:space="preserve">
+          <source>qtyPhysInventory on line %1 must be zero or more.</source>
+          <target>qtyPhysInventory á línu %1 verður að vera núll eða meira.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line no., is-IS=qtyPhysInventory á línu %1 verður að vera núll eða meira.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Reg Impl ori - Method ReadLines - NamedType NegativeLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3419876046 - Method 3760188529 - NamedType 2213642960" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send the counted quantity, zero or more.</source>
+          <target>Sendu talið magn, núll eða meira.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu talið magn, núll eða meira.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Reg Impl ori - Method ReadLines - NamedType NegativeNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2230900036 - Method 2526119521 - NamedType 3177803720" size-unit="char" translate="yes" xml:space="preserve">
           <source>sortingMethod '%1' is not valid. Expected one of: %2.</source>
@@ -3782,6 +5048,300 @@
           <target>Óafturkræft. Bókar fyrirliggjandi vöruhúsaafhendingu; notaðu Warehouse.Shipment.PreviewPost til að skoða niðurstöðuna fyrst.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Óafturkræft. Bókar fyrirliggjandi vöruhúsaafhendingu; notaðu Warehouse.Shipment.PreviewPost til að skoða niðurstöðuna fyrst.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Post Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 3350175689 - NamedType 1481985999" size-unit="char" translate="yes" xml:space="preserve">
+          <source>User %1 is not a warehouse employee of location %2.</source>
+          <target>Notandi %1 er ekki vöruhússtarfsmaður staðsetningar %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = user, %2 = location, is-IS=Notandi %1 er ekki vöruhússtarfsmaður staðsetningar %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method CheckAssignedUser - NamedType NotEmployeeLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 3350175689 - NamedType 2448538676" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a warehouse employee of the location, or omit assignedUserId.</source>
+          <target>Sendu vöruhússtarfsmann staðsetningarinnar, eða slepptu assignedUserId.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu vöruhússtarfsmann staðsetningarinnar, eða slepptu assignedUserId.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method CheckAssignedUser - NamedType NotEmployeeNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 2217144489 - NamedType 436939961" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Worksheet %1 has no lines.</source>
+          <target>Vinnublað %1 hefur engar línur.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = worksheet name, is-IS=Vinnublað %1 hefur engar línur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method CheckSomethingToHandle - NamedType EmptyLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 2217144489 - NamedType 3413976670" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fill the worksheet with Warehouse.Worksheet.GetDocuments first.</source>
+          <target>Fylltu vinnublaðið með Warehouse.Worksheet.GetDocuments fyrst.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fylltu vinnublaðið með Warehouse.Worksheet.GetDocuments fyrst.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method CheckSomethingToHandle - NamedType EmptyNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 2217144489 - NamedType 1000175713" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No line of worksheet %1 has quantity to handle.</source>
+          <target>Engin lína á vinnublaði %1 hefur magn til meðhöndlunar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = worksheet name, is-IS=Engin lína á vinnublaði %1 hefur magn til meðhöndlunar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method CheckSomethingToHandle - NamedType NothingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 2217144489 - NamedType 2480365606" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send qtyToHandle above zero on at least one line.</source>
+          <target>Sendu qtyToHandle stærra en núll á að minnsta kosti einni línu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu qtyToHandle stærra en núll á að minnsta kosti einni línu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method CheckSomethingToHandle - NamedType NothingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to create picks or put-aways from a worksheet.</source>
+          <target>Þú hefur ekki heimild til að stofna tínslur eða frágang úr vinnublaði.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að stofna tínslur eða frágang úr vinnublaði.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method ExecuteBifrostTask - NamedType DeniedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 3571782927 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Full ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method ExecuteBifrostTask - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 3571782927 - NamedType 1300278838" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Nothing was written.</source>
+          <target>Ekkert var skrifað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekkert var skrifað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method ExecuteBifrostTask - NamedType ProblemsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 3571782927 - NamedType 2462607513" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 applies to a pick worksheet only.</source>
+          <target>%1 á aðeins við tínsluvinnublað.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=%1 á aðeins við tínsluvinnublað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method ExecuteBifrostTask - NamedType PickOnlyLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 3571782927 - NamedType 2613199422" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove the grouping option, or use a pick worksheet.</source>
+          <target>Fjarlægðu flokkunarvalið, eða notaðu tínsluvinnublað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu flokkunarvalið, eða notaðu tínsluvinnublað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method ExecuteBifrostTask - NamedType PickOnlyNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Creates picks or put-aways from the lines of a pick or put-away worksheet.</source>
+          <target>Stofnar tínslur eða frágang úr línum tínslu- eða frágangsvinnublaðs.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar tínslur eða frágang úr línum tínslu- eða frágangsvinnublaðs.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
+          <source>create pick from worksheet, create put-away from worksheet, pick worksheet, put-away worksheet, wave picking, group picks</source>
+          <target>stofna tínslu úr vinnublaði, stofna frágang úr vinnublaði, tínsluvinnublað, frágangsvinnublað, bylgjutínsla, flokka tínslur</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=stofna tínslu úr vinnublaði, stofna frágang úr vinnublaði, tínsluvinnublað, frágangsvinnublað, bylgjutínsla, flokka tínslur</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 2340569551 - NamedType 3593894611" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Writes the optional quantities to handle, then runs Create Pick or Create Put-away on a pick or put-away worksheet and answers the created activity numbers. Lines with quantity to handle zero are left in the worksheet and listed under skipped.</source>
+          <target>Skrifar valfrjálst magn til meðhöndlunar og keyrir síðan Stofna tínslu eða Stofna frágang á tínslu- eða frágangsvinnublaði og skilar númerum stofnaðra aðgerða. Línur með núll til meðhöndlunar verða eftir á vinnublaðinu og eru taldar undir skipped.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skrifar valfrjálst magn til meðhöndlunar og keyrir síðan Stofna tínslu eða Stofna frágang á tínslu- eða frágangsvinnublaði og skilar númerum stofnaðra aðgerða. Línur með núll til meðhöndlunar verða eftir á vinnublaðinu og eru taldar undir skipped.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method GetOverview - NamedType OverviewLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Irreversible. Creates warehouse picks or put-aways from the worksheet lines with quantity to handle, optionally grouped per ship-to, item, zone, bin, document or date; Business Central commits the documents it creates. Lines with nothing to handle stay in the worksheet.</source>
+          <target>Óafturkræft. Stofnar tínslur eða frágang vöruhúss úr vinnublaðslínum með magni til meðhöndlunar, valfrjálst flokkað eftir sendist-til, vöru, svæði, hólfi, skjali eða dagsetningu; Business Central staðfestir skjölin sem það stofnar. Línur án magns til meðhöndlunar verða eftir á vinnublaðinu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Óafturkræft. Stofnar tínslur eða frágang vöruhúss úr vinnublaðslínum með magni til meðhöndlunar, valfrjálst flokkað eftir sendist-til, vöru, svæði, hólfi, skjali eða dagsetningu; Business Central staðfestir skjölin sem það stofnar. Línur án magns til meðhöndlunar verða eftir á vinnublaðinu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The worksheet payload was empty.</source>
+          <target>Gögn vinnublaðsins voru tóm.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gögn vinnublaðsins voru tóm.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method OnRun - NamedType MissingPayloadErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 4047536836 - NamedType 1066607173" size-unit="char" translate="yes" xml:space="preserve">
+          <source>sortingMethod %1 is not a warehouse activity sorting method.</source>
+          <target>sortingMethod %1 er ekki röðunaraðferð vöruhúsaaðgerða.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = value, is-IS=sortingMethod %1 er ekki röðunaraðferð vöruhúsaaðgerða.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method ParseSortingMethod - NamedType InvalidLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 4047536836 - NamedType 1224751234" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send None, Item, Document, Shelf or Bin, Due Date, Ship-To, Bin Ranking or Action Type.</source>
+          <target>Sendu None, Item, Document, Shelf or Bin, Due Date, Ship-To, Bin Ranking eða Action Type.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu None, Item, Document, Shelf or Bin, Due Date, Ship-To, Bin Ranking eða Action Type.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method ParseSortingMethod - NamedType InvalidNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 3760188529 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line %1 is missing %2.</source>
+          <target>Línu %1 vantar %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line index, %2 = parameter, is-IS=Línu %1 vantar %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method ReadLines - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 3760188529 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send lineNo and qtyToHandle on every line.</source>
+          <target>Sendu lineNo og qtyToHandle á hverri línu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu lineNo og qtyToHandle á hverri línu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method ReadLines - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 3760188529 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Worksheet line %1 was not found.</source>
+          <target>Vinnublaðslína %1 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line no., is-IS=Vinnublaðslína %1 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method ReadLines - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 3760188529 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use the line numbers answered by Warehouse.Worksheet.GetDocuments.</source>
+          <target>Notaðu línunúmerin sem Warehouse.Worksheet.GetDocuments skilaði.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notaðu línunúmerin sem Warehouse.Worksheet.GetDocuments skilaði.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method ReadLines - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 3760188529 - NamedType 2666638023" size-unit="char" translate="yes" xml:space="preserve">
+          <source>qtyToHandle on line %1 must be from zero up to the outstanding quantity %2.</source>
+          <target>qtyToHandle á línu %1 verður að vera frá núlli upp í útistandandi magn %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line no., %2 = outstanding, is-IS=qtyToHandle á línu %1 verður að vera frá núlli upp í útistandandi magn %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method ReadLines - NamedType RangeLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 3760188529 - NamedType 4260795724" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a quantity from zero up to the outstanding quantity.</source>
+          <target>Sendu magn frá núlli upp í útistandandi magn.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu magn frá núlli upp í útistandandi magn.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method ReadLines - NamedType RangeNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1247752009 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to fill a warehouse worksheet.</source>
+          <target>Þú hefur ekki heimild til að fylla vinnublað vöruhúss.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að fylla vinnublað vöruhúss.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh GetDocs Impl ori - Method ExecuteBifrostTask - NamedType DeniedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1247752009 - Method 3571782927 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Full ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh GetDocs Impl ori - Method ExecuteBifrostTask - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1247752009 - Method 3571782927 - NamedType 1300278838" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Nothing was written.</source>
+          <target>Ekkert var skrifað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekkert var skrifað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh GetDocs Impl ori - Method ExecuteBifrostTask - NamedType ProblemsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1247752009 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fills a pick or put-away worksheet from released warehouse documents.</source>
+          <target>Fyllir tínslu- eða frágangsvinnublað úr útgefnum vöruhúsaskjölum.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fyllir tínslu- eða frágangsvinnublað úr útgefnum vöruhúsaskjölum.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh GetDocs Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1247752009 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
+          <source>pick worksheet, put-away worksheet, get warehouse documents, plan picks, plan put-aways, worksheet lines</source>
+          <target>tínsluvinnublað, frágangsvinnublað, sækja vöruhúsaskjöl, skipuleggja tínslu, skipuleggja frágang, vinnublaðslínur</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=tínsluvinnublað, frágangsvinnublað, sækja vöruhúsaskjöl, skipuleggja tínslu, skipuleggja frágang, vinnublaðslínur</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh GetDocs Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1247752009 - Method 2340569551 - NamedType 3593894611" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Runs Get Warehouse Documents for a pick or put-away worksheet without the selection page, optionally for one document type or number, and answers the worksheet lines it added.</source>
+          <target>Keyrir Sækja vöruhúsaskjöl fyrir tínslu- eða frágangsvinnublað án valsíðunnar, valfrjálst fyrir eina skjalategund eða eitt númer, og skilar vinnublaðslínunum sem hún bætti við.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Keyrir Sækja vöruhúsaskjöl fyrir tínslu- eða frágangsvinnublað án valsíðunnar, valfrjálst fyrir eina skjalategund eða eitt númer, og skilar vinnublaðslínunum sem hún bætti við.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh GetDocs Impl ori - Method GetOverview - NamedType OverviewLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1247752009 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Writes pick worksheet lines from released shipments, internal picks, assembly or project demand, or put-away worksheet lines from posted receipts and internal put-aways, at a location that requires pick or put-away. It creates no pick or put-away; Warehouse.Worksheet.CreateActivities does.</source>
+          <target>Skrifar línur á tínsluvinnublað úr útgefnum afhendingum, innri tínslum, samsetningar- eða verkþörf, eða línur á frágangsvinnublað úr bókuðum móttökum og innri frágangi, á staðsetningu sem krefst tínslu eða frágangs. Hún stofnar hvorki tínslu né frágang; Warehouse.Worksheet.CreateActivities gerir það.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skrifar línur á tínsluvinnublað úr útgefnum afhendingum, innri tínslum, samsetningar- eða verkþörf, eða línur á frágangsvinnublað úr bókuðum móttökum og innri frágangi, á staðsetningu sem krefst tínslu eða frágangs. Hún stofnar hvorki tínslu né frágang; Warehouse.Worksheet.CreateActivities gerir það.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh GetDocs Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1247752009 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The worksheet payload was empty.</source>
+          <target>Gögn vinnublaðsins voru tóm.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gögn vinnublaðsins voru tóm.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh GetDocs Impl ori - Method OnRun - NamedType MissingPayloadErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1247752009 - Method 3645895742 - NamedType 1066607173" size-unit="char" translate="yes" xml:space="preserve">
+          <source>documentType %1 is not a document type of this worksheet. Use one of: %2.</source>
+          <target>documentType %1 er ekki skjalategund þessa vinnublaðs. Notaðu eitt af: %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = value, %2 = allowed values, is-IS=documentType %1 er ekki skjalategund þessa vinnublaðs. Notaðu eitt af: %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh GetDocs Impl ori - Method ParseDocumentType - NamedType InvalidLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1247752009 - Method 3645895742 - NamedType 1224751234" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a documentType of the worksheet type, or omit it.</source>
+          <target>Sendu documentType sem passar við tegund vinnublaðsins, eða slepptu því.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu documentType sem passar við tegund vinnublaðsins, eða slepptu því.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh GetDocs Impl ori - Method ParseDocumentType - NamedType InvalidNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1545796535 - Method 3992314644 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 is required.</source>
+          <target>%1 er nauðsynlegt.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=%1 er nauðsynlegt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Worksheet Helper ori - Method ReadWorksheetKeys - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1545796535 - Method 3992314644 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send worksheetType, worksheetTemplateName, worksheetName and locationCode.</source>
+          <target>Sendu worksheetType, worksheetTemplateName, worksheetName og locationCode.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu worksheetType, worksheetTemplateName, worksheetName og locationCode.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Worksheet Helper ori - Method ReadWorksheetKeys - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1545796535 - Method 3992314644 - NamedType 961827798" size-unit="char" translate="yes" xml:space="preserve">
+          <source>worksheetType %1 is not pick or putAway.</source>
+          <target>worksheetType %1 er hvorki pick né putAway.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = value, is-IS=worksheetType %1 er hvorki pick né putAway.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Worksheet Helper ori - Method ReadWorksheetKeys - NamedType TypeLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1545796535 - Method 3992314644 - NamedType 1246002417" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send worksheetType pick or putAway.</source>
+          <target>Sendu worksheetType pick eða putAway.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu worksheetType pick eða putAway.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Worksheet Helper ori - Method ReadWorksheetKeys - NamedType TypeNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1545796535 - Method 3992314644 - NamedType 650235816" size-unit="char" translate="yes" xml:space="preserve">
+          <source>subject and locationCode name different locations.</source>
+          <target>subject og locationCode nefna mismunandi staðsetningar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=subject og locationCode nefna mismunandi staðsetningar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Worksheet Helper ori - Method ReadWorksheetKeys - NamedType ConflictLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1545796535 - Method 3992314644 - NamedType 1132247979" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send one location: subject or locationCode.</source>
+          <target>Sendu eina staðsetningu: subject eða locationCode.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu eina staðsetningu: subject eða locationCode.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Worksheet Helper ori - Method ReadWorksheetKeys - NamedType ConflictNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1545796535 - Method 528680182 - NamedType 4234785832" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location %1 was not found.</source>
+          <target>Staðsetning %1 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = location code, is-IS=Staðsetning %1 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Worksheet Helper ori - Method ResolveWorksheet - NamedType LocationNotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1545796535 - Method 528680182 - NamedType 1017105382" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check the location code and send the request again.</source>
+          <target>Athugaðu staðsetningarkóðann og sendu beiðnina aftur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu staðsetningarkóðann og sendu beiðnina aftur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Worksheet Helper ori - Method ResolveWorksheet - NamedType LocationNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1545796535 - Method 528680182 - NamedType 2688787206" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location %1 does not require pick and shipment, so it has no pick worksheet.</source>
+          <target>Staðsetning %1 krefst ekki tínslu og afhendingar, svo hún hefur ekkert tínsluvinnublað.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = location, is-IS=Staðsetning %1 krefst ekki tínslu og afhendingar, svo hún hefur ekkert tínsluvinnublað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Worksheet Helper ori - Method ResolveWorksheet - NamedType NoPickLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1545796535 - Method 528680182 - NamedType 2572016888" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location %1 does not require put-away and receipt, so it has no put-away worksheet.</source>
+          <target>Staðsetning %1 krefst ekki frágangs og móttöku, svo hún hefur ekkert frágangsvinnublað.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = location, is-IS=Staðsetning %1 krefst ekki frágangs og móttöku, svo hún hefur ekkert frágangsvinnublað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Worksheet Helper ori - Method ResolveWorksheet - NamedType NoPutAwayLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1545796535 - Method 528680182 - NamedType 2936137007" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use the inventory activities instead.</source>
+          <target>Notaðu birgðaaðgerðirnar í staðinn.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notaðu birgðaaðgerðirnar í staðinn.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Worksheet Helper ori - Method ResolveWorksheet - NamedType InventoryNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1545796535 - Method 528680182 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Worksheet template %1 or worksheet %2 was not found at location %3.</source>
+          <target>Vinnublaðssniðmát %1 eða vinnublað %2 fannst ekki á staðsetningu %3.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = template, %2 = name, %3 = location, is-IS=Vinnublaðssniðmát %1 eða vinnublað %2 fannst ekki á staðsetningu %3.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Worksheet Helper ori - Method ResolveWorksheet - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1545796535 - Method 528680182 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Create the worksheet name first.</source>
+          <target>Stofnaðu nafn vinnublaðsins fyrst.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnaðu nafn vinnublaðsins fyrst.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Worksheet Helper ori - Method ResolveWorksheet - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1545796535 - Method 528680182 - NamedType 961827798" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Worksheet template %1 is not a %2 worksheet template.</source>
+          <target>Vinnublaðssniðmát %1 er ekki %2-sniðmát.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = template, %2 = worksheetType, is-IS=Vinnublaðssniðmát %1 er ekki %2-sniðmát.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Worksheet Helper ori - Method ResolveWorksheet - NamedType TypeLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1545796535 - Method 528680182 - NamedType 1246002417" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use a worksheet template of the type named by worksheetType.</source>
+          <target>Notaðu vinnublaðssniðmát af þeirri tegund sem worksheetType nefnir.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notaðu vinnublaðssniðmát af þeirri tegund sem worksheetType nefnir.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Worksheet Helper ori - Method ResolveWorksheet - NamedType TypeNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 4206461129 - Method 3789958634 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
           <source>Send text for codes, numbers for quantities and true or false for options.</source>

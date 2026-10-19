@@ -256,7 +256,7 @@ codeunit 10078428 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var
         ActivityHeader: Record "Warehouse Activity Header";
-        WhseRecordLookup: Codeunit "Whse Record Lookup ori";
+        RequestReader: Codeunit "Whse Write Context ori";
         Context: Codeunit "Whse Write Context ori";
         WhsePostingGate: Codeunit "Whse Posting Gate ori";
         RequestJson: JsonObject;
@@ -277,7 +277,7 @@ codeunit 10078428 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
             exit;
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
-        if not WhseRecordLookup.TryReadIdentifiers(Argument, '', RequestJson) then
+        if not RequestReader.ReadRequestObject(Argument, RequestJson) then
             exit;
         RefuseUnknownKeys(RequestJson, Argument);
         if not TryResolveMovement(RequestJson, Argument, ActivityHeader) then begin

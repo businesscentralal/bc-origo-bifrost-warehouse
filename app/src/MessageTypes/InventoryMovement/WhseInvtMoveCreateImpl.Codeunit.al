@@ -276,7 +276,7 @@ codeunit 10078427 "Whse InvtMove Create Impl ori" implements "Msg Interface ori"
     /// <param name="Argument">The request and response message argument.</param>
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var
-        WhseRecordLookup: Codeunit "Whse Record Lookup ori";
+        RequestReader: Codeunit "Whse Write Context ori";
         Context: Codeunit "Whse Write Context ori";
         RequestJson: JsonObject;
         Payload: JsonObject;
@@ -296,7 +296,7 @@ codeunit 10078427 "Whse InvtMove Create Impl ori" implements "Msg Interface ori"
         end;
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
-        if not WhseRecordLookup.TryReadIdentifiers(Argument, '', RequestJson) then
+        if not RequestReader.ReadRequestObject(Argument, RequestJson) then
             exit;
         RefuseUnknownKeys(RequestJson, Argument);
         ResolveMode(RequestJson, Argument, SourceMode, LinesMode);

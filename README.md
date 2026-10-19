@@ -10,10 +10,11 @@
 
 ## Overview
 
-Bifrost Warehouse is the warehouse module of the Bifröst platform. It publishes twelve Bifröst
-message types for warehouse work that Bifrost Foundation does not cover: bin content and open
-warehouse activity reads, warehouse shipments and receipts (create, preview, post), and picks and
-put-aways (create, register). An agent or an integration calls them through the same
+Bifrost Warehouse is the warehouse module of the Bifröst platform. It publishes twenty-four Bifröst
+message types for warehouse work that Bifrost Foundation does not cover: bin content, bin and open
+warehouse activity reads, bins and default bins, warehouse shipments and receipts (create, preview,
+post), picks, put-aways and movements (create, register), inventory picks, put-aways and movements
+for basic warehouse locations, and bin replenishment. An agent or an integration calls them through the same
 Queue → Task → Data API as the rest of Bifröst.
 
 Every write goes through Microsoft's own reports and codeunits (Get Source Documents,
@@ -41,9 +42,20 @@ The list is the enum extension `Whse MsgType EnumExt ori` in
 | `Warehouse.Pick.Register` | Inbound | Register a pick | `BIFROST WhsePost ori` |
 | `Warehouse.Putaway.Create` | Inbound | Create (or return the open) put-away for a posted warehouse receipt | `BIFROST Full ori` |
 | `Warehouse.Putaway.Register` | Inbound | Register a put-away | `BIFROST WhsePost ori` |
+| `Warehouse.Bin.Get` | Outbound | Read bins at a location, optionally with their content, with paging | `BIFROST Read ori` |
+| `Warehouse.Bin.Create` | Inbound | Create one or more bins at a location, all or nothing | `BIFROST Full ori` |
+| `Warehouse.DefaultBin.Set` | Inbound | Set the default bin for an item at a location | `BIFROST Full ori` |
+| `Warehouse.Movement.Create` | Inbound | Create a warehouse movement at a directed location from a movement worksheet or inline lines | `BIFROST Full ori` |
+| `Warehouse.Movement.Register` | Inbound | Register a warehouse movement, fully or partially | `BIFROST WhsePost ori` |
+| `Warehouse.InventoryPick.Create` | Inbound | Create an inventory pick for a released outbound source document | `BIFROST Full ori` |
+| `Warehouse.InventoryPick.Post` | Inbound | Post an inventory pick, optionally invoicing a sales order | `BIFROST WhsePost ori`; `BIFROST WhseInv ori` when `invoice` is true |
+| `Warehouse.InventoryPutAway.Create` | Inbound | Create an inventory put-away for a released inbound source document | `BIFROST Full ori` |
+| `Warehouse.InventoryPutAway.Post` | Inbound | Post an inventory put-away, optionally invoicing a purchase order | `BIFROST WhsePost ori`; `BIFROST WhseInv ori` when `invoice` is true |
+| `Warehouse.InventoryMovement.Create` | Inbound | Create an inventory movement at a basic warehouse location with bins | `BIFROST Full ori` |
+| `Warehouse.InventoryMovement.Register` | Inbound | Register an inventory movement, fully or partially | `BIFROST WhsePost ori` |
+| `Warehouse.BinReplenishment.Calculate` | Inbound | Calculate bin replenishment into a movement worksheet at a directed location | `BIFROST Full ori` |
 
-Update this table in the same change as any new or renamed message type. Warehouse movement types
-are planned for a later phase.
+Update this table in the same change as any new or renamed message type.
 
 ---
 
@@ -54,8 +66,9 @@ are planned for a later phase.
 2. Foundation resolves the type to its implementation codeunit in this app through the
    `Message Type ori` enum and the `Msg Interface ori` interface.
 3. Posting and registering types ask `Whse Posting Gate ori` whether the caller holds
-   `BIFROST WhsePost ori`; `Warehouse.Shipment.Post` with `invoice` true also needs
-   `BIFROST WhseInv ori`. Preview types do not consult the gate.
+   `BIFROST WhsePost ori`; `Warehouse.Shipment.Post`, `Warehouse.InventoryPick.Post` and
+   `Warehouse.InventoryPutAway.Post` with `invoice` true also need `BIFROST WhseInv ori`. Preview
+   types do not consult the gate.
 4. The implementation reads the request, resolves the document, calls the matching Microsoft report
    or codeunit and writes a JSON response, or a structured error (`MissingParameter`,
    `InvalidParameterFormat`, `RecordNotFound`, `PermissionDenied`, …) through the Foundation
@@ -92,10 +105,13 @@ are planned for a later phase.
 | Posting gate | `Whse Posting Gate ori` (10078453), `Whse Posting ori` (10078452), `Whse Invoice ori` (10078456) | Write permission on the token table `Whse Posting ori` is the posting permission (only `BIFROST WhsePost ori` grants it); write permission on `Whse Invoice ori` is the invoicing permission (only `BIFROST WhseInv ori` grants it). |
 | Record lookup | `Whse Record Lookup ori` (10078455) | Resolves document numbers and `id` / `recordSystemId` aliases and refuses conflicting identifiers. |
 | Contracts | `Whse Contract Parts ori` (10078459) | Shared contract chapters (effects, workflows) used by the implementation codeunits. |
-| Write restriction | `Whse Data Restrict ori` (10078458) | Subscribes to Foundation's `OnAfterIsTableWriteRestrictedForDataRecords` and closes the Warehouse Shipment, Receipt and Activity header and line tables to `Data.Records.Set`. |
+| Write isolation | `Whse Write Context ori` (10078430) | The write types of bins, default bins, movements, inventory documents and bin replenishment store the validated request here and run their own `OnRun` through `Codeunit.Run` (without a return value under Omit Commit), so a failure leaves nothing written. |
+| Write restriction | `Whse Data Restrict ori` (10078458) | Subscribes to Foundation's `OnAfterIsTableWriteRestrictedForDataRecords` and closes the Warehouse Shipment, Receipt and Activity header and line tables and the Bin table to `Data.Records.Set`; field blocks cover Bin Content Default and the movement worksheet quantity and bins. |
 
 Types that need the posting permission: `Warehouse.Shipment.Post`, `Warehouse.Receipt.Post`,
-`Warehouse.Pick.Register` and `Warehouse.Putaway.Register`.
+`Warehouse.Pick.Register`, `Warehouse.Putaway.Register`, `Warehouse.Movement.Register`,
+`Warehouse.InventoryPick.Post`, `Warehouse.InventoryPutAway.Post` and
+`Warehouse.InventoryMovement.Register`.
 
 ---
 
@@ -150,7 +166,7 @@ None. The app has no pages or page extensions.
 
 | ID | Name | Purpose |
 | --- | --- | --- |
-| 10078385 | `Whse MsgType EnumExt ori` | The twelve `Warehouse.*` values on Foundation's `Message Type ori` |
+| 10078385 | `Whse MsgType EnumExt ori` | The twenty-four `Warehouse.*` values on Foundation's `Message Type ori` |
 
 ### Codeunits
 
@@ -161,6 +177,11 @@ None. The app has no pages or page extensions.
 | 10078409–10078411 | Receipts | `Whse Receipt Create Impl ori`, `Whse Receipt Post Impl ori`, `Whse Rcpt Post Prev. Impl ori` |
 | 10078412–10078414 | Picks | `Whse Pick Create Impl ori`, `Whse Pick Create Process ori`, `Whse Pick Register Impl ori` |
 | 10078415–10078417 | Put-aways | `Whse Putaway Create Impl ori`, `Whse Putaway Create Proc. ori`, `Whse Putaway Register Impl ori` |
+| 10078418–10078420 | Bins | `Whse Bin Get Impl ori`, `Whse Bin Create Impl ori`, `Whse DefaultBin Set Impl ori` |
+| 10078421–10078422 | Movements | `Whse Movement Create Impl ori`, `Whse Movement Reg Impl ori` |
+| 10078423–10078428 | Inventory documents | `Whse InvtPick Create Impl ori`, `Whse InvtPick Post Impl ori`, `Whse InvtPut Create Impl ori`, `Whse InvtPut Post Impl ori`, `Whse InvtMove Create Impl ori`, `Whse InvtMove Reg Impl ori` |
+| 10078429 | Replenishment | `Whse Bin Repl Calc Impl ori` |
+| 10078430 | Write isolation | `Whse Write Context ori` |
 | 10078392, 10078393, 10078458 | Lifecycle | `Warehouse Install ori`, `Warehouse Upgrade ori`, `Whse Data Restrict ori` |
 | 10078453, 10078455, 10078459 | Shared | `Whse Posting Gate ori`, `Whse Record Lookup ori`, `Whse Contract Parts ori` |
 
@@ -168,8 +189,8 @@ None. The app has no pages or page extensions.
 
 | ID | Name | Assignable | Purpose |
 | --- | --- | --- | --- |
-| 10078454 | `BIFROST WhsePost ori` | Yes | Posting gate: post shipments and receipts, register picks and put-aways |
-| 10078457 | `BIFROST WhseInv ori` | Yes | Invoicing gate: `Warehouse.Shipment.Post` with `invoice` true |
+| 10078454 | `BIFROST WhsePost ori` | Yes | Posting gate: post shipments, receipts and inventory picks and put-aways; register picks, put-aways, movements and inventory movements |
+| 10078457 | `BIFROST WhseInv ori` | Yes | Invoicing gate: `Warehouse.Shipment.Post`, `Warehouse.InventoryPick.Post` and `Warehouse.InventoryPutAway.Post` with `invoice` true |
 | 10078394 | `BIFROST Whse - Read ori` (extension) | — | Extends Foundation's `BIFROST Read ori` |
 | 10078395 | `BIFROST Whse - Full ori` (extension) | — | Extends Foundation's `BIFROST Full ori` |
 

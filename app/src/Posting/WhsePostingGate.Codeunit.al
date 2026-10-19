@@ -4,9 +4,10 @@ using Origo.Bifrost;
 
 /// <summary>
 /// Posting gate for Bifrost Warehouse.
-/// Warehouse shipment post, receipt post, pick register and put-away register require
-/// write permission on Whse Posting ori. Warehouse.Shipment.Post with invoice = true
-/// also requires write permission on Whse Invoice ori.
+/// Warehouse shipment and receipt post, pick, put-away and movement register, inventory pick and
+/// put-away post and inventory movement register require write permission on Whse Posting ori.
+/// Warehouse.Shipment.Post, Warehouse.InventoryPick.Post and Warehouse.InventoryPutAway.Post with
+/// invoice = true also require write permission on Whse Invoice ori.
 /// </summary>
 codeunit 10078453 "Whse Posting Gate ori"
 {
@@ -22,6 +23,7 @@ codeunit 10078453 "Whse Posting Gate ori"
     var
         PostingDeniedErr: Label 'Posting denied: missing ''%1'' permission set.', Comment = '%1 = permission set name, is-IS=Bókun hafnað: vantar ''%1'' heimildasett.';
         PermissionSetNameTok: Label 'BIFROST WhsePost ori', Locked = true;
+        PostingDeniedNextStepLbl: Label 'Ask an administrator to assign the %1 permission set.', Comment = '%1 = permission set name, is-IS=Biddu stjórnanda um að úthluta heimildasettinu %1.';
     begin
         if HasPostingPermission() then
             exit(true);
@@ -29,7 +31,7 @@ codeunit 10078453 "Whse Posting Gate ori"
         Argument.RespondWithError(
             "Bifrost Error Code ori"::PermissionDenied,
             StrSubstNo(PostingDeniedErr, PermissionSetNameTok),
-            '', '', '', '');
+            '', '', '', StrSubstNo(PostingDeniedNextStepLbl, PermissionSetNameTok));
         exit(false);
     end;
 
@@ -43,6 +45,7 @@ codeunit 10078453 "Whse Posting Gate ori"
     var
         PostingDeniedErr: Label 'Posting denied: missing ''%1'' permission set.', Comment = '%1 = permission set name, is-IS=Bókun hafnað: vantar ''%1'' heimildasett.';
         PermissionSetNameTok: Label 'BIFROST WhseInv ori', Locked = true;
+        PostingDeniedNextStepLbl: Label 'Ask an administrator to assign the %1 permission set.', Comment = '%1 = permission set name, is-IS=Biddu stjórnanda um að úthluta heimildasettinu %1.';
     begin
         if HasInvoicePermission() then
             exit(true);
@@ -50,7 +53,7 @@ codeunit 10078453 "Whse Posting Gate ori"
         Argument.RespondWithError(
             "Bifrost Error Code ori"::PermissionDenied,
             StrSubstNo(PostingDeniedErr, PermissionSetNameTok),
-            '', '', '', '');
+            '', '', '', StrSubstNo(PostingDeniedNextStepLbl, PermissionSetNameTok));
         exit(false);
     end;
 

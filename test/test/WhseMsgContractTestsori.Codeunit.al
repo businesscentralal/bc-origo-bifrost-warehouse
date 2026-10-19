@@ -4,7 +4,7 @@ using Origo.Bifrost;
 using System.TestLibraries.Utilities;
 
 /// <summary>
-/// Conformance tests for the twelve Warehouse message type contracts.
+/// Conformance tests for the Warehouse message type contracts.
 /// </summary>
 codeunit 97027 "Whse Msg Contract Tests ori"
 {
@@ -29,6 +29,17 @@ codeunit 97027 "Whse Msg Contract Tests ori"
         AssertContract("Message Type ori"::"Warehouse.Pick.Register", 'irreversible', false);
         AssertContract("Message Type ori"::"Warehouse.Putaway.Create", 'irreversible', true);
         AssertContract("Message Type ori"::"Warehouse.Putaway.Register", 'irreversible', false);
+        AssertContract("Message Type ori"::"Warehouse.Bin.Get", 'read', true);
+        AssertContract("Message Type ori"::"Warehouse.Bin.Create", 'write', true);
+        AssertContract("Message Type ori"::"Warehouse.DefaultBin.Set", 'write', true);
+        AssertContract("Message Type ori"::"Warehouse.Movement.Create", 'irreversible', true);
+        AssertContract("Message Type ori"::"Warehouse.Movement.Register", 'irreversible', true);
+        AssertContract("Message Type ori"::"Warehouse.InventoryPick.Create", 'irreversible', true);
+        AssertContract("Message Type ori"::"Warehouse.InventoryPick.Post", 'irreversible', true);
+        AssertContract("Message Type ori"::"Warehouse.InventoryPutAway.Create", 'irreversible', true);
+        AssertContract("Message Type ori"::"Warehouse.InventoryPutAway.Post", 'irreversible', true);
+        AssertContract("Message Type ori"::"Warehouse.InventoryMovement.Create", 'irreversible', true);
+        AssertContract("Message Type ori"::"Warehouse.InventoryMovement.Register", 'irreversible', true);
     end;
 
     /// <summary>

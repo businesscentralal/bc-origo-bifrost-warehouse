@@ -113,4 +113,112 @@ enumextension 10078385 "Whse MsgType EnumExt ori" extends "Message Type ori"
         Caption = 'Warehouse.Putaway.Register', Locked = true;
         Implementation = "Msg Interface ori" = "Whse Putaway Register Impl ori", "Msg Discovery ori" = "Whse Putaway Register Impl ori", "Msg Contract ori" = "Whse Putaway Register Impl ori";
     }
+
+    /// <summary>
+    /// Reads bin master data, optionally with bin content.
+    /// </summary>
+    value(10078418; "Warehouse.Bin.Get")
+    {
+        Caption = 'Warehouse.Bin.Get', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Bin Get Impl ori", "Msg Contract ori" = "Whse Bin Get Impl ori", "Msg Discovery ori" = "Whse Bin Get Impl ori";
+    }
+
+    /// <summary>
+    /// Creates bins at a bin-mandatory location.
+    /// </summary>
+    value(10078419; "Warehouse.Bin.Create")
+    {
+        Caption = 'Warehouse.Bin.Create', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Bin Create Impl ori", "Msg Contract ori" = "Whse Bin Create Impl ori", "Msg Discovery ori" = "Whse Bin Create Impl ori";
+    }
+
+    /// <summary>
+    /// Sets the default bin for an item at a location.
+    /// </summary>
+    value(10078420; "Warehouse.DefaultBin.Set")
+    {
+        Caption = 'Warehouse.DefaultBin.Set', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse DefaultBin Set Impl ori", "Msg Contract ori" = "Whse DefaultBin Set Impl ori", "Msg Discovery ori" = "Whse DefaultBin Set Impl ori";
+    }
+
+    /// <summary>
+    /// Creates a warehouse movement at a directed put-away and pick location.
+    /// </summary>
+    value(10078421; "Warehouse.Movement.Create")
+    {
+        Caption = 'Warehouse.Movement.Create', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Movement Create Impl ori", "Msg Contract ori" = "Whse Movement Create Impl ori", "Msg Discovery ori" = "Whse Movement Create Impl ori";
+    }
+
+    /// <summary>
+    /// Registers a warehouse movement.
+    /// </summary>
+    value(10078422; "Warehouse.Movement.Register")
+    {
+        Caption = 'Warehouse.Movement.Register', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Movement Reg Impl ori", "Msg Contract ori" = "Whse Movement Reg Impl ori", "Msg Discovery ori" = "Whse Movement Reg Impl ori";
+    }
+
+    /// <summary>
+    /// Creates an inventory pick from a released source document at a basic location that requires pick.
+    /// </summary>
+    value(10078423; "Warehouse.InventoryPick.Create")
+    {
+        Caption = 'Warehouse.InventoryPick.Create', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse InvtPick Create Impl ori", "Msg Contract ori" = "Whse InvtPick Create Impl ori", "Msg Discovery ori" = "Whse InvtPick Create Impl ori";
+    }
+
+    /// <summary>
+    /// Posts an inventory pick and ships the source document.
+    /// </summary>
+    value(10078424; "Warehouse.InventoryPick.Post")
+    {
+        Caption = 'Warehouse.InventoryPick.Post', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse InvtPick Post Impl ori", "Msg Contract ori" = "Whse InvtPick Post Impl ori", "Msg Discovery ori" = "Whse InvtPick Post Impl ori";
+    }
+
+    /// <summary>
+    /// Creates an inventory put-away from a released inbound source document at a basic location that requires put-away.
+    /// </summary>
+    value(10078425; "Warehouse.InventoryPutAway.Create")
+    {
+        Caption = 'Warehouse.InventoryPutAway.Create', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse InvtPut Create Impl ori", "Msg Contract ori" = "Whse InvtPut Create Impl ori", "Msg Discovery ori" = "Whse InvtPut Create Impl ori";
+    }
+
+    /// <summary>
+    /// Posts an inventory put-away and receives the source document.
+    /// </summary>
+    value(10078426; "Warehouse.InventoryPutAway.Post")
+    {
+        Caption = 'Warehouse.InventoryPutAway.Post', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse InvtPut Post Impl ori", "Msg Contract ori" = "Whse InvtPut Post Impl ori", "Msg Discovery ori" = "Whse InvtPut Post Impl ori";
+    }
+
+    /// <summary>
+    /// Creates an inventory movement at a basic location with bins.
+    /// </summary>
+    value(10078427; "Warehouse.InventoryMovement.Create")
+    {
+        Caption = 'Warehouse.InventoryMovement.Create', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse InvtMove Create Impl ori", "Msg Contract ori" = "Whse InvtMove Create Impl ori", "Msg Discovery ori" = "Whse InvtMove Create Impl ori";
+    }
+
+    /// <summary>
+    /// Registers an inventory movement.
+    /// </summary>
+    value(10078428; "Warehouse.InventoryMovement.Register")
+    {
+        Caption = 'Warehouse.InventoryMovement.Register', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse InvtMove Reg Impl ori", "Msg Contract ori" = "Whse InvtMove Reg Impl ori", "Msg Discovery ori" = "Whse InvtMove Reg Impl ori";
+    }
+
+    /// <summary>
+    /// Calculates bin replenishment into a movement worksheet.
+    /// </summary>
+    value(10078429; "Warehouse.BinReplenishment.Calculate")
+    {
+        Caption = 'Warehouse.BinReplenishment.Calculate', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Bin Repl Calc Impl ori", "Msg Contract ori" = "Whse Bin Repl Calc Impl ori", "Msg Discovery ori" = "Whse Bin Repl Calc Impl ori";
+    }
 }

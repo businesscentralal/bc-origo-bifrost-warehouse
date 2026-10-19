@@ -1,5 +1,6 @@
 namespace Origo.Bifrost.Warehouse.Test;
 
+using Microsoft.Warehouse.Activity;
 using Microsoft.Warehouse.Document;
 using Origo.Bifrost;
 using Origo.Bifrost.Warehouse;
@@ -146,6 +147,48 @@ codeunit 97023 "Whse Posting Gate Tests ori"
         Assert.AreEqual(0, StrPos(ErrorToken.AsValue().AsText(), 'BIFROST WhsePost ori'), ErrorToken.AsValue().AsText());
     end;
 
+    /// <summary>Warehouse.Movement.Register is disabled and refused without BIFROST WhsePost ori.</summary>
+    [Test]
+    procedure MovementRegister_WithoutWhsePost_IsRefused()
+    begin
+        AssertRefusedByPostingGate(Enum::"Message Type ori"::"Warehouse.Movement.Register");
+    end;
+
+    /// <summary>Warehouse.InventoryPick.Post is disabled and refused without BIFROST WhsePost ori.</summary>
+    [Test]
+    procedure InventoryPickPost_WithoutWhsePost_IsRefused()
+    begin
+        AssertRefusedByPostingGate(Enum::"Message Type ori"::"Warehouse.InventoryPick.Post");
+    end;
+
+    /// <summary>Warehouse.InventoryPutAway.Post is disabled and refused without BIFROST WhsePost ori.</summary>
+    [Test]
+    procedure InventoryPutAwayPost_WithoutWhsePost_IsRefused()
+    begin
+        AssertRefusedByPostingGate(Enum::"Message Type ori"::"Warehouse.InventoryPutAway.Post");
+    end;
+
+    /// <summary>Warehouse.InventoryMovement.Register is disabled and refused without BIFROST WhsePost ori.</summary>
+    [Test]
+    procedure InventoryMovementRegister_WithoutWhsePost_IsRefused()
+    begin
+        AssertRefusedByPostingGate(Enum::"Message Type ori"::"Warehouse.InventoryMovement.Register");
+    end;
+
+    /// <summary>Warehouse.InventoryPick.Post with invoice = true names BIFROST WhseInv ori when only warehouse posting is held.</summary>
+    [Test]
+    procedure InventoryPickPost_InvoiceWithoutWhseInv_NamesWhseInvSet()
+    begin
+        AssertInvoiceRefused(Enum::"Message Type ori"::"Warehouse.InventoryPick.Post");
+    end;
+
+    /// <summary>Warehouse.InventoryPutAway.Post with invoice = true names BIFROST WhseInv ori when only warehouse posting is held.</summary>
+    [Test]
+    procedure InventoryPutAwayPost_InvoiceWithoutWhseInv_NamesWhseInvSet()
+    begin
+        AssertInvoiceRefused(Enum::"Message Type ori"::"Warehouse.InventoryPutAway.Post");
+    end;
+
     /// <summary>Warehouse.Shipment.PreviewPost stays enabled and does not return a posting denial.</summary>
     [Test]
     procedure ShipmentPreview_WithoutWhsePost_StaysEnabled()
@@ -220,6 +263,77 @@ codeunit 97023 "Whse Posting Gate Tests ori"
         RequestContent.AddText(RequestText);
         Dispatcher.Execute(
             Enum::"Message Type ori"::"Warehouse.Shipment.Post",
+            Enum::"Message Version ori"::"1.0",
+            '',
+            'Bifrost Warehouse Tests',
+            'text/json',
+            RequestContent,
+            ResponseContent,
+            ResponseContentType);
+        if ResponseContent.Length() = 0 then
+            exit(false);
+        ResponseContent.GetSubText(ResponseText, 1, ResponseContent.Length());
+        exit(ResponseJson.ReadFrom(ResponseText));
+    end;
+
+    local procedure AssertRefusedByPostingGate(MessageType: Enum "Message Type ori")
+    var
+        ActivityLine: Record "Warehouse Activity Line";
+        TempArgument: Record "Message Argument ori" temporary;
+        LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
+        MessageTypeInterface: Interface "Msg Interface ori";
+        ResponseJson: JsonObject;
+        CodeToken: JsonToken;
+        ErrorToken: JsonToken;
+        NextStepToken: JsonToken;
+    begin
+        LowerToDocumentWrite(LibraryLowerPermissions);
+        Assert.IsTrue(ActivityLine.WritePermission(), 'Warehouse Activity Line write must be present so the gate is what refuses.');
+        MessageTypeInterface := MessageType;
+        Assert.IsFalse(MessageTypeInterface.IsEnabled(), 'The type should be disabled without BIFROST WhsePost ori.');
+
+        PrepareArgument(TempArgument);
+        MessageTypeInterface.ExecuteBifrostTask(TempArgument);
+        ResponseJson := TempArgument.GetResponseJson();
+        Assert.IsTrue(ResponseJson.Get('code', CodeToken), 'code missing');
+        Assert.AreEqual('PermissionDenied', CodeToken.AsValue().AsText(), 'code');
+        Assert.IsTrue(ResponseJson.Get('error', ErrorToken), 'error missing');
+        Assert.AreNotEqual(0, StrPos(ErrorToken.AsValue().AsText(), 'BIFROST WhsePost ori'), ErrorToken.AsValue().AsText());
+        Assert.IsTrue(ResponseJson.Get('nextStep', NextStepToken), 'nextStep missing');
+        Assert.AreNotEqual(0, StrPos(NextStepToken.AsValue().AsText(), 'BIFROST WhsePost ori'), NextStepToken.AsValue().AsText());
+    end;
+
+    local procedure AssertInvoiceRefused(MessageType: Enum "Message Type ori")
+    var
+        LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
+        ResponseJson: JsonObject;
+        CodeToken: JsonToken;
+        ErrorToken: JsonToken;
+        ResponseText: Text;
+    begin
+        LowerToDocumentWrite(LibraryLowerPermissions);
+        LibraryLowerPermissions.AddPermissionSet('BIFROST WhsePost ori');
+
+        Assert.IsTrue(RunMessageType(MessageType, '{"invoice":true}', ResponseJson), 'The invoice denial should return JSON.');
+        ResponseJson.WriteTo(ResponseText);
+        Assert.IsTrue(ResponseJson.Get('code', CodeToken), 'code missing: ' + ResponseText);
+        Assert.AreEqual('PermissionDenied', CodeToken.AsValue().AsText(), ResponseText);
+        Assert.IsTrue(ResponseJson.Get('error', ErrorToken), 'error missing');
+        Assert.AreNotEqual(0, StrPos(ErrorToken.AsValue().AsText(), 'BIFROST WhseInv ori'), ErrorToken.AsValue().AsText());
+    end;
+
+    local procedure RunMessageType(MessageType: Enum "Message Type ori"; RequestText: Text; var ResponseJson: JsonObject): Boolean
+    var
+        Dispatcher: Codeunit "Dispatcher ori";
+        RequestContent: BigText;
+        ResponseContent: BigText;
+        ResponseContentType: Text[100];
+        ResponseText: Text;
+    begin
+        Clear(ResponseJson);
+        RequestContent.AddText(RequestText);
+        Dispatcher.Execute(
+            MessageType,
             Enum::"Message Version ori"::"1.0",
             '',
             'Bifrost Warehouse Tests',

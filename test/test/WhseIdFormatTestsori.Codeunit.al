@@ -44,6 +44,32 @@ codeunit 97029 "Whse Id Format Tests ori"
         end;
     end;
 
+    /// <summary>The bin, movement, inventory document and replenishment types answer malformed data with a structured error.</summary>
+    [Test]
+    procedure BinAndMovementTypes_DataNotObject_IsInvalidFormat()
+    var
+        MessageTypes: List of [Enum "Message Type ori"];
+        MessageType: Enum "Message Type ori";
+        Response: JsonObject;
+    begin
+        MessageTypes.Add("Message Type ori"::"Warehouse.Bin.Get");
+        MessageTypes.Add("Message Type ori"::"Warehouse.Bin.Create");
+        MessageTypes.Add("Message Type ori"::"Warehouse.DefaultBin.Set");
+        MessageTypes.Add("Message Type ori"::"Warehouse.Movement.Create");
+        MessageTypes.Add("Message Type ori"::"Warehouse.Movement.Register");
+        MessageTypes.Add("Message Type ori"::"Warehouse.InventoryPick.Create");
+        MessageTypes.Add("Message Type ori"::"Warehouse.InventoryPick.Post");
+        MessageTypes.Add("Message Type ori"::"Warehouse.InventoryPutAway.Create");
+        MessageTypes.Add("Message Type ori"::"Warehouse.InventoryPutAway.Post");
+        MessageTypes.Add("Message Type ori"::"Warehouse.InventoryMovement.Create");
+        MessageTypes.Add("Message Type ori"::"Warehouse.InventoryMovement.Register");
+        MessageTypes.Add("Message Type ori"::"Warehouse.BinReplenishment.Calculate");
+        foreach MessageType in MessageTypes do begin
+            SendRequest(MessageType, '', '[]', Response);
+            AssertFormatResponse(Response, 'InvalidParameterFormat', 'data', 'a JSON object');
+        end;
+    end;
+
     /// <summary>Every shipment identifier rejects every non-string JSON value.</summary>
     [Test]
     procedure AC02_ShipmentKeys_WrongJsonTypes_AreInvalidFormat()

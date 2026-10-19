@@ -161,6 +161,7 @@ codeunit 10078417 "Whse Putaway Register Impl ori" implements "Msg Interface ori
         WarehouseActivityLine: Record "Warehouse Activity Line";
         RegisteredWhseActivityHdr: Record "Registered Whse. Activity Hdr.";
         PostedWhseReceiptHeader: Record "Posted Whse. Receipt Header";
+        WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         WhsePostingGate: Codeunit "Whse Posting Gate ori";
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
@@ -169,14 +170,15 @@ codeunit 10078417 "Whse Putaway Register Impl ori" implements "Msg Interface ori
         SourcePostedReceiptNo: Code[20];
         LinesInPutawayBeforeRun: Integer;
         TotalQtyToHandleBeforeRun: Decimal;
-        NoLinesErr: Label 'Warehouse Put-away %1 has no lines.', Comment = '%1 = put-away no.', Locked = true;
+        NoLinesErr: Label 'Warehouse Put-away %1 has no lines.', Comment = '%1 = put-away no., is-IS=Vöruhúsafrágangur %1 hefur engar línur.';
     begin
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
         if not WhsePostingGate.AssertCanPost(Argument) then
             exit;
 
-        RequestJson := Argument.GetRequestJson();
+        if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,putawayNo=no,no=no', RequestJson) then
+            exit;
         if not FindWarehousePutaway(Argument, WarehouseActivityHeader) then
             exit;
 
@@ -237,7 +239,7 @@ codeunit 10078417 "Whse Putaway Register Impl ori" implements "Msg Interface ori
         WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         FoundSystemId: Guid;
         DocumentKind: Text;
-        NotPutawayErr: Label 'Warehouse Activity %1 is not of Type Put-away.', Comment = '%1 = activity no.', Locked = true;
+        NotPutawayErr: Label 'Warehouse Activity %1 is not of Type Put-away.', Comment = '%1 = activity no., is-IS=Vöruhúsavirkni %1 er ekki af tegundinni frágangur.';
     begin
         // Every identifier sent is tried; the shared lookup answers missing, not found and conflicts.
         // A number is looked up as Type = Put-away; a SystemId may name any activity, so the type is checked after.

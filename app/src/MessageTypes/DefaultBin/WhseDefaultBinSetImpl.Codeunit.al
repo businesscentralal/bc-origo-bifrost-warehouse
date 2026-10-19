@@ -255,6 +255,7 @@ codeunit 10078420 "Whse DefaultBin Set Impl ori" implements "Msg Interface ori",
     /// <param name="Argument">The request and response message argument.</param>
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var
+        WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         Context: Codeunit "Whse Write Context ori";
         RequestJson: JsonObject;
         Payload: JsonObject;
@@ -269,7 +270,8 @@ codeunit 10078420 "Whse DefaultBin Set Impl ori" implements "Msg Interface ori",
         end;
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
-        RequestJson := Argument.GetRequestJson();
+        if not WhseRecordLookup.TryReadIdentifiers(Argument, '', RequestJson) then
+            exit;
         RefuseUnknownKeys(RequestJson, Argument);
         if not TryBuildPayload(RequestJson, Argument, Payload) then begin
             Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, ProblemsLbl);

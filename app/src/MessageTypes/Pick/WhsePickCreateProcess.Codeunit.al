@@ -20,7 +20,7 @@ codeunit 10078413 "Whse Pick Create Process ori"
         WhseShipmentHeader: Record "Warehouse Shipment Header";
         WhseShipmentLine: Record "Warehouse Shipment Line";
         WhseShipmentCreatePickReport: Report "Whse.-Shipment - Create Pick";
-        NoLinesErr: Label 'Warehouse Shipment %1 has no lines to pick.', Comment = '%1 = shipment no.', Locked = true;
+        NoLinesErr: Label 'Warehouse Shipment %1 has no lines to pick.', Comment = '%1 = shipment no., is-IS=Vöruhúsaafhending %1 hefur engar línur til tínslu.';
     begin
         WhseShipmentHeader := Rec;
         WhseShipmentHeader.Find();

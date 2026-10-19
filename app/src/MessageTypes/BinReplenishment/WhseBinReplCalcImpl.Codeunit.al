@@ -287,6 +287,7 @@ codeunit 10078429 "Whse Bin Repl Calc Impl ori" implements "Msg Interface ori", 
     /// <param name="Argument">The request and response message argument.</param>
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var
+        WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         Context: Codeunit "Whse Write Context ori";
         RequestJson: JsonObject;
         Payload: JsonObject;
@@ -310,7 +311,8 @@ codeunit 10078429 "Whse Bin Repl Calc Impl ori" implements "Msg Interface ori", 
         end;
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
-        RequestJson := Argument.GetRequestJson();
+        if not WhseRecordLookup.TryReadIdentifiers(Argument, '', RequestJson) then
+            exit;
         RefuseUnknownKeys(RequestJson, Argument);
         ReadRequest(RequestJson, Argument, LocationCode, TemplateName, WorksheetName, ZoneCode, BinCode, ItemNo, AllowBreakbulk, DoNotFillQtyToHandle, AutoCreateMovement);
         if Argument.HasCollectedErrors() then begin

@@ -13,7 +13,37 @@
 - Posting gate: `Warehouse.Movement.Register`, `Warehouse.InventoryPick.Post`, `Warehouse.InventoryPutAway.Post` and `Warehouse.InventoryMovement.Register` require `BIFROST WhsePost ori` like the other post and register types; `invoice: true` on inventory pick and put-away post also requires `BIFROST WhseInv ori`. The gate refusal now carries a `nextStep` that names the missing permission set.
 - One Impl codeunit per message type: each write type runs its own `OnRun` inside `Codeunit.Run` and shares `Whse Write Context ori` (10078430) for the payload, the result and the request readers. The enum value of each new type reuses its Impl codeunit number. App IDs 10078431-10078451 and 10078460-10078484 stay free.
 - Generic `Data.Records.Set` writes are blocked on Bin (table), Bin Content Default, the movement worksheet quantity and bins, and the activity line quantity, bin, zone, lot, serial and expiration fields of the dedicated activity types (`Whse Data Restrict ori`).
+- The new types read the request through the shared lookup reader, so `data` that is not a JSON object answers `InvalidParameterFormat` instead of a runtime error (#21 pattern).
 - Tests 97080-97091, plus posting-gate deny and grant tests for the four new post and register types in 97023 and 97024.
+### Fixed (2026-10-19) - Warehouse posting, put-away and previews with Omit Commit (#18)
+
+- `Warehouse.Shipment.Post` and `Warehouse.Receipt.Post` run inside the caller's transaction when called with Omit Commit, and a Business Central posting error is raised as it is; without Omit Commit a posting error is still answered as `status = Error`.
+- `Warehouse.Putaway.Create` with Omit Commit returns an already-open put-away for the posted receipt (`alreadyExisted = true`) and only runs the put-away report when none exists.
+- `Warehouse.Shipment.PreviewPost` and `Warehouse.Receipt.Post.Preview` answer `PreconditionFailed` with a next step when called with Omit Commit, before any record is read; the HTTP/MCP path (no Omit Commit) is unchanged. Each type's errors chapter lists the new entry.
+- Codeunits 10078407, 10078408, 10078410, 10078411 and 10078415. Test helpers 97021 and 97022 get a `RunMessage` overload with an explicit `OmitCommit`; preview tests (97013, 97016) use `false`. New test codeunit `Whse Omit Commit Tests ori` (97028) covers the preview refusal (document and quantities kept) and the posting-error paths in both modes. Test codeunits 97023, 97024 and 97026 declare their message arguments `temporary`.
+
+### Fixed (2026-10-19) - Strict warehouse identifier validation (#21)
+
+- The nine lookup types (Shipment.Post, Shipment.PreviewPost, Receipt.Post, Receipt.Post.Preview, Pick.Create, Pick.Register, Putaway.Create, Putaway.Register, Activity.Get) answer `InvalidParameterFormat` on `data` when the request is not a JSON object, and on the key when an identifier is `null`, a number, a boolean, an object or an array. Two or more wrong keys are one `MultipleErrors`, in key order. Nothing is looked up or posted while a value is wrong; an absent or empty key stays `MissingParameter`.
+- The shared lookup errors chapter (`Whse Contract Parts ori`) describes the format rules and lists exactly one `MultipleErrors` entry. Codeunits 10078390, 10078407, 10078408, 10078410, 10078411, 10078412, 10078414, 10078415, 10078417, 10078455 and 10078459; new test codeunit `Whse Id Format Tests ori` (97029); contract tests in 97027.
+
+### Changed (2026-10-19) - Warehouse identifier contract keys (#24)
+
+- In the target chapter of Shipment.Post, Shipment.PreviewPost, Receipt.Post, Receipt.Post.Preview, Pick.Create and Putaway.Create every identifier key carries its own `data.` prefix. The accepted keys and descriptions are unchanged, and `tools/Test-ContractParameterKeys.ps1` passes. Contract tests in 97027.
+
+### Changed (2026-10-19) - Activity.Get and BinContent.Get help match the code (#34)
+
+- `Warehouse.Activity.Get` keeps documenting its identifier aliases (`activityNo`, `recordSystemId`, `id`), because the alias reading delivered by #37 reads them. Its errors chapter no longer lists `MissingParameter` (a request without an identifier reads the collection) and keeps `ConflictingIdentifiers`, which #37 answers.
+- `Warehouse.BinContent.Get` declares its optional `tableView` parameter, so a request with `tableView` no longer gets an `UnknownParameter` warning. Codeunits 10078388, 10078390 and 10078459; contract tests in 97027.
+
+### Fixed (2026-10-19) - Icelandic warehouse refusal text and translation sync (#27, #26)
+
+- Warehouse refusal texts are translated: the Locked refusal labels of the create, post, preview, pick and put-away types now carry Icelandic text, with the English text, placeholders and error codes unchanged. `tools/Test-MixedLanguageLabels.ps1` passes.
+- `app/Translations/Bifrost Warehouse.is-IS.xlf` is regenerated from the compiler output with `tools/Update-IcelandicXlf.ps1`, and `tools/Test-IcelandicXlfInSync.ps1` passes. Locale tests in 97011, 97014 and 97018.
+
+### Fixed (2026-10-19) - Warehouse context-sensitive help host
+
+- `contextSensitiveHelpUrl` in `app/app.json` points at `https://docs.bifrost.origo.is/{0}/help/warehouse/`. The Warehouse help pages themselves are maintained in the documentation site.
 
 ### Fixed (2026-10-16) - Raise Warehouse app version above UAT to unblock Deploy to Bifrost
 

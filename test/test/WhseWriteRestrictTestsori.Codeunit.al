@@ -20,7 +20,7 @@ codeunit 97026 "Whse Write Restrict Tests ori"
     [Test]
     procedure GenericWrite_WarehouseDocumentTables_IsRefused()
     var
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         Assert: Codeunit "Library Assert";
     begin
         TempArgument.Init();
@@ -38,7 +38,7 @@ codeunit 97026 "Whse Write Restrict Tests ori"
     [Test]
     procedure GenericWrite_NonWarehouseTable_IsNotRestricted()
     var
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         Assert: Codeunit "Library Assert";
     begin
         TempArgument.Init();
@@ -51,7 +51,7 @@ codeunit 97026 "Whse Write Restrict Tests ori"
     [Test]
     procedure GenericRead_WarehouseDocumentTables_StaysAllowed()
     var
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         Assert: Codeunit "Library Assert";
     begin
         TempArgument.Init();

@@ -161,6 +161,7 @@ codeunit 10078414 "Whse Pick Register Impl ori" implements "Msg Interface ori", 
         WarehouseActivityLine: Record "Warehouse Activity Line";
         RegisteredWhseActivityHdr: Record "Registered Whse. Activity Hdr.";
         WhseShipmentHeader: Record "Warehouse Shipment Header";
+        WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         WhsePostingGate: Codeunit "Whse Posting Gate ori";
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
@@ -169,14 +170,15 @@ codeunit 10078414 "Whse Pick Register Impl ori" implements "Msg Interface ori", 
         SourceShipmentNo: Code[20];
         LinesInPickBeforeRun: Integer;
         TotalQtyToHandleBeforeRun: Decimal;
-        NoLinesErr: Label 'Warehouse Pick %1 has no lines.', Comment = '%1 = pick no.', Locked = true;
+        NoLinesErr: Label 'Warehouse Pick %1 has no lines.', Comment = '%1 = pick no., is-IS=Vöruhúsatínsla %1 hefur engar línur.';
     begin
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
         if not WhsePostingGate.AssertCanPost(Argument) then
             exit;
 
-        RequestJson := Argument.GetRequestJson();
+        if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,pickNo=no,no=no', RequestJson) then
+            exit;
         if not FindWarehousePick(Argument, WarehouseActivityHeader) then
             exit;
 
@@ -237,7 +239,7 @@ codeunit 10078414 "Whse Pick Register Impl ori" implements "Msg Interface ori", 
         WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         FoundSystemId: Guid;
         DocumentKind: Text;
-        NotPickErr: Label 'Warehouse Activity %1 is not of Type Pick.', Comment = '%1 = activity no.', Locked = true;
+        NotPickErr: Label 'Warehouse Activity %1 is not of Type Pick.', Comment = '%1 = activity no., is-IS=Vöruhúsavirkni %1 er ekki af tegundinni tínsla.';
     begin
         // Every identifier sent is tried; the shared lookup answers missing, not found and conflicts.
         // A number is looked up as Type = Pick; a SystemId may name any activity, so the type is checked after.

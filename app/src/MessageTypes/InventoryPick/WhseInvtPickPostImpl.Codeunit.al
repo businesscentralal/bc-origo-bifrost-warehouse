@@ -260,6 +260,7 @@ codeunit 10078424 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var
         ActivityHeader: Record "Warehouse Activity Header";
+        WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         Context: Codeunit "Whse Write Context ori";
         WhsePostingGate: Codeunit "Whse Posting Gate ori";
         RequestJson: JsonObject;
@@ -279,7 +280,8 @@ codeunit 10078424 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
             exit;
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
-        RequestJson := Argument.GetRequestJson();
+        if not WhseRecordLookup.TryReadIdentifiers(Argument, '', RequestJson) then
+            exit;
         if Context.IsTrue(RequestJson, 'invoice') then
             if not WhsePostingGate.AssertCanInvoice(Argument) then
                 exit;

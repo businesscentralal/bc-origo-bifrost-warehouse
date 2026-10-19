@@ -168,8 +168,8 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
         HasAssignedUserId: Boolean;
         HasPostingDate: Boolean;
         I: Integer;
-        MissingSourcesErr: Label 'sourceDocuments is required and must contain at least one entry.', Locked = true;
-        FieldWriteRestrictedErr: Label 'Field %1 is restricted for write on table %2.', Comment = '%1 = field caption, %2 = table caption', Locked = true;
+        MissingSourcesErr: Label 'sourceDocuments is required and must contain at least one entry.', Comment = 'is-IS=sourceDocuments er nauðsynlegt og verður að innihalda að minnsta kosti eina færslu.';
+        FieldWriteRestrictedErr: Label 'Field %1 is restricted for write on table %2.', Comment = '%1 = field caption, %2 = table caption, is-IS=Ekki er heimilt að skrifa í reitinn %1 í töflunni %2.';
     begin
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
@@ -222,9 +222,9 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
         DocumentNo: Code[20];
         CreatedHeaderNo: Code[20];
         ReceiptJson: JsonObject;
-        InvalidSourceErr: Label 'Source #%1 is missing sourceType or documentNo (both required).', Comment = '%1 = source index', Locked = true;
-        UnsupportedSourceErr: Label 'Unsupported sourceType ''%1''. Expected: SalesReturnOrder, PurchaseOrder, TransferOrder.', Comment = '%1 = sourceType value', Locked = true;
-        NoReceiptCreatedErr: Label 'No Warehouse Receipt was created for %1 ''%2'' — already on an open receipt, no lines remain to receive, or put-away already started.', Comment = '%1 = sourceType, %2 = documentNo', Locked = true;
+        InvalidSourceErr: Label 'Source #%1 is missing sourceType or documentNo (both required).', Comment = '%1 = source index, is-IS=Í uppruna nr. %1 vantar sourceType eða documentNo (hvort tveggja er nauðsynlegt).';
+        UnsupportedSourceErr: Label 'Unsupported sourceType ''%1''. Expected: SalesReturnOrder, PurchaseOrder, TransferOrder.', Comment = '%1 = sourceType value, is-IS=sourceType ''%1'' er ekki stutt. Væntanlegt er: SalesReturnOrder, PurchaseOrder, TransferOrder.';
+        NoReceiptCreatedErr: Label 'No Warehouse Receipt was created for %1 ''%2'' — already on an open receipt, no lines remain to receive, or put-away already started.', Comment = '%1 = sourceType, %2 = documentNo, is-IS=Engin vöruhúsamóttaka var stofnuð fyrir %1 ''%2'' — skjalið er þegar í opinni móttöku, engar línur eru eftir til móttöku eða frágangur er þegar hafinn.';
     begin
         SourcesArray.Get(Index, SourceToken);
         SourceObject := SourceToken.AsObject();
@@ -282,9 +282,9 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
         SalesHeader: Record "Sales Header";
         Location: Record Location;
         GetSourceDocInbound: Codeunit "Get Source Doc. Inbound";
-        SalesNotReleasedErr: Label 'Sales Return Order ''%1'' is not Released. Release it before creating a Warehouse Receipt.', Comment = '%1 = sales return order no.', Locked = true;
-        LocationMismatchErr: Label 'Sales Return Order ''%1'' uses location ''%2'' which does not match the requested locationCode ''%3''.', Comment = '%1 = sales return order no., %2 = source location, %3 = requested location', Locked = true;
-        LocationNotRequireReceiveErr: Label 'Location ''%1'' (from Sales Return Order ''%2'') does not require receipt routing — set ''Require Receive'' on the Location card to enable warehouse receipts.', Comment = '%1 = location code, %2 = sales return order no.', Locked = true;
+        SalesNotReleasedErr: Label 'Sales Return Order ''%1'' is not Released. Release it before creating a Warehouse Receipt.', Comment = '%1 = sales return order no., is-IS=Söluskilapöntun ''%1'' er ekki útgefin. Gefðu hana út áður en þú stofnar vöruhúsamóttöku.';
+        LocationMismatchErr: Label 'Sales Return Order ''%1'' uses location ''%2'' which does not match the requested locationCode ''%3''.', Comment = '%1 = sales return order no., %2 = source location, %3 = requested location, is-IS=Söluskilapöntun ''%1'' notar birgðageymslu ''%2'' sem samsvarar ekki umbeðnu locationCode ''%3''.';
+        LocationNotRequireReceiveErr: Label 'Location ''%1'' (from Sales Return Order ''%2'') does not require receipt routing — set ''Require Receive'' on the Location card to enable warehouse receipts.', Comment = '%1 = location code, %2 = sales return order no., is-IS=Birgðageymsla ''%1'' (úr söluskilapöntun ''%2'') krefst ekki móttöku — veldu ''Krefjast móttöku'' á birgðageymsluspjaldinu til að virkja vöruhúsamóttökur.';
     begin
         if not SalesHeader.Get(SalesHeader."Document Type"::"Return Order", DocumentNo) then begin
             Argument.RespondWithRecordNotFound(Database::"Sales Header", DocumentNo, 'sourceDocuments.documentNo');
@@ -316,9 +316,9 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
         PurchaseHeader: Record "Purchase Header";
         Location: Record Location;
         GetSourceDocInbound: Codeunit "Get Source Doc. Inbound";
-        PurchNotReleasedErr: Label 'Purchase Order ''%1'' is not Released. Release it before creating a Warehouse Receipt.', Comment = '%1 = purchase order no.', Locked = true;
-        LocationMismatchErr: Label 'Purchase Order ''%1'' uses location ''%2'' which does not match the requested locationCode ''%3''.', Comment = '%1 = purchase order no., %2 = source location, %3 = requested location', Locked = true;
-        LocationNotRequireReceiveErr: Label 'Location ''%1'' (from Purchase Order ''%2'') does not require receipt routing — set ''Require Receive'' on the Location card to enable warehouse receipts.', Comment = '%1 = location code, %2 = purchase order no.', Locked = true;
+        PurchNotReleasedErr: Label 'Purchase Order ''%1'' is not Released. Release it before creating a Warehouse Receipt.', Comment = '%1 = purchase order no., is-IS=Innkaupapöntun ''%1'' er ekki útgefin. Gefðu hana út áður en þú stofnar vöruhúsamóttöku.';
+        LocationMismatchErr: Label 'Purchase Order ''%1'' uses location ''%2'' which does not match the requested locationCode ''%3''.', Comment = '%1 = purchase order no., %2 = source location, %3 = requested location, is-IS=Innkaupapöntun ''%1'' notar birgðageymslu ''%2'' sem samsvarar ekki umbeðnu locationCode ''%3''.';
+        LocationNotRequireReceiveErr: Label 'Location ''%1'' (from Purchase Order ''%2'') does not require receipt routing — set ''Require Receive'' on the Location card to enable warehouse receipts.', Comment = '%1 = location code, %2 = purchase order no., is-IS=Birgðageymsla ''%1'' (úr innkaupapöntun ''%2'') krefst ekki móttöku — veldu ''Krefjast móttöku'' á birgðageymsluspjaldinu til að virkja vöruhúsamóttökur.';
     begin
         if not PurchaseHeader.Get(PurchaseHeader."Document Type"::Order, DocumentNo) then begin
             Argument.RespondWithRecordNotFound(Database::"Purchase Header", DocumentNo, 'sourceDocuments.documentNo');
@@ -350,9 +350,9 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
         TransferHeader: Record "Transfer Header";
         Location: Record Location;
         GetSourceDocInbound: Codeunit "Get Source Doc. Inbound";
-        TransferNotReleasedErr: Label 'Transfer Order ''%1'' is not Released. Release it before creating a Warehouse Receipt.', Comment = '%1 = transfer order no.', Locked = true;
-        LocationMismatchErr: Label 'Transfer Order ''%1'' receives at ''%2'' which does not match the requested locationCode ''%3''.', Comment = '%1 = transfer order no., %2 = transfer-to location, %3 = requested location', Locked = true;
-        LocationNotRequireReceiveErr: Label 'Location ''%1'' (Transfer-to on Transfer Order ''%2'') does not require receipt routing — set ''Require Receive'' on the Location card to enable warehouse receipts.', Comment = '%1 = location code, %2 = transfer order no.', Locked = true;
+        TransferNotReleasedErr: Label 'Transfer Order ''%1'' is not Released. Release it before creating a Warehouse Receipt.', Comment = '%1 = transfer order no., is-IS=Flutningspöntun ''%1'' er ekki útgefin. Gefðu hana út áður en þú stofnar vöruhúsamóttöku.';
+        LocationMismatchErr: Label 'Transfer Order ''%1'' receives at ''%2'' which does not match the requested locationCode ''%3''.', Comment = '%1 = transfer order no., %2 = transfer-to location, %3 = requested location, is-IS=Flutningspöntun ''%1'' er móttekin í ''%2'' sem samsvarar ekki umbeðnu locationCode ''%3''.';
+        LocationNotRequireReceiveErr: Label 'Location ''%1'' (Transfer-to on Transfer Order ''%2'') does not require receipt routing — set ''Require Receive'' on the Location card to enable warehouse receipts.', Comment = '%1 = location code, %2 = transfer order no., is-IS=Birgðageymsla ''%1'' (flutt til á flutningspöntun ''%2'') krefst ekki móttöku — veldu ''Krefjast móttöku'' á birgðageymsluspjaldinu til að virkja vöruhúsamóttökur.';
     begin
         if not TransferHeader.Get(DocumentNo) then begin
             Argument.RespondWithRecordNotFound(Database::"Transfer Header", DocumentNo, 'sourceDocuments.documentNo');

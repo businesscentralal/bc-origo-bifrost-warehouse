@@ -59,6 +59,7 @@ if ($scriptsArchiveUrl) {
 
         Write-Host "Download Alpaca scripts archive from '$scriptsArchiveUrl'"
         Invoke-WebRequest -Uri $scriptsArchiveUrl -OutFile $tempArchivePath
+        $script:AppSourceAlpacaArchiveHash = (Get-FileHash -LiteralPath $tempArchivePath -Algorithm SHA256).Hash.ToLowerInvariant()
 
         Write-Host "Extract Alpaca scripts archive"
         Expand-Archive -Path $tempArchivePath -DestinationPath $tempPath -Force
@@ -117,3 +118,21 @@ if ($env:BIFROST_SHARED_CONTAINER -eq 'true') {
 
 
 Write-Host "::endgroup::"
+
+# Preserve the existing stripping/Alpaca override; initialize current-run evidence
+# after the downloaded overrides are installed, before any final app compile.
+& (Join-Path $env:GITHUB_WORKSPACE 'tools/Assert-AppSourceBuild.ps1') -Stage Initialize -AlpacaArchiveHash $script:AppSourceAlpacaArchiveHash
+
+# AL-Go v9.2 does NOT include CompileAppWithBcCompilerFolder in its automatic
+# override registry. Install Run-AlPipeline's real callback using the same
+# parent-context scope mechanism as the downloaded Alpaca initialization.
+# Do not displace an existing owner's compiler override.
+function Set-AppSourceCompilerCallback {
+    $existing = Get-Variable -Name 'CompileAppWithBcCompilerFolder' -Scope 2 -ValueOnly -ErrorAction Stop
+    if ($existing) {
+        throw 'Existing compiler-folder override requires owner coordination; refusing to replace it.'
+    }
+    $callback = (Get-Command (Join-Path $env:GITHUB_WORKSPACE '.AL-Go/CompileAppWithBcCompilerFolder.ps1')).ScriptBlock
+    Set-Variable -Name 'CompileAppWithBcCompilerFolder' -Value $callback -Scope 2
+}
+Set-AppSourceCompilerCallback

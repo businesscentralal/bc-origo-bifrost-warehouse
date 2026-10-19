@@ -1,0 +1,29 @@
+{
+  "kind": "Exact failed historical CI compiler lines; negative replay only",
+  "run": 37514877563,
+  "job": 112445666888,
+  "sourceSha": "b42ad90eaee2803205408a1cac8b0d9752b91c0e",
+  "originalLogSha256": "7cb047d1966c527e77eadd64e216d87a7c2850f50d0864109598b00a15d598ab",
+  "lines": [
+    "Microsoft (R) AL Compiler version 18.0.43.2697",
+    "Compilation started for project 'Bifrost Attachments' containing '81' files at '19:01:00.713'.",
+    "##[warning]AL0659 The length of the enum identifier 'DataExch Export Run EnumExt ori' should not exceed 30 characters as it may result in runtime issues in cases where there are other enums with the same first 30 characters.",
+    "##[error]AL0185 Table 'Data Exch. Def' is missing",
+    "##[error]AL0185 Table 'Data Exch. Def' is missing",
+    "##[error]AL0185 Table 'Data Exchange Type' is missing",
+    "##[error]AL0185 Table 'Data Exchange Type' is missing",
+    "##[error]AL0185 Table 'Data Exch. Def' is missing",
+    "##[error]AL0185 Table 'Data Exch.' is missing",
+    "##[error]AL0185 Table 'Data Exch.' is missing",
+    "##[error]AL0185 Table 'Data Exch. Def' is missing",
+    "##[error]AL0264 An application object of type 'Codeunit' with ID '70013521' is already declared by the extension 'Bifrost Attachments by Origo (28.0.0.52)'",
+    "##[error]AL0264 An application object of type 'Codeunit' with ID '70013524' is already declared by the extension 'Bifrost Attachments by Origo (28.0.0.52)'",
+    "##[error]AL0264 An application object of type 'Codeunit' with ID '70013524' is already declared by the extension 'Bifrost Attachments by Origo (28.0.0.52)'",
+    "##[error]AL0264 An application object of type 'Codeunit' with ID '70013521' is already declared by the extension 'Bifrost Attachments by Origo (28.0.0.52)'",
+    "##[error]AL0231 A member with ID '70013519' is already defined in EnumExtension 'DataExch Export Run EnumExt ori' by the extension 'Bifrost Attachments by Origo (28.0.0.52)'.",
+    "##[error]AL0231 A member with ID '70013519' is already defined in EnumExtension 'DataExch DefDel MsgType ori' by the extension 'Bifrost Attachments by Origo (28.0.0.52)'.",
+    "##[error]AL0231 A member with ID '70013516' is already defined in EnumExtension 'DataExch Type Set EnumExt ori' by the extension 'Bifrost Attachments by Origo (28.0.0.52)'.",
+    "##[error]AL0231 A member with ID '70013516' is already defined in EnumExtension 'DataExch Import MsgType ori' by the extension 'Bifrost Attachments by Origo (28.0.0.52)'.",
+    "Compilation ended at '19:01:16.024'."
+  ]
+}

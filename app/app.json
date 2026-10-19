@@ -2,16 +2,16 @@
   "id": "47acac54-3873-496f-9e88-157f36413e89",
   "name": "Bifrost Warehouse",
   "publisher": "Origo",
-  "version": "28.0.19.0",
-  "brief": "Bifrost Warehouse message types",
-  "description": "Bifrost Warehouse provides first-class warehouse message types on top of Bifrost Foundation.",
+  "version": "28.1.0.0",
+  "brief": "Bifrost Warehouse - message types for warehouse operations",
+  "description": "Adds Bifrost message types for Microsoft Dynamics 365 Business Central warehouse operations that Bifrost Foundation does not cover. Reads bin content and open warehouse activities, and creates, previews and posts warehouse shipments and receipts, creates and registers picks and put-aways - so an agent or integration can run inbound and outbound warehouse work through one governed API. Posting and registering need their own permission set, and invoicing a shipment needs a second one.",
   "url": "https://www.origo.is/",
-  "help": "https://bifrost.origo.is/warehouse/",
-  "privacyStatement": "https://businesscentralal.github.io/bifrost/en-us/foundation/privacy/",
-  "EULA": "https://businesscentralal.github.io/bifrost/en-us/foundation/eula/",
+  "help": "https://docs.bifrost.origo.is/en-us/warehouse/",
+  "privacyStatement": "https://docs.bifrost.origo.is/en-us/licensing/privacy/",
+  "EULA": "https://docs.bifrost.origo.is/en-us/licensing/eula/",
   "logo": "assets/Logo250x250.png",
   "applicationInsightsConnectionString": "InstrumentationKey=af411133-5e22-486f-b23a-081b79ed4168;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/;ApplicationId=c4476f32-5dfb-490a-8ad0-fb8ffad1c050",
-  "contextSensitiveHelpUrl": "https://bifrost.origo.is/{0}/help/warehouse/",
+  "contextSensitiveHelpUrl": "https://docs.bifrost.origo.is/{0}/help/warehouse/",
   "supportedLocales": [
     "en-US",
     "is-IS"
@@ -21,10 +21,10 @@
       "id": "7505e808-6e52-4b96-a328-82573391297a",
       "name": "Bifrost Foundation",
       "publisher": "Origo",
-      "version": "28.0.1.0"
+      "version": "28.0.3.530"
     }
   ],
-  "application": "28.0.0.0",
+  "application": "28.3.0.0",
   "platform": "28.0.0.0",
   "internalsVisibleTo": [
     {
@@ -46,7 +46,6 @@
   },
   "target": "Cloud",
   "features": [
-    "NoImplicitWith",
     "TranslationFile"
   ],
   "runtime": "17.0",

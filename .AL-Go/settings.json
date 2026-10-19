@@ -16,8 +16,8 @@
   "appDependencyProbingPaths": [
     {
       "repo": "https://github.com/OrigoSoftwareSolutions/bc-origo-bifrost-core",
-      "release_status": "latestBuild",
-      "version": "latest",
+      "release_status": "release",
+      "version": "28.0.3",
       "projects": "*",
       "authTokenSecret": "ghTokenWorkflow"
     }
@@ -48,14 +48,25 @@
       }
     }
   ],
+  "enableCodeCop": true,
+  "enableUICop": true,
+  "enableCodeAnalyzersOnTestApps": true,
+  "failOn": "warning",
+  "alpaca": {
+    "enableCodeCopForTestApps": true,
+    "enableUICopForTestApps": true,
+    "enableAppSourceCopForTestApps": true
+  },
   "fullBuildPatterns": [
     ".AL-Go/settings.json",
     ".AL-Go/*.ps1",
     "tools/Get-SharedAlpacaBuildOrder.ps1",
     "tools/SharedAlpacaContainer.ps1",
     "tools/Test-SharedAlpacaContainer.ps1",
+    ".AL-Go/**",
     ".github/workflows/**",
     ".github/AL-Go-Settings.json",
-    "tools/Test-BifrostPipeline.ps1"
+    "tools/Test-BifrostPipeline.ps1",
+    "tools/**"
   ]
 }

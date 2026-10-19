@@ -10,6 +10,8 @@ name: Source Guards
 # telemetry and refusal labels predate the Foundation rule. Enabling those two jobs would fail on main.
 # The Icelandic xlf check (tools/Test-IcelandicXlfInSync.ps1, #26) needs a build and is run by hand before a PR.
 # Help links (tools/Test-HelpLinks.ps1, #25) stay unwired until businesscentralal/bifrost main has help/warehouse/.
+# Unique object IDs, build inputs and the symbol-alias gate were ported from Bifrost Inventory/Attachments (19.10.2026);
+# the AppSource build gate itself runs inside the AL-Go build (tools/AppSourceBuildGate.md).
 
 on:
   pull_request:
@@ -74,6 +76,46 @@ jobs:
         run: ./tools/Test-PermissionCoverage.ps1
 
 
+
+  UniqueObjectIds:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: The guard checks itself
+        shell: pwsh
+        run: ./tools/Test-UniqueObjectIds.ps1 -SelfTest
+
+      - name: No object or enum value ID is declared twice in the app
+        shell: pwsh
+        run: ./tools/Test-UniqueObjectIds.ps1
+
+      - name: No object or enum value ID is declared twice in the test app
+        shell: pwsh
+        run: ./tools/Test-UniqueObjectIds.ps1 -AppFolder ./test
+
+  BuildInputs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Object allocations and the Foundation floor
+        run: |
+          python3 -m unittest discover -s tools/tests -p test_build_inputs.py -v
+          python3 tools/check_build_inputs.py --root .
+
+  SymbolDuplicateGate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Equivalent compiler symbol aliases
+        run: |
+          python3 -m unittest discover -s tools/tests -p test_symbol_duplicates.py -v
+          python3 -m unittest discover -s tools/tests -p test_foundation_restore.py -v
 
   IcelandicKeywordCounts:
     runs-on: ubuntu-latest

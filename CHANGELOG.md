@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+### Changed (2026-10-19) - AppSource preparation
+
+- The app and the test app now require Bifrost Foundation **28.0.3.530** (was 28.0.1.0) and `application` **28.3.0.0** (was 28.0.0.0). Both compile against the Foundation 28.0.3 release package with CodeCop, UICop and AppSourceCop at 0 errors and 0 warnings. CI probes that release (`release_status: release`, `version: 28.0.3`) instead of the latest build.
+- App and test app version **28.1.0.0** (UAT holds 28.0.19.x).
+- `app.json`: brief and description cover the whole app; help, privacy statement and EULA point at docs.bifrost.origo.is; `contextSensitiveHelpUrl` is `https://docs.bifrost.origo.is/{0}/help/warehouse/` (#25). The obsolete `NoImplicitWith` feature is removed. `app/AppSourceCop.json` declares publisher `Origo` and mandatory suffix `ori`. The ID range stays 10078385-10078484.
+- `BIFROST WhsePost ori` (10078454) and `BIFROST WhseInv ori` (10078457) stay assignable: they are the only grants of the posting and invoicing gates. AGENTS.md no longer says the app must not have an assignable permission set.
+- The build runs CodeCop and UICop on the app and the test app, AppSourceCop on the test app, and fails on warnings. The test app gets `test/AppSourceCop.json` and suppresses the AppSource-only manifest rules AS0015, AS0051, AS0054, AS0084 and AS0092, as in the sibling apps. `fullBuildPatterns` add `.AL-Go/**` and `tools/**`.
+- The AppSource build gate from Bifrost Inventory / Attachments (`tools/Assert-AppSourceBuild.ps1`, `tools/appsource_gate.py`, `tools/stage_foundation_inputs.py`, the `.AL-Go` compile hooks and the Pipeline stage in `_BuildALGoProject.yaml`) runs in every build; see `tools/AppSourceBuildGate.md`. The Signed stage stays deferred. `*.al` files are checked out with LF so source hashes match on Windows and Linux.
+- Source Guards add unique object/enum value IDs (`tools/Test-UniqueObjectIds.ps1`), build inputs (`tools/check_build_inputs.py`: allocations and the Foundation floor) and the compiler symbol-alias gate.
+- README follows the Origo template. The AppSource listing, release checklist and market list are in `app/docs/appsource/`; screenshots and the product sheet still need to be made.
+
 ### Fixed (2026-10-16) - Raise Warehouse app version above UAT to unblock Deploy to Bifrost
 
 - Warehouse main CI/CD #19 (run 38900771455, tip `3fc5293c`, shipping #15) failed on Deploy to Bifrost with `UnprocessableEntity`: the CI/CD build produced appVersion `28.0.0.19` (app.json `28.0.0.0` plus versioningStrategy 3 run revision 19), while UAT already held `28.0.18.0`, so Business Central refused the downgrade.

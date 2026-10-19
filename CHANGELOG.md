@@ -13,7 +13,7 @@
 - Posting gate: `Warehouse.Movement.Register`, `Warehouse.InventoryPick.Post`, `Warehouse.InventoryPutAway.Post` and `Warehouse.InventoryMovement.Register` require `BIFROST WhsePost ori` like the other post and register types; `invoice: true` on inventory pick and put-away post also requires `BIFROST WhseInv ori`. The gate refusal now carries a `nextStep` that names the missing permission set.
 - One Impl codeunit per message type: each write type runs its own `OnRun` inside `Codeunit.Run` and shares `Whse Write Context ori` (10078430) for the payload, the result and the request readers. The enum value of each new type reuses its Impl codeunit number. App IDs 10078431-10078451 and 10078460-10078484 stay free.
 - Generic `Data.Records.Set` writes are blocked on Bin (table), Bin Content Default, the movement worksheet quantity and bins, and the activity line quantity, bin, zone, lot, serial and expiration fields of the dedicated activity types (`Whse Data Restrict ori`).
-- The new types check that `data` is a JSON object (same refusal as the #21 lookup reader, without a try function so the isolated run stays allowed) and answer `InvalidParameterFormat` instead of a runtime error.
+- The new types read the request through the shared lookup reader, so `data` that is not a JSON object answers `InvalidParameterFormat` instead of a runtime error (#21 pattern). Under Omit Commit the isolated run is called without a return value, like the #18 types.
 - Tests 97080-97091, plus posting-gate deny and grant tests for the four new post and register types in 97023 and 97024.
 ### Fixed (2026-10-19) - Warehouse posting, put-away and previews with Omit Commit (#18)
 

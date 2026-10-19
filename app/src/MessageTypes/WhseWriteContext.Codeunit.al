@@ -112,31 +112,6 @@ codeunit 10078430 "Whse Write Context ori"
         HasSnapshot := false;
     end;
 
-    /// <summary>Reads the request as a JSON object without a try function, so a later isolated Codeunit.Run is still allowed.</summary>
-    /// <param name="Argument">Receives an InvalidParameterFormat answer when data is not a JSON object.</param>
-    /// <param name="RequestJson">Receives the request object; empty when no data was sent.</param>
-    /// <returns>False when data is present and is not a JSON object.</returns>
-    internal procedure ReadRequestObject(var Argument: Record "Message Argument ori"; var RequestJson: JsonObject): Boolean
-    var
-        Token: JsonToken;
-        RequestText: Text;
-        InvalidTypeErr: Label 'Parameter "%1" must be %2.', Comment = '%1 = parameter name, %2 = expected JSON type, is-IS=Færibreytan "%1" verður að vera %2.';
-        ObjectTypeTxt: Label 'a JSON object', Comment = 'is-IS=JSON-hlutur';
-        ObjectNextStepTxt: Label 'Send data as a JSON object.', Comment = 'is-IS=Sendu data sem JSON-hlut.';
-    begin
-        Clear(RequestJson);
-        RequestText := Argument.GetRequestText();
-        if DelChr(RequestText, '<>', ' ') = '' then
-            exit(true);
-        if Token.ReadFrom(RequestText) then
-            if Token.IsObject() then begin
-                RequestJson := Token.AsObject();
-                exit(true);
-            end;
-        Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(InvalidTypeErr, 'data', ObjectTypeTxt), 'data', '', ObjectTypeTxt, ObjectNextStepTxt);
-        exit(false);
-    end;
-
     /// <summary>Reads a text parameter from a request object.</summary>
     /// <param name="SourceJson">Request object or one line of it.</param>
     /// <param name="KeyName">Parameter name.</param>

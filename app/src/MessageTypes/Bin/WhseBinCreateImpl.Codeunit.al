@@ -287,7 +287,7 @@ codeunit 10078419 "Whse Bin Create Impl ori" implements "Msg Interface ori", "Ms
     /// <param name="Argument">The request and response message argument.</param>
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var
-        RequestReader: Codeunit "Whse Write Context ori";
+        WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         Context: Codeunit "Whse Write Context ori";
         RequestJson: JsonObject;
         Payload: JsonObject;
@@ -303,7 +303,7 @@ codeunit 10078419 "Whse Bin Create Impl ori" implements "Msg Interface ori", "Ms
         end;
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
-        if not RequestReader.ReadRequestObject(Argument, RequestJson) then
+        if not WhseRecordLookup.TryReadIdentifiers(Argument, '', RequestJson) then
             exit;
         RefuseUnknownKeys(RequestJson, Argument);
         if not TryResolveLocation(RequestJson, Argument, LocationCode) then
@@ -315,11 +315,15 @@ codeunit 10078419 "Whse Bin Create Impl ori" implements "Msg Interface ori", "Ms
             exit;
         end;
         Context.SetPayload(Payload);
-        if not Codeunit.Run(Codeunit::"Whse Bin Create Impl ori") then begin
-            Context.Reset();
-            Argument.RespondWithLastError();
-            exit;
-        end;
+        // Codeunit.Run with a return value is illegal inside the Omit Commit write transaction (#18).
+        if Argument."Omit Commit" then
+            Codeunit.Run(Codeunit::"Whse Bin Create Impl ori")
+        else
+            if not Codeunit.Run(Codeunit::"Whse Bin Create Impl ori") then begin
+                Context.Reset();
+                Argument.RespondWithLastError();
+                exit;
+            end;
         Context.Reset();
         WriteCreatedBins(Argument, Payload);
     end;

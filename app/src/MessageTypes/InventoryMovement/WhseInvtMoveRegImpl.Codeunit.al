@@ -256,7 +256,7 @@ codeunit 10078428 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var
         ActivityHeader: Record "Warehouse Activity Header";
-        RequestReader: Codeunit "Whse Write Context ori";
+        WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         Context: Codeunit "Whse Write Context ori";
         WhsePostingGate: Codeunit "Whse Posting Gate ori";
         RequestJson: JsonObject;
@@ -277,7 +277,7 @@ codeunit 10078428 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
             exit;
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
-        if not RequestReader.ReadRequestObject(Argument, RequestJson) then
+        if not WhseRecordLookup.TryReadIdentifiers(Argument, '', RequestJson) then
             exit;
         RefuseUnknownKeys(RequestJson, Argument);
         if not TryResolveMovement(RequestJson, Argument, ActivityHeader) then begin
@@ -297,11 +297,15 @@ codeunit 10078428 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
         Payload.Add('movementNo', ActivityHeader."No.");
         Payload.Add('lines', PlannedLines);
         Context.SetPayload(Payload);
-        if not Codeunit.Run(Codeunit::"Whse InvtMove Reg Impl ori") then begin
-            Context.Reset();
-            Argument.RespondWithLastError();
-            exit;
-        end;
+        // Codeunit.Run with a return value is illegal inside the Omit Commit write transaction (#18).
+        if Argument."Omit Commit" then
+            Codeunit.Run(Codeunit::"Whse InvtMove Reg Impl ori")
+        else
+            if not Codeunit.Run(Codeunit::"Whse InvtMove Reg Impl ori") then begin
+                Context.Reset();
+                Argument.RespondWithLastError();
+                exit;
+            end;
         WriteRegisteredMovement(Argument, ActivityHeader."No.");
         Context.Reset();
     end;

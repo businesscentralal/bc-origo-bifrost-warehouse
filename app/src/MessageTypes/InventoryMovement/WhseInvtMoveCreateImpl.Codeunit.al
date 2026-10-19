@@ -276,7 +276,7 @@ codeunit 10078427 "Whse InvtMove Create Impl ori" implements "Msg Interface ori"
     /// <param name="Argument">The request and response message argument.</param>
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var
-        RequestReader: Codeunit "Whse Write Context ori";
+        WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         Context: Codeunit "Whse Write Context ori";
         RequestJson: JsonObject;
         Payload: JsonObject;
@@ -296,7 +296,7 @@ codeunit 10078427 "Whse InvtMove Create Impl ori" implements "Msg Interface ori"
         end;
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
-        if not RequestReader.ReadRequestObject(Argument, RequestJson) then
+        if not WhseRecordLookup.TryReadIdentifiers(Argument, '', RequestJson) then
             exit;
         RefuseUnknownKeys(RequestJson, Argument);
         ResolveMode(RequestJson, Argument, SourceMode, LinesMode);
@@ -324,11 +324,15 @@ codeunit 10078427 "Whse InvtMove Create Impl ori" implements "Msg Interface ori"
         end else
             Payload.Add('locationCode', LocationCode);
         Context.SetPayload(Payload);
-        if not Codeunit.Run(Codeunit::"Whse InvtMove Create Impl ori") then begin
-            Context.Reset();
-            Argument.RespondWithLastError();
-            exit;
-        end;
+        // Codeunit.Run with a return value is illegal inside the Omit Commit write transaction (#18).
+        if Argument."Omit Commit" then
+            Codeunit.Run(Codeunit::"Whse InvtMove Create Impl ori")
+        else
+            if not Codeunit.Run(Codeunit::"Whse InvtMove Create Impl ori") then begin
+                Context.Reset();
+                Argument.RespondWithLastError();
+                exit;
+            end;
         WriteCreatedMovement(Argument, SourceMode, SourceNo);
         Context.Reset();
     end;

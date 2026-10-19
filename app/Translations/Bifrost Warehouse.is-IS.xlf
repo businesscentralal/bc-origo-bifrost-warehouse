@@ -3813,24 +3813,6 @@
           <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=Færibreytan %1 verður að vera heiltala.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Write Context ori - Method ReadInteger - NamedType FormatLbl</note>
         </trans-unit>
-        <trans-unit id="Codeunit 4206461129 - Method 3864638682 - NamedType 2034178160" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Parameter "%1" must be %2.</source>
-          <target>Færibreytan "%1" verður að vera %2.</target>
-          <note from="Developer" annotates="general" priority="2">%1 = parameter name, %2 = expected JSON type, is-IS=Færibreytan "%1" verður að vera %2.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Write Context ori - Method ReadRequestObject - NamedType InvalidTypeErr</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 4206461129 - Method 3864638682 - NamedType 546994903" size-unit="char" translate="yes" xml:space="preserve">
-          <source>a JSON object</source>
-          <target>JSON-hlutur</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=JSON-hlutur</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Write Context ori - Method ReadRequestObject - NamedType ObjectTypeTxt</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 4206461129 - Method 3864638682 - NamedType 1231375444" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Send data as a JSON object.</source>
-          <target>Sendu data sem JSON-hlut.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sendu data sem JSON-hlut.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Write Context ori - Method ReadRequestObject - NamedType ObjectNextStepTxt</note>
-        </trans-unit>
         <trans-unit id="Codeunit 4206461129 - Method 11078697 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
           <source>Parameter %1 must be text.</source>
           <target>Færibreytan %1 verður að vera texti.</target>

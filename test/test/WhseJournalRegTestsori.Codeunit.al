@@ -49,6 +49,7 @@ codeunit 97052 "Whse Journal Reg Tests ori"
         Assert.AreEqual(2, Helper.IntegerValue(ResponseJson, 'entryCount'), 'A positive adjustment writes the bin entry and the adjustment bin entry.');
         JournalLine.SetRange("Journal Template Name", JournalBatch."Journal Template Name");
         JournalLine.SetRange("Journal Batch Name", JournalBatch.Name);
+        JournalLine.SetFilter("Item No.", '<>%1', '');
         Assert.IsTrue(JournalLine.IsEmpty(), 'The registered lines are deleted.');
         WarehouseEntry.SetRange("Item No.", Item."No.");
         WarehouseEntry.SetRange("Bin Code", Bin.Code);

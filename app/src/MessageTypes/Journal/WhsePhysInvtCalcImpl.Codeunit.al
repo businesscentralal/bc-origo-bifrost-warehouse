@@ -32,6 +32,7 @@ codeunit 10078448 "Whse PhysInvt Calc Impl ori" implements "Msg Interface ori", 
         JournalLine."Journal Template Name" := CopyStr(Values.TextValue(Payload, 'journalTemplateName'), 1, MaxStrLen(JournalLine."Journal Template Name"));
         JournalLine."Journal Batch Name" := CopyStr(Values.TextValue(Payload, 'journalBatchName'), 1, MaxStrLen(JournalLine."Journal Batch Name"));
         JournalLine."Location Code" := CopyStr(Values.TextValue(Payload, 'locationCode'), 1, MaxStrLen(JournalLine."Location Code"));
+        Helper.DeleteEmptyLines(JournalLine."Journal Template Name", JournalLine."Journal Batch Name", JournalLine."Location Code");
         Context.SetSnapshot(Helper.LastLineNo(JournalLine."Journal Template Name", JournalLine."Journal Batch Name", JournalLine."Location Code"));
         RegisteringDate := Values.DateValue(Payload, 'registeringDate');
         if RegisteringDate = 0D then

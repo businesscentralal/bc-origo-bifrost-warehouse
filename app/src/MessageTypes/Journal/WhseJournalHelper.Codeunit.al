@@ -118,7 +118,7 @@ codeunit 10078451 "Whse Journal Helper ori"
         exit(true);
     end;
 
-    /// <summary>Returns the number of lines in the batch.</summary>
+    /// <summary>Returns the number of lines with an item in the batch. The empty line Business Central leaves after registering is not counted.</summary>
     /// <param name="TemplateName">Journal template name.</param>
     /// <param name="BatchName">Journal batch name.</param>
     /// <param name="LocationCode">Location code.</param>
@@ -128,7 +128,26 @@ codeunit 10078451 "Whse Journal Helper ori"
         JournalLine: Record "Warehouse Journal Line";
     begin
         FilterBatch(JournalLine, TemplateName, BatchName, LocationCode);
+        JournalLine.SetFilter("Item No.", '<>%1', '');
         exit(JournalLine.Count());
+    end;
+
+    /// <summary>
+    /// Deletes the empty lines of the batch (no item, no quantity). Business Central leaves one after registering a batch
+    /// without a number series; registering it again would fail on its missing bin. Call it inside the isolated run.
+    /// </summary>
+    /// <param name="TemplateName">Journal template name.</param>
+    /// <param name="BatchName">Journal batch name.</param>
+    /// <param name="LocationCode">Location code.</param>
+    internal procedure DeleteEmptyLines(TemplateName: Code[10]; BatchName: Code[10]; LocationCode: Code[10])
+    var
+        JournalLine: Record "Warehouse Journal Line";
+    begin
+        FilterBatch(JournalLine, TemplateName, BatchName, LocationCode);
+        JournalLine.SetRange("Item No.", '');
+        JournalLine.SetRange(Quantity, 0);
+        if not JournalLine.IsEmpty() then
+            JournalLine.DeleteAll(true);
     end;
 
     /// <summary>Returns the highest line number in the batch, or zero.</summary>
@@ -167,15 +186,27 @@ codeunit 10078451 "Whse Journal Helper ori"
     internal procedure RegisterBatch(TemplateName: Code[10]; BatchName: Code[10]; LocationCode: Code[10]): Integer
     var
         JournalLine: Record "Warehouse Journal Line";
+        WarehouseRegister: Record "Warehouse Register";
         RegisterBatchCodeunit: Codeunit "Whse. Jnl.-Register Batch";
+        LastRegisterNo: Integer;
         NothingErr: Label 'The warehouse journal batch has no lines to register.', Comment = 'is-IS=Bókarkeyrsla vöruhússins hefur engar línur til að skrá.';
     begin
+        DeleteEmptyLines(TemplateName, BatchName, LocationCode);
         FilterBatch(JournalLine, TemplateName, BatchName, LocationCode);
         if not JournalLine.FindFirst() then
             Error(NothingErr);
+        WarehouseRegister.SetLoadFields("No.");
+        if WarehouseRegister.FindLast() then
+            LastRegisterNo := WarehouseRegister."No.";
         RegisterBatchCodeunit.Run(JournalLine);
-        // Codeunit 7304 hands the warehouse register number back in Line No.
-        exit(JournalLine."Line No.");
+        // Codeunit 7304 does not hand the register number back reliably, so read the register it wrote.
+        Clear(WarehouseRegister);
+        WarehouseRegister.SetFilter("No.", '>%1', LastRegisterNo);
+        WarehouseRegister.SetRange("Journal Batch Name", BatchName);
+        WarehouseRegister.SetLoadFields("No.");
+        if WarehouseRegister.FindLast() then
+            exit(WarehouseRegister."No.");
+        exit(0);
     end;
 
     /// <summary>Adds registerNo, fromEntryNo, toEntryNo and entryCount to a response.</summary>

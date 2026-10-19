@@ -41,6 +41,7 @@ codeunit 10078446 "Whse Journal Create Impl ori" implements "Msg Interface ori",
         BatchName := CopyStr(Values.TextValue(Payload, 'journalBatchName'), 1, MaxStrLen(BatchName));
         LocationCode := CopyStr(Values.TextValue(Payload, 'locationCode'), 1, MaxStrLen(LocationCode));
         JournalTemplate.Get(TemplateName);
+        Helper.DeleteEmptyLines(TemplateName, BatchName, LocationCode);
         NextLineNo := Helper.LastLineNo(TemplateName, BatchName, LocationCode);
         LastLine."Journal Template Name" := TemplateName;
         LastLine."Journal Batch Name" := BatchName;

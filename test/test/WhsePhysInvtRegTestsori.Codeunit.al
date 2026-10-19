@@ -71,6 +71,7 @@ codeunit 97054 "Whse PhysInvt Reg Tests ori"
         Assert.AreEqual(1, Helper.IntegerValue(ResponseJson, 'registeredLineCount'), 'The count line is registered.');
         JournalLine.SetRange("Journal Template Name", JournalBatch."Journal Template Name");
         JournalLine.SetRange("Journal Batch Name", JournalBatch.Name);
+        JournalLine.SetFilter("Item No.", '<>%1', '');
         Assert.IsTrue(JournalLine.IsEmpty(), 'The registered lines are deleted.');
     end;
 

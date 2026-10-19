@@ -187,7 +187,7 @@ codeunit 97082 "Whse DefBin Set Tests ori"
     [TestPermissions(TestPermissions::Restrictive)]
     procedure Set_WithoutPermission_ReturnsPermissionDenied()
     var
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         SetImpl: Codeunit "Whse DefaultBin Set Impl ori";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         MessageTypeInterface: Interface "Msg Interface ori";

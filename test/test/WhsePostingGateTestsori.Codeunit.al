@@ -279,7 +279,7 @@ codeunit 97023 "Whse Posting Gate Tests ori"
     local procedure AssertRefusedByPostingGate(MessageType: Enum "Message Type ori")
     var
         ActivityLine: Record "Warehouse Activity Line";
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         MessageTypeInterface: Interface "Msg Interface ori";
         ResponseJson: JsonObject;

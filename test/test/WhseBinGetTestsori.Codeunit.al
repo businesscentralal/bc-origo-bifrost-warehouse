@@ -137,7 +137,7 @@ codeunit 97080 "Whse Bin Get Tests ori"
     [TestPermissions(TestPermissions::Restrictive)]
     procedure Get_WithoutPermission_ReturnsPermissionDenied()
     var
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         GetImpl: Codeunit "Whse Bin Get Impl ori";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         MessageTypeInterface: Interface "Msg Interface ori";

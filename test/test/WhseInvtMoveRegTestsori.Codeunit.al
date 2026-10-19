@@ -138,7 +138,7 @@ codeunit 97090 "Whse InvtMove Reg Tests ori"
     [TestPermissions(TestPermissions::Restrictive)]
     procedure Register_WithoutPermission_ReturnsPermissionDenied()
     var
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         RegisterImpl: Codeunit "Whse InvtMove Reg Impl ori";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         MessageTypeInterface: Interface "Msg Interface ori";

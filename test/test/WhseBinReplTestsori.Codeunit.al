@@ -196,7 +196,7 @@ codeunit 97091 "Whse Bin Repl Tests ori"
     [TestPermissions(TestPermissions::Restrictive)]
     procedure Calculate_WithoutPermission_ReturnsPermissionDenied()
     var
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         CalculateImpl: Codeunit "Whse Bin Repl Calc Impl ori";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         MessageTypeInterface: Interface "Msg Interface ori";

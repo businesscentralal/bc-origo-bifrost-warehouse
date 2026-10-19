@@ -206,7 +206,7 @@ codeunit 97085 "Whse InvtPick Create Tests ori"
     [TestPermissions(TestPermissions::Restrictive)]
     procedure Create_WithoutPermission_ReturnsPermissionDenied()
     var
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         CreateImpl: Codeunit "Whse InvtPick Create Impl ori";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         MessageTypeInterface: Interface "Msg Interface ori";

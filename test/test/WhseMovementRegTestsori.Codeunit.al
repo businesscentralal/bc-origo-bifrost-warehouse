@@ -163,7 +163,7 @@ codeunit 97084 "Whse Movement Reg Tests ori"
     [TestPermissions(TestPermissions::Restrictive)]
     procedure Register_WithoutPermission_ReturnsPermissionDenied()
     var
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         RegisterImpl: Codeunit "Whse Movement Reg Impl ori";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         MessageTypeInterface: Interface "Msg Interface ori";

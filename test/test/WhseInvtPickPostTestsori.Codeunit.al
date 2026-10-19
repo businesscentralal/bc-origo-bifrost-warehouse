@@ -167,7 +167,7 @@ codeunit 97086 "Whse InvtPick Post Tests ori"
     [TestPermissions(TestPermissions::Restrictive)]
     procedure Post_WithoutPermission_ReturnsPermissionDenied()
     var
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         PostImpl: Codeunit "Whse InvtPick Post Impl ori";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         MessageTypeInterface: Interface "Msg Interface ori";

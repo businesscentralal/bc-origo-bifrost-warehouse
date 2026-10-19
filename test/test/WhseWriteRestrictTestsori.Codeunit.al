@@ -69,7 +69,7 @@ codeunit 97026 "Whse Write Restrict Tests ori"
     [Test]
     procedure GenericWrite_Bin_IsRefusedAndHinted()
     var
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         Assert: Codeunit "Library Assert";
     begin
         TempArgument.Init();
@@ -87,7 +87,7 @@ codeunit 97026 "Whse Write Restrict Tests ori"
     procedure GenericWrite_BinContentDefault_IsRefusedAndHinted()
     var
         BinContent: Record "Bin Content";
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         Assert: Codeunit "Library Assert";
     begin
         TempArgument.Init();
@@ -102,7 +102,7 @@ codeunit 97026 "Whse Write Restrict Tests ori"
     procedure GenericWrite_MovementWorksheetFields_IsRefusedAndHinted()
     var
         WorksheetLine: Record "Whse. Worksheet Line";
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         Assert: Codeunit "Library Assert";
     begin
         TempArgument.Init();
@@ -119,7 +119,7 @@ codeunit 97026 "Whse Write Restrict Tests ori"
     procedure GenericWrite_MovementActivityFields_IsHinted()
     var
         ActivityLine: Record "Warehouse Activity Line";
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         Assert: Codeunit "Library Assert";
     begin
         TempArgument.Init();

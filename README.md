@@ -9,7 +9,7 @@ The app provides warehouse message types for bin content, open warehouse activit
 - `Warehouse.BinContent.Get` reads bin content by item, location, bin, and variant, with paging.
 - `Warehouse.Activity.Get` reads open warehouse activities, with optional line details and filters for activity type, source warehouse document, location, and assigned user.
 - `Warehouse.Shipment.Create`, `Warehouse.Shipment.Post`, and `Warehouse.Shipment.PreviewPost`.
-- `Warehouse.Receipt.Create`, `Warehouse.Receipt.Post`, and `Warehouse.Receipt.Post.Preview`.
+- `Warehouse.Receipt.Create`, `Warehouse.Receipt.Post`, and `Warehouse.Receipt.PreviewPost`.
 - `Warehouse.Pick.Create` and `Warehouse.Pick.Register`.
 - `Warehouse.Putaway.Create` and `Warehouse.Putaway.Register`.
 - `Warehouse.Bin.Get`, `Warehouse.Bin.Create`, and `Warehouse.DefaultBin.Set`.

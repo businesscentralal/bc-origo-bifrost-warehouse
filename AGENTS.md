@@ -16,3 +16,9 @@ stripping, signing requests, deferred cleanup, merged settings before secrets, a
 upgrade skipping. Keep this repository's app IDs, action versions, dependency settings and
 deployment variables. Apply compatible upstream updates and reapply the Bifrost custom blocks
 before pushing; do not disable the guard or exclude generated workflows from future updates.
+
+## Message type names
+
+Shipped message type names have exactly three nonempty dot-separated parts: `Domain.Entity.Action`.
+Run `tools/Test-MessageTypeNames.ps1 -SelfTest` and `tools/Test-MessageTypeNames.ps1 -AppFolder ./app`.
+The shared guard is adopted from Foundation core#1037; test apps are exempt from this naming rule.

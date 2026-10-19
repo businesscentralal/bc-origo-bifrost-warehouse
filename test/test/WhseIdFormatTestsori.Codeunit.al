@@ -30,7 +30,7 @@ codeunit 97029 "Whse Id Format Tests ori"
         MessageTypes.Add("Message Type ori"::"Warehouse.Shipment.Post");
         MessageTypes.Add("Message Type ori"::"Warehouse.Shipment.PreviewPost");
         MessageTypes.Add("Message Type ori"::"Warehouse.Receipt.Post");
-        MessageTypes.Add("Message Type ori"::"Warehouse.Receipt.Post.Preview");
+        MessageTypes.Add("Message Type ori"::"Warehouse.Receipt.PreviewPost");
         MessageTypes.Add("Message Type ori"::"Warehouse.Pick.Create");
         MessageTypes.Add("Message Type ori"::"Warehouse.Pick.Register");
         MessageTypes.Add("Message Type ori"::"Warehouse.Putaway.Create");

@@ -2,9 +2,30 @@
 
 - Namespace: `Origo.Bifrost.Warehouse` / `Origo.Bifrost.Warehouse.Test`
 - Follow OrigoSoftwareSolutions/bc-dev-standards.
-- Feature app: extend Foundation permission sets; do not add an assignable permission set.
+- Permissions: reads and document creation extend Foundation's `BIFROST Read ori` /
+  `BIFROST Full ori` (`BIFROST Whse - Read ori`, `BIFROST Whse - Full ori`). The two assignable
+  sets are the gates: `BIFROST WhsePost ori` (10078454; `Whse Posting Gate ori` checks write
+  permission on the token table `Whse Posting ori`) for shipment/receipt posting and pick/put-away
+  registering, and `BIFROST WhseInv ori` (10078457; token table `Whse Invoice ori`) for
+  `Warehouse.Shipment.Post` with `invoice` true. Both must stay assignable and stay out of the
+  read/full extensions: nothing else grants posting or invoicing. Add no other assignable set.
+- Foundation floor 28.0.3.530 (release `28.0.3`, probed by `.AL-Go/settings.json`);
+  `application` floor 28.3.0.0. CodeCop, UICop and AppSourceCop run on app and test app with
+  `failOn: warning`.
+- No pages: `contextSensitiveHelpUrl` is `https://docs.bifrost.origo.is/{0}/help/warehouse/`; a new
+  page needs a `ContextSensitiveHelpPage` slug and both locale pages in businesscentralal/bifrost.
 - Do not grant or read Foundation's `Setup ori` table directly.
 - App ID range: `10078385–10078484` (100 IDs; the warehouse#4 move and P2 Warehouse Movement both fit); test ID range: `97000–97099`.
+
+## AppSource build gate
+
+`tools/Assert-AppSourceBuild.ps1` runs from `.AL-Go/PipelineInitialize.ps1`,
+`.AL-Go/CompileAppWithBcCompilerFolder.ps1`, `.AL-Go/PostCompileApp.ps1`,
+`.AL-Go/PipelineFinalize.ps1` and the Pipeline stage step in `_BuildALGoProject.yaml`. It was
+ported from Bifrost Inventory / Bifrost Attachments; see `tools/AppSourceBuildGate.md`. The Signed
+stage is deferred (no NAVX trust on hosted runners). Changing the Foundation floor or the BC
+artifact needs the pins in `tools/appsource_gate.py`, `tools/stage_foundation_inputs.py` and
+`tools/check_build_inputs.py` reviewed together.
 
 ## Preserve the Bifrost build pipeline during system updates
 

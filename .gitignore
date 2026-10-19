@@ -19,3 +19,7 @@ rad.json
 .snapshots/
 cache_*
 ~$*
+
+# Python bytecode from tools/tests
+__pycache__/
+*.pyc

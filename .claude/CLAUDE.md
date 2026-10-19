@@ -2,9 +2,11 @@
 
 - Namespace: `Origo.Bifrost.Warehouse`
 - Test namespace: `Origo.Bifrost.Warehouse.Test`
-- Foundation dependency: Bifrost Foundation `28.0.1.0`
+- Foundation dependency: Bifrost Foundation `28.0.3.530` (release `28.0.3`); app and test app compile against it with CodeCop/UICop/AppSourceCop at 0 warnings (19.10.2026). `application` floor 28.3.0.0.
 - Permissions: PermissionSetExtensions onto `BIFROST Read ori` / `BIFROST Full ori`
-- Own permission sets only for the posting and invoicing gates (`BIFROST WhsePost ori`, `BIFROST WhseInv ori`); no direct `Setup ori` tabledata access.
+- Own permission sets only for the posting and invoicing gates (`BIFROST WhsePost ori`, `BIFROST WhseInv ori`). Both are `Assignable = true` on purpose: they are the only grants of the gate token tables (`Whse Posting ori`, `Whse Invoice ori`) and must stay out of the read/full extensions. No direct `Setup ori` tabledata access.
+- No pages; context-sensitive help base `https://docs.bifrost.origo.is/{0}/help/warehouse/`.
+- AppSource build gate: see `tools/AppSourceBuildGate.md` (ported from Bifrost Inventory / Attachments). Build runs with `failOn: warning`.
 - Message types: all twelve `Warehouse.*` types in `app/src/MessageTypes/`.
 - The 100-ID range fits the warehouse#4 move (~32 objects) and P2 Warehouse Movement.
 

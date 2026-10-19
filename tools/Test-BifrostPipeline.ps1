@@ -130,6 +130,12 @@ $readSecrets = $sync.IndexOf('/ReadSecrets@', [StringComparison]::Ordinal)
 Require ($readSettings -ge 0 -and $readSecrets -gt $readSettings) 'Settings sync must load merged settings before reading secrets.'
 
 $settings = Read-ProjectFile '.AL-Go/settings.json' | ConvertFrom-Json
+# Pipeline-only changes must execute the paired build, not just this guard.
+$selectionPaths = @('tools/Test-BifrostPipeline.ps1', '.github/workflows/future-workflow.yaml')
+$selectionPaths += @(Get-ChildItem -LiteralPath (Join-Path $ProjectPath '.github/workflows') -File | ForEach-Object { ".github/workflows/$($_.Name)" })
+foreach ($selectionPath in $selectionPaths) {
+    Require (@($settings.fullBuildPatterns | Where-Object { $selectionPath -like ($_ -replace '\\','/') }).Count -gt 0) "Changes to $selectionPath must trigger Default and Test."
+}
 foreach ($pattern in @('.github/workflows/**', 'tools/Test-BifrostPipeline.ps1')) {
     Require ($settings.fullBuildPatterns -ccontains $pattern) "fullBuildPatterns must include '$pattern' to execute paired builds on pipeline changes."
 }

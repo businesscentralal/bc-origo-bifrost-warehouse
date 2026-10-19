@@ -250,6 +250,14 @@ jobs:
           baselineWorkflowSHA: ${{ inputs.baselineWorkflowSHA }}
           previousAppsPath: ${{ steps.DownloadPreviousRelease.outputs.PreviousAppsPath }}
 
+      - name: Validate final AppSource pipeline evidence
+        id: appSourcePipeline
+        if: steps.DetermineBuildProject.outputs.BuildIt == 'True'
+        shell: pwsh
+        env:
+          BuildMode: ${{ inputs.buildMode }}
+        run: ./tools/Assert-AppSourceBuild.ps1 -Stage Pipeline -Root '${{ github.workspace }}'
+
       - name: Record container identity
         id: containerIdentity
         if: inputs.sharedContainer && steps.DetermineBuildProject.outputs.BuildIt == 'True'
@@ -267,6 +275,10 @@ jobs:
           azureCredentialsJson: '${{ fromJson(steps.ReadSecrets.outputs.Secrets).AZURE_CREDENTIALS }}'
           pathToFiles: '${{ inputs.project }}/.buildartifacts/Apps/*.app'
 
+      # The Signed stage (Assert-AppSourceBuild.ps1 -Stage Signed) is deferred (#78): the hosted runner has no
+      # NAVX SIP/trust and CI signs with a self-signed certificate, so the check fails with UnknownError.
+      # Verify the signed Default package on a Windows machine with NAVX trust before submission.
+
       - name: Calculate Artifact names
         id: calculateArtifactsNames
         uses: microsoft/AL-Go-Actions/CalculateArtifactNames@v9.2
@@ -281,11 +293,25 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         env:
           ACTIONS_RUNNER_DISABLE_NODE_MAGLEV: 1
-        if: inputs.artifactsRetentionDays >= 0 && (hashFiles(format('{0}/.buildartifacts/Apps/*',inputs.project)) != '')
+        if: steps.appSourcePipeline.outcome == 'success' && inputs.artifactsRetentionDays >= 0 && (hashFiles(format('{0}/.buildartifacts/Apps/*',inputs.project)) != '')
         with:
           name: ${{ steps.calculateArtifactsNames.outputs.AppsArtifactsName }}
           path: '${{ inputs.project }}/.buildartifacts/Apps/'
-          if-no-files-found: ignore
+          if-no-files-found: error
+          retention-days: ${{ inputs.artifactsRetentionDays }}
+
+      - name: Publish artifacts - final AppSource receipts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        env:
+          ACTIONS_RUNNER_DISABLE_NODE_MAGLEV: 1
+        if: (success() || failure()) && inputs.artifactsRetentionDays >= 0 && (hashFiles(format('{0}/.buildartifacts/AppSourceGate/**/finalize.json',inputs.project)) != '')
+        with:
+          name: ${{ steps.calculateArtifactsNames.outputs.BuildOutputArtifactsName }}-AppSourceFinalReceipts
+          path: |
+            ${{ inputs.project }}/.buildartifacts/AppSourceGate/**/finalize.json
+            ${{ inputs.project }}/.buildartifacts/AppSourceGate/**/pipeline.json
+            ${{ inputs.project }}/.buildartifacts/AppSourceGate/**/signed.json
+          if-no-files-found: error
           retention-days: ${{ inputs.artifactsRetentionDays }}
 
       - name: Publish artifacts - dependencies
@@ -303,11 +329,22 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         env:
           ACTIONS_RUNNER_DISABLE_NODE_MAGLEV: 1
-        if: inputs.artifactsRetentionDays >= 0 && (hashFiles(format('{0}/.buildartifacts/TestApps/*',inputs.project)) != '')
+        if: steps.appSourcePipeline.outcome == 'success' && inputs.artifactsRetentionDays >= 0 && (hashFiles(format('{0}/.buildartifacts/TestApps/*',inputs.project)) != '')
         with:
           name: ${{ steps.calculateArtifactsNames.outputs.TestAppsArtifactsName }}
           path: '${{ inputs.project }}/.buildartifacts/TestApps/'
-          if-no-files-found: ignore
+          if-no-files-found: error
+          retention-days: ${{ inputs.artifactsRetentionDays }}
+
+      - name: Publish artifacts - rejected AppSource input receipts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        env:
+          ACTIONS_RUNNER_DISABLE_NODE_MAGLEV: 1
+        if: failure() && inputs.artifactsRetentionDays >= 0 && (hashFiles(format('{0}/.buildartifacts/AppSourceGate/**/rejected-input.json',inputs.project)) != '')
+        with:
+          name: ${{ steps.calculateArtifactsNames.outputs.BuildOutputArtifactsName }}-RejectedAppSourceInputs
+          path: '${{ inputs.project }}/.buildartifacts/AppSourceGate/**/rejected-input.json'
+          if-no-files-found: error
           retention-days: ${{ inputs.artifactsRetentionDays }}
 
       - name: Publish artifacts - build output

@@ -2,65 +2,35 @@
 
 ## [Unreleased]
 
-### Changed (2026-10-16) - Preview refusal regression coverage (#18)
+### Fixed (2026-10-19) - Warehouse posting, put-away and previews with Omit Commit (#18)
 
-- Verify rollback-chain preview refusals using postable shipment and receipt fixtures, and assert that their headers and outstanding quantities remain unchanged (Whse Omit Commit Tests ori, codeunit 97028).
+- `Warehouse.Shipment.Post` and `Warehouse.Receipt.Post` run inside the caller's transaction when called with Omit Commit, and a Business Central posting error is raised as it is; without Omit Commit a posting error is still answered as `status = Error`.
+- `Warehouse.Putaway.Create` with Omit Commit returns an already-open put-away for the posted receipt (`alreadyExisted = true`) and only runs the put-away report when none exists.
+- `Warehouse.Shipment.PreviewPost` and `Warehouse.Receipt.Post.Preview` answer `PreconditionFailed` with a next step when called with Omit Commit, before any record is read; the HTTP/MCP path (no Omit Commit) is unchanged. Each type's errors chapter lists the new entry.
+- Codeunits 10078407, 10078408, 10078410, 10078411 and 10078415. Test helpers 97021 and 97022 get a `RunMessage` overload with an explicit `OmitCommit`; preview tests (97013, 97016) use `false`. New test codeunit `Whse Omit Commit Tests ori` (97028) covers the preview refusal (document and quantities kept) and the posting-error paths in both modes. Test codeunits 97023, 97024 and 97026 declare their message arguments `temporary`.
 
-### Fixed (2026-10-15) - Warehouse help host (#25)
+### Fixed (2026-10-19) - Strict warehouse identifier validation (#21)
 
-- Point `contextSensitiveHelpUrl` at `docs.bifrost.origo.is`, carrying the retained app-only fix into this batch. Real bilingual Warehouse help pages and the unchanged HelpLinks guard remain pending under bifrost#99; this does not close #25.
+- The nine lookup types (Shipment.Post, Shipment.PreviewPost, Receipt.Post, Receipt.Post.Preview, Pick.Create, Pick.Register, Putaway.Create, Putaway.Register, Activity.Get) answer `InvalidParameterFormat` on `data` when the request is not a JSON object, and on the key when an identifier is `null`, a number, a boolean, an object or an array. Two or more wrong keys are one `MultipleErrors`, in key order. Nothing is looked up or posted while a value is wrong; an absent or empty key stays `MissingParameter`.
+- The shared lookup errors chapter (`Whse Contract Parts ori`) describes the format rules and lists exactly one `MultipleErrors` entry. Codeunits 10078390, 10078407, 10078408, 10078410, 10078411, 10078412, 10078414, 10078415, 10078417, 10078455 and 10078459; new test codeunit `Whse Id Format Tests ori` (97029); contract tests in 97027.
 
-### Fixed (2026-10-15) - Test compiler diagnostics
+### Changed (2026-10-19) - Warehouse identifier contract keys (#24)
 
-- Declare temporary message arguments explicitly in posting-gate and write-restriction tests (97023, 97024, 97026), keeping AL17 and AL18 CodeCop builds warning-free.
-- Match response content-type widths, remove a shadowed assertion variable, use a label for the status assertion, and align test filenames with their object names without changing assertions (97000–97002, 97010–97027). Object IDs stay unchanged:
+- In the target chapter of Shipment.Post, Shipment.PreviewPost, Receipt.Post, Receipt.Post.Preview, Pick.Create and Putaway.Create every identifier key carries its own `data.` prefix. The accepted keys and descriptions are unchanged, and `tools/Test-ContractParameterKeys.ps1` passes. Contract tests in 97027.
 
-| Object ID | Filename |
-|---|---|
-| 97000 | `WhseBinContentGetTestsori.Codeunit.al` |
-| 97001 | `WhseActivityGetTestsori.Codeunit.al` |
-| 97002 | `WhseTestDataori.Codeunit.al` |
-| 97010 | `WhseNoReadTestori.PermissionSet.al` |
-| 97011 | `WhseShipmentCreateTestsori.Codeunit.al` |
-| 97012 | `WhseShipmentPostTestsori.Codeunit.al` |
-| 97013 | `WhseShipPrevPostTestsori.Codeunit.al` |
-| 97014 | `WhseReceiptCreateTestsori.Codeunit.al` |
-| 97015 | `WhseReceiptPostTestsori.Codeunit.al` |
-| 97016 | `WhseRcptPostPrevTestsori.Codeunit.al` |
-| 97017 | `WhsePickCreateTestsori.Codeunit.al` |
-| 97018 | `WhsePickRegisterTestsori.Codeunit.al` |
-| 97019 | `WhsePutawayCreateTestsori.Codeunit.al` |
-| 97020 | `WhsePutawayRegTestsori.Codeunit.al` |
-| 97021 | `WhseShipmentTestHelperori.Codeunit.al` |
-| 97022 | `WhseReceiptTestHelperori.Codeunit.al` |
-| 97023 | `WhsePostingGateTestsori.Codeunit.al` |
-| 97024 | `WhsePostGateGrantTestsori.Codeunit.al` |
-| 97025 | `WhseGateTestori.PermissionSet.al` |
-| 97026 | `WhseWriteRestrictTestsori.Codeunit.al` |
-| 97027 | `WhseMsgContractTestsori.Codeunit.al` |
+### Changed (2026-10-19) - Activity.Get and BinContent.Get help match the code (#34)
 
-### Fixed (2026-10-13) - Icelandic warehouse refusal text and translation sync (#27, #26)
+- `Warehouse.Activity.Get` keeps documenting its identifier aliases (`activityNo`, `recordSystemId`, `id`), because the alias reading delivered by #37 reads them. Its errors chapter no longer lists `MissingParameter` (a request without an identifier reads the collection) and keeps `ConflictingIdentifiers`, which #37 answers.
+- `Warehouse.BinContent.Get` declares its optional `tableView` parameter, so a request with `tableView` no longer gets an `UnknownParameter` warning. Codeunits 10078388, 10078390 and 10078459; contract tests in 97027.
 
-- Warehouse refusals now have Icelandic translations while retaining their English text, placeholders and error codes; preview next steps are translated too. Regenerated the Icelandic XLF from compiler output with the repository generator (message codeunits 10078406–10078417; locale tests 97011, 97014 and 97018).
+### Fixed (2026-10-19) - Icelandic warehouse refusal text and translation sync (#27, #26)
 
-### Changed (2026-10-15) - Activity.Get and BinContent.Get help match the code (#34)
+- Warehouse refusal texts are translated: the Locked refusal labels of the create, post, preview, pick and put-away types now carry Icelandic text, with the English text, placeholders and error codes unchanged. `tools/Test-MixedLanguageLabels.ps1` passes.
+- `app/Translations/Bifrost Warehouse.is-IS.xlf` is regenerated from the compiler output with `tools/Update-IcelandicXlf.ps1`, and `tools/Test-IcelandicXlfInSync.ps1` passes. Locale tests in 97011, 97014 and 97018.
 
-- Activity.Get retains the aliases and conflict errors delivered by #37/#38, validates every alias before lookup, and allows identifier-free collection reads; BinContent.Get declares its existing `tableView` filter (codeunits 10078388, 10078390 and 10078459; tests 97027).
+### Fixed (2026-10-19) - Warehouse context-sensitive help host
 
-### Fixed (2026-10-13) - Strict warehouse identifier validation (#21)
-
-- Invalid request objects and non-string identifier values return structured format errors before document lookup; multiple invalid values are reported in key order (codeunits 10078390, 10078407–10078408, 10078410–10078412, 10078414–10078415, 10078417, 10078455 and 10078459; tests 97029).
-
-### Changed (2026-10-13) - Warehouse identifier contract keys (#24)
-
-- Each identifier key in the six document lookup contracts now carries its own `data.` prefix, preserving accepted keys and descriptions (codeunits 10078407–10078408, 10078410–10078412 and 10078415; tests 97027).
-
-### Fixed (2026-10-13) - Warehouse posting and put-away (#18)
-
-- Shipment and receipt posting and put-away creation support calls with Omit Commit, including returning an existing put-away.
-- Shipment and receipt previews explain how to run them when called in a rollback chain.
-- Updated codeunits 10078407, 10078408, 10078410, 10078411 and 10078415; test helpers 97021–97022 and regression tests 97028.
-- Retained behavior while clearing existing compiler diagnostics: explicit temporary declarations and test declaration/format cleanup; test filenames now match object names.
+- `contextSensitiveHelpUrl` in `app/app.json` points at `https://docs.bifrost.origo.is/{0}/help/warehouse/`. The Warehouse help pages themselves are maintained in the documentation site.
 
 ### Fixed (2026-10-16) - Raise Warehouse app version above UAT to unblock Deploy to Bifrost
 

@@ -145,9 +145,9 @@ codeunit 97027 "Whse Msg Contract Tests ori"
         Assert.AreEqual(ExpectedText, ActualText, MessageTypeName(MessageType) + ' target must match its accepted identifiers.');
     end;
 
-    /// <summary>Issue #34 AC01: Activity.Get documents only the keys it reads.</summary>
+    /// <summary>Issue #34 AC01: Activity.Get documents every identifier key it reads, including the aliases read since #37.</summary>
     [Test]
-    procedure ActivityGet_TargetListsOnlyKeysItReads()
+    procedure ActivityGet_TargetListsEveryKeyItReads()
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Contract: JsonObject;

@@ -23,8 +23,6 @@ alone is not enough.
       (`Get-AuthenticodeSignature` returns `Valid`). The CI Signed stage is deferred, so this is a
       manual step.
 - [ ] Source guards green on that commit, including the open items #24–#27 if they are wired by then.
-- [ ] `Warehouse.Receipt.Post.Preview` is renamed to `Warehouse.Receipt.PreviewPost` (#40) before the
-      first AppSource version, so no obsolete alias has to be carried.
 - [ ] Unit tests executed on `bc28-w1` and `bc28-is`; message types smoke-tested through the MCP
       server in LCIDs 1033 and 1039.
 

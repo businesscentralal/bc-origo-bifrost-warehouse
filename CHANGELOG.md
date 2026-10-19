@@ -14,6 +14,12 @@
 - README follows the Origo template. The AppSource listing, release checklist and market list are in `app/docs/appsource/`; screenshots and the product sheet still need to be made.
 - Source Guards now run the contract parameter keys (#24) and mixed-language labels (#27) guards in full, and the Icelandic xlf guard's self-test (#26; the full xlf comparison needs a compile). Help links (#25) stay unwired: the app has no pages, so the documentation site has no help folder for it (bifrost#109).
 
+### Changed (2026-10-19) - Three-part receipt preview name (#40)
+
+- `Warehouse.Receipt.Post.Preview` is renamed `Warehouse.Receipt.PreviewPost`, the same `Domain.Entity.Action` form as `Warehouse.Shipment.PreviewPost`. The enum ordinal (10078401) and the implementation (`Whse Rcpt Post Prev. Impl ori`, 10078411) are unchanged, so stored queue entries keep working; callers that send the old name must use the new one. The app has no published AppSource baseline yet, so the old name is not kept as an alias.
+- The receipt posting selection description (en-US and is-IS), its related types and the inbound workflow in `Whse Contract Parts ori` name the new type; the Icelandic XLF is regenerated and the README lists the new name.
+- `tools/Test-MessageTypeNames.ps1` is copied unchanged from Foundation (core#1037). The Source Guards workflow runs its self-test and checks the message type names of `app/` (test apps are exempt). `AGENTS.md` states the rule.
+- Contract tests in 97027 check the ordinal, the new name and the help references in 1033 and 1039; tests 97016, 97023, 97028 and 97029 use the new name.
 ### Fixed (2026-10-19) - Warehouse posting, put-away and previews with Omit Commit (#18)
 
 - `Warehouse.Shipment.Post` and `Warehouse.Receipt.Post` run inside the caller's transaction when called with Omit Commit, and a Business Central posting error is raised as it is; without Omit Commit a posting error is still answered as `status = Error`.

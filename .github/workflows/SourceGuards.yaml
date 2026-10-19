@@ -4,7 +4,8 @@ name: Source Guards
 # bc-origo-bifrost-core/tools, 05.10.2026): an error response never carries the AL call stack, every caller-supplied
 # tableView is validated before SetView, the parameter names a contract declares are the keys the code reads and the
 # other way round, nothing is declared obsolete, every page, query and report is granted by an assignable permission
-# set, no answer mixes a Locked English sentence with translated text, and every Icelandic keyword list is complete.
+# set, no answer mixes a Locked English sentence with translated text, every Icelandic keyword list is complete, and
+# every message type name of the shipped app has exactly three parts (Domain.Entity.Action, core#1037).
 # Contract parameter keys (#24) and mixed-language labels (#27) run in full since the contract batch (#61) made main clean.
 # The Icelandic xlf check (tools/Test-IcelandicXlfInSync.ps1, #26) needs the compiler's g.xlf: its self-test runs here,
 # the full comparison is run by hand after a compile before a PR.
@@ -168,3 +169,17 @@ jobs:
       - name: Every Icelandic keyword list is complete
         shell: pwsh
         run: ./tools/Test-IcelandicKeywordCounts.ps1
+
+  MessageTypeNames:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: The guard checks itself
+        shell: pwsh
+        run: ./tools/Test-MessageTypeNames.ps1 -SelfTest
+
+      - name: Shipped message type names have exactly three parts
+        shell: pwsh
+        run: ./tools/Test-MessageTypeNames.ps1 -AppFolder ./app

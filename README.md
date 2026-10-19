@@ -35,7 +35,7 @@ The list is the enum extension `Whse MsgType EnumExt ori` in
 | `Warehouse.Shipment.PreviewPost` | Outbound | Preview posting a warehouse shipment (ship and invoice), rolled back | `BIFROST Read ori` |
 | `Warehouse.Shipment.Post` | Inbound | Post a warehouse shipment, optionally invoicing its source documents | `BIFROST WhsePost ori`; `BIFROST WhseInv ori` when `invoice` is true |
 | `Warehouse.Receipt.Create` | Inbound | Create a warehouse receipt from released source documents | `BIFROST Full ori` |
-| `Warehouse.Receipt.Post.Preview` | Outbound | Preview posting a warehouse receipt, rolled back (to be renamed `Warehouse.Receipt.PreviewPost`, #40) | `BIFROST Read ori` |
+| `Warehouse.Receipt.PreviewPost` | Outbound | Preview posting a warehouse receipt, rolled back | `BIFROST Read ori` |
 | `Warehouse.Receipt.Post` | Inbound | Post a warehouse receipt (received, not invoiced) | `BIFROST WhsePost ori` |
 | `Warehouse.Pick.Create` | Inbound | Create a pick for a warehouse shipment | `BIFROST Full ori` |
 | `Warehouse.Pick.Register` | Inbound | Register a pick | `BIFROST WhsePost ori` |
@@ -221,7 +221,7 @@ Runner, Any and Library Variable Storage.
 - Source guards (`.github/workflows/SourceGuards.yaml`): no call stack in responses, validated
   `tableView`, nothing obsolete, permission coverage, Icelandic keyword counts, unique object and
   enum value IDs, build inputs (allocations and the Foundation floor) and the compiler symbol-alias
-  gate, contract parameter keys (#24) and mixed-language labels (#27). Open guard items:
+  gate, contract parameter keys (#24), mixed-language labels (#27) and three-part message type names. Open guard items:
   - #26 Icelandic translation: Source Guards run only the self-test. After a compile, run
     `tools/Update-IcelandicXlf.ps1`, check `tools/Test-IcelandicXlfInSync.ps1` and commit
     `app/Translations/Bifrost Warehouse.is-IS.xlf`.

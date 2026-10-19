@@ -15,6 +15,18 @@
 - Generic `Data.Records.Set` writes are blocked on Bin (table), Bin Content Default, the movement worksheet quantity and bins, and the activity line quantity, bin, zone, lot, serial and expiration fields of the dedicated activity types (`Whse Data Restrict ori`).
 - The new types read the request through the shared lookup reader, so `data` that is not a JSON object answers `InvalidParameterFormat` instead of a runtime error (#21 pattern). Under Omit Commit the isolated run is called without a return value, like the #18 types.
 - Tests 97080-97091, plus posting-gate deny and grant tests for the four new post and register types in 97023 and 97024.
+### Changed (2026-10-19) - AppSource preparation
+
+- The app and the test app now require Bifrost Foundation **28.0.3.530** (was 28.0.1.0) and `application` **28.3.0.0** (was 28.0.0.0). Both compile against the Foundation 28.0.3 release package with CodeCop, UICop and AppSourceCop at 0 errors and 0 warnings. CI probes that release (`release_status: release`, `version: 28.0.3`) instead of the latest build.
+- App and test app version **28.1.0.0** (UAT holds 28.0.19.x).
+- `app.json`: brief and description cover the whole app; help, privacy statement and EULA point at docs.bifrost.origo.is; `contextSensitiveHelpUrl` is `https://docs.bifrost.origo.is/{0}/help/warehouse/` (#25). The obsolete `NoImplicitWith` feature is removed. `app/AppSourceCop.json` declares publisher `Origo` and mandatory suffix `ori`. The ID range stays 10078385-10078484.
+- `BIFROST WhsePost ori` (10078454) and `BIFROST WhseInv ori` (10078457) stay assignable: they are the only grants of the posting and invoicing gates. AGENTS.md no longer says the app must not have an assignable permission set.
+- The build runs CodeCop and UICop on the app and the test app, AppSourceCop on the test app, and fails on warnings. The test app gets `test/AppSourceCop.json` and suppresses the AppSource-only manifest rules AS0015, AS0051, AS0054, AS0084 and AS0092, as in the sibling apps. `fullBuildPatterns` add `.AL-Go/**` and `tools/**`.
+- The AppSource build gate from Bifrost Inventory / Attachments (`tools/Assert-AppSourceBuild.ps1`, `tools/appsource_gate.py`, `tools/stage_foundation_inputs.py`, the `.AL-Go` compile hooks and the Pipeline stage in `_BuildALGoProject.yaml`) runs in every build; see `tools/AppSourceBuildGate.md`. The Signed stage stays deferred. `*.al` files are checked out with LF so source hashes match on Windows and Linux.
+- Source Guards add unique object/enum value IDs (`tools/Test-UniqueObjectIds.ps1`), build inputs (`tools/check_build_inputs.py`: allocations and the Foundation floor) and the compiler symbol-alias gate.
+- README follows the Origo template. The AppSource listing, release checklist and market list are in `app/docs/appsource/`; screenshots and the product sheet still need to be made.
+- Source Guards now run the contract parameter keys (#24) and mixed-language labels (#27) guards in full, and the Icelandic xlf guard's self-test (#26; the full xlf comparison needs a compile). Help links (#25) stay unwired: the app has no pages, so the documentation site has no help folder for it (bifrost#109).
+
 ### Changed (2026-10-19) - Three-part receipt preview name (#40)
 
 - `Warehouse.Receipt.Post.Preview` is renamed `Warehouse.Receipt.PreviewPost`, the same `Domain.Entity.Action` form as `Warehouse.Shipment.PreviewPost`. The enum ordinal (10078401) and the implementation (`Whse Rcpt Post Prev. Impl ori`, 10078411) are unchanged, so stored queue entries keep working; callers that send the old name must use the new one. The app has no published AppSource baseline yet, so the old name is not kept as an alias.

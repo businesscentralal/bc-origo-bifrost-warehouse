@@ -8,7 +8,7 @@ using Microsoft.Warehouse.Document;
 using System.TestLibraries.Utilities;
 
 /// <summary>
-/// Unit tests for Warehouse.Receipt.Post.Preview message type.
+/// Unit tests for Warehouse.Receipt.PreviewPost message type.
 /// </summary>
 codeunit 97016 "Whse Rcpt Post Prev Tests ori"
 {
@@ -47,7 +47,7 @@ codeunit 97016 "Whse Rcpt Post Prev Tests ori"
         ReceiptNoBefore := WhseReceiptHeader."No.";
 
         RequestJson.WriteTo(RequestText);
-        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Receipt.Post.Preview", WhseReceiptHeader."No.", RequestText, ResponseJson, false), 'Response JSON should parse');
+        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Receipt.PreviewPost", WhseReceiptHeader."No.", RequestText, ResponseJson, false), 'Response JSON should parse');
         Assert.IsTrue(ResponseJson.Get('status', StatusToken), 'status missing');
         Assert.AreEqual('Success', StatusToken.AsValue().AsText(), 'Status should be Success');
         Assert.IsTrue(ResponseJson.Get('predictedNumbers', PredictedToken), 'predictedNumbers missing');
@@ -73,7 +73,7 @@ codeunit 97016 "Whse Rcpt Post Prev Tests ori"
         Initialize();
 
         RequestJson.WriteTo(RequestText);
-        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Receipt.Post.Preview", '', RequestText, ResponseJson, false), 'Response JSON should parse');
+        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Receipt.PreviewPost", '', RequestText, ResponseJson, false), 'Response JSON should parse');
         Assert.IsTrue(ResponseJson.Get('status', StatusToken), 'status missing');
         Assert.AreEqual('Error', StatusToken.AsValue().AsText(), 'Status should be Error');
     end;
@@ -104,7 +104,7 @@ codeunit 97016 "Whse Rcpt Post Prev Tests ori"
         Commit();
 
         RequestJson.WriteTo(RequestText);
-        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Receipt.Post.Preview", WhseReceiptHeader."No.", RequestText, ResponseJson, false), 'Response JSON should parse');
+        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Receipt.PreviewPost", WhseReceiptHeader."No.", RequestText, ResponseJson, false), 'Response JSON should parse');
         Assert.IsTrue(ResponseJson.Get('status', Token), 'status missing');
         Assert.AreEqual('Error', Token.AsValue().AsText(), 'Never Success when nothing would be received');
         Assert.IsTrue(ResponseJson.Get('code', Token), 'code');

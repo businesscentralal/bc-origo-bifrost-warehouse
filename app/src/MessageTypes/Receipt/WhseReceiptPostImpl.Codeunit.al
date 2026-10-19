@@ -47,7 +47,7 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
 
     procedure GetSelectionDescription(): Text
     var
-        SelectionLbl: Label 'Irreversible. Posts an existing Warehouse Receipt; use Warehouse.Receipt.Post.Preview to inspect the result first.', Comment = 'is-IS=Óafturkræft. Bókar fyrirliggjandi vöruhúsamóttöku; notaðu Warehouse.Receipt.Post.Preview til að skoða niðurstöðuna fyrst.';
+        SelectionLbl: Label 'Irreversible. Posts an existing Warehouse Receipt; use Warehouse.Receipt.PreviewPost to inspect the result first.', Comment = 'is-IS=Óafturkræft. Bókar fyrirliggjandi vöruhúsamóttöku; notaðu Warehouse.Receipt.PreviewPost til að skoða niðurstöðuna fyrst.';
     begin
         exit(SelectionLbl);
     end;
@@ -122,7 +122,7 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        Related.Add(ContractMgt.RelatedEntry('Warehouse.Receipt.Post.Preview', 'Use it to inspect predicted entries without committing before posting.'));
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.Receipt.PreviewPost', 'Use it to inspect predicted entries without committing before posting.'));
         Related.Add(ContractMgt.RelatedEntry('Warehouse.Putaway.Create', 'Use it after posting when the received goods require put-away.'));
         exit(true);
     end;

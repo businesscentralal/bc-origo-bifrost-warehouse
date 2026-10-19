@@ -388,9 +388,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Post Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3670300571 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Irreversible. Posts an existing Warehouse Receipt; use Warehouse.Receipt.Post.Preview to inspect the result first.</source>
-          <target>Óafturkræft. Bókar fyrirliggjandi vöruhúsamóttöku; notaðu Warehouse.Receipt.Post.Preview til að skoða niðurstöðuna fyrst.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Óafturkræft. Bókar fyrirliggjandi vöruhúsamóttöku; notaðu Warehouse.Receipt.Post.Preview til að skoða niðurstöðuna fyrst.</note>
+          <source>Irreversible. Posts an existing Warehouse Receipt; use Warehouse.Receipt.PreviewPost to inspect the result first.</source>
+          <target>Óafturkræft. Bókar fyrirliggjandi vöruhúsamóttöku; notaðu Warehouse.Receipt.PreviewPost til að skoða niðurstöðuna fyrst.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Óafturkræft. Bókar fyrirliggjandi vöruhúsamóttöku; notaðu Warehouse.Receipt.PreviewPost til að skoða niðurstöðuna fyrst.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Post Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 1135528022 - NamedType 3506339174" size-unit="char" translate="yes" xml:space="preserve">

@@ -68,7 +68,7 @@ codeunit 97028 "Whse Omit Commit Tests ori"
         QuantityToReceive := ReceiptLine."Qty. to Receive";
         Assert.IsTrue(QuantityToReceive > 0, 'The receipt must be postable before preview is refused.');
 
-        Assert.IsTrue(ReceiptHelper.RunMessage(Enum::"Message Type ori"::"Warehouse.Receipt.Post.Preview", ReceiptHeader."No.", '', ResponseJson, true), 'Response must parse.');
+        Assert.IsTrue(ReceiptHelper.RunMessage(Enum::"Message Type ori"::"Warehouse.Receipt.PreviewPost", ReceiptHeader."No.", '', ResponseJson, true), 'Response must parse.');
         AssertPreviewRefused(ResponseJson);
         Assert.IsTrue(ReceiptHeader.Get(ReceiptHeader."No."), 'Refused preview must preserve the receipt header.');
         ReceiptLine.Get(ReceiptLine."No.", ReceiptLine."Line No.");

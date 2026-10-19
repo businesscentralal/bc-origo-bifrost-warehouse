@@ -65,9 +65,11 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
 
     procedure GetTarget(var Target: JsonArray): Boolean
     var
-        Parts: Codeunit "Whse Contract Parts ori";
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        Target := Parts.RecordTarget('Warehouse Receipt Header', 'systemId, recordSystemId, id, receiptNo, no');
+        Target.Add(ContractMgt.TargetEntry('subject', 'guid', 'The SystemId of the Warehouse Receipt Header.'));
+        Target.Add(ContractMgt.TargetEntry('subject', 'document no.', 'The No. of the Warehouse Receipt Header.'));
+        Target.Add(ContractMgt.TargetEntry('data.systemId, data.recordSystemId, data.id, data.receiptNo, data.no', 'guid or document no.', 'The identifier keys accepted for the Warehouse Receipt Header. Every supplied identifier is tried; conflicting identifiers are refused.'));
         exit(true);
     end;
 
@@ -160,19 +162,21 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
         WhseReceiptHeader: Record "Warehouse Receipt Header";
         WhseReceiptLine: Record "Warehouse Receipt Line";
         PostedWhseReceiptHeader: Record "Posted Whse. Receipt Header";
+        WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         WhsePostReceipt: Codeunit "Whse.-Post Receipt";
         WhsePostingGate: Codeunit "Whse Posting Gate ori";
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
         PostedDocsArray: JsonArray;
-        NoLinesToPostErr: Label 'Warehouse Receipt %1 has no lines to post.', Comment = '%1 = Whse. Receipt No.', Locked = true;
+        NoLinesToPostErr: Label 'Warehouse Receipt %1 has no lines to post.', Comment = '%1 = Whse. Receipt No., is-IS=Vöruhúsamóttaka %1 hefur engar línur til bókunar.';
     begin
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
         if not WhsePostingGate.AssertCanPost(Argument) then
             exit;
 
-        RequestJson := Argument.GetRequestJson();
+        if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,receiptNo=no,no=no', RequestJson) then
+            exit;
 
         if not FindWhseReceiptHeader(Argument, WhseReceiptHeader) then
             exit;
@@ -184,10 +188,14 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
         end;
         WhseReceiptLine.FindFirst();
 
-        if not WhsePostReceipt.Run(WhseReceiptLine) then begin
-            Argument.RespondWithError(GetLastErrorText());
-            exit;
-        end;
+        // Codeunit.Run with a return value is illegal inside the Omit Commit write transaction (#18).
+        if Argument."Omit Commit" then
+            WhsePostReceipt.Run(WhseReceiptLine)
+        else
+            if not WhsePostReceipt.Run(WhseReceiptLine) then begin
+                Argument.RespondWithError(GetLastErrorText());
+                exit;
+            end;
 
         ResponseJson.Add('status', 'Success');
         ResponseJson.Add('receiptNo', WhseReceiptHeader."No.");

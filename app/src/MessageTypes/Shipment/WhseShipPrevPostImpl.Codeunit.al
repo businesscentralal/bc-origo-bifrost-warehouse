@@ -69,9 +69,11 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
 
     procedure GetTarget(var Target: JsonArray): Boolean
     var
-        Parts: Codeunit "Whse Contract Parts ori";
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        Target := Parts.RecordTarget('Warehouse Shipment Header', 'systemId, recordSystemId, id, shipmentNo, no');
+        Target.Add(ContractMgt.TargetEntry('subject', 'guid', 'The SystemId of the Warehouse Shipment Header.'));
+        Target.Add(ContractMgt.TargetEntry('subject', 'document no.', 'The No. of the Warehouse Shipment Header.'));
+        Target.Add(ContractMgt.TargetEntry('data.systemId, data.recordSystemId, data.id, data.shipmentNo, data.no', 'guid or document no.', 'The identifier keys accepted for the Warehouse Shipment Header. Every supplied identifier is tried; conflicting identifiers are refused.'));
         exit(true);
     end;
 
@@ -109,6 +111,7 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Parts: Codeunit "Whse Contract Parts ori";
     begin
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, 'Posting preview cannot run inside a rollback chain (Omit Commit). Run this message type with Omit Commit set to false.', 'Call Dispatcher.Execute with OmitCommit = false, or use the HTTP/MCP API.'));
         Parts.AddLookupErrors(Errors, 'Warehouse Shipment Header');
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::NothingToPreview, 'The Warehouse Shipment has no lines or no quantities to post.', 'Add lines and quantities to ship.'));
         Parts.AddBusinessCentralError(Errors, 'invalid quantities, posting setup or source-document state');
@@ -172,6 +175,7 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
         WhseShipmentLine: Record "Warehouse Shipment Line";
         GLSetup: Record "General Ledger Setup";
         TempDocumentEntry: Record "Document Entry" temporary;
+        WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         PostingPreviewEventHandler: Codeunit "Posting Preview Event Handler";
         PostingPreviewHelper: Codeunit "Posting Preview Helper ori";
         RequestJson: JsonObject;
@@ -188,14 +192,21 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
         Summary: Text;
         PreviewErrorText: Text;
         PreviewFieldNames: List of [Text];
-        NoLinesToPostErr: Label 'Warehouse Shipment %1 has no lines to post.', Comment = '%1 = Whse. Shipment No.', Locked = true;
+        NoLinesToPostErr: Label 'Warehouse Shipment %1 has no lines to post.', Comment = '%1 = Whse. Shipment No., is-IS=Vöruhúsaafhending %1 hefur engar línur til bókunar.';
         PreviewFailedErr: Label 'Posting preview failed and no entries were captured. The shipment cannot be posted in its current state.', Comment = 'is-IS=Bókunarforsýning mistókst og engar færslur voru teknar. Sendingin getur ekki verið bókuð í núverandi stöðu.';
         NothingToPostNextStepTok: Label 'No shipment line has Qty. to Ship. Set quantities on the shipment lines.', Comment = 'is-IS=Engin sendingarlína hefur Magn til afhendingar. Setjið magn á sendingarlínurnar.';
+        OmitCommitPreviewErr: Label 'Posting preview cannot run inside a rollback chain (Omit Commit). Run this message type with Omit Commit set to false.', Comment = 'is-IS=Ekki er hægt að forskoða bókun innan afturköllunarkeðju (Omit Commit). Keyrðu þessa skilaboðategund með Omit Commit stillt á false.';
+        OmitCommitPreviewNextStepTok: Label 'Call Dispatcher.Execute with OmitCommit = false, or use the HTTP/MCP API.', Comment = 'is-IS=Kallaðu á Dispatcher.Execute með OmitCommit = false eða notaðu HTTP/MCP API.';
     begin
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
+        if Argument."Omit Commit" then begin
+            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, OmitCommitPreviewErr, '', '', '', OmitCommitPreviewNextStepTok);
+            exit;
+        end;
 
-        RequestJson := Argument.GetRequestJson();
+        if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,shipmentNo=no,no=no', RequestJson) then
+            exit;
         if not FindWhseShipmentHeader(Argument, WhseShipmentHeader) then
             exit;
 

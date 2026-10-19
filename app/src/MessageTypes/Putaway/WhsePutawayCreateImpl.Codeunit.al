@@ -65,9 +65,11 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
 
     procedure GetTarget(var Target: JsonArray): Boolean
     var
-        Parts: Codeunit "Whse Contract Parts ori";
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        Target := Parts.RecordTarget('Posted Whse. Receipt Header', 'systemId, recordSystemId, id, postedWhseReceiptNo, receiptNo, no');
+        Target.Add(ContractMgt.TargetEntry('subject', 'guid', 'The SystemId of the Posted Whse. Receipt Header.'));
+        Target.Add(ContractMgt.TargetEntry('subject', 'document no.', 'The No. of the Posted Whse. Receipt Header.'));
+        Target.Add(ContractMgt.TargetEntry('data.systemId, data.recordSystemId, data.id, data.postedWhseReceiptNo, data.receiptNo, data.no', 'guid or document no.', 'The identifier keys accepted for the Posted Whse. Receipt Header. Every supplied identifier is tried; conflicting identifiers are refused.'));
         exit(true);
     end;
 
@@ -171,6 +173,7 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
     var
         PostedWhseReceiptHeader: Record "Posted Whse. Receipt Header";
         WarehouseActivityHeader: Record "Warehouse Activity Header";
+        WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         RequestValueReader: Codeunit "Request Value Reader ori";
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
@@ -184,12 +187,13 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
         PutawayWasCreated: Boolean;
         AlreadyExisted: Boolean;
         ReportErrorText: Text;
-        FieldWriteRestrictedErr: Label 'Field %1 is restricted for write on table %2.', Comment = '%1 = field caption, %2 = table caption', Locked = true;
-        UnsupportedOptionErr: Label '%1 = true is not supported by this API version. Only the BC defaults (false) are honoured.', Comment = '%1 = option name', Locked = true;
+        FieldWriteRestrictedErr: Label 'Field %1 is restricted for write on table %2.', Comment = '%1 = field caption, %2 = table caption, is-IS=Ekki er heimilt að skrifa í reitinn %1 í töflunni %2.';
+        UnsupportedOptionErr: Label '%1 = true is not supported by this API version. Only the BC defaults (false) are honoured.', Comment = '%1 = option name, is-IS=%1 = true er ekki stutt í þessari útgáfu API. Aðeins sjálfgefin gildi BC (false) eru notuð.';
     begin
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
-        RequestJson := Argument.GetRequestJson();
+        if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,postedWhseReceiptNo=no,receiptNo=no,no=no', RequestJson) then
+            exit;
 
         if not FindPostedWhseReceiptHeader(Argument, PostedWhseReceiptHeader) then
             exit;
@@ -232,8 +236,16 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
 
         // Delegate the report invocation to an isolated codeunit so report-time errors are
         // caught here without aborting the outer message-task transaction.
-        PutawayWasCreated := Codeunit.Run(Codeunit::"Whse Putaway Create Proc. ori", PostedWhseReceiptHeader);
-        ReportErrorText := GetLastErrorText();
+        // Codeunit.Run with a return value is illegal inside the Omit Commit write transaction (#18).
+        if Argument."Omit Commit" then begin
+            if not FindCreatedPutaway(PostedWhseReceiptHeader."No.", WarehouseActivityHeader) then begin
+                Codeunit.Run(Codeunit::"Whse Putaway Create Proc. ori", PostedWhseReceiptHeader);
+                PutawayWasCreated := true;
+            end;
+        end else begin
+            PutawayWasCreated := Codeunit.Run(Codeunit::"Whse Putaway Create Proc. ori", PostedWhseReceiptHeader);
+            ReportErrorText := GetLastErrorText();
+        end;
 
         // Locate the put-away for this Posted Whse. Receipt. A put-away may already exist even
         // when the report failed: on a Require Put-away location that is NOT a "Use Put-away
@@ -282,6 +294,7 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
     begin
         // Put-away activity lines reference the source Posted Whse. Receipt via
         // "Whse. Document Type" = Receipt and "Whse. Document No.".
+        WarehouseActivityLine.SetLoadFields("No.");
         WarehouseActivityLine.SetRange("Activity Type", WarehouseActivityLine."Activity Type"::"Put-away");
         WarehouseActivityLine.SetRange("Whse. Document Type", WarehouseActivityLine."Whse. Document Type"::Receipt);
         WarehouseActivityLine.SetRange("Whse. Document No.", PostedWhseReceiptNo);
@@ -373,7 +386,7 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
         Names: List of [Text];
         Idx: Integer;
         Builder: TextBuilder;
-        InvalidErr: Label 'sortingMethod ''%1'' is not valid. Expected one of: %2.', Comment = '%1 = supplied value, %2 = comma list of valid values', Locked = true;
+        InvalidErr: Label 'sortingMethod ''%1'' is not valid. Expected one of: %2.', Comment = '%1 = supplied value, %2 = comma list of valid values, is-IS=sortingMethod ''%1'' er ekki gilt. Væntanlegt er eitt af: %2.';
     begin
         Names := Enum::"Whse. Activity Sorting Method".Names();
         for Idx := 1 to Names.Count() do begin
@@ -386,7 +399,7 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
 
     local procedure NoPutawayCreatedErr() Result: Text
     var
-        Err: Label 'No Warehouse Put-away was created for Posted Whse. Receipt %1. There may be nothing to put away, the location may not require put-away, or all lines may already be completely put away.', Comment = '%1 = posted receipt no.', Locked = true;
+        Err: Label 'No Warehouse Put-away was created for Posted Whse. Receipt %1. There may be nothing to put away, the location may not require put-away, or all lines may already be completely put away.', Comment = '%1 = posted receipt no., is-IS=Enginn vöruhúsafrágangur var stofnaður fyrir bókaða vöruhúsamóttöku %1. Hugsanlega er ekkert til frágangs, birgðageymslan krefst ekki frágangs eða allar línur eru þegar fullfrágengnar.';
     begin
         Result := Err;
     end;

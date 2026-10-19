@@ -5,11 +5,11 @@ name: Source Guards
 # tableView is validated before SetView, the parameter names a contract declares are the keys the code reads and the
 # other way round, nothing is declared obsolete, every page, query and report is granted by an assignable permission
 # set, no answer mixes a Locked English sentence with translated text, and every Icelandic keyword list is complete.
-# Contract parameter keys (#24) and mixed-language labels (#27) are copied in tools/ but not run here yet:
-# the shared contract chapters declare keys individual list types do not read, and several Locked
-# telemetry and refusal labels predate the Foundation rule. Enabling those two jobs would fail on main.
-# The Icelandic xlf check (tools/Test-IcelandicXlfInSync.ps1, #26) needs a build and is run by hand before a PR.
-# Help links (tools/Test-HelpLinks.ps1, #25) stay unwired until businesscentralal/bifrost main has help/warehouse/.
+# Contract parameter keys (#24) and mixed-language labels (#27) run in full since the contract batch (#61) made main clean.
+# The Icelandic xlf check (tools/Test-IcelandicXlfInSync.ps1, #26) needs the compiler's g.xlf: its self-test runs here,
+# the full comparison is run by hand after a compile before a PR.
+# Help links (tools/Test-HelpLinks.ps1, #25) stay unwired: the app has no pages and the docs site creates no
+# help/warehouse folder for an app without pages (bifrost#109).
 # Unique object IDs, build inputs and the symbol-alias gate were ported from Bifrost Inventory/Attachments (19.10.2026);
 # the AppSource build gate itself runs inside the AL-Go build (tools/AppSourceBuildGate.md).
 
@@ -116,6 +116,44 @@ jobs:
         run: |
           python3 -m unittest discover -s tools/tests -p test_symbol_duplicates.py -v
           python3 -m unittest discover -s tools/tests -p test_foundation_restore.py -v
+
+  ContractParameterKeys:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: The guard checks itself
+        shell: pwsh
+        run: ./tools/Test-ContractParameterKeys.ps1 -SelfTest
+
+      - name: Every contract parameter is read and every read key is declared
+        shell: pwsh
+        run: ./tools/Test-ContractParameterKeys.ps1
+
+  MixedLanguageLabels:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: The guard checks itself
+        shell: pwsh
+        run: ./tools/Test-MixedLanguageLabels.ps1 -SelfTest
+
+      - name: No answer mixes a Locked English sentence with translated text
+        shell: pwsh
+        run: ./tools/Test-MixedLanguageLabels.ps1
+
+  IcelandicXlfInSync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: The xlf guard checks itself (the full check needs a compile)
+        shell: pwsh
+        run: ./tools/Test-IcelandicXlfInSync.ps1 -SelfTest
 
   IcelandicKeywordCounts:
     runs-on: ubuntu-latest

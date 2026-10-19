@@ -221,10 +221,9 @@ Runner, Any and Library Variable Storage.
 - Source guards (`.github/workflows/SourceGuards.yaml`): no call stack in responses, validated
   `tableView`, nothing obsolete, permission coverage, Icelandic keyword counts, unique object and
   enum value IDs, build inputs (allocations and the Foundation floor) and the compiler symbol-alias
-  gate. Open guard items:
-  - #24 contract parameter keys and #27 mixed-language labels: the guards are in `tools/` but not
-    wired in yet.
-  - #26 Icelandic translation: after a compile, run `tools/Update-IcelandicXlf.ps1` and commit
+  gate, contract parameter keys (#24) and mixed-language labels (#27). Open guard items:
+  - #26 Icelandic translation: Source Guards run only the self-test. After a compile, run
+    `tools/Update-IcelandicXlf.ps1`, check `tools/Test-IcelandicXlfInSync.ps1` and commit
     `app/Translations/Bifrost Warehouse.is-IS.xlf`.
   - #25 help links: not wired in. The app has no pages, and the documentation site creates no
     help folder for an app without pages, so `tools/Test-HelpLinks.ps1` would need to accept an

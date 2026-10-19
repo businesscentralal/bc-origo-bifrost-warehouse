@@ -263,6 +263,18 @@ codeunit 97022 "Whse Receipt Test Helper ori"
     /// <param name="ResponseJson">Receives the parsed response JSON.</param>
     /// <returns>True when the response parsed as JSON.</returns>
     internal procedure RunMessage(MessageType: Enum "Message Type ori"; Subject: Text; RequestText: Text; var ResponseJson: JsonObject): Boolean
+    begin
+        exit(RunMessage(MessageType, Subject, RequestText, ResponseJson, true));
+    end;
+
+    /// <summary>Dispatches a message with an explicit transaction mode.</summary>
+    /// <param name="MessageType">The message type to run.</param>
+    /// <param name="Subject">The message subject.</param>
+    /// <param name="RequestText">The request JSON.</param>
+    /// <param name="ResponseJson">Receives the parsed response.</param>
+    /// <param name="OmitCommit">True to run inside the caller transaction.</param>
+    /// <returns>True when the response parses as JSON.</returns>
+    internal procedure RunMessage(MessageType: Enum "Message Type ori"; Subject: Text; RequestText: Text; var ResponseJson: JsonObject; OmitCommit: Boolean): Boolean
     var
         Dispatcher: Codeunit "Dispatcher ori";
         RequestContent: BigText;
@@ -285,7 +297,7 @@ codeunit 97022 "Whse Receipt Test Helper ori"
             RequestContent,
             ResponseContent,
             ResponseContentType,
-            false);
+            OmitCommit);
         if ResponseContent.Length() = 0 then
             exit(false);
         ResponseContent.GetSubText(ResponseText, 1, ResponseContent.Length());

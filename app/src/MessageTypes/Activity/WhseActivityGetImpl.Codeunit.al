@@ -140,7 +140,8 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
         ConflictWhenLbl: Label 'Two supplied identifiers point to different warehouse activities.', Comment = 'is-IS=Tvö innsend auðkenni vísa á mismunandi vöruhúsavirkni.';
         ConflictNextStepLbl: Label 'Send one identifier or identifiers for the same warehouse activity.', Comment = 'is-IS=Sendu eitt auðkenni eða auðkenni fyrir sömu vöruhúsavirkni.';
     begin
-        Parts.AddLookupErrors(Errors, 'Warehouse Activity Header');
+        Parts.AddOptionalLookupErrors(Errors, 'Warehouse Activity Header');
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::ConflictingIdentifiers, ConflictWhenLbl, ConflictNextStepLbl));
         for Index := 0 to Errors.Count() - 1 do begin
             Errors.Get(Index, Token);
             ErrorEntry := Token.AsObject();
@@ -212,6 +213,7 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
     var
         ActivityHeader: Record "Warehouse Activity Header";
         ActivityLine: Record "Warehouse Activity Line";
+        WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
         ResultArray: JsonArray;
@@ -239,7 +241,8 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
 
-        RequestJson := Argument.GetRequestJson();
+        if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,no=no,activityNo=no', RequestJson) then
+            exit;
         Argument.EvaluateSkipTake(RequestJson, Skip, Take);
 
         if TryGetRequestText(RequestJson, 'activityType', ActivityTypeText) then begin

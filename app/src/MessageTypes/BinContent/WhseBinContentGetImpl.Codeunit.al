@@ -71,6 +71,7 @@ codeunit 10078388 "Whse BinContent Get Impl ori" implements "Msg Interface ori",
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Parts: Codeunit "Whse Contract Parts ori";
     begin
+        Parameters.Add(ContractMgt.Parameter('tableView', 'string', false, 'Optional Business Central table view, for example WHERE(Quantity=FILTER(>0)). An unknown field returns InvalidFilterField. Write dates as YYYY-MM-DD and decimals with a dot.'));
         Parts.AddPagingParameters(Parameters);
         Parameters.Add(ContractMgt.Parameter('itemNo', 'string', false, 'Filter by item number.'));
         Parameters.Add(ContractMgt.Parameter('locationCode', 'string', false, 'Filter by location code.'));
@@ -195,10 +196,11 @@ codeunit 10078388 "Whse BinContent Get Impl ori" implements "Msg Interface ori",
 
         RecRef.Open(Database::"Bin Content");
         RecRef.ReadIsolation := IsolationLevel::ReadCommitted;
-        if not Argument.ApplyTableView(RequestJson, RecRef) then begin
-            RecRef.Close();
-            exit;
-        end;
+        if RequestJson.Contains('tableView') then
+            if not Argument.ApplyTableView(RequestJson, RecRef) then begin
+                RecRef.Close();
+                exit;
+            end;
         RecRef.SetTable(BinContent);
         RecRef.Close();
 

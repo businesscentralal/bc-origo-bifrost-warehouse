@@ -226,8 +226,9 @@ Runner, Any and Library Variable Storage.
     wired in yet.
   - #26 Icelandic translation: after a compile, run `tools/Update-IcelandicXlf.ps1` and commit
     `app/Translations/Bifrost Warehouse.is-IS.xlf`.
-  - #25 help links: wired in once businesscentralal/bifrost main has `help/warehouse/` in both
-    locales.
+  - #25 help links: not wired in. The app has no pages, and the documentation site creates no
+    help folder for an app without pages, so `tools/Test-HelpLinks.ps1` would need to accept an
+    app with zero pages.
 - Standards: [Origo BC Development Standards](https://github.com/OrigoSoftwareSolutions/bc-dev-standards).
   Project rules are in `.claude/CLAUDE.md`; agent context is in [AGENTS.md](AGENTS.md).
 
@@ -252,9 +253,9 @@ Message-type contracts are also served by the app at runtime through `Help.Bifro
 
 `app.json` declares `contextSensitiveHelpUrl` = `https://docs.bifrost.origo.is/{0}/help/warehouse/`
 and `supportedLocales` `["en-US", "is-IS"]`. The app has no pages, so no page declares a
-`ContextSensitiveHelpPage` slug. The documentation site carries a `help/warehouse` landing page in
-both locales so that the help folder exists for the HelpLinks guard (#25). A page added later needs
-a slug and both locale pages in businesscentralal/bifrost.
+`ContextSensitiveHelpPage` slug, and the documentation site has no help instance for Warehouse (its
+rules allow no help page without a Business Central page). A page added later needs a slug and both
+locale pages in businesscentralal/bifrost.
 
 ---
 

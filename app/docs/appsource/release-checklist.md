@@ -49,7 +49,7 @@ alone is not enough.
 | Logo | `listing/logo-216.png` (216 × 216, scaled from `app/assets/Logo250x250.png`) | Offer owner: rights and branding |
 | Screenshots | None yet; the list is in [listing/screenshots/README.md](listing/screenshots/README.md) | Capture in a demo company with demo data; remove names, e-mail addresses and IDs |
 | Product sheet | Missing | Marketing: one-page PDF covering the whole app |
-| Help | `https://docs.bifrost.origo.is/en-us/warehouse/` and the `help/warehouse` landing page | Documentation owners: pages live in en-US and is-IS (businesscentralal/bifrost, branch `docs/publish-warehouse`) |
+| Help | `https://docs.bifrost.origo.is/en-us/warehouse/` (no context-sensitive help pages: the app has no pages) | Documentation owners: page live in en-US and is-IS (businesscentralal/bifrost#109, branch `docs/publish-warehouse`) |
 | Legal | Shared `/en-us/licensing/eula/` and `/en-us/licensing/privacy/` | Gunnar / legal owner: coverage of this app |
 | Support | `https://www.origo.is/` | Support owner: contact and process |
 

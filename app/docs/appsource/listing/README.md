@@ -53,8 +53,9 @@ Check the subcategory names against the current Partner Center list before enter
 | Videos | optional; none yet | up to 4 |
 
 Links use the documentation's own domain, docs.bifrost.origo.is, the same addresses as the app's
-`app.json`. The Warehouse pages on the site are added on branch `docs/publish-warehouse` in
-businesscentralal/bifrost; check that they are live before submitting.
+`app.json`. The Warehouse page on the site is added by businesscentralal/bifrost#109 (branch
+`docs/publish-warehouse`); check that it is live before submitting. The app has no pages, so it has
+no context-sensitive help pages.
 
 Microsoft's logo guidance says no text on the logo; Bifrost Foundation's logo has text, so this one
 follows Foundation for a consistent family.

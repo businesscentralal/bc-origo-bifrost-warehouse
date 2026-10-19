@@ -14,9 +14,26 @@ using Origo.Bifrost;
 /// Inline lines become an internal movement, then an inventory movement.
 /// Assembly consumption uses report 7323. A directed location is refused.
 /// </summary>
-codeunit 10078441 "Whse InvtMove Create Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
+codeunit 10078427 "Whse InvtMove Create Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
 {
     Access = Internal;
+
+    trigger OnRun()
+    var
+        Context: Codeunit "Whse Write Context ori";
+        Payload: JsonObject;
+        MovementNo: Code[20];
+        MissingPayloadErr: Label 'The inventory movement create payload was empty.', Comment = 'is-IS=Gögnin til að stofna birgðafærslu voru tóm.';
+    begin
+        if not Context.TryGetPayload(Payload) then
+            Error(MissingPayloadErr);
+        if TextValue(Payload, 'sourceDocument') <> '' then
+            MovementNo := CreateFromSource(Payload)
+        else
+            MovementNo := CreateFromLines(Payload);
+        FillQtyToHandle(MovementNo);
+        Context.SetResult(MovementNo, 0);
+    end;
 
     /// <summary>Returns whether the caller can create an inventory movement.</summary>
     /// <returns>True when the caller can write the internal movement and the activity it creates.</returns>
@@ -259,7 +276,7 @@ codeunit 10078441 "Whse InvtMove Create Impl ori" implements "Msg Interface ori"
     /// <param name="Argument">The request and response message argument.</param>
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var
-        Context: Codeunit "Whse InvtMove Context ori";
+        Context: Codeunit "Whse Write Context ori";
         RequestJson: JsonObject;
         Payload: JsonObject;
         LocationCode: Code[10];
@@ -305,7 +322,7 @@ codeunit 10078441 "Whse InvtMove Create Impl ori" implements "Msg Interface ori"
         end else
             Payload.Add('locationCode', LocationCode);
         Context.SetPayload(Payload);
-        if not Codeunit.Run(Codeunit::"Whse InvtMove Create Proc ori") then begin
+        if not Codeunit.Run(Codeunit::"Whse InvtMove Create Impl ori") then begin
             Context.Reset();
             Argument.RespondWithLastError();
             exit;
@@ -317,7 +334,7 @@ codeunit 10078441 "Whse InvtMove Create Impl ori" implements "Msg Interface ori"
     local procedure WriteCreatedMovement(var Argument: Record "Message Argument ori"; SourceMode: Boolean; SourceNo: Code[20])
     var
         ActivityHeader: Record "Warehouse Activity Header";
-        Context: Codeunit "Whse InvtMove Context ori";
+        Context: Codeunit "Whse Write Context ori";
         ResponseJson: JsonObject;
         Lines: JsonArray;
         MovementNo: Code[20];
@@ -389,7 +406,7 @@ codeunit 10078441 "Whse InvtMove Create Impl ori" implements "Msg Interface ori"
 
     local procedure ResolveMode(RequestJson: JsonObject; var Argument: Record "Message Argument ori"; var SourceMode: Boolean; var LinesMode: Boolean)
     var
-        Readers: Codeunit "Whse Movement Context ori";
+        Readers: Codeunit "Whse Write Context ori";
         Token: JsonToken;
         SourceText: Text;
         SourcePresent: Boolean;
@@ -431,7 +448,7 @@ codeunit 10078441 "Whse InvtMove Create Impl ori" implements "Msg Interface ori"
     local procedure TryResolveLocation(RequestJson: JsonObject; var Argument: Record "Message Argument ori"; var LocationCode: Code[10]): Boolean
     var
         Location: Record Location;
-        Readers: Codeunit "Whse Movement Context ori";
+        Readers: Codeunit "Whse Write Context ori";
         LocationText: Text;
         Present: Boolean;
         SubjectText: Text;
@@ -469,7 +486,7 @@ codeunit 10078441 "Whse InvtMove Create Impl ori" implements "Msg Interface ori"
     var
         AssemblyHeader: Record "Assembly Header";
         BySystemId: Record "Assembly Header";
-        Readers: Codeunit "Whse Movement Context ori";
+        Readers: Codeunit "Whse Write Context ori";
         SourceText: Text;
         SystemIdText: Text;
         LocationText: Text;
@@ -625,7 +642,7 @@ codeunit 10078441 "Whse InvtMove Create Impl ori" implements "Msg Interface ori"
 
     local procedure ReadOneLine(Token: JsonToken; Index: Integer; var Argument: Record "Message Argument ori"; LocationCode: Code[10]; var Planned: JsonArray)
     var
-        Readers: Codeunit "Whse Movement Context ori";
+        Readers: Codeunit "Whse Write Context ori";
         LineObject: JsonObject;
         PlannedLine: JsonObject;
         ItemNo: Text;
@@ -812,5 +829,177 @@ codeunit 10078441 "Whse InvtMove Create Impl ori" implements "Msg Interface ori"
         Entry := ContractMgt.ErrorEntry(ErrorCode, WhenText, NextStep);
         Entry.Add('nextStep', NextStep);
         Errors.Add(Entry);
+    end;
+
+    local procedure CreateFromLines(Payload: JsonObject): Code[20]
+    var
+        InternalHeader: Record "Internal Movement Header";
+        CreateMovement: Codeunit "Create Inventory Pick/Movement";
+        LocationCode: Code[10];
+        FirstToBin: Code[20];
+        BeforeNos: Text;
+        MovementNo: Code[20];
+        NothingErr: Label 'No inventory movement was created.', Comment = 'is-IS=Engin birgðafærsla var stofnuð.';
+    begin
+        LocationCode := CopyStr(TextValue(Payload, 'locationCode'), 1, MaxStrLen(LocationCode));
+        FirstToBin := CopyStr(FirstToBinCode(Payload), 1, MaxStrLen(FirstToBin));
+        BeforeNos := Snapshot(LocationCode);
+        InternalHeader.Init();
+        InternalHeader.Validate("Location Code", LocationCode);
+        InternalHeader.Validate("To Bin Code", FirstToBin);
+        InternalHeader.Insert(true);
+        InsertLines(Payload, InternalHeader);
+        CreateMovement.SetHideDialog(true);
+        CreateMovement.CreateInvtMvntWithoutSource(InternalHeader);
+        MovementNo := FindNewMovement(LocationCode, BeforeNos);
+        if MovementNo = '' then
+            Error(NothingErr);
+        exit(MovementNo);
+    end;
+
+    local procedure CreateFromSource(Payload: JsonObject): Code[20]
+    var
+        WarehouseRequest: Record "Warehouse Request";
+        ActivityHeader: Record "Warehouse Activity Header";
+        CreateReport: Report "Create Invt Put-away/Pick/Mvmt";
+        SourceNo: Code[20];
+        NothingErr: Label 'No inventory movement was created.', Comment = 'is-IS=Engin birgðafærsla var stofnuð.';
+    begin
+        SourceNo := CopyStr(TextValue(Payload, 'sourceNo'), 1, MaxStrLen(SourceNo));
+        WarehouseRequest.SetRange("Source Document", WarehouseRequest."Source Document"::"Assembly Consumption");
+        WarehouseRequest.SetRange("Source No.", SourceNo);
+        CreateReport.UseRequestPage(false);
+        CreateReport.InitializeRequest(false, false, true, false, true);
+        CreateReport.SuppressMessages(true);
+        CreateReport.SetTableView(WarehouseRequest);
+        CreateReport.RunModal();
+        ActivityHeader.SetRange(Type, ActivityHeader.Type::"Invt. Movement");
+        ActivityHeader.SetRange("Source Document", ActivityHeader."Source Document"::"Assembly Consumption");
+        ActivityHeader.SetRange("Source No.", SourceNo);
+        if not ActivityHeader.FindLast() then
+            Error(NothingErr);
+        exit(ActivityHeader."No.");
+    end;
+
+    local procedure InsertLines(Payload: JsonObject; InternalHeader: Record "Internal Movement Header")
+    var
+        Token: JsonToken;
+        Lines: JsonArray;
+        LineObject: JsonObject;
+        LineNo: Integer;
+    begin
+        if not Payload.Get('lines', Token) then
+            exit;
+        Lines := Token.AsArray();
+        LineNo := 0;
+        foreach Token in Lines do begin
+            LineNo += 10000;
+            LineObject := Token.AsObject();
+            InsertOneLine(InternalHeader, LineObject, LineNo);
+        end;
+    end;
+
+    local procedure InsertOneLine(InternalHeader: Record "Internal Movement Header"; LineObject: JsonObject; LineNo: Integer)
+    var
+        InternalLine: Record "Internal Movement Line";
+    begin
+        InternalLine.Init();
+        InternalLine.Validate("No.", InternalHeader."No.");
+        InternalLine.Validate("Line No.", LineNo);
+        InternalLine.Validate("Item No.", CopyStr(TextValue(LineObject, 'itemNo'), 1, MaxStrLen(InternalLine."Item No.")));
+        if TextValue(LineObject, 'variantCode') <> '' then
+            InternalLine.Validate("Variant Code", CopyStr(TextValue(LineObject, 'variantCode'), 1, MaxStrLen(InternalLine."Variant Code")));
+        if TextValue(LineObject, 'unitOfMeasureCode') <> '' then
+            InternalLine.Validate("Unit of Measure Code", CopyStr(TextValue(LineObject, 'unitOfMeasureCode'), 1, MaxStrLen(InternalLine."Unit of Measure Code")));
+        InternalLine.Validate("From Bin Code", CopyStr(TextValue(LineObject, 'fromBin'), 1, MaxStrLen(InternalLine."From Bin Code")));
+        InternalLine.Validate("To Bin Code", CopyStr(TextValue(LineObject, 'toBin'), 1, MaxStrLen(InternalLine."To Bin Code")));
+        InternalLine.Validate(Quantity, DecimalValue(LineObject, 'quantity'));
+        InternalLine.Insert(true);
+    end;
+
+    local procedure FillQtyToHandle(MovementNo: Code[20])
+    var
+        ActivityLine: Record "Warehouse Activity Line";
+    begin
+        ActivityLine.SetRange("Activity Type", ActivityLine."Activity Type"::"Invt. Movement");
+        ActivityLine.SetRange("No.", MovementNo);
+        if not ActivityLine.FindSet() then
+            exit;
+        repeat
+            if (ActivityLine."Qty. to Handle" = 0) and (ActivityLine."Qty. Outstanding" > 0) then begin
+                // Assign without Validate. A tracked line without a lot rejects Validate,
+                // and a try function cannot write the quantity afterwards.
+                ActivityLine."Qty. to Handle" := ActivityLine."Qty. Outstanding";
+                ActivityLine."Qty. to Handle (Base)" := ActivityLine."Qty. Outstanding (Base)";
+                ActivityLine.Modify(true);
+            end;
+        until ActivityLine.Next() = 0;
+    end;
+
+    local procedure Snapshot(LocationCode: Code[10]): Text
+    var
+        ActivityHeader: Record "Warehouse Activity Header";
+        Nos: Text;
+    begin
+        Nos := '|';
+        ActivityHeader.SetRange(Type, ActivityHeader.Type::"Invt. Movement");
+        ActivityHeader.SetRange("Location Code", LocationCode);
+        if ActivityHeader.FindSet() then
+            repeat
+                Nos += ActivityHeader."No." + '|';
+            until ActivityHeader.Next() = 0;
+        exit(Nos);
+    end;
+
+    local procedure FindNewMovement(LocationCode: Code[10]; BeforeNos: Text): Code[20]
+    var
+        ActivityHeader: Record "Warehouse Activity Header";
+    begin
+        ActivityHeader.SetRange(Type, ActivityHeader.Type::"Invt. Movement");
+        ActivityHeader.SetRange("Location Code", LocationCode);
+        if ActivityHeader.FindSet() then
+            repeat
+                if StrPos(BeforeNos, '|' + ActivityHeader."No." + '|') = 0 then
+                    exit(ActivityHeader."No.");
+            until ActivityHeader.Next() = 0;
+        exit('');
+    end;
+
+    local procedure FirstToBinCode(Payload: JsonObject): Text
+    var
+        Token: JsonToken;
+        Lines: JsonArray;
+    begin
+        if not Payload.Get('lines', Token) then
+            exit('');
+        Lines := Token.AsArray();
+        if Lines.Count() = 0 then
+            exit('');
+        Lines.Get(0, Token);
+        exit(TextValue(Token.AsObject(), 'toBin'));
+    end;
+
+    local procedure TextValue(Parent: JsonObject; Name: Text): Text
+    var
+        Token: JsonToken;
+    begin
+        if not Parent.Get(Name, Token) then
+            exit('');
+        if not Token.IsValue() then
+            exit('');
+        if Token.AsValue().IsNull() then
+            exit('');
+        exit(Token.AsValue().AsText());
+    end;
+
+    local procedure DecimalValue(Parent: JsonObject; Name: Text): Decimal
+    var
+        Token: JsonToken;
+    begin
+        if not Parent.Get(Name, Token) then
+            exit(0);
+        if not Token.IsValue() then
+            exit(0);
+        exit(Token.AsValue().AsDecimal());
     end;
 }

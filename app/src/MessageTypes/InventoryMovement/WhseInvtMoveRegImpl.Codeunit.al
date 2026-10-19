@@ -8,19 +8,50 @@ using Origo.Bifrost;
 /// Implements Warehouse.InventoryMovement.Register.
 /// Registration runs codeunit 7307, which commits. A movement with nothing to handle is refused.
 /// </summary>
-codeunit 10078443 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
+codeunit 10078428 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
 {
     Access = Internal;
 
-    /// <summary>Returns whether the caller can register an inventory movement.</summary>
-    /// <returns>True when the caller can write the activity and the registered movement.</returns>
+    trigger OnRun()
+    var
+        ActivityLine: Record "Warehouse Activity Line";
+        Context: Codeunit "Whse Write Context ori";
+        Payload: JsonObject;
+        MovementNo: Code[20];
+        RegisteredQty: Decimal;
+        MissingPayloadErr: Label 'The inventory movement register payload was empty.', Comment = 'is-IS=Gögnin til að skrá birgðafærslu voru tóm.';
+        NothingErr: Label 'There is nothing to register.', Comment = 'is-IS=Ekkert er til að skrá.';
+    begin
+        if not Context.TryGetPayload(Payload) then
+            Error(MissingPayloadErr);
+        MovementNo := CopyStr(TextValue(Payload, 'movementNo'), 1, MaxStrLen(MovementNo));
+        ApplyQuantities(Payload, MovementNo);
+        ActivityLine.SetRange("Activity Type", ActivityLine."Activity Type"::"Invt. Movement");
+        ActivityLine.SetRange("No.", MovementNo);
+        ActivityLine.SetRange("Action Type", ActivityLine."Action Type"::Take);
+        if not ActivityLine.FindSet() then
+            Error(NothingErr);
+        RegisteredQty := 0;
+        repeat
+            RegisteredQty += ActivityLine."Qty. to Handle";
+        until ActivityLine.Next() = 0;
+        if RegisteredQty = 0 then
+            Error(NothingErr);
+        ActivityLine.SetRange("Action Type");
+        ActivityLine.FindFirst();
+        RegisterActivity(ActivityLine);
+        Context.SetResult(FindRegisteredNo(MovementNo), RegisteredQty);
+    end;
+
+    /// <summary>Returns whether the caller can write the documents and holds the warehouse posting gate.</summary>
+    /// <returns>True when the caller can write the activity tables and holds BIFROST WhsePost ori.</returns>
     procedure IsEnabled(): Boolean
     var
-        ActivityHeader: Record "Warehouse Activity Header";
-        ActivityLine: Record "Warehouse Activity Line";
-        RegisteredHeader: Record "Registered Invt. Movement Hdr.";
+        WhsePostingGate: Codeunit "Whse Posting Gate ori";
     begin
-        exit(ActivityHeader.WritePermission() and ActivityLine.WritePermission() and RegisteredHeader.WritePermission());
+        if not HasWritePermission() then
+            exit(false);
+        exit(WhsePostingGate.HasPostingPermission());
     end;
 
     /// <summary>Returns the table this message type filters.</summary>
@@ -134,7 +165,7 @@ codeunit 10078443 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::ConflictingIdentifiers, 'movementNo and systemId name different movements.', 'Send one movement.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameter, 'qtyToHandle is negative or greater than the outstanding quantity.', 'Send a quantity from zero up to the outstanding quantity.');
-        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot register an inventory movement.', 'Ask an administrator to assign BIFROST Whse - Full ori.');
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot write the warehouse documents, or does not hold the warehouse posting gate.', 'Ask an administrator to assign BIFROST Whse - Full ori and BIFROST WhsePost ori.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MultipleErrors, 'More than one value failed validation.', 'Correct every listed value and send the request again. Nothing was registered.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::BusinessCentralError, 'Business Central rejected the registration.', 'Read the returned text and correct the movement.');
         exit(true);
@@ -147,7 +178,7 @@ codeunit 10078443 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect(Effect, 'Registers an inventory movement. Business Central commits the warehouse entries.', 'BIFROST Whse - Full ori');
+        Parts.IrreversibleEffect(Effect, 'Registers an inventory movement. Business Central commits the warehouse entries.', 'BIFROST Whse - Full ori and BIFROST WhsePost ori');
         exit(true);
     end;
 
@@ -225,7 +256,8 @@ codeunit 10078443 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var
         ActivityHeader: Record "Warehouse Activity Header";
-        Context: Codeunit "Whse InvtMove Context ori";
+        Context: Codeunit "Whse Write Context ori";
+        WhsePostingGate: Codeunit "Whse Posting Gate ori";
         RequestJson: JsonObject;
         Payload: JsonObject;
         PlannedLines: JsonArray;
@@ -236,10 +268,12 @@ codeunit 10078443 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
         NothingNextStepLbl: Label 'Set Qty. to Handle on at least one movement line.', Comment = 'is-IS=Settu magn til meðhöndlunar á að minnsta kosti eina færslulínu.';
     begin
         Context.Reset();
-        if not IsEnabled() then begin
+        if not HasWritePermission() then begin
             Argument.RespondWithError("Bifrost Error Code ori"::PermissionDenied, DeniedLbl, '', '', '', DeniedNextStepLbl);
             exit;
         end;
+        if not WhsePostingGate.AssertCanPost(Argument) then
+            exit;
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
         RequestJson := Argument.GetRequestJson();
@@ -261,7 +295,7 @@ codeunit 10078443 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
         Payload.Add('movementNo', ActivityHeader."No.");
         Payload.Add('lines', PlannedLines);
         Context.SetPayload(Payload);
-        if not Codeunit.Run(Codeunit::"Whse InvtMove Reg Proc ori") then begin
+        if not Codeunit.Run(Codeunit::"Whse InvtMove Reg Impl ori") then begin
             Context.Reset();
             Argument.RespondWithLastError();
             exit;
@@ -274,7 +308,7 @@ codeunit 10078443 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
     var
         RegisteredHeader: Record "Registered Invt. Movement Hdr.";
         ActivityLine: Record "Warehouse Activity Line";
-        Context: Codeunit "Whse InvtMove Context ori";
+        Context: Codeunit "Whse Write Context ori";
         ResponseJson: JsonObject;
         RegisteredNo: Code[20];
         RegisteredQty: Decimal;
@@ -331,7 +365,7 @@ codeunit 10078443 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
     var
         ByNumber: Record "Warehouse Activity Header";
         BySystemId: Record "Warehouse Activity Header";
-        Readers: Codeunit "Whse Movement Context ori";
+        Readers: Codeunit "Whse Write Context ori";
         MovementNo: Text;
         SystemIdText: Text;
         SubjectText: Text;
@@ -435,7 +469,7 @@ codeunit 10078443 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
     local procedure ReadOneLine(Token: JsonToken; Index: Integer; var Argument: Record "Message Argument ori"; ActivityHeader: Record "Warehouse Activity Header"; var PlannedLines: JsonArray)
     var
         ActivityLine: Record "Warehouse Activity Line";
-        Readers: Codeunit "Whse Movement Context ori";
+        Readers: Codeunit "Whse Write Context ori";
         LineObject: JsonObject;
         PlannedLine: JsonObject;
         LineNo: Integer;
@@ -522,5 +556,113 @@ codeunit 10078443 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
         Entry := ContractMgt.ErrorEntry(ErrorCode, WhenText, NextStep);
         Entry.Add('nextStep', NextStep);
         Errors.Add(Entry);
+    end;
+
+    local procedure RegisterActivity(var ActivityLine: Record "Warehouse Activity Line")
+    var
+        WhseActivityRegister: Codeunit "Whse.-Activity-Register";
+    begin
+        // Hide the dialog so a partial line is reduced without a UI confirm after codeunit 7307 commits.
+        WhseActivityRegister.ShowHideDialog(true);
+        WhseActivityRegister.Run(ActivityLine);
+    end;
+
+    local procedure ApplyQuantities(Payload: JsonObject; MovementNo: Code[20])
+    var
+        Token: JsonToken;
+        Lines: JsonArray;
+        LineObject: JsonObject;
+    begin
+        if not Payload.Get('lines', Token) then
+            exit;
+        if not Token.IsArray() then
+            exit;
+        Lines := Token.AsArray();
+        foreach Token in Lines do begin
+            LineObject := Token.AsObject();
+            ApplyOneQuantity(LineObject, MovementNo);
+        end;
+    end;
+
+    local procedure ApplyOneQuantity(LineObject: JsonObject; MovementNo: Code[20])
+    var
+        ActivityLine: Record "Warehouse Activity Line";
+        Sibling: Record "Warehouse Activity Line";
+        Outstanding: Decimal;
+        MatchCount: Integer;
+        MatchLineNo: Integer;
+    begin
+        ActivityLine.Get(ActivityLine."Activity Type"::"Invt. Movement", MovementNo, IntegerValue(LineObject, 'lineNo'));
+        Outstanding := ActivityLine."Qty. Outstanding";
+        ActivityLine.Validate("Qty. to Handle", DecimalValue(LineObject, 'qtyToHandle'));
+        ActivityLine.Modify(true);
+        Sibling.SetRange("Activity Type", ActivityLine."Activity Type");
+        Sibling.SetRange("No.", ActivityLine."No.");
+        Sibling.SetRange("Item No.", ActivityLine."Item No.");
+        Sibling.SetRange("Variant Code", ActivityLine."Variant Code");
+        Sibling.SetRange("Unit of Measure Code", ActivityLine."Unit of Measure Code");
+        if not Sibling.FindSet() then
+            exit;
+        repeat
+            if (Sibling."Line No." <> ActivityLine."Line No.") and (Sibling."Qty. Outstanding" = Outstanding) then begin
+                MatchCount += 1;
+                MatchLineNo := Sibling."Line No.";
+            end;
+        until Sibling.Next() = 0;
+        if MatchCount <> 1 then
+            exit;
+        Sibling.Get(ActivityLine."Activity Type", ActivityLine."No.", MatchLineNo);
+        Sibling.Validate("Qty. to Handle", ActivityLine."Qty. to Handle");
+        Sibling.Modify(true);
+    end;
+
+    local procedure FindRegisteredNo(MovementNo: Code[20]): Code[20]
+    var
+        RegisteredHeader: Record "Registered Invt. Movement Hdr.";
+    begin
+        RegisteredHeader.SetRange("Invt. Movement No.", MovementNo);
+        if RegisteredHeader.FindLast() then
+            exit(RegisteredHeader."No.");
+        exit('');
+    end;
+
+    local procedure TextValue(Parent: JsonObject; Name: Text): Text
+    var
+        Token: JsonToken;
+    begin
+        if not Parent.Get(Name, Token) then
+            exit('');
+        if not Token.IsValue() then
+            exit('');
+        if Token.AsValue().IsNull() then
+            exit('');
+        exit(Token.AsValue().AsText());
+    end;
+
+    local procedure DecimalValue(Parent: JsonObject; Name: Text): Decimal
+    var
+        Token: JsonToken;
+    begin
+        if not Parent.Get(Name, Token) then
+            exit(0);
+        exit(Token.AsValue().AsDecimal());
+    end;
+
+    local procedure IntegerValue(Parent: JsonObject; Name: Text): Integer
+    var
+        Token: JsonToken;
+    begin
+        if not Parent.Get(Name, Token) then
+            exit(0);
+        exit(Token.AsValue().AsInteger());
+    end;
+
+    local procedure HasWritePermission(): Boolean
+    var
+        ActivityHeader: Record "Warehouse Activity Header";
+        ActivityLine: Record "Warehouse Activity Line";
+        RegisteredHeader: Record "Registered Invt. Movement Hdr.";
+    begin
+        exit(ActivityHeader.WritePermission() and ActivityLine.WritePermission() and RegisteredHeader.WritePermission());
     end;
 }

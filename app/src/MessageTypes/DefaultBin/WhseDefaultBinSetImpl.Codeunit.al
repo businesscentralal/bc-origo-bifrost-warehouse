@@ -10,9 +10,29 @@ using Origo.Bifrost;
 /// Bin Content does not clear the previous default on its own. CheckDefaultBin raises when another
 /// default already exists, so this type clears that row before Validate(Default).
 /// </summary>
-codeunit 10078463 "Whse DefaultBin Set Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
+codeunit 10078420 "Whse DefaultBin Set Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
 {
     Access = Internal;
+
+    trigger OnRun()
+    var
+        Context: Codeunit "Whse Write Context ori";
+        Payload: JsonObject;
+        LocationCode: Code[10];
+        ItemNo: Code[20];
+        VariantCode: Code[10];
+        PreviousBinCode: Code[20];
+        MissingPayloadErr: Label 'The default bin payload was empty.', Comment = 'is-IS=Gögnin fyrir sjálfgefið hólf voru tóm.';
+    begin
+        if not Context.TryGetPayload(Payload) then
+            Error(MissingPayloadErr);
+        LocationCode := CopyStr(TextValue(Payload, 'locationCode'), 1, MaxStrLen(LocationCode));
+        ItemNo := CopyStr(TextValue(Payload, 'itemNo'), 1, MaxStrLen(ItemNo));
+        VariantCode := CopyStr(TextValue(Payload, 'variantCode'), 1, MaxStrLen(VariantCode));
+        PreviousBinCode := CopyStr(TextValue(Payload, 'previousBinCode'), 1, MaxStrLen(PreviousBinCode));
+        ClearPreviousDefault(LocationCode, ItemNo, VariantCode, PreviousBinCode);
+        SetDefault(Payload);
+    end;
 
     /// <summary>Returns whether the caller can set a default bin.</summary>
     /// <returns>True when the caller can write Bin Content and read the records the write needs.</returns>
@@ -235,14 +255,14 @@ codeunit 10078463 "Whse DefaultBin Set Impl ori" implements "Msg Interface ori",
     /// <param name="Argument">The request and response message argument.</param>
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var
-        Context: Codeunit "Whse Bin Write Context ori";
+        Context: Codeunit "Whse Write Context ori";
         RequestJson: JsonObject;
         Payload: JsonObject;
         DeniedLbl: Label 'You do not have permission to set the default bin.', Comment = 'is-IS=Þú hefur ekki heimild til að setja sjálfgefið hólf.';
         DeniedNextStepLbl: Label 'Ask an administrator to assign BIFROST Whse - Full ori.', Comment = 'is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.';
         ProblemsLbl: Label 'Nothing was written.', Comment = 'is-IS=Ekkert var skrifað.';
     begin
-        Context.Clear();
+        Context.Reset();
         if not IsEnabled() then begin
             Argument.RespondWithError("Bifrost Error Code ori"::PermissionDenied, DeniedLbl, '', '', '', DeniedNextStepLbl);
             exit;
@@ -264,12 +284,12 @@ codeunit 10078463 "Whse DefaultBin Set Impl ori" implements "Msg Interface ori",
             exit;
         end;
         Context.SetPayload(Payload);
-        if not Codeunit.Run(Codeunit::"Whse Def. Bin Set Proc. ori") then begin
-            Context.Clear();
+        if not Codeunit.Run(Codeunit::"Whse DefaultBin Set Impl ori") then begin
+            Context.Reset();
             Argument.RespondWithLastError();
             exit;
         end;
-        Context.Clear();
+        Context.Reset();
         WriteResult(Argument, Payload, true);
     end;
 
@@ -523,5 +543,57 @@ codeunit 10078463 "Whse DefaultBin Set Impl ori" implements "Msg Interface ori",
         if (Written = 'true') or (Written = 'false') then
             exit('boolean');
         exit('number');
+    end;
+
+    local procedure ClearPreviousDefault(LocationCode: Code[10]; ItemNo: Code[20]; VariantCode: Code[10]; PreviousBinCode: Code[20])
+    var
+        BinContent: Record "Bin Content";
+    begin
+        if PreviousBinCode = '' then
+            exit;
+        BinContent.SetRange("Location Code", LocationCode);
+        BinContent.SetRange("Item No.", ItemNo);
+        BinContent.SetRange("Variant Code", VariantCode);
+        BinContent.SetRange(Default, true);
+        if BinContent.FindSet(true) then
+            repeat
+                BinContent.Validate(Default, false);
+                BinContent.Modify(true);
+            until BinContent.Next() = 0;
+    end;
+
+    local procedure SetDefault(Payload: JsonObject)
+    var
+        BinContent: Record "Bin Content";
+        LocationCode: Code[10];
+        BinCode: Code[20];
+        ItemNo: Code[20];
+        VariantCode: Code[10];
+        UnitOfMeasureCode: Code[10];
+    begin
+        LocationCode := CopyStr(TextValue(Payload, 'locationCode'), 1, MaxStrLen(LocationCode));
+        BinCode := CopyStr(TextValue(Payload, 'binCode'), 1, MaxStrLen(BinCode));
+        ItemNo := CopyStr(TextValue(Payload, 'itemNo'), 1, MaxStrLen(ItemNo));
+        VariantCode := CopyStr(TextValue(Payload, 'variantCode'), 1, MaxStrLen(VariantCode));
+        UnitOfMeasureCode := CopyStr(TextValue(Payload, 'unitOfMeasureCode'), 1, MaxStrLen(UnitOfMeasureCode));
+        if not BinContent.Get(LocationCode, BinCode, ItemNo, VariantCode, UnitOfMeasureCode) then
+            InsertBinContent(BinContent, LocationCode, BinCode, ItemNo, VariantCode, UnitOfMeasureCode);
+        BinContent.Validate(Default, true);
+        BinContent.Modify(true);
+    end;
+
+    local procedure InsertBinContent(var BinContent: Record "Bin Content"; LocationCode: Code[10]; BinCode: Code[20]; ItemNo: Code[20]; VariantCode: Code[10]; UnitOfMeasureCode: Code[10])
+    begin
+        BinContent.Init();
+        BinContent.Validate("Location Code", LocationCode);
+        BinContent.Validate("Bin Code", BinCode);
+        BinContent.SetUpNewLine();
+        BinContent.Validate("Item No.", ItemNo);
+        if VariantCode <> '' then
+            BinContent.Validate("Variant Code", VariantCode);
+        if BinContent."Unit of Measure Code" <> UnitOfMeasureCode then
+            BinContent.Validate("Unit of Measure Code", UnitOfMeasureCode);
+        BinContent.Validate(Fixed, true);
+        BinContent.Insert(true);
     end;
 }

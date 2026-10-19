@@ -1,5 +1,8 @@
 namespace Origo.Bifrost.Warehouse;
 
+using Microsoft.Inventory.Transfer;
+using Microsoft.Purchases.History;
+using Microsoft.Sales.History;
 using Microsoft.Warehouse.Activity;
 using Microsoft.Warehouse.InventoryDocument;
 using Microsoft.Warehouse.Structure;
@@ -9,18 +12,32 @@ using Origo.Bifrost;
 /// Implements Warehouse.InventoryPick.Post.
 /// Posting runs codeunit 7324, which commits. A quantity above outstanding or bin content is refused.
 /// </summary>
-codeunit 10078481 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
+codeunit 10078424 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
 {
     Access = Internal;
 
-    /// <summary>Returns whether the caller can post an inventory pick.</summary>
-    /// <returns>True when the caller can write the activity and the posted pick.</returns>
+    trigger OnRun()
+    var
+        Context: Codeunit "Whse Write Context ori";
+        Payload: JsonObject;
+        Result: JsonObject;
+        MissingPayloadErr: Label 'The inventory pick post payload was empty.', Comment = 'is-IS=Gögnin til að bóka birgðatínslu voru tóm.';
+    begin
+        if not Context.TryGetPayload(Payload) then
+            Error(MissingPayloadErr);
+        PostPick(Payload, Result);
+        Context.SetResult(Result);
+    end;
+
+    /// <summary>Returns whether the caller can write the documents and holds the warehouse posting gate.</summary>
+    /// <returns>True when the caller can write the activity tables and holds BIFROST WhsePost ori.</returns>
     procedure IsEnabled(): Boolean
     var
-        ActivityLine: Record "Warehouse Activity Line";
-        PostedHeader: Record "Posted Invt. Pick Header";
+        WhsePostingGate: Codeunit "Whse Posting Gate ori";
     begin
-        exit(ActivityLine.WritePermission() and PostedHeader.WritePermission());
+        if not HasWritePermission() then
+            exit(false);
+        exit(WhsePostingGate.HasPostingPermission());
     end;
 
     /// <summary>Returns the table this message type filters.</summary>
@@ -96,7 +113,7 @@ codeunit 10078481 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
         Parameters.Add(ContractMgt.Parameter('systemId', 'string', false, 'Inventory pick SystemId.'));
         Parameters.Add(ContractMgt.Parameter('id', 'string', false, 'Inventory pick SystemId. Same as systemId.'));
         Parameters.Add(ContractMgt.Parameter('recordSystemId', 'string', false, 'Inventory pick SystemId. Same as systemId.'));
-        Parameters.Add(ContractMgt.Parameter('invoice', 'boolean', false, 'Ship and invoice a sales order. Default false. Refused for every other source.'));
+        Parameters.Add(ContractMgt.Parameter('invoice', 'boolean', false, 'Ship and invoice a sales order. Default false. Refused for every other source. Requires BIFROST WhseInv ori when true.'));
         Parameters.Add(ContractMgt.Parameter('lines', 'array', false, 'Optional per-line quantities to handle. Omitted lines keep the quantity already on the pick.'));
         Parameters.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Inventory pick line number.'));
         Parameters.Add(ContractMgt.Parameter('qtyToHandle', 'number', true, 'Quantity to handle on the line, in the line unit of measure.'));
@@ -152,7 +169,7 @@ codeunit 10078481 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::RecordNotFound, 'The inventory pick or line was not found.', 'Check the pick number with Warehouse.InventoryPick.Create.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::ConflictingIdentifiers, 'subject, pickNo and systemId name different picks.', 'Send one pick: subject, pickNo or systemId.');
-        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot post an inventory pick.', 'Ask an administrator to assign BIFROST Whse - Full ori.');
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot write the warehouse documents, or does not hold the warehouse posting gate (or the invoicing gate when invoice is true).', 'Ask an administrator to assign BIFROST Whse - Full ori and BIFROST WhsePost ori, plus BIFROST WhseInv ori for invoice true.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MultipleErrors, 'More than one line failed validation.', 'Correct every listed line and send the request again. Nothing was written.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::BusinessCentralError, 'Business Central rejected the post.', 'Read the returned text and correct the pick or the inventory.');
         exit(true);
@@ -165,7 +182,7 @@ codeunit 10078481 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect(Effect, 'Posts the inventory pick and the source document shipment. Business Central commits the post. invoice true also posts the sales invoice.', 'BIFROST Whse - Full ori');
+        Parts.IrreversibleEffect(Effect, 'Posts the inventory pick and the source document shipment. Business Central commits the post. invoice true also posts the sales invoice.', 'BIFROST Whse - Full ori and BIFROST WhsePost ori; BIFROST WhseInv ori when invoice is true');
         exit(true);
     end;
 
@@ -243,7 +260,8 @@ codeunit 10078481 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var
         ActivityHeader: Record "Warehouse Activity Header";
-        Context: Codeunit "Whse InvtPick Context ori";
+        Context: Codeunit "Whse Write Context ori";
+        WhsePostingGate: Codeunit "Whse Posting Gate ori";
         RequestJson: JsonObject;
         Payload: JsonObject;
         Lines: JsonArray;
@@ -253,13 +271,18 @@ codeunit 10078481 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
         ProblemsLbl: Label 'Nothing was written.', Comment = 'is-IS=Ekkert var skrifað.';
     begin
         Context.Reset();
-        if not IsEnabled() then begin
+        if not HasWritePermission() then begin
             Argument.RespondWithError("Bifrost Error Code ori"::PermissionDenied, DeniedLbl, '', '', '', DeniedNextStepLbl);
             exit;
         end;
+        if not WhsePostingGate.AssertCanPost(Argument) then
+            exit;
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
         RequestJson := Argument.GetRequestJson();
+        if Context.IsTrue(RequestJson, 'invoice') then
+            if not WhsePostingGate.AssertCanInvoice(Argument) then
+                exit;
         RefuseUnknownKeys(RequestJson, Argument);
         if not Argument.HasCollectedErrors() then
             ResolvePick(RequestJson, Argument, ActivityHeader);
@@ -276,7 +299,7 @@ codeunit 10078481 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
         Payload.Add('invoice', Invoice);
         Payload.Add('lines', Lines);
         Context.SetPayload(Payload);
-        if not Codeunit.Run(Codeunit::"Whse InvtPick Post Proc ori") then begin
+        if not Codeunit.Run(Codeunit::"Whse InvtPick Post Impl ori") then begin
             Context.Reset();
             Argument.RespondWithLastError();
             exit;
@@ -287,7 +310,7 @@ codeunit 10078481 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
 
     local procedure WritePosted(var Argument: Record "Message Argument ori")
     var
-        Context: Codeunit "Whse InvtPick Context ori";
+        Context: Codeunit "Whse Write Context ori";
         Result: JsonObject;
         ResponseJson: JsonObject;
         MissingResultErr: Label 'The inventory pick was posted but its result was not returned.', Comment = 'is-IS=Birgðatínslan var bókuð en niðurstaðan skilaði sér ekki.';
@@ -313,7 +336,7 @@ codeunit 10078481 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
 
     local procedure ResolvePick(RequestJson: JsonObject; var Argument: Record "Message Argument ori"; var ActivityHeader: Record "Warehouse Activity Header")
     var
-        Context: Codeunit "Whse InvtPick Context ori";
+        Context: Codeunit "Whse Write Context ori";
         PickNoText: Text;
         NoText: Text;
         SystemIdText: Text;
@@ -436,7 +459,7 @@ codeunit 10078481 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
 
     local procedure ReadInvoice(RequestJson: JsonObject; var Argument: Record "Message Argument ori"; ActivityHeader: Record "Warehouse Activity Header"; var Invoice: Boolean)
     var
-        Context: Codeunit "Whse InvtPick Context ori";
+        Context: Codeunit "Whse Write Context ori";
         Present: Boolean;
         InvoiceLbl: Label 'invoice is supported only for a sales order.', Comment = 'is-IS=invoice er aðeins stutt fyrir sölupöntun.';
         InvoiceNextStepLbl: Label 'Send invoice as false, or invoice the sales order after the shipment.', Comment = 'is-IS=Sendu invoice sem false, eða reikningsfærðu sölupöntunina eftir sendingu.';
@@ -487,7 +510,7 @@ codeunit 10078481 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
     local procedure ReadOneLine(Token: JsonToken; Index: Integer; var Argument: Record "Message Argument ori"; ActivityHeader: Record "Warehouse Activity Header"; var Planned: JsonArray)
     var
         ActivityLine: Record "Warehouse Activity Line";
-        Context: Codeunit "Whse InvtPick Context ori";
+        Context: Codeunit "Whse Write Context ori";
         LineObject: JsonObject;
         PlannedLine: JsonObject;
         LineNo: Integer;
@@ -713,5 +736,185 @@ codeunit 10078481 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
         Entry := ContractMgt.ErrorEntry(ErrorCode, WhenText, NextStep);
         Entry.Add('nextStep', NextStep);
         Errors.Add(Entry);
+    end;
+
+    local procedure PostPick(Payload: JsonObject; var Result: JsonObject)
+    var
+        ActivityHeader: Record "Warehouse Activity Header";
+        ActivityLine: Record "Warehouse Activity Line";
+        WhseActivityPost: Codeunit "Whse.-Activity-Post";
+        PickNo: Code[20];
+        Invoice: Boolean;
+        NothingToPostErr: Label 'There is no quantity to post.', Comment = 'is-IS=Ekkert magn er til að bóka.';
+    begin
+        PickNo := CopyStr(TextValue(Payload, 'pickNo'), 1, MaxStrLen(PickNo));
+        Invoice := BooleanValue(Payload, 'invoice');
+        ActivityHeader.Get(ActivityHeader.Type::"Invt. Pick", PickNo);
+        ApplyQuantities(ActivityHeader, Payload);
+        if not FindLineToPost(ActivityHeader, ActivityLine) then
+            Error(NothingToPostErr);
+        WhseActivityPost.ShowHideDialog(true);
+        WhseActivityPost.SetInvoiceSourceDoc(Invoice);
+        WhseActivityPost.Run(ActivityLine);
+        WritePostedInRun(ActivityHeader, Invoice, Result);
+    end;
+
+    local procedure FindLineToPost(ActivityHeader: Record "Warehouse Activity Header"; var ActivityLine: Record "Warehouse Activity Line"): Boolean
+    begin
+        ActivityLine.SetRange("Activity Type", ActivityHeader.Type);
+        ActivityLine.SetRange("No.", ActivityHeader."No.");
+        if not ActivityLine.FindSet() then
+            exit(false);
+        repeat
+            if ActivityLine."Qty. to Handle" <> 0 then
+                exit(true);
+        until ActivityLine.Next() = 0;
+        exit(false);
+    end;
+
+    local procedure ApplyQuantities(ActivityHeader: Record "Warehouse Activity Header"; Payload: JsonObject)
+    var
+        ActivityLine: Record "Warehouse Activity Line";
+        Token: JsonToken;
+        Lines: JsonArray;
+        LineObject: JsonObject;
+        LineNo: Integer;
+        Quantity: Decimal;
+    begin
+        if not Payload.Get('lines', Token) then
+            exit;
+        if not Token.IsArray() then
+            exit;
+        Lines := Token.AsArray();
+        foreach Token in Lines do begin
+            LineObject := Token.AsObject();
+            LineNo := IntegerValue(LineObject, 'lineNo');
+            Quantity := DecimalValue(LineObject, 'qtyToHandle');
+            ActivityLine.Get(ActivityHeader.Type, ActivityHeader."No.", LineNo);
+            ActivityLine.Validate("Qty. to Handle", Quantity);
+            ActivityLine.Modify(true);
+        end;
+    end;
+
+    local procedure WritePostedInRun(ActivityHeader: Record "Warehouse Activity Header"; Invoice: Boolean; var Result: JsonObject)
+    var
+        PostedHeader: Record "Posted Invt. Pick Header";
+        Lines: JsonArray;
+        PostedQuantity: Decimal;
+        PostedDocumentNo: Code[20];
+        PostedInvoiceNo: Code[20];
+        MissingPostedErr: Label 'The inventory pick was posted but the posted pick was not found.', Comment = 'is-IS=Birgðatínslan var bókuð en bókaða tínslan fannst ekki.';
+    begin
+        PostedHeader.SetRange("Invt Pick No.", ActivityHeader."No.");
+        if not PostedHeader.FindLast() then
+            Error(MissingPostedErr);
+        PostedDocumentNo := FindPostedDocumentNo(ActivityHeader);
+        if Invoice then
+            PostedInvoiceNo := FindPostedInvoiceNo(ActivityHeader);
+        PostedQuantity := BuildPostedLines(PostedHeader, Lines);
+        Result.Add('pickNo', ActivityHeader."No.");
+        Result.Add('postedPickNo', PostedHeader."No.");
+        Result.Add('sourceDocument', Format(ActivityHeader."Source Document"));
+        Result.Add('sourceNo', ActivityHeader."Source No.");
+        Result.Add('postedDocumentNo', PostedDocumentNo);
+        Result.Add('postedInvoiceNo', PostedInvoiceNo);
+        Result.Add('invoice', Invoice);
+        Result.Add('postedQuantity', PostedQuantity);
+        Result.Add('lines', Lines);
+    end;
+
+    local procedure BuildPostedLines(PostedHeader: Record "Posted Invt. Pick Header"; var Lines: JsonArray): Decimal
+    var
+        PostedLine: Record "Posted Invt. Pick Line";
+        LineJson: JsonObject;
+        PostedQuantity: Decimal;
+    begin
+        Clear(Lines);
+        PostedLine.SetRange("No.", PostedHeader."No.");
+        if not PostedLine.FindSet() then
+            exit(0);
+        repeat
+            Clear(LineJson);
+            LineJson.Add('lineNo', PostedLine."Line No.");
+            LineJson.Add('itemNo', PostedLine."Item No.");
+            LineJson.Add('binCode', PostedLine."Bin Code");
+            LineJson.Add('quantity', PostedLine.Quantity);
+            Lines.Add(LineJson);
+            PostedQuantity += PostedLine.Quantity;
+        until PostedLine.Next() = 0;
+        exit(PostedQuantity);
+    end;
+
+    local procedure FindPostedDocumentNo(ActivityHeader: Record "Warehouse Activity Header"): Code[20]
+    var
+        SalesShipmentHeader: Record "Sales Shipment Header";
+        ReturnShipmentHeader: Record "Return Shipment Header";
+        TransferShipmentHeader: Record "Transfer Shipment Header";
+    begin
+        case ActivityHeader."Source Document" of
+            ActivityHeader."Source Document"::"Sales Order":
+                begin
+                    SalesShipmentHeader.SetRange("Order No.", ActivityHeader."Source No.");
+                    if SalesShipmentHeader.FindLast() then
+                        exit(SalesShipmentHeader."No.");
+                end;
+            ActivityHeader."Source Document"::"Purchase Return Order":
+                begin
+                    ReturnShipmentHeader.SetRange("Return Order No.", ActivityHeader."Source No.");
+                    if ReturnShipmentHeader.FindLast() then
+                        exit(ReturnShipmentHeader."No.");
+                end;
+            ActivityHeader."Source Document"::"Outbound Transfer":
+                begin
+                    TransferShipmentHeader.SetRange("Transfer Order No.", ActivityHeader."Source No.");
+                    if TransferShipmentHeader.FindLast() then
+                        exit(TransferShipmentHeader."No.");
+                end;
+        end;
+        exit('');
+    end;
+
+    local procedure FindPostedInvoiceNo(ActivityHeader: Record "Warehouse Activity Header"): Code[20]
+    var
+        SalesInvoiceHeader: Record "Sales Invoice Header";
+    begin
+        if ActivityHeader."Source Document" <> ActivityHeader."Source Document"::"Sales Order" then
+            exit('');
+        SalesInvoiceHeader.SetRange("Order No.", ActivityHeader."Source No.");
+        if SalesInvoiceHeader.FindLast() then
+            exit(SalesInvoiceHeader."No.");
+        exit('');
+    end;
+
+    local procedure TextValue(Parent: JsonObject; Name: Text): Text
+    var
+        Token: JsonToken;
+    begin
+        if not Parent.Get(Name, Token) then
+            exit('');
+        if not Token.IsValue() then
+            exit('');
+        if Token.AsValue().IsNull() then
+            exit('');
+        exit(Token.AsValue().AsText());
+    end;
+
+    local procedure BooleanValue(Parent: JsonObject; Name: Text): Boolean
+    var
+        Token: JsonToken;
+    begin
+        if not Parent.Get(Name, Token) then
+            exit(false);
+        if not Token.IsValue() then
+            exit(false);
+        exit(Token.AsValue().AsBoolean());
+    end;
+
+    local procedure HasWritePermission(): Boolean
+    var
+        ActivityLine: Record "Warehouse Activity Line";
+        PostedHeader: Record "Posted Invt. Pick Header";
+    begin
+        exit(ActivityLine.WritePermission() and PostedHeader.WritePermission());
     end;
 }

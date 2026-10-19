@@ -110,6 +110,36 @@ codeunit 97024 "Whse Post Gate Grant Tests ori"
         Assert.AreEqual(0, StrPos(ErrorToken.AsValue().AsText(), 'Posting denied'), ErrorToken.AsValue().AsText());
     end;
 
+    /// <summary>The new post and register types are enabled with BIFROST WhsePost ori.</summary>
+    [Test]
+    procedure NewPostAndRegisterTypes_WithWhsePost_AreEnabled()
+    var
+        LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
+    begin
+        LowerToWhsePost(LibraryLowerPermissions);
+        AssertEnabled(Enum::"Message Type ori"::"Warehouse.Movement.Register");
+        AssertEnabled(Enum::"Message Type ori"::"Warehouse.InventoryPick.Post");
+        AssertEnabled(Enum::"Message Type ori"::"Warehouse.InventoryPutAway.Post");
+        AssertEnabled(Enum::"Message Type ori"::"Warehouse.InventoryMovement.Register");
+    end;
+
+    /// <summary>Warehouse.InventoryPick.Post with invoice = true passes both gates and reaches lookup.</summary>
+    [Test]
+    procedure InventoryPickPost_InvoiceWithWhseInv_ReachesLookup()
+    var
+        LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
+        ResponseJson: JsonObject;
+        CodeToken: JsonToken;
+        ResponseText: Text;
+    begin
+        LowerToWhsePost(LibraryLowerPermissions);
+        Assert.IsTrue(RunMessageType(Enum::"Message Type ori"::"Warehouse.InventoryPick.Post", '{"invoice":true}', ResponseJson), 'The lookup response should be JSON.');
+        ResponseJson.WriteTo(ResponseText);
+        Assert.IsTrue(ResponseJson.Get('code', CodeToken), 'code missing: ' + ResponseText);
+        Assert.AreNotEqual('PermissionDenied', CodeToken.AsValue().AsText(), ResponseText);
+        Assert.AreEqual(0, StrPos(ResponseText, 'Posting denied'), ResponseText);
+    end;
+
     local procedure LowerToWhsePost(var LibraryLowerPermissions: Codeunit "Library - Lower Permissions")
     begin
         // Restrictive tests start as D365 Full Access until this library replaces that set.
@@ -138,6 +168,39 @@ codeunit 97024 "Whse Post Gate Grant Tests ori"
         RequestContent.AddText(RequestText);
         Dispatcher.Execute(
             Enum::"Message Type ori"::"Warehouse.Shipment.Post",
+            Enum::"Message Version ori"::"1.0",
+            '',
+            'Bifrost Warehouse Tests',
+            'text/json',
+            RequestContent,
+            ResponseContent,
+            ResponseContentType);
+        if ResponseContent.Length() = 0 then
+            exit(false);
+        ResponseContent.GetSubText(ResponseText, 1, ResponseContent.Length());
+        exit(ResponseJson.ReadFrom(ResponseText));
+    end;
+
+    local procedure AssertEnabled(MessageType: Enum "Message Type ori")
+    var
+        MessageTypeInterface: Interface "Msg Interface ori";
+    begin
+        MessageTypeInterface := MessageType;
+        Assert.IsTrue(MessageTypeInterface.IsEnabled(), 'The post or register type should be enabled with BIFROST WhsePost ori.');
+    end;
+
+    local procedure RunMessageType(MessageType: Enum "Message Type ori"; RequestText: Text; var ResponseJson: JsonObject): Boolean
+    var
+        Dispatcher: Codeunit "Dispatcher ori";
+        RequestContent: BigText;
+        ResponseContent: BigText;
+        ResponseContentType: Text[100];
+        ResponseText: Text;
+    begin
+        Clear(ResponseJson);
+        RequestContent.AddText(RequestText);
+        Dispatcher.Execute(
+            MessageType,
             Enum::"Message Version ori"::"1.0",
             '',
             'Bifrost Warehouse Tests',

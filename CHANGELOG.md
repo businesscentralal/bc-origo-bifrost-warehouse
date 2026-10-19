@@ -2,46 +2,18 @@
 
 ## [Unreleased]
 
-### Added (2026-10-17) - Bin replenishment calculate (#47)
+### Added (2026-10-19) - Bin master, default bin, movements, inventory documents and bin replenishment (#41-#47)
 
-- Warehouse.BinReplenishment.Calculate (codeunit 10078424, process 10078449) runs Calculate Bin Replenishment into a movement worksheet at a directed location. Optional zone, bin and item filters limit the fixed bin content. Nothing to replenish returns success with an empty line list. autoCreateMovement must stay false because this type does not create the warehouse movement. A location without directed put-away and pick returns PreconditionFailed. A missing worksheet template or name returns RecordNotFound. Isolation uses codeunit 10078448.
-- Enum value 10078447. The worksheet line field hint for quantity to handle and the from and to bins now also names Warehouse.BinReplenishment.Calculate. Test 97091.
-
-### Added (2026-10-16) - Inventory movement create and register (#44)
-
-- Warehouse.InventoryMovement.Create (codeunit 10078441, process 10078442) creates an inventory movement at a location with bins and without directed put-away and pick. Inline lines are written to an internal movement and codeunit "Create Inventory Pick/Movement" creates the activity. Assembly consumption uses report 7323, which commits. A directed location returns PreconditionFailed and tells the caller to use Warehouse.Movement.Create. A location without Bin Mandatory returns PreconditionFailed. Quantity above the from-bin, and fromBin equal to toBin, return InvalidLine and write nothing.
-- Warehouse.InventoryMovement.Register (codeunit 10078443, process 10078444) registers by number or SystemId, including a partial quantity. Codeunit 7307 commits. Isolation uses codeunit 10078440.
-- Enum values 10078445 and 10078446. Warehouse Activity Line quantity and bin hints, and the activity line table hint, now also name the inventory movement types. Tests 97089–97090.
-
-### Fixed (2026-10-16) - Inventory quantity, identifier conflict and movement employee (#41, #42, #43)
-
-- Warehouse.InventoryPutAway.Create (codeunit 10078421) and Warehouse.InventoryPick.Create (codeunit 10078480) set Qty. to Handle and Qty. to Handle (Base) to the outstanding quantity after report 7323. The report leaves that field at zero when its request page is suppressed, so a post without lines had nothing to post. The quantity is assigned without Validate, because a tracked line without a lot rejects Validate and a try function cannot write afterwards. Post then refuses the missing lot or serial before posting.
-- Warehouse.InventoryPutAway.Create (codeunit 10078420) and Warehouse.InventoryPick.Create (codeunit 10078479) return ConflictingIdentifiers when sourceNo names a document and systemId does not name that same document. A missing systemId previously returned RecordNotFound before the source number was compared.
-- Movement tests 97083 and 97084 assign the current user as the default warehouse employee on the directed location, and they create a movement worksheet template when the company has none. Business Central otherwise asks to open Warehouse Employees, and inline movement lines need a template of type Movement.
-
-### Added (2026-10-16) - Inventory put-away create and post (#43)
-
-- Warehouse.InventoryPutAway.Create (codeunit 10078420, process 10078421) creates an inventory put-away from a released purchase order, sales return order or inbound transfer at a location that requires put-away and does not use warehouse receipts. An open inventory put-away for the same document is returned with a warning. Report 7323 commits the put-away.
-- Warehouse.InventoryPutAway.Post (codeunit 10078422, process 10078423) posts by number or SystemId, including a quantity and an optional bin. A missing or inbound-blocked bin, a quantity above outstanding, and a tracked line without lot or serial are refused before posting. invoice true is only for a purchase order. Posting commits. Isolation uses codeunit 10078419.
-- Enum values 10078483 and 10078418. Warehouse Activity Line quantity, bin, lot and serial hints now also name the inventory put-away types. Expiration Date names the inventory put-away types. Tests 97087–97088.
-
-### Added (2026-10-16) - Inventory pick create and post (#42)
-
-- Warehouse.InventoryPick.Create (codeunit 10078479, process 10078480) creates an inventory pick from a released sales order, purchase return order, outbound transfer, assembly consumption or production consumption at a location that requires pick and does not use warehouse shipments. An open inventory pick for the same document is returned with a warning. Report 7323 commits the pick.
-- Warehouse.InventoryPick.Post (codeunit 10078481, process 10078482) posts by number or SystemId, including a partial quantity. Quantity above outstanding or bin content is refused. invoice true is only for a sales order. Codeunit 7324 commits the post. Isolation uses codeunit 10078478.
-- Enum values 10078476–10078477. Warehouse Activity Line quantity and bin hints now name the movement and inventory-pick types. Lot No. and Serial No. name the inventory-pick types. Zone Code stays on Warehouse.Movement.Register. The activity line table hint names the dedicated activity types because a table block is answered before a field hint. Tests 97085–97086.
-
-### Added (2026-10-16) - Warehouse movement create and register (#41)
-
-- Warehouse.Movement.Create (codeunit 10078466, process 10078467) creates a movement at a directed put-away and pick location from a movement worksheet or from inline lines. A location without directed put-away and pick returns PreconditionFailed and writes nothing.
-- Warehouse.Movement.Register (codeunit 10078468, process 10078469) registers by number or SystemId, including a partial quantity. Zero quantity to handle on every line is refused. Isolation uses codeunit 10078475.
-- Enum values 10078473–10078474. Field write blocks for the movement worksheet quantity and bins, and for the activity quantity, bin and zone, live in Whse Data Restrict ori (10078458). Tests 97083–97084.
-
-### Added (2026-10-16) - Bin master and default bin (#45, #46)
-
-- Warehouse.Bin.Create (codeunit 10078461, process 10078462) and Warehouse.Bin.Get (codeunit 10078460) create and read bins. Warehouse.Bin.Get is an outbound read. The story text called it an inbound write; that wording is not how the type behaves.
-- Warehouse.DefaultBin.Set (codeunit 10078463, process 10078464) sets Bin Content Default. Business Central rejects a second default in OnValidate, so the previous default row is cleared before Validate. Empty on Bin is not writable.
-- Enum values 10078470–10078472. Write isolation uses codeunit 10078465. Table write block for Bin and field write block for Bin Content Default live in Whse Data Restrict ori (10078458). Tests 97080–97082.
+- `Warehouse.Bin.Get` (10078418) reads bins at a location with optional bin content, paged with take and skip. `Warehouse.Bin.Create` (10078419) inserts one or more bins through Validate, all or nothing, and lists every failing bin. `Warehouse.DefaultBin.Set` (10078420) creates the bin content row when missing (fixed, like the page) and sets Default; the bin that is already default answers `changed: false`. Business Central rejects a second default in OnValidate, so the previous default row is cleared first. (#45, #46)
+- `Warehouse.Movement.Create` (10078421) creates a warehouse movement at a directed put-away and pick location from a movement worksheet or from inline lines. `Warehouse.Movement.Register` (10078422) registers it by number or SystemId, including a partial quantity; zero quantity to handle on every line is refused. (#41)
+- `Warehouse.InventoryPick.Create` (10078423) creates an inventory pick from a released sales order, purchase return order, outbound transfer, assembly or production consumption; an open pick for the same document is returned with a warning. `Warehouse.InventoryPick.Post` (10078424) posts it, with optional per-line quantity and `invoice` for a sales order. (#42)
+- `Warehouse.InventoryPutAway.Create` (10078425) creates an inventory put-away from a released purchase order, sales return order or inbound transfer. `Warehouse.InventoryPutAway.Post` (10078426) posts it, with optional per-line quantity and bin and `invoice` for a purchase order; a tracked line without lot or serial is refused per line. (#43)
+- `Warehouse.InventoryMovement.Create` (10078427) creates an inventory movement at a basic warehouse location with bins, from inline lines or assembly consumption. `Warehouse.InventoryMovement.Register` (10078428) registers it, including a partial quantity. fromBin equal to toBin and a quantity above the from-bin content return `InvalidLine`. (#44)
+- `Warehouse.BinReplenishment.Calculate` (10078429) runs Calculate Bin Replenishment into a movement worksheet at a directed location; nothing to replenish answers success with an empty line list. (#47)
+- Posting gate: `Warehouse.Movement.Register`, `Warehouse.InventoryPick.Post`, `Warehouse.InventoryPutAway.Post` and `Warehouse.InventoryMovement.Register` require `BIFROST WhsePost ori` like the other post and register types; `invoice: true` on inventory pick and put-away post also requires `BIFROST WhseInv ori`. The gate refusal now carries a `nextStep` that names the missing permission set.
+- One Impl codeunit per message type: each write type runs its own `OnRun` inside `Codeunit.Run` and shares `Whse Write Context ori` (10078430) for the payload, the result and the request readers. The enum value of each new type reuses its Impl codeunit number. App IDs 10078431-10078451 and 10078460-10078484 stay free.
+- Generic `Data.Records.Set` writes are blocked on Bin (table), Bin Content Default, the movement worksheet quantity and bins, and the activity line quantity, bin, zone, lot, serial and expiration fields of the dedicated activity types (`Whse Data Restrict ori`).
+- Tests 97080-97091, plus posting-gate deny and grant tests for the four new post and register types in 97023 and 97024.
 
 ### Fixed (2026-10-16) - Raise Warehouse app version above UAT to unblock Deploy to Bifrost
 

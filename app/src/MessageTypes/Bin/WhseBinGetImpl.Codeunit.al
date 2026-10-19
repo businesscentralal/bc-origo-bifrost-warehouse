@@ -8,7 +8,7 @@ using Origo.Bifrost;
 /// Implements Warehouse.Bin.Get as a paged read of bin master data.
 /// The story text called this an inbound write. It is an outbound read, like Warehouse.BinContent.Get.
 /// </summary>
-codeunit 10078460 "Whse Bin Get Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
+codeunit 10078418 "Whse Bin Get Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
 {
     Access = Internal;
 

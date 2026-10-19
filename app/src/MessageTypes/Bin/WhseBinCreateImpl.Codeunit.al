@@ -8,9 +8,26 @@ using Origo.Bifrost;
 /// Implements Warehouse.Bin.Create. Bins are validated and then inserted inside Codeunit.Run.
 /// Empty is not written: Business Central initializes it and keeps it non-editable.
 /// </summary>
-codeunit 10078461 "Whse Bin Create Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
+codeunit 10078419 "Whse Bin Create Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
 {
     Access = Internal;
+
+    trigger OnRun()
+    var
+        Context: Codeunit "Whse Write Context ori";
+        Payload: JsonObject;
+        Bins: JsonArray;
+        BinToken: JsonToken;
+        MissingPayloadErr: Label 'The bin create payload was empty.', Comment = 'is-IS=Gögnin til að stofna hólf voru tóm.';
+    begin
+        if not Context.TryGetPayload(Payload) then
+            Error(MissingPayloadErr);
+        if not Payload.Get('bins', BinToken) then
+            Error(MissingPayloadErr);
+        Bins := BinToken.AsArray();
+        foreach BinToken in Bins do
+            InsertBin(Payload, BinToken.AsObject());
+    end;
 
     /// <summary>Returns whether the caller can create bins.</summary>
     /// <returns>True when the caller can write Bin and read Location.</returns>
@@ -270,7 +287,7 @@ codeunit 10078461 "Whse Bin Create Impl ori" implements "Msg Interface ori", "Ms
     /// <param name="Argument">The request and response message argument.</param>
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var
-        Context: Codeunit "Whse Bin Write Context ori";
+        Context: Codeunit "Whse Write Context ori";
         RequestJson: JsonObject;
         Payload: JsonObject;
         LocationCode: Code[10];
@@ -278,7 +295,7 @@ codeunit 10078461 "Whse Bin Create Impl ori" implements "Msg Interface ori", "Ms
         DeniedNextStepLbl: Label 'Ask an administrator to assign BIFROST Whse - Full ori.', Comment = 'is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.';
         ProblemsLbl: Label 'Nothing was written.', Comment = 'is-IS=Ekkert var skrifað.';
     begin
-        Context.Clear();
+        Context.Reset();
         if not IsEnabled() then begin
             Argument.RespondWithError("Bifrost Error Code ori"::PermissionDenied, DeniedLbl, '', '', '', DeniedNextStepLbl);
             exit;
@@ -291,17 +308,17 @@ codeunit 10078461 "Whse Bin Create Impl ori" implements "Msg Interface ori", "Ms
             LocationCode := '';
         ReadBins(RequestJson, Argument, LocationCode, Payload);
         if Argument.HasCollectedErrors() then begin
-            Context.Clear();
+            Context.Reset();
             Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, ProblemsLbl);
             exit;
         end;
         Context.SetPayload(Payload);
-        if not Codeunit.Run(Codeunit::"Whse Bin Create Process ori") then begin
-            Context.Clear();
+        if not Codeunit.Run(Codeunit::"Whse Bin Create Impl ori") then begin
+            Context.Reset();
             Argument.RespondWithLastError();
             exit;
         end;
-        Context.Clear();
+        Context.Reset();
         WriteCreatedBins(Argument, Payload);
     end;
 
@@ -752,5 +769,49 @@ codeunit 10078461 "Whse Bin Create Impl ori" implements "Msg Interface ori", "Ms
         if (Written = 'true') or (Written = 'false') then
             exit('boolean');
         exit('number');
+    end;
+
+    local procedure InsertBin(Payload: JsonObject; BinObject: JsonObject)
+    var
+        Bin: Record Bin;
+        LocationToken: JsonToken;
+        Token: JsonToken;
+    begin
+        Bin.Init();
+        Payload.Get('locationCode', LocationToken);
+        Bin.Validate("Location Code", CopyStr(LocationToken.AsValue().AsText(), 1, MaxStrLen(Bin."Location Code")));
+        BinObject.Get('code', Token);
+        Bin.Validate(Code, CopyStr(Token.AsValue().AsText(), 1, MaxStrLen(Bin.Code)));
+        if BinObject.Get('description', Token) then
+            if Token.AsValue().AsText() <> '' then
+                Bin.Validate(Description, CopyStr(Token.AsValue().AsText(), 1, MaxStrLen(Bin.Description)));
+        if BinObject.Get('zoneCode', Token) then
+            if Token.AsValue().AsText() <> '' then
+                Bin.Validate("Zone Code", CopyStr(Token.AsValue().AsText(), 1, MaxStrLen(Bin."Zone Code")));
+        if BinObject.Get('binTypeCode', Token) then
+            if Token.AsValue().AsText() <> '' then
+                Bin.Validate("Bin Type Code", CopyStr(Token.AsValue().AsText(), 1, MaxStrLen(Bin."Bin Type Code")));
+        if BinObject.Get('ranking', Token) then
+            Bin.Validate("Bin Ranking", Token.AsValue().AsInteger());
+        if BinObject.Get('blockMovement', Token) then
+            ValidateBlockMovement(Bin, Token.AsValue().AsText());
+        if BinObject.Get('dedicated', Token) then
+            if Token.AsValue().AsBoolean() then
+                Bin.Validate(Dedicated, true);
+        Bin.Insert(true);
+    end;
+
+    local procedure ValidateBlockMovement(var Bin: Record Bin; BlockText: Text)
+    begin
+        case UpperCase(BlockText) of
+            'INBOUND':
+                Bin.Validate("Block Movement", Bin."Block Movement"::Inbound);
+            'OUTBOUND':
+                Bin.Validate("Block Movement", Bin."Block Movement"::Outbound);
+            'ALL':
+                Bin.Validate("Block Movement", Bin."Block Movement"::All);
+            else
+                Bin.Validate("Block Movement", Bin."Block Movement"::" ");
+        end;
     end;
 }

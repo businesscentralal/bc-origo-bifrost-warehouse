@@ -1,7 +1,9 @@
 namespace Origo.Bifrost.Warehouse.Test;
 
 using Microsoft.Warehouse.Activity;
+using Microsoft.Warehouse.Activity.History;
 using Microsoft.Warehouse.Document;
+using Microsoft.Warehouse.InventoryDocument;
 using Origo.Bifrost;
 using Origo.Bifrost.Warehouse;
 using System.Environment;
@@ -25,11 +27,21 @@ permissionset 97025 "Whse Gate Test ori"
         tabledata "Warehouse Shipment Header" = RIMD,
         tabledata "Warehouse Receipt Header" = RIMD,
         tabledata "Warehouse Activity Header" = RIMD,
+        tabledata "Warehouse Activity Line" = RIMD,
+        tabledata "Registered Whse. Activity Hdr." = RIMD,
+        tabledata "Registered Invt. Movement Hdr." = RIMD,
+        tabledata "Posted Invt. Pick Header" = RIMD,
+        tabledata "Posted Invt. Put-away Header" = RIMD,
         codeunit "Whse Posting Gate ori" = X,
         codeunit "Whse Shipment Post Impl ori" = X,
         codeunit "Whse Receipt Post Impl ori" = X,
         codeunit "Whse Pick Register Impl ori" = X,
         codeunit "Whse Putaway Register Impl ori" = X,
         codeunit "Whse Ship. Prev. Post Impl ori" = X,
-        codeunit "Whse Rcpt Post Prev. Impl ori" = X;
+        codeunit "Whse Rcpt Post Prev. Impl ori" = X,
+        codeunit "Whse Movement Reg Impl ori" = X,
+        codeunit "Whse InvtPick Post Impl ori" = X,
+        codeunit "Whse InvtPut Post Impl ori" = X,
+        codeunit "Whse InvtMove Reg Impl ori" = X,
+        codeunit "Whse Write Context ori" = X;
 }

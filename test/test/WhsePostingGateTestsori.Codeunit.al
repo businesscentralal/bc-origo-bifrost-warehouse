@@ -74,11 +74,12 @@ codeunit 97023 "Whse Posting Gate Tests ori"
     [Test]
     procedure AssertCanPost_WithoutWhsePost_NamesWhsePostSet()
     var
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         PostingGate: Codeunit "Whse Posting Gate ori";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         ResponseJson: JsonObject;
         CodeToken: JsonToken;
+        ResponseText: Text;
         ErrorToken: JsonToken;
     begin
         LowerToDocumentWrite(LibraryLowerPermissions);
@@ -88,7 +89,8 @@ codeunit 97023 "Whse Posting Gate Tests ori"
         Assert.IsFalse(PostingGate.HasPostingPermission(), 'HasPostingPermission should be false without the token.');
 
         ResponseJson := TempArgument.GetResponseJson();
-        Assert.IsTrue(ResponseJson.Get('code', CodeToken), 'code missing');
+        ResponseJson.WriteTo(ResponseText);
+        Assert.IsTrue(ResponseJson.Get('code', CodeToken), 'code missing: ' + ResponseText);
         Assert.AreEqual('PermissionDenied', CodeToken.AsValue().AsText(), 'code');
         Assert.IsTrue(ResponseJson.Get('error', ErrorToken), 'error missing');
         Assert.AreNotEqual(0, StrPos(ErrorToken.AsValue().AsText(), 'BIFROST WhsePost ori'), ErrorToken.AsValue().AsText());
@@ -98,11 +100,12 @@ codeunit 97023 "Whse Posting Gate Tests ori"
     [Test]
     procedure AssertCanInvoice_WithoutWhseInv_NamesWhseInvSet()
     var
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         PostingGate: Codeunit "Whse Posting Gate ori";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         ResponseJson: JsonObject;
         CodeToken: JsonToken;
+        ResponseText: Text;
         ErrorToken: JsonToken;
     begin
         LowerToDocumentWrite(LibraryLowerPermissions);
@@ -112,7 +115,8 @@ codeunit 97023 "Whse Posting Gate Tests ori"
         Assert.IsFalse(PostingGate.HasInvoicePermission(), 'HasInvoicePermission should be false without the token.');
 
         ResponseJson := TempArgument.GetResponseJson();
-        Assert.IsTrue(ResponseJson.Get('code', CodeToken), 'code missing');
+        ResponseJson.WriteTo(ResponseText);
+        Assert.IsTrue(ResponseJson.Get('code', CodeToken), 'code missing: ' + ResponseText);
         Assert.AreEqual('PermissionDenied', CodeToken.AsValue().AsText(), 'code');
         Assert.IsTrue(ResponseJson.Get('error', ErrorToken), 'error missing');
         Assert.AreNotEqual(0, StrPos(ErrorToken.AsValue().AsText(), 'BIFROST WhseInv ori'), ErrorToken.AsValue().AsText());
@@ -146,7 +150,7 @@ codeunit 97023 "Whse Posting Gate Tests ori"
     [Test]
     procedure ShipmentPreview_WithoutWhsePost_StaysEnabled()
     var
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         PreviewImpl: Codeunit "Whse Ship. Prev. Post Impl ori";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
     begin
@@ -162,7 +166,7 @@ codeunit 97023 "Whse Posting Gate Tests ori"
     [Test]
     procedure ReceiptPreview_WithoutWhsePost_StaysEnabled()
     var
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         PreviewImpl: Codeunit "Whse Rcpt Post Prev. Impl ori";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
     begin

@@ -1,6 +1,8 @@
 namespace Origo.Bifrost.Warehouse.Test;
 
+using Microsoft.Foundation.Company;
 using Origo.Bifrost;
+using System.Globalization;
 using Microsoft.Inventory.Item;
 using Microsoft.Inventory.Location;
 using Microsoft.Sales.Document;
@@ -166,4 +168,72 @@ codeunit 97018 "Whse Pick Register Tests ori"
 
         Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Pick.Register", PickNo, RequestText, ResponseJson);
     end;
+    /// <summary>Issue #27 AC08: refusal text is entirely in the requested language.</summary>
+    [Test]
+    procedure PickRegister_Refusal_IsLocalized()
+    var
+        ActivityHeader: Record "Warehouse Activity Header";
+        TestData: Codeunit "Whse Test Data ori";
+        Request: JsonObject;
+        RequestText: Text;
+        ActivityType: Enum "Warehouse Activity Type";
+        EnglishResponse: JsonObject;
+        IcelandicResponse: JsonObject;
+    begin
+        // Story #27, AC08 | Time: independent of Today/WorkDate | Risk: native pipeline restores GlobalLanguage; company language restored before assertions.
+        TestData.CreateActivity(ActivityType::"Put-away", 'W2-IS-PUTAWAY', 'W2LANG', '', 'W2-IS-DOC');
+        ActivityHeader.Get(ActivityType::"Put-away", 'W2-IS-PUTAWAY');
+        Request.Add('systemId', Format(ActivityHeader.SystemId, 0, 4));
+        Request.WriteTo(RequestText);
+        ReadLocalizedRefusal(1033, RequestText, EnglishResponse);
+        ReadLocalizedRefusal(1039, RequestText, IcelandicResponse);
+        AssertLocalizedError(EnglishResponse, 'Warehouse Activity W2-IS-PUTAWAY is not of Type Pick.');
+        AssertLocalizedError(IcelandicResponse, 'Vöruhúsavirkni W2-IS-PUTAWAY er ekki af tegundinni tínsla.');
+    end;
+
+    local procedure ReadLocalizedRefusal(LanguageId: Integer; RequestText: Text; var ResponseJson: JsonObject)
+    var
+        CompanyInformation: Record "Company Information";
+        Language: Record Language;
+        ShipmentHelper: Codeunit "Whse Shipment Test Helper ori";
+        OriginalLanguageCode: Code[10];
+        TestLanguageCode: Code[10];
+        OriginalLanguageId: Integer;
+        Succeeded: Boolean;
+    begin
+        // The public dispatcher uses the company language when Foundation's default is blank.
+        // Seed an owned language mapping; do not access Foundation Setup or licensing data.
+        if LanguageId = 1039 then
+            TestLanguageCode := 'W2IS'
+        else
+            TestLanguageCode := 'W2EN';
+        if not Language.Get(TestLanguageCode) then begin
+            Language.Init();
+            Language.Code := TestLanguageCode;
+            Language.Name := 'Owned W2 locale test';
+            Language.Insert();
+        end;
+        Language."Windows Language ID" := LanguageId;
+        Language.Modify();
+        CompanyInformation.Get();
+        OriginalLanguageCode := CompanyInformation."Default Language Code";
+        CompanyInformation."Default Language Code" := Language.Code;
+        CompanyInformation.Modify();
+        OriginalLanguageId := GlobalLanguage();
+        Succeeded := ShipmentHelper.RunMessage("Message Type ori"::"Warehouse.Pick.Register", '', RequestText, ResponseJson, false);
+        CompanyInformation."Default Language Code" := OriginalLanguageCode;
+        CompanyInformation.Modify();
+        // The orchestrator restores GlobalLanguage; company fixture state is restored before assertions.
+        Assert.AreEqual(OriginalLanguageId, GlobalLanguage(), 'The native pipeline must restore the caller language.');
+        Assert.IsTrue(Succeeded, 'Localized request must return JSON.');
+    end;
+
+    local procedure AssertLocalizedError(ResponseJson: JsonObject; ExpectedText: Text)
+    var
+        Token: JsonToken;
+    begin
+        Assert.IsTrue(ResponseJson.Get('error', Token), 'Refusal must have error text.');
+        Assert.AreEqual(ExpectedText, Token.AsValue().AsText(), 'The entire refusal must match the requested language.');
+    end;
+
 }

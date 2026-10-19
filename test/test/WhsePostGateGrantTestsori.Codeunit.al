@@ -73,7 +73,7 @@ codeunit 97024 "Whse Post Gate Grant Tests ori"
     [Test]
     procedure AssertCanPost_WithBothSets_WritesNoError()
     var
-        TempArgument: Record "Message Argument ori";
+        TempArgument: Record "Message Argument ori" temporary;
         PostingGate: Codeunit "Whse Posting Gate ori";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
     begin

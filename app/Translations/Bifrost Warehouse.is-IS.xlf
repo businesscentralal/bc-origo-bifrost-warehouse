@@ -93,6 +93,24 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Lesaðgangur. Les blaðsíðuskipt birgðainnihald hólfa; notaðu Warehouse.Activity.Get fyrir opnar tínslur og fráganga í vöruhúsi.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse BinContent Get Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2230900036 - Method 2526119521 - NamedType 3177803720" size-unit="char" translate="yes" xml:space="preserve">
+          <source>sortingMethod '%1' is not valid. Expected one of: %2.</source>
+          <target>sortingMethod '%1' er ekki gilt. Væntanlegt er eitt af: %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = supplied value, %2 = comma list of valid values, is-IS=sortingMethod '%1' er ekki gilt. Væntanlegt er eitt af: %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method BuildInvalidSortingMethodErr - NamedType InvalidErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2230900036 - Method 3571782927 - NamedType 3782878593" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Field %1 is restricted for write on table %2.</source>
+          <target>Ekki er heimilt að skrifa í reitinn %1 í töflunni %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = field caption, %2 = table caption, is-IS=Ekki er heimilt að skrifa í reitinn %1 í töflunni %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method ExecuteBifrostTask - NamedType FieldWriteRestrictedErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2230900036 - Method 3571782927 - NamedType 354333" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 = true is not supported by this API version. Only the BC defaults (false) are honoured.</source>
+          <target>%1 = true er ekki stutt í þessari útgáfu API. Aðeins sjálfgefin gildi BC (false) eru notuð.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = option name, is-IS=%1 = true er ekki stutt í þessari útgáfu API. Aðeins sjálfgefin gildi BC (false) eru notuð.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method ExecuteBifrostTask - NamedType UnsupportedOptionErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2230900036 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>create pick, pick list, picking, pick the goods, pick for shipment, pick the items, pick for the order, picking list</source>
           <target>stofna tínslu, tínslulisti, tína, tína vörur, tínsla fyrir afhendingu, tína vörueiningar, tína í pöntun, tínslulisti fyrir pöntun</target>
@@ -104,6 +122,30 @@
           <target>Óafturkræft. Stofnar tínslu úr fyrirliggjandi afhendingu; notaðu Warehouse.Pick.Register eftir að vörur hafa verið tíndar.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Óafturkræft. Stofnar tínslu úr fyrirliggjandi afhendingu; notaðu Warehouse.Pick.Register eftir að vörur hafa verið tíndar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2230900036 - Method 544333279 - NamedType 64170927" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No Warehouse Pick was created for Warehouse Shipment %1. There may be nothing to pick, the shipment may not require a pick, or the pick may already exist.</source>
+          <target>Engin vöruhúsatínsla var stofnuð fyrir vöruhúsaafhendingu %1. Hugsanlega er ekkert til tínslu, afhendingin krefst ekki tínslu eða tínsla er þegar til.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = shipment no., is-IS=Engin vöruhúsatínsla var stofnuð fyrir vöruhúsaafhendingu %1. Hugsanlega er ekkert til tínslu, afhendingin krefst ekki tínslu eða tínsla er þegar til.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method NoPickCreatedErr - NamedType Err</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3850251965 - Method 1665861916 - NamedType 3359697259" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warehouse Shipment %1 has no lines to pick.</source>
+          <target>Vöruhúsaafhending %1 hefur engar línur til tínslu.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = shipment no., is-IS=Vöruhúsaafhending %1 hefur engar línur til tínslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Process ori - Method OnRun - NamedType NoLinesErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 662601231 - Method 3571782927 - NamedType 3359697259" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warehouse Pick %1 has no lines.</source>
+          <target>Vöruhúsatínsla %1 hefur engar línur.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = pick no., is-IS=Vöruhúsatínsla %1 hefur engar línur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Register Impl ori - Method ExecuteBifrostTask - NamedType NoLinesErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 662601231 - Method 3204241699 - NamedType 706540587" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warehouse Activity %1 is not of Type Pick.</source>
+          <target>Vöruhúsavirkni %1 er ekki af tegundinni tínsla.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = activity no., is-IS=Vöruhúsavirkni %1 er ekki af tegundinni tínsla.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Register Impl ori - Method FindWarehousePick - NamedType NotPickErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 662601231 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>register pick, goods picked, picking done, confirm picking</source>
@@ -129,6 +171,24 @@
           <note from="Developer" annotates="general" priority="2">%1 = permission set name, is-IS=Bókun hafnað: vantar '%1' heimildasett.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Posting Gate ori - Method AssertCanPost - NamedType PostingDeniedErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 344402154 - Method 2526119521 - NamedType 3177803720" size-unit="char" translate="yes" xml:space="preserve">
+          <source>sortingMethod '%1' is not valid. Expected one of: %2.</source>
+          <target>sortingMethod '%1' er ekki gilt. Væntanlegt er eitt af: %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = supplied value, %2 = comma list of valid values, is-IS=sortingMethod '%1' er ekki gilt. Væntanlegt er eitt af: %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Putaway Create Impl ori - Method BuildInvalidSortingMethodErr - NamedType InvalidErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 344402154 - Method 3571782927 - NamedType 3782878593" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Field %1 is restricted for write on table %2.</source>
+          <target>Ekki er heimilt að skrifa í reitinn %1 í töflunni %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = field caption, %2 = table caption, is-IS=Ekki er heimilt að skrifa í reitinn %1 í töflunni %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Putaway Create Impl ori - Method ExecuteBifrostTask - NamedType FieldWriteRestrictedErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 344402154 - Method 3571782927 - NamedType 354333" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 = true is not supported by this API version. Only the BC defaults (false) are honoured.</source>
+          <target>%1 = true er ekki stutt í þessari útgáfu API. Aðeins sjálfgefin gildi BC (false) eru notuð.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = option name, is-IS=%1 = true er ekki stutt í þessari útgáfu API. Aðeins sjálfgefin gildi BC (false) eru notuð.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Putaway Create Impl ori - Method ExecuteBifrostTask - NamedType UnsupportedOptionErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 344402154 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>create put-away, put away, putaway, shelve the goods, store received goods</source>
           <target>stofna frágang, ganga frá vörum, frágangur, setja vörur í hillur, geyma mótteknar vörur</target>
@@ -140,6 +200,30 @@
           <target>Óafturkræft. Stofnar eða skilar frágangi úr bókaðri móttöku; notaðu Warehouse.Putaway.Register eftir að gengið hefur verið frá vörunum.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Óafturkræft. Stofnar eða skilar frágangi úr bókaðri móttöku; notaðu Warehouse.Putaway.Register eftir að gengið hefur verið frá vörunum.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Putaway Create Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 344402154 - Method 2774196013 - NamedType 64170927" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No Warehouse Put-away was created for Posted Whse. Receipt %1. There may be nothing to put away, the location may not require put-away, or all lines may already be completely put away.</source>
+          <target>Enginn vöruhúsafrágangur var stofnaður fyrir bókaða vöruhúsamóttöku %1. Hugsanlega er ekkert til frágangs, birgðageymslan krefst ekki frágangs eða allar línur eru þegar fullfrágengnar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = posted receipt no., is-IS=Enginn vöruhúsafrágangur var stofnaður fyrir bókaða vöruhúsamóttöku %1. Hugsanlega er ekkert til frágangs, birgðageymslan krefst ekki frágangs eða allar línur eru þegar fullfrágengnar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Putaway Create Impl ori - Method NoPutawayCreatedErr - NamedType Err</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1998692970 - Method 1665861916 - NamedType 3359697259" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Posted Whse. Receipt %1 has no lines to put away.</source>
+          <target>Bókuð vöruhúsamóttaka %1 hefur engar línur til frágangs.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = posted receipt no., is-IS=Bókuð vöruhúsamóttaka %1 hefur engar línur til frágangs.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Putaway Create Proc. ori - Method OnRun - NamedType NoLinesErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4263884365 - Method 3571782927 - NamedType 3359697259" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warehouse Put-away %1 has no lines.</source>
+          <target>Vöruhúsafrágangur %1 hefur engar línur.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = put-away no., is-IS=Vöruhúsafrágangur %1 hefur engar línur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Putaway Register Impl ori - Method ExecuteBifrostTask - NamedType NoLinesErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4263884365 - Method 2621188593 - NamedType 2087987041" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warehouse Activity %1 is not of Type Put-away.</source>
+          <target>Vöruhúsavirkni %1 er ekki af tegundinni frágangur.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = activity no., is-IS=Vöruhúsavirkni %1 er ekki af tegundinni frágangur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Putaway Register Impl ori - Method FindWarehousePutaway - NamedType NotPutawayErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 4263884365 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>register put-away, goods put away, putaway done, confirm put-away</source>
@@ -153,6 +237,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Óafturkræft. Skráir fyrirliggjandi frágang og uppfærir innihald hólfa.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Putaway Register Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 3353061649 - Method 3571782927 - NamedType 2960829030" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warehouse Receipt %1 has no lines to post.</source>
+          <target>Vöruhúsamóttaka %1 hefur engar línur til bókunar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = Whse. Receipt No., is-IS=Vöruhúsamóttaka %1 hefur engar línur til bókunar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt Post Prev. Impl ori - Method ExecuteBifrostTask - NamedType NoLinesToPostErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3353061649 - Method 3571782927 - NamedType 450631880" size-unit="char" translate="yes" xml:space="preserve">
           <source>Posting preview failed and no entries were captured. The warehouse receipt cannot be posted in its current state.</source>
           <target>Bókunarforsýning mistókst og engar færslur voru teknar. Vöruhúsamóttakan getur ekki verið bókuð í núverandi stöðu.</target>
@@ -164,6 +254,18 @@
           <target>Engin móttökulína hefur Magn til móttöku. Setjið magn á móttökulínurnar.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Engin móttökulína hefur Magn til móttöku. Setjið magn á móttökulínurnar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt Post Prev. Impl ori - Method ExecuteBifrostTask - NamedType NothingToPostNextStepTok</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3353061649 - Method 3571782927 - NamedType 3662202187" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Posting preview cannot run inside a rollback chain (Omit Commit). Run this message type with Omit Commit set to false.</source>
+          <target>Ekki er hægt að forskoða bókun innan afturköllunarkeðju (Omit Commit). Keyrðu þessa skilaboðategund með Omit Commit stillt á false.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekki er hægt að forskoða bókun innan afturköllunarkeðju (Omit Commit). Keyrðu þessa skilaboðategund með Omit Commit stillt á false.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt Post Prev. Impl ori - Method ExecuteBifrostTask - NamedType OmitCommitPreviewErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3353061649 - Method 3571782927 - NamedType 1490059627" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Call Dispatcher.Execute with OmitCommit = false, or use the HTTP/MCP API.</source>
+          <target>Kallaðu á Dispatcher.Execute með OmitCommit = false eða notaðu HTTP/MCP API.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Kallaðu á Dispatcher.Execute með OmitCommit = false eða notaðu HTTP/MCP API.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt Post Prev. Impl ori - Method ExecuteBifrostTask - NamedType OmitCommitPreviewNextStepTok</note>
         </trans-unit>
         <trans-unit id="Codeunit 3353061649 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>preview warehouse receipt, simulate receipt, what would the receipt post</source>
@@ -177,6 +279,72 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Lesaðgangur. Hermir móttöku vöruhúsamóttöku og afturkallar; notaðu Warehouse.Receipt.Post til að framkvæma móttökuna.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt Post Prev. Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2572656007 - Method 2602747073 - NamedType 830660715" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Purchase Order '%1' is not Released. Release it before creating a Warehouse Receipt.</source>
+          <target>Innkaupapöntun '%1' er ekki útgefin. Gefðu hana út áður en þú stofnar vöruhúsamóttöku.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = purchase order no., is-IS=Innkaupapöntun '%1' er ekki útgefin. Gefðu hana út áður en þú stofnar vöruhúsamóttöku.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Create Impl ori - Method CreateFromPurchaseOrder - NamedType PurchNotReleasedErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2572656007 - Method 2602747073 - NamedType 3794945912" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Purchase Order '%1' uses location '%2' which does not match the requested locationCode '%3'.</source>
+          <target>Innkaupapöntun '%1' notar birgðageymslu '%2' sem samsvarar ekki umbeðnu locationCode '%3'.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = purchase order no., %2 = source location, %3 = requested location, is-IS=Innkaupapöntun '%1' notar birgðageymslu '%2' sem samsvarar ekki umbeðnu locationCode '%3'.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Create Impl ori - Method CreateFromPurchaseOrder - NamedType LocationMismatchErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2572656007 - Method 2602747073 - NamedType 1482368733" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location '%1' (from Purchase Order '%2') does not require receipt routing — set 'Require Receive' on the Location card to enable warehouse receipts.</source>
+          <target>Birgðageymsla '%1' (úr innkaupapöntun '%2') krefst ekki móttöku — veldu 'Krefjast móttöku' á birgðageymsluspjaldinu til að virkja vöruhúsamóttökur.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = location code, %2 = purchase order no., is-IS=Birgðageymsla '%1' (úr innkaupapöntun '%2') krefst ekki móttöku — veldu 'Krefjast móttöku' á birgðageymsluspjaldinu til að virkja vöruhúsamóttökur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Create Impl ori - Method CreateFromPurchaseOrder - NamedType LocationNotRequireReceiveErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2572656007 - Method 1391062682 - NamedType 506796343" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sales Return Order '%1' is not Released. Release it before creating a Warehouse Receipt.</source>
+          <target>Söluskilapöntun '%1' er ekki útgefin. Gefðu hana út áður en þú stofnar vöruhúsamóttöku.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = sales return order no., is-IS=Söluskilapöntun '%1' er ekki útgefin. Gefðu hana út áður en þú stofnar vöruhúsamóttöku.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Create Impl ori - Method CreateFromSalesReturnOrder - NamedType SalesNotReleasedErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2572656007 - Method 1391062682 - NamedType 3794945912" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sales Return Order '%1' uses location '%2' which does not match the requested locationCode '%3'.</source>
+          <target>Söluskilapöntun '%1' notar birgðageymslu '%2' sem samsvarar ekki umbeðnu locationCode '%3'.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = sales return order no., %2 = source location, %3 = requested location, is-IS=Söluskilapöntun '%1' notar birgðageymslu '%2' sem samsvarar ekki umbeðnu locationCode '%3'.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Create Impl ori - Method CreateFromSalesReturnOrder - NamedType LocationMismatchErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2572656007 - Method 1391062682 - NamedType 1482368733" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location '%1' (from Sales Return Order '%2') does not require receipt routing — set 'Require Receive' on the Location card to enable warehouse receipts.</source>
+          <target>Birgðageymsla '%1' (úr söluskilapöntun '%2') krefst ekki móttöku — veldu 'Krefjast móttöku' á birgðageymsluspjaldinu til að virkja vöruhúsamóttökur.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = location code, %2 = sales return order no., is-IS=Birgðageymsla '%1' (úr söluskilapöntun '%2') krefst ekki móttöku — veldu 'Krefjast móttöku' á birgðageymsluspjaldinu til að virkja vöruhúsamóttökur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Create Impl ori - Method CreateFromSalesReturnOrder - NamedType LocationNotRequireReceiveErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2572656007 - Method 2472984817 - NamedType 1189497330" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Transfer Order '%1' is not Released. Release it before creating a Warehouse Receipt.</source>
+          <target>Flutningspöntun '%1' er ekki útgefin. Gefðu hana út áður en þú stofnar vöruhúsamóttöku.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = transfer order no., is-IS=Flutningspöntun '%1' er ekki útgefin. Gefðu hana út áður en þú stofnar vöruhúsamóttöku.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Create Impl ori - Method CreateFromTransferOrder - NamedType TransferNotReleasedErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2572656007 - Method 2472984817 - NamedType 3794945912" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Transfer Order '%1' receives at '%2' which does not match the requested locationCode '%3'.</source>
+          <target>Flutningspöntun '%1' er móttekin í '%2' sem samsvarar ekki umbeðnu locationCode '%3'.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = transfer order no., %2 = transfer-to location, %3 = requested location, is-IS=Flutningspöntun '%1' er móttekin í '%2' sem samsvarar ekki umbeðnu locationCode '%3'.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Create Impl ori - Method CreateFromTransferOrder - NamedType LocationMismatchErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2572656007 - Method 2472984817 - NamedType 1482368733" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location '%1' (Transfer-to on Transfer Order '%2') does not require receipt routing — set 'Require Receive' on the Location card to enable warehouse receipts.</source>
+          <target>Birgðageymsla '%1' (flutt til á flutningspöntun '%2') krefst ekki móttöku — veldu 'Krefjast móttöku' á birgðageymsluspjaldinu til að virkja vöruhúsamóttökur.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = location code, %2 = transfer order no., is-IS=Birgðageymsla '%1' (flutt til á flutningspöntun '%2') krefst ekki móttöku — veldu 'Krefjast móttöku' á birgðageymsluspjaldinu til að virkja vöruhúsamóttökur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Create Impl ori - Method CreateFromTransferOrder - NamedType LocationNotRequireReceiveErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2572656007 - Method 3571782927 - NamedType 1713541465" size-unit="char" translate="yes" xml:space="preserve">
+          <source>sourceDocuments is required and must contain at least one entry.</source>
+          <target>sourceDocuments er nauðsynlegt og verður að innihalda að minnsta kosti eina færslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=sourceDocuments er nauðsynlegt og verður að innihalda að minnsta kosti eina færslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Create Impl ori - Method ExecuteBifrostTask - NamedType MissingSourcesErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2572656007 - Method 3571782927 - NamedType 3782878593" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Field %1 is restricted for write on table %2.</source>
+          <target>Ekki er heimilt að skrifa í reitinn %1 í töflunni %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = field caption, %2 = table caption, is-IS=Ekki er heimilt að skrifa í reitinn %1 í töflunni %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Create Impl ori - Method ExecuteBifrostTask - NamedType FieldWriteRestrictedErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2572656007 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>warehouse receipt, create receipt, expect goods, prepare to receive, inbound receipt, goods arriving</source>
           <target>vöruhúsamóttaka, stofna móttöku, von á vörum, undirbúa móttöku, innmóttaka, vörur á leiðinni</target>
@@ -188,6 +356,30 @@
           <target>Óafturkræft. Stofnar innleiðarmóttökur úr útgefnum söluskila-, innkaupa- eða millifærslupöntunum; notaðu Warehouse.Receipt.Post til að móttaka.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Óafturkræft. Stofnar innleiðarmóttökur úr útgefnum söluskila-, innkaupa- eða millifærslupöntunum; notaðu Warehouse.Receipt.Post til að móttaka.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Create Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2572656007 - Method 3648765730 - NamedType 1465600059" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source #%1 is missing sourceType or documentNo (both required).</source>
+          <target>Í uppruna nr. %1 vantar sourceType eða documentNo (hvort tveggja er nauðsynlegt).</target>
+          <note from="Developer" annotates="general" priority="2">%1 = source index, is-IS=Í uppruna nr. %1 vantar sourceType eða documentNo (hvort tveggja er nauðsynlegt).</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Create Impl ori - Method ProcessSource - NamedType InvalidSourceErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2572656007 - Method 3648765730 - NamedType 1105599607" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Unsupported sourceType '%1'. Expected: SalesReturnOrder, PurchaseOrder, TransferOrder.</source>
+          <target>sourceType '%1' er ekki stutt. Væntanlegt er: SalesReturnOrder, PurchaseOrder, TransferOrder.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = sourceType value, is-IS=sourceType '%1' er ekki stutt. Væntanlegt er: SalesReturnOrder, PurchaseOrder, TransferOrder.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Create Impl ori - Method ProcessSource - NamedType UnsupportedSourceErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2572656007 - Method 3648765730 - NamedType 3327558748" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No Warehouse Receipt was created for %1 '%2' — already on an open receipt, no lines remain to receive, or put-away already started.</source>
+          <target>Engin vöruhúsamóttaka var stofnuð fyrir %1 '%2' — skjalið er þegar í opinni móttöku, engar línur eru eftir til móttöku eða frágangur er þegar hafinn.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = sourceType, %2 = documentNo, is-IS=Engin vöruhúsamóttaka var stofnuð fyrir %1 '%2' — skjalið er þegar í opinni móttöku, engar línur eru eftir til móttöku eða frágangur er þegar hafinn.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Create Impl ori - Method ProcessSource - NamedType NoReceiptCreatedErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3670300571 - Method 3571782927 - NamedType 2960829030" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warehouse Receipt %1 has no lines to post.</source>
+          <target>Vöruhúsamóttaka %1 hefur engar línur til bókunar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = Whse. Receipt No., is-IS=Vöruhúsamóttaka %1 hefur engar línur til bókunar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Post Impl ori - Method ExecuteBifrostTask - NamedType NoLinesToPostErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 3670300571 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>receive, goods received, goods came in, the goods came in, warehouse receipt, post receipt</source>
@@ -267,11 +459,53 @@
           <note from="Developer" annotates="general" priority="2">%1 = table caption, is-IS=%1 fannst ekki.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Record Lookup ori - NamedType RecordNotFoundSummaryErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 1135528022 - Method 102045151 - NamedType 2034178160" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Parameter "%1" must be %2.</source>
+          <target>Færibreytan "%1" verður að vera %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter name, %2 = expected JSON type, is-IS=Færibreytan "%1" verður að vera %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Record Lookup ori - Method TryReadIdentifiers - NamedType InvalidTypeErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1135528022 - Method 102045151 - NamedType 546994903" size-unit="char" translate="yes" xml:space="preserve">
+          <source>a JSON object</source>
+          <target>JSON-hlutur</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=JSON-hlutur</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Record Lookup ori - Method TryReadIdentifiers - NamedType ObjectTypeTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1135528022 - Method 102045151 - NamedType 3084302767" size-unit="char" translate="yes" xml:space="preserve">
+          <source>a JSON string</source>
+          <target>JSON-strengur</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=JSON-strengur</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Record Lookup ori - Method TryReadIdentifiers - NamedType StringTypeTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1135528022 - Method 102045151 - NamedType 1231375444" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send data as a JSON object.</source>
+          <target>Sendu data sem JSON-hlut.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu data sem JSON-hlut.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Record Lookup ori - Method TryReadIdentifiers - NamedType ObjectNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1135528022 - Method 102045151 - NamedType 2860913180" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send the value as a JSON string.</source>
+          <target>Sendu gildið sem JSON-streng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu gildið sem JSON-streng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Record Lookup ori - Method TryReadIdentifiers - NamedType StringNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1135528022 - Method 102045151 - NamedType 565120376" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Several identifier values have an invalid format.</source>
+          <target>Nokkur auðkennisgildi eru á ógildu sniði.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Nokkur auðkennisgildi eru á ógildu sniði.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Record Lookup ori - Method TryReadIdentifiers - NamedType InvalidValuesErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3796601114 - Method 1051489508 - NamedType 1184809232" size-unit="char" translate="yes" xml:space="preserve">
           <source>Preview-posting warehouse shipment %1 (%2 lines, Ship + Invoice) would create %3 ledger entries across %4 tables. %5</source>
           <target>Forsýning bókunar vöruhúsasendingar %1 (%2 línur, Sending + Reikningur) myndi búa til %3 fjárhagsfærslur í %4 töflum. %5</target>
           <note from="Developer" annotates="general" priority="2">%1 = shipment no, %2 = lines to post, %3 = total entry count, %4 = number of tables, %5 = balanced status sentence, is-IS=Forsýning bókunar vöruhúsasendingar %1 (%2 línur, Sending + Reikningur) myndi búa til %3 fjárhagsfærslur í %4 töflum. %5</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Ship. Prev. Post Impl ori - Method BuildShipmentPreviewSummary - NamedType SummaryTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3796601114 - Method 3571782927 - NamedType 2960829030" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warehouse Shipment %1 has no lines to post.</source>
+          <target>Vöruhúsaafhending %1 hefur engar línur til bókunar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = Whse. Shipment No., is-IS=Vöruhúsaafhending %1 hefur engar línur til bókunar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Ship. Prev. Post Impl ori - Method ExecuteBifrostTask - NamedType NoLinesToPostErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 3796601114 - Method 3571782927 - NamedType 450631880" size-unit="char" translate="yes" xml:space="preserve">
           <source>Posting preview failed and no entries were captured. The shipment cannot be posted in its current state.</source>
@@ -285,6 +519,18 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Engin sendingarlína hefur Magn til afhendingar. Setjið magn á sendingarlínurnar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Ship. Prev. Post Impl ori - Method ExecuteBifrostTask - NamedType NothingToPostNextStepTok</note>
         </trans-unit>
+        <trans-unit id="Codeunit 3796601114 - Method 3571782927 - NamedType 3662202187" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Posting preview cannot run inside a rollback chain (Omit Commit). Run this message type with Omit Commit set to false.</source>
+          <target>Ekki er hægt að forskoða bókun innan afturköllunarkeðju (Omit Commit). Keyrðu þessa skilaboðategund með Omit Commit stillt á false.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekki er hægt að forskoða bókun innan afturköllunarkeðju (Omit Commit). Keyrðu þessa skilaboðategund með Omit Commit stillt á false.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Ship. Prev. Post Impl ori - Method ExecuteBifrostTask - NamedType OmitCommitPreviewErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3796601114 - Method 3571782927 - NamedType 1490059627" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Call Dispatcher.Execute with OmitCommit = false, or use the HTTP/MCP API.</source>
+          <target>Kallaðu á Dispatcher.Execute með OmitCommit = false eða notaðu HTTP/MCP API.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Kallaðu á Dispatcher.Execute með OmitCommit = false eða notaðu HTTP/MCP API.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Ship. Prev. Post Impl ori - Method ExecuteBifrostTask - NamedType OmitCommitPreviewNextStepTok</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3796601114 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>preview warehouse shipment, simulate shipment, what would the shipment post</source>
           <target>forskoða vöruhúsaafhendingu, herma afhendingu, hvað myndi afhendingin bóka</target>
@@ -297,6 +543,54 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Lesaðgangur. Hermir Sending + Reikning og afturkallar; notaðu Warehouse.Shipment.Post til að framkvæma bókunina.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Ship. Prev. Post Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2578593995 - Method 2274743296 - NamedType 506796343" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sales Order '%1' is not Released. Release it before creating a Warehouse Shipment.</source>
+          <target>Sölupöntun '%1' er ekki útgefin. Gefðu hana út áður en þú stofnar vöruhúsaafhendingu.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = sales order no., is-IS=Sölupöntun '%1' er ekki útgefin. Gefðu hana út áður en þú stofnar vöruhúsaafhendingu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method CreateFromSalesOrder - NamedType SalesNotReleasedErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2578593995 - Method 2274743296 - NamedType 3794945912" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sales Order '%1' uses location '%2' which does not match the requested locationCode '%3'.</source>
+          <target>Sölupöntun '%1' notar birgðageymslu '%2' sem samsvarar ekki umbeðnu locationCode '%3'.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = sales order no., %2 = source location, %3 = requested location, is-IS=Sölupöntun '%1' notar birgðageymslu '%2' sem samsvarar ekki umbeðnu locationCode '%3'.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method CreateFromSalesOrder - NamedType LocationMismatchErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2578593995 - Method 2274743296 - NamedType 2759400764" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location '%1' (from Sales Order '%2') does not require shipment routing — set 'Require Shipment' on the Location card to enable warehouse shipments.</source>
+          <target>Birgðageymsla '%1' (úr sölupöntun '%2') krefst ekki afhendingar — veldu 'Krefjast afhendingar' á birgðageymsluspjaldinu til að virkja vöruhúsaafhendingar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = location code, %2 = sales order no., is-IS=Birgðageymsla '%1' (úr sölupöntun '%2') krefst ekki afhendingar — veldu 'Krefjast afhendingar' á birgðageymsluspjaldinu til að virkja vöruhúsaafhendingar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method CreateFromSalesOrder - NamedType LocationNotRequireShipmentErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2578593995 - Method 2472984817 - NamedType 1189497330" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Transfer Order '%1' is not Released. Release it before creating a Warehouse Shipment.</source>
+          <target>Flutningspöntun '%1' er ekki útgefin. Gefðu hana út áður en þú stofnar vöruhúsaafhendingu.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = transfer order no., is-IS=Flutningspöntun '%1' er ekki útgefin. Gefðu hana út áður en þú stofnar vöruhúsaafhendingu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method CreateFromTransferOrder - NamedType TransferNotReleasedErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2578593995 - Method 2472984817 - NamedType 3794945912" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Transfer Order '%1' ships from '%2' which does not match the requested locationCode '%3'.</source>
+          <target>Flutningspöntun '%1' er afhent úr '%2' sem samsvarar ekki umbeðnu locationCode '%3'.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = transfer order no., %2 = source location, %3 = requested location, is-IS=Flutningspöntun '%1' er afhent úr '%2' sem samsvarar ekki umbeðnu locationCode '%3'.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method CreateFromTransferOrder - NamedType LocationMismatchErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2578593995 - Method 2472984817 - NamedType 2759400764" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location '%1' (Transfer-from on Transfer Order '%2') does not require shipment routing — set 'Require Shipment' on the Location card to enable warehouse shipments.</source>
+          <target>Birgðageymsla '%1' (flutt frá á flutningspöntun '%2') krefst ekki afhendingar — veldu 'Krefjast afhendingar' á birgðageymsluspjaldinu til að virkja vöruhúsaafhendingar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = location code, %2 = transfer order no., is-IS=Birgðageymsla '%1' (flutt frá á flutningspöntun '%2') krefst ekki afhendingar — veldu 'Krefjast afhendingar' á birgðageymsluspjaldinu til að virkja vöruhúsaafhendingar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method CreateFromTransferOrder - NamedType LocationNotRequireShipmentErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2578593995 - Method 3571782927 - NamedType 1713541465" size-unit="char" translate="yes" xml:space="preserve">
+          <source>sourceDocuments is required and must contain at least one entry.</source>
+          <target>sourceDocuments er nauðsynlegt og verður að innihalda að minnsta kosti eina færslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=sourceDocuments er nauðsynlegt og verður að innihalda að minnsta kosti eina færslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method ExecuteBifrostTask - NamedType MissingSourcesErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2578593995 - Method 3571782927 - NamedType 3782878593" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Field %1 is restricted for write on table %2.</source>
+          <target>Ekki er heimilt að skrifa í reitinn %1 í töflunni %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = field caption, %2 = table caption, is-IS=Ekki er heimilt að skrifa í reitinn %1 í töflunni %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method ExecuteBifrostTask - NamedType FieldWriteRestrictedErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2578593995 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>warehouse shipment, create shipment, prepare shipment, ship the order from the warehouse, outbound shipment, dispatch</source>
           <target>vöruhúsaafhending, stofna afhendingu, undirbúa afhendingu, senda pöntun frá vöruhúsi, útsending, senda af stað</target>
@@ -308,6 +602,30 @@
           <target>Stofnar útleiðarafhendingar úr útgefnum sölu- eða millifærslupöntunum; notaðu Warehouse.Shipment.Post til að bóka afhendingu.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Stofnar útleiðarafhendingar úr útgefnum sölu- eða millifærslupöntunum; notaðu Warehouse.Shipment.Post til að bóka afhendingu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2578593995 - Method 3648765730 - NamedType 1465600059" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source #%1 is missing sourceType or documentNo (both required).</source>
+          <target>Í uppruna nr. %1 vantar sourceType eða documentNo (hvort tveggja er nauðsynlegt).</target>
+          <note from="Developer" annotates="general" priority="2">%1 = source index, is-IS=Í uppruna nr. %1 vantar sourceType eða documentNo (hvort tveggja er nauðsynlegt).</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method ProcessSource - NamedType InvalidSourceErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2578593995 - Method 3648765730 - NamedType 1105599607" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Unsupported sourceType '%1'. Expected: SalesOrder, TransferOrder.</source>
+          <target>sourceType '%1' er ekki stutt. Væntanlegt er: SalesOrder, TransferOrder.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = sourceType value, is-IS=sourceType '%1' er ekki stutt. Væntanlegt er: SalesOrder, TransferOrder.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method ProcessSource - NamedType UnsupportedSourceErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2578593995 - Method 3648765730 - NamedType 4173875336" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No Warehouse Shipment was created for %1 '%2' — already on an open shipment, no lines remain to ship, or pick already started.</source>
+          <target>Engin vöruhúsaafhending var stofnuð fyrir %1 '%2' — skjalið er þegar í opinni afhendingu, engar línur eru eftir til afhendingar eða tínsla er þegar hafin.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = sourceType, %2 = documentNo, is-IS=Engin vöruhúsaafhending var stofnuð fyrir %1 '%2' — skjalið er þegar í opinni afhendingu, engar línur eru eftir til afhendingar eða tínsla er þegar hafin.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method ProcessSource - NamedType NoShipmentCreatedErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2463241303 - Method 3571782927 - NamedType 2960829030" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warehouse Shipment %1 has no lines to post.</source>
+          <target>Vöruhúsaafhending %1 hefur engar línur til bókunar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = Whse. Shipment No., is-IS=Vöruhúsaafhending %1 hefur engar línur til bókunar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Post Impl ori - Method ExecuteBifrostTask - NamedType NoLinesToPostErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 2463241303 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>post warehouse shipment, ship goods, goods left the warehouse, dispatch goods, send the goods out</source>

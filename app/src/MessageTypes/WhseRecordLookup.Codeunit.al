@@ -53,13 +53,14 @@ codeunit 10078455 "Whse Record Lookup ori"
         Supplied: Boolean;
     begin
         Clear(FoundSystemId);
+        if not TryReadIdentifiers(Argument, KeySpec, RequestJson) then
+            exit(false);
         RecordReference.Open(TableNo);
         TableCaptionText := RecordReference.Caption();
         if Argument.Subject <> '' then begin
             Supplied := true;
             TryIdentifier(RecordReference, SubjectSpec, Argument.Subject, SubjectSourceTok, FoundSystemId, FoundSource, LookupErrors, ConflictError);
         end;
-        RequestJson := Argument.GetRequestJson();
         foreach KeyEntry in KeySpec.Split(',') do begin
             KeyName := KeyEntry.Split('=').Get(1);
             if KeyNames.Length() > 0 then
@@ -88,6 +89,56 @@ codeunit 10078455 "Whse Record Lookup ori"
             FlushOneError(Argument, Entry.AsObject());
         Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(RecordNotFoundSummaryErr, TableCaptionText));
         exit(false);
+    end;
+
+    /// <summary>Validates the request object and all text identifiers before any record lookup.</summary>
+    /// <param name="Argument">The argument that receives structured validation errors.</param>
+    /// <param name="KeySpec">Identifier keys and kinds, in validation order.</param>
+    /// <param name="RequestJson">Receives the validated request object.</param>
+    /// <returns>True when the request and every supplied identifier have the expected JSON type.</returns>
+    internal procedure TryReadIdentifiers(var Argument: Record "Message Argument ori"; KeySpec: Text; var RequestJson: JsonObject): Boolean
+    var
+        Token: JsonToken;
+        KeyEntry: Text;
+        KeyName: Text;
+        Received: Text;
+        HasErrors: Boolean;
+        InvalidTypeErr: Label 'Parameter "%1" must be %2.', Comment = '%1 = parameter name, %2 = expected JSON type, is-IS=Færibreytan "%1" verður að vera %2.';
+        ObjectTypeTxt: Label 'a JSON object', Comment = 'is-IS=JSON-hlutur';
+        StringTypeTxt: Label 'a JSON string', Comment = 'is-IS=JSON-strengur';
+        ObjectNextStepTxt: Label 'Send data as a JSON object.', Comment = 'is-IS=Sendu data sem JSON-hlut.';
+        StringNextStepTxt: Label 'Send the value as a JSON string.', Comment = 'is-IS=Sendu gildið sem JSON-streng.';
+        InvalidValuesErr: Label 'Several identifier values have an invalid format.', Comment = 'is-IS=Nokkur auðkennisgildi eru á ógildu sniði.';
+    begin
+        Clear(RequestJson);
+        if not TryReadRequestObject(Argument, RequestJson) then begin
+            ClearLastError();
+            Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(InvalidTypeErr, 'data', ObjectTypeTxt), 'data', '', ObjectTypeTxt, ObjectNextStepTxt);
+            exit(false);
+        end;
+        HasErrors := false;
+        foreach KeyEntry in KeySpec.Split(',') do begin
+            KeyName := KeyEntry.Split('=').Get(1);
+            if RequestJson.Get(KeyName, Token) then begin
+                Token.WriteTo(Received);
+                // JSON strings always serialize with an opening quotation mark; other JSON types do not.
+                if CopyStr(Received, 1, 1) <> '"' then begin
+                    Argument.AddError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(InvalidTypeErr, KeyName, StringTypeTxt), KeyName, CopyStr(Received, 1, 80), StringTypeTxt, StringNextStepTxt);
+                    HasErrors := true;
+                end;
+            end;
+        end;
+        if HasErrors then begin
+            Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, InvalidValuesErr);
+            exit(false);
+        end;
+        exit(true);
+    end;
+
+    [TryFunction]
+    local procedure TryReadRequestObject(var Argument: Record "Message Argument ori"; var RequestJson: JsonObject)
+    begin
+        RequestJson := Argument.GetRequestJson();
     end;
 
     local procedure TryIdentifier(var RecordReference: RecordRef; Kinds: Text; Value: Text; IdentifierSource: Text; var FoundSystemId: Guid; var FoundSource: Text; var LookupErrors: JsonArray; var ConflictError: JsonObject)

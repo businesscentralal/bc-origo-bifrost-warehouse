@@ -49,4 +49,6 @@ Test range: `97000–97099`.
 | 97025 | permission set `Whse Gate Test ori` |
 | 97026 | `Whse Write Restrict Tests ori` |
 | 97027 | `Whse Msg Contract Tests ori` (warehouse#10) |
-| 97028–97099 | Free |
+| 97028 | `Whse Omit Commit Tests ori` (#18) |
+| 97029 | `Whse Id Format Tests ori` (#21) |
+| 97030–97099 | Free |

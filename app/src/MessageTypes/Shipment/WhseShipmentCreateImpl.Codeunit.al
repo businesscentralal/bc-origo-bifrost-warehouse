@@ -167,8 +167,8 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
         HasAssignedUserId: Boolean;
         HasPostingDate: Boolean;
         I: Integer;
-        MissingSourcesErr: Label 'sourceDocuments is required and must contain at least one entry.', Locked = true;
-        FieldWriteRestrictedErr: Label 'Field %1 is restricted for write on table %2.', Comment = '%1 = field caption, %2 = table caption', Locked = true;
+        MissingSourcesErr: Label 'sourceDocuments is required and must contain at least one entry.', Comment = 'is-IS=sourceDocuments er nauðsynlegt og verður að innihalda að minnsta kosti eina færslu.';
+        FieldWriteRestrictedErr: Label 'Field %1 is restricted for write on table %2.', Comment = '%1 = field caption, %2 = table caption, is-IS=Ekki er heimilt að skrifa í reitinn %1 í töflunni %2.';
     begin
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
@@ -221,9 +221,9 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
         DocumentNo: Code[20];
         CreatedHeaderNo: Code[20];
         ShipmentJson: JsonObject;
-        InvalidSourceErr: Label 'Source #%1 is missing sourceType or documentNo (both required).', Comment = '%1 = source index', Locked = true;
-        UnsupportedSourceErr: Label 'Unsupported sourceType ''%1''. Expected: SalesOrder, TransferOrder.', Comment = '%1 = sourceType value', Locked = true;
-        NoShipmentCreatedErr: Label 'No Warehouse Shipment was created for %1 ''%2'' — already on an open shipment, no lines remain to ship, or pick already started.', Comment = '%1 = sourceType, %2 = documentNo', Locked = true;
+        InvalidSourceErr: Label 'Source #%1 is missing sourceType or documentNo (both required).', Comment = '%1 = source index, is-IS=Í uppruna nr. %1 vantar sourceType eða documentNo (hvort tveggja er nauðsynlegt).';
+        UnsupportedSourceErr: Label 'Unsupported sourceType ''%1''. Expected: SalesOrder, TransferOrder.', Comment = '%1 = sourceType value, is-IS=sourceType ''%1'' er ekki stutt. Væntanlegt er: SalesOrder, TransferOrder.';
+        NoShipmentCreatedErr: Label 'No Warehouse Shipment was created for %1 ''%2'' — already on an open shipment, no lines remain to ship, or pick already started.', Comment = '%1 = sourceType, %2 = documentNo, is-IS=Engin vöruhúsaafhending var stofnuð fyrir %1 ''%2'' — skjalið er þegar í opinni afhendingu, engar línur eru eftir til afhendingar eða tínsla er þegar hafin.';
     begin
         SourcesArray.Get(Index, SourceToken);
         SourceObject := SourceToken.AsObject();
@@ -278,9 +278,9 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
         SalesHeader: Record "Sales Header";
         Location: Record Location;
         GetSourceDocOutbound: Codeunit "Get Source Doc. Outbound";
-        SalesNotReleasedErr: Label 'Sales Order ''%1'' is not Released. Release it before creating a Warehouse Shipment.', Comment = '%1 = sales order no.', Locked = true;
-        LocationMismatchErr: Label 'Sales Order ''%1'' uses location ''%2'' which does not match the requested locationCode ''%3''.', Comment = '%1 = sales order no., %2 = source location, %3 = requested location', Locked = true;
-        LocationNotRequireShipmentErr: Label 'Location ''%1'' (from Sales Order ''%2'') does not require shipment routing — set ''Require Shipment'' on the Location card to enable warehouse shipments.', Comment = '%1 = location code, %2 = sales order no.', Locked = true;
+        SalesNotReleasedErr: Label 'Sales Order ''%1'' is not Released. Release it before creating a Warehouse Shipment.', Comment = '%1 = sales order no., is-IS=Sölupöntun ''%1'' er ekki útgefin. Gefðu hana út áður en þú stofnar vöruhúsaafhendingu.';
+        LocationMismatchErr: Label 'Sales Order ''%1'' uses location ''%2'' which does not match the requested locationCode ''%3''.', Comment = '%1 = sales order no., %2 = source location, %3 = requested location, is-IS=Sölupöntun ''%1'' notar birgðageymslu ''%2'' sem samsvarar ekki umbeðnu locationCode ''%3''.';
+        LocationNotRequireShipmentErr: Label 'Location ''%1'' (from Sales Order ''%2'') does not require shipment routing — set ''Require Shipment'' on the Location card to enable warehouse shipments.', Comment = '%1 = location code, %2 = sales order no., is-IS=Birgðageymsla ''%1'' (úr sölupöntun ''%2'') krefst ekki afhendingar — veldu ''Krefjast afhendingar'' á birgðageymsluspjaldinu til að virkja vöruhúsaafhendingar.';
     begin
         if not SalesHeader.Get(SalesHeader."Document Type"::Order, DocumentNo) then begin
             Argument.RespondWithRecordNotFound(Database::"Sales Header", DocumentNo, 'sourceDocuments.documentNo');
@@ -312,9 +312,9 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
         TransferHeader: Record "Transfer Header";
         Location: Record Location;
         GetSourceDocOutbound: Codeunit "Get Source Doc. Outbound";
-        TransferNotReleasedErr: Label 'Transfer Order ''%1'' is not Released. Release it before creating a Warehouse Shipment.', Comment = '%1 = transfer order no.', Locked = true;
-        LocationMismatchErr: Label 'Transfer Order ''%1'' ships from ''%2'' which does not match the requested locationCode ''%3''.', Comment = '%1 = transfer order no., %2 = source location, %3 = requested location', Locked = true;
-        LocationNotRequireShipmentErr: Label 'Location ''%1'' (Transfer-from on Transfer Order ''%2'') does not require shipment routing — set ''Require Shipment'' on the Location card to enable warehouse shipments.', Comment = '%1 = location code, %2 = transfer order no.', Locked = true;
+        TransferNotReleasedErr: Label 'Transfer Order ''%1'' is not Released. Release it before creating a Warehouse Shipment.', Comment = '%1 = transfer order no., is-IS=Flutningspöntun ''%1'' er ekki útgefin. Gefðu hana út áður en þú stofnar vöruhúsaafhendingu.';
+        LocationMismatchErr: Label 'Transfer Order ''%1'' ships from ''%2'' which does not match the requested locationCode ''%3''.', Comment = '%1 = transfer order no., %2 = source location, %3 = requested location, is-IS=Flutningspöntun ''%1'' er afhent úr ''%2'' sem samsvarar ekki umbeðnu locationCode ''%3''.';
+        LocationNotRequireShipmentErr: Label 'Location ''%1'' (Transfer-from on Transfer Order ''%2'') does not require shipment routing — set ''Require Shipment'' on the Location card to enable warehouse shipments.', Comment = '%1 = location code, %2 = transfer order no., is-IS=Birgðageymsla ''%1'' (flutt frá á flutningspöntun ''%2'') krefst ekki afhendingar — veldu ''Krefjast afhendingar'' á birgðageymsluspjaldinu til að virkja vöruhúsaafhendingar.';
     begin
         if not TransferHeader.Get(DocumentNo) then begin
             Argument.RespondWithRecordNotFound(Database::"Transfer Header", DocumentNo, 'sourceDocuments.documentNo');

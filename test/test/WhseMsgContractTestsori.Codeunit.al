@@ -21,10 +21,10 @@ codeunit 97027 "Whse Msg Contract Tests ori"
         AssertContract("Message Type ori"::"Warehouse.Activity.Get", 'read', true);
         AssertContract("Message Type ori"::"Warehouse.Shipment.Create", 'write', true);
         AssertContract("Message Type ori"::"Warehouse.Shipment.Post", 'irreversible', true);
-        AssertContract("Message Type ori"::"Warehouse.Shipment.PreviewPost", 'read', false);
+        AssertContract("Message Type ori"::"Warehouse.Shipment.PreviewPost", 'read', true);
         AssertContract("Message Type ori"::"Warehouse.Receipt.Create", 'irreversible', true);
-        AssertContract("Message Type ori"::"Warehouse.Receipt.Post", 'irreversible', false);
-        AssertContract("Message Type ori"::"Warehouse.Receipt.PreviewPost", 'read', false);
+        AssertContract("Message Type ori"::"Warehouse.Receipt.Post", 'irreversible', true);
+        AssertContract("Message Type ori"::"Warehouse.Receipt.PreviewPost", 'read', true);
         AssertContract("Message Type ori"::"Warehouse.Pick.Create", 'irreversible', true);
         AssertContract("Message Type ori"::"Warehouse.Pick.Register", 'irreversible', false);
         AssertContract("Message Type ori"::"Warehouse.Putaway.Create", 'irreversible', true);
@@ -58,7 +58,7 @@ codeunit 97027 "Whse Msg Contract Tests ori"
         // [THEN] Existing stored values select the renamed contract and discovery implementation.
         Assert.AreEqual('Warehouse.Receipt.PreviewPost', MessageTypeName(MessageType), 'Receipt preview canonical name');
         Assert.AreEqual(10078401, Enum::"Message Type ori"::"Warehouse.Receipt.PreviewPost".AsInteger(), 'Receipt preview ordinal must not change');
-        AssertContract(MessageType, 'read', false);
+        AssertContract(MessageType, 'read', true);
     end;
 
     /// <summary>

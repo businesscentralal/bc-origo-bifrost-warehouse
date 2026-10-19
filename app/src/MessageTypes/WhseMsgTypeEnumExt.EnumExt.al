@@ -221,4 +221,67 @@ enumextension 10078385 "Whse MsgType EnumExt ori" extends "Message Type ori"
         Caption = 'Warehouse.BinReplenishment.Calculate', Locked = true;
         Implementation = "Msg Interface ori" = "Whse Bin Repl Calc Impl ori", "Msg Contract ori" = "Whse Bin Repl Calc Impl ori", "Msg Discovery ori" = "Whse Bin Repl Calc Impl ori";
     }
+
+    /// <summary>
+    /// Adds lines from released inbound source documents to a warehouse receipt, or to a new one at a location.
+    /// </summary>
+    value(10078431; "Warehouse.Receipt.GetSourceDocuments")
+    {
+        Caption = 'Warehouse.Receipt.GetSourceDocuments', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Rcpt GetSrcDocs Impl ori", "Msg Contract ori" = "Whse Rcpt GetSrcDocs Impl ori", "Msg Discovery ori" = "Whse Rcpt GetSrcDocs Impl ori";
+    }
+
+    /// <summary>
+    /// Adds lines from released outbound source documents to a warehouse shipment, or to a new one at a location.
+    /// </summary>
+    value(10078432; "Warehouse.Shipment.GetSourceDocuments")
+    {
+        Caption = 'Warehouse.Shipment.GetSourceDocuments', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Ship GetSrcDocs Impl ori", "Msg Contract ori" = "Whse Ship GetSrcDocs Impl ori", "Msg Discovery ori" = "Whse Ship GetSrcDocs Impl ori";
+    }
+
+    /// <summary>
+    /// Releases a warehouse shipment so picks can be created.
+    /// </summary>
+    value(10078433; "Warehouse.Shipment.Release")
+    {
+        Caption = 'Warehouse.Shipment.Release', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Shipment Release Impl ori", "Msg Contract ori" = "Whse Shipment Release Impl ori", "Msg Discovery ori" = "Whse Shipment Release Impl ori";
+    }
+
+    /// <summary>
+    /// Reopens a released warehouse shipment.
+    /// </summary>
+    value(10078434; "Warehouse.Shipment.Reopen")
+    {
+        Caption = 'Warehouse.Shipment.Reopen', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Shipment Reopen Impl ori", "Msg Contract ori" = "Whse Shipment Reopen Impl ori", "Msg Discovery ori" = "Whse Shipment Reopen Impl ori";
+    }
+
+    /// <summary>
+    /// Reads open warehouse requests (released or open source documents waiting for the warehouse).
+    /// </summary>
+    value(10078435; "Warehouse.Request.Get")
+    {
+        Caption = 'Warehouse.Request.Get', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Request Get Impl ori", "Msg Contract ori" = "Whse Request Get Impl ori", "Msg Discovery ori" = "Whse Request Get Impl ori";
+    }
+
+    /// <summary>
+    /// Reads posted warehouse receipts or shipments, optionally with lines.
+    /// </summary>
+    value(10078436; "Warehouse.PostedDocument.Get")
+    {
+        Caption = 'Warehouse.PostedDocument.Get', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse PostedDoc Get Impl ori", "Msg Contract ori" = "Whse PostedDoc Get Impl ori", "Msg Discovery ori" = "Whse PostedDoc Get Impl ori";
+    }
+
+    /// <summary>
+    /// Reads registered picks, put-aways or movements, optionally with lines.
+    /// </summary>
+    value(10078437; "Warehouse.RegisteredActivity.Get")
+    {
+        Caption = 'Warehouse.RegisteredActivity.Get', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse RegActivity Get Impl ori", "Msg Contract ori" = "Whse RegActivity Get Impl ori", "Msg Discovery ori" = "Whse RegActivity Get Impl ori";
+    }
 }

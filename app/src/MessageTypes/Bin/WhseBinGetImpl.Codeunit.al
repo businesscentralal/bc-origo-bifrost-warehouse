@@ -233,6 +233,7 @@ codeunit 10078418 "Whse Bin Get Impl ori" implements "Msg Interface ori", "Msg C
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var
         WhseRecordLookup: Codeunit "Whse Record Lookup ori";
+        Context: Codeunit "Whse Write Context ori";
         RequestJson: JsonObject;
         LocationCode: Code[10];
         BinCode: Text;
@@ -258,7 +259,9 @@ codeunit 10078418 "Whse Bin Get Impl ori" implements "Msg Interface ori", "Msg C
             exit;
         RefuseUnknownKeys(RequestJson, Argument);
         if not ResolveLocationCode(RequestJson, Argument, LocationCode) then
-            LocationCode := '';
+            LocationCode := ''
+        else
+            CheckLocationExists(LocationCode, Argument);
         ReadText(RequestJson, 'binCode', 20, Argument, BinCode, EmptyPresent);
         EmptyPresent := false;
         ReadText(RequestJson, 'zoneCode', 10, Argument, ZoneCode, EmptyPresent);
@@ -271,12 +274,8 @@ codeunit 10078418 "Whse Bin Get Impl ori" implements "Msg Interface ori", "Msg C
         if not IncludePresent then
             IncludeContent := false;
         NotePagingKeys(RequestJson);
-        if Argument.HasCollectedErrors() then begin
-            Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, ProblemsLbl);
-            exit;
-        end;
-        Argument.EvaluateSkipTake(RequestJson, Skip, Take);
-        if not LocationExists(LocationCode, Argument) then
+        // Every problem of the request is answered together, a bad skip or take included.
+        if not Context.RespondOrReadPaging(RequestJson, Argument, ProblemsLbl, Skip, Take) then
             exit;
         if IncludeContent then
             if not CanReadContent(Argument) then
@@ -372,17 +371,15 @@ codeunit 10078418 "Whse Bin Get Impl ori" implements "Msg Interface ori", "Msg C
         end;
     end;
 
-    local procedure LocationExists(LocationCode: Code[10]; var Argument: Record "Message Argument ori"): Boolean
+    local procedure CheckLocationExists(LocationCode: Code[10]; var Argument: Record "Message Argument ori")
     var
         Location: Record Location;
         NotFoundLbl: Label 'Location %1 was not found.', Comment = '%1 = location code, is-IS=Staðsetning %1 fannst ekki.';
         NotFoundNextStepLbl: Label 'Check the location code and try again.', Comment = 'is-IS=Athugaðu kóða staðsetningar og reyndu aftur.';
     begin
         Location.SetLoadFields(Code);
-        if Location.Get(LocationCode) then
-            exit(true);
-        Argument.RespondWithError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(NotFoundLbl, LocationCode), 'locationCode', LocationCode, '', NotFoundNextStepLbl);
-        exit(false);
+        if not Location.Get(LocationCode) then
+            Argument.AddError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(NotFoundLbl, LocationCode), 'locationCode', LocationCode, '', NotFoundNextStepLbl);
     end;
 
     local procedure CanReadContent(var Argument: Record "Message Argument ori"): Boolean

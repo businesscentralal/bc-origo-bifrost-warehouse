@@ -6,6 +6,8 @@ using Origo.Bifrost;
 /// Record lookup for warehouse message types.
 /// Same rules as Foundation's internal FindRecordByIdentifiers: subject and request JSON
 /// keys are tried, and the error response is written on Argument when no single record results.
+/// Every identifier that was sent must find the record: one that matches nothing is RecordNotFound naming
+/// its key, even when another identifier found a record; two that find different records are ConflictingIdentifiers.
 /// </summary>
 codeunit 10078455 "Whse Record Lookup ori"
 {
@@ -19,6 +21,7 @@ codeunit 10078455 "Whse Record Lookup ori"
         IdentifierMissingNextStepTxt: Label 'Send the number or SystemId as the subject, or in one of: %1.', Comment = '%1 = accepted JSON keys, is-IS=Sendu númerið eða SystemId sem subject eða í einu af: %1.';
         IdentifierNotFoundErr: Label '%1 "%2" was not found (from %3).', Comment = '%1 = table caption, %2 = value received, %3 = subject or JSON key, is-IS=%1 "%2" fannst ekki (úr %3).';
         IdentifierNotFoundNextStepTxt: Label 'Check the number with Data.Records.Get on table %1.', Comment = '%1 = table caption, is-IS=Athugaðu númerið með Data.Records.Get á töflunni %1.';
+        SystemIdNotFoundNextStepTxt: Label 'Check the SystemId with Data.Records.Get on table %1.', Comment = '%1 = table caption, is-IS=Athugaðu SystemId með Data.Records.Get á töflunni %1.';
         IdentifierAmbiguousErr: Label '%1 "%2" matches more than one document. Pass it as one of: %3.', Comment = '%1 = table caption, %2 = value received, %3 = JSON keys of the matching document types, is-IS=%1 "%2" passar við fleiri en eitt skjal. Sendu það sem eitt af: %3.';
         IdentifierAmbiguousNextStepTxt: Label 'Send the number again in the key of the document type you mean: %1.', Comment = '%1 = JSON keys, is-IS=Sendu númerið aftur í lyklinum fyrir þá skjalagerð sem þú átt við: %1.';
         IdentifiersDisagreeErr: Label 'The identifiers in %1 and %2 point to different records.', Comment = '%1 = first source, %2 = second source, is-IS=Auðkennin í %1 og %2 vísa á mismunandi færslur.';
@@ -51,8 +54,13 @@ codeunit 10078455 "Whse Record Lookup ori"
         FoundSource: Text;
         TableCaptionText: Text;
         Supplied: Boolean;
+        RefusedCount: Integer;
+        CollectedBefore: Boolean;
     begin
         Clear(FoundSystemId);
+        // Problems the caller collected before the lookup (an unknown key, a bad value) are answered together with the
+        // lookup problems, under MultipleErrors.
+        CollectedBefore := Argument.HasCollectedErrors();
         if not TryReadIdentifiers(Argument, KeySpec, RequestJson) then
             exit(false);
         RecordReference.Open(TableNo);
@@ -78,16 +86,29 @@ codeunit 10078455 "Whse Record Lookup ori"
 
         if ConflictError.Keys().Count() > 0 then begin
             FlushOneError(Argument, ConflictError);
-            Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::ConflictingIdentifiers, StrSubstNo(IdentifiersConflictErr, TableCaptionText));
+            Argument.RespondWithCollectedErrors(TopLevelCode("Bifrost Error Code ori"::ConflictingIdentifiers, CollectedBefore), Summary(StrSubstNo(IdentifiersConflictErr, TableCaptionText), CollectedBefore));
             exit(false);
         end;
-        if not IsNullGuid(FoundSystemId) then
-            exit(true);
+        // Every identifier that was sent must find the record: one that matches nothing, or is not well-formed, is refused
+        // even when another one found a record (Foundation's rule). Only an ambiguous plain value is settled by another
+        // identifier that found exactly one record.
+        if not IsNullGuid(FoundSystemId) then begin
+            foreach Entry in LookupErrors do
+                if not IsAmbiguityEntry(Entry.AsObject()) then begin
+                    FlushOneError(Argument, Entry.AsObject());
+                    RefusedCount += 1;
+                end;
+            if RefusedCount = 0 then
+                exit(true);
+            Clear(FoundSystemId);
+            Argument.RespondWithCollectedErrors(TopLevelCode("Bifrost Error Code ori"::RecordNotFound, CollectedBefore), Summary(StrSubstNo(RecordNotFoundSummaryErr, TableCaptionText), CollectedBefore));
+            exit(false);
+        end;
         if not Supplied then
             Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(IdentifierMissingErr, TableCaptionText, KeyNames.ToText()), '', '', '', StrSubstNo(IdentifierMissingNextStepTxt, KeyNames.ToText()));
         foreach Entry in LookupErrors do
             FlushOneError(Argument, Entry.AsObject());
-        Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(RecordNotFoundSummaryErr, TableCaptionText));
+        Argument.RespondWithCollectedErrors(TopLevelCode("Bifrost Error Code ori"::RecordNotFound, CollectedBefore), Summary(StrSubstNo(RecordNotFoundSummaryErr, TableCaptionText), CollectedBefore));
         exit(false);
     end;
 
@@ -185,7 +206,11 @@ codeunit 10078455 "Whse Record Lookup ori"
         end;
         case Matches of
             0:
-                LookupErrors.Add(BuildErrorEntry("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(IdentifierNotFoundErr, RecordReference.Caption(), Value, IdentifierSource), IdentifierSource, Value, '', StrSubstNo(IdentifierNotFoundNextStepTxt, RecordReference.Caption())));
+                // A GUID was looked up as the SystemId, so the next step says to check the SystemId, not the number.
+                if IsGuidValue then
+                    LookupErrors.Add(BuildErrorEntry("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(IdentifierNotFoundErr, RecordReference.Caption(), Value, IdentifierSource), IdentifierSource, Value, '', StrSubstNo(SystemIdNotFoundNextStepTxt, RecordReference.Caption())))
+                else
+                    LookupErrors.Add(BuildErrorEntry("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(IdentifierNotFoundErr, RecordReference.Caption(), Value, IdentifierSource), IdentifierSource, Value, '', StrSubstNo(IdentifierNotFoundNextStepTxt, RecordReference.Caption())));
             1:
                 if IsNullGuid(FoundSystemId) then begin
                     FoundSystemId := MatchSystemId;
@@ -196,6 +221,27 @@ codeunit 10078455 "Whse Record Lookup ori"
             else
                 LookupErrors.Add(BuildErrorEntry("Bifrost Error Code ori"::AmbiguousRecord, StrSubstNo(IdentifierAmbiguousErr, RecordReference.Caption(), Value, MatchKeys.ToText()), IdentifierSource, Value, '', StrSubstNo(IdentifierAmbiguousNextStepTxt, MatchKeys.ToText())));
         end;
+    end;
+
+    local procedure TopLevelCode(LookupCode: Enum "Bifrost Error Code ori"; CollectedBefore: Boolean): Enum "Bifrost Error Code ori"
+    begin
+        if CollectedBefore then
+            exit("Bifrost Error Code ori"::MultipleErrors);
+        exit(LookupCode);
+    end;
+
+    local procedure Summary(LookupSummary: Text; CollectedBefore: Boolean): Text
+    var
+        SeveralProblemsErr: Label 'The request has several problems; errors lists each one.', Comment = 'is-IS=Beiðnin hefur nokkur vandamál; errors telur hvert þeirra upp.';
+    begin
+        if CollectedBefore then
+            exit(SeveralProblemsErr);
+        exit(LookupSummary);
+    end;
+
+    local procedure IsAmbiguityEntry(Entry: JsonObject): Boolean
+    begin
+        exit(ReadTextProperty(Entry, 'code') = ErrorCodeName("Bifrost Error Code ori"::AmbiguousRecord));
     end;
 
     local procedure FindBySystemId(var RecordReference: RecordRef; RecordSystemId: Guid): Boolean

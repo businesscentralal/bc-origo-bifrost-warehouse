@@ -278,11 +278,9 @@ codeunit 10078436 "Whse PostedDoc Get Impl ori" implements "Msg Interface ori", 
         Context.ReadBoolean(RequestJson, 'includeLines', Argument, IncludeLines, Present, 'includeLines');
         if (PostingFrom <> 0D) and (PostingTo <> 0D) and (PostingTo < PostingFrom) then
             Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(RangeLbl, 'postingDateFrom'), 'postingDateTo', Context.FormatDate(PostingTo), '', RangeNextStepLbl);
-        if Argument.HasCollectedErrors() then begin
-            Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, ProblemsLbl);
+        // Every problem of the request is answered together, a bad skip or take included.
+        if not Context.RespondOrReadPaging(RequestJson, Argument, ProblemsLbl, Skip, Take) then
             exit;
-        end;
-        Argument.EvaluateSkipTake(RequestJson, Skip, Take);
         if IsShipment then
             WriteShipments(Argument, DocumentNo, LocationText, SourceNo, PostingFrom, PostingTo, IncludeLines, Skip, Take)
         else

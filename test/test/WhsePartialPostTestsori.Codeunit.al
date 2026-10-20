@@ -224,6 +224,73 @@ codeunit 97046 "Whse Partial Post Tests ori"
         AssertGenericSetRefused('Warehouse Shipment Line', '{"tableName":"Warehouse Shipment Line","force":true,"data":[{"primaryKey":{"No.":"SH-X","Line No.":10000},"fields":{"Qty. to Ship":1}}]}', 'Warehouse.Shipment.Post');
     end;
 
+    /// <summary>#67 item 3: an unknown top-level key no longer hides the problems in the lines (1033 and 1039).</summary>
+    [Test]
+    procedure ReceiptPost_UnknownKeyAndLineProblems_AreCollected()
+    var
+        ReceiptLine: Record "Warehouse Receipt Line";
+        ResponseJson: JsonObject;
+        RequestText: Text;
+        OriginalLanguage: Integer;
+    begin
+        // Issue #67, AC1 (item 3) | Time: independent of WorkDate | Risk: none.
+        CreateReceipt(ReceiptLine, 5);
+        RequestText := '{"receiptNo":"' + ReceiptLine."No." + '","post":true,"lines":[{"lineNo":999999,"qtyToReceive":1},{"lineNo":' + Format(ReceiptLine."Line No.") + ',"qtyToReceive":"3"}]}';
+
+        Run(Enum::"Message Type ori"::"Warehouse.Receipt.Post", RequestText, ResponseJson);
+        Assert.AreEqual('MultipleErrors', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('Nothing was posted.', TextValue(ResponseJson, 'error'), 'English summary.');
+        Assert.AreEqual('post:UnknownParameter,lines[0].lineNo:InvalidLine,lines[1].qtyToReceive:InvalidParameterFormat', ErrorList(ResponseJson), 'Every problem is listed.');
+
+        OriginalLanguage := GlobalLanguage();
+        GlobalLanguage(1039);
+        Run(Enum::"Message Type ori"::"Warehouse.Receipt.Post", RequestText, ResponseJson);
+        GlobalLanguage(OriginalLanguage);
+        Assert.AreEqual('MultipleErrors', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('Ekkert var bókað.', TextValue(ResponseJson, 'error'), 'Icelandic summary.');
+        Assert.AreEqual('post:UnknownParameter,lines[0].lineNo:InvalidLine,lines[1].qtyToReceive:InvalidParameterFormat', ErrorList(ResponseJson), 'Every problem is listed in Icelandic too.');
+        AssertReceiptUnchanged(ReceiptLine, 5);
+    end;
+
+    /// <summary>#67 item 5: the receipt preview summary answers in the caller language.</summary>
+    [Test]
+    procedure ReceiptPreview_Summary_IsTranslated()
+    var
+        ReceiptLine: Record "Warehouse Receipt Line";
+        ResponseJson: JsonObject;
+        OriginalLanguage: Integer;
+    begin
+        // Issue #67, AC2 (item 5) | Time: helper posts at WorkDate | Risk: preview needs Omit Commit false.
+        CreateReceipt(ReceiptLine, 5);
+        OriginalLanguage := GlobalLanguage();
+
+        GlobalLanguage(1039);
+        Assert.IsTrue(ReceiptHelper.RunMessage(Enum::"Message Type ori"::"Warehouse.Receipt.PreviewPost", '', '{"receiptNo":"' + ReceiptLine."No." + '"}', ResponseJson, false), 'The response should be JSON.');
+        GlobalLanguage(OriginalLanguage);
+        Assert.AreEqual('Success', TextValue(ResponseJson, 'status'), ResponseText(ResponseJson));
+        Assert.IsTrue(TextValue(ResponseJson, 'summary').StartsWith('Forsýning bókunar vöruhúsamóttöku ' + ReceiptLine."No."), 'Icelandic summary: ' + TextValue(ResponseJson, 'summary'));
+
+        Assert.IsTrue(ReceiptHelper.RunMessage(Enum::"Message Type ori"::"Warehouse.Receipt.PreviewPost", '', '{"receiptNo":"' + ReceiptLine."No." + '"}', ResponseJson, false), 'The response should be JSON.');
+        Assert.IsTrue(TextValue(ResponseJson, 'summary').StartsWith('Warehouse Receipt ' + ReceiptLine."No."), 'English summary: ' + TextValue(ResponseJson, 'summary'));
+        AssertReceiptUnchanged(ReceiptLine, 5);
+    end;
+
+    local procedure ErrorList(ResponseJson: JsonObject): Text
+    var
+        Token: JsonToken;
+        Entry: JsonToken;
+        Entries: TextBuilder;
+    begin
+        if not ResponseJson.Get('errors', Token) then
+            exit('');
+        foreach Entry in Token.AsArray() do begin
+            if Entries.Length() > 0 then
+                Entries.Append(',');
+            Entries.Append(TextValue(Entry.AsObject(), 'parameter') + ':' + TextValue(Entry.AsObject(), 'code'));
+        end;
+        exit(Entries.ToText());
+    end;
+
     local procedure CreateReceipt(var ReceiptLine: Record "Warehouse Receipt Line"; Quantity: Decimal)
     var
         Location: Record Location;

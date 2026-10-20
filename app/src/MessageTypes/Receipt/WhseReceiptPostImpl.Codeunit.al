@@ -130,15 +130,9 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
 
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
-        ContractMgt: Codeunit "Msg Contract Mgt ori";
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.AddLookupErrors(Errors, 'Warehouse Receipt Header');
-        Parts.AddPermissionError(Errors, 'BIFROST WhsePost ori');
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, 'The Warehouse Receipt has no lines, or every line would receive zero.', 'Set a quantity above zero on at least one line.'));
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidLine, 'A lineNo is not on the receipt, or qtyToReceive is negative or above the outstanding quantity.', 'Read the lines first, and read the outstanding quantity on the line and lower it.'));
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::UnknownParameter, 'The request or a line contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.'));
-        Parts.AddBusinessCentralError(Errors, 'invalid quantities, posting setup or source-document state');
+        Parts.AddDocumentPostErrors(Errors, 'Warehouse Receipt Header', 'systemId, recordSystemId, id, receiptNo, no', 'qtyToReceive', false);
         exit(true);
     end;
 
@@ -231,17 +225,18 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
 
         if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,receiptNo=no,no=no', RequestJson) then
             exit;
+        // An unknown key is answered together with the lookup and line problems, so it does not hide them.
         RefuseUnknownKeys(RequestJson, Argument);
-        if Argument.HasCollectedErrors() then begin
-            Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, ProblemsLbl);
-            exit;
-        end;
 
         if not FindWhseReceiptHeader(Argument, WhseReceiptHeader) then
             exit;
 
         WhseReceiptLine.SetRange("No.", WhseReceiptHeader."No.");
         if WhseReceiptLine.IsEmpty() then begin
+            if Argument.HasCollectedErrors() then begin
+                Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, ProblemsLbl);
+                exit;
+            end;
             Argument.RespondWithError(StrSubstNo(NoLinesToPostErr, WhseReceiptHeader."No."));
             exit;
         end;

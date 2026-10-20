@@ -92,6 +92,70 @@ codeunit 10078459 "Whse Contract Parts ori"
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::MultipleErrors, 'Several identifier values have an invalid format.', 'Read errors in order and correct each named key.'));
     end;
 
+    /// <summary>
+    /// Lists the errors of Warehouse.Receipt.Post and Warehouse.Shipment.Post. Each entry carries the nextStep the
+    /// answer gives, and InvalidParameterFormat names the line values of the wrong JSON type as well (#54 AC11).
+    /// </summary>
+    /// <param name="Errors">Receives the entries.</param>
+    /// <param name="RecordName">The document table caption, e.g. Warehouse Receipt Header.</param>
+    /// <param name="IdentifierKeys">The identifier keys under data, comma separated.</param>
+    /// <param name="QtyKey">The line quantity key: qtyToReceive or qtyToShip.</param>
+    /// <param name="IsShipment">True for the shipment, which also refuses a quantity above the picked quantity.</param>
+    internal procedure AddDocumentPostErrors(var Errors: JsonArray; RecordName: Text; IdentifierKeys: Text; QtyKey: Text; IsShipment: Boolean)
+    var
+        PreconditionWhen: Text;
+        PreconditionNextStep: Text;
+    begin
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::MissingParameter,
+            'No ' + RecordName + ' identifier was sent, or a line has no lineNo or no ' + QtyKey + '.',
+            'Send the number or SystemId as the subject, or in one of: ' + IdentifierKeys + '. Send lineNo and ' + QtyKey + ' on every line.'));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::RecordNotFound,
+            'An identifier that was sent does not match a ' + RecordName + ', also when another identifier matches one. The parameter names the key.',
+            'Check the number with Data.Records.Get on table ' + RecordName + '. For a SystemId, check the SystemId the same way.'));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::ConflictingIdentifiers,
+            'Two identifiers point to different records.',
+            'Send only one identifier, or identifiers for the same record.'));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::InvalidParameterFormat,
+            'data is not a JSON object, an identifier key under data is not a JSON string, a SystemId is not a GUID, lines is not an array of objects, or a line value has the wrong JSON type: lineNo must be an integer and ' + QtyKey + ' a number. The parameter names the offending key, e.g. lines[0].' + QtyKey + '.',
+            'Send data as an object with the identifier keys as strings, and each line as an object with lineNo as an integer and ' + QtyKey + ' as a number.'));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::MultipleErrors,
+            'More than one value failed validation, for example an unknown key together with problems in the lines. errors[] lists each one with its own code.',
+            'Correct every listed value and send the request again. Nothing was posted.'));
+        if IsShipment then
+            Errors.Add(NextStepEntry("Bifrost Error Code ori"::PermissionDenied,
+                'The caller lacks BIFROST WhsePost ori, or invoice is true and the caller lacks BIFROST WhseInv ori.',
+                'Ask an administrator to assign the BIFROST WhsePost ori permission set, and BIFROST WhseInv ori to invoice.'))
+        else
+            Errors.Add(NextStepEntry("Bifrost Error Code ori"::PermissionDenied,
+                'The caller lacks BIFROST WhsePost ori.',
+                'Ask an administrator to assign the BIFROST WhsePost ori permission set.'));
+        if IsShipment then begin
+            PreconditionWhen := 'The Warehouse Shipment has no lines, every line would ship zero, or qtyToShip is above the picked quantity at a location that requires pick.';
+            PreconditionNextStep := 'Set a quantity above zero on at least one line, or register the pick first.';
+        end else begin
+            PreconditionWhen := 'The Warehouse Receipt has no lines, or every line would receive zero.';
+            PreconditionNextStep := 'Set a quantity above zero on at least one line.';
+        end;
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::PreconditionFailed, PreconditionWhen, PreconditionNextStep));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::InvalidLine,
+            'A lineNo is not on the document or is listed twice, or ' + QtyKey + ' is negative or above the outstanding quantity.',
+            'Read the lines first, send each line once, and read the outstanding quantity on the line and lower it.'));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::UnknownParameter,
+            'The request or a line contains a key this type does not accept.',
+            'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.'));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::BusinessCentralError,
+            'Business Central''s own error text. Typical causes: invalid quantities, posting setup or source-document state.',
+            'Read the returned text; it names the field or setup to fix.'));
+    end;
+
+    local procedure NextStepEntry(ErrorCode: Enum "Bifrost Error Code ori"; WhenText: Text; NextStep: Text) Entry: JsonObject
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Entry := ContractMgt.ErrorEntry(ErrorCode, WhenText, NextStep);
+        Entry.Add('nextStep', NextStep);
+    end;
+
     internal procedure AddBusinessCentralError(var Errors: JsonArray; TypicalCauses: Text)
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";

@@ -220,16 +220,17 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
 
         if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,shipmentNo=no,no=no', RequestJson) then
             exit;
+        // An unknown key is answered together with the lookup and line problems, so it does not hide them.
         RefuseUnknownKeys(RequestJson, Argument);
-        if Argument.HasCollectedErrors() then begin
-            Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, NothingPreviewedLbl);
-            exit;
-        end;
         if not FindWhseShipmentHeader(Argument, WhseShipmentHeader) then
             exit;
 
         WhseShipmentLine.SetRange("No.", WhseShipmentHeader."No.");
         if WhseShipmentLine.IsEmpty() then begin
+            if Argument.HasCollectedErrors() then begin
+                Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, NothingPreviewedLbl);
+                exit;
+            end;
             Argument.RespondWithError("Bifrost Error Code ori"::NothingToPreview, StrSubstNo(NoLinesToPostErr, WhseShipmentHeader."No."), '', '', '', NothingToPostNextStepTok);
             exit;
         end;

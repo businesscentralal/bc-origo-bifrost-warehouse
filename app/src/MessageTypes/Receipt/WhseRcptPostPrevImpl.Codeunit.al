@@ -212,17 +212,18 @@ codeunit 10078411 "Whse Rcpt Post Prev. Impl ori" implements "Msg Interface ori"
         end;
         if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,receiptNo=no,no=no', RequestJson) then
             exit;
+        // An unknown key is answered together with the lookup and line problems, so it does not hide them.
         RefuseUnknownKeys(RequestJson, Argument);
-        if Argument.HasCollectedErrors() then begin
-            Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, NothingPreviewedLbl);
-            exit;
-        end;
 
         if not FindWhseReceiptHeader(Argument, WhseReceiptHeader) then
             exit;
 
         WhseReceiptLine.SetRange("No.", WhseReceiptHeader."No.");
         if WhseReceiptLine.IsEmpty() then begin
+            if Argument.HasCollectedErrors() then begin
+                Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, NothingPreviewedLbl);
+                exit;
+            end;
             Argument.RespondWithError("Bifrost Error Code ori"::NothingToPreview, StrSubstNo(NoLinesToPostErr, WhseReceiptHeader."No."), '', '', '', NothingToPostNextStepTok);
             exit;
         end;
@@ -392,9 +393,9 @@ codeunit 10078411 "Whse Rcpt Post Prev. Impl ori" implements "Msg Interface ori"
     var
         PostingPreviewHelper: Codeunit "Posting Preview Helper ori";
         Summary: Text;
-        SummaryTok: Label 'Warehouse Receipt %1 at %2 preview produced %3 entries. %4', Comment = '%1=Receipt No., %2=Location Code, %3=entry count, %4=G/L status sentence', Locked = true;
+        SummaryLbl: Label 'Warehouse Receipt %1 at %2 preview produced %3 entries. %4', Comment = '%1 = receipt no., %2 = location code, %3 = entry count, %4 = G/L status sentence, is-IS=Forsýning bókunar vöruhúsamóttöku %1 á %2 myndaði %3 færslur. %4';
     begin
-        Summary := StrSubstNo(SummaryTok, ReceiptNo, LocationCode, PostingPreviewHelper.CountPreviewEntries(PreviewArray), GLStatusText);
+        Summary := StrSubstNo(SummaryLbl, ReceiptNo, LocationCode, PostingPreviewHelper.CountPreviewEntries(PreviewArray), GLStatusText);
         exit(Summary);
     end;
 

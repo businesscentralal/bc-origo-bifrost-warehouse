@@ -7,10 +7,12 @@
 - Own permission sets only for the posting and invoicing gates (`BIFROST WhsePost ori`, `BIFROST WhseInv ori`). Both are `Assignable = true` on purpose: they are the only grants of the gate token tables (`Whse Posting ori`, `Whse Invoice ori`) and must stay out of the read/full extensions. No direct `Setup ori` tabledata access.
 - No pages; context-sensitive help base `https://docs.bifrost.origo.is/{0}/help/warehouse/`.
 - AppSource build gate: see `tools/AppSourceBuildGate.md` (ported from Bifrost Inventory / Attachments). Build runs with `failOn: warning`.
-- Message types: all thirty-one `Warehouse.*` types in `app/src/MessageTypes/`.
-- One Impl codeunit per message type. The write types of #41-#47 run their own `OnRun` in
+- Message types: all forty-two `Warehouse.*` types in `app/src/MessageTypes/`.
+- One Impl codeunit per message type. The write types of #41-#50 and #55-#57 run their own `OnRun` in
   `Codeunit.Run` isolation and share `Whse Write Context ori` for payload, result and request readers;
   do not add a Proc or Context codeunit per type. Their enum values reuse the Impl codeunit number.
+  The #48-#57 types share `Whse Msg Values ori` (readers), `Whse Journal Helper ori` (journal batch and
+  register), `Whse Worksheet Helper ori` and `Whse ActLine Helper ori` (activity and line resolution).
 - Post and register types go through `Whse Posting Gate ori` (`BIFROST WhsePost ori`; `BIFROST WhseInv ori`
   for invoice = true).
 
@@ -49,6 +51,12 @@ App range: `10078385–10078484` (private block, 100 IDs).
 | 10078436 | `Whse PostedDoc Get Impl ori` and enum value `Warehouse.PostedDocument.Get` (#58) |
 | 10078437 | `Whse RegActivity Get Impl ori` and enum value `Warehouse.RegisteredActivity.Get` (#58) |
 | 10078438 | `Whse Doc Line Qty ori` (per-line quantities for receipt and shipment post and preview, #54) |
+| 10078446 | `Whse Journal Create Impl ori` and enum value `Warehouse.Journal.Create` (#48) |
+| 10078447 | `Whse Journal Reg Impl ori` and enum value `Warehouse.Journal.Register` (#48) |
+| 10078448 | `Whse PhysInvt Calc Impl ori` and enum value `Warehouse.PhysInventory.Calculate` (#49) |
+| 10078449 | `Whse PhysInvt Reg Impl ori` and enum value `Warehouse.PhysInventory.Register` (#49) |
+| 10078450 | `Whse Adjustment Calc Impl ori` and enum value `Warehouse.Adjustment.Calculate` (#50) |
+| 10078451 | `Whse Journal Helper ori` (shared by #48 and #49) |
 | 10078452 | table `Whse Posting ori` |
 | 10078453 | `Whse Posting Gate ori` |
 | 10078454 | permission set `BIFROST WhsePost ori` |
@@ -57,9 +65,18 @@ App range: `10078385–10078484` (private block, 100 IDs).
 | 10078457 | permission set `BIFROST WhseInv ori` |
 | 10078458 | `Whse Data Restrict ori` |
 | 10078459 | `Whse Contract Parts ori` (warehouse#10) |
+| 10078460 | `Whse Wksh GetDocs Impl ori` and enum value `Warehouse.Worksheet.GetDocuments` (#55) |
+| 10078461 | `Whse Wksh CreateAct Impl ori` and enum value `Warehouse.Worksheet.CreateActivities` (#55) |
+| 10078462 | `Whse ActLine Split Impl ori` and enum value `Warehouse.ActivityLine.Split` (#56) |
+| 10078463 | `Whse ActLine ChgBin Impl ori` and enum value `Warehouse.ActivityLine.ChangeBin` (#56) |
+| 10078464 | `Whse ActLine SetQty Impl ori` and enum value `Warehouse.ActivityLine.SetQtyToHandle` (#56) |
+| 10078465 | `Whse ActLine Track Impl ori` and enum value `Warehouse.ActivityLine.AssignTracking` (#57) |
+| 10078466 | `Whse ActLine Helper ori` (shared by #56 and #57) |
+| 10078467 | `Whse Msg Values ori` (readers shared by #48-#50 and #55-#57) |
+| 10078468 | `Whse Worksheet Helper ori` (shared by #55) |
 | 10078389, 10078391 | Reserved (do not use) |
-| 10078439–10078445 | Reserved for the document flow PR (#51-#54, #58); free |
-| 10078446–10078451, 10078460–10078484 | Free (31 IDs; #48-#50 and #55-#57 are built in parallel) |
+| 10078439–10078445 | Free (7 IDs) |
+| 10078469–10078484 | Free (16 IDs) |
 
 Test range: `97000–97099`.
 
@@ -88,6 +105,10 @@ Test range: `97000–97099`.
 | 97046 | `Whse Partial Post Tests ori` (#54, and the #53/#54 write blocks) |
 | 97047 | `Whse DocFlow Help Tests ori` (contracts and en-US/is-IS help of #51-#54, #58) |
 | 97048–97049 | Reserved for the document flow PR; free |
-| 97050–97079 | Free |
+| 97050 | `Whse Jnl Test Helper ori` (fixtures of the #48-#57 tests) |
+| 97051–97061 | `Whse Journal Create Tests ori`, `Whse Journal Reg Tests ori`, `Whse PhysInvt Calc Tests ori`, `Whse PhysInvt Reg Tests ori`, `Whse Adjustment Calc Tests ori`, `Whse Wksh GetDocs Tests ori`, `Whse Wksh CreateAct Tests ori`, `Whse ActLine Split Tests ori`, `Whse ActLine ChgBin Tests ori`, `Whse ActLine SetQty Tests ori`, `Whse ActLine Track Tests ori` |
+| 97062 | `Whse Jnl Contract Tests ori` (contracts, bilingual help and write restrictions of #48-#57) |
+| 97063 | permission set `Whse JnlGate Tst ori` (journal register posting-gate refusal) |
+| 97064–97079 | Free |
 | 97080–97091 | Tests of #41-#47: `Whse Bin Get Tests ori`, `Whse Bin Create Tests ori`, `Whse DefBin Set Tests ori`, `Whse Movement Create Tests ori`, `Whse Movement Reg Tests ori`, `Whse InvtPick Create Tests ori`, `Whse InvtPick Post Tests ori`, `Whse InvtPut Create Tests ori`, `Whse InvtPut Post Tests ori`, `Whse InvtMove Create Tests ori`, `Whse InvtMove Reg Tests ori`, `Whse Bin Repl Tests ori` |
 | 97092–97099 | Free |

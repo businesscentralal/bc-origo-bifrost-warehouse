@@ -177,6 +177,8 @@ codeunit 97084 "Whse Movement Reg Tests ori"
         ResponseJson: JsonObject;
         MovementNo: Code[20];
     begin
+        // Restrictive tests start without Bifrost permissions; the fixtures and the create run as a full user.
+        RaiseToSetupUser(LibraryLowerPermissions);
         LibraryWarehouse.CreateFullWMSLocation(Location, 2);
         EnsureDefaultDirectedEmployee(Location.Code);
         EnsureMovementWorksheetTemplate();
@@ -390,6 +392,13 @@ codeunit 97084 "Whse Movement Reg Tests ori"
             exit(false);
         ResponseContent.GetSubText(ResponseBody, 1, ResponseContent.Length());
         exit(ResponseJson.ReadFrom(ResponseBody));
+    end;
+
+    local procedure RaiseToSetupUser(var LibraryLowerPermissions: Codeunit "Library - Lower Permissions")
+    begin
+        LibraryLowerPermissions.PushPermissionSetWithoutDefaults('BIFROST Full ori');
+        LibraryLowerPermissions.AddPermissionSet('D365 FULL ACCESS');
+        LibraryLowerPermissions.AddPermissionSet('Whse Gate Test ori');
     end;
 
     local procedure LowerToFullUserWithPostingGate(var LibraryLowerPermissions: Codeunit "Library - Lower Permissions")

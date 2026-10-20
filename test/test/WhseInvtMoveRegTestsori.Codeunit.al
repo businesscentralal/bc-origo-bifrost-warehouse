@@ -151,6 +151,8 @@ codeunit 97090 "Whse InvtMove Reg Tests ori"
         ResponseJson: JsonObject;
         MovementNo: Code[20];
     begin
+        // Restrictive tests start without Bifrost permissions; the fixtures and the create run as a full user.
+        RaiseToSetupUser(LibraryLowerPermissions);
         PrepareBasicStock(Location, Item, FromBin, ToBin, 5);
         RunCreate(LineRequest(Location.Code, Item."No.", 1, FromBin.Code, ToBin.Code), CreateResponse);
         Assert.AreEqual('Success', TextValue(CreateResponse, 'status'), ResponseText(CreateResponse));
@@ -336,6 +338,13 @@ codeunit 97090 "Whse InvtMove Reg Tests ori"
             exit(false);
         ResponseContent.GetSubText(ResponseBody, 1, ResponseContent.Length());
         exit(ResponseJson.ReadFrom(ResponseBody));
+    end;
+
+    local procedure RaiseToSetupUser(var LibraryLowerPermissions: Codeunit "Library - Lower Permissions")
+    begin
+        LibraryLowerPermissions.PushPermissionSetWithoutDefaults('BIFROST Full ori');
+        LibraryLowerPermissions.AddPermissionSet('D365 FULL ACCESS');
+        LibraryLowerPermissions.AddPermissionSet('Whse Gate Test ori');
     end;
 
     local procedure LowerToFullUserWithPostingGate(var LibraryLowerPermissions: Codeunit "Library - Lower Permissions")

@@ -44,5 +44,13 @@ permissionset 97010 "Whse NoRead Test ori"
         codeunit "Whse ActLine Split Impl ori" = X,
         codeunit "Whse ActLine ChgBin Impl ori" = X,
         codeunit "Whse ActLine SetQty Impl ori" = X,
-        codeunit "Whse ActLine Track Impl ori" = X;
+        codeunit "Whse ActLine Track Impl ori" = X,
+        codeunit "Whse Rcpt GetSrcDocs Impl ori" = X,
+        codeunit "Whse Ship GetSrcDocs Impl ori" = X,
+        codeunit "Whse Shipment Release Impl ori" = X,
+        codeunit "Whse Shipment Reopen Impl ori" = X,
+        codeunit "Whse Request Get Impl ori" = X,
+        codeunit "Whse PostedDoc Get Impl ori" = X,
+        codeunit "Whse RegActivity Get Impl ori" = X,
+        codeunit "Whse Doc Line Qty ori" = X;
 }

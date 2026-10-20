@@ -7,6 +7,8 @@ namespace Origo.Bifrost.Warehouse;
 /// receipt only performs the receive and creates Posted Whse. Receipt + the underlying
 /// posted source documents (e.g. Posted Purchase Receipt, Posted Return Shipment, Posted
 /// Transfer Receipt). Invoicing on the source document is a separate later action.
+/// Optional lines[] set Qty. to Receive per line (#54); the quantities and the posting run in this
+/// codeunit's own OnRun inside Codeunit.Run, so a failure leaves the quantities unchanged.
 /// </summary>
 
 using Microsoft.Warehouse.Document;
@@ -18,6 +20,31 @@ using Origo.Bifrost;
 codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
 {
     Access = Internal;
+
+    trigger OnRun()
+    var
+        WhseReceiptLine: Record "Warehouse Receipt Line";
+        Context: Codeunit "Whse Write Context ori";
+        DocLineQty: Codeunit "Whse Doc Line Qty ori";
+        WhsePostReceipt: Codeunit "Whse.-Post Receipt";
+        Payload: JsonObject;
+        Token: JsonToken;
+        ReceiptNo: Code[20];
+        MissingPayloadErr: Label 'The receipt posting payload was empty.', Comment = 'is-IS=Gögnin til að bóka móttöku voru tóm.';
+    begin
+        if not Context.TryGetPayload(Payload) then
+            Error(MissingPayloadErr);
+        Payload.Get('receiptNo', Token);
+        ReceiptNo := CopyStr(Token.AsValue().AsText(), 1, MaxStrLen(ReceiptNo));
+        Payload.Get('lines', Token);
+        DocLineQty.ApplyQuantities(false, ReceiptNo, Token.AsArray());
+        WhseReceiptLine.SetRange("No.", ReceiptNo);
+        WhseReceiptLine.FindFirst();
+        // The outer Codeunit.Run commits once, or the caller does under Omit Commit.
+        WhsePostReceipt.SetSuppressCommit(true);
+        WhsePostReceipt.Run(WhseReceiptLine);
+    end;
+
     procedure IsEnabled(): Boolean
     var
         WarehouseReceiptHeader: Record "Warehouse Receipt Header";
@@ -34,8 +61,10 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
     end;
 
     procedure GetDescription() Description: Text[250]
+    var
+        DescriptionLbl: Label 'Posts a Warehouse Receipt (receive), optionally with a quantity per line.', Comment = 'is-IS=Bókar vöruhúsamóttöku (móttöku), valfrjálst með magni á hverja línu.';
     begin
-        exit('Posts a Warehouse Receipt (receive).');
+        exit(DescriptionLbl);
     end;
 
     procedure GetKeywords(): Text
@@ -74,8 +103,13 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
     end;
 
     procedure GetParameters(var Parameters: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        exit(false);
+        Parameters.Add(ContractMgt.Parameter('lines', 'array', false, 'Optional per-line quantities to receive. Lines that are not listed keep their current Qty. to Receive.'));
+        Parameters.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Warehouse receipt line number (inside lines).'));
+        Parameters.Add(ContractMgt.Parameter('qtyToReceive', 'number', true, 'Quantity to receive on that line, from zero up to the outstanding quantity (inside lines).'));
+        exit(true);
     end;
 
     procedure GetResponse(var Response: JsonObject): Boolean
@@ -89,6 +123,7 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
         Fields.Add(ContractMgt.ResponseField('postedWhseReceiptNo', 'string', 'Posted Warehouse Receipt number when available.'));
         Fields.Add(ContractMgt.ResponseField('postedWhseReceiptSystemId', 'string', 'Posted Warehouse Receipt SystemId when available.'));
         Fields.Add(ContractMgt.ResponseField('postedDocuments', 'array', 'Distinct posted source-document summaries.'));
+        Fields.Add(ContractMgt.ResponseField('lines', 'array', 'Per receipt line: lineNo, itemNo, quantityPosted and quantityRemaining on the receipt after the post.'));
         Parts.Response(Response, Fields);
         exit(true);
     end;
@@ -100,7 +135,9 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
     begin
         Parts.AddLookupErrors(Errors, 'Warehouse Receipt Header');
         Parts.AddPermissionError(Errors, 'BIFROST WhsePost ori');
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, 'The Warehouse Receipt has no lines to post.', 'Add receivable lines to the receipt.'));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, 'The Warehouse Receipt has no lines, or every line would receive zero.', 'Set a quantity above zero on at least one line.'));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidLine, 'A lineNo is not on the receipt, or qtyToReceive is negative or above the outstanding quantity.', 'Read the lines first, and read the outstanding quantity on the line and lower it.'));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::UnknownParameter, 'The request or a line contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.'));
         Parts.AddBusinessCentralError(Errors, 'invalid quantities, posting setup or source-document state');
         exit(true);
     end;
@@ -109,7 +146,7 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect(Effect, 'Posts the Warehouse Receipt and moves it to history; source documents are received but not invoiced.', 'BIFROST WhsePost ori');
+        Parts.IrreversibleEffect(Effect, 'Sets the listed quantities to receive and posts the Warehouse Receipt; Business Central commits the posting. Source documents are received but not invoiced.', 'BIFROST WhsePost ori');
         exit(true);
     end;
 
@@ -124,6 +161,7 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
     begin
         Related.Add(ContractMgt.RelatedEntry('Warehouse.Receipt.PreviewPost', 'Use it to inspect predicted entries without committing before posting.'));
         Related.Add(ContractMgt.RelatedEntry('Warehouse.Putaway.Create', 'Use it after posting when the received goods require put-away.'));
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.PostedDocument.Get', 'Use it to read the posted warehouse receipt.'));
         exit(true);
     end;
 
@@ -136,13 +174,21 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
     end;
 
     procedure GetExamples(var Examples: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        exit(false);
+        Examples.Add(ContractMgt.Example(
+            'Receive 3 of 5 on line 10000 of receipt RE000001',
+            '{"receiptNo":"RE000001","lines":[{"lineNo":10000,"qtyToReceive":3}]}',
+            '{"status":"Success","receiptNo":"RE000001","postedWhseReceiptNo":"R_000001","postedWhseReceiptSystemId":"6f1c1d2e-0000-0000-0000-000000000006","postedDocuments":[{"postedSourceDocument":"Posted Receipt","postedSourceNo":"107001","sourceDocument":"Purchase Order","sourceNo":"106001"}],"lines":[{"lineNo":10000,"itemNo":"1896-S","quantityPosted":3,"quantityRemaining":2}]}'));
+        exit(true);
     end;
 
     procedure GetOverview(var Overview: Text): Boolean
+    var
+        OverviewLbl: Label 'Irreversibly posts a Warehouse Receipt, and Business Central commits the posting. Optional lines set Qty. to Receive per line first; lines that are not listed keep their value, and a quantity above the outstanding quantity is refused. Source-document invoicing is a separate later action.', Comment = 'is-IS=Bókar vöruhúsamóttöku óafturkræft og Business Central staðfestir bókunina. Valfrjálsar línur setja fyrst magn til móttöku á hverja línu; línur sem eru ekki taldar upp halda gildi sínu og magni umfram útistandandi magn er hafnað. Reikningsfærsla upprunaskjala er sérstök aðgerð síðar.';
     begin
-        Overview := 'Irreversibly posts a Warehouse Receipt. Source-document invoicing is a separate later action.';
+        Overview := OverviewLbl;
         exit(true);
     end;
 
@@ -163,13 +209,21 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
         WhseReceiptLine: Record "Warehouse Receipt Line";
         PostedWhseReceiptHeader: Record "Posted Whse. Receipt Header";
         WhseRecordLookup: Codeunit "Whse Record Lookup ori";
-        WhsePostReceipt: Codeunit "Whse.-Post Receipt";
         WhsePostingGate: Codeunit "Whse Posting Gate ori";
+        Context: Codeunit "Whse Write Context ori";
+        DocLineQty: Codeunit "Whse Doc Line Qty ori";
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
+        Payload: JsonObject;
         PostedDocsArray: JsonArray;
+        PlannedLines: JsonArray;
+        LineSummary: JsonArray;
         NoLinesToPostErr: Label 'Warehouse Receipt %1 has no lines to post.', Comment = '%1 = Whse. Receipt No., is-IS=Vöruhúsamóttaka %1 hefur engar línur til bókunar.';
+        NothingLbl: Label 'Every line of warehouse receipt %1 would receive zero.', Comment = '%1 = receipt no., is-IS=Hver lína vöruhúsamóttöku %1 myndi taka á móti núlli.';
+        NothingNextStepLbl: Label 'Set a quantity above zero on at least one line.', Comment = 'is-IS=Settu magn yfir núlli á að minnsta kosti eina línu.';
+        ProblemsLbl: Label 'Nothing was posted.', Comment = 'is-IS=Ekkert var bókað.';
     begin
+        Context.Reset();
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
         if not WhsePostingGate.AssertCanPost(Argument) then
@@ -177,6 +231,11 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
 
         if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,receiptNo=no,no=no', RequestJson) then
             exit;
+        RefuseUnknownKeys(RequestJson, Argument);
+        if Argument.HasCollectedErrors() then begin
+            Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, ProblemsLbl);
+            exit;
+        end;
 
         if not FindWhseReceiptHeader(Argument, WhseReceiptHeader) then
             exit;
@@ -186,16 +245,30 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
             Argument.RespondWithError(StrSubstNo(NoLinesToPostErr, WhseReceiptHeader."No."));
             exit;
         end;
-        WhseReceiptLine.FindFirst();
 
+        DocLineQty.ReadLines(RequestJson, Argument, false, WhseReceiptHeader."No.", PlannedLines);
+        if not Argument.HasCollectedErrors() then
+            if not DocLineQty.HasQuantityToPost(false, WhseReceiptHeader."No.", PlannedLines) then
+                Argument.AddError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(NothingLbl, WhseReceiptHeader."No."), 'lines', '', '', NothingNextStepLbl);
+        if Argument.HasCollectedErrors() then begin
+            Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, ProblemsLbl);
+            exit;
+        end;
+        LineSummary := DocLineQty.LineSummary(false, WhseReceiptHeader."No.", PlannedLines);
+
+        Payload.Add('receiptNo', WhseReceiptHeader."No.");
+        Payload.Add('lines', PlannedLines);
+        Context.SetPayload(Payload);
         // Codeunit.Run with a return value is illegal inside the Omit Commit write transaction (#18).
         if Argument."Omit Commit" then
-            WhsePostReceipt.Run(WhseReceiptLine)
+            Codeunit.Run(Codeunit::"Whse Receipt Post Impl ori")
         else
-            if not WhsePostReceipt.Run(WhseReceiptLine) then begin
+            if not Codeunit.Run(Codeunit::"Whse Receipt Post Impl ori") then begin
+                Context.Reset();
                 Argument.RespondWithError(GetLastErrorText());
                 exit;
             end;
+        Context.Reset();
 
         ResponseJson.Add('status', 'Success');
         ResponseJson.Add('receiptNo', WhseReceiptHeader."No.");
@@ -206,9 +279,21 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
             AppendPostedSourceDocuments(PostedWhseReceiptHeader."No.", PostedDocsArray);
         end;
         ResponseJson.Add('postedDocuments', PostedDocsArray);
+        ResponseJson.Add('lines', LineSummary);
 
         Argument.SetResponseJson(ResponseJson);
         Argument."Content Type" := Argument.GetContentTypeJson();
+    end;
+
+    local procedure RefuseUnknownKeys(RequestJson: JsonObject; var Argument: Record "Message Argument ori")
+    var
+        KeyName: Text;
+        UnknownLbl: Label 'The key %1 is not a parameter of this message type.', Comment = '%1 = key, is-IS=Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.';
+        UnknownNextStepLbl: Label 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.';
+    begin
+        foreach KeyName in RequestJson.Keys() do
+            if not (KeyName in ['systemId', 'recordSystemId', 'id', 'receiptNo', 'no', 'lines']) then
+                Argument.AddError("Bifrost Error Code ori"::UnknownParameter, StrSubstNo(UnknownLbl, KeyName), KeyName, KeyName, '', UnknownNextStepLbl);
     end;
 
     local procedure FindWhseReceiptHeader(var Argument: Record "Message Argument ori"; var WhseReceiptHeader: Record "Warehouse Receipt Header"): Boolean

@@ -78,8 +78,13 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
     end;
 
     procedure GetParameters(var Parameters: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        exit(false);
+        Parameters.Add(ContractMgt.Parameter('lines', 'array', false, 'Optional per-line quantities to ship in the preview, the same as Warehouse.Shipment.Post. They are rolled back with the preview. Needs write permission on warehouse shipment lines.'));
+        Parameters.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Warehouse shipment line number (inside lines).'));
+        Parameters.Add(ContractMgt.Parameter('qtyToShip', 'number', true, 'Quantity to ship on that line, from zero up to the outstanding quantity (inside lines).'));
+        exit(true);
     end;
 
     procedure GetResponse(var Response: JsonObject): Boolean
@@ -114,6 +119,9 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, 'Posting preview cannot run inside a rollback chain (Omit Commit). Run this message type with Omit Commit set to false.', 'Call Dispatcher.Execute with OmitCommit = false, or use the HTTP/MCP API.'));
         Parts.AddLookupErrors(Errors, 'Warehouse Shipment Header');
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::NothingToPreview, 'The Warehouse Shipment has no lines or no quantities to post.', 'Add lines and quantities to ship.'));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidLine, 'A lineNo is not on the shipment, or qtyToShip is negative or above the outstanding quantity.', 'Read the lines first, and read the outstanding quantity on the line and lower it.'));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::UnknownParameter, 'The request or a line contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.'));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PermissionDenied, 'lines was sent and the caller cannot write warehouse shipment lines.', 'Ask an administrator to assign BIFROST Whse - Full ori, or preview without lines.'));
         Parts.AddBusinessCentralError(Errors, 'invalid quantities, posting setup or source-document state');
         exit(true);
     end;
@@ -178,6 +186,8 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
         WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         PostingPreviewEventHandler: Codeunit "Posting Preview Event Handler";
         PostingPreviewHelper: Codeunit "Posting Preview Helper ori";
+        DocLineQty: Codeunit "Whse Doc Line Qty ori";
+        PlannedLines: JsonArray;
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
         TotalsJson: JsonObject;
@@ -197,6 +207,9 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
         NothingToPostNextStepTok: Label 'No shipment line has Qty. to Ship. Set quantities on the shipment lines.', Comment = 'is-IS=Engin sendingarlína hefur Magn til afhendingar. Setjið magn á sendingarlínurnar.';
         OmitCommitPreviewErr: Label 'Posting preview cannot run inside a rollback chain (Omit Commit). Run this message type with Omit Commit set to false.', Comment = 'is-IS=Ekki er hægt að forskoða bókun innan afturköllunarkeðju (Omit Commit). Keyrðu þessa skilaboðategund með Omit Commit stillt á false.';
         OmitCommitPreviewNextStepTok: Label 'Call Dispatcher.Execute with OmitCommit = false, or use the HTTP/MCP API.', Comment = 'is-IS=Kallaðu á Dispatcher.Execute með OmitCommit = false eða notaðu HTTP/MCP API.';
+        NothingPreviewedLbl: Label 'Nothing was previewed.', Comment = 'is-IS=Ekkert var forskoðað.';
+        LinesDeniedLbl: Label 'You do not have permission to set quantities on warehouse shipment lines.', Comment = 'is-IS=Þú hefur ekki heimild til að setja magn á línur vöruhúsaafhendingar.';
+        LinesDeniedNextStepLbl: Label 'Ask an administrator to assign BIFROST Whse - Full ori, or preview without lines.', Comment = 'is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori eða forskoðaðu án lína.';
     begin
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
@@ -207,6 +220,11 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
 
         if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,shipmentNo=no,no=no', RequestJson) then
             exit;
+        RefuseUnknownKeys(RequestJson, Argument);
+        if Argument.HasCollectedErrors() then begin
+            Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, NothingPreviewedLbl);
+            exit;
+        end;
         if not FindWhseShipmentHeader(Argument, WhseShipmentHeader) then
             exit;
 
@@ -215,6 +233,16 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
             Argument.RespondWithError("Bifrost Error Code ori"::NothingToPreview, StrSubstNo(NoLinesToPostErr, WhseShipmentHeader."No."), '', '', '', NothingToPostNextStepTok);
             exit;
         end;
+        DocLineQty.ReadLines(RequestJson, Argument, true, WhseShipmentHeader."No.", PlannedLines);
+        if Argument.HasCollectedErrors() then begin
+            Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, NothingPreviewedLbl);
+            exit;
+        end;
+        if PlannedLines.Count() > 0 then
+            if not WhseShipmentLine.WritePermission() then begin
+                Argument.RespondWithError("Bifrost Error Code ori"::PermissionDenied, LinesDeniedLbl, 'lines', '', '', LinesDeniedNextStepLbl);
+                exit;
+            end;
         LinesToPost := WhseShipmentLine.Count();
         PostingDate := WhseShipmentHeader."Posting Date";
         if PostingDate = 0D then
@@ -225,7 +253,7 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
         GLSetup.Get();
         LCYCode := GLSetup."LCY Code";
 
-        if not PreviewWhseShipment(WhseShipmentLine, PostingPreviewEventHandler, PreviewErrorText) then begin
+        if not PreviewWhseShipment(WhseShipmentLine, PlannedLines, PostingPreviewEventHandler, PreviewErrorText) then begin
             if PreviewErrorText = '' then
                 PreviewErrorText := PreviewFailedErr;
             PostingPreviewHelper.RespondWithPreviewError(Argument, PreviewErrorText, NothingToPostNextStepTok);
@@ -277,6 +305,17 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
         exit(WhseShipmentHeader.GetBySystemId(FoundSystemId));
     end;
 
+    local procedure RefuseUnknownKeys(RequestJson: JsonObject; var Argument: Record "Message Argument ori")
+    var
+        KeyName: Text;
+        UnknownLbl: Label 'The key %1 is not a parameter of this message type.', Comment = '%1 = key, is-IS=Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.';
+        UnknownNextStepLbl: Label 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.';
+    begin
+        foreach KeyName in RequestJson.Keys() do
+            if not (KeyName in ['systemId', 'recordSystemId', 'id', 'shipmentNo', 'no', 'lines']) then
+                Argument.AddError("Bifrost Error Code ori"::UnknownParameter, StrSubstNo(UnknownLbl, KeyName), KeyName, KeyName, '', UnknownNextStepLbl);
+    end;
+
     local procedure CollectDistinctGLDocumentNos(var PostingPreviewEventHandler: Codeunit "Posting Preview Event Handler"; var DocNosArray: JsonArray)
     var
         GLEntry: Record "G/L Entry";
@@ -312,15 +351,31 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
     /// `Whse.-Post Shipment (Yes/No)` subscribes to `Gen. Jnl.-Post Preview.OnRunPreview`
     /// and forces `Invoice = true` for the simulated post.
     /// </summary>
-    local procedure PreviewWhseShipment(var WhseShipmentLine: Record "Warehouse Shipment Line"; var PostingPreviewEventHandler: Codeunit "Posting Preview Event Handler"; var ErrorText: Text): Boolean
+    local procedure PreviewWhseShipment(var WhseShipmentLine: Record "Warehouse Shipment Line"; PlannedLines: JsonArray; var PostingPreviewEventHandler: Codeunit "Posting Preview Event Handler"; var ErrorText: Text): Boolean
     var
         GenJnlPostPreview: Codeunit "Gen. Jnl.-Post Preview";
         WhsePostShipmentYesNo: Codeunit "Whse.-Post Shipment (Yes/No)";
+        DocLineQty: Codeunit "Whse Doc Line Qty ori";
+        Context: Codeunit "Whse Write Context ori";
+        Payload: JsonObject;
     begin
+        // The per-line quantities are applied inside the preview run (Whse.-Post Shipment OnBeforeRun),
+        // so Business Central rolls them back with the preview.
+        Context.Reset();
+        if PlannedLines.Count() > 0 then begin
+            Payload.Add('documentNo', WhseShipmentLine."No.");
+            Payload.Add('isShipment', true);
+            Payload.Add('lines', PlannedLines);
+            Context.SetPayload(Payload);
+            BindSubscription(DocLineQty);
+        end;
         BindSubscription(WhsePostShipmentYesNo);
         GenJnlPostPreview.SetContext(WhsePostShipmentYesNo, WhseShipmentLine);
         if GenJnlPostPreview.Run() then; // expected to fail with Error('') after capturing entries
         UnbindSubscription(WhsePostShipmentYesNo);
+        if PlannedLines.Count() > 0 then
+            UnbindSubscription(DocLineQty);
+        Context.Reset();
 
         if not GenJnlPostPreview.IsSuccess() then begin
             ErrorText := GetLastErrorText();

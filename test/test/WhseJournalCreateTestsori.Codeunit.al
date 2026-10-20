@@ -20,6 +20,7 @@ codeunit 97051 "Whse Journal Create Tests ori"
     var
         Assert: Codeunit "Library Assert";
         Helper: Codeunit "Whse Jnl Test Helper ori";
+        ContractAssert: Codeunit "Whse Contract Assert ori";
 
     /// <summary>AC01: an item journal line is inserted through Validate against the adjustment bin.</summary>
     [Test]
@@ -263,6 +264,144 @@ codeunit 97051 "Whse Journal Create Tests ori"
         TempArgument.Insert(true);
         CreateImpl.ExecuteBifrostTask(TempArgument);
         Helper.ExpectError(TempArgument.GetResponseJson(), 'PermissionDenied', 'Ask an administrator to assign BIFROST Whse - Full ori.');
+    end;
+
+    /// <summary>#68 item 2: the answer echoes the lot that went on the warehouse item tracking line (1033).</summary>
+    [Test]
+    procedure Create_LineWithLot_EchoesLotNo()
+    begin
+        // Issue #68, AC1 (item 2) | Time: none | Risk: none.
+        AssertLotEchoed(1033);
+    end;
+
+    /// <summary>#68 item 2: the same in Icelandic (1039).</summary>
+    [Test]
+    procedure Create_LineWithLot_EchoesLotNoInIcelandic()
+    begin
+        // Issue #68, AC1 (item 2) | Time: none | Risk: none.
+        AssertLotEchoed(1039);
+    end;
+
+    /// <summary>#68 item 3: a refusal names the request line counted from 1 (1033).</summary>
+    [Test]
+    procedure Create_NegativeAboveBinContent_CountsLinesFromOne()
+    begin
+        // Issue #68, AC1 (item 3) | Time: none | Risk: none.
+        AssertLineCountedFromOne(1033, 'Bin %1 holds 2 base units of item %2 that can be taken; line 1 asks for 5.');
+    end;
+
+    /// <summary>#68 item 3: the same in Icelandic (1039).</summary>
+    [Test]
+    procedure Create_NegativeAboveBinContent_CountsLinesFromOneInIcelandic()
+    begin
+        // Issue #68, AC1 (item 3) | Time: none | Risk: none.
+        AssertLineCountedFromOne(1039, 'Hólf %1 geymir 2 grunneiningar af vöru %2 sem má taka; lína 1 biður um 5.');
+    end;
+
+    /// <summary>#68 item 5: an unknown batch no longer hides an unknown key, a format error and a missing bin (1033).</summary>
+    [Test]
+    procedure Create_IndependentProblems_AreCollected()
+    begin
+        // Issue #68, AC1 (item 5) | Time: none | Risk: none.
+        AssertIndependentProblems(1033, 'Nothing was written.', 'Line 1 is missing binCode.');
+    end;
+
+    /// <summary>#68 item 5: the same in Icelandic (1039).</summary>
+    [Test]
+    procedure Create_IndependentProblems_AreCollectedInIcelandic()
+    begin
+        // Issue #68, AC1 (item 5) | Time: none | Risk: none.
+        AssertIndependentProblems(1039, 'Ekkert var skrifað.', 'Línu 1 vantar binCode.');
+    end;
+
+    /// <summary>#68 item 7: the physical inventory template refusal says "birgðatalning" in Icelandic.</summary>
+    [Test]
+    procedure Create_PhysInventoryTemplate_IcelandicWording()
+    var
+        Location: Record Location;
+        Item: Record Item;
+        Bin: Record Bin;
+        JournalBatch: Record "Warehouse Journal Batch";
+        ResponseJson: JsonObject;
+        PhysTemplateTxt: Label 'Birgðabókarsniðmát vöruhúss %1 er sniðmát fyrir birgðatalningu.', Locked = true;
+    begin
+        // Issue #68, AC2 (item 7) | Time: none | Risk: none.
+        Helper.CreateDirectedLocation(Location);
+        Helper.CreateItem(Item);
+        Helper.FindPickBin(Location.Code, 1, Bin);
+        Helper.CreateWhseJournalBatch("Warehouse Journal Template Type"::"Physical Inventory", Location.Code, JournalBatch);
+
+        ResponseJson := Helper.RunTypeInLanguage(Enum::"Message Type ori"::"Warehouse.Journal.Create", '', BatchRequest(JournalBatch, '[{"itemNo":"' + Item."No." + '","binCode":"' + Bin.Code + '","quantity":1}]'), 1039);
+
+        Assert.AreEqual('InvalidParameter', Helper.TextValue(ResponseJson, 'code'), Helper.ResponseText(ResponseJson));
+        Assert.AreEqual(StrSubstNo(PhysTemplateTxt, JournalBatch."Journal Template Name"), Helper.TextValue(ResponseJson, 'error'), 'Icelandic wording.');
+    end;
+
+    local procedure AssertLotEchoed(LanguageId: Integer)
+    var
+        Location: Record Location;
+        Item: Record Item;
+        Bin: Record Bin;
+        JournalBatch: Record "Warehouse Journal Batch";
+        LibraryItemTracking: Codeunit "Library - Item Tracking";
+        ResponseJson: JsonObject;
+        LineJson: JsonObject;
+    begin
+        Helper.CreateDirectedLocation(Location);
+        LibraryItemTracking.CreateLotItem(Item);
+        Helper.FindPickBin(Location.Code, 1, Bin);
+        Helper.CreateWhseJournalBatch("Warehouse Journal Template Type"::Item, Location.Code, JournalBatch);
+
+        ResponseJson := Helper.RunTypeInLanguage(Enum::"Message Type ori"::"Warehouse.Journal.Create", '', BatchRequest(JournalBatch, '[{"itemNo":"' + Item."No." + '","binCode":"' + Bin.Code + '","quantity":2,"lotNo":"LOT-E68"}]'), LanguageId);
+
+        Helper.AssertSuccess(ResponseJson);
+        LineJson := Helper.ItemAt(Helper.ArrayValue(ResponseJson, 'lines'), 0);
+        Assert.AreEqual('LOT-E68', Helper.TextValue(LineJson, 'lotNo'), 'The answer echoes the lot that was written.');
+        Assert.AreEqual('', Helper.TextValue(LineJson, 'serialNo'), 'No serial number was sent.');
+    end;
+
+    local procedure AssertLineCountedFromOne(LanguageId: Integer; ExpectedPattern: Text)
+    var
+        Location: Record Location;
+        Item: Record Item;
+        Bin: Record Bin;
+        JournalBatch: Record "Warehouse Journal Batch";
+        ResponseJson: JsonObject;
+    begin
+        Helper.CreateDirectedLocation(Location);
+        Helper.CreateItem(Item);
+        Helper.FindPickBin(Location.Code, 1, Bin);
+        Helper.StockBin(Bin, Item."No.", 2);
+        Helper.CreateWhseJournalBatch("Warehouse Journal Template Type"::Item, Location.Code, JournalBatch);
+
+        ResponseJson := Helper.RunTypeInLanguage(Enum::"Message Type ori"::"Warehouse.Journal.Create", '', BatchRequest(JournalBatch, '[{"itemNo":"' + Item."No." + '","binCode":"' + Bin.Code + '","quantity":-5}]'), LanguageId);
+
+        Assert.AreEqual('InvalidLine', Helper.TextValue(ResponseJson, 'code'), Helper.ResponseText(ResponseJson));
+        Assert.AreEqual(StrSubstNo(ExpectedPattern, Bin.Code, Item."No."), Helper.TextValue(ResponseJson, 'error'), 'The line is counted from 1.');
+        Assert.AreEqual('lines[0].quantity', Helper.TextValue(ResponseJson, 'parameter'), 'The parameter path stays zero-based JSON.');
+        if LanguageId = 1033 then
+            ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Journal.Create", ResponseJson);
+    end;
+
+    local procedure AssertIndependentProblems(LanguageId: Integer; Summary: Text; MissingBinText: Text)
+    var
+        Location: Record Location;
+        Item: Record Item;
+        JournalBatch: Record "Warehouse Journal Batch";
+        ResponseJson: JsonObject;
+    begin
+        Helper.CreateDirectedLocation(Location);
+        Helper.CreateItem(Item);
+        Helper.CreateWhseJournalBatch("Warehouse Journal Template Type"::Item, Location.Code, JournalBatch);
+
+        ResponseJson := Helper.RunTypeInLanguage(Enum::"Message Type ori"::"Warehouse.Journal.Create", '', '{"journalTemplateName":"' + JournalBatch."Journal Template Name" + '","journalBatchName":"NOBATCH","locationCode":"' + Location.Code + '","colour":"red","lines":[{"itemNo":"' + Item."No." + '","quantity":"five"}]}', LanguageId);
+
+        Assert.AreEqual('MultipleErrors', Helper.TextValue(ResponseJson, 'code'), Helper.ResponseText(ResponseJson));
+        Assert.AreEqual(Summary, Helper.TextValue(ResponseJson, 'error'), 'The summary is in the caller language.');
+        Assert.AreEqual('colour:UnknownParameter,journalBatchName:RecordNotFound,lines[0].quantity:InvalidParameterFormat,lines[0].binCode:MissingParameter', Helper.ErrorList(ResponseJson), 'Every problem is listed.');
+        Assert.AreEqual(MissingBinText, Helper.ErrorFor(ResponseJson, 'lines[0].binCode'), 'The missing bin counts the line from 1.');
+        if LanguageId = 1033 then
+            ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Journal.Create", ResponseJson);
     end;
 
     local procedure Send(RequestText: Text): JsonObject

@@ -184,7 +184,7 @@ codeunit 10078461 "Whse Wksh CreateAct Impl ori" implements "Msg Interface ori",
         Parameters.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Worksheet line number answered by Warehouse.Worksheet.GetDocuments.'));
         Parameters.Add(ContractMgt.Parameter('qtyToHandle', 'number', true, 'Quantity to handle, from zero up to the outstanding quantity. Zero leaves the line in the worksheet.'));
         Parameters.Add(ContractMgt.Parameter('assignedUserId', 'string', false, 'Warehouse employee of the location assigned to the created activities.'));
-        Parameters.Add(ContractMgt.Parameter('sortingMethod', 'string', false, 'Sorting method of the created activities: None, Item, Document, Shelf or Bin, Due Date, Ship-To, Bin Ranking or Action Type.'));
+        Parameters.Add(ContractMgt.Parameter('sortingMethod', 'string', false, 'Sorting method of the created activities, one of "None", "Item", "Document", "Shelf or Bin", "Due Date", "Ship-To", "Bin Ranking" or "Action Type".'));
         Parameters.Add(ContractMgt.Parameter('perShipTo', 'boolean', false, 'pick only. One pick per ship-to address.'));
         Parameters.Add(ContractMgt.Parameter('perItem', 'boolean', false, 'pick only. One pick per item.'));
         Parameters.Add(ContractMgt.Parameter('perZone', 'boolean', false, 'pick only. One pick per zone.'));
@@ -246,7 +246,8 @@ codeunit 10078461 "Whse Wksh CreateAct Impl ori" implements "Msg Interface ori",
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::RecordNotFound, 'The worksheet template or worksheet name was not found at the location, or a line number is not in the worksheet.', 'Create the worksheet name first, and use the line numbers answered by Warehouse.Worksheet.GetDocuments.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::MissingParameter, 'A worksheet key is missing, or a line misses lineNo or qtyToHandle.', 'Send worksheetType, worksheetTemplateName, worksheetName and locationCode, and lineNo and qtyToHandle on every line.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameterFormat, 'A value has the wrong JSON type or is too long.', 'Send text for codes, an integer lineNo, a number for qtyToHandle and true or false for the grouping options.');
-        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameter, 'worksheetType or sortingMethod is not valid, the template is not of the worksheet type, qtyToHandle is negative or above the outstanding quantity, assignedUserId is not a warehouse employee of the location, or a grouping option is sent for a put-away worksheet.', 'Correct the value as the message says.');
+        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameter, 'worksheetType is not valid, the template is not of the worksheet type, qtyToHandle is negative or above the outstanding quantity, assignedUserId is not a warehouse employee of the location, or a grouping option is sent for a put-away worksheet.', 'Correct the value as the message says.');
+        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameter, 'sortingMethod is not a warehouse activity sorting method.', 'Send one of "None", "Item", "Document", "Shelf or Bin", "Due Date", "Ship-To", "Bin Ranking" or "Action Type".');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::UnknownParameter, 'The request or a line contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::ConflictingIdentifiers, 'subject and locationCode name different locations.', 'Send one location: subject or locationCode.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot write worksheet lines and warehouse activities.', 'Ask an administrator to assign BIFROST Whse - Full ori.');
@@ -505,7 +506,7 @@ codeunit 10078461 "Whse Wksh CreateAct Impl ori" implements "Msg Interface ori",
         Quantity: Decimal;
         LinePresent: Boolean;
         QuantityPresent: Boolean;
-        MissingLbl: Label 'Line %1 is missing %2.', Comment = '%1 = line index, %2 = parameter, is-IS=Línu %1 vantar %2.';
+        MissingLbl: Label 'Line %1 is missing %2.', Comment = '%1 = line position in the request, counted from 1, %2 = parameter, is-IS=Línu %1 vantar %2.';
         MissingNextStepLbl: Label 'Send lineNo and qtyToHandle on every line.', Comment = 'is-IS=Sendu lineNo og qtyToHandle á hverri línu.';
         NotFoundLbl: Label 'Worksheet line %1 was not found.', Comment = '%1 = line no., is-IS=Vinnublaðslína %1 fannst ekki.';
         NotFoundNextStepLbl: Label 'Use the line numbers answered by Warehouse.Worksheet.GetDocuments.', Comment = 'is-IS=Notaðu línunúmerin sem Warehouse.Worksheet.GetDocuments skilaði.';
@@ -522,9 +523,9 @@ codeunit 10078461 "Whse Wksh CreateAct Impl ori" implements "Msg Interface ori",
                 Context.ReadDecimal(LineObject, 'qtyToHandle', Argument, Quantity, QuantityPresent, Values.LineParameter('lines', Index, 'qtyToHandle'));
                 if Argument.GetCollectedErrorsJson().Count() = ErrorCount then begin
                     if not LinePresent then
-                        Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index, 'lineNo'), Values.LineParameter('lines', Index, 'lineNo'), '', '', MissingNextStepLbl);
+                        Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index + 1, 'lineNo'), Values.LineParameter('lines', Index, 'lineNo'), '', '', MissingNextStepLbl);
                     if not QuantityPresent then
-                        Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index, 'qtyToHandle'), Values.LineParameter('lines', Index, 'qtyToHandle'), '', '', MissingNextStepLbl);
+                        Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index + 1, 'qtyToHandle'), Values.LineParameter('lines', Index, 'qtyToHandle'), '', '', MissingNextStepLbl);
                     if LinePresent and QuantityPresent then
                         if not WorksheetLine.Get(TemplateName, WorksheetName, LocationCode, LineNo) then
                             Argument.AddError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(NotFoundLbl, LineNo), Values.LineParameter('lines', Index, 'lineNo'), Format(LineNo, 0, 9), '', NotFoundNextStepLbl)
@@ -607,7 +608,7 @@ codeunit 10078461 "Whse Wksh CreateAct Impl ori" implements "Msg Interface ori",
         Names: List of [Text];
         Index: Integer;
         InvalidLbl: Label 'sortingMethod %1 is not a warehouse activity sorting method.', Comment = '%1 = value, is-IS=sortingMethod %1 er ekki röðunaraðferð vöruhúsaaðgerða.';
-        InvalidNextStepLbl: Label 'Send None, Item, Document, Shelf or Bin, Due Date, Ship-To, Bin Ranking or Action Type.', Comment = 'is-IS=Sendu None, Item, Document, Shelf or Bin, Due Date, Ship-To, Bin Ranking eða Action Type.';
+        InvalidNextStepLbl: Label 'Send one of "None", "Item", "Document", "Shelf or Bin", "Due Date", "Ship-To", "Bin Ranking" or "Action Type".', Comment = 'is-IS=Sendu eitt af "None", "Item", "Document", "Shelf or Bin", "Due Date", "Ship-To", "Bin Ranking" eða "Action Type".';
     begin
         SortingOrdinal := 0;
         if SortingText = '' then

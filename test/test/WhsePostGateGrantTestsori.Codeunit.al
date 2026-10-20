@@ -1,6 +1,8 @@
 namespace Origo.Bifrost.Warehouse.Test;
 
+using Microsoft.Warehouse.Activity.History;
 using Microsoft.Warehouse.Document;
+using Microsoft.Warehouse.InventoryDocument;
 using Origo.Bifrost;
 using Origo.Bifrost.Warehouse;
 using System.Apps;
@@ -110,13 +112,23 @@ codeunit 97024 "Whse Post Gate Grant Tests ori"
         Assert.AreEqual(0, StrPos(ErrorToken.AsValue().AsText(), 'Posting denied'), ErrorToken.AsValue().AsText());
     end;
 
-    /// <summary>The new post and register types are enabled with BIFROST WhsePost ori.</summary>
+    /// <summary>The new post and register types are enabled with BIFROST WhsePost ori and no direct write on the registered or posted headers.</summary>
     [Test]
     procedure NewPostAndRegisterTypes_WithWhsePost_AreEnabled()
     var
+        RegisteredWhseHeader: Record "Registered Whse. Activity Hdr.";
+        RegisteredInvtMovementHeader: Record "Registered Invt. Movement Hdr.";
+        PostedInvtPickHeader: Record "Posted Invt. Pick Header";
+        PostedInvtPutAwayHeader: Record "Posted Invt. Put-away Header";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
     begin
         LowerToWhsePost(LibraryLowerPermissions);
+        // Whse Gate Test ori grants only read on the registered and posted headers, as Business Central's own
+        // permission sets do: the register and post codeunits write them indirectly (#70).
+        Assert.IsFalse(RegisteredWhseHeader.WritePermission(), 'Registered Whse. Activity Hdr. must not be writable directly.');
+        Assert.IsFalse(RegisteredInvtMovementHeader.WritePermission(), 'Registered Invt. Movement Hdr. must not be writable directly.');
+        Assert.IsFalse(PostedInvtPickHeader.WritePermission(), 'Posted Invt. Pick Header must not be writable directly.');
+        Assert.IsFalse(PostedInvtPutAwayHeader.WritePermission(), 'Posted Invt. Put-away Header must not be writable directly.');
         AssertEnabled(Enum::"Message Type ori"::"Warehouse.Movement.Register");
         AssertEnabled(Enum::"Message Type ori"::"Warehouse.InventoryPick.Post");
         AssertEnabled(Enum::"Message Type ori"::"Warehouse.InventoryPutAway.Post");

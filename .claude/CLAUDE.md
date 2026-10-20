@@ -110,6 +110,7 @@ Test range: `97000–97099`.
 | 97051–97061 | `Whse Journal Create Tests ori`, `Whse Journal Reg Tests ori`, `Whse PhysInvt Calc Tests ori`, `Whse PhysInvt Reg Tests ori`, `Whse Adjustment Calc Tests ori`, `Whse Wksh GetDocs Tests ori`, `Whse Wksh CreateAct Tests ori`, `Whse ActLine Split Tests ori`, `Whse ActLine ChgBin Tests ori`, `Whse ActLine SetQty Tests ori`, `Whse ActLine Track Tests ori` |
 | 97062 | `Whse Jnl Contract Tests ori` (contracts, bilingual help and write restrictions of #48-#57) |
 | 97063 | permission set `Whse JnlGate Tst ori` (journal register posting-gate refusal) |
-| 97064–97079 | Free |
+| 97064 | permission set `Whse RegUser Tst ori` (#70 allowed-user register tests) |
+| 97065–97079 | Free |
 | 97080–97091 | Tests of #41-#47: `Whse Bin Get Tests ori`, `Whse Bin Create Tests ori`, `Whse DefBin Set Tests ori`, `Whse Movement Create Tests ori`, `Whse Movement Reg Tests ori`, `Whse InvtPick Create Tests ori`, `Whse InvtPick Post Tests ori`, `Whse InvtPut Create Tests ori`, `Whse InvtPut Post Tests ori`, `Whse InvtMove Create Tests ori`, `Whse InvtMove Reg Tests ori`, `Whse Bin Repl Tests ori` |
 | 97092–97099 | Free |

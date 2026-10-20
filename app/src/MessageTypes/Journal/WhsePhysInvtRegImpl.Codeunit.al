@@ -398,7 +398,7 @@ codeunit 10078449 "Whse PhysInvt Reg Impl ori" implements "Msg Interface ori", "
         Quantity: Decimal;
         LinePresent: Boolean;
         QuantityPresent: Boolean;
-        MissingLbl: Label 'Line %1 is missing %2.', Comment = '%1 = line index, %2 = parameter, is-IS=Línu %1 vantar %2.';
+        MissingLbl: Label 'Line %1 is missing %2.', Comment = '%1 = line position in the request, counted from 1, %2 = parameter, is-IS=Línu %1 vantar %2.';
         MissingNextStepLbl: Label 'Send lineNo and qtyPhysInventory on every line.', Comment = 'is-IS=Sendu lineNo og qtyPhysInventory á hverri línu.';
         NotInBatchLbl: Label 'Line %1 is not in warehouse physical inventory batch %2.', Comment = '%1 = line no., %2 = batch, is-IS=Lína %1 er ekki í talningarkeyrslu vöruhúss %2.';
         NotInBatchNextStepLbl: Label 'Read the lines answered by Calculate.', Comment = 'is-IS=Lestu línurnar sem Calculate skilaði.';
@@ -415,9 +415,9 @@ codeunit 10078449 "Whse PhysInvt Reg Impl ori" implements "Msg Interface ori", "
                 Context.ReadDecimal(LineObject, 'qtyPhysInventory', Argument, Quantity, QuantityPresent, Values.LineParameter('lines', Index, 'qtyPhysInventory'));
                 if Argument.GetCollectedErrorsJson().Count() = ErrorCount then begin
                     if not LinePresent then
-                        Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index, 'lineNo'), Values.LineParameter('lines', Index, 'lineNo'), '', '', MissingNextStepLbl);
+                        Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index + 1, 'lineNo'), Values.LineParameter('lines', Index, 'lineNo'), '', '', MissingNextStepLbl);
                     if not QuantityPresent then
-                        Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index, 'qtyPhysInventory'), Values.LineParameter('lines', Index, 'qtyPhysInventory'), '', '', MissingNextStepLbl);
+                        Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index + 1, 'qtyPhysInventory'), Values.LineParameter('lines', Index, 'qtyPhysInventory'), '', '', MissingNextStepLbl);
                     if LinePresent and QuantityPresent then
                         if not JournalLine.Get(TemplateName, BatchName, LocationCode, LineNo) then
                             Argument.AddError("Bifrost Error Code ori"::InvalidLine, StrSubstNo(NotInBatchLbl, LineNo, BatchName), Values.LineParameter('lines', Index, 'lineNo'), Format(LineNo, 0, 9), '', NotInBatchNextStepLbl)

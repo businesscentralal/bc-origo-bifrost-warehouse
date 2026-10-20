@@ -83,7 +83,7 @@ codeunit 10078448 "Whse PhysInvt Calc Impl ori" implements "Msg Interface ori", 
     /// <returns>Comma-separated keywords.</returns>
     procedure GetKeywords(): Text
     var
-        KeywordsLbl: Label 'warehouse physical inventory, calculate inventory, stock count, cycle count, bin count, physical inventory journal', Comment = 'is-IS=talning vöruhúss, reikna birgðir, birgðatalning, lotutalning, talning hólfa, talningarbók';
+        KeywordsLbl: Label 'warehouse physical inventory, calculate inventory, stock count, cycle count, bin count, physical inventory journal', Comment = 'is-IS=talning vöruhúss, reikna birgðir, birgðatalning, reglubundin talning, talning hólfa, talningarbók';
     begin
         exit(KeywordsLbl);
     end;

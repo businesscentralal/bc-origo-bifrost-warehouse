@@ -455,4 +455,53 @@ codeunit 97050 "Whse Jnl Test Helper ori"
         ResponseJson.WriteTo(Written);
         exit(Written);
     end;
+
+    /// <summary>Dispatches a message with the company language set to LanguageId, the way the public dispatcher picks the answer language.</summary>
+    /// <param name="MessageType">The message type.</param>
+    /// <param name="Subject">The subject.</param>
+    /// <param name="RequestText">The request JSON.</param>
+    /// <param name="LanguageId">1033 or 1039.</param>
+    /// <returns>The parsed response.</returns>
+    internal procedure RunTypeInLanguage(MessageType: Enum "Message Type ori"; Subject: Text; RequestText: Text; LanguageId: Integer) ResponseJson: JsonObject
+    var
+        ReceiptHelper: Codeunit "Whse Receipt Test Helper ori";
+    begin
+        Assert.IsTrue(ReceiptHelper.RunMessageInLanguage(MessageType, Subject, RequestText, ResponseJson, LanguageId), 'The response should be JSON.');
+    end;
+
+    /// <summary>Lists the collected errors of a MultipleErrors answer as parameter:code pairs.</summary>
+    /// <param name="ResponseJson">The response.</param>
+    /// <returns>The pairs, comma separated, in answer order.</returns>
+    internal procedure ErrorList(ResponseJson: JsonObject): Text
+    var
+        Token: JsonToken;
+        Entry: JsonToken;
+        Entries: TextBuilder;
+    begin
+        if not ResponseJson.Get('errors', Token) then
+            exit('');
+        foreach Entry in Token.AsArray() do begin
+            if Entries.Length() > 0 then
+                Entries.Append(',');
+            Entries.Append(TextValue(Entry.AsObject(), 'parameter') + ':' + TextValue(Entry.AsObject(), 'code'));
+        end;
+        exit(Entries.ToText());
+    end;
+
+    /// <summary>Returns the error text of the collected error for one parameter.</summary>
+    /// <param name="ResponseJson">The MultipleErrors response.</param>
+    /// <param name="ParameterName">The parameter of the entry.</param>
+    /// <returns>The error text, or empty.</returns>
+    internal procedure ErrorFor(ResponseJson: JsonObject; ParameterName: Text): Text
+    var
+        Token: JsonToken;
+        Entry: JsonToken;
+    begin
+        if not ResponseJson.Get('errors', Token) then
+            exit('');
+        foreach Entry in Token.AsArray() do
+            if TextValue(Entry.AsObject(), 'parameter') = ParameterName then
+                exit(TextValue(Entry.AsObject(), 'error'));
+        exit('');
+    end;
 }

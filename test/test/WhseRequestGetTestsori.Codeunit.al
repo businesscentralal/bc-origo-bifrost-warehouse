@@ -161,6 +161,42 @@ codeunit 97043 "Whse Request Get Tests ori"
         Assert.AreEqual('Sendu shipmentDateFrom aftur sem 2026-10-20.', TextValue(ResponseJson, 'nextStep'), 'The value to resend, in Icelandic.');
     end;
 
+    /// <summary>
+    /// #74 AC2: a negative take, a local date and the collected answer of both are declared in the errors chapter, each with
+    /// the nextStep the runtime answers.
+    /// </summary>
+    [Test]
+    procedure Get_PagingAndDateAnswers_AreDeclared()
+    var
+        Location: Record Location;
+        Item: Record Item;
+        ContractAssert: Codeunit "Whse Contract Assert ori";
+        ResponseJson: JsonObject;
+    begin
+        // Issue #74, AC2 | Time: fixed dates in the request | Risk: none.
+        ReceiptHelper.SetupLocationAndItem(Location, Item, 0);
+
+        Run('{"locationCode":"' + Location.Code + '","take":-1}', '', ResponseJson);
+        Assert.AreEqual('InvalidParameter', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('Send a whole number of zero or more, or leave it out.', TextValue(ResponseJson, 'nextStep'), ResponseText(ResponseJson));
+        ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Request.Get", ResponseJson);
+
+        Run('{"locationCode":"' + Location.Code + '","shipmentDateFrom":"20.10.2026"}', '', ResponseJson);
+        Assert.AreEqual('Resend shipmentDateFrom as 2026-10-20.', TextValue(ResponseJson, 'nextStep'), ResponseText(ResponseJson));
+        ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Request.Get", ResponseJson);
+
+        Run('{"locationCode":"' + Location.Code + '","shipmentDateFrom":"10/20/2026"}', '', ResponseJson);
+        ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Request.Get", ResponseJson);
+
+        Run('{"locationCode":"' + Location.Code + '","shipmentDateFrom":"2026-10-20","shipmentDateTo":"2026-10-19"}', '', ResponseJson);
+        Assert.AreEqual('InvalidParameter', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Request.Get", ResponseJson);
+
+        Run('{"locationCode":"NOLOC-X","shipmentDateFrom":"20.10.2026","take":-1}', '', ResponseJson);
+        Assert.AreEqual('MultipleErrors', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        ContractAssert.AssertAnswerAndErrorsDeclared(Enum::"Message Type ori"::"Warehouse.Request.Get", ResponseJson);
+    end;
+
     /// <summary>#67 item 3: a bad date, a bad take and an unknown location are answered together (1033).</summary>
     [Test]
     procedure Get_IndependentProblems_AreCollected()

@@ -172,6 +172,7 @@ codeunit 10078431 "Whse Rcpt GetSrcDocs Impl ori" implements "Msg Interface ori"
     /// <returns>True when errors are declared.</returns>
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
+        Context: Codeunit "Whse Write Context ori";
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Parts: Codeunit "Whse Contract Parts ori";
         Entry: JsonObject;
@@ -186,6 +187,8 @@ codeunit 10078431 "Whse Rcpt GetSrcDocs Impl ori" implements "Msg Interface ori"
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot write warehouse receipts or read warehouse requests.', 'Ask an administrator to assign BIFROST Whse - Full ori.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MultipleErrors, 'More than one value failed validation.', 'Correct every listed value and send the request again. Nothing was written.');
         Parts.AddBusinessCentralError(Errors, 'a blocked item or vendor, or a location without a receipt number series');
+        Parts.AddDateErrors(Errors, 'expectedReceiptDateFrom, expectedReceiptDateTo', Context.TextDateNextStep());
+        Parts.AddDateRangeError(Errors, 'expectedReceiptDateFrom and expectedReceiptDateTo');
         exit(true);
     end;
 
@@ -451,7 +454,6 @@ codeunit 10078431 "Whse Rcpt GetSrcDocs Impl ori" implements "Msg Interface ori"
         ValueLbl: Label 'Parameter %1 has the value %2, which is not one of the values listed in the help.', Comment = '%1 = parameter, %2 = value, is-IS=Færibreytan %1 hefur gildið %2 sem er ekki eitt af gildunum sem talin eru upp í hjálpinni.';
         ValueNextStepLbl: Label 'Use one of the values listed in the help.', Comment = 'is-IS=Notaðu eitt af gildunum sem talin eru upp í hjálpinni.';
         RangeLbl: Label 'The date range %1 ends before it starts.', Comment = '%1 = parameter, is-IS=Dagsetningabilið %1 endar áður en það byrjar.';
-        RangeNextStepLbl: Label 'Send a from date that is on or before the to date.', Comment = 'is-IS=Sendu upphafsdagsetningu sem er sama dag eða á undan lokadagsetningu.';
     begin
         Context.ReadText(RequestJson, 'sourceDocument', 50, Argument, SourceDocumentText, Present, 'sourceDocument');
         Context.ReadCodeList(RequestJson, 'sourceNos', MaxStrLen(WarehouseRequest."Source No."), Argument, SourceNos, Present);
@@ -481,7 +483,7 @@ codeunit 10078431 "Whse Rcpt GetSrcDocs Impl ori" implements "Msg Interface ori"
             WarehouseRequest.SetRange("Destination No.", CopyStr(UpperCase(VendorNo), 1, MaxStrLen(WarehouseRequest."Destination No.")));
         end;
         if (DateFrom <> 0D) and (DateTo <> 0D) and (DateTo < DateFrom) then
-            Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(RangeLbl, 'expectedReceiptDateFrom'), 'expectedReceiptDateTo', Context.FormatDate(DateTo), '', RangeNextStepLbl);
+            Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(RangeLbl, 'expectedReceiptDateFrom'), 'expectedReceiptDateTo', Context.FormatDate(DateTo), '', Context.DateRangeNextStep());
         if (DateFrom <> 0D) or (DateTo <> 0D) then
             WarehouseRequest.SetRange("Expected Receipt Date", DateFrom, Context.RangeEnd(DateTo));
         // The refusal "no released request matches" names the filters that were sent (#71).

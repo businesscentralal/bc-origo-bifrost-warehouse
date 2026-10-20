@@ -440,13 +440,12 @@ codeunit 10078430 "Whse Write Context ori"
         Number: Integer;
         FormatLbl: Label 'Parameter %1 must be an integer.', Comment = '%1 = parameter, is-IS=Færibreytan %1 verður að vera heiltala.';
         NegativeLbl: Label 'Parameter %1 must be zero or greater.', Comment = '%1 = parameter, is-IS=Færibreytan %1 verður að vera núll eða stærri.';
-        PagingNextStepLbl: Label 'Send a whole number of zero or more, or leave it out.', Comment = 'is-IS=Sendu heiltölu sem er núll eða stærri, eða slepptu henni.';
         ZeroOrGreaterLbl: Label 'zero or greater', Comment = 'is-IS=núll eða stærra';
     begin
         if not RequestJson.Get(KeyName, Token) then
             exit;
         if not Token.IsValue() then begin
-            Argument.AddError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(FormatLbl, KeyName), KeyName, '', 'integer', PagingNextStepLbl);
+            Argument.AddError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(FormatLbl, KeyName), KeyName, '', 'integer', PagingNextStep());
             exit;
         end;
         if Token.AsValue().IsNull() then
@@ -455,11 +454,11 @@ codeunit 10078430 "Whse Write Context ori"
         // Foundation reads a JSON number or a string of digits.
         Written := DelChr(Written, '<>', '"');
         if not IsDigits(DelChr(Written, '<', '-')) or not Evaluate(Number, Written, 9) then begin
-            Argument.AddError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(FormatLbl, KeyName), KeyName, CopyStr(Written, 1, 80), 'integer', PagingNextStepLbl);
+            Argument.AddError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(FormatLbl, KeyName), KeyName, CopyStr(Written, 1, 80), 'integer', PagingNextStep());
             exit;
         end;
         if Number < 0 then
-            Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(NegativeLbl, KeyName), KeyName, Format(Number, 0, 9), ZeroOrGreaterLbl, PagingNextStepLbl);
+            Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(NegativeLbl, KeyName), KeyName, Format(Number, 0, 9), ZeroOrGreaterLbl, PagingNextStep());
     end;
 
     /// <summary>
@@ -471,10 +470,60 @@ codeunit 10078430 "Whse Write Context ori"
     /// <param name="Received">The text received.</param>
     /// <returns>The nextStep text.</returns>
     internal procedure DateNextStep(ParameterName: Text; Received: Text): Text
+    begin
+        exit(DateNextStep(ParameterName, Received, TextDateNextStep()));
+    end;
+
+    /// <summary>
+    /// The nextStep of a negative or unreadable skip or take. Foundation answers the negative value with the same text,
+    /// so the help can list one nextStep for both paths.
+    /// </summary>
+    /// <returns>The nextStep text in the session language.</returns>
+    internal procedure PagingNextStep(): Text
+    var
+        PagingNextStepLbl: Label 'Send a whole number of zero or more, or leave it out.', Comment = 'is-IS=Sendu heiltölu sem er núll eða stærri, eða slepptu því.';
+    begin
+        exit(PagingNextStepLbl);
+    end;
+
+    /// <summary>The nextStep of a date that cannot be read and is not a local day-month-year date (the read types).</summary>
+    /// <returns>The nextStep text in the session language.</returns>
+    internal procedure TextDateNextStep(): Text
     var
         FormatNextStepLbl: Label 'Send the date as text, for example 2026-10-19.', Comment = 'is-IS=Sendu dagsetninguna sem texta, til dæmis 2026-10-19.';
     begin
-        exit(DateNextStep(ParameterName, Received, FormatNextStepLbl));
+        exit(FormatNextStepLbl);
+    end;
+
+    /// <summary>
+    /// The nextStep of a date that cannot be read and is not a local day-month-year date (the write types, and Foundation's
+    /// own date reader, which answers the same text).
+    /// </summary>
+    /// <returns>The nextStep text in the session language.</returns>
+    internal procedure IsoDateNextStep(): Text
+    var
+        FormatNextStepLbl: Label 'Send the date as YYYY-MM-DD.', Comment = 'is-IS=Sendu dagsetninguna á forminu YYYY-MM-DD.';
+    begin
+        exit(FormatNextStepLbl);
+    end;
+
+    /// <summary>The nextStep of a date range whose to date is before its from date.</summary>
+    /// <returns>The nextStep text in the session language.</returns>
+    internal procedure DateRangeNextStep(): Text
+    var
+        RangeNextStepLbl: Label 'Send a from date that is on or before the to date.', Comment = 'is-IS=Sendu upphafsdagsetningu sem er sama dag eða á undan lokadagsetningu.';
+    begin
+        exit(RangeNextStepLbl);
+    end;
+
+    /// <summary>
+    /// The nextStep of a local day-month-year date as the help lists it: the parameter and the date are placeholders,
+    /// e.g. "Resend &lt;parameter&gt; as YYYY-MM-DD." for the answer "Resend shipmentDateFrom as 2026-10-20.".
+    /// </summary>
+    /// <returns>The nextStep pattern in the session language.</returns>
+    internal procedure ResendDatePattern(): Text
+    begin
+        exit(ResendDate('<parameter>', 'YYYY-MM-DD'));
     end;
 
     /// <summary>
@@ -488,13 +537,19 @@ codeunit 10078430 "Whse Write Context ori"
     internal procedure DateNextStep(ParameterName: Text; Received: Text; FallbackNextStep: Text): Text
     var
         IsoDate: Text;
-        ResendLbl: Label 'Resend %1 as %2.', Comment = '%1 = parameter, %2 = suggested value, is-IS=Sendu %1 aftur sem %2.';
     begin
         if SuggestIsoDate(Received, '.', IsoDate) then
-            exit(StrSubstNo(ResendLbl, ParameterName, IsoDate));
+            exit(ResendDate(ParameterName, IsoDate));
         if SuggestIsoDate(Received, '-', IsoDate) then
-            exit(StrSubstNo(ResendLbl, ParameterName, IsoDate));
+            exit(ResendDate(ParameterName, IsoDate));
         exit(FallbackNextStep);
+    end;
+
+    local procedure ResendDate(ParameterName: Text; IsoDate: Text): Text
+    var
+        ResendLbl: Label 'Resend %1 as %2.', Comment = '%1 = parameter, %2 = suggested value, is-IS=Sendu %1 aftur sem %2.';
+    begin
+        exit(StrSubstNo(ResendLbl, ParameterName, IsoDate));
     end;
 
     local procedure SuggestIsoDate(Received: Text; Separator: Text; var IsoDate: Text): Boolean

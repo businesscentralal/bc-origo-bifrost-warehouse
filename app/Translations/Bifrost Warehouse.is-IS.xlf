@@ -45,6 +45,12 @@
           <note from="Developer" annotates="general" priority="2">%1 = received value, is-IS="%1" er ekki gild tegund vöruhúsavirkni (úr activityType).</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Activity Get Impl ori - Method ExecuteBifrostTask - NamedType InvalidActivityTypeErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 3969354362 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reads open warehouse activities with optional header, document and line filters.</source>
+          <target>Les opnar vöruhúsaaðgerðir með valfrjálsum síum á haus, fylgiskjal og línur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Les opnar vöruhúsaaðgerðir með valfrjálsum síum á haus, fylgiskjal og línur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Activity Get Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3969354362 - Method 1158096087 - NamedType 3964979788" size-unit="char" translate="yes" xml:space="preserve">
           <source>Two supplied identifiers point to different warehouse activities.</source>
           <target>Tvö innsend auðkenni vísa á mismunandi vöruhúsavirkni.</target>
@@ -81,17 +87,17 @@
           <note from="Developer" annotates="general" priority="2">is-IS=númer vöruhúsavirkni</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Activity Get Impl ori - Method ResolveActivityIdentifiers - NamedType ActivityNumberTxt</note>
         </trans-unit>
+        <trans-unit id="Codeunit 3189497968 - Method 2128073413 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check the bin with Warehouse.Bin.Get.</source>
+          <target>Athugaðu hólfið með Warehouse.Bin.Get.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu hólfið með Warehouse.Bin.Get.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine ChgBin Impl ori - Method BinNotFoundNextStep - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3189497968 - Method 731518717 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
           <source>Bin %1 was not found at location %2.</source>
           <target>Hólf %1 fannst ekki á staðsetningu %2.</target>
           <note from="Developer" annotates="general" priority="2">%1 = bin, %2 = location, is-IS=Hólf %1 fannst ekki á staðsetningu %2.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine ChgBin Impl ori - Method CheckBin - NamedType NotFoundLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 3189497968 - Method 731518717 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Check the bin with Warehouse.Bin.Get.</source>
-          <target>Athugaðu hólfið með Warehouse.Bin.Get.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu hólfið með Warehouse.Bin.Get.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine ChgBin Impl ori - Method CheckBin - NamedType NotFoundNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3189497968 - Method 731518717 - NamedType 26742315" size-unit="char" translate="yes" xml:space="preserve">
           <source>Bin %1 holds %2 base units of item %3 that can be taken; line %4 needs %5.</source>
@@ -821,8 +827,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 293481984 - Method 2092638820 - NamedType 1725739631" size-unit="char" translate="yes" xml:space="preserve">
           <source>Turn on Bin Mandatory on the location first.</source>
-          <target>Kveiktu fyrst á Bin Mandatory á staðsetningunni.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Kveiktu fyrst á Bin Mandatory á staðsetningunni.</note>
+          <target>Kveiktu fyrst á skyldunotkun hólfa á staðsetningunni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Kveiktu fyrst á skyldunotkun hólfa á staðsetningunni.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method EnsureBinMandatory - NamedType BinMandatoryNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 293481984 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
@@ -851,14 +857,14 @@
         </trans-unit>
         <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 4244006160" size-unit="char" translate="yes" xml:space="preserve">
           <source>The location does not have Bin Mandatory turned on.</source>
-          <target>Staðsetningin er ekki með Bin Mandatory kveikt.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Staðsetningin er ekki með Bin Mandatory kveikt.</note>
+          <target>Staðsetningin er ekki með kveikt á skyldunotkun hólfa.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Staðsetningin er ekki með kveikt á skyldunotkun hólfa.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType BinMandatoryWhenLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 1725739631" size-unit="char" translate="yes" xml:space="preserve">
           <source>Turn on Bin Mandatory on the location first.</source>
-          <target>Kveiktu fyrst á Bin Mandatory á staðsetningunni.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Kveiktu fyrst á Bin Mandatory á staðsetningunni.</note>
+          <target>Kveiktu fyrst á skyldunotkun hólfa á staðsetningunni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Kveiktu fyrst á skyldunotkun hólfa á staðsetningunni.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType BinMandatoryNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 2373461795" size-unit="char" translate="yes" xml:space="preserve">
@@ -1635,6 +1641,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Lestu textann sem skilaði sér og leiðréttu hólfin eða vinnublaðið.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Repl Calc Impl ori - Method WriteCreatedLines - NamedType MissingResultNextStepLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 269741545 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reads Bin Content rows with item, location, bin and variant filters.</source>
+          <target>Les birgðainnihald hólfa með síum á vöru, staðsetningu, hólf og afbrigði.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Les birgðainnihald hólfa með síum á vöru, staðsetningu, hólf og afbrigði.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse BinContent Get Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 269741545 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>bin content, bin quantity, item in bin, warehouse stock, stock by bin, inventory by location</source>
           <target>birgðainnihald hólfs, magn í hólfi, vara í hólfi, vöruhúsabirgðir, birgðir eftir hólfi, birgðir eftir staðsetningu</target>
@@ -1646,6 +1658,12 @@
           <target>Lesaðgangur. Les blaðsíðuskipt birgðainnihald hólfa; notaðu Warehouse.Activity.Get fyrir opnar tínslur og fráganga í vöruhúsi.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Lesaðgangur. Les blaðsíðuskipt birgðainnihald hólfa; notaðu Warehouse.Activity.Get fyrir opnar tínslur og fráganga í vöruhúsi.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse BinContent Get Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 4070406624 - NamedType 968172995" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send the value as an integer.</source>
+          <target>Sendu gildið sem heiltölu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu gildið sem heiltölu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method AddPagingErrors - NamedType IntegerNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3968908717 - Method 1519040063 - NamedType 680257497" size-unit="char" translate="yes" xml:space="preserve">
           <source>Leave the field out; an administrator has closed it to writes.</source>
@@ -1847,8 +1865,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 2355567171 - Method 1786692598 - NamedType 680257497" size-unit="char" translate="yes" xml:space="preserve">
           <source>Create bins at the location with Warehouse.Bin.Create; the location needs Bin Mandatory turned on.</source>
-          <target>Stofnaðu hólf á staðsetningunni með Warehouse.Bin.Create; staðsetningin þarf að hafa Bin Mandatory kveikt.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Stofnaðu hólf á staðsetningunni með Warehouse.Bin.Create; staðsetningin þarf að hafa Bin Mandatory kveikt.</note>
+          <target>Stofnaðu hólf á staðsetningunni með Warehouse.Bin.Create; kveikja þarf á skyldunotkun hólfa á staðsetningunni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnaðu hólf á staðsetningunni með Warehouse.Bin.Create; kveikja þarf á skyldunotkun hólfa á staðsetningunni.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method NoBinsNextStep - NamedType NextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2355567171 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
@@ -2111,8 +2129,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 301136191 - Method 2282630890 - NamedType 2661802395" size-unit="char" translate="yes" xml:space="preserve">
           <source>Moves between bins need Bin Mandatory on the location.</source>
-          <target>Færslur milli hólfa þurfa Bin Mandatory á staðsetningunni.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Færslur milli hólfa þurfa Bin Mandatory á staðsetningunni.</note>
+          <target>Færslur milli hólfa krefjast skyldunotkunar hólfa á staðsetningunni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Færslur milli hólfa krefjast skyldunotkunar hólfa á staðsetningunni.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method EnsureBasicBins - NamedType BinsNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 301136191 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
@@ -4431,12 +4449,6 @@
           <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=Færibreytan %1 verður að vera dagsetning á sniðinu YYYY-MM-DD.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Msg Values ori - Method ReadDate - NamedType FormatLbl</note>
         </trans-unit>
-        <trans-unit id="Codeunit 3990130608 - Method 1335579242 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Send the date as YYYY-MM-DD.</source>
-          <target>Sendu dagsetninguna á sniðinu YYYY-MM-DD.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sendu dagsetninguna á sniðinu YYYY-MM-DD.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Msg Values ori - Method ReadDate - NamedType FormatNextStepLbl</note>
-        </trans-unit>
         <trans-unit id="Codeunit 3990130608 - Method 2054439282 - NamedType 1773691126" size-unit="char" translate="yes" xml:space="preserve">
           <source>The key %1 is not a parameter of this message type.</source>
           <target>Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.</target>
@@ -4797,12 +4809,6 @@
           <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=Dagsetningabilið %1 endar áður en það byrjar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PostedDoc Get Impl ori - Method ExecuteBifrostTask - NamedType RangeLbl</note>
         </trans-unit>
-        <trans-unit id="Codeunit 3794917806 - Method 3571782927 - NamedType 4260795724" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Send a from date that is on or before the to date.</source>
-          <target>Sendu upphafsdagsetningu sem er sama dag eða á undan lokadagsetningu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sendu upphafsdagsetningu sem er sama dag eða á undan lokadagsetningu.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PostedDoc Get Impl ori - Method ExecuteBifrostTask - NamedType RangeNextStepLbl</note>
-        </trans-unit>
         <trans-unit id="Codeunit 3794917806 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Reads posted warehouse receipts or posted warehouse shipments, optionally with lines.</source>
           <target>Les bókaðar vöruhúsamóttökur eða bókaðar vöruhúsaafhendingar, valfrjálst með línum.</target>
@@ -5000,12 +5006,6 @@
           <target>Dagsetningabilið %1 endar áður en það byrjar.</target>
           <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=Dagsetningabilið %1 endar áður en það byrjar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt GetSrcDocs Impl ori - Method BuildRequestFilters - NamedType RangeLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 3318992449 - Method 3522500136 - NamedType 4260795724" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Send a from date that is on or before the to date.</source>
-          <target>Sendu upphafsdagsetningu sem er sama dag eða á undan lokadagsetningu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sendu upphafsdagsetningu sem er sama dag eða á undan lokadagsetningu.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt GetSrcDocs Impl ori - Method BuildRequestFilters - NamedType RangeNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3318992449 - Method 143590048 - NamedType 2945922260" size-unit="char" translate="yes" xml:space="preserve">
           <source>No released warehouse request at location %1 matches the filters.</source>
@@ -5331,6 +5331,12 @@
           <note from="Developer" annotates="general" priority="2">%1 = field caption, %2 = table caption, is-IS=Ekki er heimilt að skrifa í reitinn %1 í töflunni %2.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Create Impl ori - Method ExecuteBifrostTask - NamedType FieldWriteRestrictedErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2572656007 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Creates Warehouse Receipt(s) from one or more released source documents (Sales Return Order, Purchase Order, Inbound Transfer Order).</source>
+          <target>Stofnar vöruhúsamóttökur úr einu eða fleiri útgefnum upprunaskjölum (vöruskilapöntun, innkaupapöntun, innleiðar-millifærslupöntun).</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar vöruhúsamóttökur úr einu eða fleiri útgefnum upprunaskjölum (vöruskilapöntun, innkaupapöntun, innleiðar-millifærslupöntun).</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2572656007 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>warehouse receipt, create receipt, expect goods, prepare to receive, inbound receipt, goods arriving</source>
           <target>vöruhúsamóttaka, stofna móttöku, von á vörum, undirbúa móttöku, innmóttaka, vörur á leiðinni</target>
@@ -5589,12 +5595,6 @@
           <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=Dagsetningabilið %1 endar áður en það byrjar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse RegActivity Get Impl ori - Method ExecuteBifrostTask - NamedType RangeLbl</note>
         </trans-unit>
-        <trans-unit id="Codeunit 2572066034 - Method 3571782927 - NamedType 4260795724" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Send a from date that is on or before the to date.</source>
-          <target>Sendu upphafsdagsetningu sem er sama dag eða á undan lokadagsetningu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sendu upphafsdagsetningu sem er sama dag eða á undan lokadagsetningu.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse RegActivity Get Impl ori - Method ExecuteBifrostTask - NamedType RangeNextStepLbl</note>
-        </trans-unit>
         <trans-unit id="Codeunit 2572066034 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Reads registered picks, put-aways or movements, optionally with lines.</source>
           <target>Les skráðar tínslur, frágang eða tilfærslur, valfrjálst með línum.</target>
@@ -5672,12 +5672,6 @@
           <target>Dagsetningabilið %1 endar áður en það byrjar.</target>
           <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=Dagsetningabilið %1 endar áður en það byrjar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Request Get Impl ori - Method ApplyFilters - NamedType RangeLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 916876614 - Method 1966358177 - NamedType 4260795724" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Send a from date that is on or before the to date.</source>
-          <target>Sendu upphafsdagsetningu sem er sama dag eða á undan lokadagsetningu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sendu upphafsdagsetningu sem er sama dag eða á undan lokadagsetningu.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Request Get Impl ori - Method ApplyFilters - NamedType RangeNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 916876614 - Method 249818101 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
           <source>Location %1 was not found.</source>
@@ -5786,12 +5780,6 @@
           <target>Dagsetningabilið %1 endar áður en það byrjar.</target>
           <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=Dagsetningabilið %1 endar áður en það byrjar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Ship GetSrcDocs Impl ori - Method BuildRequestFilters - NamedType RangeLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2400538300 - Method 3522500136 - NamedType 4260795724" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Send a from date that is on or before the to date.</source>
-          <target>Sendu upphafsdagsetningu sem er sama dag eða á undan lokadagsetningu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sendu upphafsdagsetningu sem er sama dag eða á undan lokadagsetningu.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Ship GetSrcDocs Impl ori - Method BuildRequestFilters - NamedType RangeNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2400538300 - Method 143590048 - NamedType 2945922260" size-unit="char" translate="yes" xml:space="preserve">
           <source>No released warehouse request at location %1 matches the filters.</source>
@@ -6110,6 +6098,12 @@
           <target>Ekki er heimilt að skrifa í reitinn %1 í töflunni %2.</target>
           <note from="Developer" annotates="general" priority="2">%1 = field caption, %2 = table caption, is-IS=Ekki er heimilt að skrifa í reitinn %1 í töflunni %2.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method ExecuteBifrostTask - NamedType FieldWriteRestrictedErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2578593995 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Creates Warehouse Shipment(s) from one or more released source documents (Sales Order, Outbound Transfer Order).</source>
+          <target>Stofnar vöruhúsaafhendingar úr einu eða fleiri útgefnum upprunaskjölum (sölupöntun, útleiðar-millifærslupöntun).</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar vöruhúsaafhendingar úr einu eða fleiri útgefnum upprunaskjölum (sölupöntun, útleiðar-millifærslupöntun).</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2578593995 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>warehouse shipment, create shipment, prepare shipment, ship the order from the warehouse, outbound shipment, dispatch</source>
@@ -6657,35 +6651,35 @@
           <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=Færibreytan %1 verður að vera núll eða stærri.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Write Context ori - Method AddPagingProblem - NamedType NegativeLbl</note>
         </trans-unit>
-        <trans-unit id="Codeunit 4206461129 - Method 1019868656 - NamedType 3872630915" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Send a whole number of zero or more, or leave it out.</source>
-          <target>Sendu heiltölu sem er núll eða stærri, eða slepptu henni.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sendu heiltölu sem er núll eða stærri, eða slepptu henni.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Write Context ori - Method AddPagingProblem - NamedType PagingNextStepLbl</note>
-        </trans-unit>
         <trans-unit id="Codeunit 4206461129 - Method 1019868656 - NamedType 228850617" size-unit="char" translate="yes" xml:space="preserve">
           <source>zero or greater</source>
           <target>núll eða stærra</target>
           <note from="Developer" annotates="general" priority="2">is-IS=núll eða stærra</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Write Context ori - Method AddPagingProblem - NamedType ZeroOrGreaterLbl</note>
         </trans-unit>
-        <trans-unit id="Codeunit 4206461129 - Method 2547863963 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Send the date as text, for example 2026-10-19.</source>
-          <target>Sendu dagsetninguna sem texta, til dæmis 2026-10-19.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sendu dagsetninguna sem texta, til dæmis 2026-10-19.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Write Context ori - Method DateNextStep - NamedType FormatNextStepLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 4206461129 - Method 2547863963 - NamedType 2653651339" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Resend %1 as %2.</source>
-          <target>Sendu %1 aftur sem %2.</target>
-          <note from="Developer" annotates="general" priority="2">%1 = parameter, %2 = suggested value, is-IS=Sendu %1 aftur sem %2.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Write Context ori - Method DateNextStep - NamedType ResendLbl</note>
+        <trans-unit id="Codeunit 4206461129 - Method 636406242 - NamedType 4260795724" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a from date that is on or before the to date.</source>
+          <target>Sendu upphafsdagsetningu sem er sama dag eða á undan lokadagsetningu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu upphafsdagsetningu sem er sama dag eða á undan lokadagsetningu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Write Context ori - Method DateRangeNextStep - NamedType RangeNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 4206461129 - Method 3789958634 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
           <source>Send text for codes, numbers for quantities and true or false for options.</source>
           <target>Sendu texta fyrir kóða, tölur fyrir magn og true eða false fyrir val.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Sendu texta fyrir kóða, tölur fyrir magn og true eða false fyrir val.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Write Context ori - Method FormatNextStep - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4206461129 - Method 3800755328 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send the date as YYYY-MM-DD.</source>
+          <target>Sendu dagsetninguna á forminu YYYY-MM-DD.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu dagsetninguna á forminu YYYY-MM-DD.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Write Context ori - Method IsoDateNextStep - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4206461129 - Method 2069279701 - NamedType 3872630915" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a whole number of zero or more, or leave it out.</source>
+          <target>Sendu heiltölu sem er núll eða stærri, eða slepptu því.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu heiltölu sem er núll eða stærri, eða slepptu því.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Write Context ori - Method PagingNextStep - NamedType PagingNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 4206461129 - Method 1618419858 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
           <source>Parameter %1 must be true or false.</source>
@@ -6758,6 +6752,18 @@
           <target>Sendu styttra gildi.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Sendu styttra gildi.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Write Context ori - Method ReadText - NamedType TooLongNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4206461129 - Method 887328441 - NamedType 2653651339" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Resend %1 as %2.</source>
+          <target>Sendu %1 aftur sem %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter, %2 = suggested value, is-IS=Sendu %1 aftur sem %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Write Context ori - Method ResendDate - NamedType ResendLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4206461129 - Method 4269674520 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send the date as text, for example 2026-10-19.</source>
+          <target>Sendu dagsetninguna sem texta, til dæmis 2026-10-19.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu dagsetninguna sem texta, til dæmis 2026-10-19.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Write Context ori - Method TextDateNextStep - NamedType FormatNextStepLbl</note>
         </trans-unit>
         <trans-unit id="PermissionSet 1530598549 - Property 2879900210" maxwidth="30" size-unit="char" translate="yes" xml:space="preserve">
           <source>Whse Invoice Gate</source>

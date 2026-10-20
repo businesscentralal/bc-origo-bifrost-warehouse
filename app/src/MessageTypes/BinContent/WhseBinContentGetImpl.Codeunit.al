@@ -30,8 +30,10 @@ codeunit 10078388 "Whse BinContent Get Impl ori" implements "Msg Interface ori",
     /// <summary>Returns a short description of Warehouse.BinContent.Get.</summary>
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
+    var
+        DescriptionLbl: Label 'Reads Bin Content rows with item, location, bin and variant filters.', Comment = 'is-IS=Les birgðainnihald hólfa með síum á vöru, staðsetningu, hólf og afbrigði.';
     begin
-        exit('Reads Bin Content rows with item, location, bin and variant filters.');
+        exit(DescriptionLbl);
     end;
 
     procedure GetKeywords(): Text
@@ -113,10 +115,12 @@ codeunit 10078388 "Whse BinContent Get Impl ori" implements "Msg Interface ori",
 
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
+        Parts: Codeunit "Whse Contract Parts ori";
         ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidFilterField, 'A table-view filter names a field that cannot be filtered.', 'Use a valid Bin Content field name.'));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameterFormat, 'A paging or filter value cannot be read.', 'Send integer paging values and text filter values.'));
+        Parts.AddPagingErrors(Errors, false);
         exit(true);
     end;
 

@@ -31,8 +31,10 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
     /// <summary>Returns a short description of Warehouse.Activity.Get.</summary>
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
+    var
+        DescriptionLbl: Label 'Reads open warehouse activities with optional header, document and line filters.', Comment = 'is-IS=Les opnar vöruhúsaaðgerðir með valfrjálsum síum á haus, fylgiskjal og línur.';
     begin
-        exit('Reads open warehouse activities with optional header, document and line filters.');
+        exit(DescriptionLbl);
     end;
 
     procedure GetKeywords(): Text
@@ -154,6 +156,7 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
                 end;
         end;
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, 'activityType is not a valid warehouse activity type.', 'Use a value from the Warehouse Activity Type enum.'));
+        Parts.AddPagingErrors(Errors, false);
         exit(true);
     end;
 

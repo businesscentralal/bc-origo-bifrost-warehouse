@@ -271,7 +271,7 @@ codeunit 10078449 "Whse PhysInvt Reg Impl ori" implements "Msg Interface ori", "
     /// <returns>True when notes are declared.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := 'Registration commits (core#985). The counted quantities are written and registered in one isolated run: a rejected registration also leaves the counts unwritten. The warehouse entries move the difference to and from the adjustment bin; run Warehouse.Adjustment.Calculate and Inventory.ItemJournal.Post so the item ledger follows.';
+        Notes := 'Registration commits. The counted quantities are written and registered in one isolated run: a rejected registration also leaves the counts unwritten. The warehouse entries move the difference to and from the adjustment bin; run Warehouse.Adjustment.Calculate and Inventory.ItemJournal.Post so the item ledger follows.';
         exit(true);
     end;
 

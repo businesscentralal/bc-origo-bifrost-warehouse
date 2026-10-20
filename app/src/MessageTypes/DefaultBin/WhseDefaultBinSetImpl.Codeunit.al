@@ -620,7 +620,7 @@ codeunit 10078420 "Whse DefaultBin Set Impl ori" implements "Msg Interface ori",
 
     local procedure NoBinsNextStep(): Text
     var
-        NextStepLbl: Label 'Create bins at the location with Warehouse.Bin.Create; the location needs Bin Mandatory turned on.', Comment = 'is-IS=Stofnaðu hólf á staðsetningunni með Warehouse.Bin.Create; staðsetningin þarf að hafa Bin Mandatory kveikt.';
+        NextStepLbl: Label 'Create bins at the location with Warehouse.Bin.Create; the location needs Bin Mandatory turned on.', Comment = 'is-IS=Stofnaðu hólf á staðsetningunni með Warehouse.Bin.Create; kveikja þarf á skyldunotkun hólfa á staðsetningunni.';
     begin
         exit(NextStepLbl);
     end;

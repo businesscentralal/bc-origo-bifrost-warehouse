@@ -122,7 +122,6 @@ codeunit 10078467 "Whse Msg Values ori"
         ReceivedText: Text;
         TextPresent: Boolean;
         FormatLbl: Label 'Parameter %1 must be a date written as YYYY-MM-DD.', Comment = '%1 = parameter, is-IS=Færibreytan %1 verður að vera dagsetning á sniðinu YYYY-MM-DD.';
-        FormatNextStepLbl: Label 'Send the date as YYYY-MM-DD.', Comment = 'is-IS=Sendu dagsetninguna á sniðinu YYYY-MM-DD.';
     begin
         Value := 0D;
         Present := false;
@@ -131,7 +130,7 @@ codeunit 10078467 "Whse Msg Values ori"
         if not TextPresent then
             exit(true);
         if not Evaluate(Value, ReceivedText, 9) then begin
-            Argument.AddError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(FormatLbl, KeyName), ParameterName, ReceivedText, 'YYYY-MM-DD', Context.DateNextStep(ParameterName, ReceivedText, FormatNextStepLbl));
+            Argument.AddError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(FormatLbl, KeyName), ParameterName, ReceivedText, 'YYYY-MM-DD', Context.DateNextStep(ParameterName, ReceivedText, Context.IsoDateNextStep()));
             exit(false);
         end;
         Present := true;

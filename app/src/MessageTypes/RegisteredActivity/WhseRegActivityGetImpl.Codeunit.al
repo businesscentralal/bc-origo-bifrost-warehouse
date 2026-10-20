@@ -124,6 +124,8 @@ codeunit 10078437 "Whse RegActivity Get Impl ori" implements "Msg Interface ori"
     /// <returns>True when errors are declared.</returns>
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
+        Parts: Codeunit "Whse Contract Parts ori";
+        Context: Codeunit "Whse Write Context ori";
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Entry: JsonObject;
     begin
@@ -135,6 +137,9 @@ codeunit 10078437 "Whse RegActivity Get Impl ori" implements "Msg Interface ori"
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot read registered warehouse activities.', 'Ask an administrator to assign BIFROST Whse - Read ori.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MultipleErrors, 'More than one value failed validation.', 'Correct every listed value and send the request again.');
+        Parts.AddDateErrors(Errors, 'registeringDateFrom, registeringDateTo', Context.TextDateNextStep());
+        Parts.AddDateRangeError(Errors, 'registeringDateFrom and registeringDateTo');
+        Parts.AddPagingErrors(Errors, true);
         exit(true);
     end;
 
@@ -247,7 +252,6 @@ codeunit 10078437 "Whse RegActivity Get Impl ori" implements "Msg Interface ori"
         ValueLbl: Label 'Parameter %1 has the value %2, which is not one of the values listed in the help.', Comment = '%1 = parameter, %2 = value, is-IS=Færibreytan %1 hefur gildið %2 sem er ekki eitt af gildunum sem talin eru upp í hjálpinni.';
         ValueNextStepLbl: Label 'Use one of the values listed in the help.', Comment = 'is-IS=Notaðu eitt af gildunum sem talin eru upp í hjálpinni.';
         RangeLbl: Label 'The date range %1 ends before it starts.', Comment = '%1 = parameter, is-IS=Dagsetningabilið %1 endar áður en það byrjar.';
-        RangeNextStepLbl: Label 'Send a from date that is on or before the to date.', Comment = 'is-IS=Sendu upphafsdagsetningu sem er sama dag eða á undan lokadagsetningu.';
     begin
         if not IsEnabled() then begin
             Argument.RespondWithError("Bifrost Error Code ori"::PermissionDenied, DeniedLbl, '', '', '', DeniedNextStepLbl);
@@ -279,7 +283,7 @@ codeunit 10078437 "Whse RegActivity Get Impl ori" implements "Msg Interface ori"
         Context.ReadDate(RequestJson, 'registeringDateTo', Argument, RegisteringTo, Present, 'registeringDateTo');
         Context.ReadBoolean(RequestJson, 'includeLines', Argument, IncludeLines, Present, 'includeLines');
         if (RegisteringFrom <> 0D) and (RegisteringTo <> 0D) and (RegisteringTo < RegisteringFrom) then
-            Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(RangeLbl, 'registeringDateFrom'), 'registeringDateTo', Context.FormatDate(RegisteringTo), '', RangeNextStepLbl);
+            Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(RangeLbl, 'registeringDateFrom'), 'registeringDateTo', Context.FormatDate(RegisteringTo), '', Context.DateRangeNextStep());
         // Every problem of the request is answered together, a bad skip or take included.
         if not Context.RespondOrReadPaging(RequestJson, Argument, ProblemsLbl, Skip, Take) then
             exit;

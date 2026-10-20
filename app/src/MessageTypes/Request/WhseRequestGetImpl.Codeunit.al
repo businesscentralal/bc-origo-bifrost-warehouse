@@ -124,6 +124,8 @@ codeunit 10078435 "Whse Request Get Impl ori" implements "Msg Interface ori", "M
     /// <returns>True when errors are declared.</returns>
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
+        Parts: Codeunit "Whse Contract Parts ori";
+        Context: Codeunit "Whse Write Context ori";
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Entry: JsonObject;
     begin
@@ -135,6 +137,9 @@ codeunit 10078435 "Whse Request Get Impl ori" implements "Msg Interface ori", "M
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot read warehouse requests.', 'Ask an administrator to assign BIFROST Whse - Read ori.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MultipleErrors, 'More than one value failed validation.', 'Correct every listed value and send the request again.');
+        Parts.AddDateErrors(Errors, 'expectedReceiptDateFrom, expectedReceiptDateTo, shipmentDateFrom, shipmentDateTo', Context.TextDateNextStep());
+        Parts.AddDateRangeError(Errors, 'expectedReceiptDateFrom and expectedReceiptDateTo, or shipmentDateFrom and shipmentDateTo');
+        Parts.AddPagingErrors(Errors, true);
         exit(true);
     end;
 
@@ -278,7 +283,6 @@ codeunit 10078435 "Whse Request Get Impl ori" implements "Msg Interface ori", "M
         ValueLbl: Label 'Parameter %1 has the value %2, which is not one of the values listed in the help.', Comment = '%1 = parameter, %2 = value, is-IS=Færibreytan %1 hefur gildið %2 sem er ekki eitt af gildunum sem talin eru upp í hjálpinni.';
         ValueNextStepLbl: Label 'Use one of the values listed in the help.', Comment = 'is-IS=Notaðu eitt af gildunum sem talin eru upp í hjálpinni.';
         RangeLbl: Label 'The date range %1 ends before it starts.', Comment = '%1 = parameter, is-IS=Dagsetningabilið %1 endar áður en það byrjar.';
-        RangeNextStepLbl: Label 'Send a from date that is on or before the to date.', Comment = 'is-IS=Sendu upphafsdagsetningu sem er sama dag eða á undan lokadagsetningu.';
     begin
         WarehouseRequest.SetCurrentKey(Type, "Location Code", "Completely Handled", "Document Status", "Expected Receipt Date", "Shipment Date", "Source Document", "Source No.");
         WarehouseRequest.SetRange("Location Code", LocationCode);
@@ -305,9 +309,9 @@ codeunit 10078435 "Whse Request Get Impl ori" implements "Msg Interface ori", "M
                     Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(ValueLbl, 'status', StatusText), 'status', StatusText, 'Open, Released', ValueNextStepLbl);
             end;
         if (ReceiptFrom <> 0D) and (ReceiptTo <> 0D) and (ReceiptTo < ReceiptFrom) then
-            Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(RangeLbl, 'expectedReceiptDateFrom'), 'expectedReceiptDateTo', Context.FormatDate(ReceiptTo), '', RangeNextStepLbl);
+            Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(RangeLbl, 'expectedReceiptDateFrom'), 'expectedReceiptDateTo', Context.FormatDate(ReceiptTo), '', Context.DateRangeNextStep());
         if (ShipmentFrom <> 0D) and (ShipmentTo <> 0D) and (ShipmentTo < ShipmentFrom) then
-            Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(RangeLbl, 'shipmentDateFrom'), 'shipmentDateTo', Context.FormatDate(ShipmentTo), '', RangeNextStepLbl);
+            Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(RangeLbl, 'shipmentDateFrom'), 'shipmentDateTo', Context.FormatDate(ShipmentTo), '', Context.DateRangeNextStep());
         if (ReceiptFrom <> 0D) or (ReceiptTo <> 0D) then
             WarehouseRequest.SetRange("Expected Receipt Date", ReceiptFrom, Context.RangeEnd(ReceiptTo));
         if (ShipmentFrom <> 0D) or (ShipmentTo <> 0D) then

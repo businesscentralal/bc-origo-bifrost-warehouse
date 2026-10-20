@@ -4,6 +4,7 @@ using Microsoft.Warehouse.Activity;
 using Microsoft.Warehouse.Journal;
 using Microsoft.Warehouse.Worksheet;
 using Origo.Bifrost;
+using Origo.Bifrost.Warehouse;
 using System.TestLibraries.Utilities;
 
 /// <summary>
@@ -80,18 +81,14 @@ codeunit 97062 "Whse Jnl Contract Tests ori"
     [Test]
     procedure Help_NamesNoAlObjects()
     var
-        ContractMgt: Codeunit "Msg Contract Mgt ori";
         ContractAssert: Codeunit "Whse Contract Assert ori";
         MessageType: Enum "Message Type ori";
-        Contract: JsonObject;
-        ContractText: Text;
         TypeCount: Integer;
     begin
+        // #74 AC3: the contract is checked in both languages too, and the guard also rejects issue references.
         foreach MessageType in ContractAssert.WarehouseTypes() do begin
-            Clear(Contract);
-            Assert.IsTrue(ContractMgt.GetContract(MessageType, Contract), ContractAssert.TypeName(MessageType) + ' has a contract.');
-            Contract.WriteTo(ContractText);
-            ContractAssert.AssertNamesNoAlObject(ContractText, ContractAssert.TypeName(MessageType) + ' contract');
+            AssertContractNamesNoAlObject(MessageType, 1033);
+            AssertContractNamesNoAlObject(MessageType, 1039);
             AssertCatalogueNamesNoAlObject(MessageType, 1033);
             AssertCatalogueNamesNoAlObject(MessageType, 1039);
             TypeCount += 1;
@@ -110,6 +107,76 @@ codeunit 97062 "Whse Jnl Contract Tests ori"
         Assert.AreNotEqual('', ContractAssert.FindAlReference('Call Dispatcher.Execute with OmitCommit = false.'), 'An internal procedure is found.');
         Assert.AreNotEqual('', ContractAssert.FindAlReference('Handled by Whse Pick Create Impl ori.'), 'An implementation codeunit is found.');
         Assert.AreEqual('', ContractAssert.FindAlReference('Check the number with Data.Records.Get on table Warehouse Shipment Header. It reports 4 tables.'), 'A table caption and plain words are allowed.');
+        Assert.AreNotEqual('', ContractAssert.FindAlReference('Registration commits (core#985).'), 'A Foundation issue reference is found.');
+        Assert.AreNotEqual('', ContractAssert.FindAlReference('Fixed in #71.'), 'An issue reference is found.');
+        Assert.AreEqual('', ContractAssert.FindAlReference('Resend <parameter> as YYYY-MM-DD. A # sign alone is allowed.'), 'A # without a number is allowed.');
+    end;
+
+    /// <summary>#74 AC2: a declared nextStep with placeholders matches the answer that fills them in, and nothing else.</summary>
+    [Test]
+    procedure Help_NextStepPattern_MatchesTheAnswer()
+    var
+        ContractAssert: Codeunit "Whse Contract Assert ori";
+    begin
+        // Issue #74, AC2 | Time: none | Risk: none.
+        Assert.IsTrue(ContractAssert.NextStepMatches('Resend <parameter> as YYYY-MM-DD.', 'Resend shipmentDateFrom as 2026-10-20.'), 'The date pattern matches.');
+        Assert.IsTrue(ContractAssert.NextStepMatches('Resend <parameter> as YYYY-MM-DD.', 'Resend lines[0].expirationDate as 2026-01-05.'), 'A line parameter matches.');
+        Assert.IsTrue(ContractAssert.NextStepMatches('Sendu <parameter> aftur sem YYYY-MM-DD.', 'Sendu shipmentDateFrom aftur sem 2026-10-20.'), 'The Icelandic pattern matches.');
+        Assert.IsFalse(ContractAssert.NextStepMatches('Resend <parameter> as YYYY-MM-DD.', 'Resend  as 2026-10-20.'), 'An empty parameter does not match.');
+        Assert.IsFalse(ContractAssert.NextStepMatches('Resend <parameter> as YYYY-MM-DD.', 'Send the date as text, for example 2026-10-19.'), 'Another nextStep does not match.');
+        Assert.IsFalse(ContractAssert.NextStepMatches('Check the bin with Warehouse.Bin.Get.', 'Check the activity with Warehouse.Activity.Get.'), 'Plain texts must be equal.');
+    end;
+
+    /// <summary>
+    /// #74 AC2: every type that reads skip and take declares the paging refusals, and every type that reads a date declares
+    /// the "Resend &lt;parameter&gt; as YYYY-MM-DD." nextStep; the read types also declare the fallback and the reversed range.
+    /// </summary>
+    [Test]
+    procedure ErrorsChapters_DeclarePagingAndDateNextSteps()
+    var
+        ContractAssert: Codeunit "Whse Contract Assert ori";
+        Context: Codeunit "Whse Write Context ori";
+        MessageType: Enum "Message Type ori";
+    begin
+        // Issue #74, AC2 | Time: none | Risk: none.
+        foreach MessageType in PagedTypes() do begin
+            Assert.IsTrue(ContractAssert.IsDeclared(MessageType, 'InvalidParameter', Context.PagingNextStep()), TypeName(MessageType) + ' declares a negative skip or take.');
+            Assert.IsTrue(ContractAssert.IsDeclared(MessageType, 'InvalidParameterFormat', 'Send the value as an integer.'), TypeName(MessageType) + ' declares a skip or take that is not a whole number.');
+        end;
+        foreach MessageType in DatedTypes() do
+            Assert.IsTrue(ContractAssert.IsDeclared(MessageType, 'InvalidParameterFormat', 'Resend registeringDate as 2026-10-20.'), TypeName(MessageType) + ' declares the date to resend.');
+        foreach MessageType in TextDateTypes() do begin
+            Assert.IsTrue(ContractAssert.IsDeclared(MessageType, 'InvalidParameterFormat', Context.TextDateNextStep()), TypeName(MessageType) + ' declares the date fallback.');
+            Assert.IsTrue(ContractAssert.IsDeclared(MessageType, 'InvalidParameter', Context.DateRangeNextStep()), TypeName(MessageType) + ' declares the reversed date range.');
+        end;
+    end;
+
+    /// <summary>#74 AC4: the catalogue description of every Warehouse type is translated: the 1039 text differs from 1033.</summary>
+    [Test]
+    procedure EveryWarehouseType_DescriptionIsTranslated()
+    var
+        ContractAssert: Codeunit "Whse Contract Assert ori";
+        MessageType: Enum "Message Type ori";
+        Implementation: Interface "Msg Interface ori";
+        EnglishDescription: Text;
+        IcelandicDescription: Text;
+        OriginalLanguage: Integer;
+        TypeCount: Integer;
+    begin
+        // Issue #74, AC4 | Time: none | Risk: none.
+        OriginalLanguage := GlobalLanguage();
+        foreach MessageType in ContractAssert.WarehouseTypes() do begin
+            Implementation := MessageType;
+            GlobalLanguage(1033);
+            EnglishDescription := Implementation.GetDescription();
+            GlobalLanguage(1039);
+            IcelandicDescription := Implementation.GetDescription();
+            GlobalLanguage(OriginalLanguage);
+            Assert.AreNotEqual('', IcelandicDescription, ContractAssert.TypeName(MessageType) + ' has an Icelandic description.');
+            Assert.AreNotEqual(EnglishDescription, IcelandicDescription, ContractAssert.TypeName(MessageType) + ' description is translated.');
+            TypeCount += 1;
+        end;
+        Assert.IsTrue(TypeCount >= 42, 'Every Warehouse type is checked.');
     end;
 
     /// <summary>#68 item 7: the help and catalogue texts name no internal procedure, in English and Icelandic.</summary>
@@ -209,6 +276,54 @@ codeunit 97062 "Whse Jnl Contract Tests ori"
         Assert.IsTrue(TempArgument.IsTableWriteRestrictedForDataRecords(Database::"Warehouse Activity Line", true), 'The activity line table stays closed.');
         Assert.IsTrue(TempArgument.GetDedicatedMessageTypeHintForWrite(Database::"Warehouse Activity Line").Contains('Warehouse.ActivityLine.Split, Warehouse.ActivityLine.ChangeBin, Warehouse.ActivityLine.SetQtyToHandle, Warehouse.ActivityLine.AssignTracking'), 'Table hint names the activity line types.');
         Assert.IsFalse(TempArgument.IsTableReadRestrictedForDataRecords(Database::"Warehouse Activity Line"), 'Reads stay allowed.');
+    end;
+
+    local procedure AssertContractNamesNoAlObject(MessageType: Enum "Message Type ori"; LanguageId: Integer)
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        ContractAssert: Codeunit "Whse Contract Assert ori";
+        Contract: JsonObject;
+        ContractText: Text;
+        OriginalLanguage: Integer;
+        HasContract: Boolean;
+    begin
+        OriginalLanguage := GlobalLanguage();
+        GlobalLanguage(LanguageId);
+        HasContract := ContractMgt.GetContract(MessageType, Contract);
+        Contract.WriteTo(ContractText);
+        GlobalLanguage(OriginalLanguage);
+        Assert.IsTrue(HasContract, ContractAssert.TypeName(MessageType) + ' has a contract.');
+        ContractAssert.AssertNamesNoAlObject(ContractText, ContractAssert.TypeName(MessageType) + ' contract (' + Format(LanguageId, 0, 9) + ')');
+    end;
+
+    local procedure PagedTypes() Types: List of [Enum "Message Type ori"]
+    begin
+        Types.Add("Message Type ori"::"Warehouse.Activity.Get");
+        Types.Add("Message Type ori"::"Warehouse.BinContent.Get");
+        Types.Add("Message Type ori"::"Warehouse.Bin.Get");
+        Types.Add("Message Type ori"::"Warehouse.PostedDocument.Get");
+        Types.Add("Message Type ori"::"Warehouse.RegisteredActivity.Get");
+        Types.Add("Message Type ori"::"Warehouse.Request.Get");
+    end;
+
+    local procedure TextDateTypes() Types: List of [Enum "Message Type ori"]
+    begin
+        Types.Add("Message Type ori"::"Warehouse.PostedDocument.Get");
+        Types.Add("Message Type ori"::"Warehouse.RegisteredActivity.Get");
+        Types.Add("Message Type ori"::"Warehouse.Request.Get");
+        Types.Add("Message Type ori"::"Warehouse.Receipt.GetSourceDocuments");
+        Types.Add("Message Type ori"::"Warehouse.Shipment.GetSourceDocuments");
+    end;
+
+    local procedure DatedTypes() Types: List of [Enum "Message Type ori"]
+    begin
+        Types := TextDateTypes();
+        Types.Add("Message Type ori"::"Warehouse.Journal.Create");
+        Types.Add("Message Type ori"::"Warehouse.PhysInventory.Calculate");
+        Types.Add("Message Type ori"::"Warehouse.Adjustment.Calculate");
+        Types.Add("Message Type ori"::"Warehouse.ActivityLine.AssignTracking");
+        Types.Add("Message Type ori"::"Warehouse.Receipt.Create");
+        Types.Add("Message Type ori"::"Warehouse.Shipment.Create");
     end;
 
     local procedure AssertCatalogueNamesNoAlObject(MessageType: Enum "Message Type ori"; LanguageId: Integer)

@@ -32,6 +32,7 @@ codeunit 10078451 "Whse Journal Helper ori"
         BatchPresent: Boolean;
         LocationPresent: Boolean;
         Conflict: Boolean;
+        ErrorCount: Integer;
         MissingLbl: Label '%1 is required.', Comment = '%1 = parameter, is-IS=%1 er nauðsynlegt.';
         MissingNextStepLbl: Label 'Send journalTemplateName, journalBatchName and locationCode.', Comment = 'is-IS=Sendu journalTemplateName, journalBatchName og locationCode.';
         ConflictLbl: Label 'subject and locationCode name different locations.', Comment = 'is-IS=subject og locationCode nefna mismunandi staðsetningar.';
@@ -40,10 +41,12 @@ codeunit 10078451 "Whse Journal Helper ori"
         Clear(TemplateName);
         Clear(BatchName);
         Clear(LocationCode);
+        // Only a format error of these keys stops here; problems collected before (an unknown key) do not (#68).
+        ErrorCount := Argument.GetCollectedErrorsJson().Count();
         Context.ReadText(RequestJson, 'journalTemplateName', MaxStrLen(TemplateName), Argument, TemplateText, TemplatePresent, 'journalTemplateName');
         Context.ReadText(RequestJson, 'journalBatchName', MaxStrLen(BatchName), Argument, BatchText, BatchPresent, 'journalBatchName');
         Context.ReadText(RequestJson, 'locationCode', MaxStrLen(LocationCode), Argument, LocationText, LocationPresent, 'locationCode');
-        if Argument.HasCollectedErrors() then
+        if Argument.GetCollectedErrorsJson().Count() <> ErrorCount then
             exit;
         SubjectText := DelChr(Argument.Subject, '<>', ' ');
         Conflict := LocationPresent and (SubjectText <> '') and (UpperCase(SubjectText) <> UpperCase(LocationText));

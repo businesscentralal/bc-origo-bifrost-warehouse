@@ -251,12 +251,8 @@ codeunit 97040 "Whse Rcpt GetSrcDocs Tests ori"
     local procedure AssertIndependentProblems(LanguageId: Integer; Summary: Text)
     var
         ResponseJson: JsonObject;
-        OriginalLanguage: Integer;
     begin
-        OriginalLanguage := GlobalLanguage();
-        GlobalLanguage(LanguageId);
-        Run('{"sourceDocument":"Sales Order","sourceNos":"PO1","expectedReceiptDateFrom":"20.10.2026"}', '', ResponseJson);
-        GlobalLanguage(OriginalLanguage);
+        Assert.IsTrue(ReceiptHelper.RunMessageInLanguage(Enum::"Message Type ori"::"Warehouse.Receipt.GetSourceDocuments", '', '{"sourceDocument":"Sales Order","sourceNos":"PO1","expectedReceiptDateFrom":"20.10.2026"}', ResponseJson, LanguageId), 'The response should be JSON.');
         Assert.AreEqual('MultipleErrors', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
         Assert.AreEqual(Summary, TextValue(ResponseJson, 'error'), 'The summary is in the caller language.');
         Assert.AreEqual('receiptNo:MissingParameter,sourceNos:InvalidParameterFormat,expectedReceiptDateFrom:InvalidParameterFormat,sourceDocument:InvalidParameter', ErrorList(ResponseJson), 'Every problem is listed.');

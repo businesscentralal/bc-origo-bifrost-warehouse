@@ -139,7 +139,6 @@ codeunit 97043 "Whse Request Get Tests ori"
         Location: Record Location;
         Item: Record Item;
         ResponseJson: JsonObject;
-        OriginalLanguage: Integer;
     begin
         // Issue #67, AC1 (item 2) | Time: fixed dates in the request | Risk: none.
         ReceiptHelper.SetupLocationAndItem(Location, Item, 0);
@@ -157,10 +156,7 @@ codeunit 97043 "Whse Request Get Tests ori"
         Run('{"locationCode":"' + Location.Code + '","shipmentDateFrom":"31.02.2026"}', '', ResponseJson);
         Assert.AreEqual('Send the date as text, for example 2026-10-19.', TextValue(ResponseJson, 'nextStep'), 'A date that does not exist keeps the example.');
 
-        OriginalLanguage := GlobalLanguage();
-        GlobalLanguage(1039);
-        Run('{"locationCode":"' + Location.Code + '","shipmentDateFrom":"20.10.2026"}', '', ResponseJson);
-        GlobalLanguage(OriginalLanguage);
+        Assert.IsTrue(ReceiptHelper.RunMessageInLanguage(Enum::"Message Type ori"::"Warehouse.Request.Get", '', '{"locationCode":"' + Location.Code + '","shipmentDateFrom":"20.10.2026"}', ResponseJson, 1039), 'The response should be JSON.');
         Assert.AreEqual('InvalidParameterFormat', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
         Assert.AreEqual('Sendu shipmentDateFrom aftur sem 2026-10-20.', TextValue(ResponseJson, 'nextStep'), 'The value to resend, in Icelandic.');
     end;
@@ -184,12 +180,8 @@ codeunit 97043 "Whse Request Get Tests ori"
     local procedure AssertIndependentProblems(LanguageId: Integer; Summary: Text)
     var
         ResponseJson: JsonObject;
-        OriginalLanguage: Integer;
     begin
-        OriginalLanguage := GlobalLanguage();
-        GlobalLanguage(LanguageId);
-        Run('{"locationCode":"NOLOC-X","shipmentDateFrom":"20.10.2026","take":-1}', '', ResponseJson);
-        GlobalLanguage(OriginalLanguage);
+        Assert.IsTrue(ReceiptHelper.RunMessageInLanguage(Enum::"Message Type ori"::"Warehouse.Request.Get", '', '{"locationCode":"NOLOC-X","shipmentDateFrom":"20.10.2026","take":-1}', ResponseJson, LanguageId), 'The response should be JSON.');
         Assert.AreEqual('MultipleErrors', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
         Assert.AreEqual(Summary, TextValue(ResponseJson, 'error'), 'The summary is in the caller language.');
         Assert.AreEqual('shipmentDateFrom:InvalidParameterFormat,locationCode:RecordNotFound,take:InvalidParameter', ErrorList(ResponseJson), 'Every problem is listed.');

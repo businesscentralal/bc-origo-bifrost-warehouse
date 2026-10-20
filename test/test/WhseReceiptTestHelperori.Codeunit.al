@@ -1,6 +1,7 @@
 namespace Origo.Bifrost.Warehouse.Test;
 
 using Origo.Bifrost;
+using Microsoft.Foundation.Company;
 using Microsoft.Inventory.Item;
 using Microsoft.Inventory.Journal;
 using Microsoft.Inventory.Ledger;
@@ -16,6 +17,7 @@ using Microsoft.Warehouse.History;
 using Microsoft.Warehouse.Journal;
 using Microsoft.Warehouse.Request;
 using Microsoft.Warehouse.Setup;
+using System.Globalization;
 
 /// <summary>
 /// Shared test helper for Warehouse Receipt tests.
@@ -262,6 +264,49 @@ codeunit 97022 "Whse Receipt Test Helper ori"
     /// <param name="RequestText">The request payload. Pass empty when no payload is required.</param>
     /// <param name="ResponseJson">Receives the parsed response JSON.</param>
     /// <returns>True when the response parsed as JSON.</returns>
+    /// <summary>
+    /// Dispatches a message in a caller language. The public dispatcher answers in the company language when
+    /// Foundation's default is blank, so the company language is set to a test language with that Windows
+    /// language ID for the call and put back afterwards.
+    /// </summary>
+    /// <param name="MessageType">The message type to run.</param>
+    /// <param name="Subject">The message subject.</param>
+    /// <param name="RequestText">The request JSON.</param>
+    /// <param name="ResponseJson">Receives the parsed response.</param>
+    /// <param name="LanguageId">The Windows language ID, e.g. 1033 or 1039.</param>
+    /// <returns>True when the response parses as JSON.</returns>
+    internal procedure RunMessageInLanguage(MessageType: Enum "Message Type ori"; Subject: Text; RequestText: Text; var ResponseJson: JsonObject; LanguageId: Integer): Boolean
+    var
+        CompanyInformation: Record "Company Information";
+        Language: Record Language;
+        OriginalLanguageCode: Code[10];
+        TestLanguageCode: Code[10];
+        Succeeded: Boolean;
+    begin
+        if LanguageId = 1039 then
+            TestLanguageCode := 'WHIS'
+        else
+            TestLanguageCode := 'WHEN';
+        if not Language.Get(TestLanguageCode) then begin
+            Language.Init();
+            Language.Code := TestLanguageCode;
+            Language.Name := 'Warehouse locale test';
+            Language.Insert();
+        end;
+        Language."Windows Language ID" := LanguageId;
+        Language.Modify();
+        CompanyInformation.Get();
+        OriginalLanguageCode := CompanyInformation."Default Language Code";
+        CompanyInformation."Default Language Code" := Language.Code;
+        CompanyInformation.Modify();
+        Succeeded := RunMessage(MessageType, Subject, RequestText, ResponseJson, false);
+        CompanyInformation.Get();
+        CompanyInformation."Default Language Code" := OriginalLanguageCode;
+        CompanyInformation.Modify();
+        Commit();
+        exit(Succeeded);
+    end;
+
     internal procedure RunMessage(MessageType: Enum "Message Type ori"; Subject: Text; RequestText: Text; var ResponseJson: JsonObject): Boolean
     begin
         exit(RunMessage(MessageType, Subject, RequestText, ResponseJson, true));

@@ -20,6 +20,7 @@ codeunit 97042 "Whse Ship Release Tests ori"
     var
         Assert: Codeunit "Library Assert";
         ShipmentHelper: Codeunit "Whse Shipment Test Helper ori";
+        ReceiptHelper: Codeunit "Whse Receipt Test Helper ori";
 
     /// <summary>AC01: releasing an open shipment with lines answers Released and changes the status.</summary>
     [Test]
@@ -253,17 +254,13 @@ codeunit 97042 "Whse Ship Release Tests ori"
     procedure Release_UnknownKeyAndUnknownShipment_AreCollected()
     var
         ResponseJson: JsonObject;
-        OriginalLanguage: Integer;
     begin
         // Issue #67, AC1 (item 3) | Time: independent of WorkDate | Risk: none.
-        OriginalLanguage := GlobalLanguage();
         Run(Enum::"Message Type ori"::"Warehouse.Shipment.Release", '{"shipmentNo":"NO-SUCH-SHIP","note":"x"}', ResponseJson);
         Assert.AreEqual('MultipleErrors', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
         Assert.AreEqual('UnknownParameter,RecordNotFound', ErrorCodes(ResponseJson), 'Both problems are listed in order.');
 
-        GlobalLanguage(1039);
-        Run(Enum::"Message Type ori"::"Warehouse.Shipment.Release", '{"shipmentNo":"NO-SUCH-SHIP","note":"x"}', ResponseJson);
-        GlobalLanguage(OriginalLanguage);
+        RunIn(1039, Enum::"Message Type ori"::"Warehouse.Shipment.Release", '{"shipmentNo":"NO-SUCH-SHIP","note":"x"}', '', ResponseJson);
         Assert.AreEqual('MultipleErrors', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
         Assert.AreEqual('UnknownParameter,RecordNotFound', ErrorCodes(ResponseJson), 'Both problems are listed in Icelandic too.');
         Assert.AreEqual('Beiðnin hefur nokkur vandamál; errors telur hvert þeirra upp.', TextValue(ResponseJson, 'error'), 'The summary is Icelandic.');
@@ -275,16 +272,12 @@ codeunit 97042 "Whse Ship Release Tests ori"
         ResponseJson: JsonObject;
         ShipmentNo: Code[20];
         StraySystemId: Text;
-        OriginalLanguage: Integer;
     begin
         ShipmentNo := CreateShipment();
         ShipmentHeader.Get(ShipmentNo);
         StraySystemId := Format(CreateGuid(), 0, 4);
-        OriginalLanguage := GlobalLanguage();
-        GlobalLanguage(LanguageId);
-
         // [WHEN] A valid shipmentNo comes with a systemId that matches nothing.
-        Run(Enum::"Message Type ori"::"Warehouse.Shipment.Reopen", '{"shipmentNo":"' + ShipmentNo + '","systemId":"' + StraySystemId + '"}', ResponseJson);
+        RunIn(LanguageId, Enum::"Message Type ori"::"Warehouse.Shipment.Reopen", '{"shipmentNo":"' + ShipmentNo + '","systemId":"' + StraySystemId + '"}', '', ResponseJson);
         // [THEN] The stray identifier is refused and named.
         Assert.AreEqual('Error', TextValue(ResponseJson, 'status'), ResponseText(ResponseJson));
         Assert.AreEqual('RecordNotFound', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
@@ -293,15 +286,19 @@ codeunit 97042 "Whse Ship Release Tests ori"
         Assert.IsTrue(TextValue(ResponseJson, 'nextStep').Contains('Data.Records.Get'), 'The next step names Data.Records.Get.');
 
         // [WHEN] A valid SystemId as the subject comes with a number that matches nothing.
-        Run(Enum::"Message Type ori"::"Warehouse.Shipment.Release", '{"no":"NO-SUCH-SHIP"}', Format(ShipmentHeader.SystemId, 0, 4), ResponseJson);
+        RunIn(LanguageId, Enum::"Message Type ori"::"Warehouse.Shipment.Release", '{"no":"NO-SUCH-SHIP"}', Format(ShipmentHeader.SystemId, 0, 4), ResponseJson);
         Assert.AreEqual('RecordNotFound', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
         Assert.AreEqual('no', TextValue(ResponseJson, 'parameter'), 'The stray number is named.');
 
         // [THEN] A single valid identifier keeps today's answer.
-        Run(Enum::"Message Type ori"::"Warehouse.Shipment.Reopen", '{"shipmentNo":"' + ShipmentNo + '","systemId":"' + Format(ShipmentHeader.SystemId, 0, 4) + '"}', ResponseJson);
-        GlobalLanguage(OriginalLanguage);
+        RunIn(LanguageId, Enum::"Message Type ori"::"Warehouse.Shipment.Reopen", '{"shipmentNo":"' + ShipmentNo + '","systemId":"' + Format(ShipmentHeader.SystemId, 0, 4) + '"}', '', ResponseJson);
         Assert.AreEqual('Success', TextValue(ResponseJson, 'status'), ResponseText(ResponseJson));
         AssertStatus(ShipmentNo, false);
+    end;
+
+    local procedure RunIn(LanguageId: Integer; MessageType: Enum "Message Type ori"; RequestText: Text; Subject: Text; var ResponseJson: JsonObject)
+    begin
+        Assert.IsTrue(ReceiptHelper.RunMessageInLanguage(MessageType, Subject, RequestText, ResponseJson, LanguageId), 'The response should be JSON.');
     end;
 
     local procedure ErrorCodes(ResponseJson: JsonObject): Text

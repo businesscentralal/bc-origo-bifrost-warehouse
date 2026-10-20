@@ -94,7 +94,8 @@ codeunit 97053 "Whse PhysInvt Calc Tests ori"
         Helper.ExpectError(Send('{"journalTemplateName":"' + JournalBatch."Journal Template Name" + '","journalBatchName":"NOBATCH","locationCode":"' + Location.Code + '","documentNo":"X"}'), 'RecordNotFound', 'Create the batch first.');
         Helper.ExpectError(Send(Request(JournalBatch, '')), 'MissingParameter', 'Send documentNo, or give the batch a number series.');
         Helper.ExpectError(Send(Request(ItemBatch, ',"documentNo":"X"')), 'InvalidParameter', 'Use a physical inventory template, or Warehouse.Journal.Create for item and reclassification journals.');
-        Helper.ExpectError(Send(Request(JournalBatch, ',"documentNo":"X","registeringDate":"19.10.2026"')), 'InvalidParameterFormat', 'Send the date as YYYY-MM-DD.');
+        Helper.ExpectError(Send(Request(JournalBatch, ',"documentNo":"X","registeringDate":"19.10.2026"')), 'InvalidParameterFormat', 'Resend registeringDate as 2026-10-19.');
+        Helper.ExpectError(Send(Request(JournalBatch, ',"documentNo":"X","registeringDate":"2026/10/19"')), 'InvalidParameterFormat', 'Send the date as YYYY-MM-DD.');
         Helper.ExpectError(Send(Request(JournalBatch, ',"documentNo":"X","shelf":"A"')), 'UnknownParameter', '');
         Helper.ExpectError(Send(Request(JournalBatch, ',"documentNo":"X","itemNo":"NO-SUCH-ITEM"')), 'RecordNotFound', '');
         Helper.ExpectError(Helper.RunType(Enum::"Message Type ori"::"Warehouse.PhysInventory.Calculate", 'OTHERLOC', Request(JournalBatch, ',"documentNo":"X"')), 'ConflictingIdentifiers', '');

@@ -231,7 +231,6 @@ codeunit 97046 "Whse Partial Post Tests ori"
         ReceiptLine: Record "Warehouse Receipt Line";
         ResponseJson: JsonObject;
         RequestText: Text;
-        OriginalLanguage: Integer;
     begin
         // Issue #67, AC1 (item 3) | Time: independent of WorkDate | Risk: none.
         CreateReceipt(ReceiptLine, 5);
@@ -242,10 +241,7 @@ codeunit 97046 "Whse Partial Post Tests ori"
         Assert.AreEqual('Nothing was posted.', TextValue(ResponseJson, 'error'), 'English summary.');
         Assert.AreEqual('post:UnknownParameter,lines[0].lineNo:InvalidLine,lines[1].qtyToReceive:InvalidParameterFormat', ErrorList(ResponseJson), 'Every problem is listed.');
 
-        OriginalLanguage := GlobalLanguage();
-        GlobalLanguage(1039);
-        Run(Enum::"Message Type ori"::"Warehouse.Receipt.Post", RequestText, ResponseJson);
-        GlobalLanguage(OriginalLanguage);
+        Assert.IsTrue(ReceiptHelper.RunMessageInLanguage(Enum::"Message Type ori"::"Warehouse.Receipt.Post", '', RequestText, ResponseJson, 1039), 'The response should be JSON.');
         Assert.AreEqual('MultipleErrors', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
         Assert.AreEqual('Ekkert var bókað.', TextValue(ResponseJson, 'error'), 'Icelandic summary.');
         Assert.AreEqual('post:UnknownParameter,lines[0].lineNo:InvalidLine,lines[1].qtyToReceive:InvalidParameterFormat', ErrorList(ResponseJson), 'Every problem is listed in Icelandic too.');
@@ -258,15 +254,11 @@ codeunit 97046 "Whse Partial Post Tests ori"
     var
         ReceiptLine: Record "Warehouse Receipt Line";
         ResponseJson: JsonObject;
-        OriginalLanguage: Integer;
     begin
         // Issue #67, AC2 (item 5) | Time: helper posts at WorkDate | Risk: preview needs Omit Commit false.
         CreateReceipt(ReceiptLine, 5);
-        OriginalLanguage := GlobalLanguage();
 
-        GlobalLanguage(1039);
-        Assert.IsTrue(ReceiptHelper.RunMessage(Enum::"Message Type ori"::"Warehouse.Receipt.PreviewPost", '', '{"receiptNo":"' + ReceiptLine."No." + '"}', ResponseJson, false), 'The response should be JSON.');
-        GlobalLanguage(OriginalLanguage);
+        Assert.IsTrue(ReceiptHelper.RunMessageInLanguage(Enum::"Message Type ori"::"Warehouse.Receipt.PreviewPost", '', '{"receiptNo":"' + ReceiptLine."No." + '"}', ResponseJson, 1039), 'The response should be JSON.');
         Assert.AreEqual('Success', TextValue(ResponseJson, 'status'), ResponseText(ResponseJson));
         Assert.IsTrue(TextValue(ResponseJson, 'summary').StartsWith('Forsýning bókunar vöruhúsamóttöku ' + ReceiptLine."No."), 'Icelandic summary: ' + TextValue(ResponseJson, 'summary'));
 

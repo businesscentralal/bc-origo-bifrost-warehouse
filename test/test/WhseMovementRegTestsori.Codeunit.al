@@ -396,8 +396,9 @@ codeunit 97084 "Whse Movement Reg Tests ori"
     begin
         // A Business Central full user: direct write on the activity tables, but the registered and posted
         // headers only through Business Central's own codeunits. Plus the Bifrost sets and the posting gate (#70).
-        LibraryLowerPermissions.PushPermissionSetWithoutDefaults('D365 BUS FULL ACCESS');
-        LibraryLowerPermissions.AddPermissionSet('BIFROST Full ori');
+        // Pushed first, as in the posting-gate grant tests: the dispatcher reads Foundation's setup through it.
+        LibraryLowerPermissions.PushPermissionSetWithoutDefaults('BIFROST Full ori');
+        LibraryLowerPermissions.AddPermissionSet('D365 BUS FULL ACCESS');
         LibraryLowerPermissions.AddPermissionSet('Whse Gate Test ori');
         LibraryLowerPermissions.AddPermissionSet('BIFROST WhsePost ori');
     end;

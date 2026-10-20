@@ -34,8 +34,10 @@ codeunit 10078411 "Whse Rcpt Post Prev. Impl ori" implements "Msg Interface ori"
     end;
 
     procedure GetDescription() Description: Text[250]
+    var
+        DescriptionLbl: Label 'Simulates receiving a warehouse receipt and returns the entries it would create, such as item and value entries and the posted receipt, without saving anything.', Comment = 'is-IS=Hermir móttöku vöruhúsamóttöku og skilar færslunum sem hún myndi búa til, svo sem birgða- og virðisfærslum og bókuðu móttökunni, án þess að vista neitt.';
     begin
-        exit('Simulates posting a Warehouse Receipt and returns predicted ledger entries (Item, Value, Posted Whse. Receipt) without committing.');
+        exit(DescriptionLbl);
     end;
 
     procedure GetKeywords(): Text
@@ -107,16 +109,9 @@ codeunit 10078411 "Whse Rcpt Post Prev. Impl ori" implements "Msg Interface ori"
 
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
-        ContractMgt: Codeunit "Msg Contract Mgt ori";
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, 'Posting preview cannot run inside a rollback chain (Omit Commit). Run this message type with Omit Commit set to false.', 'Call Dispatcher.Execute with OmitCommit = false, or use the HTTP/MCP API.'));
-        Parts.AddLookupErrors(Errors, 'Warehouse Receipt Header');
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::NothingToPreview, 'The Warehouse Receipt has no lines or no quantities to post.', 'Add lines and quantities to receive.'));
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidLine, 'A lineNo is not on the receipt, or qtyToReceive is negative or above the outstanding quantity.', 'Read the lines first, and read the outstanding quantity on the line and lower it.'));
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::UnknownParameter, 'The request or a line contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.'));
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PermissionDenied, 'lines was sent and the caller cannot write warehouse receipt lines.', 'Ask an administrator to assign BIFROST Whse - Full ori, or preview without lines.'));
-        Parts.AddBusinessCentralError(Errors, 'invalid quantities, posting setup or source-document state');
+        Parts.AddDocumentPreviewErrors(Errors, 'Warehouse Receipt Header', 'systemId, recordSystemId, id, receiptNo, no', 'qtyToReceive', false, OmitCommitNextStep(), NothingToPostNextStep(), LinesDeniedNextStep());
         exit(true);
     end;
 
@@ -150,13 +145,23 @@ codeunit 10078411 "Whse Rcpt Post Prev. Impl ori" implements "Msg Interface ori"
     end;
 
     procedure GetExamples(var Examples: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        exit(false);
+        Examples.Add(ContractMgt.Example(
+            'Preview receiving 2 on line 10000 of warehouse receipt RE000001',
+            '{"receiptNo":"RE000001","lines":[{"lineNo":10000,"qtyToReceive":2}]}',
+            '{"status":"Success","entryCount":3,"glEntryCount":0,"rollback":true,"summary":"Warehouse Receipt RE000001 at WHITE preview produced 3 entries. No G/L entries would be posted.","receiptNo":"RE000001","locationCode":"WHITE","sourceDocuments":[],"lcyCode":"ISK","predictedNumbers":{},"totals":{},"preview":[]}'));
+        Examples.Add(ContractMgt.Example(
+            'Refused: no line has a quantity to receive',
+            '{"receiptNo":"RE000001","lines":[{"lineNo":10000,"qtyToReceive":0}]}',
+            '{"status":"Error","code":"NothingToPreview","error":"The preview produced no entries. Nothing would be posted.","nextStep":"No receipt line has Qty. to Receive. Set quantities on the receipt lines."}'));
+        exit(true);
     end;
 
     procedure GetOverview(var Overview: Text): Boolean
     begin
-        Overview := 'Read-only posting preview for a Warehouse Receipt. It captures predicted ledger entries and rolls back the transaction.';
+        Overview := 'Read-only posting preview for a warehouse receipt, the same as the Preview Posting action. It returns the entries that receiving would create and rolls everything back. Optional lines set the quantity to receive per line inside the preview only. It cannot run inside a rollback chain (Omit Commit).';
         exit(true);
     end;
 
@@ -197,17 +202,16 @@ codeunit 10078411 "Whse Rcpt Post Prev. Impl ori" implements "Msg Interface ori"
         PreviewFieldNames: List of [Text];
         NoLinesToPostErr: Label 'Warehouse Receipt %1 has no lines to post.', Comment = '%1 = Whse. Receipt No., is-IS=Vöruhúsamóttaka %1 hefur engar línur til bókunar.';
         PreviewFailedErr: Label 'Posting preview failed and no entries were captured. The warehouse receipt cannot be posted in its current state.', Comment = 'is-IS=Bókunarforsýning mistókst og engar færslur voru teknar. Vöruhúsamóttakan getur ekki verið bókuð í núverandi stöðu.';
-        NothingToPostNextStepTok: Label 'No receipt line has Qty. to Receive. Set quantities on the receipt lines.', Comment = 'is-IS=Engin móttökulína hefur Magn til móttöku. Setjið magn á móttökulínurnar.';
+
         OmitCommitPreviewErr: Label 'Posting preview cannot run inside a rollback chain (Omit Commit). Run this message type with Omit Commit set to false.', Comment = 'is-IS=Ekki er hægt að forskoða bókun innan afturköllunarkeðju (Omit Commit). Keyrðu þessa skilaboðategund með Omit Commit stillt á false.';
-        OmitCommitPreviewNextStepTok: Label 'Call Dispatcher.Execute with OmitCommit = false, or use the HTTP/MCP API.', Comment = 'is-IS=Kallaðu á Dispatcher.Execute með OmitCommit = false eða notaðu HTTP/MCP API.';
+
         NothingPreviewedLbl: Label 'Nothing was previewed.', Comment = 'is-IS=Ekkert var forskoðað.';
         LinesDeniedLbl: Label 'You do not have permission to set quantities on warehouse receipt lines.', Comment = 'is-IS=Þú hefur ekki heimild til að setja magn á línur vöruhúsamóttöku.';
-        LinesDeniedNextStepLbl: Label 'Ask an administrator to assign BIFROST Whse - Full ori, or preview without lines.', Comment = 'is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori eða forskoðaðu án lína.';
     begin
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
         if Argument."Omit Commit" then begin
-            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, OmitCommitPreviewErr, '', '', '', OmitCommitPreviewNextStepTok);
+            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, OmitCommitPreviewErr, '', '', '', OmitCommitNextStep());
             exit;
         end;
         if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,receiptNo=no,no=no', RequestJson) then
@@ -224,7 +228,7 @@ codeunit 10078411 "Whse Rcpt Post Prev. Impl ori" implements "Msg Interface ori"
                 Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, NothingPreviewedLbl);
                 exit;
             end;
-            Argument.RespondWithError("Bifrost Error Code ori"::NothingToPreview, StrSubstNo(NoLinesToPostErr, WhseReceiptHeader."No."), '', '', '', NothingToPostNextStepTok);
+            Argument.RespondWithError("Bifrost Error Code ori"::NothingToPreview, StrSubstNo(NoLinesToPostErr, WhseReceiptHeader."No."), '', '', '', NothingToPostNextStep());
             exit;
         end;
         DocLineQty.ReadLines(RequestJson, Argument, false, WhseReceiptHeader."No.", PlannedLines);
@@ -234,7 +238,7 @@ codeunit 10078411 "Whse Rcpt Post Prev. Impl ori" implements "Msg Interface ori"
         end;
         if PlannedLines.Count() > 0 then
             if not WhseReceiptLine.WritePermission() then begin
-                Argument.RespondWithError("Bifrost Error Code ori"::PermissionDenied, LinesDeniedLbl, 'lines', '', '', LinesDeniedNextStepLbl);
+                Argument.RespondWithError("Bifrost Error Code ori"::PermissionDenied, LinesDeniedLbl, 'lines', '', '', LinesDeniedNextStep());
                 exit;
             end;
         WhseReceiptLine.FindFirst();
@@ -245,7 +249,7 @@ codeunit 10078411 "Whse Rcpt Post Prev. Impl ori" implements "Msg Interface ori"
         if not PreviewWhseReceipt(WhseReceiptLine, PlannedLines, PostingPreviewEventHandler, PreviewErrorText) then begin
             if PreviewErrorText = '' then
                 PreviewErrorText := PreviewFailedErr;
-            PostingPreviewHelper.RespondWithPreviewError(Argument, PreviewErrorText, NothingToPostNextStepTok);
+            PostingPreviewHelper.RespondWithPreviewError(Argument, PreviewErrorText, NothingToPostNextStep());
             exit;
         end;
 
@@ -257,7 +261,7 @@ codeunit 10078411 "Whse Rcpt Post Prev. Impl ori" implements "Msg Interface ori"
                 PostingPreviewHelper.AddTableToPreview(PreviewArray, PostingPreviewEventHandler, TempDocumentEntry."Table ID", TempDocumentEntry."Table Name", PreviewFieldNames);
             until TempDocumentEntry.Next() = 0;
 
-        if not PostingPreviewHelper.EvaluatePreviewOutcome(Argument, PreviewArray, PostingPreviewEventHandler, NothingToPostNextStepTok, TotalsJson, Balanced, EntryCount, GLEntryCount) then
+        if not PostingPreviewHelper.EvaluatePreviewOutcome(Argument, PreviewArray, PostingPreviewEventHandler, NothingToPostNextStep(), TotalsJson, Balanced, EntryCount, GLEntryCount) then
 
             exit;
 
@@ -440,5 +444,26 @@ codeunit 10078411 "Whse Rcpt Post Prev. Impl ori" implements "Msg Interface ori"
 
         GenJnlPostPreview.GetPreviewHandler(PostingPreviewEventHandler);
         exit(true);
+    end;
+
+    local procedure OmitCommitNextStep(): Text
+    var
+        NextStepLbl: Label 'Run the preview on its own, outside a rollback chain, for example through the HTTP or MCP API.', Comment = 'is-IS=Keyrðu forskoðunina eina og sér, utan afturköllunarkeðju, til dæmis í gegnum HTTP- eða MCP-API.';
+    begin
+        exit(NextStepLbl);
+    end;
+
+    local procedure NothingToPostNextStep(): Text
+    var
+        NextStepLbl: Label 'No receipt line has Qty. to Receive. Set quantities on the receipt lines.', Comment = 'is-IS=Engin móttökulína hefur Magn til móttöku. Setjið magn á móttökulínurnar.';
+    begin
+        exit(NextStepLbl);
+    end;
+
+    local procedure LinesDeniedNextStep(): Text
+    var
+        NextStepLbl: Label 'Ask an administrator to assign BIFROST Whse - Full ori, or preview without lines.', Comment = 'is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori eða forskoðaðu án lína.';
+    begin
+        exit(NextStepLbl);
     end;
 }

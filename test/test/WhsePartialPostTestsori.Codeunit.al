@@ -22,6 +22,7 @@ codeunit 97046 "Whse Partial Post Tests ori"
         Assert: Codeunit "Library Assert";
         ReceiptHelper: Codeunit "Whse Receipt Test Helper ori";
         ShipmentHelper: Codeunit "Whse Shipment Test Helper ori";
+        ContractAssert: Codeunit "Whse Contract Assert ori";
 
     /// <summary>AC01: a partial qtyToReceive posts that quantity and answers posted and remaining per line.</summary>
     [Test]
@@ -199,6 +200,74 @@ codeunit 97046 "Whse Partial Post Tests ori"
         Assert.IsTrue(ShipmentHelper.RunMessage(Enum::"Message Type ori"::"Warehouse.Shipment.PreviewPost", '', '{"shipmentNo":"' + ShipmentLine."No." + '","lines":[{"lineNo":' + Format(ShipmentLine."Line No.") + ',"qtyToShip":9}]}', ResponseJson, false), 'The response should be JSON.');
 
         Assert.AreEqual('InvalidLine', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        // #71 AC2: the refusal and its nextStep are in the help.
+        ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Shipment.PreviewPost", ResponseJson);
+    end;
+
+    /// <summary>#71 item 3: the shipment preview refuses more than the picked quantity, and its help lists that refusal (1033 and 1039).</summary>
+    [Test]
+    procedure ShipmentPreview_AbovePicked_IsRefusedAndDeclared()
+    var
+        ShipmentLine: Record "Warehouse Shipment Line";
+        ResponseJson: JsonObject;
+        RequestText: Text;
+    begin
+        // Issue #71, AC2 (item 3) | Time: independent of WorkDate | Risk: preview needs Omit Commit false.
+        CreateShipment(ShipmentLine, 5, true);
+        RequestText := '{"shipmentNo":"' + ShipmentLine."No." + '","lines":[{"lineNo":' + Format(ShipmentLine."Line No.") + ',"qtyToShip":1}]}';
+
+        Assert.IsTrue(ShipmentHelper.RunMessage(Enum::"Message Type ori"::"Warehouse.Shipment.PreviewPost", '', RequestText, ResponseJson, false), 'The response should be JSON.');
+        Assert.AreEqual('PreconditionFailed', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('Register the pick first.', TextValue(ResponseJson, 'nextStep'), 'The next step must name the pick.');
+        Assert.AreEqual('lines[0].qtyToShip', TextValue(ResponseJson, 'parameter'), 'The refusal names the quantity.');
+        ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Shipment.PreviewPost", ResponseJson);
+
+        Assert.IsTrue(ReceiptHelper.RunMessageInLanguage(Enum::"Message Type ori"::"Warehouse.Shipment.PreviewPost", '', RequestText, ResponseJson, 1039), 'The response should be JSON.');
+        Assert.AreEqual('PreconditionFailed', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('Skráðu tínsluna fyrst.', TextValue(ResponseJson, 'nextStep'), 'The Icelandic next step must name the pick.');
+        ShipmentLine.Get(ShipmentLine."No.", ShipmentLine."Line No.");
+        Assert.AreEqual(5, ShipmentLine."Qty. Outstanding", 'Nothing is shipped.');
+    end;
+
+    /// <summary>#71 AC2: every line refusal of the receipt preview is answered with a nextStep its help lists.</summary>
+    [Test]
+    procedure ReceiptPreview_LineRefusals_AreDeclared()
+    var
+        ReceiptLine: Record "Warehouse Receipt Line";
+        PreviewType: Enum "Message Type ori";
+        ResponseJson: JsonObject;
+        Prefix: Text;
+    begin
+        // Issue #71, AC2 | Time: independent of WorkDate | Risk: preview needs Omit Commit false.
+        CreateReceipt(ReceiptLine, 5);
+        PreviewType := Enum::"Message Type ori"::"Warehouse.Receipt.PreviewPost";
+        Prefix := '{"receiptNo":"' + ReceiptLine."No." + '","lines":[';
+
+        // A line that is not on the receipt.
+        Assert.IsTrue(ReceiptHelper.RunMessage(PreviewType, '', Prefix + '{"lineNo":999999,"qtyToReceive":1}]}', ResponseJson, false), 'The response should be JSON.');
+        Assert.AreEqual('Read the lines first.', TextValue(ResponseJson, 'nextStep'), ResponseText(ResponseJson));
+        ContractAssert.AssertAnswerDeclared(PreviewType, ResponseJson);
+        // A quantity above the outstanding quantity.
+        Assert.IsTrue(ReceiptHelper.RunMessage(PreviewType, '', Prefix + '{"lineNo":' + Format(ReceiptLine."Line No.") + ',"qtyToReceive":9}]}', ResponseJson, false), 'The response should be JSON.');
+        Assert.AreEqual('Read the outstanding quantity on the line and lower it.', TextValue(ResponseJson, 'nextStep'), ResponseText(ResponseJson));
+        ContractAssert.AssertAnswerDeclared(PreviewType, ResponseJson);
+        // A line without the quantity.
+        Assert.IsTrue(ReceiptHelper.RunMessage(PreviewType, '', Prefix + '{"lineNo":' + Format(ReceiptLine."Line No.") + '}]}', ResponseJson, false), 'The response should be JSON.');
+        Assert.AreEqual('MissingParameter', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        ContractAssert.AssertAnswerDeclared(PreviewType, ResponseJson);
+        // lines that is not an array.
+        Assert.IsTrue(ReceiptHelper.RunMessage(PreviewType, '', '{"receiptNo":"' + ReceiptLine."No." + '","lines":5}', ResponseJson, false), 'The response should be JSON.');
+        Assert.AreEqual('InvalidParameterFormat', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        ContractAssert.AssertAnswerDeclared(PreviewType, ResponseJson);
+        // An unknown receipt number.
+        Assert.IsTrue(ReceiptHelper.RunMessage(PreviewType, '', '{"receiptNo":"NO-SUCH-RCPT"}', ResponseJson, false), 'The response should be JSON.');
+        Assert.AreEqual('RecordNotFound', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        ContractAssert.AssertAnswerDeclared(PreviewType, ResponseJson);
+        // No identifier.
+        Assert.IsTrue(ReceiptHelper.RunMessage(PreviewType, '', '{}', ResponseJson, false), 'The response should be JSON.');
+        Assert.AreEqual('MissingParameter', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        ContractAssert.AssertAnswerDeclared(PreviewType, ResponseJson);
+        AssertReceiptUnchanged(ReceiptLine, 5);
     end;
 
     /// <summary>#53 AC09 and #54 AC09: generic writes of shipment status and the receipt and shipment quantities are refused and point at the dedicated types.</summary>

@@ -179,7 +179,7 @@ codeunit 10078431 "Whse Rcpt GetSrcDocs Impl ori" implements "Msg Interface ori"
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MissingParameter, 'No receipt and no locationCode were sent.', 'Send receiptNo for an existing receipt or locationCode for a new one.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::RecordNotFound, 'The warehouse receipt or the location does not exist.', 'Create it with Warehouse.Receipt.Create or pass locationCode.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::ConflictingIdentifiers, 'Two identifiers name different receipts, locationCode is not the receipt location, or a named source document is at another location.', 'Use a receipt at the same location.');
-        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'No released warehouse request matches the filters, or the location does not require receive.', 'Release the source documents first; read Warehouse.Request.Get.');
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'No released warehouse request matches the filters (the parameter names the filters that were sent), or the location does not require receive.', 'Release the source documents first; read Warehouse.Request.Get.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameter, 'sourceDocument is not one of the listed values, or a date range ends before it starts.', 'Use one of the values listed in the help.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameterFormat, 'A value has the wrong JSON type, sourceNos is not an array of strings, or a date is not YYYY-MM-DD.', 'Send text for codes, an array of strings for sourceNos and dates as YYYY-MM-DD.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.');
@@ -285,6 +285,7 @@ codeunit 10078431 "Whse Rcpt GetSrcDocs Impl ori" implements "Msg Interface ori"
         Payload: JsonObject;
         SourceNos: List of [Text];
         LocationCode: Code[10];
+        FilterKeys: Text;
         SnapshotLineNo: Integer;
         ResultNo: Code[20];
         Quantity: Decimal;
@@ -306,9 +307,9 @@ codeunit 10078431 "Whse Rcpt GetSrcDocs Impl ori" implements "Msg Interface ori"
         // bad filter value do not hide one another. Only the check of the warehouse requests needs a valid target.
         RefuseUnknownKeys(RequestJson, Argument);
         ResolveTarget(RequestJson, Argument, ReceiptHeader, LocationCode, HasReceipt);
-        BuildRequestFilters(RequestJson, Argument, WarehouseRequest, LocationCode, SourceNos);
+        BuildRequestFilters(RequestJson, Argument, WarehouseRequest, LocationCode, SourceNos, FilterKeys);
         if not Argument.HasCollectedErrors() then
-            CheckRequests(Argument, WarehouseRequest, LocationCode, SourceNos);
+            CheckRequests(Argument, WarehouseRequest, LocationCode, SourceNos, FilterKeys);
         if Argument.HasCollectedErrors() then begin
             Context.Reset();
             Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, ProblemsLbl);
@@ -439,7 +440,7 @@ codeunit 10078431 "Whse Rcpt GetSrcDocs Impl ori" implements "Msg Interface ori"
             Argument.AddError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(NoReceiveLbl, LocationCode), 'locationCode', LocationText, '', NoReceiveNextStepLbl);
     end;
 
-    local procedure BuildRequestFilters(RequestJson: JsonObject; var Argument: Record "Message Argument ori"; var WarehouseRequest: Record "Warehouse Request"; LocationCode: Code[10]; var SourceNos: List of [Text])
+    local procedure BuildRequestFilters(RequestJson: JsonObject; var Argument: Record "Message Argument ori"; var WarehouseRequest: Record "Warehouse Request"; LocationCode: Code[10]; var SourceNos: List of [Text]; var FilterKeys: Text)
     var
         Context: Codeunit "Whse Write Context ori";
         SourceDocumentText: Text;
@@ -483,10 +484,25 @@ codeunit 10078431 "Whse Rcpt GetSrcDocs Impl ori" implements "Msg Interface ori"
             Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(RangeLbl, 'expectedReceiptDateFrom'), 'expectedReceiptDateTo', Context.FormatDate(DateTo), '', RangeNextStepLbl);
         if (DateFrom <> 0D) or (DateTo <> 0D) then
             WarehouseRequest.SetRange("Expected Receipt Date", DateFrom, Context.RangeEnd(DateTo));
+        // The refusal "no released request matches" names the filters that were sent (#71).
+        FilterKeys := '';
+        AddFilterKey(FilterKeys, SourceDocumentText <> '', 'sourceDocument');
+        AddFilterKey(FilterKeys, SourceNos.Count() > 0, 'sourceNos');
+        AddFilterKey(FilterKeys, VendorNo <> '', 'vendorNo');
+        AddFilterKey(FilterKeys, DateFrom <> 0D, 'expectedReceiptDateFrom');
+        AddFilterKey(FilterKeys, DateTo <> 0D, 'expectedReceiptDateTo');
         WarehouseRequest.SetRange("Location Code", LocationCode);
     end;
 
-    local procedure CheckRequests(var Argument: Record "Message Argument ori"; var WarehouseRequest: Record "Warehouse Request"; LocationCode: Code[10]; SourceNos: List of [Text])
+    local procedure AddFilterKey(var FilterKeys: Text; Sent: Boolean; KeyName: Text)
+    begin
+        if not Sent then
+            exit;
+        if FilterKeys <> '' then
+            FilterKeys += ', ';
+        FilterKeys += KeyName;
+    end;
+    local procedure CheckRequests(var Argument: Record "Message Argument ori"; var WarehouseRequest: Record "Warehouse Request"; LocationCode: Code[10]; SourceNos: List of [Text]; FilterKeys: Text)
     var
         NamedRequest: Record "Warehouse Request";
         SourceNo: Text;
@@ -515,7 +531,7 @@ codeunit 10078431 "Whse Rcpt GetSrcDocs Impl ori" implements "Msg Interface ori"
         if Argument.HasCollectedErrors() then
             exit;
         if WarehouseRequest.IsEmpty() then
-            Argument.AddError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(NoneLbl, LocationCode), 'sourceNos', '', '', ReleaseNextStepLbl);
+            Argument.AddError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(NoneLbl, LocationCode), FilterKeys, '', '', ReleaseNextStepLbl);
     end;
 
     local procedure WriteResponse(var Argument: Record "Message Argument ori"; var WarehouseRequest: Record "Warehouse Request"; ReceiptNo: Code[20]; LocationCode: Code[10]; Created: Boolean; SnapshotLineNo: Integer)

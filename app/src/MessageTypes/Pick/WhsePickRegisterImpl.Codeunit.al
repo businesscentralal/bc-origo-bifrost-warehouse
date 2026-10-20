@@ -29,8 +29,10 @@ codeunit 10078414 "Whse Pick Register Impl ori" implements "Msg Interface ori", 
     end;
 
     procedure GetDescription() Description: Text[250]
+    var
+        DescriptionLbl: Label 'Registers a warehouse pick, the same as the Register Pick action, and updates the picked quantities on the warehouse shipment.', Comment = 'is-IS=Skráir vöruhúsatínslu, eins og aðgerðin Skrá tínslu, og uppfærir tínt magn á vöruhúsaafhendingunni.';
     begin
-        exit('Registers a Warehouse Pick (BC codeunit 7307 "Whse.-Activity-Register").');
+        exit(DescriptionLbl);
     end;
 
     procedure GetKeywords(): Text
@@ -93,12 +95,12 @@ codeunit 10078414 "Whse Pick Register Impl ori" implements "Msg Interface ori", 
 
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
-        ContractMgt: Codeunit "Msg Contract Mgt ori";
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.AddLookupErrors(Errors, 'Warehouse Activity Header');
+        Parts.AddLookupErrors(Errors, 'Warehouse Activity Header', 'systemId, recordSystemId, id, pickNo, no');
         Parts.AddPermissionError(Errors, 'BIFROST WhsePost ori');
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, 'The Warehouse Pick has no lines or the identified activity is not a Pick.', 'Send a Warehouse Pick with lines.'));
+        Parts.AddNextStepError(Errors, "Bifrost Error Code ori"::PreconditionFailed, 'The identified warehouse activity is not a pick.', NotActivityNextStep());
+        Parts.AddNextStepError(Errors, "Bifrost Error Code ori"::PreconditionFailed, 'The warehouse pick has no lines.', NoLinesNextStep());
         Parts.AddBusinessCentralError(Errors, 'invalid quantities or warehouse activity state');
         exit(true);
     end;
@@ -188,7 +190,7 @@ codeunit 10078414 "Whse Pick Register Impl ori" implements "Msg Interface ori", 
         WarehouseActivityLine.SetRange("Activity Type", WarehouseActivityLine."Activity Type"::Pick);
         WarehouseActivityLine.SetRange("No.", PickNoBeforeRun);
         if WarehouseActivityLine.IsEmpty() then begin
-            Argument.RespondWithError(StrSubstNo(NoLinesErr, PickNoBeforeRun));
+            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(NoLinesErr, PickNoBeforeRun), '', '', '', NoLinesNextStep());
             exit;
         end;
         LinesInPickBeforeRun := WarehouseActivityLine.Count();
@@ -205,7 +207,7 @@ codeunit 10078414 "Whse Pick Register Impl ori" implements "Msg Interface ori", 
             Codeunit.Run(Codeunit::"Whse.-Activity-Register", WarehouseActivityLine)
         else
             if not Codeunit.Run(Codeunit::"Whse.-Activity-Register", WarehouseActivityLine) then begin
-                Argument.RespondWithError(GetLastErrorText());
+                Argument.RespondWithError("Bifrost Error Code ori"::BusinessCentralError, GetLastErrorText(), '', '', '', '');
                 exit;
             end;
 
@@ -248,7 +250,7 @@ codeunit 10078414 "Whse Pick Register Impl ori" implements "Msg Interface ori", 
             exit(false);
         WarehouseActivityHeader.GetBySystemId(FoundSystemId);
         if WarehouseActivityHeader.Type <> WarehouseActivityHeader.Type::Pick then begin
-            Argument.RespondWithError(StrSubstNo(NotPickErr, WarehouseActivityHeader."No."));
+            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(NotPickErr, WarehouseActivityHeader."No."), '', '', '', NotActivityNextStep());
             exit(false);
         end;
         exit(true);
@@ -288,5 +290,19 @@ codeunit 10078414 "Whse Pick Register Impl ori" implements "Msg Interface ori", 
         if SourceShipmentNo <> '' then
             exit(StrSubstNo(FromShipmentMsg, PickNo, LinesRegistered, SourceShipmentNo));
         exit(StrSubstNo(StandaloneMsg, PickNo, LinesRegistered));
+    end;
+
+    local procedure NoLinesNextStep(): Text
+    var
+        NextStepLbl: Label 'Send a warehouse pick that has lines.', Comment = 'is-IS=Sendu vöruhúsatínslu sem hefur línur.';
+    begin
+        exit(NextStepLbl);
+    end;
+
+    local procedure NotActivityNextStep(): Text
+    var
+        NextStepLbl: Label 'Send the number or SystemId of a warehouse pick.', Comment = 'is-IS=Sendu númer eða SystemId vöruhúsatínslu.';
+    begin
+        exit(NextStepLbl);
     end;
 }

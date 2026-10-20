@@ -29,8 +29,10 @@ codeunit 10078417 "Whse Putaway Register Impl ori" implements "Msg Interface ori
     end;
 
     procedure GetDescription() Description: Text[250]
+    var
+        DescriptionLbl: Label 'Registers a warehouse put-away, the same as the Register Put-away action, and places the goods in their bins.', Comment = 'is-IS=Skráir vöruhúsafrágang, eins og aðgerðin Skrá frágang, og setur vörurnar í hólf sín.';
     begin
-        exit('Registers a Warehouse Put-away (BC codeunit 7307 "Whse.-Activity-Register").');
+        exit(DescriptionLbl);
     end;
 
     procedure GetKeywords(): Text
@@ -93,12 +95,12 @@ codeunit 10078417 "Whse Putaway Register Impl ori" implements "Msg Interface ori
 
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
-        ContractMgt: Codeunit "Msg Contract Mgt ori";
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.AddLookupErrors(Errors, 'Warehouse Activity Header');
+        Parts.AddLookupErrors(Errors, 'Warehouse Activity Header', 'systemId, recordSystemId, id, putawayNo, no');
         Parts.AddPermissionError(Errors, 'BIFROST WhsePost ori');
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, 'The Warehouse Put-away has no lines or the identified activity is not a Put-away.', 'Send a Warehouse Put-away with lines.'));
+        Parts.AddNextStepError(Errors, "Bifrost Error Code ori"::PreconditionFailed, 'The identified warehouse activity is not a put-away.', NotActivityNextStep());
+        Parts.AddNextStepError(Errors, "Bifrost Error Code ori"::PreconditionFailed, 'The warehouse put-away has no lines.', NoLinesNextStep());
         Parts.AddBusinessCentralError(Errors, 'invalid quantities or warehouse activity state');
         exit(true);
     end;
@@ -188,7 +190,7 @@ codeunit 10078417 "Whse Putaway Register Impl ori" implements "Msg Interface ori
         WarehouseActivityLine.SetRange("Activity Type", WarehouseActivityLine."Activity Type"::"Put-away");
         WarehouseActivityLine.SetRange("No.", PutawayNoBeforeRun);
         if WarehouseActivityLine.IsEmpty() then begin
-            Argument.RespondWithError(StrSubstNo(NoLinesErr, PutawayNoBeforeRun));
+            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(NoLinesErr, PutawayNoBeforeRun), '', '', '', NoLinesNextStep());
             exit;
         end;
         LinesInPutawayBeforeRun := WarehouseActivityLine.Count();
@@ -205,7 +207,7 @@ codeunit 10078417 "Whse Putaway Register Impl ori" implements "Msg Interface ori
             Codeunit.Run(Codeunit::"Whse.-Activity-Register", WarehouseActivityLine)
         else
             if not Codeunit.Run(Codeunit::"Whse.-Activity-Register", WarehouseActivityLine) then begin
-                Argument.RespondWithError(GetLastErrorText());
+                Argument.RespondWithError("Bifrost Error Code ori"::BusinessCentralError, GetLastErrorText(), '', '', '', '');
                 exit;
             end;
 
@@ -248,7 +250,7 @@ codeunit 10078417 "Whse Putaway Register Impl ori" implements "Msg Interface ori
             exit(false);
         WarehouseActivityHeader.GetBySystemId(FoundSystemId);
         if WarehouseActivityHeader.Type <> WarehouseActivityHeader.Type::"Put-away" then begin
-            Argument.RespondWithError(StrSubstNo(NotPutawayErr, WarehouseActivityHeader."No."));
+            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(NotPutawayErr, WarehouseActivityHeader."No."), '', '', '', NotActivityNextStep());
             exit(false);
         end;
         exit(true);
@@ -288,5 +290,19 @@ codeunit 10078417 "Whse Putaway Register Impl ori" implements "Msg Interface ori
         if SourcePostedReceiptNo <> '' then
             exit(StrSubstNo(FromReceiptMsg, PutawayNo, LinesRegistered, SourcePostedReceiptNo));
         exit(StrSubstNo(StandaloneMsg, PutawayNo, LinesRegistered));
+    end;
+
+    local procedure NoLinesNextStep(): Text
+    var
+        NextStepLbl: Label 'Send a warehouse put-away that has lines.', Comment = 'is-IS=Sendu vöruhúsafrágang sem hefur línur.';
+    begin
+        exit(NextStepLbl);
+    end;
+
+    local procedure NotActivityNextStep(): Text
+    var
+        NextStepLbl: Label 'Send the number or SystemId of a warehouse put-away.', Comment = 'is-IS=Sendu númer eða SystemId vöruhúsafrágangs.';
+    begin
+        exit(NextStepLbl);
     end;
 }

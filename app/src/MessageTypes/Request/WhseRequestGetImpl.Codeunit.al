@@ -261,14 +261,12 @@ codeunit 10078435 "Whse Request Get Impl ori" implements "Msg Interface ori", "M
         Context.ReadDate(RequestJson, 'expectedReceiptDateTo', Argument, ReceiptTo, Present, 'expectedReceiptDateTo');
         Context.ReadDate(RequestJson, 'shipmentDateFrom', Argument, ShipmentFrom, Present, 'shipmentDateFrom');
         Context.ReadDate(RequestJson, 'shipmentDateTo', Argument, ShipmentTo, Present, 'shipmentDateTo');
-        if not Argument.HasCollectedErrors() then
-            ApplyFilters(Argument, WarehouseRequest, LocationCode, TypeText, SourceDocumentText, SourceNo, StatusText, ReceiptFrom, ReceiptTo, ShipmentFrom, ShipmentTo);
-        if Argument.HasCollectedErrors() then begin
-            Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, ProblemsLbl);
-            exit;
-        end;
-        Argument.EvaluateSkipTake(RequestJson, Skip, Take);
-        if not LocationExists(LocationCode, Argument) then
+        // Independent problems are collected and answered together: a bad date does not hide a bad value, an unknown
+        // location or a bad skip or take.
+        ApplyFilters(Argument, WarehouseRequest, LocationCode, TypeText, SourceDocumentText, SourceNo, StatusText, ReceiptFrom, ReceiptTo, ShipmentFrom, ShipmentTo);
+        if LocationCode <> '' then
+            CheckLocationExists(LocationCode, Argument);
+        if not Context.RespondOrReadPaging(RequestJson, Argument, ProblemsLbl, Skip, Take) then
             exit;
         WritePage(Argument, WarehouseRequest, Skip, Take);
     end;
@@ -377,17 +375,15 @@ codeunit 10078435 "Whse Request Get Impl ori" implements "Msg Interface ori", "M
         Result.Add('externalDocumentNo', WarehouseRequest."External Document No.");
     end;
 
-    local procedure LocationExists(LocationCode: Code[10]; var Argument: Record "Message Argument ori"): Boolean
+    local procedure CheckLocationExists(LocationCode: Code[10]; var Argument: Record "Message Argument ori")
     var
         Location: Record Location;
         NotFoundLbl: Label 'Location %1 was not found.', Comment = '%1 = location code, is-IS=Staðsetning %1 fannst ekki.';
         NotFoundNextStepLbl: Label 'Check the location code and try again.', Comment = 'is-IS=Athugaðu kóða staðsetningar og reyndu aftur.';
     begin
         Location.SetLoadFields(Code);
-        if Location.Get(LocationCode) then
-            exit(true);
-        Argument.RespondWithError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(NotFoundLbl, LocationCode), 'locationCode', LocationCode, '', NotFoundNextStepLbl);
-        exit(false);
+        if not Location.Get(LocationCode) then
+            Argument.AddError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(NotFoundLbl, LocationCode), 'locationCode', LocationCode, '', NotFoundNextStepLbl);
     end;
 
     local procedure ResolveLocationCode(RequestJson: JsonObject; var Argument: Record "Message Argument ori"; var LocationCode: Code[10])

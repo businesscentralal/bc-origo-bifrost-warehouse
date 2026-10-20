@@ -20,6 +20,7 @@ codeunit 97042 "Whse Ship Release Tests ori"
     var
         Assert: Codeunit "Library Assert";
         ShipmentHelper: Codeunit "Whse Shipment Test Helper ori";
+        ReceiptHelper: Codeunit "Whse Receipt Test Helper ori";
 
     /// <summary>AC01: releasing an open shipment with lines answers Released and changes the status.</summary>
     [Test]
@@ -230,6 +231,90 @@ codeunit 97042 "Whse Ship Release Tests ori"
         ReopenImpl.ExecuteBifrostTask(TempArgument);
         ResponseJson := TempArgument.GetResponseJson();
         Assert.AreEqual('PermissionDenied', TextValue(ResponseJson, 'code'), 'Reopen denial must use PermissionDenied.');
+    end;
+
+    /// <summary>#67 item 1: every identifier sent must find the shipment; a stray one is RecordNotFound, not Success (1033).</summary>
+    [Test]
+    procedure Reopen_StrayIdentifier_IsRecordNotFound()
+    begin
+        // Issue #67, AC1 (item 1) | Time: independent of WorkDate | Risk: none.
+        AssertStrayIdentifierRefused(1033, 'was not found');
+    end;
+
+    /// <summary>#67 item 1: the same refusal answers in Icelandic (1039).</summary>
+    [Test]
+    procedure Reopen_StrayIdentifier_IsRecordNotFoundInIcelandic()
+    begin
+        // Issue #67, AC1 (item 1) | Time: independent of WorkDate | Risk: none.
+        AssertStrayIdentifierRefused(1039, 'fannst ekki');
+    end;
+
+    /// <summary>#67 item 3: an unknown key and an unknown shipment are answered together as MultipleErrors.</summary>
+    [Test]
+    procedure Release_UnknownKeyAndUnknownShipment_AreCollected()
+    var
+        ResponseJson: JsonObject;
+    begin
+        // Issue #67, AC1 (item 3) | Time: independent of WorkDate | Risk: none.
+        Run(Enum::"Message Type ori"::"Warehouse.Shipment.Release", '{"shipmentNo":"NO-SUCH-SHIP","note":"x"}', ResponseJson);
+        Assert.AreEqual('MultipleErrors', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('UnknownParameter,RecordNotFound', ErrorCodes(ResponseJson), 'Both problems are listed in order.');
+
+        RunIn(1039, Enum::"Message Type ori"::"Warehouse.Shipment.Release", '{"shipmentNo":"NO-SUCH-SHIP","note":"x"}', '', ResponseJson);
+        Assert.AreEqual('MultipleErrors', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('UnknownParameter,RecordNotFound', ErrorCodes(ResponseJson), 'Both problems are listed in Icelandic too.');
+        Assert.AreEqual('Beiðnin hefur nokkur vandamál; errors telur hvert þeirra upp.', TextValue(ResponseJson, 'error'), 'The summary is Icelandic.');
+    end;
+
+    local procedure AssertStrayIdentifierRefused(LanguageId: Integer; NotFoundText: Text)
+    var
+        ShipmentHeader: Record "Warehouse Shipment Header";
+        ResponseJson: JsonObject;
+        ShipmentNo: Code[20];
+        StraySystemId: Text;
+    begin
+        ShipmentNo := CreateShipment();
+        ShipmentHeader.Get(ShipmentNo);
+        StraySystemId := Format(CreateGuid(), 0, 4);
+        // [WHEN] A valid shipmentNo comes with a systemId that matches nothing.
+        RunIn(LanguageId, Enum::"Message Type ori"::"Warehouse.Shipment.Reopen", '{"shipmentNo":"' + ShipmentNo + '","systemId":"' + StraySystemId + '"}', '', ResponseJson);
+        // [THEN] The stray identifier is refused and named.
+        Assert.AreEqual('Error', TextValue(ResponseJson, 'status'), ResponseText(ResponseJson));
+        Assert.AreEqual('RecordNotFound', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('systemId', TextValue(ResponseJson, 'parameter'), 'The stray key is named.');
+        Assert.IsTrue(TextValue(ResponseJson, 'error').Contains(NotFoundText), 'The error is in the caller language: ' + ResponseText(ResponseJson));
+        Assert.IsTrue(TextValue(ResponseJson, 'nextStep').Contains('Data.Records.Get'), 'The next step names Data.Records.Get.');
+
+        // [WHEN] A valid SystemId as the subject comes with a number that matches nothing.
+        RunIn(LanguageId, Enum::"Message Type ori"::"Warehouse.Shipment.Release", '{"no":"NO-SUCH-SHIP"}', Format(ShipmentHeader.SystemId, 0, 4), ResponseJson);
+        Assert.AreEqual('RecordNotFound', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('no', TextValue(ResponseJson, 'parameter'), 'The stray number is named.');
+
+        // [THEN] A single valid identifier keeps today's answer.
+        RunIn(LanguageId, Enum::"Message Type ori"::"Warehouse.Shipment.Reopen", '{"shipmentNo":"' + ShipmentNo + '","systemId":"' + Format(ShipmentHeader.SystemId, 0, 4) + '"}', '', ResponseJson);
+        Assert.AreEqual('Success', TextValue(ResponseJson, 'status'), ResponseText(ResponseJson));
+        AssertStatus(ShipmentNo, false);
+    end;
+
+    local procedure RunIn(LanguageId: Integer; MessageType: Enum "Message Type ori"; RequestText: Text; Subject: Text; var ResponseJson: JsonObject)
+    begin
+        Assert.IsTrue(ReceiptHelper.RunMessageInLanguage(MessageType, Subject, RequestText, ResponseJson, LanguageId), 'The response should be JSON.');
+    end;
+
+    local procedure ErrorCodes(ResponseJson: JsonObject): Text
+    var
+        Token: JsonToken;
+        Entry: JsonToken;
+        Codes: TextBuilder;
+    begin
+        if not ResponseJson.Get('errors', Token) then
+            exit('');
+        foreach Entry in Token.AsArray() do begin
+            if Codes.Length() > 0 then
+                Codes.Append(',');
+            Codes.Append(TextValue(Entry.AsObject(), 'code'));
+        end;
+        exit(Codes.ToText());
     end;
 
     local procedure CreateShipment(): Code[20]

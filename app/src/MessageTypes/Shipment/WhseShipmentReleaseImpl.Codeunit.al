@@ -253,13 +253,14 @@ codeunit 10078433 "Whse Shipment Release Impl ori" implements "Msg Interface ori
         Argument.AssertVersion1();
         if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,shipmentNo=no,no=no', RequestJson) then
             exit;
+        // An unknown key is answered together with the lookup problems, so it does not hide them.
         RefuseUnknownKeys(RequestJson, Argument);
+        if not WhseRecordLookup.FindRecord(Argument, Database::"Warehouse Shipment Header", 'guid|no', 'systemId=guid,recordSystemId=guid,id=guid,shipmentNo=no,no=no', FoundSystemId) then
+            exit;
         if Argument.HasCollectedErrors() then begin
             Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, ProblemsLbl);
             exit;
         end;
-        if not WhseRecordLookup.FindRecord(Argument, Database::"Warehouse Shipment Header", 'guid|no', 'systemId=guid,recordSystemId=guid,id=guid,shipmentNo=no,no=no', FoundSystemId) then
-            exit;
         ShipmentHeader.GetBySystemId(FoundSystemId);
         if ShipmentHeader.Status = ShipmentHeader.Status::Released then begin
             WriteResponse(Argument, ShipmentHeader, false);

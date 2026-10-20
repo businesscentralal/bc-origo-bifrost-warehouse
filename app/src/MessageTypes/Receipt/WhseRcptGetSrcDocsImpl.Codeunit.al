@@ -302,11 +302,11 @@ codeunit 10078431 "Whse Rcpt GetSrcDocs Impl ori" implements "Msg Interface ori"
         Argument.AssertVersion1();
         if not WhseRecordLookup.TryReadIdentifiers(Argument, '', RequestJson) then
             exit;
+        // Independent problems are collected and answered together: an unknown key, a missing or unknown target and a
+        // bad filter value do not hide one another. Only the check of the warehouse requests needs a valid target.
         RefuseUnknownKeys(RequestJson, Argument);
-        if not Argument.HasCollectedErrors() then
-            ResolveTarget(RequestJson, Argument, ReceiptHeader, LocationCode, HasReceipt);
-        if not Argument.HasCollectedErrors() then
-            BuildRequestFilters(RequestJson, Argument, WarehouseRequest, LocationCode, SourceNos);
+        ResolveTarget(RequestJson, Argument, ReceiptHeader, LocationCode, HasReceipt);
+        BuildRequestFilters(RequestJson, Argument, WarehouseRequest, LocationCode, SourceNos);
         if not Argument.HasCollectedErrors() then
             CheckRequests(Argument, WarehouseRequest, LocationCode, SourceNos);
         if Argument.HasCollectedErrors() then begin
@@ -350,6 +350,9 @@ codeunit 10078431 "Whse Rcpt GetSrcDocs Impl ori" implements "Msg Interface ori"
         NumberPresent: Boolean;
         SystemPresent: Boolean;
         LocationPresent: Boolean;
+        NumberFormatOk: Boolean;
+        SystemFormatOk: Boolean;
+        LocationFormatOk: Boolean;
         MissingLbl: Label 'receiptNo or locationCode is required.', Comment = 'is-IS=receiptNo eða locationCode er nauðsynlegt.';
         MissingNextStepLbl: Label 'Send receiptNo for an existing receipt or locationCode for a new one.', Comment = 'is-IS=Sendu receiptNo fyrir fyrirliggjandi móttöku eða locationCode fyrir nýja.';
         FormatLbl: Label 'systemId is not a GUID.', Comment = 'is-IS=systemId er ekki GUID.';
@@ -368,11 +371,11 @@ codeunit 10078431 "Whse Rcpt GetSrcDocs Impl ori" implements "Msg Interface ori"
         HasReceipt := false;
         Clear(LocationCode);
         SubjectText := DelChr(Argument.Subject, '<>', ' ');
-        if not Context.ReadText(RequestJson, 'receiptNo', MaxStrLen(ReceiptHeader."No."), Argument, ReceiptNo, NumberPresent, 'receiptNo') then
-            exit;
-        if not Context.ReadText(RequestJson, 'systemId', 50, Argument, SystemIdText, SystemPresent, 'systemId') then
-            exit;
-        if not Context.ReadText(RequestJson, 'locationCode', MaxStrLen(LocationCode), Argument, LocationText, LocationPresent, 'locationCode') then
+        // All three are read before stopping, so one value of the wrong type does not hide another.
+        NumberFormatOk := Context.ReadText(RequestJson, 'receiptNo', MaxStrLen(ReceiptHeader."No."), Argument, ReceiptNo, NumberPresent, 'receiptNo');
+        SystemFormatOk := Context.ReadText(RequestJson, 'systemId', 50, Argument, SystemIdText, SystemPresent, 'systemId');
+        LocationFormatOk := Context.ReadText(RequestJson, 'locationCode', MaxStrLen(LocationCode), Argument, LocationText, LocationPresent, 'locationCode');
+        if not (NumberFormatOk and SystemFormatOk and LocationFormatOk) then
             exit;
         if SubjectText <> '' then
             if Evaluate(Parsed, SubjectText) then begin

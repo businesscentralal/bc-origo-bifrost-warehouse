@@ -131,15 +131,9 @@ codeunit 10078407 "Whse Shipment Post Impl ori" implements "Msg Interface ori", 
 
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
-        ContractMgt: Codeunit "Msg Contract Mgt ori";
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.AddLookupErrors(Errors, 'Warehouse Shipment Header');
-        Parts.AddPermissionError(Errors, 'BIFROST WhsePost ori');
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, 'The Warehouse Shipment has no lines, every line would ship zero, or qtyToShip is above the picked quantity at a location that requires pick.', 'Set a quantity above zero on at least one line, or register the pick first.'));
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidLine, 'A lineNo is not on the shipment, or qtyToShip is negative or above the outstanding quantity.', 'Read the lines first, and read the outstanding quantity on the line and lower it.'));
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::UnknownParameter, 'The request or a line contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.'));
-        Parts.AddBusinessCentralError(Errors, 'invalid quantities, posting setup or source-document state');
+        Parts.AddDocumentPostErrors(Errors, 'Warehouse Shipment Header', 'systemId, recordSystemId, id, shipmentNo, no', 'qtyToShip', true);
         exit(true);
     end;
 
@@ -241,17 +235,18 @@ codeunit 10078407 "Whse Shipment Post Impl ori" implements "Msg Interface ori", 
             if not WhsePostingGate.AssertCanInvoice(Argument) then
                 exit;
 
+        // An unknown key is answered together with the lookup and line problems, so it does not hide them.
         RefuseUnknownKeys(RequestJson, Argument);
-        if Argument.HasCollectedErrors() then begin
-            Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, ProblemsLbl);
-            exit;
-        end;
 
         if not FindWhseShipmentHeader(Argument, WhseShipmentHeader) then
             exit;
 
         WhseShipmentLine.SetRange("No.", WhseShipmentHeader."No.");
         if WhseShipmentLine.IsEmpty() then begin
+            if Argument.HasCollectedErrors() then begin
+                Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, ProblemsLbl);
+                exit;
+            end;
             Argument.RespondWithError(StrSubstNo(NoLinesToPostErr, WhseShipmentHeader."No."));
             exit;
         end;

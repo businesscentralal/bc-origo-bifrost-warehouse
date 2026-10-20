@@ -132,6 +132,77 @@ codeunit 97043 "Whse Request Get Tests ori"
         Assert.AreEqual('Ask an administrator to assign BIFROST Whse - Read ori.', TextValue(ResponseJson, 'nextStep'), 'The next step must name the read permission set.');
     end;
 
+    /// <summary>#67 item 2: an unambiguous local date gets the value to resend; anything else keeps the example (1033 and 1039).</summary>
+    [Test]
+    procedure Get_DateNextStep_GivesTheValueToResend()
+    var
+        Location: Record Location;
+        Item: Record Item;
+        ResponseJson: JsonObject;
+    begin
+        // Issue #67, AC1 (item 2) | Time: fixed dates in the request | Risk: none.
+        ReceiptHelper.SetupLocationAndItem(Location, Item, 0);
+
+        Run('{"locationCode":"' + Location.Code + '","shipmentDateFrom":"20.10.2026"}', '', ResponseJson);
+        Assert.AreEqual('InvalidParameterFormat', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('Resend shipmentDateFrom as 2026-10-20.', TextValue(ResponseJson, 'nextStep'), 'The value to resend.');
+
+        Run('{"locationCode":"' + Location.Code + '","shipmentDateFrom":"5-1-2026"}', '', ResponseJson);
+        Assert.AreEqual('Resend shipmentDateFrom as 2026-01-05.', TextValue(ResponseJson, 'nextStep'), 'A dash date with the year last is day-month-year.');
+
+        Run('{"locationCode":"' + Location.Code + '","shipmentDateFrom":"10/20/2026"}', '', ResponseJson);
+        Assert.AreEqual('Send the date as text, for example 2026-10-19.', TextValue(ResponseJson, 'nextStep'), 'An ambiguous form keeps the example.');
+
+        Run('{"locationCode":"' + Location.Code + '","shipmentDateFrom":"31.02.2026"}', '', ResponseJson);
+        Assert.AreEqual('Send the date as text, for example 2026-10-19.', TextValue(ResponseJson, 'nextStep'), 'A date that does not exist keeps the example.');
+
+        Assert.IsTrue(ReceiptHelper.RunMessageInLanguage(Enum::"Message Type ori"::"Warehouse.Request.Get", '', '{"locationCode":"' + Location.Code + '","shipmentDateFrom":"20.10.2026"}', ResponseJson, 1039), 'The response should be JSON.');
+        Assert.AreEqual('InvalidParameterFormat', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('Sendu shipmentDateFrom aftur sem 2026-10-20.', TextValue(ResponseJson, 'nextStep'), 'The value to resend, in Icelandic.');
+    end;
+
+    /// <summary>#67 item 3: a bad date, a bad take and an unknown location are answered together (1033).</summary>
+    [Test]
+    procedure Get_IndependentProblems_AreCollected()
+    begin
+        // Issue #67, AC1 (item 3) | Time: fixed dates in the request | Risk: none.
+        AssertIndependentProblems(1033, 'The request has invalid values.');
+    end;
+
+    /// <summary>#67 item 3: the same problems are answered together in Icelandic (1039).</summary>
+    [Test]
+    procedure Get_IndependentProblems_AreCollectedInIcelandic()
+    begin
+        // Issue #67, AC1 (item 3) | Time: fixed dates in the request | Risk: none.
+        AssertIndependentProblems(1039, 'Beiðnin hefur ógild gildi.');
+    end;
+
+    local procedure AssertIndependentProblems(LanguageId: Integer; Summary: Text)
+    var
+        ResponseJson: JsonObject;
+    begin
+        Assert.IsTrue(ReceiptHelper.RunMessageInLanguage(Enum::"Message Type ori"::"Warehouse.Request.Get", '', '{"locationCode":"NOLOC-X","shipmentDateFrom":"20.10.2026","take":-1}', ResponseJson, LanguageId), 'The response should be JSON.');
+        Assert.AreEqual('MultipleErrors', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual(Summary, TextValue(ResponseJson, 'error'), 'The summary is in the caller language.');
+        Assert.AreEqual('shipmentDateFrom:InvalidParameterFormat,locationCode:RecordNotFound,take:InvalidParameter', ErrorList(ResponseJson), 'Every problem is listed.');
+    end;
+
+    local procedure ErrorList(ResponseJson: JsonObject): Text
+    var
+        Token: JsonToken;
+        Entry: JsonToken;
+        Entries: TextBuilder;
+    begin
+        if not ResponseJson.Get('errors', Token) then
+            exit('');
+        foreach Entry in Token.AsArray() do begin
+            if Entries.Length() > 0 then
+                Entries.Append(',');
+            Entries.Append(TextValue(Entry.AsObject(), 'parameter') + ':' + TextValue(Entry.AsObject(), 'code'));
+        end;
+        exit(Entries.ToText());
+    end;
+
     local procedure Run(RequestText: Text; Subject: Text; var ResponseJson: JsonObject)
     begin
         Assert.IsTrue(ReceiptHelper.RunMessage(Enum::"Message Type ori"::"Warehouse.Request.Get", Subject, RequestText, ResponseJson), 'The response should be JSON.');

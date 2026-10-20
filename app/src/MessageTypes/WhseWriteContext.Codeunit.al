@@ -275,7 +275,6 @@ codeunit 10078430 "Whse Write Context ori"
         ReceivedDate: Text;
         TextPresent: Boolean;
         FormatLbl: Label 'Parameter %1 must be a date in the form YYYY-MM-DD.', Comment = '%1 = parameter, is-IS=Færibreytan %1 verður að vera dagsetning á forminu YYYY-MM-DD.';
-        FormatNextStepLbl: Label 'Send the date as text, for example 2026-10-19.', Comment = 'is-IS=Sendu dagsetninguna sem texta, til dæmis 2026-10-19.';
     begin
         Clear(Value);
         Present := false;
@@ -284,7 +283,7 @@ codeunit 10078430 "Whse Write Context ori"
         if not TextPresent then
             exit(true);
         if not Evaluate(Value, ReceivedDate, 9) then begin
-            Argument.AddError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(FormatLbl, KeyName), ParameterName, ReceivedDate, 'date', FormatNextStepLbl);
+            Argument.AddError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(FormatLbl, KeyName), ParameterName, ReceivedDate, 'date', DateNextStep(ParameterName, ReceivedDate));
             exit(false);
         end;
         Present := true;
@@ -408,6 +407,137 @@ codeunit 10078430 "Whse Write Context ori"
         if Value = 0D then
             exit('');
         exit(Format(Value, 0, 9));
+    end;
+
+    /// <summary>
+    /// Ends the validation of a paged read. With no problem collected, skip and take are read the Foundation way
+    /// (EvaluateSkipTake, so a single bad paging value keeps Foundation's answer) and the call goes on. With problems
+    /// already collected, a bad skip or take is added to them and every problem is answered together, so one bad value
+    /// does not hide another.
+    /// </summary>
+    /// <param name="RequestJson">The request.</param>
+    /// <param name="Argument">Holds the collected problems and receives the answer.</param>
+    /// <param name="SummaryMessage">The top-level text when several problems are answered.</param>
+    /// <param name="Skip">Receives skip.</param>
+    /// <param name="Take">Receives take.</param>
+    /// <returns>True when the request is valid and the read can run; false when the error answer is set.</returns>
+    internal procedure RespondOrReadPaging(RequestJson: JsonObject; var Argument: Record "Message Argument ori"; SummaryMessage: Text; var Skip: Integer; var Take: Integer): Boolean
+    begin
+        if not Argument.HasCollectedErrors() then begin
+            Argument.EvaluateSkipTake(RequestJson, Skip, Take);
+            exit(true);
+        end;
+        AddPagingProblem(RequestJson, 'skip', Argument);
+        AddPagingProblem(RequestJson, 'take', Argument);
+        Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, SummaryMessage);
+        exit(false);
+    end;
+
+    local procedure AddPagingProblem(RequestJson: JsonObject; KeyName: Text; var Argument: Record "Message Argument ori")
+    var
+        Token: JsonToken;
+        Written: Text;
+        Number: Integer;
+        FormatLbl: Label 'Parameter %1 must be an integer.', Comment = '%1 = parameter, is-IS=Færibreytan %1 verður að vera heiltala.';
+        NegativeLbl: Label 'Parameter %1 must be zero or greater.', Comment = '%1 = parameter, is-IS=Færibreytan %1 verður að vera núll eða stærri.';
+        PagingNextStepLbl: Label 'Send a whole number of zero or more, or leave it out.', Comment = 'is-IS=Sendu heiltölu sem er núll eða stærri, eða slepptu henni.';
+        ZeroOrGreaterLbl: Label 'zero or greater', Comment = 'is-IS=núll eða stærra';
+    begin
+        if not RequestJson.Get(KeyName, Token) then
+            exit;
+        if not Token.IsValue() then begin
+            Argument.AddError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(FormatLbl, KeyName), KeyName, '', 'integer', PagingNextStepLbl);
+            exit;
+        end;
+        if Token.AsValue().IsNull() then
+            exit;
+        Token.WriteTo(Written);
+        // Foundation reads a JSON number or a string of digits.
+        Written := DelChr(Written, '<>', '"');
+        if not IsDigits(DelChr(Written, '<', '-')) or not Evaluate(Number, Written, 9) then begin
+            Argument.AddError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(FormatLbl, KeyName), KeyName, CopyStr(Written, 1, 80), 'integer', PagingNextStepLbl);
+            exit;
+        end;
+        if Number < 0 then
+            Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(NegativeLbl, KeyName), KeyName, Format(Number, 0, 9), ZeroOrGreaterLbl, PagingNextStepLbl);
+    end;
+
+    /// <summary>
+    /// The nextStep for a date that cannot be read. An unambiguous local day-month-year date such as 20.10.2026 or
+    /// 20-10-2026 gets the value to send back ("Resend expectedReceiptDateFrom as 2026-10-20."), the same rule as
+    /// Foundation's shared conventions; anything else gets the example of the format.
+    /// </summary>
+    /// <param name="ParameterName">Parameter path the date was sent in.</param>
+    /// <param name="Received">The text received.</param>
+    /// <returns>The nextStep text.</returns>
+    internal procedure DateNextStep(ParameterName: Text; Received: Text): Text
+    var
+        FormatNextStepLbl: Label 'Send the date as text, for example 2026-10-19.', Comment = 'is-IS=Sendu dagsetninguna sem texta, til dæmis 2026-10-19.';
+    begin
+        exit(DateNextStep(ParameterName, Received, FormatNextStepLbl));
+    end;
+
+    /// <summary>
+    /// The nextStep for a date that cannot be read, with the caller's own text for a value that is not an
+    /// unambiguous local date. See DateNextStep(ParameterName, Received).
+    /// </summary>
+    /// <param name="ParameterName">Parameter path the date was sent in.</param>
+    /// <param name="Received">The text received.</param>
+    /// <param name="FallbackNextStep">The nextStep when no value can be suggested.</param>
+    /// <returns>The nextStep text.</returns>
+    internal procedure DateNextStep(ParameterName: Text; Received: Text; FallbackNextStep: Text): Text
+    var
+        IsoDate: Text;
+        ResendLbl: Label 'Resend %1 as %2.', Comment = '%1 = parameter, %2 = suggested value, is-IS=Sendu %1 aftur sem %2.';
+    begin
+        if SuggestIsoDate(Received, '.', IsoDate) then
+            exit(StrSubstNo(ResendLbl, ParameterName, IsoDate));
+        if SuggestIsoDate(Received, '-', IsoDate) then
+            exit(StrSubstNo(ResendLbl, ParameterName, IsoDate));
+        exit(FallbackNextStep);
+    end;
+
+    local procedure SuggestIsoDate(Received: Text; Separator: Text; var IsoDate: Text): Boolean
+    var
+        Parts: List of [Text];
+        Day: Integer;
+        Month: Integer;
+        Year: Integer;
+    begin
+        IsoDate := '';
+        if not Received.Contains(Separator) then
+            exit(false);
+        Parts := Received.Split(Separator);
+        if Parts.Count() <> 3 then
+            exit(false);
+        // 2026-10-20 is already the ISO form; a dash date is day-month-year only with the year last.
+        if StrLen(Parts.Get(3)) <> 4 then
+            exit(false);
+        if (StrLen(Parts.Get(1)) > 2) or (StrLen(Parts.Get(2)) > 2) then
+            exit(false);
+        if not (IsDigits(Parts.Get(1)) and IsDigits(Parts.Get(2)) and IsDigits(Parts.Get(3))) then
+            exit(false);
+        Evaluate(Day, Parts.Get(1), 9);
+        Evaluate(Month, Parts.Get(2), 9);
+        Evaluate(Year, Parts.Get(3), 9);
+        if (Year < 1) or (Month < 1) or (Month > 12) or (Day < 1) then
+            exit(false);
+        if Day > Date2DMY(CalcDate('<CM>', DMY2Date(1, Month, Year)), 1) then
+            exit(false);
+        IsoDate := Format(DMY2Date(Day, Month, Year), 0, 9);
+        exit(true);
+    end;
+
+    local procedure IsDigits(Value: Text): Boolean
+    var
+        Index: Integer;
+    begin
+        if Value = '' then
+            exit(false);
+        for Index := 1 to StrLen(Value) do
+            if not (Value[Index] in ['0' .. '9']) then
+                exit(false);
+        exit(true);
     end;
 
     local procedure FormatNextStep(): Text

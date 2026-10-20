@@ -131,7 +131,7 @@ codeunit 10078467 "Whse Msg Values ori"
         if not TextPresent then
             exit(true);
         if not Evaluate(Value, ReceivedText, 9) then begin
-            Argument.AddError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(FormatLbl, KeyName), ParameterName, ReceivedText, 'YYYY-MM-DD', FormatNextStepLbl);
+            Argument.AddError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(FormatLbl, KeyName), ParameterName, ReceivedText, 'YYYY-MM-DD', Context.DateNextStep(ParameterName, ReceivedText, FormatNextStepLbl));
             exit(false);
         end;
         Present := true;

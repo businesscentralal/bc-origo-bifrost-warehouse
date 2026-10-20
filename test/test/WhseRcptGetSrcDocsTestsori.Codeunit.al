@@ -232,6 +232,48 @@ codeunit 97040 "Whse Rcpt GetSrcDocs Tests ori"
         Assert.AreEqual('Ask an administrator to assign BIFROST Whse - Full ori.', TextValue(ResponseJson, 'nextStep'), 'The next step must name the full permission set.');
     end;
 
+    /// <summary>#67 item 3: a missing key no longer hides the other bad values; all are answered together (1033).</summary>
+    [Test]
+    procedure IndependentProblems_AreCollected()
+    begin
+        // Issue #67, AC1 (item 3) | Time: fixed dates in the request | Risk: none.
+        AssertIndependentProblems(1033, 'Nothing was added.');
+    end;
+
+    /// <summary>#67 item 3: the same problems are answered together in Icelandic (1039).</summary>
+    [Test]
+    procedure IndependentProblems_AreCollectedInIcelandic()
+    begin
+        // Issue #67, AC1 (item 3) | Time: fixed dates in the request | Risk: none.
+        AssertIndependentProblems(1039, 'Engu var bætt við.');
+    end;
+
+    local procedure AssertIndependentProblems(LanguageId: Integer; Summary: Text)
+    var
+        ResponseJson: JsonObject;
+    begin
+        Assert.IsTrue(ReceiptHelper.RunMessageInLanguage(Enum::"Message Type ori"::"Warehouse.Receipt.GetSourceDocuments", '', '{"sourceDocument":"Sales Order","sourceNos":"PO1","expectedReceiptDateFrom":"20.10.2026"}', ResponseJson, LanguageId), 'The response should be JSON.');
+        Assert.AreEqual('MultipleErrors', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual(Summary, TextValue(ResponseJson, 'error'), 'The summary is in the caller language.');
+        Assert.AreEqual('receiptNo:MissingParameter,sourceNos:InvalidParameterFormat,expectedReceiptDateFrom:InvalidParameterFormat,sourceDocument:InvalidParameter', ErrorList(ResponseJson), 'Every problem is listed.');
+    end;
+
+    local procedure ErrorList(ResponseJson: JsonObject): Text
+    var
+        Token: JsonToken;
+        Entry: JsonToken;
+        Entries: TextBuilder;
+    begin
+        if not ResponseJson.Get('errors', Token) then
+            exit('');
+        foreach Entry in Token.AsArray() do begin
+            if Entries.Length() > 0 then
+                Entries.Append(',');
+            Entries.Append(TextValue(Entry.AsObject(), 'parameter') + ':' + TextValue(Entry.AsObject(), 'code'));
+        end;
+        exit(Entries.ToText());
+    end;
+
     local procedure AssertNoReceiptAt(LocationCode: Code[10])
     var
         ReceiptHeader: Record "Warehouse Receipt Header";

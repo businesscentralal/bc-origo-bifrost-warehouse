@@ -30,7 +30,7 @@ codeunit 97047 "Whse DocFlow Help Tests ori"
         AssertHelp("Message Type ori"::"Warehouse.Shipment.Reopen", 'write', false, 'Reopens a released warehouse shipment', 'Opnar útgefna vöruhúsaafhendingu');
         AssertHelp("Message Type ori"::"Warehouse.Request.Get", 'read', true, 'warehouse requests', 'vöruhúsabeiðnir');
         AssertHelp("Message Type ori"::"Warehouse.PostedDocument.Get", 'read', true, 'posted warehouse receipts', 'bókaðar vöruhúsamóttökur');
-        AssertHelp("Message Type ori"::"Warehouse.RegisteredActivity.Get", 'read', true, 'registered picks', 'skráðar tínslur');
+        AssertHelp("Message Type ori"::"Warehouse.RegisteredActivity.Get", 'read', true, 'registered picks', 'skráðar tínslur, frágang eða tilfærslur');
         AssertHelp("Message Type ori"::"Warehouse.Receipt.Post", 'irreversible', true, 'commits the posting', 'staðfestir bókunina');
         AssertHelp("Message Type ori"::"Warehouse.Shipment.Post", 'irreversible', true, 'commits the posting', 'staðfestir bókunina');
     end;
@@ -116,6 +116,61 @@ codeunit 97047 "Whse DocFlow Help Tests ori"
         GlobalLanguage(OriginalLanguage);
         Assert.IsTrue(Overview.Contains(IcelandicPart), MessageTypeName(MessageType) + ' is-IS overview: ' + Overview);
         AssertNoObjectNames(MessageType, Overview);
+    end;
+
+    /// <summary>#67 item 4: every errors entry of Receipt.Post and Shipment.Post carries a nextStep, and InvalidParameterFormat names wrong-typed line values.</summary>
+    [Test]
+    procedure PostErrorsChapters_CarryNextSteps()
+    begin
+        // Issue #67, AC2 (item 4) | Time: independent of WorkDate | Risk: none.
+        AssertEveryEntryHasNextStep("Message Type ori"::"Warehouse.Receipt.Post", 'qtyToReceive');
+        AssertEveryEntryHasNextStep("Message Type ori"::"Warehouse.Shipment.Post", 'qtyToShip');
+        AssertErrorEntry("Message Type ori"::"Warehouse.Receipt.Post", 'RecordNotFound', 'Check the number with Data.Records.Get on table Warehouse Receipt Header.');
+        AssertErrorEntry("Message Type ori"::"Warehouse.Shipment.Post", 'MultipleErrors', 'Nothing was posted.');
+    end;
+
+    /// <summary>#67 item 6: the Icelandic catalogue text of RegisteredActivity calls movements tilfærslur.</summary>
+    [Test]
+    procedure RegisteredActivity_IcelandicCallsMovementsTilfaerslur()
+    var
+        Discovery: Interface "Msg Discovery ori";
+        MessageTypeInterface: Interface "Msg Interface ori";
+        SelectionDescription: Text;
+        Description: Text;
+        Keywords: Text;
+        OriginalLanguage: Integer;
+    begin
+        // Issue #67, AC2 (item 6) | Time: independent of WorkDate | Risk: none.
+        Discovery := "Message Type ori"::"Warehouse.RegisteredActivity.Get";
+        MessageTypeInterface := "Message Type ori"::"Warehouse.RegisteredActivity.Get";
+        OriginalLanguage := GlobalLanguage();
+        GlobalLanguage(1039);
+        SelectionDescription := Discovery.GetSelectionDescription();
+        Description := MessageTypeInterface.GetDescription();
+        Keywords := Discovery.GetKeywords();
+        GlobalLanguage(OriginalLanguage);
+        Assert.IsTrue(SelectionDescription.Contains('tínslur, frágang eða tilfærslur'), 'Selection description: ' + SelectionDescription);
+        Assert.IsTrue(Description.Contains('tínslur, frágang eða tilfærslur'), 'Description: ' + Description);
+        Assert.IsTrue(Keywords.Contains('skráð tilfærsla'), 'Keywords: ' + Keywords);
+    end;
+
+    local procedure AssertEveryEntryHasNextStep(MessageType: Enum "Message Type ori"; QtyKey: Text)
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        ContractJson: JsonObject;
+        Token: JsonToken;
+        Entry: JsonToken;
+        FormatWhen: Text;
+    begin
+        Assert.IsTrue(ContractMgt.GetContract(MessageType, ContractJson), MessageTypeName(MessageType) + ' has a contract.');
+        ContractJson.Get('errors', Token);
+        foreach Entry in Token.AsArray() do begin
+            Assert.AreNotEqual('', TextValue(Entry.AsObject(), 'nextStep'), MessageTypeName(MessageType) + ' ' + TextValue(Entry.AsObject(), 'code') + ' must carry a nextStep.');
+            if TextValue(Entry.AsObject(), 'code') = 'InvalidParameterFormat' then
+                FormatWhen := TextValue(Entry.AsObject(), 'when');
+        end;
+        Assert.IsTrue(FormatWhen.Contains('a line value has the wrong JSON type'), MessageTypeName(MessageType) + ' InvalidParameterFormat names line values: ' + FormatWhen);
+        Assert.IsTrue(FormatWhen.Contains(QtyKey), MessageTypeName(MessageType) + ' InvalidParameterFormat names ' + QtyKey + '.');
     end;
 
     local procedure AssertNoObjectNames(MessageType: Enum "Message Type ori"; HelpText: Text)

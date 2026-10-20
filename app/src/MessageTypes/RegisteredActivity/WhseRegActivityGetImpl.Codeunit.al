@@ -33,7 +33,7 @@ codeunit 10078437 "Whse RegActivity Get Impl ori" implements "Msg Interface ori"
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Reads registered picks, put-aways or movements, optionally with lines.', Comment = 'is-IS=Les skráðar tínslur, frágang eða færslur, valfrjálst með línum.';
+        DescriptionLbl: Label 'Reads registered picks, put-aways or movements, optionally with lines.', Comment = 'is-IS=Les skráðar tínslur, frágang eða tilfærslur, valfrjálst með línum.';
     begin
         exit(DescriptionLbl);
     end;
@@ -42,7 +42,7 @@ codeunit 10078437 "Whse RegActivity Get Impl ori" implements "Msg Interface ori"
     /// <returns>Comma-separated keywords.</returns>
     procedure GetKeywords(): Text
     var
-        KeywordsLbl: Label 'registered pick, registered put-away, registered movement, what was picked, where was it put away, warehouse activity history', Comment = 'is-IS=skráð tínsla, skráður frágangur, skráð færsla, hvað var tínt, hvar var gengið frá, saga vöruhúsavirkni';
+        KeywordsLbl: Label 'registered pick, registered put-away, registered movement, what was picked, where was it put away, warehouse activity history', Comment = 'is-IS=skráð tínsla, skráður frágangur, skráð tilfærsla, hvað var tínt, hvar var gengið frá, saga vöruhúsavirkni';
     begin
         exit(KeywordsLbl);
     end;
@@ -51,7 +51,7 @@ codeunit 10078437 "Whse RegActivity Get Impl ori" implements "Msg Interface ori"
     /// <returns>Selection description.</returns>
     procedure GetSelectionDescription(): Text
     var
-        SelectionLbl: Label 'Read-only. Reads registered picks, put-aways or movements by number or by location, source number and registering date, paged.', Comment = 'is-IS=Lesaðgangur. Les skráðar tínslur, frágang eða færslur eftir númeri eða eftir staðsetningu, númeri upprunaskjals og skráningardegi, blaðsíðuskipt.';
+        SelectionLbl: Label 'Read-only. Reads registered picks, put-aways or movements by number or by location, source number and registering date, paged.', Comment = 'is-IS=Lesaðgangur. Les skráðar tínslur, frágang eða tilfærslur eftir númeri eða eftir staðsetningu, númeri upprunaskjals og skráningardegi, blaðsíðuskipt.';
     begin
         exit(SelectionLbl);
     end;
@@ -198,7 +198,7 @@ codeunit 10078437 "Whse RegActivity Get Impl ori" implements "Msg Interface ori"
     /// <returns>True when an overview is declared.</returns>
     procedure GetOverview(var Overview: Text): Boolean
     var
-        OverviewLbl: Label 'Reads registered picks, put-aways or movements (activityType Pick, PutAway or Movement) by number, or by location, source document number and registering date range, paged with take and skip. includeLines adds the lines. A number that does not exist is refused; filters that match nothing answer success with an empty list. Nothing is written.', Comment = 'is-IS=Les skráðar tínslur, frágang eða færslur (activityType Pick, PutAway eða Movement) eftir númeri, eða eftir staðsetningu, númeri upprunaskjals og bili skráningardaga, blaðsíðuskipt með take og skip. includeLines bætir línunum við. Númeri sem er ekki til er hafnað; síur sem passa ekki við neitt skila árangri með tómum lista. Ekkert er skrifað.';
+        OverviewLbl: Label 'Reads registered picks, put-aways or movements (activityType Pick, PutAway or Movement) by number, or by location, source document number and registering date range, paged with take and skip. includeLines adds the lines. A number that does not exist is refused; filters that match nothing answer success with an empty list. Nothing is written.', Comment = 'is-IS=Les skráðar tínslur, frágang eða tilfærslur (activityType Pick, PutAway eða Movement) eftir númeri, eða eftir staðsetningu, númeri upprunaskjals og bili skráningardaga, blaðsíðuskipt með take og skip. includeLines bætir línunum við. Númeri sem er ekki til er hafnað; síur sem passa ekki við neitt skila árangri með tómum lista. Ekkert er skrifað.';
     begin
         Overview := OverviewLbl;
         exit(true);
@@ -280,11 +280,9 @@ codeunit 10078437 "Whse RegActivity Get Impl ori" implements "Msg Interface ori"
         Context.ReadBoolean(RequestJson, 'includeLines', Argument, IncludeLines, Present, 'includeLines');
         if (RegisteringFrom <> 0D) and (RegisteringTo <> 0D) and (RegisteringTo < RegisteringFrom) then
             Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(RangeLbl, 'registeringDateFrom'), 'registeringDateTo', Context.FormatDate(RegisteringTo), '', RangeNextStepLbl);
-        if Argument.HasCollectedErrors() then begin
-            Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, ProblemsLbl);
+        // Every problem of the request is answered together, a bad skip or take included.
+        if not Context.RespondOrReadPaging(RequestJson, Argument, ProblemsLbl, Skip, Take) then
             exit;
-        end;
-        Argument.EvaluateSkipTake(RequestJson, Skip, Take);
         RegisteredHeader.ReadIsolation := IsolationLevel::ReadCommitted;
         RegisteredHeader.SetRange(Type, ActivityType);
         if ActivityNo <> '' then begin

@@ -174,6 +174,8 @@ codeunit 10078446 "Whse Journal Create Impl ori" implements "Msg Interface ori",
     /// <returns>True when errors are declared.</returns>
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
+        Parts: Codeunit "Whse Contract Parts ori";
+        Context: Codeunit "Whse Write Context ori";
         Values: Codeunit "Whse Msg Values ori";
     begin
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PreconditionFailed, 'The location does not use directed put-away and pick.', 'Use Inventory.ItemJournal.* or Inventory.Reclassification.* for basic locations.');
@@ -188,6 +190,7 @@ codeunit 10078446 "Whse Journal Create Impl ori" implements "Msg Interface ori",
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot write warehouse journal lines.', 'Ask an administrator to assign BIFROST Whse - Full ori.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::MultipleErrors, 'More than one value failed validation.', 'Correct every listed value and send the request again. Nothing was written.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::BusinessCentralError, 'Business Central rejected a line.', 'Read the returned text and correct the line. Nothing was written.');
+        Parts.AddDateErrors(Errors, 'registeringDate, lines[n].expirationDate', Context.IsoDateNextStep());
         exit(true);
     end;
 

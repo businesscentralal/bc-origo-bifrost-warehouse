@@ -31,7 +31,35 @@ codeunit 97030 "Whse Contract Assert ori"
         Assert.IsTrue(IsDeclared(MessageType, ErrorCode, NextStep), TypeName(MessageType) + ' declares ' + ErrorCode + ' with the nextStep "' + NextStep + '" in its errors chapter.');
     end;
 
-    /// <summary>Returns whether the errors chapter of the type has an entry with the code and, when given, the nextStep.</summary>
+    /// <summary>
+    /// Asserts that the answer and every entry in its errors[] are declared in the errors chapter of the type (#74): the
+    /// MultipleErrors answer and each problem it lists, each with its own code and nextStep.
+    /// </summary>
+    /// <param name="MessageType">The message type that answered.</param>
+    /// <param name="ResponseJson">The English answer.</param>
+    internal procedure AssertAnswerAndErrorsDeclared(MessageType: Enum "Message Type ori"; ResponseJson: JsonObject)
+    var
+        Token: JsonToken;
+        Entry: JsonToken;
+        ErrorCode: Text;
+        NextStep: Text;
+    begin
+        AssertAnswerDeclared(MessageType, ResponseJson);
+        if not ResponseJson.Get('errors', Token) then
+            exit;
+        if not Token.IsArray() then
+            exit;
+        foreach Entry in Token.AsArray() do begin
+            ErrorCode := TextValue(Entry.AsObject(), 'code');
+            NextStep := TextValue(Entry.AsObject(), 'nextStep');
+            Assert.IsTrue(IsDeclared(MessageType, ErrorCode, NextStep), TypeName(MessageType) + ' declares the listed ' + ErrorCode + ' with the nextStep "' + NextStep + '" in its errors chapter.');
+        end;
+    end;
+
+    /// <summary>
+    /// Returns whether the errors chapter of the type has an entry with the code and, when given, the nextStep. A declared
+    /// nextStep with the placeholders &lt;parameter&gt; and YYYY-MM-DD matches an answer that fills them in (#74).
+    /// </summary>
     /// <param name="MessageType">The message type.</param>
     /// <param name="ErrorCode">The error code.</param>
     /// <param name="NextStep">The nextStep, or empty to match the code only.</param>
@@ -49,8 +77,52 @@ codeunit 97030 "Whse Contract Assert ori"
             exit(false);
         foreach Entry in Token.AsArray() do
             if TextValue(Entry.AsObject(), 'code') = ErrorCode then
-                if (NextStep = '') or (TextValue(Entry.AsObject(), 'nextStep') = NextStep) then
+                if (NextStep = '') or NextStepMatches(TextValue(Entry.AsObject(), 'nextStep'), NextStep) then
                     exit(true);
+        exit(false);
+    end;
+
+    /// <summary>
+    /// Returns whether an answered nextStep matches a declared one: the same text, or the declared pattern with each
+    /// placeholder (&lt;parameter&gt;, YYYY-MM-DD) standing for a non-empty part of the answer, e.g. "Resend &lt;parameter&gt; as
+    /// YYYY-MM-DD." matches "Resend shipmentDateFrom as 2026-10-20.".
+    /// </summary>
+    /// <param name="Declared">The nextStep in the errors chapter.</param>
+    /// <param name="Answered">The nextStep of the answer.</param>
+    /// <returns>True when the answer matches.</returns>
+    internal procedure NextStepMatches(Declared: Text; Answered: Text): Boolean
+    var
+        Segments: List of [Text];
+        Segment: Text;
+        Rest: Text;
+        Position: Integer;
+        Index: Integer;
+    begin
+        if Declared = Answered then
+            exit(true);
+        if not (Declared.Contains(ParameterPlaceholder()) or Declared.Contains(DatePlaceholder())) then
+            exit(false);
+        Segments := Declared.Replace(ParameterPlaceholder(), WildcardMark()).Replace(DatePlaceholder(), WildcardMark()).Split(WildcardMark());
+        Rest := Answered;
+        for Index := 1 to Segments.Count() do begin
+            Segment := Segments.Get(Index);
+            case true of
+                Index = 1:
+                    begin
+                        if not Rest.StartsWith(Segment) then
+                            exit(false);
+                        Rest := CopyStr(Rest, StrLen(Segment) + 1);
+                    end;
+                Index = Segments.Count():
+                    exit(Rest.EndsWith(Segment) and (StrLen(Rest) > StrLen(Segment)));
+                else begin
+                    Position := StrPos(CopyStr(Rest, 2), Segment);
+                    if (Segment = '') or (Position = 0) then
+                        exit(false);
+                    Rest := CopyStr(Rest, Position + 1 + StrLen(Segment));
+                end;
+            end;
+        end;
         exit(false);
     end;
 
@@ -87,7 +159,7 @@ codeunit 97030 "Whse Contract Assert ori"
             if Fragment <> '' then
                 exit(Fragment);
         end;
-        exit('');
+        exit(IssueReference(Lowered));
     end;
 
     /// <summary>Returns the Warehouse.* message types.</summary>
@@ -127,6 +199,45 @@ codeunit 97030 "Whse Contract Assert ori"
         Fragments.Add('BC table');
         Fragments.Add('BC page');
         Fragments.Add('Whse.-');
+    end;
+
+    /// <summary>Returns the first issue reference (core#985, #71) in the text, or empty (#74).</summary>
+    local procedure IssueReference(Lowered: Text): Text
+    var
+        Position: Integer;
+        Offset: Integer;
+        Start: Integer;
+        NextChar: Text;
+    begin
+        Offset := 0;
+        Position := StrPos(Lowered, '#');
+        while Position > 0 do begin
+            NextChar := CopyStr(Lowered, Offset + Position + 1, 1);
+            if (NextChar <> '') and (StrPos('0123456789', NextChar) > 0) then begin
+                Start := Offset + Position - 4;
+                if Start < 1 then
+                    Start := 1;
+                exit(CopyStr(Lowered, Start, Offset + Position - Start + 6));
+            end;
+            Offset += Position;
+            Position := StrPos(CopyStr(Lowered, Offset + 1), '#');
+        end;
+        exit('');
+    end;
+
+    local procedure ParameterPlaceholder(): Text
+    begin
+        exit('<parameter>');
+    end;
+
+    local procedure DatePlaceholder(): Text
+    begin
+        exit('YYYY-MM-DD');
+    end;
+
+    local procedure WildcardMark(): Text
+    begin
+        exit('|');
     end;
 
     local procedure ObjectWords() Words: List of [Text]

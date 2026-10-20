@@ -137,8 +137,8 @@ codeunit 10078419 "Whse Bin Create Impl ori" implements "Msg Interface ori", "Ms
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Entry: JsonObject;
-        BinMandatoryWhenLbl: Label 'The location does not have Bin Mandatory turned on.', Comment = 'is-IS=Staðsetningin er ekki með Bin Mandatory kveikt.';
-        BinMandatoryNextStepLbl: Label 'Turn on Bin Mandatory on the location first.', Comment = 'is-IS=Kveiktu fyrst á Bin Mandatory á staðsetningunni.';
+        BinMandatoryWhenLbl: Label 'The location does not have Bin Mandatory turned on.', Comment = 'is-IS=Staðsetningin er ekki með kveikt á skyldunotkun hólfa.';
+        BinMandatoryNextStepLbl: Label 'Turn on Bin Mandatory on the location first.', Comment = 'is-IS=Kveiktu fyrst á skyldunotkun hólfa á staðsetningunni.';
         DuplicateWhenLbl: Label 'The bin code already exists at the location.', Comment = 'is-IS=Hólfakóðinn er þegar til á staðsetningunni.';
         DuplicateNextStepLbl: Label 'Read Warehouse.Bin.Get or choose another code.', Comment = 'is-IS=Lestu Warehouse.Bin.Get eða veldu annan kóða.';
         ZoneWhenLbl: Label 'zoneCode or binTypeCode was sent for a basic location, or the code is unknown.', Comment = 'is-IS=zoneCode eða binTypeCode var sent fyrir einfalda staðsetningu, eða kóðinn er óþekktur.';
@@ -467,7 +467,7 @@ codeunit 10078419 "Whse Bin Create Impl ori" implements "Msg Interface ori", "Ms
     var
         Location: Record Location;
         BinMandatoryLbl: Label 'Location %1 does not use bins.', Comment = '%1 = location, is-IS=Staðsetning %1 notar ekki hólf.';
-        BinMandatoryNextStepLbl: Label 'Turn on Bin Mandatory on the location first.', Comment = 'is-IS=Kveiktu fyrst á Bin Mandatory á staðsetningunni.';
+        BinMandatoryNextStepLbl: Label 'Turn on Bin Mandatory on the location first.', Comment = 'is-IS=Kveiktu fyrst á skyldunotkun hólfa á staðsetningunni.';
     begin
         if LocationCode = '' then
             exit(false);

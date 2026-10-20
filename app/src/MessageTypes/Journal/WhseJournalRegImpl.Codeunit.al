@@ -231,7 +231,7 @@ codeunit 10078447 "Whse Journal Reg Impl ori" implements "Msg Interface ori", "M
     /// <returns>True when notes are declared.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := 'Registration commits (core#985), also when the template increments the batch name. Item journal lines only change the warehouse: run Warehouse.Adjustment.Calculate and Inventory.ItemJournal.Post afterwards so the item ledger follows. Reclassification lines post their item ledger entries during registration.';
+        Notes := 'Registration commits, also when the template increments the batch name. Item journal lines only change the warehouse: run Warehouse.Adjustment.Calculate and Inventory.ItemJournal.Post afterwards so the item ledger follows. Reclassification lines post their item ledger entries during registration.';
         exit(true);
     end;
 

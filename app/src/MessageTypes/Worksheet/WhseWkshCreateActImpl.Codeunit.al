@@ -330,7 +330,7 @@ codeunit 10078461 "Whse Wksh CreateAct Impl ori" implements "Msg Interface ori",
     /// <returns>True when notes are declared.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := 'Create Pick commits each pick it creates (core#985). The grouping options are the Create Pick request page options; a put-away worksheet accepts assignedUserId and sortingMethod only.';
+        Notes := 'Create Pick commits each pick it creates. The grouping options are the Create Pick request page options; a put-away worksheet accepts assignedUserId and sortingMethod only.';
         exit(true);
     end;
 

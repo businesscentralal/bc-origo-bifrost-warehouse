@@ -153,6 +153,7 @@ codeunit 10078463 "Whse ActLine ChgBin Impl ori" implements "Msg Interface ori",
     begin
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidLine, 'The bin does not hold enough of the item for a Take line, or does not accept stock for a Place line (blocked for inbound movement or the adjustment bin).', 'Read Warehouse.BinContent.Get.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameter, 'activityType is not a warehouse activity type.', 'Send Put-away, Pick, Movement, Invt. Put-away, Invt. Pick or Invt. Movement.');
+        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::RecordNotFound, 'binCode is not a bin at the location of the line. The parameter is binCode.', BinNotFoundNextStep());
         Helper.AddActivityErrors(Errors);
         exit(true);
     end;
@@ -335,13 +336,12 @@ codeunit 10078463 "Whse ActLine ChgBin Impl ori" implements "Msg Interface ori",
         Helper: Codeunit "Whse ActLine Helper ori";
         Available: Decimal;
         NotFoundLbl: Label 'Bin %1 was not found at location %2.', Comment = '%1 = bin, %2 = location, is-IS=Hólf %1 fannst ekki á staðsetningu %2.';
-        NotFoundNextStepLbl: Label 'Check the bin with Warehouse.Bin.Get.', Comment = 'is-IS=Athugaðu hólfið með Warehouse.Bin.Get.';
         TakeLbl: Label 'Bin %1 holds %2 base units of item %3 that can be taken; line %4 needs %5.', Comment = '%1 = bin, %2 = available, %3 = item, %4 = line no., %5 = needed, is-IS=Hólf %1 geymir %2 grunneiningar af vöru %3 sem má taka; lína %4 þarf %5.';
         PlaceLbl: Label 'Bin %1 does not accept stock: it is blocked for inbound movement or it is the adjustment bin.', Comment = '%1 = bin, is-IS=Hólf %1 tekur ekki við birgðum: það er lokað fyrir innfærslu eða það er leiðréttingarhólfið.';
         BinContentNextStepLbl: Label 'Read Warehouse.BinContent.Get.', Comment = 'is-IS=Lestu Warehouse.BinContent.Get.';
     begin
         if not Bin.Get(ActivityLine."Location Code", CopyStr(BinText, 1, MaxStrLen(Bin.Code))) then begin
-            Argument.AddError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(NotFoundLbl, BinText, ActivityLine."Location Code"), 'binCode', BinText, '', NotFoundNextStepLbl);
+            Argument.AddError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(NotFoundLbl, BinText, ActivityLine."Location Code"), 'binCode', BinText, '', BinNotFoundNextStep());
             exit;
         end;
         if UpperCase(ActivityLine."Bin Code") = UpperCase(BinText) then
@@ -364,6 +364,13 @@ codeunit 10078463 "Whse ActLine ChgBin Impl ori" implements "Msg Interface ori",
         Bin.CalcFields("Adjustment Bin");
         if Bin."Adjustment Bin" or (Bin."Block Movement" in [Bin."Block Movement"::Inbound, Bin."Block Movement"::All]) then
             Argument.AddError("Bifrost Error Code ori"::InvalidLine, StrSubstNo(PlaceLbl, Bin.Code), 'binCode', BinText, '', BinContentNextStepLbl);
+    end;
+
+    local procedure BinNotFoundNextStep(): Text
+    var
+        NotFoundNextStepLbl: Label 'Check the bin with Warehouse.Bin.Get.', Comment = 'is-IS=Athugaðu hólfið með Warehouse.Bin.Get.';
+    begin
+        exit(NotFoundNextStepLbl);
     end;
 
     local procedure PairedLineNos(ActivityLine: Record "Warehouse Activity Line"): JsonArray

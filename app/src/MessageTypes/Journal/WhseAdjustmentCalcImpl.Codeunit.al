@@ -171,6 +171,8 @@ codeunit 10078450 "Whse Adjustment Calc Impl ori" implements "Msg Interface ori"
     /// <returns>True when errors are declared.</returns>
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
+        Parts: Codeunit "Whse Contract Parts ori";
+        Context: Codeunit "Whse Write Context ori";
         Values: Codeunit "Whse Msg Values ori";
     begin
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::RecordNotFound, 'The item journal template or batch was not found.', 'Create the batch first.');
@@ -185,6 +187,7 @@ codeunit 10078450 "Whse Adjustment Calc Impl ori" implements "Msg Interface ori"
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot write item journal lines.', 'Ask an administrator to assign BIFROST Whse - Full ori.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::MultipleErrors, 'More than one value failed validation.', 'Correct every listed value and send the request again. Nothing was written.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::BusinessCentralError, 'Business Central rejected the calculation.', 'Read the returned text and correct the batch. Nothing was written.');
+        Parts.AddDateErrors(Errors, 'postingDate', Context.IsoDateNextStep());
         exit(true);
     end;
 

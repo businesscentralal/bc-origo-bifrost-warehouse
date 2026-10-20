@@ -147,6 +147,8 @@ codeunit 10078465 "Whse ActLine Track Impl ori" implements "Msg Interface ori", 
     /// <returns>True when errors are declared.</returns>
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
+        Parts: Codeunit "Whse Contract Parts ori";
+        Context: Codeunit "Whse Write Context ori";
         Values: Codeunit "Whse Msg Values ori";
         Helper: Codeunit "Whse ActLine Helper ori";
     begin
@@ -156,6 +158,7 @@ codeunit 10078465 "Whse ActLine Track Impl ori" implements "Msg Interface ori", 
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PreconditionFailed, 'The item of the line has no item tracking code that requires warehouse tracking.', 'No tracking is needed on this line.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameter, 'activityType is not valid, an entry has no tracking number, a quantity is zero or negative, the entries of a line exceed its outstanding quantity, or a line with several entries misses a quantity.', 'Send a lot, serial or package number and a positive quantity on every entry, at most the outstanding quantity per line.');
         Helper.AddActivityErrors(Errors);
+        Parts.AddDateErrors(Errors, 'entries[n].expirationDate', Context.IsoDateNextStep());
         exit(true);
     end;
 

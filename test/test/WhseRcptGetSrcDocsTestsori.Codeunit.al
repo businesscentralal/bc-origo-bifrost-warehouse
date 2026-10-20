@@ -253,6 +253,25 @@ codeunit 97040 "Whse Rcpt GetSrcDocs Tests ori"
         Assert.AreEqual('Ask an administrator to assign BIFROST Whse - Full ori.', TextValue(ResponseJson, 'nextStep'), 'The next step must name the full permission set.');
     end;
 
+    /// <summary>#74 AC2: a local date is answered with the date to resend, and the help declares that nextStep.</summary>
+    [Test]
+    procedure LocalDate_AnswerIsDeclared()
+    var
+        Location: Record Location;
+        Item: Record Item;
+        ContractAssert: Codeunit "Whse Contract Assert ori";
+        ResponseJson: JsonObject;
+    begin
+        // Issue #74, AC2 | Time: fixed dates in the request | Risk: none.
+        ReceiptHelper.SetupLocationAndItem(Location, Item, 0);
+
+        Run('{"locationCode":"' + Location.Code + '","expectedReceiptDateFrom":"20.10.2026"}', '', ResponseJson);
+
+        Assert.AreEqual('InvalidParameterFormat', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('Resend expectedReceiptDateFrom as 2026-10-20.', TextValue(ResponseJson, 'nextStep'), ResponseText(ResponseJson));
+        ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Receipt.GetSourceDocuments", ResponseJson);
+    end;
+
     /// <summary>#67 item 3: a missing key no longer hides the other bad values; all are answered together (1033).</summary>
     [Test]
     procedure IndependentProblems_AreCollected()

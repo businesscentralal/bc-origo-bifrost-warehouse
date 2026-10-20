@@ -32,8 +32,10 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
     end;
 
     procedure GetDescription() Description: Text[250]
+    var
+        DescriptionLbl: Label 'Creates Warehouse Shipment(s) from one or more released source documents (Sales Order, Outbound Transfer Order).', Comment = 'is-IS=Stofnar vöruhúsaafhendingar úr einu eða fleiri útgefnum upprunaskjölum (sölupöntun, útleiðar-millifærslupöntun).';
     begin
-        exit('Creates Warehouse Shipment(s) from one or more released source documents (Sales Order, Outbound Transfer Order).');
+        exit(DescriptionLbl);
     end;
 
     procedure GetKeywords(): Text
@@ -94,9 +96,11 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
 
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
+        Context: Codeunit "Whse Write Context ori";
         Parts: Codeunit "Whse Contract Parts ori";
     begin
         Parts.AddSourceDocumentErrors(Errors, 'SalesOrder, TransferOrder');
+        Parts.AddDateErrors(Errors, 'postingDate', Context.IsoDateNextStep());
         exit(true);
     end;
 

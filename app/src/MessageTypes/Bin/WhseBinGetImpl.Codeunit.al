@@ -128,6 +128,7 @@ codeunit 10078418 "Whse Bin Get Impl ori" implements "Msg Interface ori", "Msg C
 
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
+        Parts: Codeunit "Whse Contract Parts ori";
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Entry: JsonObject;
         MissingWhenLbl: Label 'locationCode was not sent and subject is empty.', Comment = 'is-IS=locationCode var ekki sent og subject er tómt.';
@@ -166,6 +167,7 @@ codeunit 10078418 "Whse Bin Get Impl ori" implements "Msg Interface ori", "Msg C
         Entry := ContractMgt.ErrorEntry("Bifrost Error Code ori"::PermissionDenied, DeniedWhenLbl, DeniedNextStepLbl);
         Entry.Add('nextStep', DeniedNextStepLbl);
         Errors.Add(Entry);
+        Parts.AddPagingErrors(Errors, true);
         exit(true);
     end;
 

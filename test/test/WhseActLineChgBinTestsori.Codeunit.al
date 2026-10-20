@@ -117,6 +117,26 @@ codeunit 97059 "Whse ActLine ChgBin Tests ori"
         Helper.ExpectError(Send('{"activityNo":"' + MovementNo + '","lineNo":10000,"binCode":"' + ToBin.Code + '","zone":"PICK"}'), 'UnknownParameter', '');
     end;
 
+    /// <summary>#74 AC1: the unknown bin answer (RecordNotFound, binCode) is declared in the errors chapter with its nextStep.</summary>
+    [Test]
+    procedure ChangeBin_UnknownBin_AnswerIsDeclared()
+    var
+        TakeLine: Record "Warehouse Activity Line";
+        ContractAssert: Codeunit "Whse Contract Assert ori";
+        ResponseJson: JsonObject;
+        MovementNo: Code[20];
+    begin
+        // Issue #74, AC1 | Time: none | Risk: none.
+        MovementNo := CreateMovement(2);
+        Helper.FindLine(TakeLine."Activity Type"::Movement, MovementNo, TakeLine."Action Type"::Take, TakeLine);
+
+        ResponseJson := Send(LineRequest(MovementNo, TakeLine."Line No.", 'ZZNOBIN'));
+
+        Helper.ExpectError(ResponseJson, 'RecordNotFound', 'Check the bin with Warehouse.Bin.Get.');
+        Assert.AreEqual('binCode', Helper.TextValue(ResponseJson, 'parameter'), Helper.ResponseText(ResponseJson));
+        ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.ActivityLine.ChangeBin", ResponseJson);
+    end;
+
     /// <summary>AC09: without activity write permission the type is disabled and answers PermissionDenied.</summary>
     [Test]
     [TestPermissions(TestPermissions::Restrictive)]

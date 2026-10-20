@@ -33,8 +33,10 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
     end;
 
     procedure GetDescription() Description: Text[250]
+    var
+        DescriptionLbl: Label 'Creates Warehouse Receipt(s) from one or more released source documents (Sales Return Order, Purchase Order, Inbound Transfer Order).', Comment = 'is-IS=Stofnar vöruhúsamóttökur úr einu eða fleiri útgefnum upprunaskjölum (vöruskilapöntun, innkaupapöntun, innleiðar-millifærslupöntun).';
     begin
-        exit('Creates Warehouse Receipt(s) from one or more released source documents (Sales Return Order, Purchase Order, Inbound Transfer Order).');
+        exit(DescriptionLbl);
     end;
 
     procedure GetKeywords(): Text
@@ -95,9 +97,11 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
 
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
+        Context: Codeunit "Whse Write Context ori";
         Parts: Codeunit "Whse Contract Parts ori";
     begin
         Parts.AddSourceDocumentErrors(Errors, 'SalesReturnOrder, PurchaseOrder, TransferOrder');
+        Parts.AddDateErrors(Errors, 'postingDate', Context.IsoDateNextStep());
         exit(true);
     end;
 

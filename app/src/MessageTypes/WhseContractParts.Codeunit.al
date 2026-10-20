@@ -60,6 +60,71 @@ codeunit 10078459 "Whse Contract Parts ori"
     end;
 
     /// <summary>
+    /// Lists the skip and take refusals of a paged read, each with the nextStep the answer gives (#74). A negative value
+    /// is InvalidParameter; a value that is not a whole number is InvalidParameterFormat. When skip or take is the only
+    /// problem, the platform answers it; when the type has already collected other problems, the type adds the paging
+    /// problem to errors[] of the MultipleErrors answer with the paging nextStep.
+    /// </summary>
+    /// <param name="Errors">Receives the entries.</param>
+    /// <param name="CollectedWithOtherProblems">True for the types that report a bad skip or take together with the other request problems.</param>
+    internal procedure AddPagingErrors(var Errors: JsonArray; CollectedWithOtherProblems: Boolean)
+    var
+        Context: Codeunit "Whse Write Context ori";
+        IntegerNextStepLbl: Label 'Send the value as an integer.', Comment = 'is-IS=Sendu gildið sem heiltölu.';
+    begin
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::InvalidParameter,
+            'skip or take is negative. The parameter names the key and expected says zero or greater.',
+            Context.PagingNextStep()));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::InvalidParameterFormat,
+            'skip or take is not a whole number. The parameter names the key.',
+            IntegerNextStepLbl));
+        if CollectedWithOtherProblems then
+            Errors.Add(NextStepEntry("Bifrost Error Code ori"::InvalidParameterFormat,
+                'skip or take is not a whole number and another request value failed too; its entry in errors[] of the MultipleErrors answer has this nextStep.',
+                Context.PagingNextStep()));
+    end;
+
+    /// <summary>
+    /// Lists the date refusals of a type, each with the nextStep the answer gives (#74). A local day-month-year date such as
+    /// 20.10.2026 or 20-10-2026 is answered with the value to send back, e.g. "Resend shipmentDateFrom as 2026-10-20.";
+    /// the help lists that nextStep as the pattern "Resend &lt;parameter&gt; as YYYY-MM-DD.". Any other unreadable date gets
+    /// the fallback nextStep.
+    /// </summary>
+    /// <param name="Errors">Receives the entries.</param>
+    /// <param name="DateKeys">The date keys of the type, comma separated.</param>
+    /// <param name="FallbackNextStep">The nextStep of a date that is not a local day-month-year date.</param>
+    internal procedure AddDateErrors(var Errors: JsonArray; DateKeys: Text; FallbackNextStep: Text)
+    var
+        Context: Codeunit "Whse Write Context ori";
+    begin
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::InvalidParameterFormat,
+            'A date (' + DateKeys + ') is written as a local day-month-year date such as 20.10.2026 or 20-10-2026. The parameter names the key; nextStep names it too and gives the date to send back, e.g. Resend ' + FirstKey(DateKeys) + ' as 2026-10-20.',
+            Context.ResendDatePattern()));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::InvalidParameterFormat,
+            'A date (' + DateKeys + ') cannot be read as YYYY-MM-DD. The parameter names the key.',
+            FallbackNextStep));
+    end;
+
+    /// <summary>Lists the refusal of a date range whose to date is before its from date, with the nextStep the answer gives (#74).</summary>
+    /// <param name="Errors">Receives the entry.</param>
+    /// <param name="RangeKeys">The from and to keys of the type's date ranges.</param>
+    internal procedure AddDateRangeError(var Errors: JsonArray; RangeKeys: Text)
+    var
+        Context: Codeunit "Whse Write Context ori";
+    begin
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::InvalidParameter,
+            'A date range ends before it starts (' + RangeKeys + '). The parameter names the to key.',
+            Context.DateRangeNextStep()));
+    end;
+
+    local procedure FirstKey(Keys: Text): Text
+    begin
+        if Keys.Contains(',') then
+            exit(Keys.Split(',').Get(1).Trim());
+        exit(Keys.Trim());
+    end;
+
+    /// <summary>
     /// Lists the errors of the shared document lookup, each with the nextStep the lookup answers (#71): a missing identifier,
     /// an identifier that matches nothing (by number or by SystemId), identifiers for different records, and the JSON format refusals.
     /// </summary>

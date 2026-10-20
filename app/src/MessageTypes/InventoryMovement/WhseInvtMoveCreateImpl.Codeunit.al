@@ -605,7 +605,7 @@ codeunit 10078427 "Whse InvtMove Create Impl ori" implements "Msg Interface ori"
         DirectedLbl: Label 'Location %1 uses directed put-away and pick.', Comment = '%1 = location, is-IS=Staðsetning %1 notar beina innsetningu og tínslu.';
         DirectedNextStepLbl: Label 'Use Warehouse.Movement.Create.', Comment = 'is-IS=Notaðu Warehouse.Movement.Create.';
         BinsLbl: Label 'Location %1 does not use bins.', Comment = '%1 = location, is-IS=Staðsetning %1 notar ekki hólf.';
-        BinsNextStepLbl: Label 'Moves between bins need Bin Mandatory on the location.', Comment = 'is-IS=Færslur milli hólfa þurfa Bin Mandatory á staðsetningunni.';
+        BinsNextStepLbl: Label 'Moves between bins need Bin Mandatory on the location.', Comment = 'is-IS=Færslur milli hólfa krefjast skyldunotkunar hólfa á staðsetningunni.';
     begin
         Location.SetLoadFields("Directed Put-away and Pick", "Bin Mandatory");
         if not Location.Get(LocationCode) then

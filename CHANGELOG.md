@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed (2026-10-20) - Make main CI green: InvalidParameter count of Warehouse.Activity.Get
+
+- `ActivityGet_ErrorsDoNotListUnanswerableCodes` expects two `InvalidParameter` entries on `Warehouse.Activity.Get`: an `activityType` that is not valid, and the negative `skip` or `take` entry added by #74. The two have different causes and nextSteps, so both are correct; the test was stale (it was masked by the earlier `InvalidParameterFormat` assertion failing first). Test only; no product, label or XLF change.
+
 ### Fixed (2026-10-20) - Make main CI green: paging answer and errors-chapter counts after #74
 
 - A lone negative `skip` or `take` on `Warehouse.Request.Get`, `Warehouse.PostedDocument.Get`, `Warehouse.RegisteredActivity.Get` and `Warehouse.Bin.Get` raised Foundation's `EvaluateSkipTake` error instead of the answer the help declares (`InvalidParameter`, nextStep "Send a whole number of zero or more, or leave it out."). `Whse Write Context ori.RespondOrReadPaging` now always collects a bad skip or take first, so a single problem answers with its own code and nextStep and several are still answered together as `MultipleErrors`. Fixes `Get_PagingAndDateAnswers_AreDeclared`.

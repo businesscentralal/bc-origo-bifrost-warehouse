@@ -20,6 +20,7 @@ codeunit 97051 "Whse Journal Create Tests ori"
     var
         Assert: Codeunit "Library Assert";
         Helper: Codeunit "Whse Jnl Test Helper ori";
+        ContractAssert: Codeunit "Whse Contract Assert ori";
 
     /// <summary>AC01: an item journal line is inserted through Validate against the adjustment bin.</summary>
     [Test]
@@ -378,6 +379,8 @@ codeunit 97051 "Whse Journal Create Tests ori"
         Assert.AreEqual('InvalidLine', Helper.TextValue(ResponseJson, 'code'), Helper.ResponseText(ResponseJson));
         Assert.AreEqual(StrSubstNo(ExpectedPattern, Bin.Code, Item."No."), Helper.TextValue(ResponseJson, 'error'), 'The line is counted from 1.');
         Assert.AreEqual('lines[0].quantity', Helper.TextValue(ResponseJson, 'parameter'), 'The parameter path stays zero-based JSON.');
+        if LanguageId = 1033 then
+            ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Journal.Create", ResponseJson);
     end;
 
     local procedure AssertIndependentProblems(LanguageId: Integer; Summary: Text; MissingBinText: Text)
@@ -397,6 +400,8 @@ codeunit 97051 "Whse Journal Create Tests ori"
         Assert.AreEqual(Summary, Helper.TextValue(ResponseJson, 'error'), 'The summary is in the caller language.');
         Assert.AreEqual('colour:UnknownParameter,journalBatchName:RecordNotFound,lines[0].quantity:InvalidParameterFormat,lines[0].binCode:MissingParameter', Helper.ErrorList(ResponseJson), 'Every problem is listed.');
         Assert.AreEqual(MissingBinText, Helper.ErrorFor(ResponseJson, 'lines[0].binCode'), 'The missing bin counts the line from 1.');
+        if LanguageId = 1033 then
+            ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Journal.Create", ResponseJson);
     end;
 
     local procedure Send(RequestText: Text): JsonObject

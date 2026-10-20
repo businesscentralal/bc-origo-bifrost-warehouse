@@ -21,6 +21,7 @@ codeunit 97061 "Whse ActLine Track Tests ori"
     var
         Assert: Codeunit "Library Assert";
         Helper: Codeunit "Whse Jnl Test Helper ori";
+        ContractAssert: Codeunit "Whse Contract Assert ori";
         LibraryItemTracking: Codeunit "Library - Item Tracking";
         LibraryWarehouse: Codeunit "Library - Warehouse";
 
@@ -168,7 +169,7 @@ codeunit 97061 "Whse ActLine Track Tests ori"
     begin
         // Issue #68, AC1 (items 3, 4) | Time: none | Risk: none.
         AssertNotAvailableTexts(1033, 'Bin %1 holds 0 base units of item %2 with lot LOT-NONE that can be taken; entry 1 needs 2.', 'Entry 1 has no lot, serial or package number.',
-            'Read Inventory.TrackingAvailability.Get for the item.', 'Read the warehouse entries of bin %1 and item %2 with Data.Records.Get on table Warehouse Entry.');
+            'Read Inventory.TrackingAvailability.Get for the item.', 'Read the warehouse entries of the bin and item with Data.Records.Get on table Warehouse Entry.');
     end;
 
     /// <summary>#68 items 3 and 4: the same in Icelandic (1039).</summary>
@@ -177,7 +178,7 @@ codeunit 97061 "Whse ActLine Track Tests ori"
     begin
         // Issue #68, AC1 (items 3, 4) | Time: none | Risk: none.
         AssertNotAvailableTexts(1039, 'Hólf %1 geymir 0 grunneiningar af vöru %2 með lotu LOT-NONE sem má taka; færsla 1 þarf 2.', 'Færsla 1 hefur ekkert lotu-, rað- eða pakkanúmer.',
-            'Lestu Inventory.TrackingAvailability.Get fyrir vöruna.', 'Lestu vöruhúsafærslur hólfs %1 og vöru %2 með Data.Records.Get á töflunni Warehouse Entry.');
+            'Lestu Inventory.TrackingAvailability.Get fyrir vöruna.', 'Lestu vöruhúsafærslur hólfsins og vörunnar með Data.Records.Get á töflunni Warehouse Entry.');
     end;
 
     /// <summary>#68 item 4: the roster check finds a type that exists and is enabled, and no type that is not installed.</summary>
@@ -191,7 +192,7 @@ codeunit 97061 "Whse ActLine Track Tests ori"
         Assert.IsFalse(Values.IsTypeInRoster('Warehouse.NoSuch.Type'), 'A type no app declares is not in the roster.');
     end;
 
-    local procedure AssertNotAvailableTexts(LanguageId: Integer; ExpectedPattern: Text; NoNumberText: Text; InventoryNextStep: Text; EntriesNextStepPattern: Text)
+    local procedure AssertNotAvailableTexts(LanguageId: Integer; ExpectedPattern: Text; NoNumberText: Text; InventoryNextStep: Text; EntriesNextStep: Text)
     var
         Location: Record Location;
         Item: Record Item;
@@ -209,13 +210,15 @@ codeunit 97061 "Whse ActLine Track Tests ori"
         if Values.IsTypeInRoster('Inventory.TrackingAvailability.Get') then
             ExpectedNextStep := InventoryNextStep
         else
-            ExpectedNextStep := StrSubstNo(EntriesNextStepPattern, Bin.Code, Item."No.");
+            ExpectedNextStep := EntriesNextStep;
 
         ResponseJson := Helper.RunTypeInLanguage(Enum::"Message Type ori"::"Warehouse.ActivityLine.AssignTracking", '', '{"activityType":"Movement","activityNo":"' + ActivityNo + '","entries":[{"lineNo":10000,"lotNo":"LOT-NONE"}]}', LanguageId);
 
         Helper.ExpectError(ResponseJson, 'InvalidLine', ExpectedNextStep);
         Assert.AreEqual(StrSubstNo(ExpectedPattern, Bin.Code, Item."No."), Helper.TextValue(ResponseJson, 'error'), 'Only the sent numbers, the entry counted from 1.');
         Assert.AreEqual('entries[0].lotNo', Helper.TextValue(ResponseJson, 'parameter'), 'The parameter names the key that was sent.');
+        if LanguageId = 1033 then
+            ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.ActivityLine.AssignTracking", ResponseJson);
 
         ResponseJson := Helper.RunTypeInLanguage(Enum::"Message Type ori"::"Warehouse.ActivityLine.AssignTracking", '', '{"activityType":"Movement","activityNo":"' + ActivityNo + '","entries":[{"lineNo":10000,"quantity":1}]}', LanguageId);
 

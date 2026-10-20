@@ -415,7 +415,7 @@ codeunit 10078450 "Whse Adjustment Calc Impl ori" implements "Msg Interface ori"
         TypeLbl: Label 'Item journal template %1 is not of type Item.', Comment = '%1 = template, is-IS=Birgðabókarsniðmát %1 er ekki af tegundinni Vara.';
         TypeNextStepLbl: Label 'Use an item journal template of type Item.', Comment = 'is-IS=Notaðu birgðabókarsniðmát af tegundinni Vara.';
         HasLinesLbl: Label 'Item journal batch %1 %2 already has lines.', Comment = '%1 = template, %2 = batch, is-IS=Keyrsla birgðabókar %1 %2 hefur þegar línur.';
-        HasLinesNextStepLbl: Label 'Post the lines with Inventory.ItemJournal.Post (templateName %1, batchName %2), or delete them first.', Comment = '%1 = template, %2 = batch, is-IS=Bókaðu línurnar með Inventory.ItemJournal.Post (templateName %1, batchName %2), eða eyddu þeim fyrst.';
+        HasLinesNextStepLbl: Label 'Post the lines with Inventory.ItemJournal.Post (templateName, batchName), or delete them first.', Comment = 'is-IS=Bókaðu línurnar með Inventory.ItemJournal.Post (templateName, batchName), eða eyddu þeim fyrst.';
         DocumentNoLbl: Label 'documentNo is required because batch %1 has no number series.', Comment = '%1 = batch, is-IS=documentNo er nauðsynlegt því keyrsla %1 hefur enga númeraröð.';
         DocumentNoNextStepLbl: Label 'Send documentNo, or give the batch a number series.', Comment = 'is-IS=Sendu documentNo, eða gefðu keyrslunni númeraröð.';
     begin
@@ -438,7 +438,7 @@ codeunit 10078450 "Whse Adjustment Calc Impl ori" implements "Msg Interface ori"
         ItemJournalLine.SetRange("Journal Batch Name", BatchName);
         ItemJournalLine.SetFilter("Item No.", '<>%1', '');
         if not ItemJournalLine.IsEmpty() then
-            Argument.AddError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(HasLinesLbl, TemplateName, BatchName), 'journalBatchName', BatchName, '', StrSubstNo(HasLinesNextStepLbl, TemplateName, BatchName));
+            Argument.AddError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(HasLinesLbl, TemplateName, BatchName), 'journalBatchName', BatchName, '', HasLinesNextStepLbl);
         if DocumentNoRead and (DocumentNoText = '') and (ItemJournalBatch."No. Series" = '') then
             Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(DocumentNoLbl, BatchName), 'documentNo', '', '', DocumentNoNextStepLbl);
     end;

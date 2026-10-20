@@ -19,6 +19,7 @@ codeunit 97055 "Whse Adjustment Calc Tests ori"
     var
         Assert: Codeunit "Library Assert";
         Helper: Codeunit "Whse Jnl Test Helper ori";
+        ContractAssert: Codeunit "Whse Contract Assert ori";
         LibraryInventory: Codeunit "Library - Inventory";
         LibraryWarehouse: Codeunit "Library - Warehouse";
 
@@ -92,13 +93,12 @@ codeunit 97055 "Whse Adjustment Calc Tests ori"
         Item: Record Item;
         ItemJournalBatch: Record "Item Journal Batch";
         ItemJournalLine: Record "Item Journal Line";
-        PostKeysTxt: Label 'Post the lines with Inventory.ItemJournal.Post (templateName %1, batchName %2), or delete them first.', Locked = true;
     begin
         Helper.CreateItem(Item);
         CreateItemJournalBatch(ItemJournalBatch);
         LibraryInventory.CreateItemJournalLine(ItemJournalLine, ItemJournalBatch."Journal Template Name", ItemJournalBatch.Name, ItemJournalLine."Entry Type"::"Positive Adjmt.", Item."No.", 1);
 
-        Helper.ExpectError(Send(Request(ItemJournalBatch, ',"documentNo":"X"')), 'PreconditionFailed', StrSubstNo(PostKeysTxt, ItemJournalBatch."Journal Template Name", ItemJournalBatch.Name));
+        Helper.ExpectError(Send(Request(ItemJournalBatch, ',"documentNo":"X"')), 'PreconditionFailed', 'Post the lines with Inventory.ItemJournal.Post (templateName, batchName), or delete them first.');
         ItemJournalLine.SetRange("Journal Template Name", ItemJournalBatch."Journal Template Name");
         ItemJournalLine.SetRange("Journal Batch Name", ItemJournalBatch.Name);
         Assert.AreEqual(1, ItemJournalLine.Count(), 'Nothing is written.');
@@ -163,7 +163,7 @@ codeunit 97055 "Whse Adjustment Calc Tests ori"
     procedure Calculate_BatchWithLines_NamesPostKeys()
     begin
         // Issue #68, AC1 (item 6) | Time: none | Risk: none.
-        AssertPostKeysNamed(1033, 'Post the lines with Inventory.ItemJournal.Post (templateName %1, batchName %2), or delete them first.');
+        AssertPostKeysNamed(1033, 'Post the lines with Inventory.ItemJournal.Post (templateName, batchName), or delete them first.');
     end;
 
     /// <summary>#68 item 6: the same in Icelandic (1039).</summary>
@@ -171,7 +171,7 @@ codeunit 97055 "Whse Adjustment Calc Tests ori"
     procedure Calculate_BatchWithLines_NamesPostKeysInIcelandic()
     begin
         // Issue #68, AC1 (item 6) | Time: none | Risk: none.
-        AssertPostKeysNamed(1039, 'Bókaðu línurnar með Inventory.ItemJournal.Post (templateName %1, batchName %2), eða eyddu þeim fyrst.');
+        AssertPostKeysNamed(1039, 'Bókaðu línurnar með Inventory.ItemJournal.Post (templateName, batchName), eða eyddu þeim fyrst.');
     end;
 
     /// <summary>#68 item 5: an unknown batch and an unknown item are answered together (1033).</summary>
@@ -221,7 +221,7 @@ codeunit 97055 "Whse Adjustment Calc Tests ori"
         Assert.IsTrue(ItemJournalLine.IsEmpty(), 'The empty line is gone.');
     end;
 
-    local procedure AssertPostKeysNamed(LanguageId: Integer; NextStepPattern: Text)
+    local procedure AssertPostKeysNamed(LanguageId: Integer; NextStep: Text)
     var
         Item: Record Item;
         ItemJournalBatch: Record "Item Journal Batch";
@@ -234,7 +234,10 @@ codeunit 97055 "Whse Adjustment Calc Tests ori"
 
         ResponseJson := Helper.RunTypeInLanguage(Enum::"Message Type ori"::"Warehouse.Adjustment.Calculate", '', Request(ItemJournalBatch, ',"documentNo":"X"'), LanguageId);
 
-        Helper.ExpectError(ResponseJson, 'PreconditionFailed', StrSubstNo(NextStepPattern, ItemJournalBatch."Journal Template Name", ItemJournalBatch.Name));
+        Helper.ExpectError(ResponseJson, 'PreconditionFailed', NextStep);
+        Assert.AreNotEqual(0, StrPos(Helper.TextValue(ResponseJson, 'error'), ItemJournalBatch.Name), 'The error names the batch.');
+        if LanguageId = 1033 then
+            ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Adjustment.Calculate", ResponseJson);
     end;
 
     local procedure AssertIndependentProblems(LanguageId: Integer; Summary: Text)
@@ -249,6 +252,8 @@ codeunit 97055 "Whse Adjustment Calc Tests ori"
         Assert.AreEqual('MultipleErrors', Helper.TextValue(ResponseJson, 'code'), Helper.ResponseText(ResponseJson));
         Assert.AreEqual(Summary, Helper.TextValue(ResponseJson, 'error'), 'The summary is in the caller language.');
         Assert.AreEqual('colour:UnknownParameter,journalBatchName:RecordNotFound,itemNo:RecordNotFound', Helper.ErrorList(ResponseJson), 'Every problem is listed.');
+        if LanguageId = 1033 then
+            ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Adjustment.Calculate", ResponseJson);
     end;
 
     local procedure CreateItemJournalBatch(var ItemJournalBatch: Record "Item Journal Batch")

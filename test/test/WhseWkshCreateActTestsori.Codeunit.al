@@ -21,6 +21,7 @@ codeunit 97057 "Whse Wksh CreateAct Tests ori"
     var
         Assert: Codeunit "Library Assert";
         Helper: Codeunit "Whse Jnl Test Helper ori";
+        ContractAssert: Codeunit "Whse Contract Assert ori";
 
     /// <summary>AC02: the pick worksheet creates a pick and answers its number.</summary>
     [Test]
@@ -171,6 +172,7 @@ codeunit 97057 "Whse Wksh CreateAct Tests ori"
         Helper.ExpectError(Send(Helper.WorksheetRequest('pick', WorksheetName, ',"lines":[{"lineNo":999999,"qtyToHandle":1}]')), 'RecordNotFound', 'Use the line numbers answered by Warehouse.Worksheet.GetDocuments.');
         Helper.ExpectError(Send(Helper.WorksheetRequest('putAway', PutWorksheetName, ',"perItem":true')), 'InvalidParameter', 'Remove the grouping option, or use a pick worksheet.');
         Helper.ExpectError(Send(Helper.WorksheetRequest('pick', WorksheetName, ',"sortingMethod":"Colour"')), 'InvalidParameter', 'Send one of "None", "Item", "Document", "Shelf or Bin", "Due Date", "Ship-To", "Bin Ranking" or "Action Type".');
+        ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Worksheet.CreateActivities", Send(Helper.WorksheetRequest('pick', WorksheetName, ',"sortingMethod":"Colour"')));
         Helper.ExpectError(Helper.RunTypeInLanguage(Enum::"Message Type ori"::"Warehouse.Worksheet.CreateActivities", '', Helper.WorksheetRequest('pick', WorksheetName, ',"sortingMethod":"Colour"'), 1039), 'InvalidParameter', 'Sendu eitt af "None", "Item", "Document", "Shelf or Bin", "Due Date", "Ship-To", "Bin Ranking" eða "Action Type".');
         Helper.ExpectError(Send(Helper.WorksheetRequest('pick', WorksheetName, ',"assignedUserId":"NOBODY-HERE"')), 'InvalidParameter', 'Send a warehouse employee of the location, or omit assignedUserId.');
         Helper.ExpectError(Send(Helper.WorksheetRequest('pick', WorksheetName, ',"perItem":"yes"')), 'InvalidParameterFormat', '');

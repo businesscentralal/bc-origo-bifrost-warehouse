@@ -478,9 +478,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method AvailabilityNextStep - NamedType InventoryNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 1320428310 - Method 1416300912 - NamedType 2312266391" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Read the warehouse entries of bin %1 and item %2 with Data.Records.Get on table Warehouse Entry.</source>
-          <target>Lestu vöruhúsafærslur hólfs %1 og vöru %2 með Data.Records.Get á töflunni Warehouse Entry.</target>
-          <note from="Developer" annotates="general" priority="2">%1 = bin, %2 = item, is-IS=Lestu vöruhúsafærslur hólfs %1 og vöru %2 með Data.Records.Get á töflunni Warehouse Entry.</note>
+          <source>Read the warehouse entries of the bin and item with Data.Records.Get on table Warehouse Entry.</source>
+          <target>Lestu vöruhúsafærslur hólfsins og vörunnar með Data.Records.Get á töflunni Warehouse Entry.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lestu vöruhúsafærslur hólfsins og vörunnar með Data.Records.Get á töflunni Warehouse Entry.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method AvailabilityNextStep - NamedType EntriesNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 1320428310 - Method 3752376489 - NamedType 2375457378" size-unit="char" translate="yes" xml:space="preserve">
@@ -676,9 +676,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method CheckBatch - NamedType HasLinesLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 4252178793 - Method 2666466422 - NamedType 3807453844" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Post the lines with Inventory.ItemJournal.Post (templateName %1, batchName %2), or delete them first.</source>
-          <target>Bókaðu línurnar með Inventory.ItemJournal.Post (templateName %1, batchName %2), eða eyddu þeim fyrst.</target>
-          <note from="Developer" annotates="general" priority="2">%1 = template, %2 = batch, is-IS=Bókaðu línurnar með Inventory.ItemJournal.Post (templateName %1, batchName %2), eða eyddu þeim fyrst.</note>
+          <source>Post the lines with Inventory.ItemJournal.Post (templateName, batchName), or delete them first.</source>
+          <target>Bókaðu línurnar með Inventory.ItemJournal.Post (templateName, batchName), eða eyddu þeim fyrst.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bókaðu línurnar með Inventory.ItemJournal.Post (templateName, batchName), eða eyddu þeim fyrst.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method CheckBatch - NamedType HasLinesNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 4252178793 - Method 2666466422 - NamedType 1721277456" size-unit="char" translate="yes" xml:space="preserve">

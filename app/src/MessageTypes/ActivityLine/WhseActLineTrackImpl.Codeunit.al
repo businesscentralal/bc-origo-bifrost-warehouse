@@ -151,7 +151,8 @@ codeunit 10078465 "Whse ActLine Track Impl ori" implements "Msg Interface ori", 
         Helper: Codeunit "Whse ActLine Helper ori";
     begin
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidLine, 'A serial number entry has a quantity other than one base unit.', 'One entry per serial no.');
-        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidLine, 'The lot, serial or package number is not available in the bin of a Take line.', 'Read Inventory.TrackingAvailability.Get for the item when Bifrost Inventory is in the roster; otherwise read the warehouse entries of the bin with Data.Records.Get.');
+        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidLine, 'The lot, serial or package number is not available in the bin of a Take line, and Bifrost Inventory is in the roster.', 'Read Inventory.TrackingAvailability.Get for the item.');
+        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidLine, 'The lot, serial or package number is not available in the bin of a Take line, and Bifrost Inventory is not in the roster.', 'Read the warehouse entries of the bin and item with Data.Records.Get on table Warehouse Entry.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PreconditionFailed, 'The item of the line has no item tracking code that requires warehouse tracking.', 'No tracking is needed on this line.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameter, 'activityType is not valid, an entry has no tracking number, a quantity is zero or negative, the entries of a line exceed its outstanding quantity, or a line with several entries misses a quantity.', 'Send a lot, serial or package number and a positive quantity on every entry, at most the outstanding quantity per line.');
         Helper.AddActivityErrors(Errors);
@@ -516,7 +517,7 @@ codeunit 10078465 "Whse ActLine Track Impl ori" implements "Msg Interface ori", 
             Argument.AddError(
                 "Bifrost Error Code ori"::InvalidLine,
                 StrSubstNo(NotAvailableLbl, ActivityLine."Bin Code", Available - AlreadyTaken, ActivityLine."Item No.", TrackingText(Entry), Values.IntegerValue(Entry, 'index') + 1, Requested),
-                Values.LineParameter('entries', Values.IntegerValue(Entry, 'index'), TrackingKey(Entry)), Values.TextValue(Entry, TrackingKey(Entry)), '', AvailabilityNextStep(ActivityLine));
+                Values.LineParameter('entries', Values.IntegerValue(Entry, 'index'), TrackingKey(Entry)), Values.TextValue(Entry, TrackingKey(Entry)), '', AvailabilityNextStep());
             exit(false);
         end;
         if Taken.ContainsKey(TakenKey) then
@@ -530,17 +531,16 @@ codeunit 10078465 "Whse ActLine Track Impl ori" implements "Msg Interface ori", 
     /// The next step of a number that is not in the bin. Inventory.TrackingAvailability.Get belongs to Bifrost Inventory,
     /// which Warehouse does not depend on, so it is named only when it is in the caller's roster (#68).
     /// </summary>
-    /// <param name="ActivityLine">The Take line.</param>
     /// <returns>The next step.</returns>
-    internal procedure AvailabilityNextStep(ActivityLine: Record "Warehouse Activity Line"): Text
+    internal procedure AvailabilityNextStep(): Text
     var
         Values: Codeunit "Whse Msg Values ori";
         InventoryNextStepLbl: Label 'Read Inventory.TrackingAvailability.Get for the item.', Comment = 'is-IS=Lestu Inventory.TrackingAvailability.Get fyrir vöruna.';
-        EntriesNextStepLbl: Label 'Read the warehouse entries of bin %1 and item %2 with Data.Records.Get on table Warehouse Entry.', Comment = '%1 = bin, %2 = item, is-IS=Lestu vöruhúsafærslur hólfs %1 og vöru %2 með Data.Records.Get á töflunni Warehouse Entry.';
+        EntriesNextStepLbl: Label 'Read the warehouse entries of the bin and item with Data.Records.Get on table Warehouse Entry.', Comment = 'is-IS=Lestu vöruhúsafærslur hólfsins og vörunnar með Data.Records.Get á töflunni Warehouse Entry.';
     begin
         if Values.IsTypeInRoster('Inventory.TrackingAvailability.Get') then
             exit(InventoryNextStepLbl);
-        exit(StrSubstNo(EntriesNextStepLbl, ActivityLine."Bin Code", ActivityLine."Item No."));
+        exit(EntriesNextStepLbl);
     end;
 
     local procedure TrackingText(Entry: JsonObject) Result: Text

@@ -67,7 +67,9 @@ codeunit 97062 "Whse Jnl Contract Tests ori"
         AssertDeclaredError("Message Type ori"::"Warehouse.ActivityLine.ChangeBin", 'InvalidLine', 'Read Warehouse.BinContent.Get.');
         AssertDeclaredError("Message Type ori"::"Warehouse.ActivityLine.ChangeBin", 'ConflictingIdentifiers', 'Use the activity no. answered by Warehouse.Activity.Get.');
         AssertDeclaredError("Message Type ori"::"Warehouse.ActivityLine.AssignTracking", 'InvalidLine', 'One entry per serial no.');
-        AssertDeclaredError("Message Type ori"::"Warehouse.ActivityLine.AssignTracking", 'InvalidLine', 'Read Inventory.TrackingAvailability.Get for the item when Bifrost Inventory is in the roster; otherwise read the warehouse entries of the bin with Data.Records.Get.');
+        AssertDeclaredError("Message Type ori"::"Warehouse.ActivityLine.AssignTracking", 'InvalidLine', 'Read Inventory.TrackingAvailability.Get for the item.');
+        AssertDeclaredError("Message Type ori"::"Warehouse.ActivityLine.AssignTracking", 'InvalidLine', 'Read the warehouse entries of the bin and item with Data.Records.Get on table Warehouse Entry.');
+        AssertDeclaredError("Message Type ori"::"Warehouse.Worksheet.CreateActivities", 'InvalidParameter', 'Send one of "None", "Item", "Document", "Shelf or Bin", "Due Date", "Ship-To", "Bin Ranking" or "Action Type".');
         AssertDeclaredError("Message Type ori"::"Warehouse.ActivityLine.AssignTracking", 'PreconditionFailed', 'No tracking is needed on this line.');
     end;
 

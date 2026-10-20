@@ -589,7 +589,7 @@ codeunit 10078446 "Whse Journal Create Impl ori" implements "Msg Interface ori",
 
     local procedure CheckTracking(var Argument: Record "Message Argument ori"; Index: Integer; ItemNo: Code[20]; QuantityBase: Decimal; LotText: Text; SerialText: Text; PackageText: Text): Boolean
     var
-        TempWhseItemTrackingSetup: Record "Item Tracking Setup";
+        TempWhseItemTrackingSetup: Record "Item Tracking Setup" temporary;
         ItemTrackingMgt: Codeunit "Item Tracking Management";
         Values: Codeunit "Whse Msg Values ori";
         NoTrackingLbl: Label 'Item %1 does not use warehouse item tracking, so line %2 cannot carry lot, serial or package numbers.', Comment = '%1 = item, %2 = line index, is-IS=Vara %1 notar ekki vörurakningu í vöruhúsi, svo lína %2 getur ekki borið lotu-, rað- eða pakkanúmer.';

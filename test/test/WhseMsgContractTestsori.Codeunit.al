@@ -246,7 +246,8 @@ codeunit 97027 "Whse Msg Contract Tests ori"
         // #74 adds the paging entry (skip or take is not a whole number), so InvalidParameterFormat has four entries.
         AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'RecordNotFound', 2);
         AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'InvalidParameterFormat', 4);
-        AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'InvalidParameter', 1);
+        // Two distinct refusals: an activityType that is not valid, and (#74) a negative skip or take.
+        AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'InvalidParameter', 2);
         AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'MultipleErrors', 1);
     end;
 

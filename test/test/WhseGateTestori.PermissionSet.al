@@ -12,6 +12,7 @@ using System.Environment.Configuration;
 /// <summary>
 /// Document and argument permissions for the warehouse posting-gate tests.
 /// Does not grant Whse Posting ori or Whse Invoice ori. Those sets are added only on the grant path.
+/// The registered and posted headers are read only: Business Central's register and post codeunits write them (#70).
 /// Grants indirect read on NAV App Setting for HTTP readiness; never settings-write permission.
 /// Grants indirect read on Company. Dispatcher.Execute calls Foundation Eula Consent ori, which reads Company to build the consent key.
 /// </summary>
@@ -28,10 +29,10 @@ permissionset 97025 "Whse Gate Test ori"
         tabledata "Warehouse Receipt Header" = RIMD,
         tabledata "Warehouse Activity Header" = RIMD,
         tabledata "Warehouse Activity Line" = RIMD,
-        tabledata "Registered Whse. Activity Hdr." = RIMD,
-        tabledata "Registered Invt. Movement Hdr." = RIMD,
-        tabledata "Posted Invt. Pick Header" = RIMD,
-        tabledata "Posted Invt. Put-away Header" = RIMD,
+        tabledata "Registered Whse. Activity Hdr." = R,
+        tabledata "Registered Invt. Movement Hdr." = R,
+        tabledata "Posted Invt. Pick Header" = R,
+        tabledata "Posted Invt. Put-away Header" = R,
         codeunit "Whse Posting Gate ori" = X,
         codeunit "Whse Shipment Post Impl ori" = X,
         codeunit "Whse Receipt Post Impl ori" = X,

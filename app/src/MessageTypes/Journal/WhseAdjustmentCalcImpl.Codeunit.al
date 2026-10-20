@@ -29,6 +29,7 @@ codeunit 10078450 "Whse Adjustment Calc Impl ori" implements "Msg Interface ori"
     begin
         if not Context.TryGetPayload(Payload) then
             Error(MissingPayloadErr);
+        DeleteEmptyLines(CopyStr(Values.TextValue(Payload, 'journalTemplateName'), 1, 10), CopyStr(Values.TextValue(Payload, 'journalBatchName'), 1, 10));
         ItemJournalLine.Init();
         ItemJournalLine."Journal Template Name" := CopyStr(Values.TextValue(Payload, 'journalTemplateName'), 1, MaxStrLen(ItemJournalLine."Journal Template Name"));
         ItemJournalLine."Journal Batch Name" := CopyStr(Values.TextValue(Payload, 'journalBatchName'), 1, MaxStrLen(ItemJournalLine."Journal Batch Name"));
@@ -86,7 +87,7 @@ codeunit 10078450 "Whse Adjustment Calc Impl ori" implements "Msg Interface ori"
     /// <returns>Selection description.</returns>
     procedure GetSelectionDescription(): Text
     var
-        SelectionLbl: Label 'Writes item journal lines for the quantity in the adjustment bins of directed locations, so the item ledger can follow registered warehouse adjustments. It posts nothing; post the batch with Inventory.ItemJournal.Post. The batch must be empty.', Comment = 'is-IS=Skrifar línur í birgðabók fyrir magnið í leiðréttingarhólfum beinna staðsetninga, svo birgðahöfuðbókin geti fylgt skráðum leiðréttingum vöruhúss. Hún bókar ekkert; bókaðu keyrsluna með Inventory.ItemJournal.Post. Keyrslan verður að vera tóm.';
+        SelectionLbl: Label 'Writes item journal lines for the quantity in the adjustment bins of directed locations, so the item ledger can follow registered warehouse adjustments. It posts nothing; post the batch with Inventory.ItemJournal.Post, sending journalTemplateName as templateName and journalBatchName as batchName. The batch must be empty.', Comment = 'is-IS=Skrifar línur í birgðabók fyrir magnið í leiðréttingarhólfum beinna staðsetninga, svo birgðahöfuðbókin geti fylgt skráðum leiðréttingum vöruhúss. Hún bókar ekkert; bókaðu keyrsluna með Inventory.ItemJournal.Post og sendu journalTemplateName sem templateName og journalBatchName sem batchName. Keyrslan verður að vera tóm.';
     begin
         exit(SelectionLbl);
     end;
@@ -123,8 +124,8 @@ codeunit 10078450 "Whse Adjustment Calc Impl ori" implements "Msg Interface ori"
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        Parameters.Add(ContractMgt.Parameter('journalTemplateName', 'string', true, 'Item journal template of type Item.'));
-        Parameters.Add(ContractMgt.Parameter('journalBatchName', 'string', true, 'Item journal batch name. The batch must be empty.'));
+        Parameters.Add(ContractMgt.Parameter('journalTemplateName', 'string', true, 'Item journal template of type Item. Inventory.ItemJournal.Post calls it templateName.'));
+        Parameters.Add(ContractMgt.Parameter('journalBatchName', 'string', true, 'Item journal batch name. The batch must be empty. Inventory.ItemJournal.Post calls it batchName.'));
         Parameters.Add(ContractMgt.Parameter('postingDate', 'string', false, 'Posting date written as YYYY-MM-DD. Defaults to the work date.'));
         Parameters.Add(ContractMgt.Parameter('documentNo', 'string', false, 'Document number of the lines. Required when the batch has no number series.'));
         Parameters.Add(ContractMgt.Parameter('itemNo', 'string', false, 'Limits the calculation to one item.'));
@@ -174,7 +175,7 @@ codeunit 10078450 "Whse Adjustment Calc Impl ori" implements "Msg Interface ori"
     begin
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::RecordNotFound, 'The item journal template or batch was not found.', 'Create the batch first.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::RecordNotFound, 'The item or location was not found.', 'Check the value and send the request again.');
-        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PreconditionFailed, 'The batch already has lines.', 'Post or delete the existing lines first.');
+        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PreconditionFailed, 'The batch already has lines with an item. The empty line Business Central leaves after posting does not count.', 'Post the lines with Inventory.ItemJournal.Post (templateName, batchName), or delete them first.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PreconditionFailed, 'The location does not use directed put-away and pick, so it has no warehouse adjustment.', 'Send a directed location, or omit locationCode.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::MissingParameter, 'journalTemplateName or journalBatchName is missing, or documentNo is missing for a batch without a number series.', 'Send the batch keys, and documentNo when the batch has no number series.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameterFormat, 'A value has the wrong JSON type, is too long, or a date is not YYYY-MM-DD.', 'Send text for codes and dates.');
@@ -213,7 +214,7 @@ codeunit 10078450 "Whse Adjustment Calc Impl ori" implements "Msg Interface ori"
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        Related.Add(ContractMgt.RelatedEntry('Inventory.ItemJournal.Post', 'Use it to post the calculated lines.'));
+        Related.Add(ContractMgt.RelatedEntry('Inventory.ItemJournal.Post', 'Use it to post the calculated lines: send journalTemplateName as templateName and journalBatchName as batchName.'));
         Related.Add(ContractMgt.RelatedEntry('Warehouse.Journal.Register', 'Use it first to register the warehouse adjustments that this type brings to the item ledger.'));
         Related.Add(ContractMgt.RelatedEntry('Warehouse.PhysInventory.Register', 'Use it first to register a warehouse count.'));
         exit(true);
@@ -249,7 +250,7 @@ codeunit 10078450 "Whse Adjustment Calc Impl ori" implements "Msg Interface ori"
     /// <returns>True when an overview is declared.</returns>
     procedure GetOverview(var Overview: Text): Boolean
     var
-        OverviewLbl: Label 'Runs Calculate Warehouse Adjustment into an empty item journal batch, filtered by item and location, and answers the lines it wrote. Nothing to adjust is a success with an empty list. Post the batch with Inventory.ItemJournal.Post.', Comment = 'is-IS=Keyrir Reikna leiðréttingu vöruhúss inn í tóma keyrslu birgðabókar, síað eftir vöru og staðsetningu, og skilar línunum sem hún skrifaði. Ekkert til að leiðrétta er árangur með tómum lista. Bókaðu keyrsluna með Inventory.ItemJournal.Post.';
+        OverviewLbl: Label 'Runs Calculate Warehouse Adjustment into an empty item journal batch, filtered by item and location, and answers the lines it wrote. Nothing to adjust is a success with an empty list. Post the batch with Inventory.ItemJournal.Post (templateName = journalTemplateName, batchName = journalBatchName).', Comment = 'is-IS=Keyrir Reikna leiðréttingu vöruhúss inn í tóma keyrslu birgðabókar, síað eftir vöru og staðsetningu, og skilar línunum sem hún skrifaði. Ekkert til að leiðrétta er árangur með tómum lista. Bókaðu keyrsluna með Inventory.ItemJournal.Post (templateName = journalTemplateName, batchName = journalBatchName).';
     begin
         Overview := OverviewLbl;
         exit(true);
@@ -291,6 +292,11 @@ codeunit 10078450 "Whse Adjustment Calc Impl ori" implements "Msg Interface ori"
         BatchPresent: Boolean;
         Present: Boolean;
         LocationPresent: Boolean;
+        TemplateRead: Boolean;
+        BatchRead: Boolean;
+        DocumentNoRead: Boolean;
+        ItemRead: Boolean;
+        LocationRead: Boolean;
         DeniedLbl: Label 'You do not have permission to calculate the warehouse adjustment.', Comment = 'is-IS=Þú hefur ekki heimild til að reikna leiðréttingu vöruhúss.';
         DeniedNextStepLbl: Label 'Ask an administrator to assign BIFROST Whse - Full ori.', Comment = 'is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.';
         ProblemsLbl: Label 'Nothing was written.', Comment = 'is-IS=Ekkert var skrifað.';
@@ -315,30 +321,35 @@ codeunit 10078450 "Whse Adjustment Calc Impl ori" implements "Msg Interface ori"
         AllowedKeys.Add('itemNo');
         AllowedKeys.Add('locationCode');
         Values.RefuseUnknownKeys(RequestJson, AllowedKeys, Argument, '', -1);
-        Context.ReadText(RequestJson, 'journalTemplateName', 10, Argument, TemplateText, TemplatePresent, 'journalTemplateName');
-        Context.ReadText(RequestJson, 'journalBatchName', 10, Argument, BatchText, BatchPresent, 'journalBatchName');
+        TemplateRead := Context.ReadText(RequestJson, 'journalTemplateName', 10, Argument, TemplateText, TemplatePresent, 'journalTemplateName');
+        BatchRead := Context.ReadText(RequestJson, 'journalBatchName', 10, Argument, BatchText, BatchPresent, 'journalBatchName');
         Values.ReadDate(RequestJson, 'postingDate', Argument, PostingDate, Present, 'postingDate');
-        Context.ReadText(RequestJson, 'documentNo', 20, Argument, DocumentNoText, Present, 'documentNo');
-        Context.ReadText(RequestJson, 'itemNo', 20, Argument, ItemText, Present, 'itemNo');
-        Context.ReadText(RequestJson, 'locationCode', 10, Argument, LocationText, LocationPresent, 'locationCode');
-        if not Argument.HasCollectedErrors() then begin
-            if not TemplatePresent then
-                Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, 'journalTemplateName'), 'journalTemplateName', '', '', MissingNextStepLbl);
-            if not BatchPresent then
-                Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, 'journalBatchName'), 'journalBatchName', '', '', MissingNextStepLbl);
-            if LocationPresent and (DelChr(Argument.Subject, '<>', ' ') <> '') and (UpperCase(DelChr(Argument.Subject, '<>', ' ')) <> UpperCase(LocationText)) then
-                Argument.AddError("Bifrost Error Code ori"::ConflictingIdentifiers, ConflictLbl, 'locationCode', LocationText, Argument.Subject, ConflictNextStepLbl);
+        DocumentNoRead := Context.ReadText(RequestJson, 'documentNo', 20, Argument, DocumentNoText, Present, 'documentNo');
+        ItemRead := Context.ReadText(RequestJson, 'itemNo', 20, Argument, ItemText, Present, 'itemNo');
+        LocationRead := Context.ReadText(RequestJson, 'locationCode', 10, Argument, LocationText, LocationPresent, 'locationCode');
+        // Independent problems are answered together (#68): a value that was read is checked even when another failed.
+        if TemplateRead and not TemplatePresent then
+            Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, 'journalTemplateName'), 'journalTemplateName', '', '', MissingNextStepLbl);
+        if BatchRead and not BatchPresent then
+            Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, 'journalBatchName'), 'journalBatchName', '', '', MissingNextStepLbl);
+        if LocationPresent and (DelChr(Argument.Subject, '<>', ' ') <> '') and (UpperCase(DelChr(Argument.Subject, '<>', ' ')) <> UpperCase(LocationText)) then begin
+            Argument.AddError("Bifrost Error Code ori"::ConflictingIdentifiers, ConflictLbl, 'locationCode', LocationText, Argument.Subject, ConflictNextStepLbl);
+            // Which location was meant is unclear, so neither is looked up.
+            LocationRead := false;
         end;
+        if LocationRead and not LocationPresent then
+            LocationText := CopyStr(DelChr(Argument.Subject, '<>', ' '), 1, 10);
+        if TemplatePresent and BatchPresent then
+            CheckBatch(Argument, CopyStr(TemplateText, 1, 10), CopyStr(BatchText, 1, 10), DocumentNoText, DocumentNoRead);
+        if not ItemRead then
+            ItemText := '';
+        if not LocationRead then
+            LocationText := '';
+        CheckFilters(Argument, ItemText, LocationText);
         if Argument.HasCollectedErrors() then begin
             Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, ProblemsLbl);
             exit;
         end;
-        if not LocationPresent then
-            LocationText := CopyStr(DelChr(Argument.Subject, '<>', ' '), 1, 10);
-        if not ResolveBatch(Argument, CopyStr(TemplateText, 1, 10), CopyStr(BatchText, 1, 10), DocumentNoText) then
-            exit;
-        if not CheckFilters(Argument, ItemText, LocationText) then
-            exit;
         Payload.Add('journalTemplateName', TemplateText);
         Payload.Add('journalBatchName', BatchText);
         Payload.Add('postingDate', Values.DateText(PostingDate));
@@ -393,7 +404,7 @@ codeunit 10078450 "Whse Adjustment Calc Impl ori" implements "Msg Interface ori"
         Argument."Content Type" := Argument.GetContentTypeJson();
     end;
 
-    local procedure ResolveBatch(var Argument: Record "Message Argument ori"; TemplateName: Code[10]; BatchName: Code[10]; DocumentNoText: Text): Boolean
+    local procedure CheckBatch(var Argument: Record "Message Argument ori"; TemplateName: Code[10]; BatchName: Code[10]; DocumentNoText: Text; DocumentNoRead: Boolean)
     var
         ItemJournalTemplate: Record "Item Journal Template";
         ItemJournalBatch: Record "Item Journal Batch";
@@ -404,38 +415,47 @@ codeunit 10078450 "Whse Adjustment Calc Impl ori" implements "Msg Interface ori"
         TypeLbl: Label 'Item journal template %1 is not of type Item.', Comment = '%1 = template, is-IS=Birgðabókarsniðmát %1 er ekki af tegundinni Vara.';
         TypeNextStepLbl: Label 'Use an item journal template of type Item.', Comment = 'is-IS=Notaðu birgðabókarsniðmát af tegundinni Vara.';
         HasLinesLbl: Label 'Item journal batch %1 %2 already has lines.', Comment = '%1 = template, %2 = batch, is-IS=Keyrsla birgðabókar %1 %2 hefur þegar línur.';
-        HasLinesNextStepLbl: Label 'Post or delete the existing lines first.', Comment = 'is-IS=Bókaðu eða eyddu núverandi línum fyrst.';
+        HasLinesNextStepLbl: Label 'Post the lines with Inventory.ItemJournal.Post (templateName %1, batchName %2), or delete them first.', Comment = '%1 = template, %2 = batch, is-IS=Bókaðu línurnar með Inventory.ItemJournal.Post (templateName %1, batchName %2), eða eyddu þeim fyrst.';
         DocumentNoLbl: Label 'documentNo is required because batch %1 has no number series.', Comment = '%1 = batch, is-IS=documentNo er nauðsynlegt því keyrsla %1 hefur enga númeraröð.';
         DocumentNoNextStepLbl: Label 'Send documentNo, or give the batch a number series.', Comment = 'is-IS=Sendu documentNo, eða gefðu keyrslunni númeraröð.';
     begin
         ItemJournalTemplate.SetLoadFields(Name, Type, Recurring);
         if not ItemJournalTemplate.Get(TemplateName) then begin
-            Argument.RespondWithError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(TemplateNotFoundLbl, TemplateName), 'journalTemplateName', TemplateName, '', CreateBatchNextStepLbl);
-            exit(false);
+            Argument.AddError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(TemplateNotFoundLbl, TemplateName), 'journalTemplateName', TemplateName, '', CreateBatchNextStepLbl);
+            exit;
         end;
         if (ItemJournalTemplate.Type <> ItemJournalTemplate.Type::Item) or ItemJournalTemplate.Recurring then begin
-            Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(TypeLbl, TemplateName), 'journalTemplateName', TemplateName, 'Item', TypeNextStepLbl);
-            exit(false);
+            Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(TypeLbl, TemplateName), 'journalTemplateName', TemplateName, 'Item', TypeNextStepLbl);
+            exit;
         end;
         ItemJournalBatch.SetLoadFields("Journal Template Name", Name, "No. Series");
         if not ItemJournalBatch.Get(TemplateName, BatchName) then begin
-            Argument.RespondWithError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(BatchNotFoundLbl, TemplateName, BatchName), 'journalBatchName', BatchName, '', CreateBatchNextStepLbl);
-            exit(false);
+            Argument.AddError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(BatchNotFoundLbl, TemplateName, BatchName), 'journalBatchName', BatchName, '', CreateBatchNextStepLbl);
+            exit;
         end;
+        // The empty line Business Central leaves after posting a batch is not a line (#68); OnRun deletes it.
         ItemJournalLine.SetRange("Journal Template Name", TemplateName);
         ItemJournalLine.SetRange("Journal Batch Name", BatchName);
-        if not ItemJournalLine.IsEmpty() then begin
-            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(HasLinesLbl, TemplateName, BatchName), 'journalBatchName', BatchName, '', HasLinesNextStepLbl);
-            exit(false);
-        end;
-        if (DocumentNoText = '') and (ItemJournalBatch."No. Series" = '') then begin
-            Argument.RespondWithError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(DocumentNoLbl, BatchName), 'documentNo', '', '', DocumentNoNextStepLbl);
-            exit(false);
-        end;
-        exit(true);
+        ItemJournalLine.SetFilter("Item No.", '<>%1', '');
+        if not ItemJournalLine.IsEmpty() then
+            Argument.AddError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(HasLinesLbl, TemplateName, BatchName), 'journalBatchName', BatchName, '', StrSubstNo(HasLinesNextStepLbl, TemplateName, BatchName));
+        if DocumentNoRead and (DocumentNoText = '') and (ItemJournalBatch."No. Series" = '') then
+            Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(DocumentNoLbl, BatchName), 'documentNo', '', '', DocumentNoNextStepLbl);
     end;
 
-    local procedure CheckFilters(var Argument: Record "Message Argument ori"; ItemText: Text; LocationText: Text): Boolean
+    local procedure DeleteEmptyLines(TemplateName: Code[10]; BatchName: Code[10])
+    var
+        ItemJournalLine: Record "Item Journal Line";
+    begin
+        ItemJournalLine.SetRange("Journal Template Name", TemplateName);
+        ItemJournalLine.SetRange("Journal Batch Name", BatchName);
+        ItemJournalLine.SetRange("Item No.", '');
+        ItemJournalLine.SetRange(Quantity, 0);
+        if not ItemJournalLine.IsEmpty() then
+            ItemJournalLine.DeleteAll(true);
+    end;
+
+    local procedure CheckFilters(var Argument: Record "Message Argument ori"; ItemText: Text; LocationText: Text)
     var
         Item: Record Item;
         Location: Record Location;
@@ -446,23 +466,18 @@ codeunit 10078450 "Whse Adjustment Calc Impl ori" implements "Msg Interface ori"
     begin
         if ItemText <> '' then begin
             Item.SetLoadFields("No.");
-            if not Item.Get(CopyStr(ItemText, 1, MaxStrLen(Item."No."))) then begin
-                Argument.RespondWithError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(NotFoundLbl, Item.TableCaption(), ItemText), 'itemNo', ItemText, '', NotFoundNextStepLbl);
-                exit(false);
-            end;
+            if not Item.Get(CopyStr(ItemText, 1, MaxStrLen(Item."No."))) then
+                Argument.AddError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(NotFoundLbl, Item.TableCaption(), ItemText), 'itemNo', ItemText, '', NotFoundNextStepLbl);
         end;
         if LocationText <> '' then begin
             Location.SetLoadFields(Code, "Directed Put-away and Pick");
             if not Location.Get(CopyStr(LocationText, 1, MaxStrLen(Location.Code))) then begin
-                Argument.RespondWithError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(NotFoundLbl, Location.TableCaption(), LocationText), 'locationCode', LocationText, '', NotFoundNextStepLbl);
-                exit(false);
+                Argument.AddError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(NotFoundLbl, Location.TableCaption(), LocationText), 'locationCode', LocationText, '', NotFoundNextStepLbl);
+                exit;
             end;
-            if not Location."Directed Put-away and Pick" then begin
-                Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(DirectedLbl, LocationText), 'locationCode', LocationText, '', DirectedNextStepLbl);
-                exit(false);
-            end;
+            if not Location."Directed Put-away and Pick" then
+                Argument.AddError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(DirectedLbl, LocationText), 'locationCode', LocationText, '', DirectedNextStepLbl);
         end;
-        exit(true);
     end;
 
     local procedure EntryTypeName(EntryType: Enum "Item Ledger Entry Type"): Text

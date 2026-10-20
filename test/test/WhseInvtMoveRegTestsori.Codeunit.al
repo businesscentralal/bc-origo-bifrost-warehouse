@@ -133,6 +133,40 @@ codeunit 97090 "Whse InvtMove Reg Tests ori"
         Assert.IsTrue(ActivityHeader.Get(ActivityHeader.Type::"Invt. Movement", MovementNo), 'The open movement should stay.');
     end;
 
+    /// <summary>
+    /// A Business Central full user with BIFROST WhsePost ori sees the type enabled and registers, although Business
+    /// Central writes the registered inventory movement under its own permissions (#70).
+    /// </summary>
+    [Test]
+    [TestPermissions(TestPermissions::Restrictive)]
+    procedure Register_FullUserWithPostingGate_Registers()
+    var
+        Location: Record Location;
+        Item: Record Item;
+        FromBin: Record Bin;
+        ToBin: Record Bin;
+        LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
+        MessageTypeInterface: Interface "Msg Interface ori";
+        CreateResponse: JsonObject;
+        ResponseJson: JsonObject;
+        MovementNo: Code[20];
+    begin
+        PrepareBasicStock(Location, Item, FromBin, ToBin, 5);
+        RunCreate(LineRequest(Location.Code, Item."No.", 1, FromBin.Code, ToBin.Code), CreateResponse);
+        Assert.AreEqual('Success', TextValue(CreateResponse, 'status'), ResponseText(CreateResponse));
+        MovementNo := CopyStr(TextValue(CreateResponse, 'movementNo'), 1, MaxStrLen(MovementNo));
+        Commit();
+
+        LowerToFullUserWithPostingGate(LibraryLowerPermissions);
+        MessageTypeInterface := Enum::"Message Type ori"::"Warehouse.InventoryMovement.Register";
+        Assert.IsTrue(MessageTypeInterface.IsEnabled(), 'Register must be enabled for a full user with BIFROST WhsePost ori.');
+        Assert.IsTrue(RunAsCaller('{"movementNo":"' + MovementNo + '"}', ResponseJson), 'The response should be JSON.');
+
+        Assert.AreEqual('Success', TextValue(ResponseJson, 'status'), ResponseText(ResponseJson));
+        Assert.AreNotEqual('', TextValue(ResponseJson, 'registeredMovementNo'), 'A registered movement number should be returned.');
+        Assert.AreEqual(0, IntegerValue(ResponseJson, 'remainingLineCount'), 'A full register should leave no open line.');
+    end;
+
     /// <summary>Register is disabled and returns PermissionDenied without write permission.</summary>
     [Test]
     [TestPermissions(TestPermissions::Restrictive)]
@@ -276,5 +310,41 @@ codeunit 97090 "Whse InvtMove Reg Tests ori"
         if not Token.IsValue() then
             exit(-1);
         exit(Token.AsValue().AsInteger());
+    end;
+
+    local procedure RunAsCaller(RequestText: Text; var ResponseJson: JsonObject): Boolean
+    var
+        Dispatcher: Codeunit "Dispatcher ori";
+        RequestContent: BigText;
+        ResponseContent: BigText;
+        ResponseContentType: Text[100];
+        ResponseBody: Text;
+    begin
+        // The public dispatcher, called directly so the lowered caller needs no test helper codeunit.
+        Clear(ResponseJson);
+        RequestContent.AddText(RequestText);
+        Dispatcher.Execute(
+            Enum::"Message Type ori"::"Warehouse.InventoryMovement.Register",
+            Enum::"Message Version ori"::"1.0",
+            '',
+            'Bifrost Warehouse Tests',
+            'text/json',
+            RequestContent,
+            ResponseContent,
+            ResponseContentType);
+        if ResponseContent.Length() = 0 then
+            exit(false);
+        ResponseContent.GetSubText(ResponseBody, 1, ResponseContent.Length());
+        exit(ResponseJson.ReadFrom(ResponseBody));
+    end;
+
+    local procedure LowerToFullUserWithPostingGate(var LibraryLowerPermissions: Codeunit "Library - Lower Permissions")
+    begin
+        // A Business Central full user: direct write on the activity tables, but the registered and posted
+        // headers only through Business Central's own codeunits. Plus the Bifrost sets and the posting gate (#70).
+        LibraryLowerPermissions.PushPermissionSetWithoutDefaults('D365 BUS FULL ACCESS');
+        LibraryLowerPermissions.AddPermissionSet('BIFROST Full ori');
+        LibraryLowerPermissions.AddPermissionSet('Whse Gate Test ori');
+        LibraryLowerPermissions.AddPermissionSet('BIFROST WhsePost ori');
     end;
 }

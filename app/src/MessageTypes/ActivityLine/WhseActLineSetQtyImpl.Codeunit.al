@@ -97,7 +97,7 @@ codeunit 10078464 "Whse ActLine SetQty Impl ori" implements "Msg Interface ori",
     /// <returns>Selection description.</returns>
     procedure GetSelectionDescription(): Text
     var
-        SelectionLbl: Label 'Writes Qty. to Handle through Validate on named activity lines, or on every line with all: true (Autofill Qty. to Handle) or none: true (Delete Qty. to Handle). It registers nothing.', Comment = 'is-IS=Skrifar Magn til meðhöndlunar með Validate á nefndar aðgerðarlínur, eða á allar línur með all: true (Fylla út magn til meðhöndlunar) eða none: true (Eyða magni til meðhöndlunar). Hún skráir ekkert.';
+        SelectionLbl: Label 'Writes Qty. to Handle on named activity lines, with the checks of the activity page, or on every line with all: true (Autofill Qty. to Handle) or none: true (Delete Qty. to Handle). It registers nothing.', Comment = 'is-IS=Skrifar Magn til meðhöndlunar á nefndar aðgerðarlínur, með prófunum aðgerðarsíðunnar, eða á allar línur með all: true (Fylla út magn til meðhöndlunar) eða none: true (Eyða magni til meðhöndlunar). Hún skráir ekkert.';
     begin
         exit(SelectionLbl);
     end;
@@ -366,7 +366,7 @@ codeunit 10078464 "Whse ActLine SetQty Impl ori" implements "Msg Interface ori",
         ErrorCount: Integer;
         Quantity: Decimal;
         QuantityPresent: Boolean;
-        MissingLbl: Label 'Line %1 is missing qtyToHandle.', Comment = '%1 = line index, is-IS=Línu %1 vantar qtyToHandle.';
+        MissingLbl: Label 'Line %1 is missing qtyToHandle.', Comment = '%1 = line position in the request, counted from 1, is-IS=Línu %1 vantar qtyToHandle.';
         MissingNextStepLbl: Label 'Send qtyToHandle on every line.', Comment = 'is-IS=Sendu qtyToHandle á hverri línu.';
         RangeLbl: Label 'qtyToHandle on line %1 must be from zero up to the outstanding quantity %2.', Comment = '%1 = line no., %2 = outstanding, is-IS=qtyToHandle á línu %1 verður að vera frá núlli upp í útistandandi magn %2.';
         RangeNextStepLbl: Label 'Send a quantity from zero up to the outstanding quantity.', Comment = 'is-IS=Sendu magn frá núlli upp í útistandandi magn.';
@@ -381,7 +381,7 @@ codeunit 10078464 "Whse ActLine SetQty Impl ori" implements "Msg Interface ori",
                 Context.ReadDecimal(LineObject, 'qtyToHandle', Argument, Quantity, QuantityPresent, Values.LineParameter('lines', Index, 'qtyToHandle'));
                 if Argument.GetCollectedErrorsJson().Count() = ErrorCount then
                     if not QuantityPresent then
-                        Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index), Values.LineParameter('lines', Index, 'qtyToHandle'), '', '', MissingNextStepLbl)
+                        Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index + 1), Values.LineParameter('lines', Index, 'qtyToHandle'), '', '', MissingNextStepLbl)
                     else
                         if Helper.ResolveLine(LineObject, Argument, ActivityHeader, 'lines', Index, ActivityLine) then
                             if (Quantity < 0) or (Quantity > ActivityLine."Qty. Outstanding") then

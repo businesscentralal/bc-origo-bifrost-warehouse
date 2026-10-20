@@ -92,12 +92,13 @@ codeunit 97055 "Whse Adjustment Calc Tests ori"
         Item: Record Item;
         ItemJournalBatch: Record "Item Journal Batch";
         ItemJournalLine: Record "Item Journal Line";
+        PostKeysTxt: Label 'Post the lines with Inventory.ItemJournal.Post (templateName %1, batchName %2), or delete them first.', Locked = true;
     begin
         Helper.CreateItem(Item);
         CreateItemJournalBatch(ItemJournalBatch);
         LibraryInventory.CreateItemJournalLine(ItemJournalLine, ItemJournalBatch."Journal Template Name", ItemJournalBatch.Name, ItemJournalLine."Entry Type"::"Positive Adjmt.", Item."No.", 1);
 
-        Helper.ExpectError(Send(Request(ItemJournalBatch, ',"documentNo":"X"')), 'PreconditionFailed', 'Post or delete the existing lines first.');
+        Helper.ExpectError(Send(Request(ItemJournalBatch, ',"documentNo":"X"')), 'PreconditionFailed', StrSubstNo(PostKeysTxt, ItemJournalBatch."Journal Template Name", ItemJournalBatch.Name));
         ItemJournalLine.SetRange("Journal Template Name", ItemJournalBatch."Journal Template Name");
         ItemJournalLine.SetRange("Journal Batch Name", ItemJournalBatch.Name);
         Assert.AreEqual(1, ItemJournalLine.Count(), 'Nothing is written.');
@@ -139,6 +140,115 @@ codeunit 97055 "Whse Adjustment Calc Tests ori"
         TempArgument.Insert(true);
         CalcImpl.ExecuteBifrostTask(TempArgument);
         Helper.ExpectError(TempArgument.GetResponseJson(), 'PermissionDenied', 'Ask an administrator to assign BIFROST Whse - Full ori.');
+    end;
+
+    /// <summary>#68 item 1: the empty line Business Central leaves after posting does not block the calculation (1033).</summary>
+    [Test]
+    procedure Calculate_OnlyEmptyLeftoverLine_IsIgnored()
+    begin
+        // Issue #68, AC1 (item 1) | Time: work date | Risk: none.
+        AssertEmptyLineIgnored(1033);
+    end;
+
+    /// <summary>#68 item 1: the same in Icelandic (1039).</summary>
+    [Test]
+    procedure Calculate_OnlyEmptyLeftoverLine_IsIgnoredInIcelandic()
+    begin
+        // Issue #68, AC1 (item 1) | Time: work date | Risk: none.
+        AssertEmptyLineIgnored(1039);
+    end;
+
+    /// <summary>#68 item 6: a batch with lines names the exact keys of Inventory.ItemJournal.Post (1033).</summary>
+    [Test]
+    procedure Calculate_BatchWithLines_NamesPostKeys()
+    begin
+        // Issue #68, AC1 (item 6) | Time: none | Risk: none.
+        AssertPostKeysNamed(1033, 'Post the lines with Inventory.ItemJournal.Post (templateName %1, batchName %2), or delete them first.');
+    end;
+
+    /// <summary>#68 item 6: the same in Icelandic (1039).</summary>
+    [Test]
+    procedure Calculate_BatchWithLines_NamesPostKeysInIcelandic()
+    begin
+        // Issue #68, AC1 (item 6) | Time: none | Risk: none.
+        AssertPostKeysNamed(1039, 'Bókaðu línurnar með Inventory.ItemJournal.Post (templateName %1, batchName %2), eða eyddu þeim fyrst.');
+    end;
+
+    /// <summary>#68 item 5: an unknown batch and an unknown item are answered together (1033).</summary>
+    [Test]
+    procedure Calculate_IndependentProblems_AreCollected()
+    begin
+        // Issue #68, AC1 (item 5) | Time: none | Risk: none.
+        AssertIndependentProblems(1033, 'Nothing was written.');
+    end;
+
+    /// <summary>#68 item 5: the same in Icelandic (1039).</summary>
+    [Test]
+    procedure Calculate_IndependentProblems_AreCollectedInIcelandic()
+    begin
+        // Issue #68, AC1 (item 5) | Time: none | Risk: none.
+        AssertIndependentProblems(1039, 'Ekkert var skrifað.');
+    end;
+
+    local procedure AssertEmptyLineIgnored(LanguageId: Integer)
+    var
+        Location: Record Location;
+        Item: Record Item;
+        Bin: Record Bin;
+        ItemJournalBatch: Record "Item Journal Batch";
+        ItemJournalLine: Record "Item Journal Line";
+        ResponseJson: JsonObject;
+    begin
+        Helper.CreateDirectedLocation(Location);
+        Helper.CreateItem(Item);
+        Helper.FindPickBin(Location.Code, 1, Bin);
+        LibraryWarehouse.UpdateWarehouseStockOnBin(Bin, Item."No.", 3, false);
+        CreateItemJournalBatch(ItemJournalBatch);
+        // The line Business Central leaves in a batch without a number series after Inventory.ItemJournal.Post.
+        ItemJournalLine.Init();
+        ItemJournalLine."Journal Template Name" := ItemJournalBatch."Journal Template Name";
+        ItemJournalLine."Journal Batch Name" := ItemJournalBatch.Name;
+        ItemJournalLine."Line No." := 10000;
+        ItemJournalLine.Insert(false);
+
+        ResponseJson := Helper.RunTypeInLanguage(Enum::"Message Type ori"::"Warehouse.Adjustment.Calculate", '', Request(ItemJournalBatch, ',"itemNo":"' + Item."No." + '","locationCode":"' + Location.Code + '","documentNo":"ADJ-68"'), LanguageId);
+
+        Helper.AssertSuccess(ResponseJson);
+        Assert.AreEqual(1, Helper.IntegerValue(ResponseJson, 'lineCount'), Helper.ResponseText(ResponseJson));
+        ItemJournalLine.SetRange("Journal Template Name", ItemJournalBatch."Journal Template Name");
+        ItemJournalLine.SetRange("Journal Batch Name", ItemJournalBatch.Name);
+        ItemJournalLine.SetRange("Item No.", '');
+        Assert.IsTrue(ItemJournalLine.IsEmpty(), 'The empty line is gone.');
+    end;
+
+    local procedure AssertPostKeysNamed(LanguageId: Integer; NextStepPattern: Text)
+    var
+        Item: Record Item;
+        ItemJournalBatch: Record "Item Journal Batch";
+        ItemJournalLine: Record "Item Journal Line";
+        ResponseJson: JsonObject;
+    begin
+        Helper.CreateItem(Item);
+        CreateItemJournalBatch(ItemJournalBatch);
+        LibraryInventory.CreateItemJournalLine(ItemJournalLine, ItemJournalBatch."Journal Template Name", ItemJournalBatch.Name, ItemJournalLine."Entry Type"::"Positive Adjmt.", Item."No.", 1);
+
+        ResponseJson := Helper.RunTypeInLanguage(Enum::"Message Type ori"::"Warehouse.Adjustment.Calculate", '', Request(ItemJournalBatch, ',"documentNo":"X"'), LanguageId);
+
+        Helper.ExpectError(ResponseJson, 'PreconditionFailed', StrSubstNo(NextStepPattern, ItemJournalBatch."Journal Template Name", ItemJournalBatch.Name));
+    end;
+
+    local procedure AssertIndependentProblems(LanguageId: Integer; Summary: Text)
+    var
+        ItemJournalBatch: Record "Item Journal Batch";
+        ResponseJson: JsonObject;
+    begin
+        CreateItemJournalBatch(ItemJournalBatch);
+
+        ResponseJson := Helper.RunTypeInLanguage(Enum::"Message Type ori"::"Warehouse.Adjustment.Calculate", '', '{"journalTemplateName":"' + ItemJournalBatch."Journal Template Name" + '","journalBatchName":"NOBATCH","documentNo":"X","itemNo":"NO-SUCH-ITEM","colour":"red"}', LanguageId);
+
+        Assert.AreEqual('MultipleErrors', Helper.TextValue(ResponseJson, 'code'), Helper.ResponseText(ResponseJson));
+        Assert.AreEqual(Summary, Helper.TextValue(ResponseJson, 'error'), 'The summary is in the caller language.');
+        Assert.AreEqual('colour:UnknownParameter,journalBatchName:RecordNotFound,itemNo:RecordNotFound', Helper.ErrorList(ResponseJson), 'Every problem is listed.');
     end;
 
     local procedure CreateItemJournalBatch(var ItemJournalBatch: Record "Item Journal Batch")

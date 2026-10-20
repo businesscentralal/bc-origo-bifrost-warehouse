@@ -77,7 +77,7 @@ codeunit 10078463 "Whse ActLine ChgBin Impl ori" implements "Msg Interface ori",
     /// <returns>Selection description.</returns>
     procedure GetSelectionDescription(): Text
     var
-        SelectionLbl: Label 'Changes the bin of one warehouse activity line through Validate. A Take line needs a bin with enough content; a Place line needs a bin that accepts stock. The paired line of the other action type is not changed.', Comment = 'is-IS=Breytir hólfi einnar línu vöruhúsaaðgerðar með Validate. Taka-lína þarf hólf með nægu innihaldi; Setja-lína þarf hólf sem tekur við birgðum. Paraðri línu hinnar aðgerðartegundarinnar er ekki breytt.';
+        SelectionLbl: Label 'Changes the bin of one warehouse activity line, with the checks of the activity page. A Take line needs a bin with enough content; a Place line needs a bin that accepts stock. The paired line of the other action type is not changed.', Comment = 'is-IS=Breytir hólfi einnar línu vöruhúsaaðgerðar, með prófunum aðgerðarsíðunnar. Taka-lína þarf hólf með nægu innihaldi; Setja-lína þarf hólf sem tekur við birgðum. Paraðri línu hinnar aðgerðartegundarinnar er ekki breytt.';
     begin
         exit(SelectionLbl);
     end;

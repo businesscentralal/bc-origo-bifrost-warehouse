@@ -60,14 +60,14 @@ codeunit 97062 "Whse Jnl Contract Tests ori"
         AssertDeclaredError("Message Type ori"::"Warehouse.PhysInventory.Calculate", 'PreconditionFailed', 'Use Inventory.PhysInventory.* for basic locations.');
         AssertDeclaredError("Message Type ori"::"Warehouse.PhysInventory.Register", 'InvalidLine', 'Read the lines answered by Calculate.');
         AssertDeclaredError("Message Type ori"::"Warehouse.Adjustment.Calculate", 'RecordNotFound', 'Create the batch first.');
-        AssertDeclaredError("Message Type ori"::"Warehouse.Adjustment.Calculate", 'PreconditionFailed', 'Post or delete the existing lines first.');
+        AssertDeclaredError("Message Type ori"::"Warehouse.Adjustment.Calculate", 'PreconditionFailed', 'Post the lines with Inventory.ItemJournal.Post (templateName, batchName), or delete them first.');
         AssertDeclaredError("Message Type ori"::"Warehouse.Worksheet.GetDocuments", 'PreconditionFailed', 'Use the inventory activities instead.');
         AssertDeclaredError("Message Type ori"::"Warehouse.Worksheet.CreateActivities", 'RecordNotFound', 'Create the worksheet name first, and use the line numbers answered by Warehouse.Worksheet.GetDocuments.');
         AssertDeclaredError("Message Type ori"::"Warehouse.ActivityLine.Split", 'PreconditionFailed', 'Lower qtyToHandle first; BC splits the rest off.');
         AssertDeclaredError("Message Type ori"::"Warehouse.ActivityLine.ChangeBin", 'InvalidLine', 'Read Warehouse.BinContent.Get.');
         AssertDeclaredError("Message Type ori"::"Warehouse.ActivityLine.ChangeBin", 'ConflictingIdentifiers', 'Use the activity no. answered by Warehouse.Activity.Get.');
         AssertDeclaredError("Message Type ori"::"Warehouse.ActivityLine.AssignTracking", 'InvalidLine', 'One entry per serial no.');
-        AssertDeclaredError("Message Type ori"::"Warehouse.ActivityLine.AssignTracking", 'InvalidLine', 'Read Inventory.TrackingAvailability.Get for the item.');
+        AssertDeclaredError("Message Type ori"::"Warehouse.ActivityLine.AssignTracking", 'InvalidLine', 'Read Inventory.TrackingAvailability.Get for the item when Bifrost Inventory is in the roster; otherwise read the warehouse entries of the bin with Data.Records.Get.');
         AssertDeclaredError("Message Type ori"::"Warehouse.ActivityLine.AssignTracking", 'PreconditionFailed', 'No tracking is needed on this line.');
     end;
 
@@ -87,6 +87,39 @@ codeunit 97062 "Whse Jnl Contract Tests ori"
             Assert.IsFalse(ContractText.Contains('Impl ori'), 'The help names no implementation codeunit.');
             Assert.IsFalse(LowerCase(ContractText).Contains('codeunit'), 'The help names no codeunit.');
         end;
+    end;
+
+    /// <summary>#68 item 7: the help and catalogue texts name no internal procedure, in English and Icelandic.</summary>
+    [Test]
+    procedure Help_DoesNotNameValidate()
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        MessageType: Enum "Message Type ori";
+        Discovery: Interface "Msg Discovery ori";
+        Contract: JsonObject;
+        Languages: List of [Integer];
+        ContractText: Text;
+        LanguageId: Integer;
+        OriginalLanguage: Integer;
+    begin
+        // Issue #68, AC2 (item 7) | Time: none | Risk: none.
+        OriginalLanguage := GlobalLanguage();
+        Languages.Add(1033);
+        Languages.Add(1039);
+        foreach LanguageId in Languages do begin
+            GlobalLanguage(LanguageId);
+            foreach MessageType in NewTypes() do begin
+                Clear(Contract);
+                Assert.IsTrue(ContractMgt.GetContract(MessageType, Contract), 'Contract exists.');
+                Contract.WriteTo(ContractText);
+                Discovery := MessageType;
+                ContractText += Discovery.GetSelectionDescription();
+                Assert.IsFalse(ContractText.Contains('through Validate'), TypeName(MessageType) + ' names Validate.');
+                Assert.IsFalse(ContractText.Contains('með Validate'), TypeName(MessageType) + ' names Validate in Icelandic.');
+                Assert.IsFalse(ContractText.Contains('efnislega birgðatalningu'), TypeName(MessageType) + ' uses birgðatalning.');
+            end;
+        end;
+        GlobalLanguage(OriginalLanguage);
     end;
 
     /// <summary>#48 AC09: Warehouse Journal Line is closed to generic writes, including force, and the hint names the journal types.</summary>

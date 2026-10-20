@@ -207,6 +207,26 @@ codeunit 10078467 "Whse Msg Values ori"
                 Argument.AddError("Bifrost Error Code ori"::UnknownParameter, StrSubstNo(UnknownLbl, KeyName), LineParameter(ArrayName, Index, KeyName), KeyName, '', UnknownNextStepLbl);
     end;
 
+    /// <summary>
+    /// Returns whether a message type is in the caller's roster: an installed app declares it and it is enabled.
+    /// Used before a next step names a type of an app Warehouse does not depend on (#68).
+    /// </summary>
+    /// <param name="TypeName">The message type name, for example Inventory.TrackingAvailability.Get.</param>
+    /// <returns>True when the type exists and is enabled for the caller.</returns>
+    internal procedure IsTypeInRoster(TypeName: Text): Boolean
+    var
+        MessageType: Enum "Message Type ori";
+        MessageTypeInterface: Interface "Msg Interface ori";
+        Position: Integer;
+    begin
+        Position := Enum::"Message Type ori".Names().IndexOf(TypeName);
+        if Position = 0 then
+            exit(false);
+        MessageType := Enum::"Message Type ori".FromInteger(Enum::"Message Type ori".Ordinals().Get(Position));
+        MessageTypeInterface := MessageType;
+        exit(MessageTypeInterface.IsEnabled());
+    end;
+
     /// <summary>Builds a parameter path such as lines[2].itemNo.</summary>
     /// <param name="ArrayName">Array name, or empty.</param>
     /// <param name="Index">Line index, or -1.</param>

@@ -73,7 +73,7 @@ codeunit 10078465 "Whse ActLine Track Impl ori" implements "Msg Interface ori", 
     /// <returns>Selection description.</returns>
     procedure GetSelectionDescription(): Text
     var
-        SelectionLbl: Label 'Writes lot, serial and package numbers through Validate on warehouse activity lines of an item with warehouse item tracking. Several entries for one line split it, one line per entry. A Take line needs the lot or serial number in its bin. It registers nothing.', Comment = 'is-IS=Skrifar lotu-, rað- og pakkanúmer með Validate á línur vöruhúsaaðgerðar fyrir vöru með vörurakningu í vöruhúsi. Margar færslur fyrir eina línu skipta henni, ein lína fyrir hverja færslu. Taka-lína þarf lotuna eða raðnúmerið í hólfinu sínu. Hún skráir ekkert.';
+        SelectionLbl: Label 'Writes lot, serial and package numbers on warehouse activity lines of an item with warehouse item tracking. Several entries for one line split it, one line per entry. A Take line needs the lot or serial number in its bin. It registers nothing.', Comment = 'is-IS=Skrifar lotu-, rað- og pakkanúmer á línur vöruhúsaaðgerðar fyrir vöru með vörurakningu í vöruhúsi. Margar færslur fyrir eina línu skipta henni, ein lína fyrir hverja færslu. Taka-lína þarf lotuna eða raðnúmerið í hólfinu sínu. Hún skráir ekkert.';
     begin
         exit(SelectionLbl);
     end;
@@ -151,7 +151,7 @@ codeunit 10078465 "Whse ActLine Track Impl ori" implements "Msg Interface ori", 
         Helper: Codeunit "Whse ActLine Helper ori";
     begin
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidLine, 'A serial number entry has a quantity other than one base unit.', 'One entry per serial no.');
-        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidLine, 'The lot, serial or package number is not available in the bin of a Take line.', 'Read Inventory.TrackingAvailability.Get for the item.');
+        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidLine, 'The lot, serial or package number is not available in the bin of a Take line.', 'Read Inventory.TrackingAvailability.Get for the item when Bifrost Inventory is in the roster; otherwise read the warehouse entries of the bin with Data.Records.Get.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PreconditionFailed, 'The item of the line has no item tracking code that requires warehouse tracking.', 'No tracking is needed on this line.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameter, 'activityType is not valid, an entry has no tracking number, a quantity is zero or negative, the entries of a line exceed its outstanding quantity, or a line with several entries misses a quantity.', 'Send a lot, serial or package number and a positive quantity on every entry, at most the outstanding quantity per line.');
         Helper.AddActivityErrors(Errors);
@@ -220,7 +220,7 @@ codeunit 10078465 "Whse ActLine Track Impl ori" implements "Msg Interface ori", 
     /// <returns>True when an overview is declared.</returns>
     procedure GetOverview(var Overview: Text): Boolean
     var
-        OverviewLbl: Label 'Assigns lot, serial and package numbers on warehouse activity lines through Validate. Several entries for one line split it, one line per entry. Sending the lot a line already has answers success with changed false.', Comment = 'is-IS=Úthlutar lotu-, rað- og pakkanúmerum á línur vöruhúsaaðgerðar með Validate. Margar færslur fyrir eina línu skipta henni, ein lína fyrir hverja færslu. Ef send er lotan sem línan hefur þegar er svarað með árangri og changed false.';
+        OverviewLbl: Label 'Assigns lot, serial and package numbers on warehouse activity lines, with the checks of the activity page. Several entries for one line split it, one line per entry. Sending the lot a line already has answers success with changed false.', Comment = 'is-IS=Úthlutar lotu-, rað- og pakkanúmerum á línur vöruhúsaaðgerðar, með prófunum aðgerðarsíðunnar. Margar færslur fyrir eina línu skipta henni, ein lína fyrir hverja færslu. Ef send er lotan sem línan hefur þegar er svarað með árangri og changed false.';
     begin
         Overview := OverviewLbl;
         exit(true);
@@ -334,9 +334,9 @@ codeunit 10078465 "Whse ActLine Track Impl ori" implements "Msg Interface ori", 
         ExpirationDate: Date;
         Present: Boolean;
         QuantityPresent: Boolean;
-        NoNumberLbl: Label 'Entry %1 has no lot, serial or package number.', Comment = '%1 = entry index, is-IS=Færsla %1 hefur ekkert lotu-, rað- eða pakkanúmer.';
+        NoNumberLbl: Label 'Entry %1 has no lot, serial or package number.', Comment = '%1 = entry position in the request, counted from 1, is-IS=Færsla %1 hefur ekkert lotu-, rað- eða pakkanúmer.';
         NoNumberNextStepLbl: Label 'Send lotNo, serialNo or packageNo on every entry.', Comment = 'is-IS=Sendu lotNo, serialNo eða packageNo á hverri færslu.';
-        QuantityLbl: Label 'quantity on entry %1 must be above zero.', Comment = '%1 = entry index, is-IS=quantity á færslu %1 verður að vera stærra en núll.';
+        QuantityLbl: Label 'quantity on entry %1 must be above zero.', Comment = '%1 = entry position in the request, counted from 1, is-IS=quantity á færslu %1 verður að vera stærra en núll.';
         QuantityNextStepLbl: Label 'Send a positive quantity.', Comment = 'is-IS=Sendu jákvætt magn.';
     begin
         AllowedKeys.Add('lineNo');
@@ -358,10 +358,10 @@ codeunit 10078465 "Whse ActLine Track Impl ori" implements "Msg Interface ori", 
                 if Argument.GetCollectedErrorsJson().Count() = ErrorCount then
                     if Helper.ResolveLine(EntryObject, Argument, ActivityHeader, 'entries', Index, ActivityLine) then
                         if (LotText = '') and (SerialText = '') and (PackageText = '') then
-                            Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(NoNumberLbl, Index), Values.LineParameter('entries', Index, 'lotNo'), '', '', NoNumberNextStepLbl)
+                            Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(NoNumberLbl, Index + 1), Values.LineParameter('entries', Index, 'lotNo'), '', '', NoNumberNextStepLbl)
                         else
                             if QuantityPresent and (Quantity <= 0) then
-                                Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(QuantityLbl, Index), Values.LineParameter('entries', Index, 'quantity'), Format(Quantity, 0, 9), '', QuantityNextStepLbl)
+                                Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(QuantityLbl, Index + 1), Values.LineParameter('entries', Index, 'quantity'), Format(Quantity, 0, 9), '', QuantityNextStepLbl)
                             else begin
                                 Clear(Planned);
                                 Planned.Add('index', Index);
@@ -423,7 +423,7 @@ codeunit 10078465 "Whse ActLine Track Impl ori" implements "Msg Interface ori", 
         NeedQuantityNextStepLbl: Label 'Send quantity on every entry of the line.', Comment = 'is-IS=Sendu quantity á hverja færslu línunnar.';
         TooMuchLbl: Label 'The entries of line %1 hold %2, more than its outstanding quantity %3.', Comment = '%1 = line no., %2 = total, %3 = outstanding, is-IS=Færslur línu %1 eru samtals %2, meira en útistandandi magn hennar %3.';
         TooMuchNextStepLbl: Label 'Send at most the outstanding quantity per line.', Comment = 'is-IS=Sendu mest útistandandi magn fyrir hverja línu.';
-        SerialLbl: Label 'Entry %1 gives serial number %2 more than one base unit.', Comment = '%1 = entry index, %2 = serial no., is-IS=Færsla %1 gefur raðnúmeri %2 meira en eina grunneiningu.';
+        SerialLbl: Label 'Entry %1 gives serial number %2 more than one base unit.', Comment = '%1 = entry position in the request, counted from 1, %2 = serial no., is-IS=Færsla %1 gefur raðnúmeri %2 meira en eina grunneiningu.';
         SerialNextStepLbl: Label 'One entry per serial no.', Comment = 'is-IS=Ein færsla fyrir hvert raðnúmer.';
     begin
         Entries.ReadFrom(EntriesText);
@@ -444,7 +444,7 @@ codeunit 10078465 "Whse ActLine Track Impl ori" implements "Msg Interface ori", 
                     exit;
                 end;
             if (Values.TextValue(Entry, 'serialNo') <> '') and (Quantity * ActivityLine."Qty. per Unit of Measure" <> 1) then begin
-                Argument.AddError("Bifrost Error Code ori"::InvalidLine, StrSubstNo(SerialLbl, EntryIndex, Values.TextValue(Entry, 'serialNo')), Values.LineParameter('entries', EntryIndex, 'quantity'), Format(Quantity, 0, 9), '1', SerialNextStepLbl);
+                Argument.AddError("Bifrost Error Code ori"::InvalidLine, StrSubstNo(SerialLbl, EntryIndex + 1, Values.TextValue(Entry, 'serialNo')), Values.LineParameter('entries', EntryIndex, 'quantity'), Format(Quantity, 0, 9), '1', SerialNextStepLbl);
                 exit;
             end;
             Total += Quantity;
@@ -497,8 +497,7 @@ codeunit 10078465 "Whse ActLine Track Impl ori" implements "Msg Interface ori", 
         Requested: Decimal;
         AlreadyTaken: Decimal;
         TakenKey: Text;
-        NotAvailableLbl: Label 'Bin %1 holds %2 base units of item %3 with lot %4, serial %5, package %6 that can be taken; entry %7 needs %8.', Comment = '%1 = bin, %2 = available, %3 = item, %4 = lot, %5 = serial, %6 = package, %7 = entry index, %8 = needed, is-IS=Hólf %1 geymir %2 grunneiningar af vöru %3 með lotu %4, raðnúmeri %5, pakka %6 sem má taka; færsla %7 þarf %8.';
-        NotAvailableNextStepLbl: Label 'Read Inventory.TrackingAvailability.Get for the item.', Comment = 'is-IS=Lestu Inventory.TrackingAvailability.Get fyrir vöruna.';
+        NotAvailableLbl: Label 'Bin %1 holds %2 base units of item %3 with %4 that can be taken; entry %5 needs %6.', Comment = '%1 = bin, %2 = available, %3 = item, %4 = the sent lot, serial and package numbers, %5 = entry position in the request, counted from 1, %6 = needed, is-IS=Hólf %1 geymir %2 grunneiningar af vöru %3 með %4 sem má taka; færsla %5 þarf %6.';
     begin
         Requested := Values.DecimalValue(Entry, 'quantity') * ActivityLine."Qty. per Unit of Measure";
         TakenKey := Values.TextValue(Entry, 'lotNo') + '|' + Values.TextValue(Entry, 'serialNo') + '|' + Values.TextValue(Entry, 'packageNo');
@@ -516,8 +515,8 @@ codeunit 10078465 "Whse ActLine Track Impl ori" implements "Msg Interface ori", 
         if Requested + AlreadyTaken > Available then begin
             Argument.AddError(
                 "Bifrost Error Code ori"::InvalidLine,
-                StrSubstNo(NotAvailableLbl, ActivityLine."Bin Code", Available - AlreadyTaken, ActivityLine."Item No.", Values.TextValue(Entry, 'lotNo'), Values.TextValue(Entry, 'serialNo'), Values.TextValue(Entry, 'packageNo'), Values.IntegerValue(Entry, 'index'), Requested),
-                Values.LineParameter('entries', Values.IntegerValue(Entry, 'index'), 'lotNo'), Values.TextValue(Entry, 'lotNo') + Values.TextValue(Entry, 'serialNo') + Values.TextValue(Entry, 'packageNo'), '', NotAvailableNextStepLbl);
+                StrSubstNo(NotAvailableLbl, ActivityLine."Bin Code", Available - AlreadyTaken, ActivityLine."Item No.", TrackingText(Entry), Values.IntegerValue(Entry, 'index') + 1, Requested),
+                Values.LineParameter('entries', Values.IntegerValue(Entry, 'index'), TrackingKey(Entry)), Values.TextValue(Entry, TrackingKey(Entry)), '', AvailabilityNextStep(ActivityLine));
             exit(false);
         end;
         if Taken.ContainsKey(TakenKey) then
@@ -525,6 +524,57 @@ codeunit 10078465 "Whse ActLine Track Impl ori" implements "Msg Interface ori", 
         else
             Taken.Add(TakenKey, Requested);
         exit(true);
+    end;
+
+    /// <summary>
+    /// The next step of a number that is not in the bin. Inventory.TrackingAvailability.Get belongs to Bifrost Inventory,
+    /// which Warehouse does not depend on, so it is named only when it is in the caller's roster (#68).
+    /// </summary>
+    /// <param name="ActivityLine">The Take line.</param>
+    /// <returns>The next step.</returns>
+    internal procedure AvailabilityNextStep(ActivityLine: Record "Warehouse Activity Line"): Text
+    var
+        Values: Codeunit "Whse Msg Values ori";
+        InventoryNextStepLbl: Label 'Read Inventory.TrackingAvailability.Get for the item.', Comment = 'is-IS=Lestu Inventory.TrackingAvailability.Get fyrir vöruna.';
+        EntriesNextStepLbl: Label 'Read the warehouse entries of bin %1 and item %2 with Data.Records.Get on table Warehouse Entry.', Comment = '%1 = bin, %2 = item, is-IS=Lestu vöruhúsafærslur hólfs %1 og vöru %2 með Data.Records.Get á töflunni Warehouse Entry.';
+    begin
+        if Values.IsTypeInRoster('Inventory.TrackingAvailability.Get') then
+            exit(InventoryNextStepLbl);
+        exit(StrSubstNo(EntriesNextStepLbl, ActivityLine."Bin Code", ActivityLine."Item No."));
+    end;
+
+    local procedure TrackingText(Entry: JsonObject) Result: Text
+    var
+        Values: Codeunit "Whse Msg Values ori";
+        LotLbl: Label 'lot %1', Comment = '%1 = lot no., is-IS=lotu %1';
+        SerialLbl: Label 'serial number %1', Comment = '%1 = serial no., is-IS=raðnúmeri %1';
+        PackageLbl: Label 'package %1', Comment = '%1 = package no., is-IS=pakka %1';
+    begin
+        // Only the numbers that were sent, so the text has no empty placeholders (#68).
+        if Values.TextValue(Entry, 'lotNo') <> '' then
+            Result := StrSubstNo(LotLbl, Values.TextValue(Entry, 'lotNo'));
+        if Values.TextValue(Entry, 'serialNo') <> '' then
+            Result := JoinPart(Result, StrSubstNo(SerialLbl, Values.TextValue(Entry, 'serialNo')));
+        if Values.TextValue(Entry, 'packageNo') <> '' then
+            Result := JoinPart(Result, StrSubstNo(PackageLbl, Values.TextValue(Entry, 'packageNo')));
+    end;
+
+    local procedure JoinPart(Existing: Text; Part: Text): Text
+    begin
+        if Existing = '' then
+            exit(Part);
+        exit(Existing + ', ' + Part);
+    end;
+
+    local procedure TrackingKey(Entry: JsonObject): Text
+    var
+        Values: Codeunit "Whse Msg Values ori";
+    begin
+        if Values.TextValue(Entry, 'lotNo') <> '' then
+            exit('lotNo');
+        if Values.TextValue(Entry, 'serialNo') <> '' then
+            exit('serialNo');
+        exit('packageNo');
     end;
 
     local procedure AssignLine(ActivityType: Enum "Warehouse Activity Type"; ActivityNo: Code[20]; LineNo: Integer; Entries: JsonArray)

@@ -47,8 +47,8 @@ codeunit 10078422 "Whse Movement Reg Impl ori" implements "Msg Interface ori", "
         Context.SetResult(FindRegisteredNo(MovementNo), RegisteredQty);
     end;
 
-    /// <summary>Returns whether the caller can write the documents and holds the warehouse posting gate.</summary>
-    /// <returns>True when the caller can write the activity tables and holds BIFROST WhsePost ori.</returns>
+    /// <summary>Returns whether the caller can write the source activity and holds the warehouse posting gate.</summary>
+    /// <returns>True when the caller can write the activity lines, read registered movements and holds BIFROST WhsePost ori.</returns>
     procedure IsEnabled(): Boolean
     var
         WhsePostingGate: Codeunit "Whse Posting Gate ori";
@@ -485,7 +485,7 @@ codeunit 10078422 "Whse Movement Reg Impl ori" implements "Msg Interface ori", "
         QuantityPresent: Boolean;
         FormatLbl: Label 'Each line must be an object.', Comment = 'is-IS=Hver lína verður að vera hlutur.';
         FormatNextStepLbl: Label 'Send text for the movement number, an integer line number and a number for the quantity.', Comment = 'is-IS=Sendu texta fyrir færslunúmer, heiltölu fyrir línunúmer og tölu fyrir magnið.';
-        MissingLbl: Label 'Line %1 is missing %2.', Comment = '%1 = line index, %2 = field, is-IS=Línu %1 vantar %2.';
+        MissingLbl: Label 'Line %1 is missing %2.', Comment = '%1 = line position in the request, counted from 1, %2 = field, is-IS=Línu %1 vantar %2.';
         MissingNextStepLbl: Label 'Send lineNo and qtyToHandle on every line.', Comment = 'is-IS=Sendu lineNo og qtyToHandle á hverri línu.';
         NotFoundLbl: Label 'Movement line %1 was not found.', Comment = '%1 = line no., is-IS=Færslulína %1 fannst ekki.';
         NotFoundNextStepLbl: Label 'Check the identifier with Warehouse.Activity.Get (activityType Movement).', Comment = 'is-IS=Athugaðu auðkennið með Warehouse.Activity.Get (activityType Movement).';
@@ -501,9 +501,9 @@ codeunit 10078422 "Whse Movement Reg Impl ori" implements "Msg Interface ori", "
         Context.ReadInteger(LineObject, 'lineNo', Argument, LineNo, LinePresent, LineParameter(Index, 'lineNo'));
         Context.ReadDecimal(LineObject, 'qtyToHandle', Argument, Quantity, QuantityPresent, LineParameter(Index, 'qtyToHandle'));
         if not LinePresent then
-            Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index, 'lineNo'), LineParameter(Index, 'lineNo'), '', '', MissingNextStepLbl);
+            Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index + 1, 'lineNo'), LineParameter(Index, 'lineNo'), '', '', MissingNextStepLbl);
         if not QuantityPresent then
-            Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index, 'qtyToHandle'), LineParameter(Index, 'qtyToHandle'), '', '', MissingNextStepLbl);
+            Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index + 1, 'qtyToHandle'), LineParameter(Index, 'qtyToHandle'), '', '', MissingNextStepLbl);
         if not LinePresent or not QuantityPresent then
             exit;
         if not ActivityLine.Get(ActivityHeader.Type, ActivityHeader."No.", LineNo) then begin
@@ -660,6 +660,8 @@ codeunit 10078422 "Whse Movement Reg Impl ori" implements "Msg Interface ori", "
         ActivityLine: Record "Warehouse Activity Line";
         RegisteredHeader: Record "Registered Whse. Activity Hdr.";
     begin
-        exit(ActivityLine.WritePermission() and RegisteredHeader.WritePermission());
+        // Codeunit 7307 writes the registered movement under its own indirect permissions, so the caller needs
+        // write on the source activity only, and read on the registered header for the answer (#70).
+        exit(ActivityLine.WritePermission() and RegisteredHeader.ReadPermission());
     end;
 }

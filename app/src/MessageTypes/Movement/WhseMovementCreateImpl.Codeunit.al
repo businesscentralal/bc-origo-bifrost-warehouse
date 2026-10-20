@@ -537,7 +537,7 @@ codeunit 10078421 "Whse Movement Create Impl ori" implements "Msg Interface ori"
         QuantityPresent: Boolean;
         FormatLbl: Label 'Each line must be an object.', Comment = 'is-IS=Hver lína verður að vera hlutur.';
         FormatNextStepLbl: Label 'Send text for codes and numbers for quantities.', Comment = 'is-IS=Sendu texta fyrir kóða og tölur fyrir magn.';
-        MissingLbl: Label 'Line %1 is missing %2.', Comment = '%1 = line index, %2 = field, is-IS=Línu %1 vantar %2.';
+        MissingLbl: Label 'Line %1 is missing %2.', Comment = '%1 = line position in the request, counted from 1, %2 = field, is-IS=Línu %1 vantar %2.';
         MissingNextStepLbl: Label 'Send itemNo, quantity, fromBin and toBin on every line.', Comment = 'is-IS=Sendu itemNo, quantity, fromBin og toBin á hverri línu.';
     begin
         if not Token.IsObject() then begin
@@ -553,13 +553,13 @@ codeunit 10078421 "Whse Movement Create Impl ori" implements "Msg Interface ori"
         Context.ReadText(LineObject, 'toBin', 20, Argument, ToBin, ToPresent, LineParameter(Index, 'toBin'));
         Context.ReadDecimal(LineObject, 'quantity', Argument, Quantity, QuantityPresent, LineParameter(Index, 'quantity'));
         if not ItemPresent then
-            Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index, 'itemNo'), LineParameter(Index, 'itemNo'), '', '', MissingNextStepLbl);
+            Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index + 1, 'itemNo'), LineParameter(Index, 'itemNo'), '', '', MissingNextStepLbl);
         if not FromPresent then
-            Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index, 'fromBin'), LineParameter(Index, 'fromBin'), '', '', MissingNextStepLbl);
+            Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index + 1, 'fromBin'), LineParameter(Index, 'fromBin'), '', '', MissingNextStepLbl);
         if not ToPresent then
-            Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index, 'toBin'), LineParameter(Index, 'toBin'), '', '', MissingNextStepLbl);
+            Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index + 1, 'toBin'), LineParameter(Index, 'toBin'), '', '', MissingNextStepLbl);
         if not QuantityPresent then
-            Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index, 'quantity'), LineParameter(Index, 'quantity'), '', '', MissingNextStepLbl);
+            Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index + 1, 'quantity'), LineParameter(Index, 'quantity'), '', '', MissingNextStepLbl);
         if QuantityPresent and (Quantity <= 0) then
             RefuseQuantity(Argument, Index, Quantity);
         if LocationCode <> '' then

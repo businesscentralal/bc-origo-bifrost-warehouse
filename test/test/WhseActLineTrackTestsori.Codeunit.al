@@ -81,7 +81,7 @@ codeunit 97061 "Whse ActLine Track Tests ori"
         Helper.FindPickBin(Location.Code, 1, Bin);
         ActivityNo := Helper.CreateRawActivity("Warehouse Activity Type"::Movement, "Warehouse Action Type"::Take, Location.Code, Item."No.", Bin."Zone Code", Bin.Code, 2);
 
-        Helper.ExpectError(Send('{"activityType":"Movement","activityNo":"' + ActivityNo + '","entries":[{"lineNo":10000,"lotNo":"LOT-NONE"}]}'), 'InvalidLine', 'Read Inventory.TrackingAvailability.Get for the item.');
+        Helper.ExpectError(Send('{"activityType":"Movement","activityNo":"' + ActivityNo + '","entries":[{"lineNo":10000,"lotNo":"LOT-NONE"}]}'), 'InvalidLine', '');
     end;
 
     /// <summary>AC04: an item without warehouse tracking is PreconditionFailed.</summary>
@@ -160,6 +160,66 @@ codeunit 97061 "Whse ActLine Track Tests ori"
         TempArgument.Insert(true);
         TrackImpl.ExecuteBifrostTask(TempArgument);
         Helper.ExpectError(TempArgument.GetResponseJson(), 'PermissionDenied', 'Ask an administrator to assign BIFROST Whse - Full ori.');
+    end;
+
+    /// <summary>#68 items 3 and 4: the availability refusal names only the sent numbers, counts entries from 1 and names a read that exists (1033).</summary>
+    [Test]
+    procedure AssignTracking_LotNotInTakeBin_TextAndNextStep()
+    begin
+        // Issue #68, AC1 (items 3, 4) | Time: none | Risk: none.
+        AssertNotAvailableTexts(1033, 'Bin %1 holds 0 base units of item %2 with lot LOT-NONE that can be taken; entry 1 needs 2.', 'Entry 1 has no lot, serial or package number.',
+            'Read Inventory.TrackingAvailability.Get for the item.', 'Read the warehouse entries of bin %1 and item %2 with Data.Records.Get on table Warehouse Entry.');
+    end;
+
+    /// <summary>#68 items 3 and 4: the same in Icelandic (1039).</summary>
+    [Test]
+    procedure AssignTracking_LotNotInTakeBin_TextAndNextStepInIcelandic()
+    begin
+        // Issue #68, AC1 (items 3, 4) | Time: none | Risk: none.
+        AssertNotAvailableTexts(1039, 'Hólf %1 geymir 0 grunneiningar af vöru %2 með lotu LOT-NONE sem má taka; færsla 1 þarf 2.', 'Færsla 1 hefur ekkert lotu-, rað- eða pakkanúmer.',
+            'Lestu Inventory.TrackingAvailability.Get fyrir vöruna.', 'Lestu vöruhúsafærslur hólfs %1 og vöru %2 með Data.Records.Get á töflunni Warehouse Entry.');
+    end;
+
+    /// <summary>#68 item 4: the roster check finds a type that exists and is enabled, and no type that is not installed.</summary>
+    [Test]
+    procedure IsTypeInRoster_KnownAndUnknownTypes()
+    var
+        Values: Codeunit "Whse Msg Values ori";
+    begin
+        // Issue #68, AC1 (item 4) | Time: none | Risk: none.
+        Assert.IsTrue(Values.IsTypeInRoster('Warehouse.Bin.Get'), 'An installed, enabled type is in the roster.');
+        Assert.IsFalse(Values.IsTypeInRoster('Warehouse.NoSuch.Type'), 'A type no app declares is not in the roster.');
+    end;
+
+    local procedure AssertNotAvailableTexts(LanguageId: Integer; ExpectedPattern: Text; NoNumberText: Text; InventoryNextStep: Text; EntriesNextStepPattern: Text)
+    var
+        Location: Record Location;
+        Item: Record Item;
+        Bin: Record Bin;
+        Values: Codeunit "Whse Msg Values ori";
+        ResponseJson: JsonObject;
+        ActivityNo: Code[20];
+        ExpectedNextStep: Text;
+    begin
+        Helper.CreateDirectedLocation(Location);
+        LibraryItemTracking.CreateLotItem(Item);
+        Helper.FindPickBin(Location.Code, 1, Bin);
+        ActivityNo := Helper.CreateRawActivity("Warehouse Activity Type"::Movement, "Warehouse Action Type"::Take, Location.Code, Item."No.", Bin."Zone Code", Bin.Code, 2);
+        // Warehouse does not depend on Bifrost Inventory: its type is named only when it is in the roster.
+        if Values.IsTypeInRoster('Inventory.TrackingAvailability.Get') then
+            ExpectedNextStep := InventoryNextStep
+        else
+            ExpectedNextStep := StrSubstNo(EntriesNextStepPattern, Bin.Code, Item."No.");
+
+        ResponseJson := Helper.RunTypeInLanguage(Enum::"Message Type ori"::"Warehouse.ActivityLine.AssignTracking", '', '{"activityType":"Movement","activityNo":"' + ActivityNo + '","entries":[{"lineNo":10000,"lotNo":"LOT-NONE"}]}', LanguageId);
+
+        Helper.ExpectError(ResponseJson, 'InvalidLine', ExpectedNextStep);
+        Assert.AreEqual(StrSubstNo(ExpectedPattern, Bin.Code, Item."No."), Helper.TextValue(ResponseJson, 'error'), 'Only the sent numbers, the entry counted from 1.');
+        Assert.AreEqual('entries[0].lotNo', Helper.TextValue(ResponseJson, 'parameter'), 'The parameter names the key that was sent.');
+
+        ResponseJson := Helper.RunTypeInLanguage(Enum::"Message Type ori"::"Warehouse.ActivityLine.AssignTracking", '', '{"activityType":"Movement","activityNo":"' + ActivityNo + '","entries":[{"lineNo":10000,"quantity":1}]}', LanguageId);
+
+        Assert.AreEqual(NoNumberText, Helper.TextValue(ResponseJson, 'error'), 'The entry is counted from 1.');
     end;
 
     local procedure CreatePutAway(ItemNo: Code[20]; Quantity: Decimal): Code[20]

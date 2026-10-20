@@ -3,6 +3,7 @@ namespace Origo.Bifrost.Warehouse;
 using Microsoft.Inventory.Location;
 using Microsoft.Warehouse.Journal;
 using Microsoft.Warehouse.Ledger;
+using Microsoft.Warehouse.Tracking;
 using Origo.Bifrost;
 
 /// <summary>
@@ -30,6 +31,7 @@ codeunit 10078451 "Whse Journal Helper ori"
         TemplatePresent: Boolean;
         BatchPresent: Boolean;
         LocationPresent: Boolean;
+        Conflict: Boolean;
         MissingLbl: Label '%1 is required.', Comment = '%1 = parameter, is-IS=%1 er nauðsynlegt.';
         MissingNextStepLbl: Label 'Send journalTemplateName, journalBatchName and locationCode.', Comment = 'is-IS=Sendu journalTemplateName, journalBatchName og locationCode.';
         ConflictLbl: Label 'subject and locationCode name different locations.', Comment = 'is-IS=subject og locationCode nefna mismunandi staðsetningar.';
@@ -44,7 +46,8 @@ codeunit 10078451 "Whse Journal Helper ori"
         if Argument.HasCollectedErrors() then
             exit;
         SubjectText := DelChr(Argument.Subject, '<>', ' ');
-        if LocationPresent and (SubjectText <> '') and (UpperCase(SubjectText) <> UpperCase(LocationText)) then
+        Conflict := LocationPresent and (SubjectText <> '') and (UpperCase(SubjectText) <> UpperCase(LocationText));
+        if Conflict then
             Argument.AddError("Bifrost Error Code ori"::ConflictingIdentifiers, ConflictLbl, 'locationCode', LocationText, SubjectText, ConflictNextStepLbl);
         if not LocationPresent then
             LocationText := SubjectText;
@@ -59,6 +62,9 @@ codeunit 10078451 "Whse Journal Helper ori"
         TemplateName := CopyStr(TemplateText, 1, MaxStrLen(TemplateName));
         BatchName := CopyStr(BatchText, 1, MaxStrLen(BatchName));
         LocationCode := CopyStr(LocationText, 1, MaxStrLen(LocationCode));
+        // Which location was meant is unclear, so the caller looks none up.
+        if Conflict then
+            Clear(LocationCode);
     end;
 
     /// <summary>
@@ -75,6 +81,31 @@ codeunit 10078451 "Whse Journal Helper ori"
     /// <returns>True when the batch can be used.</returns>
     internal procedure ResolveBatch(var Argument: Record "Message Argument ori"; TemplateName: Code[10]; BatchName: Code[10]; LocationCode: Code[10]; PhysInventory: Boolean; DirectedNextStep: Text; var JournalTemplate: Record "Warehouse Journal Template"): Boolean
     var
+        TemplateFound: Boolean;
+    begin
+        exit(CheckBatch(Argument, TemplateName, BatchName, LocationCode, PhysInventory, DirectedNextStep, false, JournalTemplate, TemplateFound));
+    end;
+
+    /// <summary>
+    /// Checks the batch like ResolveBatch, but adds every independent problem to the collected errors instead of
+    /// answering the first one (#68). The template and batch are checked only at a directed location that exists.
+    /// </summary>
+    /// <param name="Argument">Collects the problems.</param>
+    /// <param name="TemplateName">Journal template name.</param>
+    /// <param name="BatchName">Journal batch name.</param>
+    /// <param name="LocationCode">Location code.</param>
+    /// <param name="PhysInventory">True for the physical inventory types, false for the item and reclassification types.</param>
+    /// <param name="DirectedNextStep">The next step for a location without directed put-away and pick.</param>
+    /// <param name="JournalTemplate">Receives the template.</param>
+    /// <param name="TemplateFound">True when JournalTemplate holds a template of the right kind, so its type can be used.</param>
+    /// <returns>True when the batch can be used.</returns>
+    internal procedure CollectBatchProblems(var Argument: Record "Message Argument ori"; TemplateName: Code[10]; BatchName: Code[10]; LocationCode: Code[10]; PhysInventory: Boolean; DirectedNextStep: Text; var JournalTemplate: Record "Warehouse Journal Template"; var TemplateFound: Boolean): Boolean
+    begin
+        exit(CheckBatch(Argument, TemplateName, BatchName, LocationCode, PhysInventory, DirectedNextStep, true, JournalTemplate, TemplateFound));
+    end;
+
+    local procedure CheckBatch(var Argument: Record "Message Argument ori"; TemplateName: Code[10]; BatchName: Code[10]; LocationCode: Code[10]; PhysInventory: Boolean; DirectedNextStep: Text; Collect: Boolean; var JournalTemplate: Record "Warehouse Journal Template"; var TemplateFound: Boolean): Boolean
+    var
         Location: Record Location;
         JournalBatch: Record "Warehouse Journal Batch";
         LocationNotFoundLbl: Label 'Location %1 was not found.', Comment = '%1 = location code, is-IS=Staðsetning %1 fannst ekki.';
@@ -83,39 +114,50 @@ codeunit 10078451 "Whse Journal Helper ori"
         TemplateNotFoundLbl: Label 'Warehouse journal template %1 was not found.', Comment = '%1 = template, is-IS=Birgðabókarsniðmát vöruhúss %1 fannst ekki.';
         BatchNotFoundLbl: Label 'Warehouse journal batch %1 %2 was not found at location %3.', Comment = '%1 = template, %2 = batch, %3 = location, is-IS=Bókarkeyrsla vöruhúss %1 %2 fannst ekki á staðsetningu %3.';
         CreateBatchNextStepLbl: Label 'Create the batch first.', Comment = 'is-IS=Stofnaðu keyrsluna fyrst.';
-        PhysTemplateLbl: Label 'Warehouse journal template %1 is a physical inventory template.', Comment = '%1 = template, is-IS=Birgðabókarsniðmát vöruhúss %1 er sniðmát fyrir efnislega birgðatalningu.';
+        PhysTemplateLbl: Label 'Warehouse journal template %1 is a physical inventory template.', Comment = '%1 = template, is-IS=Birgðabókarsniðmát vöruhúss %1 er sniðmát fyrir birgðatalningu.';
         PhysTemplateNextStepLbl: Label 'Use Warehouse.PhysInventory.Calculate and Warehouse.PhysInventory.Register for a physical inventory journal.', Comment = 'is-IS=Notaðu Warehouse.PhysInventory.Calculate og Warehouse.PhysInventory.Register fyrir talningarbók.';
-        NotPhysTemplateLbl: Label 'Warehouse journal template %1 is not a physical inventory template.', Comment = '%1 = template, is-IS=Birgðabókarsniðmát vöruhúss %1 er ekki sniðmát fyrir efnislega birgðatalningu.';
+        NotPhysTemplateLbl: Label 'Warehouse journal template %1 is not a physical inventory template.', Comment = '%1 = template, is-IS=Birgðabókarsniðmát vöruhúss %1 er ekki sniðmát fyrir birgðatalningu.';
         NotPhysTemplateNextStepLbl: Label 'Use a physical inventory template, or Warehouse.Journal.Create for item and reclassification journals.', Comment = 'is-IS=Notaðu talningarsniðmát, eða Warehouse.Journal.Create fyrir birgða- og endurflokkunarbækur.';
     begin
+        TemplateFound := false;
+        // A warehouse journal batch belongs to a directed location, so nothing else is checked without one.
         Location.SetLoadFields(Code, "Directed Put-away and Pick");
         if not Location.Get(LocationCode) then begin
-            Argument.RespondWithError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(LocationNotFoundLbl, LocationCode), 'locationCode', LocationCode, '', LocationNextStepLbl);
+            Refuse(Argument, Collect, "Bifrost Error Code ori"::RecordNotFound, StrSubstNo(LocationNotFoundLbl, LocationCode), 'locationCode', LocationCode, '', LocationNextStepLbl);
             exit(false);
         end;
         if not Location."Directed Put-away and Pick" then begin
-            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(DirectedLbl, LocationCode), 'locationCode', LocationCode, '', DirectedNextStep);
+            Refuse(Argument, Collect, "Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(DirectedLbl, LocationCode), 'locationCode', LocationCode, '', DirectedNextStep);
             exit(false);
         end;
         JournalTemplate.SetLoadFields(Name, Type);
         if not JournalTemplate.Get(TemplateName) then begin
-            Argument.RespondWithError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(TemplateNotFoundLbl, TemplateName), 'journalTemplateName', TemplateName, '', CreateBatchNextStepLbl);
+            Refuse(Argument, Collect, "Bifrost Error Code ori"::RecordNotFound, StrSubstNo(TemplateNotFoundLbl, TemplateName), 'journalTemplateName', TemplateName, '', CreateBatchNextStepLbl);
             exit(false);
         end;
         if PhysInventory and (JournalTemplate.Type <> JournalTemplate.Type::"Physical Inventory") then begin
-            Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(NotPhysTemplateLbl, TemplateName), 'journalTemplateName', TemplateName, 'Physical Inventory', NotPhysTemplateNextStepLbl);
+            Refuse(Argument, Collect, "Bifrost Error Code ori"::InvalidParameter, StrSubstNo(NotPhysTemplateLbl, TemplateName), 'journalTemplateName', TemplateName, 'Physical Inventory', NotPhysTemplateNextStepLbl);
             exit(false);
         end;
         if (not PhysInventory) and (JournalTemplate.Type = JournalTemplate.Type::"Physical Inventory") then begin
-            Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(PhysTemplateLbl, TemplateName), 'journalTemplateName', TemplateName, 'Item, Reclassification', PhysTemplateNextStepLbl);
+            Refuse(Argument, Collect, "Bifrost Error Code ori"::InvalidParameter, StrSubstNo(PhysTemplateLbl, TemplateName), 'journalTemplateName', TemplateName, 'Item, Reclassification', PhysTemplateNextStepLbl);
             exit(false);
         end;
+        TemplateFound := true;
         JournalBatch.SetLoadFields("Journal Template Name", Name, "Location Code");
         if not JournalBatch.Get(TemplateName, BatchName, LocationCode) then begin
-            Argument.RespondWithError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(BatchNotFoundLbl, TemplateName, BatchName, LocationCode), 'journalBatchName', BatchName, '', CreateBatchNextStepLbl);
+            Refuse(Argument, Collect, "Bifrost Error Code ori"::RecordNotFound, StrSubstNo(BatchNotFoundLbl, TemplateName, BatchName, LocationCode), 'journalBatchName', BatchName, '', CreateBatchNextStepLbl);
             exit(false);
         end;
         exit(true);
+    end;
+
+    local procedure Refuse(var Argument: Record "Message Argument ori"; Collect: Boolean; ErrorCode: Enum "Bifrost Error Code ori"; Message: Text; ParameterName: Text; Received: Text; Expected: Text; NextStep: Text)
+    begin
+        if Collect then
+            Argument.AddError(ErrorCode, Message, ParameterName, Received, Expected, NextStep)
+        else
+            Argument.RespondWithError(ErrorCode, Message, ParameterName, Received, Expected, NextStep);
     end;
 
     /// <summary>Returns the number of lines with an item in the batch. The empty line Business Central leaves after registering is not counted.</summary>
@@ -245,6 +287,9 @@ codeunit 10078451 "Whse Journal Helper ori"
         Values: Codeunit "Whse Msg Values ori";
         LineObject: JsonObject;
     begin
+        // Warehouse.Journal.Create keeps the tracking numbers on Whse. Item Tracking Line, not on the line (#68).
+        if (JournalLine."Lot No." = '') and (JournalLine."Serial No." = '') and (JournalLine."Package No." = '') then
+            ReadTrackingLine(JournalLine);
         LineObject.Add('lineNo', JournalLine."Line No.");
         LineObject.Add('itemNo', JournalLine."Item No.");
         LineObject.Add('variantCode', JournalLine."Variant Code");
@@ -275,7 +320,7 @@ codeunit 10078451 "Whse Journal Helper ori"
         Steps.Add(ContractMgt.WorkflowStep('Warehouse.Journal.Create', 'Insert warehouse item or reclassification journal lines; or Warehouse.PhysInventory.Calculate for a count.'));
         Steps.Add(ContractMgt.WorkflowStep('Warehouse.Journal.Register', 'Register the batch; or Warehouse.PhysInventory.Register with the counted quantities.'));
         Steps.Add(ContractMgt.WorkflowStep('Warehouse.Adjustment.Calculate', 'Calculate the warehouse adjustment into an item journal batch.'));
-        Steps.Add(ContractMgt.WorkflowStep('Inventory.ItemJournal.Post', 'Post the item journal so the item ledger matches the bins.'));
+        Steps.Add(ContractMgt.WorkflowStep('Inventory.ItemJournal.Post', 'Post the item journal so the item ledger matches the bins; send templateName and batchName.'));
         Workflow.Add('steps', Steps);
     end;
 
@@ -289,8 +334,27 @@ codeunit 10078451 "Whse Journal Helper ori"
         Steps.Add(ContractMgt.WorkflowStep('Warehouse.PhysInventory.Calculate', 'Write the physical inventory lines with the calculated quantity per bin.'));
         Steps.Add(ContractMgt.WorkflowStep('Warehouse.PhysInventory.Register', 'Send the counted quantity per line and register the batch.'));
         Steps.Add(ContractMgt.WorkflowStep('Warehouse.Adjustment.Calculate', 'Calculate the warehouse adjustment into an item journal batch.'));
-        Steps.Add(ContractMgt.WorkflowStep('Inventory.ItemJournal.Post', 'Post the item journal so the item ledger matches the count.'));
+        Steps.Add(ContractMgt.WorkflowStep('Inventory.ItemJournal.Post', 'Post the item journal so the item ledger matches the count; send templateName and batchName.'));
         Workflow.Add('steps', Steps);
+    end;
+
+    local procedure ReadTrackingLine(var JournalLine: Record "Warehouse Journal Line")
+    var
+        TrackingLine: Record "Whse. Item Tracking Line";
+    begin
+        if not TrackingLine.ReadPermission() then
+            exit;
+        TrackingLine.SetRange("Source Type", Database::"Warehouse Journal Line");
+        TrackingLine.SetRange("Source ID", JournalLine."Journal Batch Name");
+        TrackingLine.SetRange("Source Batch Name", JournalLine."Journal Template Name");
+        TrackingLine.SetRange("Source Ref. No.", JournalLine."Line No.");
+        TrackingLine.SetRange("Location Code", JournalLine."Location Code");
+        TrackingLine.SetLoadFields("Lot No.", "Serial No.", "Package No.");
+        if not TrackingLine.FindFirst() then
+            exit;
+        JournalLine."Lot No." := TrackingLine."Lot No.";
+        JournalLine."Serial No." := TrackingLine."Serial No.";
+        JournalLine."Package No." := TrackingLine."Package No.";
     end;
 
     local procedure EntryTypeName(JournalLine: Record "Warehouse Journal Line"): Text

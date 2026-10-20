@@ -184,7 +184,7 @@ codeunit 10078461 "Whse Wksh CreateAct Impl ori" implements "Msg Interface ori",
         Parameters.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Worksheet line number answered by Warehouse.Worksheet.GetDocuments.'));
         Parameters.Add(ContractMgt.Parameter('qtyToHandle', 'number', true, 'Quantity to handle, from zero up to the outstanding quantity. Zero leaves the line in the worksheet.'));
         Parameters.Add(ContractMgt.Parameter('assignedUserId', 'string', false, 'Warehouse employee of the location assigned to the created activities.'));
-        Parameters.Add(ContractMgt.Parameter('sortingMethod', 'string', false, 'Sorting method of the created activities: None, Item, Document, Shelf or Bin, Due Date, Ship-To, Bin Ranking or Action Type.'));
+        Parameters.Add(ContractMgt.Parameter('sortingMethod', 'string', false, 'Sorting method of the created activities, one of "None", "Item", "Document", "Shelf or Bin", "Due Date", "Ship-To", "Bin Ranking" or "Action Type".'));
         Parameters.Add(ContractMgt.Parameter('perShipTo', 'boolean', false, 'pick only. One pick per ship-to address.'));
         Parameters.Add(ContractMgt.Parameter('perItem', 'boolean', false, 'pick only. One pick per item.'));
         Parameters.Add(ContractMgt.Parameter('perZone', 'boolean', false, 'pick only. One pick per zone.'));
@@ -505,7 +505,7 @@ codeunit 10078461 "Whse Wksh CreateAct Impl ori" implements "Msg Interface ori",
         Quantity: Decimal;
         LinePresent: Boolean;
         QuantityPresent: Boolean;
-        MissingLbl: Label 'Line %1 is missing %2.', Comment = '%1 = line index, %2 = parameter, is-IS=Línu %1 vantar %2.';
+        MissingLbl: Label 'Line %1 is missing %2.', Comment = '%1 = line position in the request, counted from 1, %2 = parameter, is-IS=Línu %1 vantar %2.';
         MissingNextStepLbl: Label 'Send lineNo and qtyToHandle on every line.', Comment = 'is-IS=Sendu lineNo og qtyToHandle á hverri línu.';
         NotFoundLbl: Label 'Worksheet line %1 was not found.', Comment = '%1 = line no., is-IS=Vinnublaðslína %1 fannst ekki.';
         NotFoundNextStepLbl: Label 'Use the line numbers answered by Warehouse.Worksheet.GetDocuments.', Comment = 'is-IS=Notaðu línunúmerin sem Warehouse.Worksheet.GetDocuments skilaði.';
@@ -522,9 +522,9 @@ codeunit 10078461 "Whse Wksh CreateAct Impl ori" implements "Msg Interface ori",
                 Context.ReadDecimal(LineObject, 'qtyToHandle', Argument, Quantity, QuantityPresent, Values.LineParameter('lines', Index, 'qtyToHandle'));
                 if Argument.GetCollectedErrorsJson().Count() = ErrorCount then begin
                     if not LinePresent then
-                        Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index, 'lineNo'), Values.LineParameter('lines', Index, 'lineNo'), '', '', MissingNextStepLbl);
+                        Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index + 1, 'lineNo'), Values.LineParameter('lines', Index, 'lineNo'), '', '', MissingNextStepLbl);
                     if not QuantityPresent then
-                        Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index, 'qtyToHandle'), Values.LineParameter('lines', Index, 'qtyToHandle'), '', '', MissingNextStepLbl);
+                        Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index + 1, 'qtyToHandle'), Values.LineParameter('lines', Index, 'qtyToHandle'), '', '', MissingNextStepLbl);
                     if LinePresent and QuantityPresent then
                         if not WorksheetLine.Get(TemplateName, WorksheetName, LocationCode, LineNo) then
                             Argument.AddError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(NotFoundLbl, LineNo), Values.LineParameter('lines', Index, 'lineNo'), Format(LineNo, 0, 9), '', NotFoundNextStepLbl)
@@ -607,7 +607,7 @@ codeunit 10078461 "Whse Wksh CreateAct Impl ori" implements "Msg Interface ori",
         Names: List of [Text];
         Index: Integer;
         InvalidLbl: Label 'sortingMethod %1 is not a warehouse activity sorting method.', Comment = '%1 = value, is-IS=sortingMethod %1 er ekki röðunaraðferð vöruhúsaaðgerða.';
-        InvalidNextStepLbl: Label 'Send None, Item, Document, Shelf or Bin, Due Date, Ship-To, Bin Ranking or Action Type.', Comment = 'is-IS=Sendu None, Item, Document, Shelf or Bin, Due Date, Ship-To, Bin Ranking eða Action Type.';
+        InvalidNextStepLbl: Label 'Send one of "None", "Item", "Document", "Shelf or Bin", "Due Date", "Ship-To", "Bin Ranking" or "Action Type".', Comment = 'is-IS=Sendu eitt af "None", "Item", "Document", "Shelf or Bin", "Due Date", "Ship-To", "Bin Ranking" eða "Action Type".';
     begin
         SortingOrdinal := 0;
         if SortingText = '' then

@@ -299,6 +299,8 @@ codeunit 10078446 "Whse Journal Create Impl ori" implements "Msg Interface ori",
         DatePresent: Boolean;
         DocumentNoPresent: Boolean;
         LinesPresent: Boolean;
+        TemplateFound: Boolean;
+        BatchUsable: Boolean;
         DeniedLbl: Label 'You do not have permission to write warehouse journal lines.', Comment = 'is-IS=Þú hefur ekki heimild til að skrifa línur í birgðabók vöruhúss.';
         DeniedNextStepLbl: Label 'Ask an administrator to assign BIFROST Whse - Full ori.', Comment = 'is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.';
         ProblemsLbl: Label 'Nothing was written.', Comment = 'is-IS=Ekkert var skrifað.';
@@ -328,13 +330,13 @@ codeunit 10078446 "Whse Journal Create Impl ori" implements "Msg Interface ori",
         if Values.ReadArray(RequestJson, 'lines', Argument, Lines, LinesPresent) then
             if (not LinesPresent) or (Lines.Count() = 0) then
                 Argument.AddError("Bifrost Error Code ori"::MissingParameter, LinesMissingLbl, 'lines', '', '', LinesMissingNextStepLbl);
-        if Argument.HasCollectedErrors() then begin
-            Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, ProblemsLbl);
-            exit;
-        end;
-        if not Helper.ResolveBatch(Argument, TemplateName, BatchName, LocationCode, false, DirectedNextStepLbl, JournalTemplate) then
-            exit;
-        ReadLines(Lines, Argument, JournalTemplate, LocationCode, PlannedLines);
+        // Independent problems are answered together (#68): an unknown batch no longer hides the request keys or the
+        // lines. The lines are checked for keys, formats and missing values always, for the bin keys of the journal
+        // type when the template was found, and against items, bins and bin content only when the batch can be used.
+        if (TemplateName <> '') and (BatchName <> '') and (LocationCode <> '') then
+            BatchUsable := Helper.CollectBatchProblems(Argument, TemplateName, BatchName, LocationCode, false, DirectedNextStepLbl, JournalTemplate, TemplateFound);
+        if LinesPresent then
+            ReadLines(Lines, Argument, JournalTemplate, TemplateFound, BatchUsable, LocationCode, PlannedLines);
         if Argument.HasCollectedErrors() then begin
             Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, ProblemsLbl);
             exit;
@@ -386,7 +388,7 @@ codeunit 10078446 "Whse Journal Create Impl ori" implements "Msg Interface ori",
         Argument."Content Type" := Argument.GetContentTypeJson();
     end;
 
-    local procedure ReadLines(Lines: JsonArray; var Argument: Record "Message Argument ori"; JournalTemplate: Record "Warehouse Journal Template"; LocationCode: Code[10]; var PlannedLines: JsonArray)
+    local procedure ReadLines(Lines: JsonArray; var Argument: Record "Message Argument ori"; JournalTemplate: Record "Warehouse Journal Template"; TemplateFound: Boolean; BatchUsable: Boolean; LocationCode: Code[10]; var PlannedLines: JsonArray)
     var
         Values: Codeunit "Whse Msg Values ori";
         LineObject: JsonObject;
@@ -396,10 +398,10 @@ codeunit 10078446 "Whse Journal Create Impl ori" implements "Msg Interface ori",
         Clear(PlannedLines);
         for Index := 0 to Lines.Count() - 1 do
             if Values.TryGetLineObject(Lines, Index, 'lines', Argument, LineObject) then
-                ReadOneLine(LineObject, Index, Argument, JournalTemplate.Type = JournalTemplate.Type::Reclassification, LocationCode, Taken, PlannedLines);
+                ReadOneLine(LineObject, Index, Argument, TemplateFound, JournalTemplate.Type = JournalTemplate.Type::Reclassification, BatchUsable, LocationCode, Taken, PlannedLines);
     end;
 
-    local procedure ReadOneLine(LineObject: JsonObject; Index: Integer; var Argument: Record "Message Argument ori"; Reclass: Boolean; LocationCode: Code[10]; var Taken: Dictionary of [Text, Decimal]; var PlannedLines: JsonArray)
+    local procedure ReadOneLine(LineObject: JsonObject; Index: Integer; var Argument: Record "Message Argument ori"; TemplateFound: Boolean; Reclass: Boolean; BatchUsable: Boolean; LocationCode: Code[10]; var Taken: Dictionary of [Text, Decimal]; var PlannedLines: JsonArray)
     var
         Item: Record Item;
         ItemUnitOfMeasure: Record "Item Unit of Measure";
@@ -434,13 +436,18 @@ codeunit 10078446 "Whse Journal Create Impl ori" implements "Msg Interface ori",
         PackagePresent: Boolean;
         QuantityPresent: Boolean;
         ExpirationPresent: Boolean;
+        ItemRead: Boolean;
+        BinRead: Boolean;
+        FromBinRead: Boolean;
+        ToBinRead: Boolean;
+        QuantityRead: Boolean;
         ErrorCount: Integer;
-        MissingLbl: Label 'Line %1 is missing %2.', Comment = '%1 = line index, %2 = parameter, is-IS=Línu %1 vantar %2.';
+        MissingLbl: Label 'Line %1 is missing %2.', Comment = '%1 = line position in the request, counted from 1, %2 = parameter, is-IS=Línu %1 vantar %2.';
         MissingNextStepLbl: Label 'Send itemNo, quantity and binCode (item journal) or fromBin and toBin (reclassification journal) on every line.', Comment = 'is-IS=Sendu itemNo, quantity og binCode (birgðabók) eða fromBin og toBin (endurflokkunarbók) á hverri línu.';
-        ZeroLbl: Label 'quantity on line %1 must not be zero.', Comment = '%1 = line index, is-IS=quantity á línu %1 má ekki vera núll.';
-        NegativeLbl: Label 'quantity on reclassification line %1 must be positive.', Comment = '%1 = line index, is-IS=quantity á endurflokkunarlínu %1 verður að vera jákvætt.';
+        ZeroLbl: Label 'quantity on line %1 must not be zero.', Comment = '%1 = line position in the request, counted from 1, is-IS=quantity á línu %1 má ekki vera núll.';
+        NegativeLbl: Label 'quantity on reclassification line %1 must be positive.', Comment = '%1 = line position in the request, counted from 1, is-IS=quantity á endurflokkunarlínu %1 verður að vera jákvætt.';
         QuantityNextStepLbl: Label 'Send a non-zero quantity; a reclassification quantity is positive.', Comment = 'is-IS=Sendu magn sem er ekki núll; magn endurflokkunar er jákvætt.';
-        WrongBinKeyLbl: Label 'Line %1 sends %2, which this journal type does not use.', Comment = '%1 = line index, %2 = parameter, is-IS=Lína %1 sendir %2, sem þessi bókartegund notar ekki.';
+        WrongBinKeyLbl: Label 'Line %1 sends %2, which this journal type does not use.', Comment = '%1 = line position in the request, counted from 1, %2 = parameter, is-IS=Lína %1 sendir %2, sem þessi bókartegund notar ekki.';
         WrongBinKeyNextStepLbl: Label 'Send binCode on an item journal line and fromBin and toBin on a reclassification line.', Comment = 'is-IS=Sendu binCode á línu í birgðabók og fromBin og toBin á endurflokkunarlínu.';
         ZoneConflictLbl: Label 'Bin %1 is not in zone %2.', Comment = '%1 = bin, %2 = zone, is-IS=Hólf %1 er ekki á svæði %2.';
         ZoneConflictNextStepLbl: Label 'Send a zone that holds the bin, or omit zoneCode.', Comment = 'is-IS=Sendu svæði sem inniheldur hólfið, eða slepptu zoneCode.';
@@ -459,48 +466,51 @@ codeunit 10078446 "Whse Journal Create Impl ori" implements "Msg Interface ori",
         AllowedKeys.Add('expirationDate');
         ErrorCount := Argument.GetCollectedErrorsJson().Count();
         Values.RefuseUnknownKeys(LineObject, AllowedKeys, Argument, 'lines', Index);
-        Context.ReadText(LineObject, 'itemNo', MaxStrLen(Item."No."), Argument, ItemText, ItemPresent, Values.LineParameter('lines', Index, 'itemNo'));
+        ItemRead := Context.ReadText(LineObject, 'itemNo', MaxStrLen(Item."No."), Argument, ItemText, ItemPresent, Values.LineParameter('lines', Index, 'itemNo'));
         Context.ReadText(LineObject, 'variantCode', 10, Argument, VariantText, VariantPresent, Values.LineParameter('lines', Index, 'variantCode'));
         Context.ReadText(LineObject, 'unitOfMeasureCode', 10, Argument, UomText, UomPresent, Values.LineParameter('lines', Index, 'unitOfMeasureCode'));
         Context.ReadText(LineObject, 'zoneCode', 10, Argument, ZoneText, ZonePresent, Values.LineParameter('lines', Index, 'zoneCode'));
-        Context.ReadText(LineObject, 'binCode', 20, Argument, BinText, BinPresent, Values.LineParameter('lines', Index, 'binCode'));
-        Context.ReadText(LineObject, 'fromBin', 20, Argument, FromBinText, FromBinPresent, Values.LineParameter('lines', Index, 'fromBin'));
-        Context.ReadText(LineObject, 'toBin', 20, Argument, ToBinText, ToBinPresent, Values.LineParameter('lines', Index, 'toBin'));
+        BinRead := Context.ReadText(LineObject, 'binCode', 20, Argument, BinText, BinPresent, Values.LineParameter('lines', Index, 'binCode'));
+        FromBinRead := Context.ReadText(LineObject, 'fromBin', 20, Argument, FromBinText, FromBinPresent, Values.LineParameter('lines', Index, 'fromBin'));
+        ToBinRead := Context.ReadText(LineObject, 'toBin', 20, Argument, ToBinText, ToBinPresent, Values.LineParameter('lines', Index, 'toBin'));
         Context.ReadText(LineObject, 'lotNo', 50, Argument, LotText, LotPresent, Values.LineParameter('lines', Index, 'lotNo'));
         Context.ReadText(LineObject, 'serialNo', 50, Argument, SerialText, SerialPresent, Values.LineParameter('lines', Index, 'serialNo'));
         Context.ReadText(LineObject, 'packageNo', 50, Argument, PackageText, PackagePresent, Values.LineParameter('lines', Index, 'packageNo'));
-        Context.ReadDecimal(LineObject, 'quantity', Argument, Quantity, QuantityPresent, Values.LineParameter('lines', Index, 'quantity'));
+        QuantityRead := Context.ReadDecimal(LineObject, 'quantity', Argument, Quantity, QuantityPresent, Values.LineParameter('lines', Index, 'quantity'));
         Values.ReadDate(LineObject, 'expirationDate', Argument, ExpirationDate, ExpirationPresent, Values.LineParameter('lines', Index, 'expirationDate'));
-        if Argument.GetCollectedErrorsJson().Count() <> ErrorCount then
-            exit;
-        if not ItemPresent then
-            Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index, 'itemNo'), Values.LineParameter('lines', Index, 'itemNo'), '', '', MissingNextStepLbl);
-        if not QuantityPresent then
-            Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index, 'quantity'), Values.LineParameter('lines', Index, 'quantity'), '', '', MissingNextStepLbl);
-        if Reclass then begin
+        // A missing value is reported next to the format errors of the same line (#68); a key with a format error
+        // is not also reported as missing.
+        if ItemRead and not ItemPresent then
+            Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index + 1, 'itemNo'), Values.LineParameter('lines', Index, 'itemNo'), '', '', MissingNextStepLbl);
+        if QuantityRead and not QuantityPresent then
+            Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index + 1, 'quantity'), Values.LineParameter('lines', Index, 'quantity'), '', '', MissingNextStepLbl);
+        if TemplateFound and Reclass then begin
             if BinPresent then
-                Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(WrongBinKeyLbl, Index, 'binCode'), Values.LineParameter('lines', Index, 'binCode'), BinText, '', WrongBinKeyNextStepLbl);
+                Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(WrongBinKeyLbl, Index + 1, 'binCode'), Values.LineParameter('lines', Index, 'binCode'), BinText, '', WrongBinKeyNextStepLbl);
             if ZonePresent then
-                Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(WrongBinKeyLbl, Index, 'zoneCode'), Values.LineParameter('lines', Index, 'zoneCode'), ZoneText, '', WrongBinKeyNextStepLbl);
-            if not FromBinPresent then
-                Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index, 'fromBin'), Values.LineParameter('lines', Index, 'fromBin'), '', '', MissingNextStepLbl);
-            if not ToBinPresent then
-                Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index, 'toBin'), Values.LineParameter('lines', Index, 'toBin'), '', '', MissingNextStepLbl);
-        end else begin
+                Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(WrongBinKeyLbl, Index + 1, 'zoneCode'), Values.LineParameter('lines', Index, 'zoneCode'), ZoneText, '', WrongBinKeyNextStepLbl);
+            if FromBinRead and not FromBinPresent then
+                Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index + 1, 'fromBin'), Values.LineParameter('lines', Index, 'fromBin'), '', '', MissingNextStepLbl);
+            if ToBinRead and not ToBinPresent then
+                Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index + 1, 'toBin'), Values.LineParameter('lines', Index, 'toBin'), '', '', MissingNextStepLbl);
+        end;
+        if TemplateFound and not Reclass then begin
             if FromBinPresent then
-                Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(WrongBinKeyLbl, Index, 'fromBin'), Values.LineParameter('lines', Index, 'fromBin'), FromBinText, '', WrongBinKeyNextStepLbl);
+                Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(WrongBinKeyLbl, Index + 1, 'fromBin'), Values.LineParameter('lines', Index, 'fromBin'), FromBinText, '', WrongBinKeyNextStepLbl);
             if ToBinPresent then
-                Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(WrongBinKeyLbl, Index, 'toBin'), Values.LineParameter('lines', Index, 'toBin'), ToBinText, '', WrongBinKeyNextStepLbl);
-            if not BinPresent then
-                Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index, 'binCode'), Values.LineParameter('lines', Index, 'binCode'), '', '', MissingNextStepLbl);
+                Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(WrongBinKeyLbl, Index + 1, 'toBin'), Values.LineParameter('lines', Index, 'toBin'), ToBinText, '', WrongBinKeyNextStepLbl);
+            if BinRead and not BinPresent then
+                Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index + 1, 'binCode'), Values.LineParameter('lines', Index, 'binCode'), '', '', MissingNextStepLbl);
         end;
         if QuantityPresent then begin
             if Quantity = 0 then
-                Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(ZeroLbl, Index), Values.LineParameter('lines', Index, 'quantity'), '0', '', QuantityNextStepLbl);
-            if Reclass and (Quantity < 0) then
-                Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(NegativeLbl, Index), Values.LineParameter('lines', Index, 'quantity'), Format(Quantity, 0, 9), '', QuantityNextStepLbl);
+                Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(ZeroLbl, Index + 1), Values.LineParameter('lines', Index, 'quantity'), '0', '', QuantityNextStepLbl);
+            if TemplateFound and Reclass and (Quantity < 0) then
+                Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(NegativeLbl, Index + 1), Values.LineParameter('lines', Index, 'quantity'), Format(Quantity, 0, 9), '', QuantityNextStepLbl);
         end;
         if Argument.GetCollectedErrorsJson().Count() <> ErrorCount then
+            exit;
+        if not BatchUsable then
             exit;
         if not ResolveItem(Argument, Index, ItemText, VariantText, UomText, Item, ItemUnitOfMeasure) then
             exit;
@@ -592,19 +602,19 @@ codeunit 10078446 "Whse Journal Create Impl ori" implements "Msg Interface ori",
         TempWhseItemTrackingSetup: Record "Item Tracking Setup" temporary;
         ItemTrackingMgt: Codeunit "Item Tracking Management";
         Values: Codeunit "Whse Msg Values ori";
-        NoTrackingLbl: Label 'Item %1 does not use warehouse item tracking, so line %2 cannot carry lot, serial or package numbers.', Comment = '%1 = item, %2 = line index, is-IS=Vara %1 notar ekki vörurakningu í vöruhúsi, svo lína %2 getur ekki borið lotu-, rað- eða pakkanúmer.';
+        NoTrackingLbl: Label 'Item %1 does not use warehouse item tracking, so line %2 cannot carry lot, serial or package numbers.', Comment = '%1 = item, %2 = line position in the request, counted from 1, is-IS=Vara %1 notar ekki vörurakningu í vöruhúsi, svo lína %2 getur ekki borið lotu-, rað- eða pakkanúmer.';
         NoTrackingNextStepLbl: Label 'Remove lotNo, serialNo and packageNo from the line.', Comment = 'is-IS=Fjarlægðu lotNo, serialNo og packageNo af línunni.';
-        SerialLbl: Label 'Line %1 carries serial number %2 for more than one base unit.', Comment = '%1 = line index, %2 = serial no., is-IS=Lína %1 ber raðnúmer %2 fyrir meira en eina grunneiningu.';
+        SerialLbl: Label 'Line %1 carries serial number %2 for more than one base unit.', Comment = '%1 = line position in the request, counted from 1, %2 = serial no., is-IS=Lína %1 ber raðnúmer %2 fyrir meira en eina grunneiningu.';
         SerialNextStepLbl: Label 'Send one line per serial number with quantity 1.', Comment = 'is-IS=Sendu eina línu fyrir hvert raðnúmer með magnið 1.';
     begin
         if (LotText = '') and (SerialText = '') and (PackageText = '') then
             exit(true);
         if not ItemTrackingMgt.GetWhseItemTrkgSetup(ItemNo, TempWhseItemTrackingSetup) then begin
-            Argument.AddError("Bifrost Error Code ori"::InvalidLine, StrSubstNo(NoTrackingLbl, ItemNo, Index), Values.LineParameter('lines', Index, 'lotNo'), LotText + SerialText + PackageText, '', NoTrackingNextStepLbl);
+            Argument.AddError("Bifrost Error Code ori"::InvalidLine, StrSubstNo(NoTrackingLbl, ItemNo, Index + 1), Values.LineParameter('lines', Index, 'lotNo'), LotText + SerialText + PackageText, '', NoTrackingNextStepLbl);
             exit(false);
         end;
         if (SerialText <> '') and (Abs(QuantityBase) <> 1) then begin
-            Argument.AddError("Bifrost Error Code ori"::InvalidLine, StrSubstNo(SerialLbl, Index, SerialText), Values.LineParameter('lines', Index, 'serialNo'), SerialText, '1', SerialNextStepLbl);
+            Argument.AddError("Bifrost Error Code ori"::InvalidLine, StrSubstNo(SerialLbl, Index + 1, SerialText), Values.LineParameter('lines', Index, 'serialNo'), SerialText, '1', SerialNextStepLbl);
             exit(false);
         end;
         exit(true);
@@ -618,7 +628,7 @@ codeunit 10078446 "Whse Journal Create Impl ori" implements "Msg Interface ori",
         AlreadyTaken: Decimal;
         Requested: Decimal;
         TakenKey: Text;
-        ShortLbl: Label 'Bin %1 holds %2 base units of item %3 that can be taken; line %4 asks for %5.', Comment = '%1 = bin, %2 = available, %3 = item, %4 = line index, %5 = requested, is-IS=Hólf %1 geymir %2 grunneiningar af vöru %3 sem má taka; lína %4 biður um %5.';
+        ShortLbl: Label 'Bin %1 holds %2 base units of item %3 that can be taken; line %4 asks for %5.', Comment = '%1 = bin, %2 = available, %3 = item, %4 = line position in the request, counted from 1, %5 = requested, is-IS=Hólf %1 geymir %2 grunneiningar af vöru %3 sem má taka; lína %4 biður um %5.';
         ShortNextStepLbl: Label 'Read Warehouse.BinContent.Get.', Comment = 'is-IS=Lestu Warehouse.BinContent.Get.';
     begin
         Requested := Quantity * ItemUnitOfMeasure."Qty. per Unit of Measure";
@@ -636,7 +646,7 @@ codeunit 10078446 "Whse Journal Create Impl ori" implements "Msg Interface ori",
             Available := BinContent.CalcQtyAvailToTake(0);
         end;
         if Requested + AlreadyTaken > Available then begin
-            Argument.AddError("Bifrost Error Code ori"::InvalidLine, StrSubstNo(ShortLbl, BinCode, Available - AlreadyTaken, ItemNo, Index, Requested), Values.LineParameter('lines', Index, 'quantity'), Format(Quantity, 0, 9), Format(Available - AlreadyTaken, 0, 9), ShortNextStepLbl);
+            Argument.AddError("Bifrost Error Code ori"::InvalidLine, StrSubstNo(ShortLbl, BinCode, Available - AlreadyTaken, ItemNo, Index + 1, Requested), Values.LineParameter('lines', Index, 'quantity'), Format(Quantity, 0, 9), Format(Available - AlreadyTaken, 0, 9), ShortNextStepLbl);
             exit(false);
         end;
         if Taken.ContainsKey(TakenKey) then

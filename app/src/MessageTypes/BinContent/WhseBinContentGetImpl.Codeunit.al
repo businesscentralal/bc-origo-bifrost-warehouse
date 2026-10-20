@@ -119,7 +119,7 @@ codeunit 10078388 "Whse BinContent Get Impl ori" implements "Msg Interface ori",
         ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidFilterField, 'A table-view filter names a field that cannot be filtered.', 'Use a valid Bin Content field name.'));
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameterFormat, 'A paging or filter value cannot be read.', 'Send integer paging values and text filter values.'));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameterFormat, 'A table-view filter value cannot be read. The paging values have their own entry below.', 'Send text filter values.'));
         Parts.AddPagingErrors(Errors, false);
         exit(true);
     end;

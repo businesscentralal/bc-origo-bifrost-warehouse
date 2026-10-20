@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Fixed (2026-10-20) - Make main CI green: paging answer and errors-chapter counts after #74
+
+- A lone negative `skip` or `take` on `Warehouse.Request.Get`, `Warehouse.PostedDocument.Get`, `Warehouse.RegisteredActivity.Get` and `Warehouse.Bin.Get` raised Foundation's `EvaluateSkipTake` error instead of the answer the help declares (`InvalidParameter`, nextStep "Send a whole number of zero or more, or leave it out."). `Whse Write Context ori.RespondOrReadPaging` now always collects a bad skip or take first, so a single problem answers with its own code and nextStep and several are still answered together as `MultipleErrors`. Fixes `Get_PagingAndDateAnswers_AreDeclared`.
+- `Warehouse.BinContent.Get` listed two overlapping `InvalidParameterFormat` entries for an unreadable paging value (the old generic one and the new #74 paging one, with different nextSteps). The generic entry now covers only an unreadable table-view filter value; the paging value has the shared paging entry.
+- Tests: `ActivityGet_ErrorsDoNotListUnanswerableCodes` expects four `InvalidParameterFormat` entries on `Warehouse.Activity.Get` (three identifier entries from #71 plus the paging entry from #74) and `NonLookupTypes_ErrorsChapter_HasNoMultipleErrors` two on `Warehouse.BinContent.Get` (filter value and paging value). No new objects, no label changes (is-IS XLF unchanged).
+
 ### Changed (2026-10-20) - Residual help gaps after #71: ChangeBin bin refusal, paging and date nextSteps, issue references, Icelandic catalogue text (#74)
 
 - `Warehouse.ActivityLine.ChangeBin` lists the unknown bin refusal: `RecordNotFound` on `binCode` with the nextStep "Check the bin with Warehouse.Bin.Get.", the text the runtime answers.

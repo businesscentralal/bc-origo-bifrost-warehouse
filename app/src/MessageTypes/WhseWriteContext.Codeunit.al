@@ -410,10 +410,11 @@ codeunit 10078430 "Whse Write Context ori"
     end;
 
     /// <summary>
-    /// Ends the validation of a paged read. With no problem collected, skip and take are read the Foundation way
-    /// (EvaluateSkipTake, so a single bad paging value keeps Foundation's answer) and the call goes on. With problems
-    /// already collected, a bad skip or take is added to them and every problem is answered together, so one bad value
-    /// does not hide another.
+    /// Ends the validation of a paged read. A bad skip or take is always added to the collected problems and answered
+    /// with the paging nextStep the help declares (a single problem keeps its own code, several are answered together as
+    /// MultipleErrors), so one bad value does not hide another and a lone bad value is not left to Foundation's
+    /// EvaluateSkipTake, which raises an error without that nextStep. With no problem left, skip and take are read the
+    /// Foundation way and the call goes on.
     /// </summary>
     /// <param name="RequestJson">The request.</param>
     /// <param name="Argument">Holds the collected problems and receives the answer.</param>
@@ -423,12 +424,12 @@ codeunit 10078430 "Whse Write Context ori"
     /// <returns>True when the request is valid and the read can run; false when the error answer is set.</returns>
     internal procedure RespondOrReadPaging(RequestJson: JsonObject; var Argument: Record "Message Argument ori"; SummaryMessage: Text; var Skip: Integer; var Take: Integer): Boolean
     begin
+        AddPagingProblem(RequestJson, 'skip', Argument);
+        AddPagingProblem(RequestJson, 'take', Argument);
         if not Argument.HasCollectedErrors() then begin
             Argument.EvaluateSkipTake(RequestJson, Skip, Take);
             exit(true);
         end;
-        AddPagingProblem(RequestJson, 'skip', Argument);
-        AddPagingProblem(RequestJson, 'take', Argument);
         Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, SummaryMessage);
         exit(false);
     end;

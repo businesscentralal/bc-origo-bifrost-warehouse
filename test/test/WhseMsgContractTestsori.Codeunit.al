@@ -243,8 +243,9 @@ codeunit 97027 "Whse Msg Contract Tests ori"
         AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'MissingParameter', 0);
         AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'ConflictingIdentifiers', 1);
         // #71: one entry per nextStep the lookup answers (a number or a SystemId that matches nothing; data or an identifier of the wrong type).
+        // #74 adds the paging entry (skip or take is not a whole number), so InvalidParameterFormat has four entries.
         AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'RecordNotFound', 2);
-        AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'InvalidParameterFormat', 3);
+        AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'InvalidParameterFormat', 4);
         AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'InvalidParameter', 1);
         AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'MultipleErrors', 1);
     end;
@@ -323,7 +324,8 @@ codeunit 97027 "Whse Msg Contract Tests ori"
         AssertErrorCount("Message Type ori"::"Warehouse.BinContent.Get", 'MultipleErrors', 0);
         AssertErrorCount("Message Type ori"::"Warehouse.Shipment.Create", 'MultipleErrors', 0);
         AssertErrorCount("Message Type ori"::"Warehouse.Receipt.Create", 'MultipleErrors', 0);
-        AssertErrorCount("Message Type ori"::"Warehouse.BinContent.Get", 'InvalidParameterFormat', 1);
+        // #74: one entry for an unreadable table-view filter value and one for a skip or take that is not a whole number.
+        AssertErrorCount("Message Type ori"::"Warehouse.BinContent.Get", 'InvalidParameterFormat', 2);
     end;
 
     local procedure AssertRegisterAliases(MessageType: Enum "Message Type ori")

@@ -159,7 +159,7 @@ codeunit 97084 "Whse Movement Reg Tests ori"
     end;
 
     /// <summary>
-    /// A Business Central full user with BIFROST WhsePost ori sees the type enabled and registers, although Business
+    /// A Business Central warehouse user with BIFROST WhsePost ori sees the type enabled and registers, although Business
     /// Central writes the registered movement under its own permissions (#70).
     /// </summary>
     [Test]
@@ -192,7 +192,7 @@ codeunit 97084 "Whse Movement Reg Tests ori"
 
         LowerToFullUserWithPostingGate(LibraryLowerPermissions);
         MessageTypeInterface := Enum::"Message Type ori"::"Warehouse.Movement.Register";
-        Assert.IsTrue(MessageTypeInterface.IsEnabled(), 'Register must be enabled for a full user with BIFROST WhsePost ori.');
+        Assert.IsTrue(MessageTypeInterface.IsEnabled(), 'Register must be enabled for a warehouse user with BIFROST WhsePost ori.');
         Assert.IsTrue(RunAsCaller('{"movementNo":"' + MovementNo + '"}', ResponseJson), 'The response should be JSON.');
 
         Assert.AreEqual('Success', TextValue(ResponseJson, 'status'), ResponseText(ResponseJson));
@@ -394,12 +394,12 @@ codeunit 97084 "Whse Movement Reg Tests ori"
 
     local procedure LowerToFullUserWithPostingGate(var LibraryLowerPermissions: Codeunit "Library - Lower Permissions")
     begin
-        // A Business Central full user: direct write on the activity tables, but the registered and posted
-        // headers only through Business Central's own codeunits. Plus the Bifrost sets and the posting gate (#70).
-        // Pushed first, as in the posting-gate grant tests: the dispatcher reads Foundation's setup through it.
+        // A Business Central warehouse user: direct write on the activity tables, the registered headers and lines
+        // read directly and inserted only through Business Central's register codeunit. Plus the Bifrost sets and the
+        // posting gate (#70).
         LibraryLowerPermissions.PushPermissionSetWithoutDefaults('BIFROST Full ori');
-        LibraryLowerPermissions.AddPermissionSet('D365 BUS FULL ACCESS');
         LibraryLowerPermissions.AddPermissionSet('Whse Gate Test ori');
+        LibraryLowerPermissions.AddPermissionSet('Whse RegUser Tst ori');
         LibraryLowerPermissions.AddPermissionSet('BIFROST WhsePost ori');
     end;
 }

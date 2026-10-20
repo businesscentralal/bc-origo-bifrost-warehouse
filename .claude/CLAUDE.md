@@ -95,7 +95,8 @@ Test range: `97000–97099`.
 | 97027 | `Whse Msg Contract Tests ori` (warehouse#10) |
 | 97028 | `Whse Omit Commit Tests ori` (#18) |
 | 97029 | `Whse Id Format Tests ori` (#21) |
-| 97030–97039 | Free |
+| 97030 | `Whse Contract Assert ori` (help and answered-error assertions, #71) |
+| 97031–97039 | Free |
 | 97040 | `Whse Rcpt GetSrcDocs Tests ori` (#51) |
 | 97041 | `Whse Ship GetSrcDocs Tests ori` (#52) |
 | 97042 | `Whse Ship Release Tests ori` (#53) |

@@ -164,6 +164,8 @@ codeunit 10078421 "Whse Movement Create Impl ori" implements "Msg Interface ori"
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidLine, 'A line asks for more than the bin content in fromBin.', 'Read Warehouse.BinContent.Get for the bin and lower the quantity.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::RecordNotFound, 'The item or bin was not found.', 'Check the identifier with Warehouse.Activity.Get (activityType Movement).');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MissingParameter, 'locationCode, or a worksheet, or the lines array is missing.', 'Send locationCode and either a movement worksheet or at least one line.');
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameter, 'worksheetTemplateName is not a movement worksheet template.', 'Send a movement worksheet template.');
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameter, 'A line quantity is zero or negative.', 'Send a quantity greater than zero.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameterFormat, 'A value has the wrong JSON type or is too long.', 'Send text for codes and numbers for quantities.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::ConflictingIdentifiers, 'subject and locationCode name different locations.', 'Send one location: subject or locationCode.');

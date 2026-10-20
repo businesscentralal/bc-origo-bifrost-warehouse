@@ -156,6 +156,38 @@ codeunit 10078455 "Whse Record Lookup ori"
         exit(true);
     end;
 
+    /// <summary>
+    /// Names the request key that identified the record, for a refusal about that record (#71): subject when a subject was
+    /// sent, else the first identifier key of KeySpec that holds a value. Every identifier sent matched the same record, so
+    /// any of them names it.
+    /// </summary>
+    /// <param name="Argument">The message argument.</param>
+    /// <param name="RequestJson">The request read by TryReadIdentifiers.</param>
+    /// <param name="KeySpec">Request JSON keys and their kinds, e.g. systemId=guid,no=no.</param>
+    /// <param name="Received">Receives the value sent for that key.</param>
+    /// <returns>The key: subject, or a key under data. Empty when nothing was sent.</returns>
+    internal procedure IdentifierParameter(var Argument: Record "Message Argument ori"; RequestJson: JsonObject; KeySpec: Text; var Received: Text): Text
+    var
+        Token: JsonToken;
+        KeyEntry: Text;
+        KeyName: Text;
+    begin
+        Received := '';
+        if Argument.Subject <> '' then begin
+            Received := Argument.Subject;
+            exit(SubjectSourceTok);
+        end;
+        foreach KeyEntry in KeySpec.Split(',') do begin
+            KeyName := KeyEntry.Split('=').Get(1);
+            if RequestJson.Get(KeyName, Token) then begin
+                Received := Argument.TokenAsText(Token);
+                if Received <> '' then
+                    exit(KeyName);
+            end;
+        end;
+        exit('');
+    end;
+
     [TryFunction]
     local procedure TryReadRequestObject(var Argument: Record "Message Argument ori"; var RequestJson: JsonObject)
     begin

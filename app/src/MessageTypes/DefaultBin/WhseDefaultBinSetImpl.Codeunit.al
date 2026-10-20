@@ -131,8 +131,11 @@ codeunit 10078420 "Whse DefaultBin Set Impl ori" implements "Msg Interface ori",
         Entry: JsonObject;
         NotFoundWhenLbl: Label 'The item, location, bin or variant does not exist.', Comment = 'is-IS=Varan, staðsetningin, hólfið eða afbrigðið er ekki til.';
         NotFoundNextStepLbl: Label 'Check with Warehouse.Bin.Get.', Comment = 'is-IS=Athugaðu með Warehouse.Bin.Get.';
-        PreconditionWhenLbl: Label 'The location has no bins, or the bin type on a directed location does not allow put-away and pick.', Comment = 'is-IS=Staðsetningin hefur engin hólf, eða hólfategundin á beinu vöruhúsi leyfir ekki frágang og tínslu.';
+        NoBinsWhenLbl: Label 'The location has no bins. The parameter is locationCode.', Comment = 'is-IS=Staðsetningin hefur engin hólf. Færibreytan er locationCode.';
+        PreconditionWhenLbl: Label 'The bin type on a directed location does not allow put-away and pick, or the bin has no zone.', Comment = 'is-IS=Hólfategundin á beinu vöruhúsi leyfir ekki frágang og tínslu, eða hólfið er ekki á svæði.';
         PreconditionNextStepLbl: Label 'Choose a bin whose bin type allows it.', Comment = 'is-IS=Veldu hólf þar sem hólfategundin leyfir það.';
+        ManyWhenLbl: Label 'More than one value failed validation. errors[] lists each one with its own code.', Comment = 'is-IS=Fleiri en eitt gildi stóðst ekki prófun. errors telur hvert þeirra upp með eigin kóða.';
+        ManyNextStepLbl: Label 'Correct every listed value and send the request again. Nothing was written.', Comment = 'is-IS=Leiðréttu öll gildin sem eru talin upp og sendu beiðnina aftur. Ekkert var skrifað.';
         BlockWhenLbl: Label 'The bin blocks movement.', Comment = 'is-IS=Hólfið hindrar flutning.';
         BlockNextStepLbl: Label 'Unblock the bin or choose another.', Comment = 'is-IS=Aflæstu hólfinu eða veldu annað.';
         UnitWhenLbl: Label 'The unit of measure does not exist for the item.', Comment = 'is-IS=Mælieiningin er ekki til fyrir vöruna.';
@@ -152,6 +155,10 @@ codeunit 10078420 "Whse DefaultBin Set Impl ori" implements "Msg Interface ori",
     begin
         Entry := ContractMgt.ErrorEntry("Bifrost Error Code ori"::RecordNotFound, NotFoundWhenLbl, NotFoundNextStepLbl);
         Entry.Add('nextStep', NotFoundNextStepLbl);
+        Errors.Add(Entry);
+        Clear(Entry);
+        Entry := ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, NoBinsWhenLbl, NoBinsNextStep());
+        Entry.Add('nextStep', NoBinsNextStep());
         Errors.Add(Entry);
         Clear(Entry);
         Entry := ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, PreconditionWhenLbl, PreconditionNextStepLbl);
@@ -188,6 +195,10 @@ codeunit 10078420 "Whse DefaultBin Set Impl ori" implements "Msg Interface ori",
         Clear(Entry);
         Entry := ContractMgt.ErrorEntry("Bifrost Error Code ori"::BusinessCentralError, PlatformWhenLbl, PlatformNextStepLbl);
         Entry.Add('nextStep', PlatformNextStepLbl);
+        Errors.Add(Entry);
+        Clear(Entry);
+        Entry := ContractMgt.ErrorEntry("Bifrost Error Code ori"::MultipleErrors, ManyWhenLbl, ManyNextStepLbl);
+        Entry.Add('nextStep', ManyNextStepLbl);
         Errors.Add(Entry);
         exit(true);
     end;
@@ -324,6 +335,7 @@ codeunit 10078420 "Whse DefaultBin Set Impl ori" implements "Msg Interface ori",
         BinCode: Code[20];
         PreviousBinCode: Code[20];
         SubjectText: Text;
+        LocationKey: Text;
         MissingLbl: Label '%1 is required.', Comment = '%1 = parameter, is-IS=%1 er nauðsynlegt.';
         MissingNextStepLbl: Label 'Send locationCode, itemNo and binCode.', Comment = 'is-IS=Sendu locationCode, itemNo og binCode.';
         ConflictLbl: Label 'subject and locationCode name different locations.', Comment = 'is-IS=subject og locationCode nefna mismunandi staðsetningar.';
@@ -354,8 +366,11 @@ codeunit 10078420 "Whse DefaultBin Set Impl ori" implements "Msg Interface ori",
             Argument.AddError("Bifrost Error Code ori"::ConflictingIdentifiers, ConflictLbl, 'locationCode', LocationText, SubjectText, ConflictNextStepLbl);
             exit(false);
         end;
-        if not LocationPresent then
+        LocationKey := 'locationCode';
+        if not LocationPresent then begin
             LocationText := SubjectText;
+            LocationKey := 'subject';
+        end;
         if LocationText = '' then
             Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, 'locationCode'), 'locationCode', '', '', MissingNextStepLbl);
         if not ItemPresent then
@@ -380,7 +395,7 @@ codeunit 10078420 "Whse DefaultBin Set Impl ori" implements "Msg Interface ori",
         end;
         Bin.SetRange("Location Code", LocationCode);
         if Bin.IsEmpty() then begin
-            Argument.AddError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(NoBinsLbl, LocationCode), 'binCode', BinCode, '', PreconditionNextStepLbl);
+            Argument.AddError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(NoBinsLbl, LocationCode), LocationKey, LocationText, '', NoBinsNextStep());
             exit(false);
         end;
         Bin.Reset();
@@ -601,5 +616,12 @@ codeunit 10078420 "Whse DefaultBin Set Impl ori" implements "Msg Interface ori",
             BinContent.Validate("Unit of Measure Code", UnitOfMeasureCode);
         BinContent.Validate(Fixed, true);
         BinContent.Insert(true);
+    end;
+
+    local procedure NoBinsNextStep(): Text
+    var
+        NextStepLbl: Label 'Create bins at the location with Warehouse.Bin.Create; the location needs Bin Mandatory turned on.', Comment = 'is-IS=Stofnaðu hólf á staðsetningunni með Warehouse.Bin.Create; staðsetningin þarf að hafa Bin Mandatory kveikt.';
+    begin
+        exit(NextStepLbl);
     end;
 }

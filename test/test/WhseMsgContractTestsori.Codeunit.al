@@ -242,8 +242,9 @@ codeunit 97027 "Whse Msg Contract Tests ori"
         // Story #34, AC02 | Time: independent of Today/WorkDate | Risk: retains #37/#38 conflicts; a missing identifier still allows collection reads.
         AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'MissingParameter', 0);
         AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'ConflictingIdentifiers', 1);
-        AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'RecordNotFound', 1);
-        AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'InvalidParameterFormat', 1);
+        // #71: one entry per nextStep the lookup answers (a number or a SystemId that matches nothing; data or an identifier of the wrong type).
+        AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'RecordNotFound', 2);
+        AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'InvalidParameterFormat', 3);
         AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'InvalidParameter', 1);
         AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'MultipleErrors', 1);
     end;
@@ -304,11 +305,12 @@ codeunit 97027 "Whse Msg Contract Tests ori"
         Types.Add("Message Type ori"::"Warehouse.Pick.Register");
         Types.Add("Message Type ori"::"Warehouse.Putaway.Create");
         Types.Add("Message Type ori"::"Warehouse.Putaway.Register");
+        // #71: a code can have one entry per nextStep the runtime answers; the aggregation code stays single.
         foreach MessageType in Types do begin
-            AssertErrorCount(MessageType, 'InvalidParameterFormat', 1);
+            AssertErrorDeclared(MessageType, 'InvalidParameterFormat');
             AssertErrorCount(MessageType, 'MultipleErrors', 1);
-            AssertErrorCount(MessageType, 'MissingParameter', 1);
-            AssertErrorCount(MessageType, 'RecordNotFound', 1);
+            AssertErrorDeclared(MessageType, 'MissingParameter');
+            AssertErrorDeclared(MessageType, 'RecordNotFound');
             AssertErrorCount(MessageType, 'ConflictingIdentifiers', 1);
         end;
     end;
@@ -356,6 +358,13 @@ codeunit 97027 "Whse Msg Contract Tests ori"
                 if Token.AsValue().AsText() = CodeName then
                     Count += 1;
         Assert.AreEqual(ExpectedCount, Count, MessageTypeName(MessageType) + ' ' + CodeName + ' count.');
+    end;
+
+    local procedure AssertErrorDeclared(MessageType: Enum "Message Type ori"; CodeName: Text)
+    var
+        ContractAssert: Codeunit "Whse Contract Assert ori";
+    begin
+        Assert.IsTrue(ContractAssert.IsDeclared(MessageType, CodeName, ''), MessageTypeName(MessageType) + ' declares ' + CodeName + '.');
     end;
 
     local procedure MessageTypeName(MessageType: Enum "Message Type ori"): Text

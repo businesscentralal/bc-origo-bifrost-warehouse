@@ -43,7 +43,7 @@ codeunit 97028 "Whse Omit Commit Tests ori"
         Assert.IsTrue(QuantityToShip > 0, 'The shipment must be postable before preview is refused.');
 
         Assert.IsTrue(ShipmentHelper.RunMessage(Enum::"Message Type ori"::"Warehouse.Shipment.PreviewPost", ShipmentHeader."No.", '', ResponseJson, true), 'Response must parse.');
-        AssertPreviewRefused(ResponseJson);
+        AssertPreviewRefused(Enum::"Message Type ori"::"Warehouse.Shipment.PreviewPost", ResponseJson);
         Assert.IsTrue(ShipmentHeader.Get(ShipmentHeader."No."), 'Refused preview must preserve the shipment header.');
         ShipmentLine.Get(ShipmentLine."No.", ShipmentLine."Line No.");
         Assert.AreEqual(QuantityToShip, ShipmentLine."Qty. to Ship", 'Refused preview must preserve the quantity to ship.');
@@ -70,7 +70,7 @@ codeunit 97028 "Whse Omit Commit Tests ori"
         Assert.IsTrue(QuantityToReceive > 0, 'The receipt must be postable before preview is refused.');
 
         Assert.IsTrue(ReceiptHelper.RunMessage(Enum::"Message Type ori"::"Warehouse.Receipt.PreviewPost", ReceiptHeader."No.", '', ResponseJson, true), 'Response must parse.');
-        AssertPreviewRefused(ResponseJson);
+        AssertPreviewRefused(Enum::"Message Type ori"::"Warehouse.Receipt.PreviewPost", ResponseJson);
         Assert.IsTrue(ReceiptHeader.Get(ReceiptHeader."No."), 'Refused preview must preserve the receipt header.');
         ReceiptLine.Get(ReceiptLine."No.", ReceiptLine."Line No.");
         Assert.AreEqual(QuantityToReceive, ReceiptLine."Qty. to Receive", 'Refused preview must preserve the quantity to receive.');
@@ -109,8 +109,9 @@ codeunit 97028 "Whse Omit Commit Tests ori"
         Assert.AreEqual(ExpectedError, Token.AsValue().AsText(), 'The original Business Central posting error must remain in the JSON response.');
     end;
 
-    local procedure AssertPreviewRefused(ResponseJson: JsonObject)
+    local procedure AssertPreviewRefused(MessageType: Enum "Message Type ori"; ResponseJson: JsonObject)
     var
+        ContractAssert: Codeunit "Whse Contract Assert ori";
         Token: JsonToken;
     begin
         Assert.IsTrue(ResponseJson.Get('status', Token), 'status missing.');
@@ -118,7 +119,10 @@ codeunit 97028 "Whse Omit Commit Tests ori"
         Assert.IsTrue(ResponseJson.Get('code', Token), 'code missing.');
         Assert.AreEqual('PreconditionFailed', Token.AsValue().AsText(), 'Preview must explain its precondition.');
         Assert.IsTrue(ResponseJson.Get('nextStep', Token), 'nextStep missing.');
-        Assert.IsTrue(Token.AsValue().AsText().Contains('OmitCommit = false'), 'Next step must identify the supported mode.');
+        // #71 item 2: the next step says what to do in user terms, names no internal procedure, and is the one the help lists.
+        Assert.AreEqual('Run the preview on its own, outside a rollback chain, for example through the HTTP or MCP API.', Token.AsValue().AsText(), 'Next step must identify the supported mode.');
+        ContractAssert.AssertNamesNoAlObject(Token.AsValue().AsText(), 'The Omit Commit next step');
+        ContractAssert.AssertAnswerDeclared(MessageType, ResponseJson);
     end;
 
     local procedure CreateShipmentWithOpenRequest(var ExpectedError: Text): Code[20]

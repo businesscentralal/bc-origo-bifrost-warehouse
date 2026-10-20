@@ -413,6 +413,8 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
         SystemPresent: Boolean;
         Released: Boolean;
         Found: Boolean;
+        IdentifierKey: Text;
+        IdentifierValue: Text;
     begin
         Clear(DocumentNo);
         SubjectText := DelChr(Argument.Subject, '<>', ' ');
@@ -440,11 +442,33 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
         Found := LoadDocument(Argument, SourceDocument, SourceNoText, SystemIdText, DocumentNo, Released, Locations);
         if not Found then
             exit;
+        // A refusal about the document or its location names the key that identified the document (#71).
+        IdentifierSource(SubjectText, SourceNoText, SourceNoPresent, SystemIdText, SystemPresent, IdentifierKey, IdentifierValue);
         if not Released then begin
-            RefuseNotReleased(Argument, DocumentNo);
+            RefuseNotReleased(Argument, IdentifierKey, IdentifierValue);
             exit;
         end;
-        CheckLocations(Argument, Locations);
+        CheckLocations(Argument, Locations, IdentifierKey, IdentifierValue);
+    end;
+
+    local procedure IdentifierSource(SubjectText: Text; SourceNoText: Text; SourceNoPresent: Boolean; SystemIdText: Text; SystemPresent: Boolean; var IdentifierKey: Text; var IdentifierValue: Text)
+    begin
+        case true of
+            SourceNoPresent:
+                begin
+                    IdentifierKey := 'sourceNo';
+                    IdentifierValue := SourceNoText;
+                end;
+            SystemPresent:
+                begin
+                    IdentifierKey := 'systemId';
+                    IdentifierValue := SystemIdText;
+                end;
+            else begin
+                IdentifierKey := 'subject';
+                IdentifierValue := SubjectText;
+            end;
+        end;
     end;
 
     local procedure ApplySubject(var Argument: Record "Message Argument ori"; SubjectText: Text; var SourceNoText: Text; SourceNoPresent: Boolean; var SystemIdText: Text; SystemPresent: Boolean)
@@ -611,14 +635,14 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
         exit(NotFound(Argument, SourceNoText, SystemIdText));
     end;
 
-    local procedure CheckLocations(var Argument: Record "Message Argument ori"; Locations: List of [Code[10]])
+    local procedure CheckLocations(var Argument: Record "Message Argument ori"; Locations: List of [Code[10]]; IdentifierKey: Text; IdentifierValue: Text)
     var
         Location: Record Location;
         LocationCode: Code[10];
         SawPutAway: Boolean;
     begin
         if Locations.Count() = 0 then begin
-            RefuseNotReleased(Argument, '');
+            RefuseNotReleased(Argument, IdentifierKey, IdentifierValue);
             exit;
         end;
         foreach LocationCode in Locations do begin
@@ -628,18 +652,18 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
                 exit;
             end;
             if Location."Directed Put-away and Pick" or Location."Require Receive" then begin
-                RefuseReceiptLocation(Argument, LocationCode);
+                RefuseReceiptLocation(Argument, LocationCode, IdentifierKey, IdentifierValue);
                 exit;
             end;
             if Location."Require Put-away" then
                 SawPutAway := true
             else begin
-                RefuseNotReleased(Argument, LocationCode);
+                RefuseNotReleased(Argument, IdentifierKey, IdentifierValue);
                 exit;
             end;
         end;
         if not SawPutAway then
-            RefuseNotReleased(Argument, '');
+            RefuseNotReleased(Argument, IdentifierKey, IdentifierValue);
     end;
 
     local procedure AddLocation(var Locations: List of [Code[10]]; LocationCode: Code[10])
@@ -729,20 +753,20 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
         Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(InvalidLbl, SourceText), 'sourceDocument', SourceText, '', InvalidNextStepLbl);
     end;
 
-    local procedure RefuseNotReleased(var Argument: Record "Message Argument ori"; Received: Text)
+    local procedure RefuseNotReleased(var Argument: Record "Message Argument ori"; IdentifierKey: Text; Received: Text)
     var
         NotReleasedLbl: Label 'The source document is not released, or the location does not require put-away.', Comment = 'is-IS=Upprunaskjalið er ekki staðfest, eða staðsetningin krefst ekki frágangs.';
         NotReleasedNextStepLbl: Label 'Release the document first, or post it directly.', Comment = 'is-IS=Staðfestu skjalið fyrst, eða bókaðu það beint.';
     begin
-        Argument.AddError("Bifrost Error Code ori"::PreconditionFailed, NotReleasedLbl, 'sourceNo', Received, '', NotReleasedNextStepLbl);
+        Argument.AddError("Bifrost Error Code ori"::PreconditionFailed, NotReleasedLbl, IdentifierKey, Received, '', NotReleasedNextStepLbl);
     end;
 
-    local procedure RefuseReceiptLocation(var Argument: Record "Message Argument ori"; LocationCode: Code[10])
+    local procedure RefuseReceiptLocation(var Argument: Record "Message Argument ori"; LocationCode: Code[10]; IdentifierKey: Text; IdentifierValue: Text)
     var
         ReceiptLbl: Label 'Location %1 uses warehouse receipts.', Comment = '%1 = location, is-IS=Staðsetning %1 notar vöruhúsamóttökur.';
         ReceiptNextStepLbl: Label 'Use Warehouse.Receipt.Create and Warehouse.Putaway.Create instead.', Comment = 'is-IS=Notaðu Warehouse.Receipt.Create og Warehouse.Putaway.Create í staðinn.';
     begin
-        Argument.AddError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(ReceiptLbl, LocationCode), 'sourceDocument', LocationCode, '', ReceiptNextStepLbl);
+        Argument.AddError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(ReceiptLbl, LocationCode), IdentifierKey, IdentifierValue, '', ReceiptNextStepLbl);
     end;
 
     local procedure NotFound(var Argument: Record "Message Argument ori"; SourceNoText: Text; SystemIdText: Text): Boolean

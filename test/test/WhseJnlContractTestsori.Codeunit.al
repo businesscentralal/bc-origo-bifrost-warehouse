@@ -71,22 +71,43 @@ codeunit 97062 "Whse Jnl Contract Tests ori"
         AssertDeclaredError("Message Type ori"::"Warehouse.ActivityLine.AssignTracking", 'PreconditionFailed', 'No tracking is needed on this line.');
     end;
 
-    /// <summary>AC11: the help never names AL objects or implementation codeunits.</summary>
+    /// <summary>
+    /// AC11 here, extended by #71 AC1 to every Warehouse type: no contract chapter, description, selection description or
+    /// keyword list names an AL object, an object number or an internal procedure, in English (1033) or Icelandic (1039).
+    /// </summary>
     [Test]
     procedure Help_NamesNoAlObjects()
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        ContractAssert: Codeunit "Whse Contract Assert ori";
         MessageType: Enum "Message Type ori";
         Contract: JsonObject;
         ContractText: Text;
+        TypeCount: Integer;
     begin
-        foreach MessageType in NewTypes() do begin
+        foreach MessageType in ContractAssert.WarehouseTypes() do begin
             Clear(Contract);
-            Assert.IsTrue(ContractMgt.GetContract(MessageType, Contract), 'Contract exists.');
+            Assert.IsTrue(ContractMgt.GetContract(MessageType, Contract), ContractAssert.TypeName(MessageType) + ' has a contract.');
             Contract.WriteTo(ContractText);
-            Assert.IsFalse(ContractText.Contains('Impl ori'), 'The help names no implementation codeunit.');
-            Assert.IsFalse(LowerCase(ContractText).Contains('codeunit'), 'The help names no codeunit.');
+            ContractAssert.AssertNamesNoAlObject(ContractText, ContractAssert.TypeName(MessageType) + ' contract');
+            AssertCatalogueNamesNoAlObject(MessageType, 1033);
+            AssertCatalogueNamesNoAlObject(MessageType, 1039);
+            TypeCount += 1;
         end;
+        Assert.IsTrue(TypeCount >= 42, 'Every Warehouse type is checked.');
+    end;
+
+    /// <summary>#71 AC1: the guard itself finds object numbers and internal procedure names.</summary>
+    [Test]
+    procedure Help_Guard_FindsAlReferences()
+    var
+        ContractAssert: Codeunit "Whse Contract Assert ori";
+    begin
+        Assert.AreNotEqual('', ContractAssert.FindAlReference('Registers a Warehouse Pick (BC codeunit 7307 "Whse.-Activity-Register").'), 'A codeunit number is found.');
+        Assert.AreNotEqual('', ContractAssert.FindAlReference('Creates a pick using report 7318.'), 'A report number is found.');
+        Assert.AreNotEqual('', ContractAssert.FindAlReference('Call Dispatcher.Execute with OmitCommit = false.'), 'An internal procedure is found.');
+        Assert.AreNotEqual('', ContractAssert.FindAlReference('Handled by Whse Pick Create Impl ori.'), 'An implementation codeunit is found.');
+        Assert.AreEqual('', ContractAssert.FindAlReference('Check the number with Data.Records.Get on table Warehouse Shipment Header. It reports 4 tables.'), 'A table caption and plain words are allowed.');
     end;
 
     /// <summary>#68 item 7: the help and catalogue texts name no internal procedure, in English and Icelandic.</summary>
@@ -186,6 +207,25 @@ codeunit 97062 "Whse Jnl Contract Tests ori"
         Assert.IsTrue(TempArgument.IsTableWriteRestrictedForDataRecords(Database::"Warehouse Activity Line", true), 'The activity line table stays closed.');
         Assert.IsTrue(TempArgument.GetDedicatedMessageTypeHintForWrite(Database::"Warehouse Activity Line").Contains('Warehouse.ActivityLine.Split, Warehouse.ActivityLine.ChangeBin, Warehouse.ActivityLine.SetQtyToHandle, Warehouse.ActivityLine.AssignTracking'), 'Table hint names the activity line types.');
         Assert.IsFalse(TempArgument.IsTableReadRestrictedForDataRecords(Database::"Warehouse Activity Line"), 'Reads stay allowed.');
+    end;
+
+    local procedure AssertCatalogueNamesNoAlObject(MessageType: Enum "Message Type ori"; LanguageId: Integer)
+    var
+        ContractAssert: Codeunit "Whse Contract Assert ori";
+        Discovery: Interface "Msg Discovery ori";
+        Implementation: Interface "Msg Interface ori";
+        OriginalLanguage: Integer;
+        Context: Text;
+    begin
+        OriginalLanguage := GlobalLanguage();
+        GlobalLanguage(LanguageId);
+        Discovery := MessageType;
+        Implementation := MessageType;
+        Context := ContractAssert.TypeName(MessageType) + ' (' + Format(LanguageId, 0, 9) + ')';
+        ContractAssert.AssertNamesNoAlObject(Implementation.GetDescription(), Context + ' description');
+        ContractAssert.AssertNamesNoAlObject(Discovery.GetSelectionDescription(), Context + ' selection description');
+        ContractAssert.AssertNamesNoAlObject(Discovery.GetKeywords(), Context + ' keywords');
+        GlobalLanguage(OriginalLanguage);
     end;
 
     local procedure JournalHint(): Text

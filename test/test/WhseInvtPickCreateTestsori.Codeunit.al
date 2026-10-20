@@ -85,6 +85,13 @@ codeunit 97085 "Whse InvtPick Create Tests ori"
 
         Assert.AreEqual('PreconditionFailed', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
         Assert.AreEqual(ShipmentNextStepTxt, TextValue(ResponseJson, 'nextStep'), 'The next step should name the shipment and pick types.');
+        // #71 item 4: the refusal names the key that identified the document, not sourceDocument with the location code.
+        Assert.AreEqual('sourceNo', TextValue(ResponseJson, 'parameter'), 'The refusal names sourceNo.');
+        Assert.AreEqual(SalesHeader."No.", TextValue(ResponseJson, 'received'), 'The refusal echoes the document number.');
+        Assert.IsTrue(TextValue(ResponseJson, 'error').Contains(Location.Code), 'The message names the location.');
+        Run('{"sourceDocument":"Sales Order"}', SalesHeader."No.", ResponseJson);
+        Assert.AreEqual('PreconditionFailed', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('subject', TextValue(ResponseJson, 'parameter'), 'Sent as the subject, the refusal names the subject.');
         Assert.AreEqual(0, CountPicks(SalesHeader."No."), 'A shipment location must not get an inventory pick.');
     end;
 

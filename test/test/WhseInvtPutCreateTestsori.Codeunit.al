@@ -87,6 +87,12 @@ codeunit 97087 "Whse InvtPut Create Tests ori"
 
         Assert.AreEqual('PreconditionFailed', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
         Assert.AreEqual(ReceiptNextStepTxt, TextValue(ResponseJson, 'nextStep'), 'The next step should name the receipt and put-away types.');
+        // #71 item 4: the refusal names the key that identified the document, not sourceDocument with the location code.
+        Assert.AreEqual('sourceNo', TextValue(ResponseJson, 'parameter'), 'The refusal names sourceNo.');
+        Assert.AreEqual(PurchaseHeader."No.", TextValue(ResponseJson, 'received'), 'The refusal echoes the document number.');
+        Run('{"sourceDocument":"Purchase Order"}', PurchaseHeader."No.", ResponseJson);
+        Assert.AreEqual('PreconditionFailed', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('subject', TextValue(ResponseJson, 'parameter'), 'Sent as the subject, the refusal names the subject.');
         Assert.AreEqual(0, CountPutaways(PurchaseHeader."No."), 'A receipt location must not get an inventory put-away.');
     end;
 

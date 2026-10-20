@@ -105,7 +105,7 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect(Effect, 'Creates Warehouse Receipt Header and Line records and applies requested header fields. Business Central''s Get Source Documents report commits after each receipt header it creates, so the receipts are not rolled back with the caller''s transaction.', 'BIFROST Full ori');
+        Parts.IrreversibleEffect(Effect, 'Creates Warehouse Receipt Header and Line records and applies requested header fields. Business Central commits after each receipt header it creates, so the receipts are not rolled back with the caller''s transaction.', 'BIFROST Full ori');
         exit(true);
     end;
 

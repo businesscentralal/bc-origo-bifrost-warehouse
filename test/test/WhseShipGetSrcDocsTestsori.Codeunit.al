@@ -164,6 +164,12 @@ codeunit 97041 "Whse Ship GetSrcDocs Tests ori"
 
         Assert.AreEqual('PreconditionFailed', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
         Assert.AreEqual('Release the source documents first.', TextValue(ResponseJson, 'nextStep'), 'The next step must name the release.');
+        Assert.AreEqual('', TextValue(ResponseJson, 'parameter'), 'No filter was sent, so no key is named.');
+
+        // #71 item 4: the refusal names the filters that were sent.
+        Run('{"locationCode":"' + Location.Code + '","customerNo":"NO-CUSTOMER"}', '', ResponseJson);
+        Assert.AreEqual('PreconditionFailed', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('customerNo', TextValue(ResponseJson, 'parameter'), 'The refusal names customerNo, not sourceNos.');
         AssertNoShipmentAt(Location.Code);
     end;
 

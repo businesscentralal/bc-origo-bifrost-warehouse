@@ -59,37 +59,118 @@ codeunit 10078459 "Whse Contract Parts ori"
         Parameters.Add(ContractMgt.Parameter('take', 'integer', false, 'Maximum number of records to return. Defaults to the platform page size.'));
     end;
 
-    /// <summary>Lists required document lookup errors, including strict JSON format validation.</summary>
-    internal procedure AddLookupErrors(var Errors: JsonArray; RecordName: Text)
-    var
-        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    /// <summary>
+    /// Lists the errors of the shared document lookup, each with the nextStep the lookup answers (#71): a missing identifier,
+    /// an identifier that matches nothing (by number or by SystemId), identifiers for different records, and the JSON format refusals.
+    /// </summary>
+    /// <param name="Errors">Receives the entries.</param>
+    /// <param name="RecordName">The table caption the lookup names, e.g. Warehouse Shipment Header.</param>
+    /// <param name="IdentifierKeys">The identifier keys under data, comma separated, as the lookup lists them.</param>
+    internal procedure AddLookupErrors(var Errors: JsonArray; RecordName: Text; IdentifierKeys: Text)
     begin
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::MissingParameter, 'No ' + RecordName + ' identifier was supplied.', 'Send subject or an identifier under data.'));
-        AddRecordNotFoundError(Errors, RecordName);
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::ConflictingIdentifiers, 'Two identifiers point to different records.', 'Send one identifier or identifiers for the same record.'));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::MissingParameter,
+            'No ' + RecordName + ' identifier was sent.',
+            'Send the number or SystemId as the subject, or in one of: ' + IdentifierKeys + '.'));
+        AddRecordNotFoundErrors(Errors, RecordName);
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::ConflictingIdentifiers,
+            'Two identifiers point to different records. The answer names both keys.',
+            'Send only one identifier, or identifiers for the same record.'));
         AddIdentifierFormatErrors(Errors);
     end;
 
     /// <summary>Lists optional lookup errors; callers add any supported conflict error.</summary>
+    /// <param name="Errors">Receives the entries.</param>
+    /// <param name="RecordName">The table caption the lookup names.</param>
     internal procedure AddOptionalLookupErrors(var Errors: JsonArray; RecordName: Text)
     begin
-        AddRecordNotFoundError(Errors, RecordName);
+        AddRecordNotFoundErrors(Errors, RecordName);
         AddIdentifierFormatErrors(Errors);
     end;
 
-    local procedure AddRecordNotFoundError(var Errors: JsonArray; RecordName: Text)
-    var
-        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    local procedure AddRecordNotFoundErrors(var Errors: JsonArray; RecordName: Text)
     begin
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::RecordNotFound, 'The supplied identifier does not match a ' + RecordName + '.', 'Check the value or look the record up first.'));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::RecordNotFound,
+            'A number that was sent does not match a ' + RecordName + ', also when another identifier matches one. The parameter names the key.',
+            'Check the number with Data.Records.Get on table ' + RecordName + '.'));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::RecordNotFound,
+            'A SystemId that was sent does not match a ' + RecordName + ', also when another identifier matches one. The parameter names the key.',
+            'Check the SystemId with Data.Records.Get on table ' + RecordName + '.'));
     end;
 
     local procedure AddIdentifierFormatErrors(var Errors: JsonArray)
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameterFormat, 'data is not a JSON object, an identifier key under data is not a JSON string, or a SystemId is not a GUID. The parameter names the offending key.', 'Send data as an object, identifier keys as strings, and SystemId keys as GUIDs.'));
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::MultipleErrors, 'Several identifier values have an invalid format.', 'Read errors in order and correct each named key.'));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::InvalidParameterFormat,
+            'data is not a JSON object.',
+            'Send data as a JSON object.'));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::InvalidParameterFormat,
+            'An identifier key under data is not a JSON string. The parameter names the offending key.',
+            'Send the value as a JSON string.'));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameterFormat,
+            'A SystemId key holds a value that is not a GUID. The parameter names the key and expected says GUID.',
+            'Send the SystemId as a GUID, or send the number in a number key.'));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::MultipleErrors,
+            'More than one value failed validation, for example several identifiers of the wrong type, or an unknown key together with an identifier that matches nothing. errors[] lists each one with its own code.',
+            'Correct every listed value and send the request again.'));
+    end;
+
+    /// <summary>
+    /// Lists the errors of Warehouse.Receipt.PreviewPost and Warehouse.Shipment.PreviewPost: every refusal the preview answers,
+    /// each with the nextStep of the answer (#71).
+    /// </summary>
+    /// <param name="Errors">Receives the entries.</param>
+    /// <param name="RecordName">The document table caption, e.g. Warehouse Shipment Header.</param>
+    /// <param name="IdentifierKeys">The identifier keys under data, comma separated.</param>
+    /// <param name="QtyKey">The line quantity key: qtyToReceive or qtyToShip.</param>
+    /// <param name="IsShipment">True for the shipment, which also refuses a quantity above the picked quantity.</param>
+    /// <param name="OmitCommitNextStep">The nextStep the preview answers inside a rollback chain.</param>
+    /// <param name="NothingToPostNextStep">The nextStep the preview answers when nothing would be posted.</param>
+    /// <param name="LinesDeniedNextStep">The nextStep the preview answers when lines is sent without write permission.</param>
+    internal procedure AddDocumentPreviewErrors(var Errors: JsonArray; RecordName: Text; IdentifierKeys: Text; QtyKey: Text; IsShipment: Boolean; OmitCommitNextStep: Text; NothingToPostNextStep: Text; LinesDeniedNextStep: Text)
+    var
+        LineTable: Text;
+    begin
+        if IsShipment then
+            LineTable := 'warehouse shipment lines'
+        else
+            LineTable := 'warehouse receipt lines';
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::PreconditionFailed,
+            'The request runs inside a rollback chain (Omit Commit), where a posting preview cannot run.',
+            OmitCommitNextStep));
+        AddLookupErrors(Errors, RecordName, IdentifierKeys);
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::NothingToPreview,
+            'The document has no lines, or no line would post a quantity.',
+            NothingToPostNextStep));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::InvalidParameterFormat,
+            'lines is not an array, or a line is not an object.',
+            'Send lines as an array of objects with lineNo and the quantity.'));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::InvalidParameterFormat,
+            'A line value has the wrong JSON type: lineNo must be an integer and ' + QtyKey + ' a number. The parameter names the value, e.g. lines[0].' + QtyKey + '.',
+            'Send text for codes, numbers for quantities and true or false for options.'));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::MissingParameter,
+            'A line has no lineNo or no ' + QtyKey + '.',
+            'Send lineNo and the quantity on every line.'));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::InvalidLine,
+            'A lineNo is listed more than once.',
+            'Send each line once.'));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::InvalidLine,
+            'A lineNo is not on the document.',
+            'Read the lines first.'));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::InvalidLine,
+            QtyKey + ' is negative or above the outstanding quantity of the line.',
+            'Read the outstanding quantity on the line and lower it.'));
+        if IsShipment then
+            Errors.Add(NextStepEntry("Bifrost Error Code ori"::PreconditionFailed,
+                'qtyToShip is more than the picked quantity that is not yet shipped, at a location that requires pick.',
+                'Register the pick first.'));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::UnknownParameter,
+            'The request or a line contains a key this type does not accept.',
+            'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.'));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::PermissionDenied,
+            'lines was sent and the caller cannot write ' + LineTable + '.',
+            LinesDeniedNextStep));
+        AddBusinessCentralError(Errors, 'invalid quantities, posting setup or source-document state');
     end;
 
     /// <summary>
@@ -164,10 +245,8 @@ codeunit 10078459 "Whse Contract Parts ori"
     end;
 
     internal procedure AddPermissionError(var Errors: JsonArray; PermissionSetName: Text)
-    var
-        ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PermissionDenied, 'The caller lacks ' + PermissionSetName + '.', 'Ask an administrator to assign ' + PermissionSetName + '.'));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::PermissionDenied, 'The caller lacks ' + PermissionSetName + '.', 'Ask an administrator to assign the ' + PermissionSetName + ' permission set.'));
     end;
 
     internal procedure AddSourceDocumentErrors(var Errors: JsonArray; SourceKinds: Text)
@@ -188,9 +267,63 @@ codeunit 10078459 "Whse Contract Parts ori"
         Parameters.Add(ContractMgt.Parameter('assignedUserId', 'string', false, 'User assigned to the created Warehouse Activity Header.'));
         Parameters.Add(ContractMgt.Parameter('sortingMethod', 'string', false, 'Warehouse activity sorting method.'));
         if IncludeOptions then begin
-            Parameters.Add(ContractMgt.Parameter('setBreakbulkFilter', 'boolean', false, 'Must be false; true is rejected because the report request-page option is not supported.'));
-            Parameters.Add(ContractMgt.Parameter('doNotFillQtyToHandle', 'boolean', false, 'Must be false; true is rejected because the report request-page option is not supported.'));
+            Parameters.Add(ContractMgt.Parameter('setBreakbulkFilter', 'boolean', false, 'Must be false; true is refused because this option is not supported.'));
+            Parameters.Add(ContractMgt.Parameter('doNotFillQtyToHandle', 'boolean', false, 'Must be false; true is refused because this option is not supported.'));
         end;
+    end;
+
+    /// <summary>
+    /// Lists the option refusals of Warehouse.Pick.Create and Warehouse.Putaway.Create, with the nextSteps the runtime answers (#71).
+    /// </summary>
+    /// <param name="Errors">Receives the entries.</param>
+    internal procedure AddActivityOptionErrors(var Errors: JsonArray)
+    begin
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::InvalidParameter,
+            'sortingMethod is not a warehouse activity sorting method. expected lists the valid values.',
+            SortingMethodNextStep()));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::InvalidParameter,
+            'setBreakbulkFilter or doNotFillQtyToHandle is true; only false is supported. The parameter names the option.',
+            UnsupportedOptionNextStep()));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::PermissionDenied,
+            'assignedUserId or sortingMethod was sent and that field is closed to writes in this company. The parameter names the key.',
+            ClosedFieldNextStep()));
+    end;
+
+    /// <summary>The nextStep of an unknown sortingMethod.</summary>
+    /// <returns>The nextStep text in the session language.</returns>
+    internal procedure SortingMethodNextStep(): Text
+    var
+        NextStepLbl: Label 'Send one of the sorting methods listed in expected.', Comment = 'is-IS=Sendu eina af röðunaraðferðunum sem taldar eru upp í expected.';
+    begin
+        exit(NextStepLbl);
+    end;
+
+    /// <summary>The nextStep of an activity option sent as true.</summary>
+    /// <returns>The nextStep text in the session language.</returns>
+    internal procedure UnsupportedOptionNextStep(): Text
+    var
+        NextStepLbl: Label 'Leave the option out or send false.', Comment = 'is-IS=Slepptu valkostinum eða sendu false.';
+    begin
+        exit(NextStepLbl);
+    end;
+
+    /// <summary>The nextStep of an activity field that is closed to writes.</summary>
+    /// <returns>The nextStep text in the session language.</returns>
+    internal procedure ClosedFieldNextStep(): Text
+    var
+        NextStepLbl: Label 'Leave the field out; an administrator has closed it to writes.', Comment = 'is-IS=Slepptu reitnum; stjórnandi hefur lokað fyrir skrif í hann.';
+    begin
+        exit(NextStepLbl);
+    end;
+
+    /// <summary>Adds one error entry whose fix and nextStep are the same text.</summary>
+    /// <param name="Errors">Receives the entry.</param>
+    /// <param name="ErrorCode">The error code.</param>
+    /// <param name="WhenText">When the error is answered.</param>
+    /// <param name="NextStep">The nextStep of the answer.</param>
+    internal procedure AddNextStepError(var Errors: JsonArray; ErrorCode: Enum "Bifrost Error Code ori"; WhenText: Text; NextStep: Text)
+    begin
+        Errors.Add(NextStepEntry(ErrorCode, WhenText, NextStep));
     end;
 
     internal procedure ReadEffect(var Effect: JsonObject; Changes: Text; PermissionSetName: Text)

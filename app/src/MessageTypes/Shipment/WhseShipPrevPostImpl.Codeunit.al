@@ -38,8 +38,10 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
     end;
 
     procedure GetDescription() Description: Text[250]
+    var
+        DescriptionLbl: Label 'Simulates posting a warehouse shipment (ship and invoice) and returns the entries it would create, without saving anything.', Comment = 'is-IS=Hermir bókun vöruhúsaafhendingar (afhending og reikningur) og skilar færslunum sem hún myndi búa til, án þess að vista neitt.';
     begin
-        exit('Simulates posting a Warehouse Shipment (Ship + Invoice) and returns the ledger entries that would be produced without committing changes.');
+        exit(DescriptionLbl);
     end;
 
     procedure GetKeywords(): Text
@@ -113,16 +115,9 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
 
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
-        ContractMgt: Codeunit "Msg Contract Mgt ori";
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, 'Posting preview cannot run inside a rollback chain (Omit Commit). Run this message type with Omit Commit set to false.', 'Call Dispatcher.Execute with OmitCommit = false, or use the HTTP/MCP API.'));
-        Parts.AddLookupErrors(Errors, 'Warehouse Shipment Header');
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::NothingToPreview, 'The Warehouse Shipment has no lines or no quantities to post.', 'Add lines and quantities to ship.'));
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidLine, 'A lineNo is not on the shipment, or qtyToShip is negative or above the outstanding quantity.', 'Read the lines first, and read the outstanding quantity on the line and lower it.'));
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::UnknownParameter, 'The request or a line contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.'));
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PermissionDenied, 'lines was sent and the caller cannot write warehouse shipment lines.', 'Ask an administrator to assign BIFROST Whse - Full ori, or preview without lines.'));
-        Parts.AddBusinessCentralError(Errors, 'invalid quantities, posting setup or source-document state');
+        Parts.AddDocumentPreviewErrors(Errors, 'Warehouse Shipment Header', 'systemId, recordSystemId, id, shipmentNo, no', 'qtyToShip', true, OmitCommitNextStep(), NothingToPostNextStep(), LinesDeniedNextStep());
         exit(true);
     end;
 
@@ -156,13 +151,23 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
     end;
 
     procedure GetExamples(var Examples: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        exit(false);
+        Examples.Add(ContractMgt.Example(
+            'Preview shipping 2 on line 10000 of warehouse shipment SH000001',
+            '{"shipmentNo":"SH000001","lines":[{"lineNo":10000,"qtyToShip":2}]}',
+            '{"status":"Success","entryCount":6,"glEntryCount":4,"rollback":true,"summary":"Preview-posting warehouse shipment SH000001 (1 lines, Ship + Invoice) would create 6 ledger entries across 4 tables. Transaction is balanced.","shipmentNo":"SH000001","locationCode":"WHITE","invoice":true,"linesToPost":1,"postingDate":"2026-10-20","lcyCode":"ISK","predictedNumbers":["103001"],"totals":{},"preview":[]}'));
+        Examples.Add(ContractMgt.Example(
+            'Refused: more than the picked quantity on a location that requires pick',
+            '{"shipmentNo":"SH000001","lines":[{"lineNo":10000,"qtyToShip":5}]}',
+            '{"status":"Error","code":"PreconditionFailed","error":"The quantity 5 on line 10000 is more than the picked quantity 2 that is not yet shipped.","parameter":"lines[0].qtyToShip","received":"5","nextStep":"Register the pick first."}'));
+        exit(true);
     end;
 
     procedure GetOverview(var Overview: Text): Boolean
     begin
-        Overview := 'Read-only posting preview for a Warehouse Shipment. It captures predicted ledger entries and rolls back the transaction.';
+        Overview := 'Read-only posting preview for a warehouse shipment, the same as the Preview Posting action. It returns the entries that posting would create (ship and invoice) and rolls everything back. Optional lines set the quantity to ship per line inside the preview only. It cannot run inside a rollback chain (Omit Commit).';
         exit(true);
     end;
 
@@ -204,17 +209,16 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
         PreviewFieldNames: List of [Text];
         NoLinesToPostErr: Label 'Warehouse Shipment %1 has no lines to post.', Comment = '%1 = Whse. Shipment No., is-IS=Vöruhúsaafhending %1 hefur engar línur til bókunar.';
         PreviewFailedErr: Label 'Posting preview failed and no entries were captured. The shipment cannot be posted in its current state.', Comment = 'is-IS=Bókunarforsýning mistókst og engar færslur voru teknar. Sendingin getur ekki verið bókuð í núverandi stöðu.';
-        NothingToPostNextStepTok: Label 'No shipment line has Qty. to Ship. Set quantities on the shipment lines.', Comment = 'is-IS=Engin sendingarlína hefur Magn til afhendingar. Setjið magn á sendingarlínurnar.';
+
         OmitCommitPreviewErr: Label 'Posting preview cannot run inside a rollback chain (Omit Commit). Run this message type with Omit Commit set to false.', Comment = 'is-IS=Ekki er hægt að forskoða bókun innan afturköllunarkeðju (Omit Commit). Keyrðu þessa skilaboðategund með Omit Commit stillt á false.';
-        OmitCommitPreviewNextStepTok: Label 'Call Dispatcher.Execute with OmitCommit = false, or use the HTTP/MCP API.', Comment = 'is-IS=Kallaðu á Dispatcher.Execute með OmitCommit = false eða notaðu HTTP/MCP API.';
+
         NothingPreviewedLbl: Label 'Nothing was previewed.', Comment = 'is-IS=Ekkert var forskoðað.';
         LinesDeniedLbl: Label 'You do not have permission to set quantities on warehouse shipment lines.', Comment = 'is-IS=Þú hefur ekki heimild til að setja magn á línur vöruhúsaafhendingar.';
-        LinesDeniedNextStepLbl: Label 'Ask an administrator to assign BIFROST Whse - Full ori, or preview without lines.', Comment = 'is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori eða forskoðaðu án lína.';
     begin
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
         if Argument."Omit Commit" then begin
-            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, OmitCommitPreviewErr, '', '', '', OmitCommitPreviewNextStepTok);
+            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, OmitCommitPreviewErr, '', '', '', OmitCommitNextStep());
             exit;
         end;
 
@@ -231,7 +235,7 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
                 Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, NothingPreviewedLbl);
                 exit;
             end;
-            Argument.RespondWithError("Bifrost Error Code ori"::NothingToPreview, StrSubstNo(NoLinesToPostErr, WhseShipmentHeader."No."), '', '', '', NothingToPostNextStepTok);
+            Argument.RespondWithError("Bifrost Error Code ori"::NothingToPreview, StrSubstNo(NoLinesToPostErr, WhseShipmentHeader."No."), '', '', '', NothingToPostNextStep());
             exit;
         end;
         DocLineQty.ReadLines(RequestJson, Argument, true, WhseShipmentHeader."No.", PlannedLines);
@@ -241,7 +245,7 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
         end;
         if PlannedLines.Count() > 0 then
             if not WhseShipmentLine.WritePermission() then begin
-                Argument.RespondWithError("Bifrost Error Code ori"::PermissionDenied, LinesDeniedLbl, 'lines', '', '', LinesDeniedNextStepLbl);
+                Argument.RespondWithError("Bifrost Error Code ori"::PermissionDenied, LinesDeniedLbl, 'lines', '', '', LinesDeniedNextStep());
                 exit;
             end;
         LinesToPost := WhseShipmentLine.Count();
@@ -257,7 +261,7 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
         if not PreviewWhseShipment(WhseShipmentLine, PlannedLines, PostingPreviewEventHandler, PreviewErrorText) then begin
             if PreviewErrorText = '' then
                 PreviewErrorText := PreviewFailedErr;
-            PostingPreviewHelper.RespondWithPreviewError(Argument, PreviewErrorText, NothingToPostNextStepTok);
+            PostingPreviewHelper.RespondWithPreviewError(Argument, PreviewErrorText, NothingToPostNextStep());
             exit;
         end;
 
@@ -269,7 +273,7 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
                 PostingPreviewHelper.AddTableToPreview(PreviewArray, PostingPreviewEventHandler, TempDocumentEntry."Table ID", TempDocumentEntry."Table Name", PreviewFieldNames);
             until TempDocumentEntry.Next() = 0;
 
-        if not PostingPreviewHelper.EvaluatePreviewOutcome(Argument, PreviewArray, PostingPreviewEventHandler, NothingToPostNextStepTok, TotalsJson, Balanced, EntryCount, GLEntryCount) then
+        if not PostingPreviewHelper.EvaluatePreviewOutcome(Argument, PreviewArray, PostingPreviewEventHandler, NothingToPostNextStep(), TotalsJson, Balanced, EntryCount, GLEntryCount) then
 
             exit;
 
@@ -385,5 +389,26 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
 
         GenJnlPostPreview.GetPreviewHandler(PostingPreviewEventHandler);
         exit(true);
+    end;
+
+    local procedure OmitCommitNextStep(): Text
+    var
+        NextStepLbl: Label 'Run the preview on its own, outside a rollback chain, for example through the HTTP or MCP API.', Comment = 'is-IS=Keyrðu forskoðunina eina og sér, utan afturköllunarkeðju, til dæmis í gegnum HTTP- eða MCP-API.';
+    begin
+        exit(NextStepLbl);
+    end;
+
+    local procedure NothingToPostNextStep(): Text
+    var
+        NextStepLbl: Label 'No shipment line has Qty. to Ship. Set quantities on the shipment lines.', Comment = 'is-IS=Engin sendingarlína hefur Magn til afhendingar. Setjið magn á sendingarlínurnar.';
+    begin
+        exit(NextStepLbl);
+    end;
+
+    local procedure LinesDeniedNextStep(): Text
+    var
+        NextStepLbl: Label 'Ask an administrator to assign BIFROST Whse - Full ori, or preview without lines.', Comment = 'is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori eða forskoðaðu án lína.';
+    begin
+        exit(NextStepLbl);
     end;
 }

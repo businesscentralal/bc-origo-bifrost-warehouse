@@ -21,6 +21,7 @@ codeunit 97042 "Whse Ship Release Tests ori"
         Assert: Codeunit "Library Assert";
         ShipmentHelper: Codeunit "Whse Shipment Test Helper ori";
         ReceiptHelper: Codeunit "Whse Receipt Test Helper ori";
+        ContractAssert: Codeunit "Whse Contract Assert ori";
 
     /// <summary>AC01: releasing an open shipment with lines answers Released and changes the status.</summary>
     [Test]
@@ -90,6 +91,15 @@ codeunit 97042 "Whse Ship Release Tests ori"
         Assert.AreEqual('RecordNotFound', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
         Assert.IsTrue(TextValue(ResponseJson, 'nextStep').Contains('Data.Records.Get'), 'The next step must name Data.Records.Get.');
         Assert.IsTrue(TextValue(ResponseJson, 'nextStep').Contains('Warehouse Shipment Header'), 'The next step must name the table.');
+        // #71 item 3: the help lists this refusal with the same nextStep, for Release and Reopen.
+        ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Shipment.Release", ResponseJson);
+        Run(Enum::"Message Type ori"::"Warehouse.Shipment.Reopen", '{"shipmentNo":"NO-SUCH-SHIP"}', ResponseJson);
+        Assert.AreEqual('RecordNotFound', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Shipment.Reopen", ResponseJson);
+        Run(Enum::"Message Type ori"::"Warehouse.Shipment.Reopen", '{"systemId":"' + Format(CreateGuid(), 0, 4) + '"}', ResponseJson);
+        Assert.AreEqual('RecordNotFound', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('Check the SystemId with Data.Records.Get on table Warehouse Shipment Header.', TextValue(ResponseJson, 'nextStep'), 'A SystemId gets the SystemId next step.');
+        ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Shipment.Reopen", ResponseJson);
     end;
 
     /// <summary>AC06: missing, wrong-typed, unknown and conflicting identifiers are refused with their codes.</summary>
@@ -107,13 +117,16 @@ codeunit 97042 "Whse Ship Release Tests ori"
         Run(Enum::"Message Type ori"::"Warehouse.Shipment.Release", '{}', ResponseJson);
         Assert.AreEqual('MissingParameter', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
         Assert.AreNotEqual('', TextValue(ResponseJson, 'nextStep'), 'MissingParameter needs a next step.');
+        ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Shipment.Release", ResponseJson);
 
         Run(Enum::"Message Type ori"::"Warehouse.Shipment.Release", '{"shipmentNo":12}', ResponseJson);
         Assert.AreEqual('InvalidParameterFormat', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Shipment.Release", ResponseJson);
 
         Run(Enum::"Message Type ori"::"Warehouse.Shipment.Release", '{"shipmentNo":"' + ShipmentNo + '","note":"x"}', ResponseJson);
         Assert.AreEqual('UnknownParameter', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
         Assert.AreEqual('note', TextValue(ResponseJson, 'parameter'), 'The unknown key must be named.');
+        ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Shipment.Release", ResponseJson);
 
         Run(Enum::"Message Type ori"::"Warehouse.Shipment.Release", '{"shipmentNo":"' + ShipmentNo + '","no":"' + OtherNo + '"}', ResponseJson);
         Assert.AreEqual('ConflictingIdentifiers', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
@@ -177,7 +190,32 @@ codeunit 97042 "Whse Ship Release Tests ori"
 
         Assert.AreEqual('PreconditionFailed', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
         Assert.AreEqual('Register or delete the picks first.', TextValue(ResponseJson, 'nextStep'), 'The next step must name the picks.');
+        Assert.AreEqual('shipmentNo', TextValue(ResponseJson, 'parameter'), 'The refusal names the key that was sent.');
+        ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Shipment.Reopen", ResponseJson);
+
+        // #71 item 4: sent as the subject, the refusal names the subject.
+        Run(Enum::"Message Type ori"::"Warehouse.Shipment.Reopen", '{}', ShipmentNo, ResponseJson);
+        Assert.AreEqual('PreconditionFailed', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('subject', TextValue(ResponseJson, 'parameter'), 'The refusal names the subject.');
+        Assert.AreEqual(ShipmentNo, TextValue(ResponseJson, 'received'), 'The refusal echoes the subject.');
         AssertStatus(ShipmentNo, true);
+    end;
+
+    /// <summary>#71 item 4: a shipment without lines sent as the subject is refused naming the subject.</summary>
+    [Test]
+    procedure Release_NoLinesAsSubject_NamesSubject()
+    var
+        ShipmentHeader: Record "Warehouse Shipment Header";
+        ResponseJson: JsonObject;
+    begin
+        // Issue #71, AC3 | Time: independent of WorkDate | Risk: none.
+        CreateEmptyShipment(ShipmentHeader);
+
+        Run(Enum::"Message Type ori"::"Warehouse.Shipment.Release", '{}', ShipmentHeader."No.", ResponseJson);
+
+        Assert.AreEqual('PreconditionFailed', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('subject', TextValue(ResponseJson, 'parameter'), 'The refusal names the subject.');
+        ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Shipment.Release", ResponseJson);
     end;
 
     /// <summary>AC06 for reopen: an unknown key is refused and the shipment stays released.</summary>

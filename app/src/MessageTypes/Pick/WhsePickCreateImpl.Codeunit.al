@@ -2,7 +2,7 @@ namespace Origo.Bifrost.Warehouse;
 
 /// <summary>
 /// Implementation of the Warehouse.Pick.Create message type.
-/// Wraps BC's Create Pick flow (report "Whse.-Shipment - Create Pick", 7318) to generate a
+/// Wraps Business Central's Create Pick flow (report "Whse.-Shipment - Create Pick") to generate a
 /// Warehouse Activity Header (Type = Pick) from a Warehouse Shipment. After creation the
 /// optional `assignedUserId` and `sortingMethod` are applied to the activity header (subject
 /// to write-restrictions on those fields).
@@ -34,8 +34,10 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
     end;
 
     procedure GetDescription() Description: Text[250]
+    var
+        DescriptionLbl: Label 'Creates a warehouse pick from a released warehouse shipment, the same as the Create Pick action on the shipment.', Comment = 'is-IS=Stofnar vöruhúsatínslu úr útgefinni vöruhúsaafhendingu, eins og aðgerðin Stofna tínslu á afhendingunni.';
     begin
-        exit('Creates a Warehouse Pick from a Warehouse Shipment (BC report 7318 "Whse.-Shipment - Create Pick").');
+        exit(DescriptionLbl);
     end;
 
     procedure GetKeywords(): Text
@@ -103,13 +105,12 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
 
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
-        ContractMgt: Codeunit "Msg Contract Mgt ori";
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.AddLookupErrors(Errors, 'Warehouse Shipment Header');
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, 'A sortingMethod or report option is not valid.', 'Use a valid sorting method and leave unsupported report options false.'));
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, 'No Warehouse Pick was created for the shipment.', 'Ensure the shipment has lines requiring a pick and no pick already exists.'));
-        Parts.AddBusinessCentralError(Errors, 'missing warehouse setup, no quantities to pick or report validation failure');
+        Parts.AddLookupErrors(Errors, 'Warehouse Shipment Header', 'systemId, recordSystemId, id, whseShipmentNo, shipmentNo, no');
+        Parts.AddActivityOptionErrors(Errors);
+        Parts.AddNextStepError(Errors, "Bifrost Error Code ori"::PreconditionFailed, 'Business Central created no pick for the shipment: there is nothing to pick, the location does not require pick, or the lines are already on a pick.', NoPickCreatedNextStep());
+        Parts.AddBusinessCentralError(Errors, 'missing warehouse setup, no quantities to pick or a validation failure');
         exit(true);
     end;
 
@@ -117,7 +118,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect(Effect, 'Creates Warehouse Activity Header and Line records of type Pick and applies optional activity fields. Outside Omit Commit the pick is created in its own transaction (Codeunit.Run with a return value), which commits it, so it is not rolled back with the caller''s transaction.', 'BIFROST Full ori');
+        Parts.IrreversibleEffect(Effect, 'Creates a warehouse pick with its lines and applies the optional activity fields. Outside Omit Commit the pick is created and committed in its own transaction, so it is not rolled back with the caller''s transaction.', 'BIFROST Full ori');
         exit(true);
     end;
 
@@ -150,7 +151,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
 
     procedure GetOverview(var Overview: Text): Boolean
     begin
-        Overview := 'Irreversibly creates a Warehouse Pick from an existing Warehouse Shipment using BC report 7318 (committed in its own transaction) and applies optional activity fields.';
+        Overview := 'Irreversibly creates a warehouse pick from an existing warehouse shipment, the same as the Create Pick action (committed in its own transaction), and applies the optional activity fields.';
         exit(true);
     end;
 
@@ -171,6 +172,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
         WarehouseActivityHeader: Record "Warehouse Activity Header";
         WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         RequestValueReader: Codeunit "Request Value Reader ori";
+        Parts: Codeunit "Whse Contract Parts ori";
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
         SortingMethodText: Text;
@@ -196,7 +198,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
         HasAssignedUserId := AssignedUserIdValue <> '';
         if HasAssignedUserId then
             if RequestValueReader.IsFieldWriteRestricted(Database::"Warehouse Activity Header", WarehouseActivityHeader.FieldNo("Assigned User ID")) then begin
-                Argument.RespondWithError(StrSubstNo(FieldWriteRestrictedErr, WarehouseActivityHeader.FieldCaption("Assigned User ID"), WarehouseActivityHeader.TableCaption()));
+                Argument.RespondWithError("Bifrost Error Code ori"::PermissionDenied, StrSubstNo(FieldWriteRestrictedErr, WarehouseActivityHeader.FieldCaption("Assigned User ID"), WarehouseActivityHeader.TableCaption()), 'assignedUserId', '', '', Parts.ClosedFieldNextStep());
                 exit;
             end;
 
@@ -204,26 +206,26 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
         SortingMethodText := ReadString(RequestJson, 'sortingMethod');
         if SortingMethodText <> '' then begin
             if not TryParseSortingMethod(SortingMethodText, SortingMethodValue) then begin
-                Argument.RespondWithError(BuildInvalidSortingMethodErr(SortingMethodText));
+                Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, BuildInvalidSortingMethodErr(SortingMethodText), 'sortingMethod', CopyStr(SortingMethodText, 1, 80), SortingMethodNames(), Parts.SortingMethodNextStep());
                 exit;
             end;
             if RequestValueReader.IsFieldWriteRestricted(Database::"Warehouse Activity Header", WarehouseActivityHeader.FieldNo("Sorting Method")) then begin
-                Argument.RespondWithError(StrSubstNo(FieldWriteRestrictedErr, WarehouseActivityHeader.FieldCaption("Sorting Method"), WarehouseActivityHeader.TableCaption()));
+                Argument.RespondWithError("Bifrost Error Code ori"::PermissionDenied, StrSubstNo(FieldWriteRestrictedErr, WarehouseActivityHeader.FieldCaption("Sorting Method"), WarehouseActivityHeader.TableCaption()), 'sortingMethod', '', '', Parts.ClosedFieldNextStep());
                 exit;
             end;
             HasSortingMethod := true;
         end;
 
-        // setBreakbulkFilter / doNotFillQtyToHandle are request-page-only on BC report 7318.
+        // setBreakbulkFilter / doNotFillQtyToHandle are request-page-only options of the Create Pick report.
         // We accept the defaults silently; non-default values are rejected to avoid silent loss.
         SetBreakbulkFilter := ReadBoolean(RequestJson, 'setBreakbulkFilter');
         if SetBreakbulkFilter then begin
-            Argument.RespondWithError(StrSubstNo(UnsupportedOptionErr, 'setBreakbulkFilter'));
+            Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(UnsupportedOptionErr, 'setBreakbulkFilter'), 'setBreakbulkFilter', 'true', 'false', Parts.UnsupportedOptionNextStep());
             exit;
         end;
         DoNotFillQtyToHandle := ReadBoolean(RequestJson, 'doNotFillQtyToHandle');
         if DoNotFillQtyToHandle then begin
-            Argument.RespondWithError(StrSubstNo(UnsupportedOptionErr, 'doNotFillQtyToHandle'));
+            Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(UnsupportedOptionErr, 'doNotFillQtyToHandle'), 'doNotFillQtyToHandle', 'true', 'false', Parts.UnsupportedOptionNextStep());
             exit;
         end;
 
@@ -233,14 +235,14 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
             Codeunit.Run(Codeunit::"Whse Pick Create Process ori", WhseShipmentHeader)
         else
             if not Codeunit.Run(Codeunit::"Whse Pick Create Process ori", WhseShipmentHeader) then begin
-                Argument.RespondWithError(GetLastErrorText());
+                Argument.RespondWithError("Bifrost Error Code ori"::BusinessCentralError, GetLastErrorText(), '', '', '', '');
                 exit;
             end;
 
         // Locate the activity header that was created. Match the latest pick whose source line
         // points at this Warehouse Shipment.
         if not FindCreatedPick(WhseShipmentHeader."No.", WarehouseActivityHeader) then begin
-            Argument.RespondWithError(StrSubstNo(NoPickCreatedErr(), WhseShipmentHeader."No."));
+            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(NoPickCreatedErr(), WhseShipmentHeader."No."), '', '', '', NoPickCreatedNextStep());
             exit;
         end;
 
@@ -370,6 +372,28 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
             Builder.Append(Names.Get(Idx));
         end;
         ErrMessage := StrSubstNo(InvalidErr, SortingMethodText, Builder.ToText());
+    end;
+
+    local procedure SortingMethodNames(): Text
+    var
+        Names: List of [Text];
+        Idx: Integer;
+        Builder: TextBuilder;
+    begin
+        Names := Enum::"Whse. Activity Sorting Method".Names();
+        for Idx := 1 to Names.Count() do begin
+            if Idx > 1 then
+                Builder.Append(', ');
+            Builder.Append(Names.Get(Idx));
+        end;
+        exit(Builder.ToText());
+    end;
+
+    local procedure NoPickCreatedNextStep(): Text
+    var
+        NextStepLbl: Label 'Check that the shipment is released, that its location requires pick, and that its lines are not already on a pick.', Comment = 'is-IS=Athugaðu að afhendingin sé útgefin, að staðsetning hennar krefjist tínslu og að línur hennar séu ekki þegar á tínslu.';
+    begin
+        exit(NextStepLbl);
     end;
 
     local procedure NoPickCreatedErr() Result: Text

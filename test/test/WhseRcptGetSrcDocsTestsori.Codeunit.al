@@ -136,6 +136,27 @@ codeunit 97040 "Whse Rcpt GetSrcDocs Tests ori"
 
         Assert.AreEqual('PreconditionFailed', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
         Assert.AreEqual('Release the source documents first; read Warehouse.Request.Get.', TextValue(ResponseJson, 'nextStep'), 'The next step must name the release and Request.Get.');
+        Assert.AreEqual('', TextValue(ResponseJson, 'parameter'), 'No filter was sent, so no key is named.');
+        AssertNoReceiptAt(Location.Code);
+    end;
+
+    /// <summary>#71 item 4: when no released request matches the filters, the refusal names the filters that were sent.</summary>
+    [Test]
+    procedure NoReleasedRequest_NamesTheFilter()
+    var
+        Location: Record Location;
+        Item: Record Item;
+        ResponseJson: JsonObject;
+    begin
+        // Issue #71, AC3 | Time: independent of WorkDate | Risk: none.
+        ReceiptHelper.SetupLocationAndItem(Location, Item, 0);
+
+        Run('{"locationCode":"' + Location.Code + '","vendorNo":"NO-VENDOR"}', '', ResponseJson);
+        Assert.AreEqual('PreconditionFailed', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('vendorNo', TextValue(ResponseJson, 'parameter'), 'The refusal names vendorNo, not sourceNos.');
+
+        Run('{"locationCode":"' + Location.Code + '","sourceDocument":"Purchase Order","vendorNo":"NO-VENDOR"}', '', ResponseJson);
+        Assert.AreEqual('sourceDocument, vendorNo', TextValue(ResponseJson, 'parameter'), 'The refusal names every filter that was sent.');
         AssertNoReceiptAt(Location.Code);
     end;
 

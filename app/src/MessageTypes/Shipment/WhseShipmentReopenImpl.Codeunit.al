@@ -135,7 +135,7 @@ codeunit 10078434 "Whse Shipment Reopen Impl ori" implements "Msg Interface ori"
         Parts: Codeunit "Whse Contract Parts ori";
         Entry: JsonObject;
     begin
-        Parts.AddLookupErrors(Errors, 'Warehouse Shipment Header');
+        Parts.AddLookupErrors(Errors, 'Warehouse Shipment Header', 'systemId, recordSystemId, id, shipmentNo, no');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'Open pick lines or pick worksheet lines exist for the shipment.', 'Register or delete the picks first.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot write warehouse shipments.', 'Ask an administrator to assign BIFROST Whse - Full ori.');
@@ -237,6 +237,8 @@ codeunit 10078434 "Whse Shipment Reopen Impl ori" implements "Msg Interface ori"
         RequestJson: JsonObject;
         Payload: JsonObject;
         FoundSystemId: Guid;
+        IdentifierKey: Text;
+        Received: Text;
         DeniedLbl: Label 'You do not have permission to reopen a warehouse shipment.', Comment = 'is-IS=Þú hefur ekki heimild til að opna vöruhúsaafhendingu aftur.';
         DeniedNextStepLbl: Label 'Ask an administrator to assign BIFROST Whse - Full ori.', Comment = 'is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.';
         ProblemsLbl: Label 'Nothing was reopened.', Comment = 'is-IS=Ekkert var opnað aftur.';
@@ -266,7 +268,9 @@ codeunit 10078434 "Whse Shipment Reopen Impl ori" implements "Msg Interface ori"
             exit;
         end;
         if HasOpenPicks(ShipmentHeader."No.") then begin
-            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(PicksLbl, ShipmentHeader."No."), 'shipmentNo', ShipmentHeader."No.", '', PicksNextStepLbl);
+            // The refusal names the key that identified the shipment: subject, shipmentNo or a SystemId key (#71).
+            IdentifierKey := WhseRecordLookup.IdentifierParameter(Argument, RequestJson, 'systemId=guid,recordSystemId=guid,id=guid,shipmentNo=no,no=no', Received);
+            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(PicksLbl, ShipmentHeader."No."), IdentifierKey, Received, '', PicksNextStepLbl);
             exit;
         end;
         Payload.Add('shipmentNo', ShipmentHeader."No.");

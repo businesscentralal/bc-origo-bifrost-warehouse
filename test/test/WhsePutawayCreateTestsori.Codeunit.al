@@ -20,6 +20,7 @@ codeunit 97019 "Whse Putaway Create Tests ori"
     var
         Assert: Codeunit "Library Assert";
         Helper: Codeunit "Whse Receipt Test Helper ori";
+        ContractAssert: Codeunit "Whse Contract Assert ori";
         IsInitialized: Boolean;
 
     local procedure Initialize()
@@ -148,6 +149,12 @@ codeunit 97019 "Whse Putaway Create Tests ori"
         Assert.AreEqual('Error', StatusToken.AsValue().AsText(), 'Status should be Error');
         Assert.IsTrue(ResponseJson.Get('error', ErrorToken), 'error missing');
         Assert.IsTrue(ErrorToken.AsValue().AsText().Contains('NotAMethod'), 'Error should mention supplied sortingMethod value');
+        // #71 AC2: the refusal carries a code and nextStep, and the help lists both.
+        Assert.IsTrue(ResponseJson.Get('code', ErrorToken), 'code missing');
+        Assert.AreEqual('InvalidParameter', ErrorToken.AsValue().AsText(), 'code');
+        Assert.IsTrue(ResponseJson.Get('parameter', ErrorToken), 'parameter missing');
+        Assert.AreEqual('sortingMethod', ErrorToken.AsValue().AsText(), 'parameter');
+        ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Putaway.Create", ResponseJson);
     end;
 
     [Test]
@@ -212,6 +219,10 @@ codeunit 97019 "Whse Putaway Create Tests ori"
         Assert.AreEqual('Error', StatusToken.AsValue().AsText(), 'Status should be Error');
         Assert.IsTrue(ResponseJson.Get('error', ErrorToken), 'error missing');
         Assert.IsTrue(ErrorToken.AsValue().AsText().Contains('setBreakbulkFilter'), 'Error should mention setBreakbulkFilter');
+        // #71 AC2: the refusal carries a code and nextStep, and the help lists both.
+        Assert.IsTrue(ResponseJson.Get('parameter', ErrorToken), 'parameter missing');
+        Assert.AreEqual('setBreakbulkFilter', ErrorToken.AsValue().AsText(), 'parameter');
+        ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Putaway.Create", ResponseJson);
     end;
 
     local procedure CreateMessage(var ResponseJson: JsonObject; PostedWhseReceiptNo: Code[20]; AssignedUserId: Code[50]; SortingMethod: Text; SetBreakbulkFilter: Boolean; DoNotFillQtyToHandle: Boolean)

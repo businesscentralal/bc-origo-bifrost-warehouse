@@ -34,8 +34,10 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
     end;
 
     procedure GetDescription() Description: Text[250]
+    var
+        DescriptionLbl: Label 'Creates a warehouse put-away from a posted warehouse receipt, or returns the open put-away that already exists for it.', Comment = 'is-IS=Stofnar vöruhúsafrágang úr bókaðri vöruhúsamóttöku, eða skilar opna frágangnum sem er þegar til fyrir hana.';
     begin
-        exit('Creates a Warehouse Put-away from a Posted Whse. Receipt (BC report 7305 "Whse.-Source - Create Document").');
+        exit(DescriptionLbl);
     end;
 
     procedure GetKeywords(): Text
@@ -105,13 +107,12 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
 
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
-        ContractMgt: Codeunit "Msg Contract Mgt ori";
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.AddLookupErrors(Errors, 'Posted Whse. Receipt Header');
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, 'A sortingMethod or report option is not valid.', 'Use a valid sorting method and leave unsupported report options false.'));
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, 'No Warehouse Put-away exists or could be created for the posted receipt.', 'Ensure the receipt has outstanding quantities and the location requires put-away.'));
-        Parts.AddBusinessCentralError(Errors, 'missing warehouse setup, no quantities to put away or report validation failure');
+        Parts.AddLookupErrors(Errors, 'Posted Whse. Receipt Header', 'systemId, recordSystemId, id, postedWhseReceiptNo, receiptNo, no');
+        Parts.AddActivityOptionErrors(Errors);
+        Parts.AddNextStepError(Errors, "Bifrost Error Code ori"::PreconditionFailed, 'Business Central created no put-away for the posted receipt and none is open: there is nothing to put away, the location does not require put-away, or every line is already put away.', NoPutawayCreatedNextStep());
+        Parts.AddBusinessCentralError(Errors, 'missing warehouse setup, no quantities to put away or a validation failure');
         exit(true);
     end;
 
@@ -119,7 +120,7 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect(Effect, 'Creates or returns Warehouse Activity Header and Line records of type Put-away and applies optional activity fields. Business Central''s Whse.-Source - Create Document report commits each put-away it creates, so the put-away is not rolled back with the caller''s transaction.', 'BIFROST Full ori');
+        Parts.IrreversibleEffect(Effect, 'Creates or returns Warehouse Activity Header and Line records of type Put-away and applies optional activity fields. Business Central commits each put-away it creates, so the put-away is not rolled back with the caller''s transaction.', 'BIFROST Full ori');
         // Returning an already-created open put-away makes a repeated call safe.
         Effect.Replace('idempotent', true);
         exit(true);
@@ -175,6 +176,7 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
         WarehouseActivityHeader: Record "Warehouse Activity Header";
         WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         RequestValueReader: Codeunit "Request Value Reader ori";
+        Parts: Codeunit "Whse Contract Parts ori";
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
         SortingMethodText: Text;
@@ -203,7 +205,7 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
         HasAssignedUserId := AssignedUserIdValue <> '';
         if HasAssignedUserId then
             if RequestValueReader.IsFieldWriteRestricted(Database::"Warehouse Activity Header", WarehouseActivityHeader.FieldNo("Assigned User ID")) then begin
-                Argument.RespondWithError(StrSubstNo(FieldWriteRestrictedErr, WarehouseActivityHeader.FieldCaption("Assigned User ID"), WarehouseActivityHeader.TableCaption()));
+                Argument.RespondWithError("Bifrost Error Code ori"::PermissionDenied, StrSubstNo(FieldWriteRestrictedErr, WarehouseActivityHeader.FieldCaption("Assigned User ID"), WarehouseActivityHeader.TableCaption()), 'assignedUserId', '', '', Parts.ClosedFieldNextStep());
                 exit;
             end;
 
@@ -211,26 +213,26 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
         SortingMethodText := ReadString(RequestJson, 'sortingMethod');
         if SortingMethodText <> '' then begin
             if not TryParseSortingMethod(SortingMethodText, SortingMethodValue) then begin
-                Argument.RespondWithError(BuildInvalidSortingMethodErr(SortingMethodText));
+                Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, BuildInvalidSortingMethodErr(SortingMethodText), 'sortingMethod', CopyStr(SortingMethodText, 1, 80), SortingMethodNames(), Parts.SortingMethodNextStep());
                 exit;
             end;
             if RequestValueReader.IsFieldWriteRestricted(Database::"Warehouse Activity Header", WarehouseActivityHeader.FieldNo("Sorting Method")) then begin
-                Argument.RespondWithError(StrSubstNo(FieldWriteRestrictedErr, WarehouseActivityHeader.FieldCaption("Sorting Method"), WarehouseActivityHeader.TableCaption()));
+                Argument.RespondWithError("Bifrost Error Code ori"::PermissionDenied, StrSubstNo(FieldWriteRestrictedErr, WarehouseActivityHeader.FieldCaption("Sorting Method"), WarehouseActivityHeader.TableCaption()), 'sortingMethod', '', '', Parts.ClosedFieldNextStep());
                 exit;
             end;
             HasSortingMethod := true;
         end;
 
-        // setBreakbulkFilter / doNotFillQtyToHandle are request-page-only on BC report 7305.
+        // setBreakbulkFilter / doNotFillQtyToHandle are request-page-only options of the Create Document report.
         // We accept the defaults silently; non-default values are rejected to avoid silent loss.
         SetBreakbulkFilter := ReadBoolean(RequestJson, 'setBreakbulkFilter');
         if SetBreakbulkFilter then begin
-            Argument.RespondWithError(StrSubstNo(UnsupportedOptionErr, 'setBreakbulkFilter'));
+            Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(UnsupportedOptionErr, 'setBreakbulkFilter'), 'setBreakbulkFilter', 'true', 'false', Parts.UnsupportedOptionNextStep());
             exit;
         end;
         DoNotFillQtyToHandle := ReadBoolean(RequestJson, 'doNotFillQtyToHandle');
         if DoNotFillQtyToHandle then begin
-            Argument.RespondWithError(StrSubstNo(UnsupportedOptionErr, 'doNotFillQtyToHandle'));
+            Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(UnsupportedOptionErr, 'doNotFillQtyToHandle'), 'doNotFillQtyToHandle', 'true', 'false', Parts.UnsupportedOptionNextStep());
             exit;
         end;
 
@@ -256,9 +258,9 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
         // idempotent success and return it (flagged via "alreadyExisted").
         if not FindCreatedPutaway(PostedWhseReceiptHeader."No.", WarehouseActivityHeader) then begin
             if PutawayWasCreated then
-                Argument.RespondWithError(StrSubstNo(NoPutawayCreatedErr(), PostedWhseReceiptHeader."No."))
+                Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(NoPutawayCreatedErr(), PostedWhseReceiptHeader."No."), '', '', '', NoPutawayCreatedNextStep())
             else
-                Argument.RespondWithError(ReportErrorText);
+                Argument.RespondWithError("Bifrost Error Code ori"::BusinessCentralError, ReportErrorText, '', '', '', '');
             exit;
         end;
         AlreadyExisted := not PutawayWasCreated;
@@ -395,6 +397,28 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
             Builder.Append(Names.Get(Idx));
         end;
         ErrMessage := StrSubstNo(InvalidErr, SortingMethodText, Builder.ToText());
+    end;
+
+    local procedure SortingMethodNames(): Text
+    var
+        Names: List of [Text];
+        Idx: Integer;
+        Builder: TextBuilder;
+    begin
+        Names := Enum::"Whse. Activity Sorting Method".Names();
+        for Idx := 1 to Names.Count() do begin
+            if Idx > 1 then
+                Builder.Append(', ');
+            Builder.Append(Names.Get(Idx));
+        end;
+        exit(Builder.ToText());
+    end;
+
+    local procedure NoPutawayCreatedNextStep(): Text
+    var
+        NextStepLbl: Label 'Check that the location requires put-away and that the posted receipt has lines that are not yet put away.', Comment = 'is-IS=Athugaðu að staðsetningin krefjist frágangs og að bókaða móttakan hafi línur sem ekki hefur enn verið gengið frá.';
+    begin
+        exit(NextStepLbl);
     end;
 
     local procedure NoPutawayCreatedErr() Result: Text

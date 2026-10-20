@@ -19,6 +19,7 @@ codeunit 97082 "Whse DefBin Set Tests ori"
         Assert: Codeunit "Library Assert";
         LibraryInventory: Codeunit "Library - Inventory";
         LibraryWarehouse: Codeunit "Library - Warehouse";
+        ContractAssert: Codeunit "Whse Contract Assert ori";
 
     /// <summary>The first default creates fixed bin content and reports changed.</summary>
     [Test]
@@ -125,8 +126,10 @@ codeunit 97082 "Whse DefBin Set Tests ori"
         Run('{"locationCode":"' + Location.Code + '","itemNo":"' + Item."No." + '","binCode":"MISSING"}', '', ResponseJson);
 
         Assert.AreEqual('PreconditionFailed', TextValue(ResponseJson, 'code'), 'No bins should be a precondition failure.');
-        Assert.AreEqual('binCode', TextValue(ResponseJson, 'parameter'), 'The error should name binCode.');
-        Assert.AreEqual('Choose a bin whose bin type allows it.', TextValue(ResponseJson, 'nextStep'), 'The next step should say to choose an allowed bin.');
+        // #71 item 5: the location causes the refusal, and the next step says how to get bins.
+        Assert.AreEqual('locationCode', TextValue(ResponseJson, 'parameter'), 'The error should name locationCode.');
+        Assert.AreEqual('Create bins at the location with Warehouse.Bin.Create; the location needs Bin Mandatory turned on.', TextValue(ResponseJson, 'nextStep'), 'The next step should say how to get bins.');
+        ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.DefaultBin.Set", ResponseJson);
     end;
 
     /// <summary>An unknown unit of measure is InvalidParameter, not a missing bin.</summary>

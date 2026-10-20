@@ -104,8 +104,18 @@ codeunit 97050 "Whse Jnl Test Helper ori"
     /// <param name="ItemNo">The item.</param>
     /// <param name="Quantity">The quantity.</param>
     internal procedure StockBin(Bin: Record Bin; ItemNo: Code[20]; Quantity: Decimal)
+    var
+        Item: Record Item;
+        WarehouseJournalBatch: Record "Warehouse Journal Batch";
+        BatchText: Text;
     begin
-        LibraryWarehouse.UpdateInventoryInBinUsingWhseJournal(Bin, ItemNo, Quantity, false);
+        // The library's warehouse journal opens the template selection page when several item templates exist, so stock goes through the message types.
+        CreateWhseJournalBatch("Warehouse Journal Template Type"::Item, Bin."Location Code", WarehouseJournalBatch);
+        BatchText := '"journalTemplateName":"' + WarehouseJournalBatch."Journal Template Name" + '","journalBatchName":"' + WarehouseJournalBatch.Name + '","locationCode":"' + Bin."Location Code" + '"';
+        AssertSuccess(RunType(Enum::"Message Type ori"::"Warehouse.Journal.Create", '', '{' + BatchText + ',"documentNo":"STOCK","lines":[{"itemNo":"' + ItemNo + '","binCode":"' + Bin.Code + '","quantity":' + Format(Quantity, 0, 9) + '}]}'));
+        AssertSuccess(RunType(Enum::"Message Type ori"::"Warehouse.Journal.Register", '', '{' + BatchText + '}'));
+        Item.Get(ItemNo);
+        LibraryWarehouse.PostWhseAdjustment(Item);
     end;
 
     /// <summary>Creates an item.</summary>
@@ -308,7 +318,14 @@ codeunit 97050 "Whse Jnl Test Helper ori"
     var
         WorksheetTemplate: Record "Whse. Worksheet Template";
     begin
-        LibraryWarehouse.SelectWhseWorksheetTemplate(WorksheetTemplate, TemplateType);
+        WorksheetTemplate.SetRange(Type, TemplateType);
+        if not WorksheetTemplate.FindFirst() then begin
+            WorksheetTemplate.Init();
+            WorksheetTemplate.Name := NewCode();
+            WorksheetTemplate.Validate(Type, TemplateType);
+            WorksheetTemplate.Description := WorksheetTemplate.Name;
+            WorksheetTemplate.Insert(true);
+        end;
         LibraryWarehouse.CreateWhseWorksheetName(WorksheetName, WorksheetTemplate.Name, LocationCode);
     end;
 

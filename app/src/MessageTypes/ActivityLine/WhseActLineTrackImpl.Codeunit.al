@@ -184,7 +184,7 @@ codeunit 10078465 "Whse ActLine Track Impl ori" implements "Msg Interface ori", 
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        Related.Add(ContractMgt.RelatedEntry('Inventory.TrackingAvailability.Get', 'Use it to find the lots and serial numbers available for the item.'));
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.BinContent.Get', 'Use it to read the quantity of the item in the bin of a Take line.'));
         Related.Add(ContractMgt.RelatedEntry('Warehouse.ActivityLine.Split', 'Use it to split a line without assigning tracking.'));
         Related.Add(ContractMgt.RelatedEntry('Warehouse.Pick.Register', 'Use it, or Warehouse.Putaway.Register or Warehouse.Movement.Register, to register the activity.'));
         exit(true);

@@ -62,6 +62,60 @@ codeunit 10078458 "Whse Data Restrict ori"
             Hint := 'Warehouse.InventoryPutAway.Create, Warehouse.InventoryPutAway.Post';
     end;
 
+    [EventSubscriber(ObjectType::Table, Database::"Message Argument ori", 'OnAfterIsFieldWriteRestrictedForDataRecords', '', false, false)]
+    local procedure RestrictDocumentFlowFieldsFromWrite(TableNo: Integer; FieldNo: Integer; var IsRestricted: Boolean)
+    begin
+        // Shipment status and the receipt and shipment quantities belong to the release, reopen and post types (#53, #54).
+        if IsShipmentStatusField(TableNo, FieldNo) or IsReceiptQuantityField(TableNo, FieldNo) or IsShipmentQuantityField(TableNo, FieldNo) then
+            IsRestricted := true;
+    end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Message Argument ori", 'OnGetDedicatedMessageTypeHintForWrite', '', false, false)]
+    local procedure HintDocumentFlowTableWrite(TableNo: Integer; var Hint: Text)
+    begin
+        // These tables stay wholly write-restricted, so the table hint names the dedicated types that change them.
+        case TableNo of
+            Database::"Warehouse Shipment Header":
+                Hint := 'Warehouse.Shipment.Release, Warehouse.Shipment.Reopen, Warehouse.Shipment.GetSourceDocuments';
+            Database::"Warehouse Receipt Line":
+                Hint := 'Warehouse.Receipt.Post, Warehouse.Receipt.GetSourceDocuments';
+            Database::"Warehouse Shipment Line":
+                Hint := 'Warehouse.Shipment.Post, Warehouse.Shipment.GetSourceDocuments';
+        end;
+    end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Message Argument ori", 'OnGetDedicatedMessageTypeHintForField', '', false, false)]
+    local procedure HintDocumentFlowField(TableNo: Integer; FieldNo: Integer; var Hint: Text)
+    begin
+        if IsShipmentStatusField(TableNo, FieldNo) then
+            Hint := 'Warehouse.Shipment.Release, Warehouse.Shipment.Reopen';
+        if IsReceiptQuantityField(TableNo, FieldNo) then
+            Hint := 'Warehouse.Receipt.Post';
+        if IsShipmentQuantityField(TableNo, FieldNo) then
+            Hint := 'Warehouse.Shipment.Post';
+    end;
+
+    local procedure IsShipmentStatusField(TableNo: Integer; FieldNo: Integer): Boolean
+    var
+        ShipmentHeader: Record "Warehouse Shipment Header";
+    begin
+        exit((TableNo = Database::"Warehouse Shipment Header") and (FieldNo = ShipmentHeader.FieldNo(Status)));
+    end;
+
+    local procedure IsReceiptQuantityField(TableNo: Integer; FieldNo: Integer): Boolean
+    var
+        ReceiptLine: Record "Warehouse Receipt Line";
+    begin
+        exit((TableNo = Database::"Warehouse Receipt Line") and (FieldNo = ReceiptLine.FieldNo("Qty. to Receive")));
+    end;
+
+    local procedure IsShipmentQuantityField(TableNo: Integer; FieldNo: Integer): Boolean
+    var
+        ShipmentLine: Record "Warehouse Shipment Line";
+    begin
+        exit((TableNo = Database::"Warehouse Shipment Line") and (FieldNo = ShipmentLine.FieldNo("Qty. to Ship")));
+    end;
+
     local procedure IsMovementCreateField(TableNo: Integer; FieldNo: Integer): Boolean
     var
         WorksheetLine: Record "Whse. Worksheet Line";

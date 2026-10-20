@@ -1,0 +1,183 @@
+namespace Origo.Bifrost.Warehouse.Test;
+
+using Microsoft.Inventory.Item;
+using Microsoft.Inventory.Location;
+using Microsoft.Purchases.Document;
+using Origo.Bifrost;
+using Origo.Bifrost.Warehouse;
+using System.TestLibraries.Utilities;
+
+/// <summary>
+/// Tests Warehouse.Request.Get (#58) through the public dispatcher.
+/// </summary>
+codeunit 97043 "Whse Request Get Tests ori"
+{
+    Subtype = Test;
+    TestPermissions = Disabled;
+
+    var
+        Assert: Codeunit "Library Assert";
+        ReceiptHelper: Codeunit "Whse Receipt Test Helper ori";
+
+    /// <summary>AC01: released inbound requests at a location are answered with source, destination and dates, paged.</summary>
+    [Test]
+    procedure Get_ReleasedInboundRequests_AreAnswered()
+    var
+        Location: Record Location;
+        Item: Record Item;
+        FirstOrder: Record "Purchase Header";
+        SecondOrder: Record "Purchase Header";
+        ResponseJson: JsonObject;
+        Entry: JsonObject;
+    begin
+        // Story #58, AC01 + AC03 (paging) | Time: independent of WorkDate | Risk: none.
+        ReceiptHelper.SetupLocationAndItem(Location, Item, 0);
+        ReceiptHelper.CreateReleasedPurchaseOrder(FirstOrder, Item."No.", Location.Code, 1);
+        ReceiptHelper.CreateReleasedPurchaseOrder(SecondOrder, Item."No.", Location.Code, 1);
+
+        Run('{"locationCode":"' + Location.Code + '","type":"Inbound","status":"Released","sourceDocument":"PurchaseOrder","take":1}', '', ResponseJson);
+
+        Assert.AreEqual('Success', TextValue(ResponseJson, 'status'), ResponseText(ResponseJson));
+        Assert.AreEqual(2, IntegerValue(ResponseJson, 'noOfRecords'), 'Both purchase orders match.');
+        Assert.AreEqual(1, ArrayCount(ResponseJson, 'result'), 'take 1 answers one request.');
+        Entry := FirstEntry(ResponseJson, 'result');
+        Assert.AreEqual('Inbound', TextValue(Entry, 'type'), 'type');
+        Assert.AreEqual('Purchase Order', TextValue(Entry, 'sourceDocument'), 'sourceDocument');
+        Assert.AreEqual('Released', TextValue(Entry, 'documentStatus'), 'documentStatus');
+        Assert.AreEqual('Vendor', TextValue(Entry, 'destinationType'), 'destinationType');
+        Assert.AreNotEqual('', TextValue(Entry, 'destinationNo'), 'destinationNo');
+        Assert.AreEqual(Location.Code, TextValue(Entry, 'locationCode'), 'locationCode');
+
+        Run('{"locationCode":"' + Location.Code + '","sourceNo":"' + SecondOrder."No." + '"}', '', ResponseJson);
+        Assert.AreEqual(1, IntegerValue(ResponseJson, 'noOfRecords'), 'sourceNo narrows to one request.');
+        Assert.AreEqual(SecondOrder."No.", TextValue(FirstEntry(ResponseJson, 'result'), 'sourceNo'), 'sourceNo');
+    end;
+
+    /// <summary>AC07: filters that match nothing answer success with an empty list.</summary>
+    [Test]
+    procedure Get_NoMatch_AnswersEmptyList()
+    var
+        Location: Record Location;
+        Item: Record Item;
+        PurchaseHeader: Record "Purchase Header";
+        ResponseJson: JsonObject;
+    begin
+        // Story #58, AC07 | Time: the date filter is far before the order dates | Risk: none.
+        ReceiptHelper.SetupLocationAndItem(Location, Item, 0);
+        ReceiptHelper.CreateReleasedPurchaseOrder(PurchaseHeader, Item."No.", Location.Code, 1);
+
+        Run('{"locationCode":"' + Location.Code + '","type":"Outbound"}', '', ResponseJson);
+        Assert.AreEqual('Success', TextValue(ResponseJson, 'status'), ResponseText(ResponseJson));
+        Assert.AreEqual(0, ArrayCount(ResponseJson, 'result'), 'No outbound request.');
+
+        Run('{"locationCode":"' + Location.Code + '","expectedReceiptDateFrom":"2999-01-01"}', '', ResponseJson);
+        Assert.AreEqual('Success', TextValue(ResponseJson, 'status'), ResponseText(ResponseJson));
+        Assert.AreEqual(0, IntegerValue(ResponseJson, 'noOfRecords'), 'No request expected after 2999.');
+    end;
+
+    /// <summary>AC04 and AC06: an unknown type value, a missing location, an unknown key and a bad date are refused.</summary>
+    [Test]
+    procedure Get_Refusals()
+    var
+        Location: Record Location;
+        Item: Record Item;
+        ResponseJson: JsonObject;
+    begin
+        // Story #58, AC04 + AC06 | Time: independent of WorkDate | Risk: none.
+        ReceiptHelper.SetupLocationAndItem(Location, Item, 0);
+
+        Run('{"locationCode":"' + Location.Code + '","type":"Sideways"}', '', ResponseJson);
+        Assert.AreEqual('InvalidParameter', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('Use one of the values listed in the help.', TextValue(ResponseJson, 'nextStep'), 'InvalidParameter next step.');
+
+        Run('{}', '', ResponseJson);
+        Assert.AreEqual('MissingParameter', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreNotEqual('', TextValue(ResponseJson, 'nextStep'), 'MissingParameter next step.');
+
+        Run('{"locationCode":"' + Location.Code + '","colour":"red"}', '', ResponseJson);
+        Assert.AreEqual('UnknownParameter', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+
+        Run('{"locationCode":"' + Location.Code + '","shipmentDateFrom":"19.10.2026"}', '', ResponseJson);
+        Assert.AreEqual('InvalidParameterFormat', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+
+        Run('{"locationCode":"NOLOC-X"}', '', ResponseJson);
+        Assert.AreEqual('RecordNotFound', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+
+        Run('{"locationCode":"' + Location.Code + '"}', 'OTHER', ResponseJson);
+        Assert.AreEqual('ConflictingIdentifiers', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+    end;
+
+    /// <summary>AC08: without read permission the type is disabled and answers PermissionDenied naming the read set.</summary>
+    [Test]
+    [TestPermissions(TestPermissions::Restrictive)]
+    procedure Get_WithoutPermission_ReturnsPermissionDenied()
+    var
+        TempArgument: Record "Message Argument ori" temporary;
+        RequestGetImpl: Codeunit "Whse Request Get Impl ori";
+        LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
+        MessageTypeInterface: Interface "Msg Interface ori";
+        ResponseJson: JsonObject;
+    begin
+        // Story #58, AC08 | Time: independent of WorkDate | Risk: none.
+        LibraryLowerPermissions.PushPermissionSetWithoutDefaults('Whse NoRead Test ori');
+        MessageTypeInterface := Enum::"Message Type ori"::"Warehouse.Request.Get";
+        Assert.IsFalse(MessageTypeInterface.IsEnabled(), 'The type must be disabled without read permission.');
+
+        TempArgument.Init();
+        TempArgument.Version := "Message Version ori"::"1.0";
+        TempArgument.Insert(true);
+        RequestGetImpl.ExecuteBifrostTask(TempArgument);
+        ResponseJson := TempArgument.GetResponseJson();
+        Assert.AreEqual('PermissionDenied', TextValue(ResponseJson, 'code'), 'The denial must use PermissionDenied.');
+        Assert.AreEqual('Ask an administrator to assign BIFROST Whse - Read ori.', TextValue(ResponseJson, 'nextStep'), 'The next step must name the read permission set.');
+    end;
+
+    local procedure Run(RequestText: Text; Subject: Text; var ResponseJson: JsonObject)
+    begin
+        Assert.IsTrue(ReceiptHelper.RunMessage(Enum::"Message Type ori"::"Warehouse.Request.Get", Subject, RequestText, ResponseJson), 'The response should be JSON.');
+    end;
+
+    local procedure FirstEntry(Parent: JsonObject; Name: Text): JsonObject
+    var
+        Token: JsonToken;
+    begin
+        Assert.IsTrue(Parent.Get(Name, Token), Name + ' must be in the response.');
+        Assert.IsTrue(Token.AsArray().Get(0, Token), Name + ' must have an entry.');
+        exit(Token.AsObject());
+    end;
+
+    local procedure ArrayCount(Parent: JsonObject; Name: Text): Integer
+    var
+        Token: JsonToken;
+    begin
+        Assert.IsTrue(Parent.Get(Name, Token), Name + ' must be in the response.');
+        exit(Token.AsArray().Count());
+    end;
+
+    local procedure ResponseText(ResponseJson: JsonObject): Text
+    var
+        Written: Text;
+    begin
+        ResponseJson.WriteTo(Written);
+        exit(Written);
+    end;
+
+    local procedure IntegerValue(Parent: JsonObject; Name: Text): Integer
+    var
+        Token: JsonToken;
+    begin
+        Assert.IsTrue(Parent.Get(Name, Token), Name + ' must be in the response.');
+        exit(Token.AsValue().AsInteger());
+    end;
+
+    local procedure TextValue(Parent: JsonObject; Name: Text): Text
+    var
+        Token: JsonToken;
+    begin
+        if not Parent.Get(Name, Token) then
+            exit('');
+        if not Token.IsValue() then
+            exit('');
+        exit(Token.AsValue().AsText());
+    end;
+}

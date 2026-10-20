@@ -37,5 +37,13 @@ permissionsetextension 10078395 "BIFROST Whse - Full ori" extends "BIFROST Full 
         codeunit "Whse InvtMove Create Impl ori" = X,
         codeunit "Whse InvtMove Reg Impl ori" = X,
         codeunit "Whse Bin Repl Calc Impl ori" = X,
+        codeunit "Whse Rcpt GetSrcDocs Impl ori" = X,
+        codeunit "Whse Ship GetSrcDocs Impl ori" = X,
+        codeunit "Whse Shipment Release Impl ori" = X,
+        codeunit "Whse Shipment Reopen Impl ori" = X,
+        codeunit "Whse Request Get Impl ori" = X,
+        codeunit "Whse PostedDoc Get Impl ori" = X,
+        codeunit "Whse RegActivity Get Impl ori" = X,
+        codeunit "Whse Doc Line Qty ori" = X,
         codeunit "Whse Data Restrict ori" = X;
 }

@@ -10,10 +10,11 @@
 
 ## Overview
 
-Bifrost Warehouse is the warehouse module of the Bifröst platform. It publishes twenty-four Bifröst
+Bifrost Warehouse is the warehouse module of the Bifröst platform. It publishes thirty-one Bifröst
 message types for warehouse work that Bifrost Foundation does not cover: bin content, bin and open
-warehouse activity reads, bins and default bins, warehouse shipments and receipts (create, preview,
-post), picks, put-aways and movements (create, register), inventory picks, put-aways and movements
+warehouse activity reads, warehouse requests and history reads, bins and default bins, warehouse
+shipments and receipts (create, get source documents, release and reopen, preview, post with per-line
+quantities), picks, put-aways and movements (create, register), inventory picks, put-aways and movements
 for basic warehouse locations, and bin replenishment. An agent or an integration calls them through the same
 Queue → Task → Data API as the rest of Bifröst.
 
@@ -34,10 +35,10 @@ The list is the enum extension `Whse MsgType EnumExt ori` in
 | `Warehouse.Activity.Get` | Outbound | Read open warehouse activities, optionally with lines, filtered by type, source document, location or assigned user | `BIFROST Read ori` |
 | `Warehouse.Shipment.Create` | Inbound | Create a warehouse shipment from released source documents | `BIFROST Full ori` |
 | `Warehouse.Shipment.PreviewPost` | Outbound | Preview posting a warehouse shipment (ship and invoice), rolled back | `BIFROST Read ori` |
-| `Warehouse.Shipment.Post` | Inbound | Post a warehouse shipment, optionally invoicing its source documents | `BIFROST WhsePost ori`; `BIFROST WhseInv ori` when `invoice` is true |
+| `Warehouse.Shipment.Post` | Inbound | Post a warehouse shipment, optionally with a quantity to ship per line and optionally invoicing its source documents | `BIFROST WhsePost ori`; `BIFROST WhseInv ori` when `invoice` is true |
 | `Warehouse.Receipt.Create` | Inbound | Create a warehouse receipt from released source documents | `BIFROST Full ori` |
 | `Warehouse.Receipt.PreviewPost` | Outbound | Preview posting a warehouse receipt, rolled back | `BIFROST Read ori` |
-| `Warehouse.Receipt.Post` | Inbound | Post a warehouse receipt (received, not invoiced) | `BIFROST WhsePost ori` |
+| `Warehouse.Receipt.Post` | Inbound | Post a warehouse receipt (received, not invoiced), optionally with a quantity to receive per line | `BIFROST WhsePost ori` |
 | `Warehouse.Pick.Create` | Inbound | Create a pick for a warehouse shipment | `BIFROST Full ori` |
 | `Warehouse.Pick.Register` | Inbound | Register a pick | `BIFROST WhsePost ori` |
 | `Warehouse.Putaway.Create` | Inbound | Create (or return the open) put-away for a posted warehouse receipt | `BIFROST Full ori` |
@@ -54,6 +55,13 @@ The list is the enum extension `Whse MsgType EnumExt ori` in
 | `Warehouse.InventoryMovement.Create` | Inbound | Create an inventory movement at a basic warehouse location with bins | `BIFROST Full ori` |
 | `Warehouse.InventoryMovement.Register` | Inbound | Register an inventory movement, fully or partially | `BIFROST WhsePost ori` |
 | `Warehouse.BinReplenishment.Calculate` | Inbound | Calculate bin replenishment into a movement worksheet at a directed location | `BIFROST Full ori` |
+| `Warehouse.Receipt.GetSourceDocuments` | Inbound | Add lines from released purchase orders, sales return orders or inbound transfers to a warehouse receipt, or to a new one at a location; source lines already on another receipt are listed as skipped | `BIFROST Full ori` |
+| `Warehouse.Shipment.GetSourceDocuments` | Inbound | Add lines from released sales orders, purchase return orders or outbound transfers to an open warehouse shipment, or to a new one at a location | `BIFROST Full ori` |
+| `Warehouse.Shipment.Release` | Inbound | Release a warehouse shipment so picks can be created | `BIFROST Full ori` |
+| `Warehouse.Shipment.Reopen` | Inbound | Reopen a released warehouse shipment; refused while open picks exist | `BIFROST Full ori` |
+| `Warehouse.Request.Get` | Outbound | Read the warehouse requests at a location (source documents waiting for a receipt or shipment), with paging | `BIFROST Read ori` |
+| `Warehouse.PostedDocument.Get` | Outbound | Read posted warehouse receipts or shipments, optionally with lines, with paging | `BIFROST Read ori` |
+| `Warehouse.RegisteredActivity.Get` | Outbound | Read registered picks, put-aways or movements, optionally with lines, with paging | `BIFROST Read ori` |
 
 Update this table in the same change as any new or renamed message type.
 
@@ -105,8 +113,9 @@ Update this table in the same change as any new or renamed message type.
 | Posting gate | `Whse Posting Gate ori` (10078453), `Whse Posting ori` (10078452), `Whse Invoice ori` (10078456) | Write permission on the token table `Whse Posting ori` is the posting permission (only `BIFROST WhsePost ori` grants it); write permission on `Whse Invoice ori` is the invoicing permission (only `BIFROST WhseInv ori` grants it). |
 | Record lookup | `Whse Record Lookup ori` (10078455) | Resolves document numbers and `id` / `recordSystemId` aliases and refuses conflicting identifiers. |
 | Contracts | `Whse Contract Parts ori` (10078459) | Shared contract chapters (effects, workflows) used by the implementation codeunits. |
-| Write isolation | `Whse Write Context ori` (10078430) | The write types of bins, default bins, movements, inventory documents and bin replenishment store the validated request here and run their own `OnRun` through `Codeunit.Run` (without a return value under Omit Commit), so a failure leaves nothing written. |
-| Write restriction | `Whse Data Restrict ori` (10078458) | Subscribes to Foundation's `OnAfterIsTableWriteRestrictedForDataRecords` and closes the Warehouse Shipment, Receipt and Activity header and line tables and the Bin table to `Data.Records.Set`; field blocks cover Bin Content Default and the movement worksheet quantity and bins. |
+| Write isolation | `Whse Write Context ori` (10078430) | The write types of bins, default bins, movements, inventory documents, bin replenishment, get source documents, shipment release and reopen, and shipment and receipt posting store the validated request here and run their own `OnRun` through `Codeunit.Run` (without a return value under Omit Commit), so a failure leaves nothing written. |
+| Write restriction | `Whse Data Restrict ori` (10078458) | Subscribes to Foundation's `OnAfterIsTableWriteRestrictedForDataRecords` and closes the Warehouse Shipment, Receipt and Activity header and line tables and the Bin table to `Data.Records.Set`; field blocks cover Bin Content Default, the movement worksheet quantity and bins, the warehouse shipment status and the receipt and shipment quantities to handle. |
+| Per-line quantities | `Whse Doc Line Qty ori` (10078438) | Reads and checks `lines[]` for receipt and shipment posting and previews, validates Qty. to Receive or Qty. to Ship, and summarises posted and remaining quantity per line. The previews bind it so the quantities are set inside Business Central's preview run and rolled back with it. |
 
 Types that need the posting permission: `Warehouse.Shipment.Post`, `Warehouse.Receipt.Post`,
 `Warehouse.Pick.Register`, `Warehouse.Putaway.Register`, `Warehouse.Movement.Register`,
@@ -166,7 +175,7 @@ None. The app has no pages or page extensions.
 
 | ID | Name | Purpose |
 | --- | --- | --- |
-| 10078385 | `Whse MsgType EnumExt ori` | The twenty-four `Warehouse.*` values on Foundation's `Message Type ori` |
+| 10078385 | `Whse MsgType EnumExt ori` | The thirty-one `Warehouse.*` values on Foundation's `Message Type ori` |
 
 ### Codeunits
 
@@ -182,6 +191,8 @@ None. The app has no pages or page extensions.
 | 10078423–10078428 | Inventory documents | `Whse InvtPick Create Impl ori`, `Whse InvtPick Post Impl ori`, `Whse InvtPut Create Impl ori`, `Whse InvtPut Post Impl ori`, `Whse InvtMove Create Impl ori`, `Whse InvtMove Reg Impl ori` |
 | 10078429 | Replenishment | `Whse Bin Repl Calc Impl ori` |
 | 10078430 | Write isolation | `Whse Write Context ori` |
+| 10078431–10078434, 10078438 | Document flow | `Whse Rcpt GetSrcDocs Impl ori`, `Whse Ship GetSrcDocs Impl ori`, `Whse Shipment Release Impl ori`, `Whse Shipment Reopen Impl ori`, `Whse Doc Line Qty ori` |
+| 10078435–10078437 | Requests and history | `Whse Request Get Impl ori`, `Whse PostedDoc Get Impl ori`, `Whse RegActivity Get Impl ori` |
 | 10078392, 10078393, 10078458 | Lifecycle | `Warehouse Install ori`, `Warehouse Upgrade ori`, `Whse Data Restrict ori` |
 | 10078453, 10078455, 10078459 | Shared | `Whse Posting Gate ori`, `Whse Record Lookup ori`, `Whse Contract Parts ori` |
 

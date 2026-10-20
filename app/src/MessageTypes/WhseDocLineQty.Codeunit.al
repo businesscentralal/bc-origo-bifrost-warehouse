@@ -197,6 +197,8 @@ codeunit 10078438 "Whse Doc Line Qty ori"
         Outstanding: Decimal;
         LinePresent: Boolean;
         QuantityPresent: Boolean;
+        LineFormatOk: Boolean;
+        QuantityFormatOk: Boolean;
         FormatLbl: Label 'Each line must be an object.', Comment = 'is-IS=Hver lína verður að vera hlutur.';
         FormatNextStepLbl: Label 'Send lines as an array of objects with lineNo and the quantity.', Comment = 'is-IS=Sendu lines sem fylki hluta með lineNo og magni.';
         MissingLbl: Label 'Line %1 is missing %2.', Comment = '%1 = line index, %2 = field, is-IS=Línu %1 vantar %2.';
@@ -220,11 +222,12 @@ codeunit 10078438 "Whse Doc Line Qty ori"
         end;
         LineObject := Token.AsObject();
         RefuseUnknownLineKeys(LineObject, Index, QtyKey, Argument);
-        Context.ReadInteger(LineObject, 'lineNo', Argument, LineNo, LinePresent, LineParameter(Index, 'lineNo'));
-        Context.ReadDecimal(LineObject, QtyKey, Argument, Quantity, QuantityPresent, LineParameter(Index, QtyKey));
-        if not LinePresent then
+        LineFormatOk := Context.ReadInteger(LineObject, 'lineNo', Argument, LineNo, LinePresent, LineParameter(Index, 'lineNo'));
+        QuantityFormatOk := Context.ReadDecimal(LineObject, QtyKey, Argument, Quantity, QuantityPresent, LineParameter(Index, QtyKey));
+        // A value of the wrong type is already answered as InvalidParameterFormat; only an absent key is missing.
+        if not LinePresent and LineFormatOk then
             Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index, 'lineNo'), LineParameter(Index, 'lineNo'), '', '', MissingNextStepLbl);
-        if not QuantityPresent then
+        if not QuantityPresent and QuantityFormatOk then
             Argument.AddError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(MissingLbl, Index, QtyKey), LineParameter(Index, QtyKey), '', '', MissingNextStepLbl);
         if not LinePresent or not QuantityPresent then
             exit;

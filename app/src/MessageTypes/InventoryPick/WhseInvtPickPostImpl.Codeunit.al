@@ -107,6 +107,8 @@ codeunit 10078424 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        LinesParameter: JsonObject;
+        LineChildren: JsonArray;
     begin
         Parameters.Add(ContractMgt.Parameter('pickNo', 'string', false, 'Inventory pick number. Required when systemId and subject are empty.'));
         Parameters.Add(ContractMgt.Parameter('no', 'string', false, 'Inventory pick number. Same as pickNo.'));
@@ -114,9 +116,11 @@ codeunit 10078424 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
         Parameters.Add(ContractMgt.Parameter('id', 'string', false, 'Inventory pick SystemId. Same as systemId.'));
         Parameters.Add(ContractMgt.Parameter('recordSystemId', 'string', false, 'Inventory pick SystemId. Same as systemId.'));
         Parameters.Add(ContractMgt.Parameter('invoice', 'boolean', false, 'Ship and invoice a sales order. Default false. Refused for every other source. Requires BIFROST WhseInv ori when true.'));
-        Parameters.Add(ContractMgt.Parameter('lines', 'array', false, 'Optional per-line quantities to handle. Omitted lines keep the quantity already on the pick.'));
-        Parameters.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Inventory pick line number.'));
-        Parameters.Add(ContractMgt.Parameter('qtyToHandle', 'number', true, 'Quantity to handle on the line, in the line unit of measure.'));
+        LinesParameter := ContractMgt.Parameter('lines', 'array', false, 'Optional per-line quantities to handle. Omitted lines keep the quantity already on the pick.');
+        LineChildren.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Inventory pick line number.'));
+        LineChildren.Add(ContractMgt.Parameter('qtyToHandle', 'number', true, 'Quantity to handle on the line, in the line unit of measure, from zero up to the outstanding quantity and the quantity in the bin.'));
+        LinesParameter.Add('children', LineChildren);
+        Parameters.Add(LinesParameter);
         exit(true);
     end;
 
@@ -136,7 +140,7 @@ codeunit 10078424 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
         Fields.Add(ContractMgt.ResponseField('postedPickNo', 'string', 'Posted inventory pick number.'));
         Fields.Add(ContractMgt.ResponseField('sourceDocument', 'string', 'Source document type.'));
         Fields.Add(ContractMgt.ResponseField('sourceNo', 'string', 'Source document number.'));
-        Fields.Add(ContractMgt.ResponseField('postedDocumentNo', 'string', 'Posted shipment, return shipment or transfer shipment number.'));
+        Fields.Add(ContractMgt.ResponseField('postedDocumentNo', 'string', 'Posted shipment, return shipment or transfer shipment number. Empty for an assembly consumption or production consumption pick.'));
         Fields.Add(ContractMgt.ResponseField('postedInvoiceNo', 'string', 'Posted sales invoice number when invoice was true. Otherwise empty.'));
         Fields.Add(ContractMgt.ResponseField('invoice', 'boolean', 'True when the sales order was invoiced.'));
         Fields.Add(ContractMgt.ResponseField('postedQuantity', 'number', 'Posted quantity across the pick lines.'));
@@ -163,7 +167,7 @@ codeunit 10078424 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
     begin
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidLine, 'qtyToHandle exceeds the outstanding quantity or the bin content.', 'Lower qtyToHandle; read Warehouse.BinContent.Get.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'The activity is not an inventory pick, or there is nothing to post.', 'Send an inventory pick with a quantity to handle. Use Warehouse.Pick.Register for a warehouse pick.');
-        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MissingParameter, 'pickNo or systemId is missing.', 'Send pickNo or systemId.');
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MissingParameter, 'pickNo or systemId is missing, or a line has no lineNo or no qtyToHandle.', 'Send pickNo or systemId, and lineNo and qtyToHandle on every line.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameterFormat, 'A value has the wrong JSON type or is too long.', 'Send text for codes, numbers for quantities and true or false for invoice.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameter, 'invoice is true for a source that is not a sales order, or a quantity is negative.', 'Send invoice false, or post a sales order. Send qtyToHandle as zero or greater.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.');
@@ -208,10 +212,17 @@ codeunit 10078424 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
 
     /// <summary>Returns the workflow chapter.</summary>
     /// <param name="Workflow">Receives the workflow.</param>
-    /// <returns>False. Inventory pick post has no separate workflow chapter.</returns>
+    /// <returns>True. The workflow runs from creating the pick to posting it.</returns>
     procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Steps: JsonArray;
     begin
-        exit(false);
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.InventoryPick.Create', 'Create the inventory pick from a released source document at a location that requires pick.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.BinContent.Get', 'Read the quantity in the pick bin before sending a quantity to handle. Optional.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.InventoryPick.Post', 'Post the inventory pick; the source document is shipped, and a sales order can be invoiced.'));
+        Workflow.Add('steps', Steps);
+        exit(true);
     end;
 
     /// <summary>Returns an example request and response.</summary>
@@ -241,11 +252,16 @@ codeunit 10078424 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
 
     /// <summary>Returns the notes chapter.</summary>
     /// <param name="Notes">Receives the notes.</param>
-    /// <returns>False. There are no extra notes.</returns>
+    /// <returns>True. The notes hold edge cases for consultants.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'Posting commits: Business Central posts the inventory pick and the shipment of the source document and cannot undo them from this call. The caller needs BIFROST Whse - Full ori and BIFROST WhsePost ori, and BIFROST WhseInv ori when invoice is true. ' +
+            'Without lines, the quantity to handle already on the pick is posted. Warehouse.InventoryPick.Create fills it with the outstanding quantity. ' +
+            'With lines, each lineNo sets the quantity to handle on that line; lines that are not sent keep their quantity. A line sent with zero is not posted. A quantity above the outstanding quantity, or above what the pick bin holds for the item and variant in the base unit, is refused and nothing is written. If a lineNo is sent twice, the last quantity applies. ' +
+            'The call is refused when the total quantity to handle is zero. ' +
+            'invoice true ships and invoices a sales order in one step; every other source document refuses it. Purchase return orders and outbound transfers are shipped, and assembly or production consumption picks post the consumption, so postedDocumentNo is empty for those two. ' +
+            'The number must belong to an inventory pick; a SystemId of another kind of activity is refused. Use Warehouse.Pick.Register for a warehouse pick.';
+        exit(true);
     end;
 
     /// <summary>Returns the inbound direction of this message type.</summary>

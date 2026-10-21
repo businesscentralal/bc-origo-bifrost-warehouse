@@ -219,8 +219,12 @@ codeunit 10078418 "Whse Bin Get Impl ori" implements "Msg Interface ori", "Msg C
 
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'One location is read per call: send locationCode or the location code as the subject, and it must exist. Sending different locations in both places is refused. A location that has no bins (for example one that is not bin mandatory) is Success with an empty result. ' +
+            'binCode, zoneCode and binTypeCode are exact filters; empty selects bins whose Empty field is true or false, and Business Central maintains that field from the warehouse entries. Empty text and null values are ignored, so they do not filter. ' +
+            'A key this type does not know is refused as UnknownParameter, and all request problems, including a bad skip or take, are answered together in one answer. ' +
+            'includeContent adds every bin content row of each bin, also rows with quantity 0 such as an empty fixed bin, and needs read permission on bin content as well as on bins. Bins and content of other locations are not touched. ' +
+            'blockMovement is blank, Inbound, Outbound or All. Content here lists item, variant, unit of measure and quantity only; use Warehouse.BinContent.Get to filter on an item across locations or to see zone and bin type per row.';
+        exit(true);
     end;
 
     /// <summary>Returns the outbound direction of this message type.</summary>

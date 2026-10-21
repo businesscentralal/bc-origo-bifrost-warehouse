@@ -134,9 +134,16 @@ codeunit 10078464 "Whse ActLine SetQty Impl ori" implements "Msg Interface ori",
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Helper: Codeunit "Whse ActLine Helper ori";
+        LineChildren: JsonArray;
+        LinesParameter: JsonObject;
     begin
         Helper.AddActivityParameters(Parameters);
-        Parameters.Add(ContractMgt.Parameter('lines', 'array', false, 'Lines with their quantity to handle. Send lines, all or none, exactly one of them.'));
+        LinesParameter := ContractMgt.Parameter('lines', 'array', false, 'Lines with their quantity to handle. Send lines, all or none, exactly one of them.');
+        LineChildren.Add(ContractMgt.Parameter('lineNo', 'integer', false, 'Line number on a line entry. Required when lineSystemId is empty.'));
+        LineChildren.Add(ContractMgt.Parameter('lineSystemId', 'string', false, 'SystemId of the activity line on a line entry.'));
+        LineChildren.Add(ContractMgt.Parameter('qtyToHandle', 'number', true, 'Quantity to handle on a line entry, from zero up to the outstanding quantity.'));
+        LinesParameter.Add('children', LineChildren);
+        Parameters.Add(LinesParameter);
         Parameters.Add(ContractMgt.Parameter('lineNo', 'integer', false, 'Line number on a line entry. Required when lineSystemId is empty.'));
         Parameters.Add(ContractMgt.Parameter('lineSystemId', 'string', false, 'SystemId of the activity line on a line entry.'));
         Parameters.Add(ContractMgt.Parameter('qtyToHandle', 'number', true, 'Quantity to handle on a line entry, from zero up to the outstanding quantity.'));

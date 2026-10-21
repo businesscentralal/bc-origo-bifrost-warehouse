@@ -107,17 +107,21 @@ codeunit 10078421 "Whse Movement Create Impl ori" implements "Msg Interface ori"
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        LineChildren: JsonArray;
+        LinesParameter: JsonObject;
     begin
         Parameters.Add(ContractMgt.Parameter('locationCode', 'string', true, 'Directed put-away and pick location. Required when subject is empty.'));
         Parameters.Add(ContractMgt.Parameter('worksheetTemplateName', 'string', false, 'Movement worksheet template. Required when lines are omitted.'));
         Parameters.Add(ContractMgt.Parameter('worksheetName', 'string', false, 'Movement worksheet name. Required when lines are omitted.'));
-        Parameters.Add(ContractMgt.Parameter('lines', 'array', false, 'Inline lines. Written to the worksheet before the movement is created. Required when no worksheet is named.'));
-        Parameters.Add(ContractMgt.Parameter('itemNo', 'string', true, 'Item number on an inline line.'));
-        Parameters.Add(ContractMgt.Parameter('variantCode', 'string', false, 'Item variant. Optional.'));
-        Parameters.Add(ContractMgt.Parameter('unitOfMeasureCode', 'string', false, 'Unit of measure. Defaults to the item base unit.'));
-        Parameters.Add(ContractMgt.Parameter('quantity', 'number', true, 'Quantity to move, in the line unit of measure.'));
-        Parameters.Add(ContractMgt.Parameter('fromBin', 'string', true, 'Bin the quantity is taken from.'));
-        Parameters.Add(ContractMgt.Parameter('toBin', 'string', true, 'Bin the quantity is placed in.'));
+        LinesParameter := ContractMgt.Parameter('lines', 'array', false, 'Inline lines. Written to the worksheet before the movement is created. Required when no worksheet is named.');
+        LineChildren.Add(ContractMgt.Parameter('itemNo', 'string', true, 'Item number on an inline line.'));
+        LineChildren.Add(ContractMgt.Parameter('variantCode', 'string', false, 'Item variant. Optional.'));
+        LineChildren.Add(ContractMgt.Parameter('unitOfMeasureCode', 'string', false, 'Unit of measure. Defaults to the item base unit.'));
+        LineChildren.Add(ContractMgt.Parameter('quantity', 'number', true, 'Quantity to move, in the line unit of measure. Must be greater than zero.'));
+        LineChildren.Add(ContractMgt.Parameter('fromBin', 'string', true, 'Bin the quantity is taken from.'));
+        LineChildren.Add(ContractMgt.Parameter('toBin', 'string', true, 'Bin the quantity is placed in.'));
+        LinesParameter.Add('children', LineChildren);
+        Parameters.Add(LinesParameter);
         exit(true);
     end;
 
@@ -209,10 +213,18 @@ codeunit 10078421 "Whse Movement Create Impl ori" implements "Msg Interface ori"
 
     /// <summary>Returns the workflow chapter.</summary>
     /// <param name="Workflow">Receives the workflow.</param>
-    /// <returns>False. Movement create has no separate workflow chapter.</returns>
+    /// <returns>True. The workflow runs from the bin content check to registration.</returns>
     procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Steps: JsonArray;
     begin
-        exit(false);
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.BinContent.Get', 'Read the quantity in the from-bin so no line asks for more than the bin holds.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Movement.Create', 'Create the movement from inline lines or from a movement worksheet.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Activity.Get', 'Read the created movement lines, with activityType Movement, and check the quantity to handle.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Movement.Register', 'Register the movement to move the goods between the bins.'));
+        Workflow.Add('steps', Steps);
+        exit(true);
     end;
 
     /// <summary>Returns an example request and response.</summary>
@@ -242,11 +254,18 @@ codeunit 10078421 "Whse Movement Create Impl ori" implements "Msg Interface ori"
 
     /// <summary>Returns the notes chapter.</summary>
     /// <param name="Notes">Receives the notes.</param>
-    /// <returns>False. There are no extra notes.</returns>
+    /// <returns>True. The notes hold the edge cases of movement creation.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'Only a location with directed put-away and pick is accepted. A basic location is refused with PreconditionFailed and nothing else is checked; use Warehouse.InventoryMovement.Create there. ' +
+            'Send lines to have them written to a movement worksheet, or name worksheetTemplateName and worksheetName together to use a worksheet that already holds lines. Naming only one of the two is refused. ' +
+            'When lines are sent without a worksheet, a temporary worksheet name is created on the first movement worksheet template and removed again once the movement exists, so no worksheet is left behind. ' +
+            'When a worksheet is named together with lines, the new lines are added after the lines already in that worksheet, and every worksheet line with a quantity above zero is used for the movement. ' +
+            'Lines are checked before anything is written: item, variant, unit of measure, both bins and the quantity in the from-bin (counted in base units, across the bin content of that item and variant). Every failing line is reported together in one MultipleErrors answer and nothing is written. ' +
+            'Existing worksheet lines are checked the same way. Item, variant, unit and bin codes are upper-cased. A line with a quantity of zero or less is refused. ' +
+            'The movement is committed when it is created, so a later failure does not roll it back. If no movement line comes out of the worksheet, the call answers BusinessCentralError. ' +
+            'The lines come back as take lines paired with their place bin. Register the movement with Warehouse.Movement.Register; the quantity to handle is read back in the answer.';
+        exit(true);
     end;
 
     /// <summary>Returns the inbound direction of this message type.</summary>

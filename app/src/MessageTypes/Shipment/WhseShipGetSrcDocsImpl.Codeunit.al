@@ -265,11 +265,18 @@ codeunit 10078432 "Whse Ship GetSrcDocs Impl ori" implements "Msg Interface ori"
 
     /// <summary>Returns the notes chapter.</summary>
     /// <param name="Notes">Receives the notes.</param>
-    /// <returns>False. There are no extra notes.</returns>
+    /// <returns>True. The notes describe targets, filters, skipped lines and the all-or-nothing run.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'Send shipmentNo (or systemId, or the subject) to add lines to an existing shipment, or only locationCode to create a new shipment at that location; when a shipment is named, locationCode must be its location. A new location must have Require Shipment set. ' +
+            'A released shipment is refused, because lines cannot be added to it: reopen it with Warehouse.Shipment.Reopen first and release it again with Warehouse.Shipment.Release when the lines are in place. ' +
+            'Only released outbound source documents (sales orders, purchase return orders and outbound transfers) that are not completely handled and sit at the shipment location are considered. sourceDocument, sourceNos, customerNo, the shipment dates and shippingAgentCode narrow them. sourceNos is an array of text values, so send document numbers as strings. ' +
+            'Every sourceNos entry must have a released request at the shipment location. A number released at another location is refused as ConflictingIdentifiers and an unreleased one as PreconditionFailed; the refusal names the entry. ' +
+            'If a new shipment would get no lines it is removed again, and the answer has an empty shipmentNo, created false and linesAdded 0. ' +
+            'Source lines that already sit on another warehouse shipment are not added; they are listed under skipped with the shipment that holds them. When lines are added to an existing shipment, only the lines added by this call are counted in linesAdded and sourceDocuments. ' +
+            'Bad parameters are collected and answered together as MultipleErrors. The run is all-or-nothing: a failure leaves nothing written, and nothing is picked or posted. ' +
+            'The caller needs the BIFROST Whse - Full ori permission set. Use Warehouse.Request.Get to see what is waiting, Warehouse.Pick.Create for the pick and Warehouse.Shipment.Post to ship.';
+        exit(true);
     end;
 
     /// <summary>Returns the inbound direction of this message type.</summary>

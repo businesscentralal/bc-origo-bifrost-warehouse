@@ -110,9 +110,20 @@ codeunit 10078465 "Whse ActLine Track Impl ori" implements "Msg Interface ori", 
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Helper: Codeunit "Whse ActLine Helper ori";
+        EntryChildren: JsonArray;
+        EntriesParameter: JsonObject;
     begin
         Helper.AddActivityParameters(Parameters);
-        Parameters.Add(ContractMgt.Parameter('entries', 'array', true, 'Tracking entries, in order. Several entries for one line split the line, one line per entry.'));
+        EntriesParameter := ContractMgt.Parameter('entries', 'array', true, 'Tracking entries, in order. Several entries for one line split the line, one line per entry.');
+        EntryChildren.Add(ContractMgt.Parameter('lineNo', 'integer', false, 'Line number on an entry. Required when lineSystemId is empty.'));
+        EntryChildren.Add(ContractMgt.Parameter('lineSystemId', 'string', false, 'SystemId of the activity line on an entry.'));
+        EntryChildren.Add(ContractMgt.Parameter('lotNo', 'string', false, 'Lot number on an entry.'));
+        EntryChildren.Add(ContractMgt.Parameter('serialNo', 'string', false, 'Serial number on an entry; its quantity must be one base unit.'));
+        EntryChildren.Add(ContractMgt.Parameter('packageNo', 'string', false, 'Package number on an entry.'));
+        EntryChildren.Add(ContractMgt.Parameter('quantity', 'number', false, 'Quantity of the entry in the line unit of measure. Optional when the line has one entry: the outstanding quantity.'));
+        EntryChildren.Add(ContractMgt.Parameter('expirationDate', 'string', false, 'Expiration date of a new lot or serial number on a put-away, written as YYYY-MM-DD.'));
+        EntriesParameter.Add('children', EntryChildren);
+        Parameters.Add(EntriesParameter);
         Parameters.Add(ContractMgt.Parameter('lineNo', 'integer', false, 'Line number on an entry. Required when lineSystemId is empty.'));
         Parameters.Add(ContractMgt.Parameter('lineSystemId', 'string', false, 'SystemId of the activity line on an entry.'));
         Parameters.Add(ContractMgt.Parameter('lotNo', 'string', false, 'Lot number on an entry.'));

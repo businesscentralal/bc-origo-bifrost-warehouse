@@ -213,11 +213,15 @@ codeunit 10078434 "Whse Shipment Reopen Impl ori" implements "Msg Interface ori"
 
     /// <summary>Returns the notes chapter.</summary>
     /// <param name="Notes">Receives the notes.</param>
-    /// <returns>False. There are no extra notes.</returns>
+    /// <returns>True. The notes describe the refusals, the no-op case and the order with sibling types.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'The only input is the shipment identifier, as the subject or as systemId, recordSystemId, id, shipmentNo or no under data; any other key is refused as UnknownParameter, together with any lookup problem as MultipleErrors. ' +
+            'Reopening a shipment that is already open is not an error: the call answers success with changed false and writes nothing. ' +
+            'The call is refused as PreconditionFailed, with nothing written, while the shipment still has pick lines (activity type Pick) or lines in a pick worksheet. Register the picks with Warehouse.Pick.Register or delete them first; Warehouse.Activity.Get with activityType Pick finds them. ' +
+            'Reopening is what Business Central does with the Reopen action: the status becomes Open and the pick request is reopened, so lines can be added with Warehouse.Shipment.GetSourceDocuments. Release the shipment again with Warehouse.Shipment.Release before picks are created. ' +
+            'The caller needs write permission on warehouse shipments and pick requests (BIFROST Whse - Full ori). Nothing is posted; the change is committed.';
+        exit(true);
     end;
 
     /// <summary>Returns the inbound direction of this message type.</summary>

@@ -82,8 +82,14 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        LineChildren: JsonArray;
+        LinesParameter: JsonObject;
     begin
-        Parameters.Add(ContractMgt.Parameter('lines', 'array', false, 'Optional per-line quantities to ship in the preview, the same as Warehouse.Shipment.Post. They are rolled back with the preview. Needs write permission on warehouse shipment lines.'));
+        LineChildren.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Warehouse shipment line number. Each line may be listed once.'));
+        LineChildren.Add(ContractMgt.Parameter('qtyToShip', 'number', true, 'Quantity to ship on that line in the preview, from zero up to the outstanding quantity, and at a location that requires pick up to the picked quantity not yet shipped.'));
+        LinesParameter := ContractMgt.Parameter('lines', 'array', false, 'Optional per-line quantities to ship in the preview, the same as Warehouse.Shipment.Post. They are rolled back with the preview. Needs write permission on warehouse shipment lines.');
+        LinesParameter.Add('children', LineChildren);
+        Parameters.Add(LinesParameter);
         Parameters.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Warehouse shipment line number (inside lines).'));
         Parameters.Add(ContractMgt.Parameter('qtyToShip', 'number', true, 'Quantity to ship on that line, from zero up to the outstanding quantity (inside lines).'));
         exit(true);
@@ -173,8 +179,15 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
 
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'Nothing is saved: Business Central runs the posting and rolls it back, so the shipment, its lines and the ledgers are unchanged. Quantities sent in lines are applied inside the preview only; Qty. to Ship on the shipment keeps its real value. ' +
+            'The preview always simulates ship and invoice, so invoice is always true in the answer and the entries include the invoicing of the source documents, even if you later post with Warehouse.Shipment.Post without invoice. ' +
+            'The preview cannot run inside a rollback chain (Omit Commit) and is refused there. ' +
+            'It does not use the posting permission sets that Warehouse.Shipment.Post needs, but sending lines needs write permission on warehouse shipment lines. ' +
+            'At a location that requires pick a line quantity above the picked quantity that is not yet shipped is refused, so register the pick first. Unknown keys and bad line values are answered together as MultipleErrors. ' +
+            'A shipment with no lines is answered as NothingToPreview, and so is a preview that produces no entries, for example when every line would ship zero. If Business Central refuses the posting during the preview, its error text is returned. ' +
+            'linesToPost counts every line on the shipment, not only the lines in the request. predictedNumbers lists the distinct G/L document numbers seen in the rolled-back run, and is empty when no G/L entries are produced. ' +
+            'Use Warehouse.Shipment.Post to post for real.';
+        exit(true);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"

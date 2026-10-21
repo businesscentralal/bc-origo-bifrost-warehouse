@@ -91,17 +91,21 @@ codeunit 10078419 "Whse Bin Create Impl ori" implements "Msg Interface ori", "Ms
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        BinsParameter: JsonObject;
+        BinChildren: JsonArray;
     begin
         Parameters.Add(ContractMgt.Parameter('locationCode', 'string', true, 'Location code. Required when subject is empty.'));
-        Parameters.Add(ContractMgt.Parameter('bins', 'array', true, 'One or more bins to create. All are created, or none.'));
-        Parameters.Add(ContractMgt.Parameter('code', 'string', true, 'Bin code, unique at the location.'));
-        Parameters.Add(ContractMgt.Parameter('description', 'string', false, 'Bin description.'));
-        Parameters.Add(ContractMgt.Parameter('zoneCode', 'string', false, 'Zone code. Required on a directed location and refused on a basic location.'));
-        Parameters.Add(ContractMgt.Parameter('binTypeCode', 'string', false, 'Bin type code. Required on a directed location and refused on a basic location.'));
-        Parameters.Add(ContractMgt.Parameter('ranking', 'integer', false, 'Bin ranking. Defaults to 0.'));
-        Parameters.Add(ContractMgt.Parameter('blockMovement', 'string', false, 'Blank, Inbound, Outbound or All.'));
-        Parameters.Add(ContractMgt.Parameter('dedicated', 'boolean', false, 'Whether the bin is dedicated. Defaults to false.'));
-        Parameters.Add(ContractMgt.Parameter('empty', 'boolean', false, 'Must be omitted or true. A new bin stays empty until stock is posted.'));
+        BinChildren.Add(ContractMgt.Parameter('code', 'string', true, 'Bin code, at most 20 characters, unique at the location and within the request. It is stored in upper case.'));
+        BinChildren.Add(ContractMgt.Parameter('description', 'string', false, 'Bin description, at most 100 characters.'));
+        BinChildren.Add(ContractMgt.Parameter('zoneCode', 'string', false, 'Zone code, at most 10 characters. Required on a directed location and refused on a basic location.'));
+        BinChildren.Add(ContractMgt.Parameter('binTypeCode', 'string', false, 'Bin type code, at most 10 characters. Required on a directed location and refused on a basic location.'));
+        BinChildren.Add(ContractMgt.Parameter('ranking', 'integer', false, 'Bin ranking. Defaults to 0.'));
+        BinChildren.Add(ContractMgt.Parameter('blockMovement', 'string', false, 'Blank, Inbound, Outbound or All.'));
+        BinChildren.Add(ContractMgt.Parameter('dedicated', 'boolean', false, 'Whether the bin is dedicated. Defaults to false.'));
+        BinChildren.Add(ContractMgt.Parameter('empty', 'boolean', false, 'Must be omitted or true. A new bin stays empty until stock is posted.'));
+        BinsParameter := ContractMgt.Parameter('bins', 'array', true, 'One or more bins to create. All are created, or none.');
+        BinsParameter.Add('children', BinChildren);
+        Parameters.Add(BinsParameter);
         exit(true);
     end;
 
@@ -247,8 +251,16 @@ codeunit 10078419 "Whse Bin Create Impl ori" implements "Msg Interface ori", "Ms
     end;
 
     procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Steps: JsonArray;
     begin
-        exit(false);
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Bin.Get', 'Optional: read the bins the location already has, to avoid duplicate codes.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Bin.Create', 'Create the bins at the bin-mandatory location.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Bin.Get', 'Read the bins back to confirm them.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.DefaultBin.Set', 'Make one of the new bins the default bin of an item.'));
+        Workflow.Add('steps', Steps);
+        exit(true);
     end;
 
     procedure GetExamples(var Examples: JsonArray): Boolean
@@ -272,8 +284,14 @@ codeunit 10078419 "Whse Bin Create Impl ori" implements "Msg Interface ori", "Ms
 
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'The location must exist and have Bin Mandatory turned on. Bin Mandatory is not changed by this type. ' +
+            'Every bin is checked before anything is written, and the request is refused with all the problems listed (MultipleErrors) when any bin fails; the bins are then written together, and if Business Central rejects one of them none is kept. ' +
+            'A code that already exists at the location, or appears twice in the request, is refused. Bin codes are stored in upper case, so a-01 and A-01 are the same bin. The answer returns the codes as stored. ' +
+            'Basic location: zoneCode and binTypeCode must be left out or blank. Directed put-away and pick location: both are required, the zone must exist at the location and the bin type must exist. ' +
+            'blockMovement is blank, Inbound, Outbound or All, in any letter case. empty can only be omitted or true; a new bin is always empty until stock is posted, so true is accepted and changes nothing. Empty text and null values are treated as not sent. ' +
+            'A key that is not a bin field is refused as UnknownParameter, and the parameter names the bin by position, for example bins[1].code. ' +
+            'Calling the same request again is refused because the codes now exist. Default bins for items are set separately with Warehouse.DefaultBin.Set. The caller needs BIFROST Whse - Full ori.';
+        exit(true);
     end;
 
     /// <summary>Returns the inbound direction of this message type.</summary>

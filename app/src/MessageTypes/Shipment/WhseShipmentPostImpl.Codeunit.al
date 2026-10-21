@@ -104,9 +104,15 @@ codeunit 10078407 "Whse Shipment Post Impl ori" implements "Msg Interface ori", 
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        LineChildren: JsonArray;
+        LinesParameter: JsonObject;
     begin
         Parameters.Add(ContractMgt.Parameter('invoice', 'boolean', false, 'Also invoice the shipped source documents. Defaults to false and requires BIFROST WhseInv ori when true.'));
-        Parameters.Add(ContractMgt.Parameter('lines', 'array', false, 'Optional per-line quantities to ship. Lines that are not listed keep their current Qty. to Ship.'));
+        LineChildren.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Warehouse shipment line number. Each line may be listed once.'));
+        LineChildren.Add(ContractMgt.Parameter('qtyToShip', 'number', true, 'Quantity to ship on that line, from zero up to the outstanding quantity, and at a location that requires pick up to the picked quantity not yet shipped.'));
+        LinesParameter := ContractMgt.Parameter('lines', 'array', false, 'Optional per-line quantities to ship. Lines that are not listed keep their current Qty. to Ship.');
+        LinesParameter.Add('children', LineChildren);
+        Parameters.Add(LinesParameter);
         Parameters.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Warehouse shipment line number (inside lines).'));
         Parameters.Add(ContractMgt.Parameter('qtyToShip', 'number', true, 'Quantity to ship on that line, from zero up to the outstanding quantity, and at a location that requires pick up to the picked quantity not yet shipped (inside lines).'));
         exit(true);
@@ -189,8 +195,15 @@ codeunit 10078407 "Whse Shipment Post Impl ori" implements "Msg Interface ori", 
 
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'Posting commits; under Omit Commit the caller''s transaction commits instead. The caller needs the BIFROST WhsePost ori permission set, and also BIFROST WhseInv ori when invoice is true; without the second one the whole call is refused and nothing is shipped. ' +
+            'invoice defaults to false, so the source documents are shipped but not invoiced; with true the shipped source documents are invoiced in the same posting. It must be a JSON boolean. ' +
+            'lines sets Qty. to Ship per listed line; lines that are not listed keep the quantity they have now, and that quantity counts when Business Central checks that something is left to post. Each lineNo may be listed once and the quantity must be from zero up to the outstanding quantity. ' +
+            'At a location that requires pick the quantity cannot be above the picked quantity that is not yet shipped, so register the pick first with Warehouse.Pick.Register. ' +
+            'The call is refused, with nothing posted, when the shipment has no lines or when every line would ship zero. Unknown keys, bad line values and the nothing-to-post case are answered together as MultipleErrors. ' +
+            'The quantities are set in the same run as the posting, so a failure leaves them unchanged. A shipment that is only partly shipped stays open for the remaining quantity; a fully shipped one is moved to history. ' +
+            'In the answer, quantityPosted is the quantity the post handles and quantityRemaining is the outstanding quantity less that, worked out before the post. postedWhseShipmentNo and postedWhseShipmentSystemId are left out if no Posted Whse. Shipment is found. ' +
+            'Use Warehouse.Shipment.PreviewPost first to see the entries.';
+        exit(true);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"

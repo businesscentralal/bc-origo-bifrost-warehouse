@@ -136,8 +136,14 @@ codeunit 10078414 "Whse Pick Register Impl ori" implements "Msg Interface ori", 
     end;
 
     procedure GetExamples(var Examples: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        exit(false);
+        Examples.Add(ContractMgt.Example(
+            'Register pick PI000001',
+            '{"pickNo":"PI000001"}',
+            '{"status":"Success","pickNo":"PI000001","linesRegistered":2,"totalQtyRegistered":10,"shipmentNo":"SH000001","shipmentSystemId":"6f1c1d2e-0000-0000-0000-000000000012","shipmentLines":[{"shipmentNo":"SH000001","lineNo":10000,"sourceDocument":"Sales Order","sourceNo":"101005","sourceLineNo":10000,"itemNo":"1896-S","qty":5,"qtyPicked":5,"qtyToShip":5,"qtyOutstanding":5}],"registeredPickNo":"RP000001","registeredPickSystemId":"6f1c1d2e-0000-0000-0000-000000000013","message":"Warehouse Pick PI000001 (2 lines) registered against Warehouse Shipment SH000001."}'));
+        exit(true);
     end;
 
     procedure GetOverview(var Overview: Text): Boolean
@@ -148,8 +154,13 @@ codeunit 10078414 "Whse Pick Register Impl ori" implements "Msg Interface ori", 
 
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'The call registers the whole pick with the quantity to handle that is on its lines; it accepts no line quantities. To register part of a pick, set the quantity to handle first with Warehouse.ActivityLine.SetQtyToHandle. ' +
+            'The caller needs BIFROST WhsePost ori. The pick is found from subject or from pickNo, no, systemId, recordSystemId or id; a number is looked up among picks only. A SystemId or number that belongs to another kind of warehouse activity is refused with PreconditionFailed, and a pick without lines is refused the same way. ' +
+            'Business Central commits the registration. If it rejects the registration, for example because no line has a quantity to handle, the answer is BusinessCentralError with its text. ' +
+            'linesRegistered counts every line the pick had before registration and totalQtyRegistered sums the quantity to handle over all of them. On a directed location a pick has a take line and a place line for the same quantity, so the total counts both. ' +
+            'shipmentNo, shipmentSystemId and shipmentLines are only returned when the pick belongs to a warehouse shipment. shipmentLines describes every line of that shipment as it stands after registration, not only the lines of this pick. registeredPickNo and registeredPickSystemId are left out if no registered pick is found. ' +
+            'After registration, post the shipment with Warehouse.Shipment.Post.';
+        exit(true);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"

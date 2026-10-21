@@ -126,8 +126,10 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
         Fields: JsonArray;
         PutawayFields: JsonArray;
         LineFields: JsonArray;
+        WarningFields: JsonArray;
         Putaways: JsonObject;
         Lines: JsonObject;
+        Warnings: JsonObject;
     begin
         Parts.AddStatusField(Fields);
         Fields.Add(ContractMgt.ResponseField('sourceDocument', 'string', 'Source document type.'));
@@ -153,6 +155,15 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
         Putaways.Add('description', 'Inventory put-aways for the source document. An existing open put-away is returned with a warning instead of creating another.');
         Putaways.Add('children', PutawayFields);
         Fields.Add(Putaways);
+        WarningFields.Add(ContractMgt.ResponseField('code', 'string', 'PreconditionFailed.'));
+        WarningFields.Add(ContractMgt.ResponseField('message', 'string', 'An open inventory put-away already exists for this source document.'));
+        WarningFields.Add(ContractMgt.ResponseField('parameter', 'string', 'sourceNo.'));
+        WarningFields.Add(ContractMgt.ResponseField('nextStep', 'string', 'Use Warehouse.InventoryPutAway.Post for the existing inventory put-away.'));
+        Warnings.Add('name', 'warnings');
+        Warnings.Add('type', 'array');
+        Warnings.Add('description', 'Present only when an open inventory put-away already existed and was returned instead of creating another.');
+        Warnings.Add('children', WarningFields);
+        Fields.Add(Warnings);
         Parts.Response(Response, Fields);
         exit(true);
     end;
@@ -213,10 +224,18 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
 
     /// <summary>Returns the workflow chapter.</summary>
     /// <param name="Workflow">Receives the workflow.</param>
-    /// <returns>False. Inventory put-away create has no separate workflow chapter.</returns>
+    /// <returns>True. The workflow runs from creating the put-away to posting it.</returns>
     procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Steps: JsonArray;
     begin
-        exit(false);
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.InventoryPutAway.Create', 'Create the inventory put-away from a released inbound source document at a location that requires put-away.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Activity.Get', 'Read the open put-away and its lines. Optional.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.ActivityLine.ChangeBin', 'Change the bin on a line when the suggested bin is not the one to use. Optional.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.InventoryPutAway.Post', 'Post the inventory put-away; the source document is received and the goods are placed in the bins.'));
+        Workflow.Add('steps', Steps);
+        exit(true);
     end;
 
     /// <summary>Returns an example request and response.</summary>
@@ -246,11 +265,16 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
 
     /// <summary>Returns the notes chapter.</summary>
     /// <param name="Notes">Receives the notes.</param>
-    /// <returns>False. There are no extra notes.</returns>
+    /// <returns>True. The notes hold edge cases for consultants.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'The source document must be released, and every item line must sit at a location that requires put-away. A location that uses warehouse receipts or directed put-away and pick is refused: use Warehouse.Receipt.Create and Warehouse.Putaway.Create there. A document with no item line at such a location is refused as not released or not requiring put-away. ' +
+            'sourceDocument takes Purchase Order, Sales Return Order or Inbound Transfer. ' +
+            'If an open inventory put-away already exists for the document, nothing is created: that put-away is returned with a warning, also when the document has lines that put-away does not cover. ' +
+            'When Business Central creates no put-away, the call is refused with the error No inventory put-away was created. A created put-away is committed, so a later failure does not roll it back. ' +
+            'Quantity to handle is set to the outstanding quantity on every line, so the put-away can be posted straight away with Warehouse.InventoryPutAway.Post. The bin on each line is the one Business Central suggests; it is empty at a location without bins. ' +
+            'Nothing is received or posted by this call.';
+        exit(true);
     end;
 
     /// <summary>Returns the inbound direction of this message type.</summary>

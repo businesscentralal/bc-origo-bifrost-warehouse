@@ -73,8 +73,14 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        SourceChildren: JsonArray;
+        SourceParameter: JsonObject;
     begin
-        Parameters.Add(ContractMgt.Parameter('sourceDocuments', 'array', true, 'One or more source documents. Each child has sourceType (SalesOrder or TransferOrder) and documentNo.'));
+        SourceChildren.Add(ContractMgt.Parameter('sourceType', 'string', true, 'Kind of source document: SalesOrder or TransferOrder. Not case sensitive.'));
+        SourceChildren.Add(ContractMgt.Parameter('documentNo', 'string', true, 'No. of the released source document, at most 20 characters.'));
+        SourceParameter := ContractMgt.Parameter('sourceDocuments', 'array', true, 'One or more source documents. Each child has sourceType (SalesOrder or TransferOrder) and documentNo.');
+        SourceParameter.Add('children', SourceChildren);
+        Parameters.Add(SourceParameter);
         Parameters.Add(ContractMgt.Parameter('locationCode', 'string', false, 'Optional source-location check. It does not override the source document.'));
         Parameters.Add(ContractMgt.Parameter('assignedUserId', 'string', false, 'User assigned to each created Warehouse Shipment Header.'));
         Parameters.Add(ContractMgt.Parameter('postingDate', 'string', false, 'Posting date applied to each created Warehouse Shipment Header.'));
@@ -135,8 +141,18 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
     end;
 
     procedure GetExamples(var Examples: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        exit(false);
+        Examples.Add(ContractMgt.Example(
+            'Create a shipment from released sales order 101005',
+            '{"sourceDocuments":[{"sourceType":"SalesOrder","documentNo":"101005"}]}',
+            '{"status":"Success","noOfShipments":1,"shipments":[{"recordSystemId":"6f1c1d2e-0000-0000-0000-000000000021","no":"SH000001","locationCode":"WHITE","assignedUserId":"","sourceType":"SalesOrder","sourceDocumentNo":"101005","linesCreated":2}]}'));
+        Examples.Add(ContractMgt.Example(
+            'Create shipments for a sales order and a transfer order and assign them to a user',
+            '{"sourceDocuments":[{"sourceType":"SalesOrder","documentNo":"101006"},{"sourceType":"TransferOrder","documentNo":"TO000002"}],"assignedUserId":"JSMITH"}',
+            '{"status":"Success","noOfShipments":2,"shipments":[{"recordSystemId":"6f1c1d2e-0000-0000-0000-000000000022","no":"SH000002","locationCode":"WHITE","assignedUserId":"JSMITH","sourceType":"SalesOrder","sourceDocumentNo":"101006","linesCreated":1},{"recordSystemId":"6f1c1d2e-0000-0000-0000-000000000023","no":"SH000003","locationCode":"WHITE","assignedUserId":"JSMITH","sourceType":"TransferOrder","sourceDocumentNo":"TO000002","linesCreated":3}]}'));
+        exit(true);
     end;
 
     procedure GetOverview(var Overview: Text): Boolean
@@ -147,8 +163,14 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
 
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'One Warehouse Shipment is created per source document, in the order listed. If a later source is refused, the shipments already created for earlier sources are not rolled back by this type. ' +
+            'Each source must exist and be Released, and its location (the Transfer-from location for a transfer order) must have Require Shipment set. ' +
+            'locationCode is only a check against the source location and never moves the shipment; a mismatch is refused. ' +
+            'sourceType accepts SalesOrder and TransferOrder only, not case sensitive; other kinds such as a purchase return order are refused. ' +
+            'assignedUserId and postingDate are applied to each header after it is created, so a user that does not exist or a date Business Central refuses leaves the shipment created without that value. postingDate must be an ISO date (YYYY-MM-DD). ' +
+            'If no shipment lines exist for a source afterwards (no lines left to ship, or pick already started) the call is refused. linesCreated counts every line on the shipment that is reported for the source. ' +
+            'The shipment is only created here: nothing is picked or posted. Use Warehouse.Pick.Create when the location requires pick, and Warehouse.Shipment.Post to ship.';
+        exit(true);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"

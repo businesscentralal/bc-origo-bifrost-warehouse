@@ -175,12 +175,18 @@ codeunit 10078461 "Whse Wksh CreateAct Impl ori" implements "Msg Interface ori",
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        LineChildren: JsonArray;
+        LinesParameter: JsonObject;
     begin
         Parameters.Add(ContractMgt.Parameter('worksheetType', 'string', true, 'pick or putAway.'));
         Parameters.Add(ContractMgt.Parameter('worksheetTemplateName', 'string', true, 'Worksheet template of the matching type.'));
         Parameters.Add(ContractMgt.Parameter('worksheetName', 'string', true, 'Worksheet name at the location.'));
         Parameters.Add(ContractMgt.Parameter('locationCode', 'string', false, 'Location of the worksheet. Required when subject is empty.'));
-        Parameters.Add(ContractMgt.Parameter('lines', 'array', false, 'Optional quantities to handle per worksheet line, written before the activities are created. Lines that are not sent keep their quantity to handle.'));
+        LinesParameter := ContractMgt.Parameter('lines', 'array', false, 'Optional quantities to handle per worksheet line, written before the activities are created. Lines that are not sent keep their quantity to handle.');
+        LineChildren.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Worksheet line number answered by Warehouse.Worksheet.GetDocuments.'));
+        LineChildren.Add(ContractMgt.Parameter('qtyToHandle', 'number', true, 'Quantity to handle, from zero up to the outstanding quantity. Zero leaves the line in the worksheet.'));
+        LinesParameter.Add('children', LineChildren);
+        Parameters.Add(LinesParameter);
         Parameters.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Worksheet line number answered by Warehouse.Worksheet.GetDocuments.'));
         Parameters.Add(ContractMgt.Parameter('qtyToHandle', 'number', true, 'Quantity to handle, from zero up to the outstanding quantity. Zero leaves the line in the worksheet.'));
         Parameters.Add(ContractMgt.Parameter('assignedUserId', 'string', false, 'Warehouse employee of the location assigned to the created activities.'));

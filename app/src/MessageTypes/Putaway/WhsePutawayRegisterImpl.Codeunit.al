@@ -136,8 +136,14 @@ codeunit 10078417 "Whse Putaway Register Impl ori" implements "Msg Interface ori
     end;
 
     procedure GetExamples(var Examples: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        exit(false);
+        Examples.Add(ContractMgt.Example(
+            'Register put-away PA000001',
+            '{"putawayNo":"PA000001"}',
+            '{"status":"Success","putawayNo":"PA000001","linesRegistered":2,"totalQtyRegistered":10,"postedWhseReceiptNo":"PWR000001","postedWhseReceiptSystemId":"6f1c1d2e-0000-0000-0000-000000000021","receiptLines":[{"postedWhseReceiptNo":"PWR000001","lineNo":10000,"sourceDocument":"Purchase Order","sourceNo":"106001","sourceLineNo":10000,"itemNo":"1896-S","qty":5,"qtyPutAway":5,"qtyOutstanding":0,"status":"Completely Put Away"}],"registeredPutawayNo":"RPA000001","registeredPutawaySystemId":"6f1c1d2e-0000-0000-0000-000000000023","message":"Warehouse Put-away PA000001 (2 lines) registered against Posted Whse. Receipt PWR000001."}'));
+        exit(true);
     end;
 
     procedure GetOverview(var Overview: Text): Boolean
@@ -148,8 +154,13 @@ codeunit 10078417 "Whse Putaway Register Impl ori" implements "Msg Interface ori
 
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'The call registers the whole put-away with the quantity to handle that is on its lines; it accepts no line quantities. To register part of a put-away, set the quantity to handle first with Warehouse.ActivityLine.SetQtyToHandle, and use Warehouse.ActivityLine.ChangeBin to place goods in another bin. ' +
+            'The caller needs BIFROST WhsePost ori. The put-away is found from subject or from putawayNo, no, systemId, recordSystemId or id; a number is looked up among put-aways only. A SystemId or number that belongs to another kind of warehouse activity is refused with PreconditionFailed, and a put-away without lines is refused the same way. ' +
+            'Business Central commits the registration and the goods are placed in their bins. If it rejects the registration, for example because no line has a quantity to handle, the answer is BusinessCentralError with its text. ' +
+            'linesRegistered counts every line the put-away had before registration and totalQtyRegistered sums the quantity to handle over all of them. A put-away has a take line and a place line for the same quantity, so the total counts both. ' +
+            'postedWhseReceiptNo, postedWhseReceiptSystemId and receiptLines are only returned when the put-away belongs to a posted warehouse receipt. receiptLines describes every line of that receipt as it stands after registration, not only the lines of this put-away. registeredPutawayNo and registeredPutawaySystemId are left out if no registered put-away is found. ' +
+            'Create the put-away first with Warehouse.Putaway.Create.';
+        exit(true);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"

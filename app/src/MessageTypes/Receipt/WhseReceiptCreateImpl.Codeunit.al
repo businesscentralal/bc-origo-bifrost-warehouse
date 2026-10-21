@@ -74,8 +74,14 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        SourceChildren: JsonArray;
+        SourceParameter: JsonObject;
     begin
-        Parameters.Add(ContractMgt.Parameter('sourceDocuments', 'array', true, 'One or more source documents. Each child has sourceType (SalesReturnOrder, PurchaseOrder or TransferOrder) and documentNo.'));
+        SourceChildren.Add(ContractMgt.Parameter('sourceType', 'string', true, 'Kind of source document: SalesReturnOrder, PurchaseOrder or TransferOrder. Not case sensitive.'));
+        SourceChildren.Add(ContractMgt.Parameter('documentNo', 'string', true, 'No. of the released source document, at most 20 characters.'));
+        SourceParameter := ContractMgt.Parameter('sourceDocuments', 'array', true, 'One or more source documents. Each child has sourceType (SalesReturnOrder, PurchaseOrder or TransferOrder) and documentNo.');
+        SourceParameter.Add('children', SourceChildren);
+        Parameters.Add(SourceParameter);
         Parameters.Add(ContractMgt.Parameter('locationCode', 'string', false, 'Optional source-location check. It does not override the source document.'));
         Parameters.Add(ContractMgt.Parameter('assignedUserId', 'string', false, 'User assigned to each created Warehouse Receipt Header.'));
         Parameters.Add(ContractMgt.Parameter('postingDate', 'string', false, 'Posting date applied to each created Warehouse Receipt Header.'));
@@ -136,8 +142,18 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
     end;
 
     procedure GetExamples(var Examples: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        exit(false);
+        Examples.Add(ContractMgt.Example(
+            'Create a receipt from released purchase order 106001',
+            '{"sourceDocuments":[{"sourceType":"PurchaseOrder","documentNo":"106001"}]}',
+            '{"status":"Success","noOfReceipts":1,"receipts":[{"recordSystemId":"6f1c1d2e-0000-0000-0000-000000000011","no":"RE000001","locationCode":"WHITE","assignedUserId":"","sourceType":"PurchaseOrder","sourceDocumentNo":"106001","linesCreated":2}]}'));
+        Examples.Add(ContractMgt.Example(
+            'Create a receipt for a transfer order and assign it to a user',
+            '{"sourceDocuments":[{"sourceType":"TransferOrder","documentNo":"TO000001"}],"assignedUserId":"JSMITH","postingDate":"2026-10-21"}',
+            '{"status":"Success","noOfReceipts":1,"receipts":[{"recordSystemId":"6f1c1d2e-0000-0000-0000-000000000012","no":"RE000002","locationCode":"WHITE","assignedUserId":"JSMITH","sourceType":"TransferOrder","sourceDocumentNo":"TO000001","linesCreated":1}]}'));
+        exit(true);
     end;
 
     procedure GetOverview(var Overview: Text): Boolean
@@ -148,8 +164,14 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
 
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'One Warehouse Receipt is created per source document, in the order listed, and Business Central commits as it goes: if a later source is refused, the receipts already created for earlier sources stay. ' +
+            'Each source must exist and be Released, and its location (the Transfer-to location for a transfer order) must have Require Receive set. ' +
+            'locationCode is only a check against the source location and never moves the receipt; a mismatch is refused. ' +
+            'sourceType accepts SalesReturnOrder, PurchaseOrder and TransferOrder only, not case sensitive; a sales order or purchase return order is refused. ' +
+            'assignedUserId and postingDate are applied to each header after it is created, so a user that does not exist or a date Business Central refuses leaves the receipt created without that value. postingDate must be an ISO date (YYYY-MM-DD). ' +
+            'If no receipt lines exist for a source afterwards (no lines left to receive, or put-away already started) the call is refused. linesCreated counts every line on the receipt that is reported for the source. ' +
+            'The receipt is only created here: use Warehouse.Receipt.Post to receive it and Warehouse.Putaway.Create for the put-away.';
+        exit(true);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"

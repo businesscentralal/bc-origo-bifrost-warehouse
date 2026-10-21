@@ -227,11 +227,18 @@ codeunit 10078463 "Whse ActLine ChgBin Impl ori" implements "Msg Interface ori",
 
     /// <summary>Returns the notes chapter.</summary>
     /// <param name="Notes">Receives the notes.</param>
-    /// <returns>False. There are no extra notes.</returns>
+    /// <returns>True. The notes hold the edge cases of changing a bin.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'Only the bin on the one line you name is changed, and the zone follows the new bin when it is in another zone. The paired line of the other action type is left as it is: moving the take bin does not move the place bin, and the answer lists the paired line numbers and says so. ' +
+            'The line is named with lineNo, or with lineSystemId; if both are sent they must name the same line. ' +
+            'Sending the bin the line already has is not an error. Nothing is checked or written, changed is false and the line is returned as it is. The call can therefore be repeated safely. ' +
+            'A take line needs a new bin that can give the whole outstanding quantity in base units for the same item, variant and unit of measure. A lot, serial or package number on the line narrows that to stock with the same number. A bin without enough is refused with InvalidLine; read Warehouse.BinContent.Get to find a bin that has it. ' +
+            'A place line needs a bin that accepts stock. A bin that is blocked for inbound movement or for all movement, or that is the adjustment bin, is refused with InvalidLine. ' +
+            'A line of an inventory pick is treated as a take line and every other line without an action type is treated as a place line. ' +
+            'A bin that is not at the location of the line is refused as not found. Problems found before anything is written are returned together in one MultipleErrors answer. ' +
+            'To take only part of a line from another bin, split it first with Warehouse.ActivityLine.Split.';
+        exit(true);
     end;
 
     /// <summary>Returns the inbound direction of this message type.</summary>

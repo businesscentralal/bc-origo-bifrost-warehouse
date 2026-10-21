@@ -149,8 +149,18 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
     end;
 
     procedure GetExamples(var Examples: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        exit(false);
+        Examples.Add(ContractMgt.Example(
+            'Create the put-away for posted warehouse receipt PWR000001',
+            '{"postedWhseReceiptNo":"PWR000001"}',
+            '{"status":"Success","postedWhseReceiptNo":"PWR000001","postedWhseReceiptSystemId":"6f1c1d2e-0000-0000-0000-000000000021","putawayNo":"PA000001","putawaySystemId":"6f1c1d2e-0000-0000-0000-000000000022","locationCode":"WHITE","assignedUserId":"","sortingMethod":"None","alreadyExisted":false,"totalPutawayLines":2,"totalQtyToHandle":10,"message":"Warehouse Put-away PA000001 created from Posted Receipt PWR000001 with 2 lines."}'));
+        Examples.Add(ContractMgt.Example(
+            'Call again for the same receipt and assign the put-away to a user',
+            '{"postedWhseReceiptNo":"PWR000001","assignedUserId":"JOHN"}',
+            '{"status":"Success","postedWhseReceiptNo":"PWR000001","postedWhseReceiptSystemId":"6f1c1d2e-0000-0000-0000-000000000021","putawayNo":"PA000001","putawaySystemId":"6f1c1d2e-0000-0000-0000-000000000022","locationCode":"WHITE","assignedUserId":"JOHN","sortingMethod":"None","alreadyExisted":true,"totalPutawayLines":2,"totalQtyToHandle":10,"message":"Warehouse Put-away PA000001 already existed for Posted Receipt PWR000001 (auto-created at receipt posting) and was returned with 2 lines."}'));
+        exit(true);
     end;
 
     procedure GetOverview(var Overview: Text): Boolean
@@ -161,8 +171,15 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
 
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'The call is safe to repeat. If an open put-away already exists for the posted receipt it is returned with alreadyExisted true instead of creating a second one. ' +
+            'On a location that requires put-away and does not use the put-away worksheet, Business Central creates the put-away when the receipt is posted, so this call usually just returns it. ' +
+            'The put-away returned is the latest one that has lines for this posted receipt. ' +
+            'The posted receipt is found from subject or from any of the identifier keys; identifiers that point at different receipts are refused. ' +
+            'assignedUserId and sortingMethod are applied after the put-away is found or created, also when it already existed. assignedUserId is upper-cased and sortingMethod is matched without regard to case. An unknown sortingMethod is refused with its valid values in expected, and a field an administrator has closed to writes is refused with PermissionDenied; both are checked before anything is created. ' +
+            'setBreakbulkFilter and doNotFillQtyToHandle can only be false or left out; true is refused. ' +
+            'If no put-away exists and Business Central creates none, the answer is PreconditionFailed; check that the location requires put-away and that the receipt has quantity not yet put away. If the report itself fails and no put-away exists, the answer is BusinessCentralError with its text. ' +
+            'Business Central commits each put-away it creates. Post the receipt first with Warehouse.Receipt.Post, and register the put-away with Warehouse.Putaway.Register once the goods are placed.';
+        exit(true);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"

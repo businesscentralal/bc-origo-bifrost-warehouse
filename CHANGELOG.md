@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed (2026-10-21) - Pipeline: AppSource build gate after the first AppSource release
+
+- Pipeline: the AppSource build gate no longer fails after the first AppSource release (previous self-app removed from the compile symbol cache; AppSourceCop baseline kept). New `tools/prune_self_symbols.py`, called from `tools/Assert-AppSourceBuild.ps1` before the gate; regression tests in `tools/tests/test_foundation_restore.py`. Port of attachments#174.
+
 ### Fixed (2026-10-20) - Make main CI green: InvalidParameter count of Warehouse.Activity.Get
 
 - `ActivityGet_ErrorsDoNotListUnanswerableCodes` expects two `InvalidParameter` entries on `Warehouse.Activity.Get`: an `activityType` that is not valid, and the negative `skip` or `take` entry added by #74. The two have different causes and nextSteps, so both are correct; the test was stale (it was masked by the earlier `InvalidParameterFormat` assertion failing first). Test only; no product, label or XLF change.

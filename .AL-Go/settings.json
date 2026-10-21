@@ -68,5 +68,13 @@
     ".github/AL-Go-Settings.json",
     "tools/Test-BifrostPipeline.ps1",
     "tools/**"
-  ]
+  ],
+  "deliverToAppSource": {
+    "productId": "229df294-b78f-4779-963a-f427937ba15a",
+    "mainAppFolder": "app",
+    "branches": [
+      "main"
+    ],
+    "continuousDelivery": false
+  }
 }

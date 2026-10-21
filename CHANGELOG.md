@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed (2026-10-21) - AppSource delivery
+
+- `.AL-Go/settings.json`: `deliverToAppSource` names the Partner Center offer for Bifrost Warehouse (productId 229df294-b78f-4779-963a-f427937ba15a, main app folder `app`, branch main, no continuous delivery), so the Publish To AppSource workflow can deliver new versions to the offer.
+
 ### Fixed (2026-10-20) - Make main CI green: InvalidParameter count of Warehouse.Activity.Get
 
 - `ActivityGet_ErrorsDoNotListUnanswerableCodes` expects two `InvalidParameter` entries on `Warehouse.Activity.Get`: an `activityType` that is not valid, and the negative `skip` or `take` entry added by #74. The two have different causes and nextSteps, so both are correct; the test was stale (it was masked by the earlier `InvalidParameterFormat` assertion failing first). Test only; no product, label or XLF change.

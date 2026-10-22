@@ -5,6 +5,9 @@
 ### Changed (2026-10-21) - AppSource delivery
 
 - `.AL-Go/settings.json`: `deliverToAppSource` names the Partner Center offer for Bifrost Warehouse (productId 229df294-b78f-4779-963a-f427937ba15a, main app folder `app`, branch main, no continuous delivery), so the Publish To AppSource workflow can deliver new versions to the offer.
+### Fixed (2026-10-21) - Pipeline: AppSource build gate after the first AppSource release
+
+- Pipeline: the AppSource build gate no longer fails after the first AppSource release (previous self-app removed from the compile symbol cache; AppSourceCop baseline kept). New `tools/prune_self_symbols.py`, called from `tools/Assert-AppSourceBuild.ps1` before the gate; regression tests in `tools/tests/test_foundation_restore.py`. Port of attachments#174.
 
 ### Fixed (2026-10-20) - Make main CI green: InvalidParameter count of Warehouse.Activity.Get
 

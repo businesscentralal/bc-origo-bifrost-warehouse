@@ -196,6 +196,16 @@ if ($Stage -eq 'BeforeCompile') {
     $restoreExitCode = $LASTEXITCODE
     $restoreOutput | ForEach-Object { Write-Host $_ }
     if ($restoreExitCode -ne 0) { throw 'Foundation candidate restore failed.' }
+    # Separate the analyzer baseline only after approved Foundation restoration;
+    # the genuine input gate still sees the complete cleaned compile cache.
+    $pruneArgs = @((Join-Path $Root 'tools/prune_self_symbols.py'), '--root', $Root,
+        '--project', [string]$CompilationParams.appProjectFolder,
+        '--symbols', [string]$CompilationParams.appSymbolsFolder,
+        '--compiler-symbols', (Join-Path $CompilationParams.compilerFolder 'symbols'))
+    $pruneOutput = @(& $python.Source @pruneArgs)
+    $pruneExitCode = $LASTEXITCODE
+    $pruneOutput | ForEach-Object { Write-Host $_ }
+    if ($pruneExitCode -ne 0) { throw 'Actual precompile cache/baseline preparation failed.' }
     Invoke-Gate 'before' @{
         context = $context
         kind = $kind

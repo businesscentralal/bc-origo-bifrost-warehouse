@@ -76,8 +76,9 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
         Parts: Codeunit "Whse Contract Parts ori";
     begin
         Parts.AddPagingParameters(Parameters);
-        Parameters.Add(ContractMgt.Parameter('activityType', 'string', false, 'Warehouse activity type, for example Pick or Put-away.'));
+        Parameters.Add(ContractMgt.Parameter('activityType', 'string', false, 'Warehouse activity type, for example Pick or Put-away. The name must match a Warehouse Activity Type value.'));
         Parameters.Add(ContractMgt.Parameter('no', 'string', false, 'Warehouse activity number.'));
+        Parameters.Add(ContractMgt.Parameter('activityNo', 'string', false, 'Alias of no: the warehouse activity number.'));
         Parameters.Add(ContractMgt.Parameter('systemId', 'string', false, 'Warehouse Activity Header SystemId. recordSystemId and id are accepted too.'));
         Parameters.Add(ContractMgt.Parameter('locationCode', 'string', false, 'Filter by location code.'));
         Parameters.Add(ContractMgt.Parameter('assignedUserId', 'string', false, 'Filter by assigned user.'));
@@ -178,17 +179,42 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
         ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
         Related.Add(ContractMgt.RelatedEntry('Warehouse.BinContent.Get', 'Use it to read bin stock rather than open warehouse activities.'));
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.RegisteredActivity.Get', 'You want the activities that are already registered.'));
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.Pick.Register', 'You found an open pick and want to register it.'));
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.Putaway.Register', 'You found an open put-away and want to register it.'));
         exit(true);
     end;
 
     procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Steps: JsonArray;
     begin
-        exit(false);
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Activity.Get', 'Find the open pick, put-away or movement, with includeLines to see what is left to handle.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.ActivityLine.SetQtyToHandle', 'Optional: set the quantity to handle on the lines before registering a partial quantity.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Pick.Register', 'Register the pick found.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Putaway.Register', 'Register the put-away found.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Movement.Register', 'Register the movement found.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.RegisteredActivity.Get', 'Read the registered activity afterwards.'));
+        Workflow.Add('steps', Steps);
+        Workflow.Add('text', 'Use the step that matches the activityType of the activity found. Inventory picks, put-aways and movements are posted or registered with the Warehouse.InventoryPick.Post, Warehouse.InventoryPutAway.Post and Warehouse.InventoryMovement.Register types instead.');
+        exit(true);
     end;
 
     procedure GetExamples(var Examples: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        exit(false);
+        Examples.Add(ContractMgt.Example(
+            'Read the open picks at a location with their lines',
+            '{"activityType":"Pick","locationCode":"SILVER","includeLines":true}',
+            '{"status":"Success","noOfRecords":1,"skip":0,"take":100,"result":[{"no":"PI000001","systemId":"6f1c1d2e-0000-0000-0000-000000000011","activityType":"Pick","locationCode":"SILVER","assignedUserId":"","sortingMethod":"Document",' +
+            '"lines":[{"lineNo":10000,"itemNo":"1896-S","binCode":"S-01-0001","zoneCode":"PICK","unitOfMeasureCode":"PCS","qtyToHandle":2,"qtyHandled":0,"qtyOutstanding":2,"actionType":"Take","whseDocumentType":"Shipment","whseDocumentNo":"SH000001","whseDocumentLineNo":10000}]}]}'));
+        Examples.Add(ContractMgt.Example(
+            'Find the activities created for one warehouse document',
+            '{"whseDocumentNo":"SH000001"}',
+            '{"status":"Success","noOfRecords":1,"skip":0,"take":100,"result":[{"no":"PI000001","systemId":"6f1c1d2e-0000-0000-0000-000000000011","activityType":"Pick","locationCode":"SILVER","assignedUserId":"","sortingMethod":"Document"}]}'));
+        exit(true);
     end;
 
     procedure GetOverview(var Overview: Text): Boolean
@@ -199,8 +225,15 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
 
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'Only open activities are read: the unregistered Warehouse Activity Header rows, including inventory picks, put-aways and movements. Registered activities are read with Warehouse.RegisteredActivity.Get. ' +
+            'The caller sees only headers and lines the permission filter allows. ' +
+            'No filter at all returns every open activity, paged with skip and take. noOfRecords is the total before paging. ' +
+            'A number or SystemId (as subject, no, activityNo, systemId, recordSystemId or id) selects one activity; if another filter then excludes it, the answer is RecordNotFound that names systemId, not an empty result. Without an identifier, no match is Success with an empty result. ' +
+            'Without activityType the activity number is looked up across all activity types; send activityType when the same number may exist in more than one type. ' +
+            'whseDocumentNo keeps the activities that have at least one line for that warehouse document. ' +
+            'includeLines adds every line of each returned activity, and lines is an empty array when the activity has none. A value for includeLines other than true or false is ignored, not refused, and no lines are returned. ' +
+            'Quantities are read as they stand: set the quantity to handle with Warehouse.ActivityLine.SetQtyToHandle before registering a partial quantity.';
+        exit(true);
     end;
 
     /// <summary>Returns the outbound direction of this message type.</summary>

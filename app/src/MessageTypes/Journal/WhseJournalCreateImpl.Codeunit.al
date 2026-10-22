@@ -128,13 +128,29 @@ codeunit 10078446 "Whse Journal Create Impl ori" implements "Msg Interface ori",
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        LineChildren: JsonArray;
+        LinesParameter: JsonObject;
     begin
         Parameters.Add(ContractMgt.Parameter('journalTemplateName', 'string', true, 'Warehouse journal template of type Item or Reclassification.'));
         Parameters.Add(ContractMgt.Parameter('journalBatchName', 'string', true, 'Warehouse journal batch name.'));
         Parameters.Add(ContractMgt.Parameter('locationCode', 'string', false, 'Directed put-away and pick location of the batch. Required when subject is empty.'));
         Parameters.Add(ContractMgt.Parameter('registeringDate', 'string', false, 'Registering date written as YYYY-MM-DD. Defaults to the work date.'));
         Parameters.Add(ContractMgt.Parameter('documentNo', 'string', false, 'Warehouse document number. Defaults to the next number of the batch number series.'));
-        Parameters.Add(ContractMgt.Parameter('lines', 'array', true, 'Journal lines to insert, in order.'));
+        LinesParameter := ContractMgt.Parameter('lines', 'array', true, 'Journal lines to insert, in order.');
+        LineChildren.Add(ContractMgt.Parameter('itemNo', 'string', true, 'Item number on the line.'));
+        LineChildren.Add(ContractMgt.Parameter('variantCode', 'string', false, 'Variant code on the line.'));
+        LineChildren.Add(ContractMgt.Parameter('unitOfMeasureCode', 'string', false, 'Unit of measure on the line. Defaults to the base unit of measure.'));
+        LineChildren.Add(ContractMgt.Parameter('zoneCode', 'string', false, 'Item journal only. Zone of binCode; it must match the zone of the bin.'));
+        LineChildren.Add(ContractMgt.Parameter('binCode', 'string', false, 'Item journal only, required there. The bin that is adjusted.'));
+        LineChildren.Add(ContractMgt.Parameter('fromBin', 'string', false, 'Reclassification journal only, required there. The bin the quantity is taken from.'));
+        LineChildren.Add(ContractMgt.Parameter('toBin', 'string', false, 'Reclassification journal only, required there. The bin the quantity is placed in.'));
+        LineChildren.Add(ContractMgt.Parameter('quantity', 'number', true, 'Quantity in the line unit of measure. Item journal: positive adds to the bin, negative removes from it. Reclassification journal: positive only. Never zero.'));
+        LineChildren.Add(ContractMgt.Parameter('lotNo', 'string', false, 'Lot number for an item with warehouse lot tracking.'));
+        LineChildren.Add(ContractMgt.Parameter('serialNo', 'string', false, 'Serial number for an item with warehouse serial tracking. The line quantity must then be one base unit.'));
+        LineChildren.Add(ContractMgt.Parameter('packageNo', 'string', false, 'Package number for an item with warehouse package tracking.'));
+        LineChildren.Add(ContractMgt.Parameter('expirationDate', 'string', false, 'Expiration date of a new lot or serial number, written as YYYY-MM-DD.'));
+        LinesParameter.Add('children', LineChildren);
+        Parameters.Add(LinesParameter);
         Parameters.Add(ContractMgt.Parameter('itemNo', 'string', true, 'Item number on a line.'));
         Parameters.Add(ContractMgt.Parameter('variantCode', 'string', false, 'Variant code on a line.'));
         Parameters.Add(ContractMgt.Parameter('unitOfMeasureCode', 'string', false, 'Unit of measure on a line. Defaults to the base unit of measure.'));
@@ -738,11 +754,21 @@ codeunit 10078446 "Whse Journal Create Impl ori" implements "Msg Interface ori",
     begin
         LineFields.Add(ContractMgt.ResponseField('lineNo', 'integer', 'Journal line number.'));
         LineFields.Add(ContractMgt.ResponseField('itemNo', 'string', 'Item number.'));
+        LineFields.Add(ContractMgt.ResponseField('variantCode', 'string', 'Variant code.'));
+        LineFields.Add(ContractMgt.ResponseField('unitOfMeasureCode', 'string', 'Unit of measure.'));
         LineFields.Add(ContractMgt.ResponseField('entryType', 'string', 'Positive Adjmt., Negative Adjmt. or Movement.'));
+        LineFields.Add(ContractMgt.ResponseField('zoneCode', 'string', 'Zone of an item journal line.'));
         LineFields.Add(ContractMgt.ResponseField('binCode', 'string', 'Bin of an item journal line.'));
         LineFields.Add(ContractMgt.ResponseField('fromBin', 'string', 'Bin the quantity is taken from.'));
         LineFields.Add(ContractMgt.ResponseField('toBin', 'string', 'Bin the quantity is placed in.'));
         LineFields.Add(ContractMgt.ResponseField('quantity', 'number', 'Quantity of the line.'));
+        LineFields.Add(ContractMgt.ResponseField('qtyCalculated', 'number', 'Calculated quantity, used by physical inventory lines.'));
+        LineFields.Add(ContractMgt.ResponseField('qtyPhysInventory', 'number', 'Counted quantity, used by physical inventory lines.'));
+        LineFields.Add(ContractMgt.ResponseField('lotNo', 'string', 'Lot number of a tracked line.'));
+        LineFields.Add(ContractMgt.ResponseField('serialNo', 'string', 'Serial number of a tracked line.'));
+        LineFields.Add(ContractMgt.ResponseField('packageNo', 'string', 'Package number of a tracked line.'));
+        LineFields.Add(ContractMgt.ResponseField('whseDocumentNo', 'string', 'Warehouse document number.'));
+        LineFields.Add(ContractMgt.ResponseField('registeringDate', 'string', 'Registering date, YYYY-MM-DD.'));
         Lines.Add('name', 'lines');
         Lines.Add('type', 'array');
         Lines.Add('description', Description);

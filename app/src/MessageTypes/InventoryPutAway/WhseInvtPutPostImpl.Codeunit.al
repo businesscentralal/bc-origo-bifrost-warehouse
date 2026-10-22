@@ -109,6 +109,8 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        LinesParameter: JsonObject;
+        LineChildren: JsonArray;
     begin
         Parameters.Add(ContractMgt.Parameter('putawayNo', 'string', false, 'Inventory put-away number. Required when systemId and subject are empty.'));
         Parameters.Add(ContractMgt.Parameter('no', 'string', false, 'Inventory put-away number. Same as putawayNo.'));
@@ -116,10 +118,12 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
         Parameters.Add(ContractMgt.Parameter('id', 'string', false, 'Inventory put-away SystemId. Same as systemId.'));
         Parameters.Add(ContractMgt.Parameter('recordSystemId', 'string', false, 'Inventory put-away SystemId. Same as systemId.'));
         Parameters.Add(ContractMgt.Parameter('invoice', 'boolean', false, 'Receive and invoice a purchase order. Default false. Refused for every other source. Requires BIFROST WhseInv ori when true.'));
-        Parameters.Add(ContractMgt.Parameter('lines', 'array', false, 'Optional per-line quantity and bin. Omitted lines keep the quantity and bin already on the put-away.'));
-        Parameters.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Inventory put-away line number.'));
-        Parameters.Add(ContractMgt.Parameter('qtyToHandle', 'number', true, 'Quantity to handle on the line, in the line unit of measure.'));
-        Parameters.Add(ContractMgt.Parameter('binCode', 'string', false, 'Bin to put the line into. Omitted lines keep the bin already on the put-away.'));
+        LinesParameter := ContractMgt.Parameter('lines', 'array', false, 'Optional per-line quantity and bin. Omitted lines keep the quantity and bin already on the put-away.');
+        LineChildren.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Inventory put-away line number.'));
+        LineChildren.Add(ContractMgt.Parameter('qtyToHandle', 'number', true, 'Quantity to handle on the line, in the line unit of measure, from zero up to the outstanding quantity.'));
+        LineChildren.Add(ContractMgt.Parameter('binCode', 'string', false, 'Bin to put the line into. Omitted or empty keeps the bin already on the put-away.'));
+        LinesParameter.Add('children', LineChildren);
+        Parameters.Add(LinesParameter);
         exit(true);
     end;
 
@@ -139,7 +143,7 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
         Fields.Add(ContractMgt.ResponseField('postedPutawayNo', 'string', 'Posted inventory put-away number.'));
         Fields.Add(ContractMgt.ResponseField('sourceDocument', 'string', 'Source document type.'));
         Fields.Add(ContractMgt.ResponseField('sourceNo', 'string', 'Source document number.'));
-        Fields.Add(ContractMgt.ResponseField('postedDocumentNo', 'string', 'Posted receipt, return receipt or transfer receipt number.'));
+        Fields.Add(ContractMgt.ResponseField('postedDocumentNo', 'string', 'Posted receipt, return receipt or transfer receipt number. Empty when no such document is found for the source document.'));
         Fields.Add(ContractMgt.ResponseField('postedInvoiceNo', 'string', 'Posted purchase invoice number when invoice was true. Otherwise empty.'));
         Fields.Add(ContractMgt.ResponseField('invoice', 'boolean', 'True when the purchase order was invoiced.'));
         Fields.Add(ContractMgt.ResponseField('postedQuantity', 'number', 'Posted quantity across the put-away lines.'));
@@ -168,9 +172,9 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidLine, 'binCode is not a bin at the location, or the bin is blocked for inbound movement.', 'Read Warehouse.Bin.Get for valid bins.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidLine, 'A tracked item line has no lot or serial number.', 'Send the lot or serial number on that line before posting.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'The activity is not an inventory put-away, or there is nothing to post.', 'Send an inventory put-away with a quantity to handle. Use Warehouse.Putaway.Register for a warehouse put-away.');
-        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MissingParameter, 'putawayNo or systemId is missing.', 'Send putawayNo or systemId.');
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MissingParameter, 'putawayNo or systemId is missing, or a line has no lineNo or no qtyToHandle.', 'Send putawayNo or systemId, and lineNo and qtyToHandle on every line.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameterFormat, 'A value has the wrong JSON type or is too long.', 'Send text for codes, numbers for quantities and true or false for invoice.');
-        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameter, 'invoice is true for a source that is not a purchase order, a bin is not valid, or a quantity is negative.', 'Send invoice false, or post a purchase order. Send qtyToHandle as zero or greater.');
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameter, 'invoice is true for a source that is not a purchase order, or a quantity is negative.', 'Send invoice false, or post a purchase order. Send qtyToHandle as zero or greater.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::RecordNotFound, 'The inventory put-away or line was not found.', 'Check the put-away number with Warehouse.InventoryPutAway.Create.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::ConflictingIdentifiers, 'subject, putawayNo and systemId name different put-aways.', 'Send one put-away: subject, putawayNo or systemId.');
@@ -213,10 +217,18 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
 
     /// <summary>Returns the workflow chapter.</summary>
     /// <param name="Workflow">Receives the workflow.</param>
-    /// <returns>False. Inventory put-away post has no separate workflow chapter.</returns>
+    /// <returns>True. The workflow runs from creating the put-away to posting it.</returns>
     procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Steps: JsonArray;
     begin
-        exit(false);
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.InventoryPutAway.Create', 'Create the inventory put-away from a released inbound source document at a location that requires put-away.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Bin.Get', 'Read the bins before sending a binCode. Optional.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.ActivityLine.AssignTracking', 'Assign lot or serial numbers on tracked item lines. Needed before posting a tracked item.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.InventoryPutAway.Post', 'Post the inventory put-away; the source document is received and the goods are placed in the bins.'));
+        Workflow.Add('steps', Steps);
+        exit(true);
     end;
 
     /// <summary>Returns an example request and response.</summary>
@@ -246,11 +258,17 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
 
     /// <summary>Returns the notes chapter.</summary>
     /// <param name="Notes">Receives the notes.</param>
-    /// <returns>False. There are no extra notes.</returns>
+    /// <returns>True. The notes hold edge cases for consultants.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'Posting commits: Business Central posts the inventory put-away and the receipt of the source document and cannot undo them from this call. The caller needs BIFROST Whse - Full ori and BIFROST WhsePost ori, and BIFROST WhseInv ori when invoice is true. ' +
+            'Without lines, the quantity to handle already on the put-away is posted. Warehouse.InventoryPutAway.Create fills it with the outstanding quantity. ' +
+            'With lines, each lineNo sets the quantity to handle on that line, and binCode can change the bin; lines that are not sent keep their quantity and bin. A line sent with zero is not posted. A quantity above the outstanding quantity is refused. A bin must exist at the location and must not be blocked for inbound movement or for all movement. If a lineNo is sent twice, the last quantity applies. ' +
+            'A line with quantity to handle for an item with item tracking needs a lot or serial number when the tracking code requires one for that kind of source document. It is refused before posting, also for lines you did not send; assign the numbers first with Warehouse.ActivityLine.AssignTracking. ' +
+            'The call is refused when the total quantity to handle is zero. If any line fails, every problem is listed and nothing is written. ' +
+            'invoice true receives and invoices a purchase order in one step; every other source document refuses it. Sales return orders and inbound transfers are received. ' +
+            'The number must belong to an inventory put-away; a SystemId of another kind of activity is refused. Use Warehouse.Putaway.Register for a warehouse put-away.';
+        exit(true);
     end;
 
     /// <summary>Returns the inbound direction of this message type.</summary>

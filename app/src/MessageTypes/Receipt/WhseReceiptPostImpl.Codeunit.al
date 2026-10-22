@@ -105,8 +105,14 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        LineChildren: JsonArray;
+        LinesParameter: JsonObject;
     begin
-        Parameters.Add(ContractMgt.Parameter('lines', 'array', false, 'Optional per-line quantities to receive. Lines that are not listed keep their current Qty. to Receive.'));
+        LineChildren.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Warehouse receipt line number. Each line may be listed once.'));
+        LineChildren.Add(ContractMgt.Parameter('qtyToReceive', 'number', true, 'Quantity to receive on that line, from zero up to the outstanding quantity.'));
+        LinesParameter := ContractMgt.Parameter('lines', 'array', false, 'Optional per-line quantities to receive. Lines that are not listed keep their current Qty. to Receive.');
+        LinesParameter.Add('children', LineChildren);
+        Parameters.Add(LinesParameter);
         Parameters.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Warehouse receipt line number (inside lines).'));
         Parameters.Add(ContractMgt.Parameter('qtyToReceive', 'number', true, 'Quantity to receive on that line, from zero up to the outstanding quantity (inside lines).'));
         exit(true);
@@ -188,8 +194,14 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
 
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'Posting commits; under Omit Commit the caller''s transaction commits instead. Only the receive is posted: the source documents (purchase order, sales return order, transfer order) are received but not invoiced, so invoice them separately. ' +
+            'The caller needs the BIFROST WhsePost ori permission set. ' +
+            'lines sets Qty. to Receive per listed line; lines that are not listed keep the quantity they have now, and that quantity counts when Business Central checks that something is left to post. Each lineNo may be listed once and the quantity must be from zero up to the outstanding quantity. ' +
+            'The call is refused, with nothing posted, when the receipt has no lines or when every line would receive zero. Unknown keys, bad line values and the nothing-to-post case are answered together as MultipleErrors. ' +
+            'The quantities are set in the same run as the posting, so a failure leaves them unchanged. ' +
+            'In the answer, quantityPosted is the quantity the post handles and quantityRemaining is the outstanding quantity less that, worked out before the post. postedWhseReceiptNo and postedWhseReceiptSystemId are left out if no Posted Whse. Receipt is found. ' +
+            'Use Warehouse.Receipt.PreviewPost first to see the entries, and Warehouse.Putaway.Create on the posted receipt when the location uses put-away.';
+        exit(true);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"

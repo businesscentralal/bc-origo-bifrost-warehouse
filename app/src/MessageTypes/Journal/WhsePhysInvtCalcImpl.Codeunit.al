@@ -267,11 +267,15 @@ codeunit 10078448 "Whse PhysInvt Calc Impl ori" implements "Msg Interface ori", 
 
     /// <summary>Returns the notes chapter.</summary>
     /// <param name="Notes">Receives the notes.</param>
-    /// <returns>False. There are no extra notes.</returns>
+    /// <returns>True when notes are declared.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'Nothing is registered: the call writes warehouse physical inventory journal lines with the calculated quantity, and the count only changes the warehouse when you send the counted quantities with Warehouse.PhysInventory.Register. ';
+        Notes := Notes + 'The lines come from bin content at the directed location, narrowed by zoneCode, binCode and itemNo. Bin content with zero quantity is skipped unless itemsNotOnInventory is true. A bin that is not in the named zone is refused. ';
+        Notes := Notes + 'The empty line Business Central leaves after registering is deleted first, and the answer lists only the lines this call wrote. Existing lines in the batch are kept, so calling the type twice adds the lines twice. ';
+        Notes := Notes + 'When there is nothing to count the call succeeds with lineCount 0 and an empty list. The template must be a physical inventory template and the location must use directed put-away and pick; basic locations are refused. ';
+        Notes := Notes + 'registeringDate defaults to the work date. documentNo is needed only when the batch has no number series. A refusal writes nothing.';
+        exit(true);
     end;
 
     /// <summary>Returns the inbound direction of this message type.</summary>

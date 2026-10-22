@@ -121,12 +121,16 @@ codeunit 10078428 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        LinesParameter: JsonObject;
+        LineChildren: JsonArray;
     begin
         Parameters.Add(ContractMgt.Parameter('movementNo', 'string', false, 'Inventory movement number. Required when subject and systemId are empty.'));
         Parameters.Add(ContractMgt.Parameter('systemId', 'string', false, 'Inventory movement SystemId.'));
-        Parameters.Add(ContractMgt.Parameter('lines', 'array', false, 'Optional per-line quantities to handle. Omitted lines keep the quantity already on the movement.'));
-        Parameters.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Inventory movement line number.'));
-        Parameters.Add(ContractMgt.Parameter('qtyToHandle', 'number', true, 'Quantity to handle on that line. Zero on every line is refused.'));
+        LinesParameter := ContractMgt.Parameter('lines', 'array', false, 'Optional per-line quantities to handle. Omitted lines keep the quantity already on the movement.');
+        LineChildren.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Inventory movement line number.'));
+        LineChildren.Add(ContractMgt.Parameter('qtyToHandle', 'number', true, 'Quantity to handle on that line, from zero up to the outstanding quantity. Zero on every line is refused.'));
+        LinesParameter.Add('children', LineChildren);
+        Parameters.Add(LinesParameter);
         exit(true);
     end;
 
@@ -158,9 +162,10 @@ codeunit 10078428 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
         Entry: JsonObject;
     begin
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::RecordNotFound, 'The movement number or SystemId was not found.', 'Check the identifier with Warehouse.InventoryMovement.Create.');
-        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'The activity is not an inventory movement.', 'Use Warehouse.Movement.Register for a directed movement.');
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::RecordNotFound, 'A lineNo is not a line of the movement.', 'Read the movement lines with Warehouse.Activity.Get and send a line number on the movement.');
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'The SystemId belongs to a warehouse activity that is not an inventory movement.', 'Use Warehouse.Movement.Register for a directed movement.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'Every line has zero quantity to handle.', 'Set Qty. to Handle on at least one movement line.');
-        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MissingParameter, 'movementNo and systemId are both missing.', 'Send the movement number or its SystemId.');
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MissingParameter, 'movementNo and systemId are both missing, or a line has no lineNo or no qtyToHandle.', 'Send the movement number or its SystemId, and lineNo and qtyToHandle on every line.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameterFormat, 'A value has the wrong JSON type.', 'Send text for the movement number, an integer line number and a number for the quantity.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::ConflictingIdentifiers, 'movementNo and systemId name different movements.', 'Send one movement.');
@@ -204,10 +209,18 @@ codeunit 10078428 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
 
     /// <summary>Returns the workflow chapter.</summary>
     /// <param name="Workflow">Receives the workflow.</param>
-    /// <returns>False. Inventory movement register has no separate workflow chapter.</returns>
+    /// <returns>True. The workflow runs from creating the movement to registering it.</returns>
     procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Steps: JsonArray;
     begin
-        exit(false);
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.InventoryMovement.Create', 'Create the inventory movement from inline lines or from a released assembly order.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Activity.Get', 'Read the open movement and its quantity to handle. Optional.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.ActivityLine.SetQtyToHandle', 'Change the quantity to handle on lines before registering. Optional; lines can also be sent in this call.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.InventoryMovement.Register', 'Register the movement. The goods move between the bins.'));
+        Workflow.Add('steps', Steps);
+        exit(true);
     end;
 
     /// <summary>Returns an example request and response.</summary>
@@ -237,11 +250,15 @@ codeunit 10078428 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
 
     /// <summary>Returns the notes chapter.</summary>
     /// <param name="Notes">Receives the notes.</param>
-    /// <returns>False. There are no extra notes.</returns>
+    /// <returns>True. The notes hold edge cases for consultants.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'Registration commits: Business Central writes the warehouse entries and the registered movement and cannot undo them from this call. The caller needs both BIFROST Whse - Full ori and BIFROST WhsePost ori. ' +
+            'Without lines, the quantity to handle already on the movement is registered. Warehouse.InventoryMovement.Create fills it with the outstanding quantity. ' +
+            'With lines, each lineNo sets the quantity to handle on that line, from zero up to the outstanding quantity. A line sent with zero is not registered and stays on the movement. If a movement has a take line and a matching place line with the same item, variant, unit of measure and outstanding quantity, the quantity is copied to the matching line too. If a lineNo is sent twice, the last quantity applies. ' +
+            'The call is refused when the movement has no quantity to handle on any line, whether it comes from lines or from the movement itself. A partial quantity registers that part and leaves the rest open: remainingLineCount tells how many lines are still on the movement, and zero means the movement was fully registered. ' +
+            'A movement number is looked up among inventory movements only. A SystemId that belongs to another kind of activity is refused; use Warehouse.Movement.Register for a directed movement.';
+        exit(true);
     end;
 
     /// <summary>Returns the inbound direction of this message type.</summary>

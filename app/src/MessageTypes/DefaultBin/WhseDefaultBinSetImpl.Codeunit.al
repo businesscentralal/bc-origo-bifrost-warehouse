@@ -226,8 +226,16 @@ codeunit 10078420 "Whse DefaultBin Set Impl ori" implements "Msg Interface ori",
     end;
 
     procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Steps: JsonArray;
     begin
-        exit(false);
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Bin.Create', 'Create the bin first when it does not exist yet.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Bin.Get', 'Read the bins at the location and choose one that is not blocked.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.DefaultBin.Set', 'Make the bin the default bin of the item.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.BinContent.Get', 'Read the bin content to confirm the default bin.'));
+        Workflow.Add('steps', Steps);
+        exit(true);
     end;
 
     procedure GetExamples(var Examples: JsonArray): Boolean
@@ -251,8 +259,15 @@ codeunit 10078420 "Whse DefaultBin Set Impl ori" implements "Msg Interface ori",
 
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'The default bin is per location, item and variant. Setting a new one first clears the Default mark on the previous bin content of that item and variant, whatever its unit of measure, and then marks the new one; the previous bin content row stays and keeps its stock. ' +
+            'If no bin content exists yet for that bin, item, variant and unit of measure, one is created as a fixed bin content, and the call is then not a pure flag change. ' +
+            'Sending the bin that is already the default answers Success with changed false and writes nothing, even when a different unit of measure was sent; previousBinCode is then the same bin. ' +
+            'Codes are read in upper case. The unit of measure defaults to the base unit of measure of the item and must exist for the item; a variant, when sent, must exist. ' +
+            'The location must have bins and the bin must exist at it. A bin that blocks movement (Inbound, Outbound or All) is refused. ' +
+            'On a directed put-away and pick location the bin must have a zone and a bin type that allows both put-away and pick; a basic location has no such check. ' +
+            'Missing values are all listed together; a record that is not found (location, item, bin, variant) is answered as soon as it is met. If Business Central rejects the change, nothing is kept. ' +
+            'The caller needs BIFROST Whse - Full ori. Create the bin first with Warehouse.Bin.Create when it does not exist.';
+        exit(true);
     end;
 
     /// <summary>Returns the inbound direction of this message type.</summary>

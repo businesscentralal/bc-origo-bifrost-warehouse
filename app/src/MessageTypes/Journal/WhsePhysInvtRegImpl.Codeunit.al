@@ -129,11 +129,17 @@ codeunit 10078449 "Whse PhysInvt Reg Impl ori" implements "Msg Interface ori", "
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        LineChildren: JsonArray;
+        LinesParameter: JsonObject;
     begin
         Parameters.Add(ContractMgt.Parameter('journalTemplateName', 'string', true, 'Warehouse journal template of type Physical Inventory.'));
         Parameters.Add(ContractMgt.Parameter('journalBatchName', 'string', true, 'Warehouse physical inventory journal batch name.'));
         Parameters.Add(ContractMgt.Parameter('locationCode', 'string', false, 'Directed location of the batch. Required when subject is empty.'));
-        Parameters.Add(ContractMgt.Parameter('lines', 'array', false, 'Optional counted quantities. A line that is not sent keeps the quantity it has (the calculated quantity unless it was changed).'));
+        LinesParameter := ContractMgt.Parameter('lines', 'array', false, 'Optional counted quantities. A line that is not sent keeps the quantity it has (the calculated quantity unless it was changed).');
+        LineChildren.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Line number answered by Warehouse.PhysInventory.Calculate.'));
+        LineChildren.Add(ContractMgt.Parameter('qtyPhysInventory', 'number', true, 'Counted quantity in the line unit of measure, zero or more.'));
+        LinesParameter.Add('children', LineChildren);
+        Parameters.Add(LinesParameter);
         Parameters.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Line number answered by Warehouse.PhysInventory.Calculate.'));
         Parameters.Add(ContractMgt.Parameter('qtyPhysInventory', 'number', true, 'Counted quantity in the line unit of measure, zero or more.'));
         exit(true);
@@ -162,11 +168,21 @@ codeunit 10078449 "Whse PhysInvt Reg Impl ori" implements "Msg Interface ori", "
         Fields.Add(ContractMgt.ResponseField('entryCount', 'integer', 'Number of warehouse entries written.'));
         LineFields.Add(ContractMgt.ResponseField('lineNo', 'integer', 'Journal line number.'));
         LineFields.Add(ContractMgt.ResponseField('itemNo', 'string', 'Item number.'));
+        LineFields.Add(ContractMgt.ResponseField('variantCode', 'string', 'Variant code.'));
+        LineFields.Add(ContractMgt.ResponseField('unitOfMeasureCode', 'string', 'Unit of measure.'));
+        LineFields.Add(ContractMgt.ResponseField('entryType', 'string', 'Positive Adjmt. or Negative Adjmt.'));
+        LineFields.Add(ContractMgt.ResponseField('zoneCode', 'string', 'Zone.'));
         LineFields.Add(ContractMgt.ResponseField('binCode', 'string', 'Bin.'));
+        LineFields.Add(ContractMgt.ResponseField('fromBin', 'string', 'From bin code.'));
+        LineFields.Add(ContractMgt.ResponseField('toBin', 'string', 'To bin code.'));
+        LineFields.Add(ContractMgt.ResponseField('quantity', 'number', 'Difference that was registered.'));
         LineFields.Add(ContractMgt.ResponseField('qtyCalculated', 'number', 'Calculated quantity.'));
         LineFields.Add(ContractMgt.ResponseField('qtyPhysInventory', 'number', 'Counted quantity.'));
-        LineFields.Add(ContractMgt.ResponseField('quantity', 'number', 'Difference that was registered.'));
-        LineFields.Add(ContractMgt.ResponseField('entryType', 'string', 'Positive Adjmt. or Negative Adjmt.'));
+        LineFields.Add(ContractMgt.ResponseField('lotNo', 'string', 'Lot number of a tracked line.'));
+        LineFields.Add(ContractMgt.ResponseField('serialNo', 'string', 'Serial number of a tracked line.'));
+        LineFields.Add(ContractMgt.ResponseField('packageNo', 'string', 'Package number of a tracked line.'));
+        LineFields.Add(ContractMgt.ResponseField('whseDocumentNo', 'string', 'Warehouse document number.'));
+        LineFields.Add(ContractMgt.ResponseField('registeringDate', 'string', 'Registering date, YYYY-MM-DD.'));
         Lines.Add('name', 'adjustedLines');
         Lines.Add('type', 'array');
         Lines.Add('description', 'Lines with a difference, as they were registered.');

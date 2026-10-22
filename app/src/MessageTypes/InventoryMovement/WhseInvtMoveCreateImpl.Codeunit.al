@@ -119,18 +119,22 @@ codeunit 10078427 "Whse InvtMove Create Impl ori" implements "Msg Interface ori"
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        LinesParameter: JsonObject;
+        LineChildren: JsonArray;
     begin
         Parameters.Add(ContractMgt.Parameter('locationCode', 'string', false, 'Location with bins and without directed put-away and pick. Required for inline lines when subject is empty.'));
         Parameters.Add(ContractMgt.Parameter('sourceDocument', 'string', false, 'Assembly Consumption. Required when lines are omitted.'));
         Parameters.Add(ContractMgt.Parameter('sourceNo', 'string', false, 'Assembly order number. Required when sourceDocument is sent and systemId and subject are empty.'));
         Parameters.Add(ContractMgt.Parameter('systemId', 'string', false, 'Assembly order SystemId. Used only with sourceDocument.'));
-        Parameters.Add(ContractMgt.Parameter('lines', 'array', false, 'Inline lines. Required when sourceDocument is omitted.'));
-        Parameters.Add(ContractMgt.Parameter('itemNo', 'string', true, 'Item number on an inline line.'));
-        Parameters.Add(ContractMgt.Parameter('variantCode', 'string', false, 'Item variant. Optional.'));
-        Parameters.Add(ContractMgt.Parameter('unitOfMeasureCode', 'string', false, 'Unit of measure. Defaults to the item base unit.'));
-        Parameters.Add(ContractMgt.Parameter('quantity', 'number', true, 'Quantity to move, in the line unit of measure.'));
-        Parameters.Add(ContractMgt.Parameter('fromBin', 'string', true, 'Bin the quantity is taken from.'));
-        Parameters.Add(ContractMgt.Parameter('toBin', 'string', true, 'Bin the quantity is placed in. Must differ from fromBin.'));
+        LinesParameter := ContractMgt.Parameter('lines', 'array', false, 'Inline lines. Required when sourceDocument is omitted.');
+        LineChildren.Add(ContractMgt.Parameter('itemNo', 'string', true, 'Item number on an inline line.'));
+        LineChildren.Add(ContractMgt.Parameter('variantCode', 'string', false, 'Item variant. Optional.'));
+        LineChildren.Add(ContractMgt.Parameter('unitOfMeasureCode', 'string', false, 'Unit of measure. Defaults to the item base unit.'));
+        LineChildren.Add(ContractMgt.Parameter('quantity', 'number', true, 'Quantity to move, in the line unit of measure. Must be greater than zero.'));
+        LineChildren.Add(ContractMgt.Parameter('fromBin', 'string', true, 'Bin the quantity is taken from.'));
+        LineChildren.Add(ContractMgt.Parameter('toBin', 'string', true, 'Bin the quantity is placed in. Must differ from fromBin.'));
+        LinesParameter.Add('children', LineChildren);
+        Parameters.Add(LinesParameter);
         exit(true);
     end;
 
@@ -177,6 +181,8 @@ codeunit 10078427 "Whse InvtMove Create Impl ori" implements "Msg Interface ori"
     begin
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'The location uses directed put-away and pick.', 'Use Warehouse.Movement.Create.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'The location does not use bins.', 'Moves between bins need Bin Mandatory on the location.');
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'The assembly order is not released.', 'Release the assembly order and send the request again.');
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'The assembly order location does not create an inventory movement for assembly consumption.', 'Set assembly consumption warehouse handling to inventory movement.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidLine, 'A line asks for more than the bin content in fromBin.', 'Read Warehouse.BinContent.Get and lower the quantity.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidLine, 'fromBin and toBin are the same bin.', 'Send a toBin that is different from fromBin.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::RecordNotFound, 'The item, bin or assembly order was not found.', 'Check the identifier and send the request again.');
@@ -225,10 +231,19 @@ codeunit 10078427 "Whse InvtMove Create Impl ori" implements "Msg Interface ori"
 
     /// <summary>Returns the workflow chapter.</summary>
     /// <param name="Workflow">Receives the workflow.</param>
-    /// <returns>False. Inventory movement create has no separate workflow chapter.</returns>
+    /// <returns>True. The workflow runs from the bin content to the registered movement.</returns>
     procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Steps: JsonArray;
     begin
-        exit(false);
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.BinContent.Get', 'Read the quantity in the from-bin before an inline movement.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.InventoryMovement.Create', 'Create the inventory movement from inline lines or from a released assembly order.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Activity.Get', 'Read the open movement and its lines. Optional.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.ActivityLine.SetQtyToHandle', 'Lower the quantity to handle on a line when only part of the movement is done. Optional.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.InventoryMovement.Register', 'Register the movement to move the goods between the bins.'));
+        Workflow.Add('steps', Steps);
+        exit(true);
     end;
 
     /// <summary>Returns an example request and response.</summary>
@@ -258,11 +273,16 @@ codeunit 10078427 "Whse InvtMove Create Impl ori" implements "Msg Interface ori"
 
     /// <summary>Returns the notes chapter.</summary>
     /// <param name="Notes">Receives the notes.</param>
-    /// <returns>False. There are no extra notes.</returns>
+    /// <returns>True. The notes hold edge cases for consultants.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'Send inline lines or sourceDocument Assembly Consumption, never both. The type works at a location with bins and without directed put-away and pick; a directed location is refused, use Warehouse.Movement.Create there. ' +
+            'Inline lines are checked together: the item, variant, unit of measure and both bins must exist at the location, quantity must be greater than zero, fromBin and toBin must differ, and the from-bin must hold at least the quantity in the item base unit. ' +
+            'If any line fails, every problem is listed and nothing is written. Business Central then creates the movement from the lines. ' +
+            'With an assembly order, the order must be released and the location must have assembly consumption warehouse handling set to inventory movement. If locationCode is sent it must be the location of the order. Business Central creates the movement and commits it, so a later failure does not roll it back. ' +
+            'The movement is created, not registered: no stock moves until Warehouse.InventoryMovement.Register. Quantity to handle is set to the outstanding quantity on every line that has none, so the movement can be registered straight away. ' +
+            'The call is not idempotent: sending it twice creates two movements.';
+        exit(true);
     end;
 
     /// <summary>Returns the inbound direction of this message type.</summary>

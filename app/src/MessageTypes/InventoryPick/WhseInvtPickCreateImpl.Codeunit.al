@@ -128,8 +128,10 @@ codeunit 10078423 "Whse InvtPick Create Impl ori" implements "Msg Interface ori"
         Fields: JsonArray;
         PickFields: JsonArray;
         LineFields: JsonArray;
+        WarningFields: JsonArray;
         Picks: JsonObject;
         Lines: JsonObject;
+        Warnings: JsonObject;
     begin
         Parts.AddStatusField(Fields);
         Fields.Add(ContractMgt.ResponseField('sourceDocument', 'string', 'Source document type.'));
@@ -155,6 +157,15 @@ codeunit 10078423 "Whse InvtPick Create Impl ori" implements "Msg Interface ori"
         Picks.Add('description', 'Inventory picks for the source document. An existing open pick is returned with a warning instead of creating another.');
         Picks.Add('children', PickFields);
         Fields.Add(Picks);
+        WarningFields.Add(ContractMgt.ResponseField('code', 'string', 'PreconditionFailed.'));
+        WarningFields.Add(ContractMgt.ResponseField('message', 'string', 'An open inventory pick already exists for this source document.'));
+        WarningFields.Add(ContractMgt.ResponseField('parameter', 'string', 'sourceNo.'));
+        WarningFields.Add(ContractMgt.ResponseField('nextStep', 'string', 'Use Warehouse.InventoryPick.Post for the existing inventory pick.'));
+        Warnings.Add('name', 'warnings');
+        Warnings.Add('type', 'array');
+        Warnings.Add('description', 'Present only when an open inventory pick already existed and was returned instead of creating another.');
+        Warnings.Add('children', WarningFields);
+        Fields.Add(Warnings);
         Parts.Response(Response, Fields);
         exit(true);
     end;
@@ -215,10 +226,18 @@ codeunit 10078423 "Whse InvtPick Create Impl ori" implements "Msg Interface ori"
 
     /// <summary>Returns the workflow chapter.</summary>
     /// <param name="Workflow">Receives the workflow.</param>
-    /// <returns>False. Inventory pick create has no separate workflow chapter.</returns>
+    /// <returns>True. The workflow runs from creating the pick to posting it.</returns>
     procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Steps: JsonArray;
     begin
-        exit(false);
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.InventoryPick.Create', 'Create the inventory pick from a released source document at a location that requires pick.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Activity.Get', 'Read the open pick and its lines. Optional.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.ActivityLine.SetQtyToHandle', 'Lower the quantity to handle on a line when only part is picked. Optional.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.InventoryPick.Post', 'Post the inventory pick; the source document is shipped, and invoiced when asked.'));
+        Workflow.Add('steps', Steps);
+        exit(true);
     end;
 
     /// <summary>Returns an example request and response.</summary>
@@ -248,11 +267,16 @@ codeunit 10078423 "Whse InvtPick Create Impl ori" implements "Msg Interface ori"
 
     /// <summary>Returns the notes chapter.</summary>
     /// <param name="Notes">Receives the notes.</param>
-    /// <returns>False. There are no extra notes.</returns>
+    /// <returns>True. The notes hold edge cases for consultants.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'The source document must be released, and every item line must sit at a location that requires pick. A location that uses warehouse shipments or directed put-away and pick is refused: use Warehouse.Shipment.Create and Warehouse.Pick.Create there. A document with no item line at such a location is refused as not released or not requiring pick. ' +
+            'sourceDocument takes Sales Order, Purchase Return Order, Outbound Transfer, Assembly Consumption or Prod. Consumption. A production order is found by its number, released orders first, and must be released. ' +
+            'If an open inventory pick already exists for the document, nothing is created: that pick is returned with a warning, also when the document has lines that pick does not cover. ' +
+            'Business Central creates the pick only for stock that is available. When no stock can be picked, no pick is created and the call is refused with the error No inventory pick was created. A created pick is committed, so a later failure does not roll it back. ' +
+            'Quantity to handle is set to the outstanding quantity on every line, so the pick can be posted straight away with Warehouse.InventoryPick.Post. ' +
+            'Nothing is shipped or posted by this call.';
+        exit(true);
     end;
 
     /// <summary>Returns the inbound direction of this message type.</summary>

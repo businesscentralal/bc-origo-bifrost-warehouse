@@ -236,10 +236,18 @@ codeunit 10078429 "Whse Bin Repl Calc Impl ori" implements "Msg Interface ori", 
 
     /// <summary>Returns the workflow chapter.</summary>
     /// <param name="Workflow">Receives the workflow.</param>
-    /// <returns>False. Bin replenishment has no separate workflow chapter.</returns>
+    /// <returns>True. The workflow runs from bin content to the registered movement.</returns>
     procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Steps: JsonArray;
     begin
-        exit(false);
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.BinContent.Get', 'Optional: read the fixed bin content and its quantities before calculating.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.BinReplenishment.Calculate', 'Write the replenishment lines to the movement worksheet.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Movement.Create', 'Create the warehouse movement from the worksheet by naming worksheetTemplateName and worksheetName.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Movement.Register', 'Register the movement to move the stock into the pick bins.'));
+        Workflow.Add('steps', Steps);
+        exit(true);
     end;
 
     /// <summary>Returns an example request and response.</summary>
@@ -269,11 +277,16 @@ codeunit 10078429 "Whse Bin Repl Calc Impl ori" implements "Msg Interface ori", 
 
     /// <summary>Returns the notes chapter.</summary>
     /// <param name="Notes">Receives the notes.</param>
-    /// <returns>False. There are no extra notes.</returns>
+    /// <returns>True. The notes list edge cases and the dependency on the worksheet.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'Only a location with directed put-away and pick is accepted; any other location is refused with PreconditionFailed. The movement worksheet template must be of type Movement, and the worksheet name must already exist at that location: this type does not create worksheet names. ' +
+            'Only bin content marked fixed is considered, and zoneCode, binCode and itemNo narrow that set. A bin that is not in the named zone is refused as ConflictingIdentifiers. Business Central decides what is below its minimum and where the stock comes from. ' +
+            'New lines are added after the lines already on the worksheet, which are not changed. The answer lists only the lines this call added, so lineCount 0 with an empty lines array is Success and means nothing needed replenishing. ' +
+            'allowBreakbulk lets the calculation take stock from another unit of measure when the unit needed is not available. doNotFillQtyToHandle leaves Qty. to Handle at zero, and qtyToHandle in the answer is then 0; a movement made from the worksheet then needs the quantity to handle set first. ' +
+            'autoCreateMovement can only be false or omitted: a true value is refused, and no movement is created here; use Warehouse.Movement.Create with the worksheet afterwards. ' +
+            'Missing values and values of the wrong type are listed together; a record that is not found is answered on its own. If Business Central rejects the calculation no lines are kept. Calling the type again calculates again against the worksheet as it then is.';
+        exit(true);
     end;
 
     /// <summary>Returns the inbound direction of this message type.</summary>

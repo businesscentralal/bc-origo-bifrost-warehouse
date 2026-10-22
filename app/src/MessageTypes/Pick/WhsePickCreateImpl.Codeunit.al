@@ -145,8 +145,18 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
     end;
 
     procedure GetExamples(var Examples: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        exit(false);
+        Examples.Add(ContractMgt.Example(
+            'Create the pick for warehouse shipment SH000001',
+            '{"whseShipmentNo":"SH000001"}',
+            '{"status":"Success","whseShipmentNo":"SH000001","pickNo":"PI000001","pickSystemId":"6f1c1d2e-0000-0000-0000-000000000011","locationCode":"WHITE","assignedUserId":"","sortingMethod":"None","totalPickLines":2,"totalQtyToHandle":5,"message":"Warehouse Pick PI000001 created from Shipment SH000001 with 2 lines."}'));
+        Examples.Add(ContractMgt.Example(
+            'Create the pick and assign it to a user',
+            '{"whseShipmentNo":"SH000001","assignedUserId":"JOHN","sortingMethod":"Item"}',
+            '{"status":"Success","whseShipmentNo":"SH000001","pickNo":"PI000001","pickSystemId":"6f1c1d2e-0000-0000-0000-000000000011","locationCode":"WHITE","assignedUserId":"JOHN","sortingMethod":"Item","totalPickLines":2,"totalQtyToHandle":5,"message":"Warehouse Pick PI000001 created from Shipment SH000001 with 2 lines."}'));
+        exit(true);
     end;
 
     procedure GetOverview(var Overview: Text): Boolean
@@ -157,8 +167,14 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
 
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'The call does the same as the Create Pick action on the warehouse shipment. A shipment without lines is refused with BusinessCentralError. ' +
+            'The shipment is found from subject or from any of the identifier keys; identifiers that point at different shipments are refused. ' +
+            'The pick returned is the latest pick that has lines for this shipment. If Business Central creates nothing and the shipment has no pick at all, the answer is PreconditionFailed; check that the shipment is released, that its location requires pick and that there is quantity left to pick. ' +
+            'assignedUserId and sortingMethod are applied to the pick after it is created. assignedUserId is upper-cased and sortingMethod is matched without regard to case. An unknown sortingMethod is refused with its valid values in expected, and a field an administrator has closed to writes is refused with PermissionDenied; both are checked before the pick is created. ' +
+            'setBreakbulkFilter and doNotFillQtyToHandle can only be false or left out; true is refused. ' +
+            'Outside Omit Commit the pick is created and committed in its own transaction, so a later problem does not remove it. ' +
+            'totalQtyToHandle is the quantity to handle that Business Central filled on the pick lines. Register the pick with Warehouse.Pick.Register once the goods are picked.';
+        exit(true);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"

@@ -262,11 +262,17 @@ codeunit 10078431 "Whse Rcpt GetSrcDocs Impl ori" implements "Msg Interface ori"
 
     /// <summary>Returns the notes chapter.</summary>
     /// <param name="Notes">Receives the notes.</param>
-    /// <returns>False. There are no extra notes.</returns>
+    /// <returns>True. The notes describe targets, filters, skipped lines and the all-or-nothing run.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'Send receiptNo (or systemId, or the subject) to add lines to an existing receipt, or only locationCode to create a new receipt at that location; when a receipt is named, locationCode must be its location. A new location must have Require Receive set. ' +
+            'Only released inbound source documents (purchase orders, sales return orders and inbound transfers) that are not completely handled and sit at the receipt location are considered. sourceDocument, sourceNos, vendorNo and the expected receipt dates narrow them. sourceNos is an array of text values, so send document numbers as strings. ' +
+            'Every sourceNos entry must have a released request at the receipt location. A number released at another location is refused as ConflictingIdentifiers and an unreleased one as PreconditionFailed; the refusal names the entry. ' +
+            'If a new receipt would get no lines it is removed again, and the answer has an empty receiptNo, created false and linesAdded 0. ' +
+            'Source lines that already sit on another warehouse receipt are not added; they are listed under skipped with the receipt that holds them. When lines are added to an existing receipt, only the lines added by this call are counted in linesAdded and sourceDocuments. ' +
+            'Bad parameters are collected and answered together as MultipleErrors. The run is all-or-nothing: a failure leaves nothing written, and nothing is posted. ' +
+            'The caller needs the BIFROST Whse - Full ori permission set. Use Warehouse.Request.Get to see what is waiting, and Warehouse.Receipt.Post to receive.';
+        exit(true);
     end;
 
     /// <summary>Returns the inbound direction of this message type.</summary>

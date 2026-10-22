@@ -125,12 +125,16 @@ codeunit 10078422 "Whse Movement Reg Impl ori" implements "Msg Interface ori", "
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        LineChildren: JsonArray;
+        LinesParameter: JsonObject;
     begin
         Parameters.Add(ContractMgt.Parameter('movementNo', 'string', false, 'Warehouse movement number. Required when subject and systemId are empty.'));
         Parameters.Add(ContractMgt.Parameter('systemId', 'string', false, 'Warehouse movement SystemId.'));
-        Parameters.Add(ContractMgt.Parameter('lines', 'array', false, 'Optional per-line quantities to handle. Omitted lines keep the quantity already on the movement.'));
-        Parameters.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Warehouse activity line number.'));
-        Parameters.Add(ContractMgt.Parameter('qtyToHandle', 'number', true, 'Quantity to handle on that line. Zero on every line is refused.'));
+        LinesParameter := ContractMgt.Parameter('lines', 'array', false, 'Optional per-line quantities to handle. Omitted lines keep the quantity already on the movement.');
+        LineChildren.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Warehouse activity line number.'));
+        LineChildren.Add(ContractMgt.Parameter('qtyToHandle', 'number', true, 'Quantity to handle on that line, from zero up to the outstanding quantity. Zero on every line is refused.'));
+        LinesParameter.Add('children', LineChildren);
+        Parameters.Add(LinesParameter);
         exit(true);
     end;
 
@@ -207,10 +211,18 @@ codeunit 10078422 "Whse Movement Reg Impl ori" implements "Msg Interface ori", "
 
     /// <summary>Returns the workflow chapter.</summary>
     /// <param name="Workflow">Receives the workflow.</param>
-    /// <returns>False. Movement register has no separate workflow chapter.</returns>
+    /// <returns>True. The workflow runs from creation to the registered movement.</returns>
     procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Steps: JsonArray;
     begin
-        exit(false);
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Movement.Create', 'Create the movement from inline lines or from a movement worksheet.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Activity.Get', 'Read the movement lines, with activityType Movement, to get the line numbers and the quantity to handle.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Movement.Register', 'Register the movement, all of it or the quantities sent in lines.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.RegisteredActivity.Get', 'Read the registered movement, with activityType Movement, to confirm what was moved.'));
+        Workflow.Add('steps', Steps);
+        exit(true);
     end;
 
     /// <summary>Returns an example request and response.</summary>
@@ -240,11 +252,17 @@ codeunit 10078422 "Whse Movement Reg Impl ori" implements "Msg Interface ori", "
 
     /// <summary>Returns the notes chapter.</summary>
     /// <param name="Notes">Receives the notes.</param>
-    /// <returns>False. There are no extra notes.</returns>
+    /// <returns>True. The notes hold the edge cases of movement registration.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'Registration commits. The caller needs both BIFROST Whse - Full ori and BIFROST WhsePost ori; without the posting set the call is refused before the movement is read. ' +
+            'Send no lines to register the quantity to handle already on the movement. Send lines to change the quantity to handle first; a quantity from zero up to the outstanding quantity of that line is accepted, anything else is refused. ' +
+            'A movement has a take line and a place line for each piece of work. When the line sent has exactly one other line with the same item, variant, unit of measure and outstanding quantity, that line gets the same quantity to handle. If several lines match or none does, send every line you want to change, take and place alike. ' +
+            'The registered quantity is the sum of the quantity to handle on the take lines. If it is zero, or the movement has no lines, the call is refused with PreconditionFailed and nothing is registered. ' +
+            'A partial quantity registers that part and leaves the rest on the movement; remainingLineCount counts every take and place line still on the movement and is 0 when the movement is fully registered. ' +
+            'All lines are checked before anything is changed, and every problem is returned together in one MultipleErrors answer. A number that belongs to another kind of warehouse activity is answered as not found. ' +
+            'The registration cannot be undone. Create the movement first with Warehouse.Movement.Create.';
+        exit(true);
     end;
 
     /// <summary>Returns the inbound direction of this message type.</summary>

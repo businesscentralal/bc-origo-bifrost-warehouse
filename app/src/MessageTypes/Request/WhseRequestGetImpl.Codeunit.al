@@ -109,12 +109,30 @@ codeunit 10078435 "Whse Request Get Impl ori" implements "Msg Interface ori", "M
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Parts: Codeunit "Whse Contract Parts ori";
         Fields: JsonArray;
+        ResultFields: JsonArray;
+        Result: JsonObject;
     begin
         Parts.AddStatusField(Fields);
         Fields.Add(ContractMgt.ResponseField('noOfRecords', 'integer', 'Number of matching warehouse requests before paging.'));
         Fields.Add(ContractMgt.ResponseField('skip', 'integer', 'Records skipped.'));
         Fields.Add(ContractMgt.ResponseField('take', 'integer', 'Page size.'));
-        Fields.Add(ContractMgt.ResponseField('result', 'array', 'Warehouse requests: type, locationCode, sourceDocument, sourceNo, documentStatus, destinationType, destinationNo, expectedReceiptDate, shipmentDate, shippingAgentCode, shipmentMethodCode, externalDocumentNo.'));
+        ResultFields.Add(ContractMgt.ResponseField('type', 'string', 'Inbound or Outbound.'));
+        ResultFields.Add(ContractMgt.ResponseField('locationCode', 'string', 'Location code.'));
+        ResultFields.Add(ContractMgt.ResponseField('sourceDocument', 'string', 'Kind of source document, for example Purchase Order.'));
+        ResultFields.Add(ContractMgt.ResponseField('sourceNo', 'string', 'Source document number.'));
+        ResultFields.Add(ContractMgt.ResponseField('documentStatus', 'string', 'Open or Released.'));
+        ResultFields.Add(ContractMgt.ResponseField('destinationType', 'string', 'Destination type, for example Customer or Vendor; blank when none.'));
+        ResultFields.Add(ContractMgt.ResponseField('destinationNo', 'string', 'Destination number.'));
+        ResultFields.Add(ContractMgt.ResponseField('expectedReceiptDate', 'string', 'Expected receipt date as YYYY-MM-DD, or blank.'));
+        ResultFields.Add(ContractMgt.ResponseField('shipmentDate', 'string', 'Shipment date as YYYY-MM-DD, or blank.'));
+        ResultFields.Add(ContractMgt.ResponseField('shippingAgentCode', 'string', 'Shipping agent code.'));
+        ResultFields.Add(ContractMgt.ResponseField('shipmentMethodCode', 'string', 'Shipment method code.'));
+        ResultFields.Add(ContractMgt.ResponseField('externalDocumentNo', 'string', 'External document number.'));
+        Result.Add('name', 'result');
+        Result.Add('type', 'array');
+        Result.Add('description', 'The paged warehouse requests.');
+        Result.Add('children', ResultFields);
+        Fields.Add(Result);
         Parts.Response(Response, Fields);
         exit(true);
     end;
@@ -177,10 +195,20 @@ codeunit 10078435 "Whse Request Get Impl ori" implements "Msg Interface ori", "M
 
     /// <summary>Returns the workflow chapter.</summary>
     /// <param name="Workflow">Receives the workflow.</param>
-    /// <returns>False. This read has no workflow chapter.</returns>
+    /// <returns>True. The read is the first step towards a warehouse receipt or shipment.</returns>
     procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Steps: JsonArray;
     begin
-        exit(false);
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Request.Get', 'Find the released source documents that wait for a warehouse receipt or shipment.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Receipt.Create', 'For an inbound request, create the Warehouse Receipt from the source document.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Shipment.Create', 'For an outbound sales order or transfer request, create the Warehouse Shipment from the source document.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Receipt.GetSourceDocuments', 'Alternatively add an inbound request to a receipt that already exists.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Shipment.GetSourceDocuments', 'Alternatively add an outbound request to a shipment that already exists.'));
+        Workflow.Add('steps', Steps);
+        Workflow.Add('text', 'Follow the inbound or the outbound steps according to the type of the request. The sourceDocument of a request names the kind of source document that the next step needs in its own spelling.');
+        exit(true);
     end;
 
     /// <summary>Returns an example request and response.</summary>
@@ -210,11 +238,18 @@ codeunit 10078435 "Whse Request Get Impl ori" implements "Msg Interface ori", "M
 
     /// <summary>Returns the notes chapter.</summary>
     /// <param name="Notes">Receives the notes.</param>
-    /// <returns>False. There are no extra notes.</returns>
+    /// <returns>True. The notes list edge cases of the filters.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'One location is read per call, and it must exist. Only requests that are not completely handled are returned, so a source document disappears from the list once everything on it has been received or shipped; use Warehouse.PostedDocument.Get for what is done. ' +
+            'Without status both Open and Released requests are returned; add status Released to see only what can be taken into a receipt or shipment. ' +
+            'type, sourceDocument and status are matched by name, ignoring case, spaces, hyphens and dots, so Purchase Order, purchaseorder and Purchase-Order are the same. sourceNo is an exact match and is read in upper case. ' +
+            'sourceDocument is one of Sales Order, Sales Return Order, Purchase Order, Purchase Return Order, Inbound Transfer, Outbound Transfer or Job Usage. A value outside the list is refused, not ignored. ' +
+            'Dates are inclusive. A from date without a to date has no upper end. A request with no date in the field filtered is left out when a from date is sent, and kept when only a to date is sent. expectedReceiptDate is usually blank on outbound requests and shipmentDate on inbound ones. ' +
+            'The rows are read in the order type, status, expected receipt date, shipment date, source document and source number. skip and take page them, and noOfRecords is the total before paging. ' +
+            'Filters that match nothing are Success with an empty result. All invalid values, including a bad skip or take, are answered together. ' +
+            'The spelling of the source document differs in the next step: Warehouse.Receipt.Create takes sourceType PurchaseOrder, SalesReturnOrder or TransferOrder, and Warehouse.Shipment.Create takes SalesOrder or TransferOrder. A Purchase Return Order request is added to a shipment with Warehouse.Shipment.GetSourceDocuments.';
+        exit(true);
     end;
 
     /// <summary>Returns the outbound direction of this message type.</summary>

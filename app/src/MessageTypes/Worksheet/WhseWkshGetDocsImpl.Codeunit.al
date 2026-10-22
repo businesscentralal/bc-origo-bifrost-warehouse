@@ -257,11 +257,15 @@ codeunit 10078460 "Whse Wksh GetDocs Impl ori" implements "Msg Interface ori", "
 
     /// <summary>Returns the notes chapter.</summary>
     /// <param name="Notes">Receives the notes.</param>
-    /// <returns>False. There are no extra notes.</returns>
+    /// <returns>True when notes are declared.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'The call only fills the worksheet; it creates no pick or put-away. Send the lines to Warehouse.Worksheet.CreateActivities afterwards, after setting the quantity to handle you want. ';
+        Notes := Notes + 'worksheetType decides the source: pick reads released warehouse shipments, internal picks, and assembly, production or project demand; putAway reads posted receipts and internal put-aways. documentType must be one of the types of that worksheet type, and documentNo then limits the run to one document (for put-away, a posted receipt number). ';
+        Notes := Notes + 'The location must require both pick and shipment (pick) or both put-away and receive (putAway); otherwise the call is refused, and the inventory pick and put-away types are the way to work there. The worksheet template must be of the matching type and the worksheet name must already exist at the location. ';
+        Notes := Notes + 'The answer lists only the worksheet lines this call added, so lines that were already in the worksheet are not repeated. When no released document is open the call succeeds with lineCount 0. ';
+        Notes := Notes + 'If Business Central rejects one document, for example a blocked customer, the whole call is refused and no line is written.';
+        exit(true);
     end;
 
     /// <summary>Returns the inbound direction of this message type.</summary>
@@ -414,9 +418,15 @@ codeunit 10078460 "Whse Wksh GetDocs Impl ori" implements "Msg Interface ori", "
         LineFields.Add(ContractMgt.ResponseField('lineNo', 'integer', 'Worksheet line number.'));
         LineFields.Add(ContractMgt.ResponseField('whseDocumentType', 'string', 'Warehouse document type of the line.'));
         LineFields.Add(ContractMgt.ResponseField('whseDocumentNo', 'string', 'Warehouse document number.'));
+        LineFields.Add(ContractMgt.ResponseField('whseDocumentLineNo', 'integer', 'Line number on the warehouse document.'));
         LineFields.Add(ContractMgt.ResponseField('itemNo', 'string', 'Item number.'));
+        LineFields.Add(ContractMgt.ResponseField('variantCode', 'string', 'Variant code.'));
+        LineFields.Add(ContractMgt.ResponseField('unitOfMeasureCode', 'string', 'Unit of measure.'));
+        LineFields.Add(ContractMgt.ResponseField('quantity', 'number', 'Quantity of the line.'));
         LineFields.Add(ContractMgt.ResponseField('qtyOutstanding', 'number', 'Quantity still to handle.'));
         LineFields.Add(ContractMgt.ResponseField('qtyToHandle', 'number', 'Quantity to handle when the activity is created.'));
+        LineFields.Add(ContractMgt.ResponseField('fromBin', 'string', 'From bin code.'));
+        LineFields.Add(ContractMgt.ResponseField('toBin', 'string', 'To bin code.'));
         Lines.Add('name', Name);
         Lines.Add('type', 'array');
         Lines.Add('description', Description);

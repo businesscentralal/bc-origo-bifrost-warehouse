@@ -108,13 +108,49 @@ codeunit 10078437 "Whse RegActivity Get Impl ori" implements "Msg Interface ori"
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Parts: Codeunit "Whse Contract Parts ori";
         Fields: JsonArray;
+        ResultFields: JsonArray;
+        LineFields: JsonArray;
+        Result: JsonObject;
+        Lines: JsonObject;
     begin
         Parts.AddStatusField(Fields);
         Fields.Add(ContractMgt.ResponseField('activityType', 'string', 'Pick, Put-away or Movement.'));
         Fields.Add(ContractMgt.ResponseField('noOfRecords', 'integer', 'Number of matching registered activities before paging.'));
         Fields.Add(ContractMgt.ResponseField('skip', 'integer', 'Records skipped.'));
         Fields.Add(ContractMgt.ResponseField('take', 'integer', 'Page size.'));
-        Fields.Add(ContractMgt.ResponseField('result', 'array', 'Registered activities: activityType, no, systemId, locationCode, registeringDate, whseActivityNo, assignedUserId, and lines when includeLines is true (lineNo, actionType, itemNo, variantCode, description, quantity, unitOfMeasureCode, zoneCode, binCode, sourceDocument, sourceNo, sourceLineNo, whseDocumentType, whseDocumentNo, lotNo, serialNo).'));
+        LineFields.Add(ContractMgt.ResponseField('lineNo', 'integer', 'Registered line number.'));
+        LineFields.Add(ContractMgt.ResponseField('actionType', 'string', 'Take or Place; blank when the line has none.'));
+        LineFields.Add(ContractMgt.ResponseField('itemNo', 'string', 'Item number.'));
+        LineFields.Add(ContractMgt.ResponseField('variantCode', 'string', 'Variant code.'));
+        LineFields.Add(ContractMgt.ResponseField('description', 'string', 'Line description.'));
+        LineFields.Add(ContractMgt.ResponseField('quantity', 'number', 'Registered quantity.'));
+        LineFields.Add(ContractMgt.ResponseField('unitOfMeasureCode', 'string', 'Unit of measure code.'));
+        LineFields.Add(ContractMgt.ResponseField('zoneCode', 'string', 'Zone code.'));
+        LineFields.Add(ContractMgt.ResponseField('binCode', 'string', 'Bin code.'));
+        LineFields.Add(ContractMgt.ResponseField('sourceDocument', 'string', 'Kind of source document, for example Sales Order.'));
+        LineFields.Add(ContractMgt.ResponseField('sourceNo', 'string', 'Source document number.'));
+        LineFields.Add(ContractMgt.ResponseField('sourceLineNo', 'integer', 'Source document line number.'));
+        LineFields.Add(ContractMgt.ResponseField('whseDocumentType', 'string', 'Kind of warehouse document, for example Shipment.'));
+        LineFields.Add(ContractMgt.ResponseField('whseDocumentNo', 'string', 'Warehouse document number.'));
+        LineFields.Add(ContractMgt.ResponseField('lotNo', 'string', 'Lot number.'));
+        LineFields.Add(ContractMgt.ResponseField('serialNo', 'string', 'Serial number.'));
+        ResultFields.Add(ContractMgt.ResponseField('activityType', 'string', 'Pick, Put-away or Movement.'));
+        ResultFields.Add(ContractMgt.ResponseField('no', 'string', 'Registered activity number.'));
+        ResultFields.Add(ContractMgt.ResponseField('systemId', 'string', 'SystemId of the registered activity.'));
+        ResultFields.Add(ContractMgt.ResponseField('locationCode', 'string', 'Location code.'));
+        ResultFields.Add(ContractMgt.ResponseField('registeringDate', 'string', 'Registering date as YYYY-MM-DD.'));
+        ResultFields.Add(ContractMgt.ResponseField('whseActivityNo', 'string', 'Number of the open activity it was registered from.'));
+        ResultFields.Add(ContractMgt.ResponseField('assignedUserId', 'string', 'Assigned user ID.'));
+        Lines.Add('name', 'lines');
+        Lines.Add('type', 'array');
+        Lines.Add('description', 'Included when includeLines is true.');
+        Lines.Add('children', LineFields);
+        ResultFields.Add(Lines);
+        Result.Add('name', 'result');
+        Result.Add('type', 'array');
+        Result.Add('description', 'The paged registered activities.');
+        Result.Add('children', ResultFields);
+        Fields.Add(Result);
         Parts.Response(Response, Fields);
         exit(true);
     end;
@@ -178,10 +214,19 @@ codeunit 10078437 "Whse RegActivity Get Impl ori" implements "Msg Interface ori"
 
     /// <summary>Returns the workflow chapter.</summary>
     /// <param name="Workflow">Receives the workflow.</param>
-    /// <returns>False. This read has no workflow chapter.</returns>
+    /// <returns>True. The read confirms a registration and leads to posting the shipment.</returns>
     procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Steps: JsonArray;
     begin
-        exit(false);
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Activity.Get', 'Find the open pick, put-away or movement.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Pick.Register', 'Register the pick (Warehouse.Putaway.Register and Warehouse.Movement.Register do the same for the other types).'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.RegisteredActivity.Get', 'Read the registered activity to confirm what was registered, by source document number or registering date.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Shipment.Post', 'After registered picks, post the warehouse shipment.'));
+        Workflow.Add('steps', Steps);
+        Workflow.Add('text', 'The last step applies to picks only. A registered put-away or movement ends its flow.');
+        exit(true);
     end;
 
     /// <summary>Returns an example request and response.</summary>
@@ -211,11 +256,17 @@ codeunit 10078437 "Whse RegActivity Get Impl ori" implements "Msg Interface ori"
 
     /// <summary>Returns the notes chapter.</summary>
     /// <param name="Notes">Receives the notes.</param>
-    /// <returns>False. There are no extra notes.</returns>
+    /// <returns>True. The notes list edge cases of the filters.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'activityType is always required, also when a number is sent. It is Pick, PutAway (Put-away is accepted too) or Movement, matched ignoring case, spaces and hyphens. Registered inventory picks, put-aways and movements are not read by this type, and any other value is refused. ' +
+            'Registered activities are created when Warehouse.Pick.Register, Warehouse.Putaway.Register or Warehouse.Movement.Register registers an open activity, and they cannot be changed. The open activity is gone then, so it is no longer returned by Warehouse.Activity.Get. ' +
+            'A number (as subject or no, read in upper case) must exist for that activityType, or the answer is RecordNotFound. If other filters then exclude it, the answer is Success with noOfRecords 0. Sending subject and no with different numbers is refused. ' +
+            'sourceNo keeps the registered activities with at least one line for that source document number, read in upper case, within the chosen activityType. With includeLines, every line of such an activity is returned, not only the lines of that source document. ' +
+            'registeringDateFrom and registeringDateTo are inclusive and either can be left out. locationCode is an exact match. Filters that match nothing are Success with an empty result; the response still names the activityType. ' +
+            'whseActivityNo is the number the activity had before it was registered. A directed pick or movement has a Take and a Place line for each move, and both are listed. ' +
+            'Activities are returned in the order of their numbers, paged with skip and take; noOfRecords is the total before paging. All invalid values, including a bad skip or take, are answered together. includeLines must be the JSON value true or false; text such as "true" is refused.';
+        exit(true);
     end;
 
     /// <summary>Returns the outbound direction of this message type.</summary>

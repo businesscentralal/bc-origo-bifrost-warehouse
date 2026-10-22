@@ -78,8 +78,14 @@ codeunit 10078411 "Whse Rcpt Post Prev. Impl ori" implements "Msg Interface ori"
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        LineChildren: JsonArray;
+        LinesParameter: JsonObject;
     begin
-        Parameters.Add(ContractMgt.Parameter('lines', 'array', false, 'Optional per-line quantities to receive in the preview, the same as Warehouse.Receipt.Post. They are rolled back with the preview. Needs write permission on warehouse receipt lines.'));
+        LineChildren.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Warehouse receipt line number. Each line may be listed once.'));
+        LineChildren.Add(ContractMgt.Parameter('qtyToReceive', 'number', true, 'Quantity to receive on that line in the preview, from zero up to the outstanding quantity.'));
+        LinesParameter := ContractMgt.Parameter('lines', 'array', false, 'Optional per-line quantities to receive in the preview, the same as Warehouse.Receipt.Post. They are rolled back with the preview. Needs write permission on warehouse receipt lines.');
+        LinesParameter.Add('children', LineChildren);
+        Parameters.Add(LinesParameter);
         Parameters.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Warehouse receipt line number (inside lines).'));
         Parameters.Add(ContractMgt.Parameter('qtyToReceive', 'number', true, 'Quantity to receive on that line, from zero up to the outstanding quantity (inside lines).'));
         exit(true);
@@ -167,8 +173,14 @@ codeunit 10078411 "Whse Rcpt Post Prev. Impl ori" implements "Msg Interface ori"
 
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'Nothing is saved: Business Central runs the receive posting and rolls it back, so the receipt, its lines and the ledgers are unchanged. Quantities sent in lines are applied inside the preview only; Qty. to Receive on the receipt keeps its real value. ' +
+            'The preview cannot run inside a rollback chain (Omit Commit) and is refused there. ' +
+            'It does not use the posting permission set that Warehouse.Receipt.Post needs, but sending lines needs write permission on warehouse receipt lines. ' +
+            'Unknown keys and bad line values are answered together as MultipleErrors. A receipt with no lines is answered as NothingToPreview, and so is a preview that produces no entries, for example when every line would receive zero. If Business Central refuses the posting during the preview, its error text is returned. ' +
+            'predictedNumbers always holds postedWhseReceiptNo, plus postedPurchaseReceiptNo, postedReturnReceiptNo or postedTransferReceiptNo when the receipt carries that kind of source document; these are the numbers seen in the rolled-back run. ' +
+            'sourceDocuments lists the distinct source documents on all lines of the receipt, not only the lines in the request. ' +
+            'Use Warehouse.Receipt.Post to post for real.';
+        exit(true);
     end;
 
     procedure GetMessageDirection() MessageDirection: Enum "Msg Direction ori"

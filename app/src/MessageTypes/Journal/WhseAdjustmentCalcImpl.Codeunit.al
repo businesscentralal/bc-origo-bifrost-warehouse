@@ -261,11 +261,15 @@ codeunit 10078450 "Whse Adjustment Calc Impl ori" implements "Msg Interface ori"
 
     /// <summary>Returns the notes chapter.</summary>
     /// <param name="Notes">Receives the notes.</param>
-    /// <returns>False. There are no extra notes.</returns>
+    /// <returns>True when notes are declared.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'Nothing is posted: the call only writes item journal lines, and the item ledger changes when you post the batch with Inventory.ItemJournal.Post. ';
+        Notes := Notes + 'The batch must hold no line with an item; the empty line Business Central leaves after posting is deleted first, so a batch that was just posted can be reused. A batch that still has lines is refused and nothing is written. ';
+        Notes := Notes + 'The lines hold the quantity in the adjustment bins of directed put-away and pick locations, so run it after Warehouse.Journal.Register or Warehouse.PhysInventory.Register. Without locationCode (or a subject) all directed locations are included; a location that is not directed is refused. ';
+        Notes := Notes + 'When nothing needs adjusting the call succeeds with lineCount 0 and an empty list. Calling it again on a batch that already has lines is refused, so it is not applied twice. ';
+        Notes := Notes + 'postingDate defaults to the work date. documentNo is needed only when the batch has no number series. The template must be a non-recurring item journal template.';
+        exit(true);
     end;
 
     /// <summary>Returns the inbound direction of this message type.</summary>

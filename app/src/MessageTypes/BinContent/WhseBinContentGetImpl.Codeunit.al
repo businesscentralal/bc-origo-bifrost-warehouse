@@ -142,6 +142,7 @@ codeunit 10078388 "Whse BinContent Get Impl ori" implements "Msg Interface ori",
         ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
         Related.Add(ContractMgt.RelatedEntry('Warehouse.Activity.Get', 'Use it to read open warehouse picks and put-aways instead of Bin Content.'));
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.Bin.Get', 'You want the bin itself (zone, ranking, blocking), not the stock in it.'));
         exit(true);
     end;
 
@@ -151,8 +152,18 @@ codeunit 10078388 "Whse BinContent Get Impl ori" implements "Msg Interface ori",
     end;
 
     procedure GetExamples(var Examples: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        exit(false);
+        Examples.Add(ContractMgt.Example(
+            'Read where an item is stored at a location',
+            '{"itemNo":"1896-S","locationCode":"SILVER"}',
+            '{"status":"Success","noOfRecords":1,"skip":0,"take":100,"result":[{"locationCode":"SILVER","binCode":"S-01-0001","itemNo":"1896-S","variantCode":"","unitOfMeasureCode":"PCS","quantity":10,"dedicated":false,"fixed":true,"zoneCode":"PICK","binTypeCode":"PICK"}]}'));
+        Examples.Add(ContractMgt.Example(
+            'Read bin content that holds stock, using a table view',
+            '{"locationCode":"SILVER","tableView":"WHERE(Quantity=FILTER(>0))","take":50}',
+            '{"status":"Success","noOfRecords":0,"skip":0,"take":50,"result":[]}'));
+        exit(true);
     end;
 
     procedure GetOverview(var Overview: Text): Boolean
@@ -163,8 +174,14 @@ codeunit 10078388 "Whse BinContent Get Impl ori" implements "Msg Interface ori",
 
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'One row is one item, variant and unit of measure in one bin; the same item in two bins is two rows. quantity is calculated from the warehouse entries when the row is read, so it is the stock now, in the unit of measure of the row. ' +
+            'Rows with quantity 0 are returned too, for instance fixed bins that are empty; filter with a table view such as WHERE(Quantity=FILTER(>0)) to see only stock. ' +
+            'itemNo, locationCode, binCode and variantCode are exact filters and are combined with each other and with tableView. An empty variantCode filter matches only content without a variant. ' +
+            'No match is Success with noOfRecords 0 and an empty result, not an error. Only rows the caller may read are counted and returned. ' +
+            'Rows are paged with skip and take; noOfRecords is the total before paging. ' +
+            'Quantities that are reserved for or already assigned to open pick lines are not subtracted; read Warehouse.Activity.Get for open picks. ' +
+            'To read the bin itself (description, zone, ranking, blocking) use Warehouse.Bin.Get.';
+        exit(true);
     end;
 
     /// <summary>Returns the outbound direction of this message type.</summary>

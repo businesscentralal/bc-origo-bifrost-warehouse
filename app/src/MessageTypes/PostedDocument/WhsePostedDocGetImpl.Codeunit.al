@@ -109,13 +109,49 @@ codeunit 10078436 "Whse PostedDoc Get Impl ori" implements "Msg Interface ori", 
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Parts: Codeunit "Whse Contract Parts ori";
         Fields: JsonArray;
+        ResultFields: JsonArray;
+        LineFields: JsonArray;
+        Result: JsonObject;
+        Lines: JsonObject;
     begin
         Parts.AddStatusField(Fields);
         Fields.Add(ContractMgt.ResponseField('documentType', 'string', 'Receipt or Shipment.'));
         Fields.Add(ContractMgt.ResponseField('noOfRecords', 'integer', 'Number of matching documents before paging.'));
         Fields.Add(ContractMgt.ResponseField('skip', 'integer', 'Records skipped.'));
         Fields.Add(ContractMgt.ResponseField('take', 'integer', 'Page size.'));
-        Fields.Add(ContractMgt.ResponseField('result', 'array', 'Documents: no, systemId, locationCode, postingDate, the warehouse document number it was posted from, and lines when includeLines is true (lineNo, sourceDocument, sourceNo, sourceLineNo, itemNo, variantCode, description, quantity, unitOfMeasureCode, binCode, postedSourceDocument, postedSourceNo).'));
+        LineFields.Add(ContractMgt.ResponseField('lineNo', 'integer', 'Posted line number.'));
+        LineFields.Add(ContractMgt.ResponseField('sourceDocument', 'string', 'Kind of source document, for example Purchase Order.'));
+        LineFields.Add(ContractMgt.ResponseField('sourceNo', 'string', 'Source document number.'));
+        LineFields.Add(ContractMgt.ResponseField('sourceLineNo', 'integer', 'Source document line number.'));
+        LineFields.Add(ContractMgt.ResponseField('itemNo', 'string', 'Item number.'));
+        LineFields.Add(ContractMgt.ResponseField('variantCode', 'string', 'Variant code.'));
+        LineFields.Add(ContractMgt.ResponseField('description', 'string', 'Line description.'));
+        LineFields.Add(ContractMgt.ResponseField('quantity', 'number', 'Posted quantity.'));
+        LineFields.Add(ContractMgt.ResponseField('unitOfMeasureCode', 'string', 'Unit of measure code.'));
+        LineFields.Add(ContractMgt.ResponseField('binCode', 'string', 'Bin code.'));
+        LineFields.Add(ContractMgt.ResponseField('postedSourceDocument', 'string', 'Kind of posted source document, for example Posted Receipt.'));
+        LineFields.Add(ContractMgt.ResponseField('postedSourceNo', 'string', 'Posted source document number.'));
+        ResultFields.Add(ContractMgt.ResponseField('no', 'string', 'Posted document number.'));
+        ResultFields.Add(ContractMgt.ResponseField('systemId', 'string', 'SystemId of the posted document.'));
+        ResultFields.Add(ContractMgt.ResponseField('locationCode', 'string', 'Location code.'));
+        ResultFields.Add(ContractMgt.ResponseField('postingDate', 'string', 'Posting date as YYYY-MM-DD.'));
+        ResultFields.Add(ContractMgt.ResponseField('whseReceiptNo', 'string', 'Warehouse receipt it was posted from. Receipt only.'));
+        ResultFields.Add(ContractMgt.ResponseField('vendorShipmentNo', 'string', 'Vendor shipment number. Receipt only.'));
+        ResultFields.Add(ContractMgt.ResponseField('whseShipmentNo', 'string', 'Warehouse shipment it was posted from. Shipment only.'));
+        ResultFields.Add(ContractMgt.ResponseField('externalDocumentNo', 'string', 'External document number. Shipment only.'));
+        ResultFields.Add(ContractMgt.ResponseField('shipmentDate', 'string', 'Shipment date as YYYY-MM-DD, or blank. Shipment only.'));
+        ResultFields.Add(ContractMgt.ResponseField('shippingAgentCode', 'string', 'Shipping agent code. Shipment only.'));
+        ResultFields.Add(ContractMgt.ResponseField('assignedUserId', 'string', 'Assigned user ID.'));
+        Lines.Add('name', 'lines');
+        Lines.Add('type', 'array');
+        Lines.Add('description', 'Included when includeLines is true.');
+        Lines.Add('children', LineFields);
+        ResultFields.Add(Lines);
+        Result.Add('name', 'result');
+        Result.Add('type', 'array');
+        Result.Add('description', 'The paged posted documents.');
+        Result.Add('children', ResultFields);
+        Fields.Add(Result);
         Parts.Response(Response, Fields);
         exit(true);
     end;
@@ -179,10 +215,19 @@ codeunit 10078436 "Whse PostedDoc Get Impl ori" implements "Msg Interface ori", 
 
     /// <summary>Returns the workflow chapter.</summary>
     /// <param name="Workflow">Receives the workflow.</param>
-    /// <returns>False. This read has no workflow chapter.</returns>
+    /// <returns>True. The read finds the posted receipt that the put-away is created from.</returns>
     procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Steps: JsonArray;
     begin
-        exit(false);
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Receipt.Post', 'Post the warehouse receipt; this creates the posted warehouse receipt.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.PostedDocument.Get', 'Find the posted warehouse receipt, with documentType Receipt and the source document number, and read its lines.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Putaway.Create', 'Create the put-away from the posted warehouse receipt number.'));
+        Steps.Add(ContractMgt.WorkflowStep('Warehouse.Putaway.Register', 'Register the put-away to place the goods in their bins.'));
+        Workflow.Add('steps', Steps);
+        Workflow.Add('text', 'For a shipment the read only confirms what was shipped: Warehouse.Shipment.Post creates the posted warehouse shipment, and there is no further step in this app.');
+        exit(true);
     end;
 
     /// <summary>Returns an example request and response.</summary>
@@ -212,11 +257,17 @@ codeunit 10078436 "Whse PostedDoc Get Impl ori" implements "Msg Interface ori", 
 
     /// <summary>Returns the notes chapter.</summary>
     /// <param name="Notes">Receives the notes.</param>
-    /// <returns>False. There are no extra notes.</returns>
+    /// <returns>True. The notes list edge cases of the filters.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'documentType is always required, also when a number is sent: Receipt reads Posted Warehouse Receipts and Shipment reads Posted Warehouse Shipments, and the names are matched ignoring case. The other fields of a document differ by type, see the response. ' +
+            'Posted documents are created by Warehouse.Receipt.Post and Warehouse.Shipment.Post and cannot be changed, so this read is the way to see what was received or shipped. ' +
+            'A number (as subject or no, read in upper case) must exist, or the answer is RecordNotFound. If other filters then exclude that document, the answer is Success with noOfRecords 0. Sending subject and no with different numbers is refused. ' +
+            'sourceNo keeps the documents that have at least one line for that source document number, read in upper case. With includeLines, every line of such a document is returned, not only the lines of that source document. ' +
+            'postingDateFrom and postingDateTo are inclusive and either can be left out. locationCode is an exact match. Filters that match nothing are Success with an empty result. ' +
+            'Documents are returned in the order of their numbers, paged with skip and take; noOfRecords is the total before paging. All invalid values, including a bad skip or take, are answered together. ' +
+            'includeLines must be the JSON value true or false; text such as "true" is refused. Quantities are the posted quantities, in the unit of measure on the line.';
+        exit(true);
     end;
 
     /// <summary>Returns the outbound direction of this message type.</summary>

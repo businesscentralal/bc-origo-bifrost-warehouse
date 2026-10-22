@@ -213,11 +213,16 @@ codeunit 10078433 "Whse Shipment Release Impl ori" implements "Msg Interface ori
 
     /// <summary>Returns the notes chapter.</summary>
     /// <param name="Notes">Receives the notes.</param>
-    /// <returns>False. There are no extra notes.</returns>
+    /// <returns>True. The notes describe the refusals, the no-op case and the order with sibling types.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := '';
-        exit(false);
+        Notes := 'The only input is the shipment identifier, as the subject or as systemId, recordSystemId, id, shipmentNo or no under data; any other key is refused as UnknownParameter, together with any lookup problem as MultipleErrors. ' +
+            'Releasing a shipment that is already released is not an error: the call answers success with changed false and writes nothing. ' +
+            'A shipment with no line that has a quantity is refused as PreconditionFailed; add lines with Warehouse.Shipment.GetSourceDocuments first. ' +
+            'Release is what Business Central does with the Release action: the status becomes Released and the pick request is created, so picks can be made with Warehouse.Pick.Create. If Business Central finds a line incomplete, for example without a bin at a bin-mandatory location, it refuses with its own error text and the shipment stays open. ' +
+            'A released shipment cannot take more lines; reopen it with Warehouse.Shipment.Reopen. ' +
+            'The caller needs write permission on warehouse shipments and pick requests (BIFROST Whse - Full ori). Nothing is posted; the change is committed.';
+        exit(true);
     end;
 
     /// <summary>Returns the inbound direction of this message type.</summary>

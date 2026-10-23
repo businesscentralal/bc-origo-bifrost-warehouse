@@ -1,0 +1,12 @@
+{
+  "sha": "980403dea67d488536b490261e17ae7458436b3c",
+  "runUrl": "https://github.com/businesscentralal/bc-origo-bifrost-warehouse/actions/runs/39969324005",
+  "jobUrl": "https://github.com/businesscentralal/bc-origo-bifrost-warehouse/actions/runs/39969324005/job/120472512041",
+  "jobId": "120472512041",
+  "conclusion": "success",
+  "actualCountLines": [
+    "2026-10-23T14:45:56.3693787Z 1 TestApps, 442 tests, 0 failed, 0 skipped, 202.005 seconds\r",
+    "2026-10-23T14:45:56.3835769Z - Bifrost Warehouse - Tests, 442 tests, 442 passed, 0 failed, 0 skipped, 202.005 seconds\r"
+  ],
+  "at": "2026-10-23T15:14:14.032Z"
+}

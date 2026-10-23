@@ -245,7 +245,7 @@ codeunit 97027 "Whse Msg Contract Tests ori"
         // #71: one entry per nextStep the lookup answers (a number or a SystemId that matches nothing; data or an identifier of the wrong type).
         // #74 adds the paging entry (skip or take is not a whole number), so InvalidParameterFormat has four entries.
         AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'RecordNotFound', 2);
-        AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'InvalidParameterFormat', 5);
+        AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'InvalidParameterFormat', 4);
         // Two distinct refusals: an activityType that is not valid, and (#74) a negative skip or take.
         AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'InvalidParameter', 2);
         AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'MultipleErrors', 1);
@@ -325,8 +325,8 @@ codeunit 97027 "Whse Msg Contract Tests ori"
         AssertErrorCount("Message Type ori"::"Warehouse.BinContent.Get", 'MultipleErrors', 1);
         AssertErrorCount("Message Type ori"::"Warehouse.Shipment.Create", 'MultipleErrors', 0);
         AssertErrorCount("Message Type ori"::"Warehouse.Receipt.Create", 'MultipleErrors', 0);
-        // #79: table-view format refusal and both declared paging nextSteps.
-        AssertErrorCount("Message Type ori"::"Warehouse.BinContent.Get", 'InvalidParameterFormat', 3);
+        // #79: table-view format refusal and the collecting reader's paging nextStep.
+        AssertErrorCount("Message Type ori"::"Warehouse.BinContent.Get", 'InvalidParameterFormat', 2);
     end;
 
     local procedure AssertRegisterAliases(MessageType: Enum "Message Type ori")

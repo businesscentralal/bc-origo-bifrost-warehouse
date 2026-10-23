@@ -157,7 +157,7 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
                 end;
         end;
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, 'activityType is not a valid warehouse activity type.', 'Use a value from the Warehouse Activity Type enum.'));
-        Parts.AddPagingErrors(Errors, true);
+        Parts.AddCollectedPagingErrors(Errors);
         exit(true);
     end;
 

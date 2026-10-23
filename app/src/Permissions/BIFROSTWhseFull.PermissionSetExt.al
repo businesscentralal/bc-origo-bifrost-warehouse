@@ -8,6 +8,9 @@ using Origo.Bifrost;
 permissionsetextension 10078395 "BIFROST Whse - Full ori" extends "BIFROST Full ori"
 {
     Permissions =
+        page "Whse Setup Wizard ori" = X,
+        codeunit "Whse Wizard Reg. ori" = X,
+        codeunit "Whse Wizard Mgt ori" = X,
         codeunit "Warehouse Install ori" = X,
         codeunit "Warehouse Upgrade ori" = X,
         codeunit "Whse BinContent Get Impl ori" = X,

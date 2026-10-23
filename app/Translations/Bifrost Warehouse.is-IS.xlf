@@ -45,6 +45,12 @@
           <note from="Developer" annotates="general" priority="2">%1 = received value, is-IS="%1" er ekki gild tegund vöruhúsavirkni (úr activityType).</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Activity Get Impl ori - Method ExecuteBifrostTask - NamedType InvalidActivityTypeErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 3969354362 - Method 3571782927 - NamedType 3783390024" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The warehouse query contains invalid paging values.</source>
+          <target>Fyrirspurn vöruhúss inniheldur ógild síðuskiptingargildi.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fyrirspurn vöruhúss inniheldur ógild síðuskiptingargildi.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Activity Get Impl ori - Method ExecuteBifrostTask - NamedType PagingProblemsLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3969354362 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Reads open warehouse activities with optional header, document and line filters.</source>
           <target>Les opnar vöruhúsaaðgerðir með valfrjálsum síum á haus, fylgiskjal og línur.</target>
@@ -1640,6 +1646,12 @@
           <target>Lestu textann sem skilaði sér og leiðréttu hólfin eða vinnublaðið.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Lestu textann sem skilaði sér og leiðréttu hólfin eða vinnublaðið.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Repl Calc Impl ori - Method WriteCreatedLines - NamedType MissingResultNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 269741545 - Method 3571782927 - NamedType 3783390024" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The warehouse query contains invalid paging values.</source>
+          <target>Fyrirspurn vöruhúss inniheldur ógild síðuskiptingargildi.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fyrirspurn vöruhúss inniheldur ógild síðuskiptingargildi.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse BinContent Get Impl ori - Method ExecuteBifrostTask - NamedType PagingProblemsLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 269741545 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Reads Bin Content rows with item, location, bin and variant filters.</source>

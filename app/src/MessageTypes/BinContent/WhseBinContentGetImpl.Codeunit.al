@@ -120,7 +120,8 @@ codeunit 10078388 "Whse BinContent Get Impl ori" implements "Msg Interface ori",
     begin
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidFilterField, 'A table-view filter names a field that cannot be filtered.', 'Use a valid Bin Content field name.'));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameterFormat, 'A table-view filter value cannot be read. The paging values have their own entry below.', 'Send text filter values.'));
-        Parts.AddPagingErrors(Errors, false);
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::MultipleErrors, 'Both skip and take failed validation.', 'Correct every listed value and send the request again.'));
+        Parts.AddCollectedPagingErrors(Errors);
         exit(true);
     end;
 
@@ -196,6 +197,7 @@ codeunit 10078388 "Whse BinContent Get Impl ori" implements "Msg Interface ori",
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var
         BinContent: Record "Bin Content";
+        Context: Codeunit "Whse Write Context ori";
         RecRef: RecordRef;
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
@@ -208,12 +210,14 @@ codeunit 10078388 "Whse BinContent Get Impl ori" implements "Msg Interface ori",
         LocationCode: Text;
         BinCode: Text;
         VariantCode: Text;
+        PagingProblemsLbl: Label 'The warehouse query contains invalid paging values.', Comment = 'is-IS=Fyrirspurn vöruhúss inniheldur ógild síðuskiptingargildi.';
     begin
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
 
         RequestJson := Argument.GetRequestJson();
-        Argument.EvaluateSkipTake(RequestJson, Skip, Take);
+        if not Context.RespondOrReadPaging(RequestJson, Argument, PagingProblemsLbl, Skip, Take) then
+            exit;
 
         RecRef.Open(Database::"Bin Content");
         RecRef.ReadIsolation := IsolationLevel::ReadCommitted;

@@ -84,6 +84,20 @@ codeunit 10078459 "Whse Contract Parts ori"
                 Context.PagingNextStep()));
     end;
 
+    /// <summary>Declares the paging refusals answered by the collecting reader, including a single bad value.</summary>
+    /// <param name="Errors">Receives the negative-value and format errors with the collecting reader's nextStep.</param>
+    internal procedure AddCollectedPagingErrors(var Errors: JsonArray)
+    var
+        Context: Codeunit "Whse Write Context ori";
+    begin
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::InvalidParameter,
+            'skip or take is negative. The parameter names the key and expected says zero or greater.',
+            Context.PagingNextStep()));
+        Errors.Add(NextStepEntry("Bifrost Error Code ori"::InvalidParameterFormat,
+            'skip or take is not a whole number. A single problem is answered directly; several are listed in errors[] of MultipleErrors.',
+            Context.PagingNextStep()));
+    end;
+
     /// <summary>
     /// Lists the date refusals of a type, each with the nextStep the answer gives (#74). A local day-month-year date such as
     /// 20.10.2026 or 20-10-2026 is answered with the value to send back, e.g. "Resend shipmentDateFrom as 2026-10-20.";

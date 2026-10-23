@@ -1,0 +1,6 @@
+{
+  "sha": "696cb80c873050eb8746d6defa3d22b01aaf9b3b",
+  "touchedMessageTypes": [],
+  "notApplicableReason": "Only setup wizard modal actions, system-setting read permission, administrator guidance, Icelandic help, translations and restricted wizard tests changed. No message handler, message enum, contract or dispatcher changed.",
+  "messageTypeTestsExecuted": 0
+}

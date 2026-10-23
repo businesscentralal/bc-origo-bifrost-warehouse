@@ -1,0 +1,40 @@
+{
+  "sha": "980403dea67d488536b490261e17ae7458436b3c",
+  "containerId": "f00f227f7231",
+  "appVersion": "28.3.0.79",
+  "startedAt": "2026-10-23T14:07:20.775Z",
+  "scenarios": [
+    {
+      "lcid": 1033,
+      "suite": "W79UIEN",
+      "codeunit": 97032,
+      "executed": 12,
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0,
+      "scenario": "Actual real Web Client test result retained; normalized the platform GUID braces in the identity assertion",
+      "evidence": "ui-paging-1033-results.json"
+    },
+    {
+      "lcid": 1039,
+      "suite": "W79UIIS",
+      "codeunit": 97032,
+      "executed": 12,
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0,
+      "scenario": "Actual real Web Client Icelandic session result retained",
+      "evidence": "ui-paging-1039-results.json"
+    }
+  ],
+  "passed": 2,
+  "failed": 0,
+  "skipped": 0,
+  "cleanup": {
+    "businessFixtureRecordsCreated": 0,
+    "languageRestored": true,
+    "languageReadback": "ui-language-restored.txt"
+  },
+  "finishedAt": "2026-10-23T14:21:08.366Z",
+  "recoveryHistory": "Initial empty-suite selection and GUID-display/translated-dialog selector errors were retained privately. Actual1033/1039 result snapshots each contain12passed methods. Recovery reused those exact results and restored1033 without rerunning them."
+}

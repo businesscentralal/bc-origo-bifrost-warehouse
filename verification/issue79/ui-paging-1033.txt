@@ -1,0 +1,291 @@
+
+Dynamics 365 Business Central
+
+
+
+
+G
+
+Command Line Test Tool
+Saved
+
+
+
+Suite Name
+Test Codeunit Range
+Test Procedure Range
+Test Runner Codeunit ID
+Extension ID
+Required Test Isolation
+Test Type
+DisableTestMethod
+Test Result JSON
+{"name":"Whse Negative Paging Tests ori","codeUnit":97032,"codeunitName":"Whse Negative Paging Tests ori","applicationID":"{6AE41D19-D457-4D62-BD87-0413FF18DE75}","applicationName":"Bifrost Warehouse - Tests","startTime":"2026-10-23T14:10:47.8600000Z","finishTime":"2026-10-23T14:10:48.1870000Z","result":2,"testResults":[{"method":"AC02_Activity_NegativeSkip_1033","startTime":"2026-10-23T14:10:47.8700000Z","finishTime":"2026-10-23T14:10:47.8870000Z","result":2},{"method":"AC02_Activity_NegativeTake_1033","startTime":"2026-10-23T14:10:47.9030000Z","finishTime":"2026-10-23T14:10:47.9300000Z","result":2},{"method":"AC02_Activity_BothNegative_1033","startTime":"2026-10-23T14:10:47.9370000Z","finishTime":"2026-10-23T14:10:47.9670000Z","result":2},{"method":"AC02_Activity_NegativeSkip_1039","startTime":"2026-10-23T14:10:47.9770000Z","finishTime":"2026-10-23T14:10:47.9930000Z","result":2},{"method":"AC02_Activity_NegativeTake_1039","startTime":"2026-10-23T14:10:48.0000000Z","finishTime":"2026-10-23T14:10:48.0270000Z","result":2},{"method":"AC02_Activity_BothNegative_1039","startTime":"2026-10-23T14:10:48.0370000Z","finishTime":"2026-10-23T14:10:48.0570000Z","result":2},{"method":"AC02_BinContent_NegativeSkip_1033","startTime":"2026-10-23T14:10:48.0630000Z","finishTime":"2026-10-23T14:10:48.0870000Z","result":2},{"method":"AC02_BinContent_NegativeTake_1033","startTime":"2026-10-23T14:10:48.0930000Z","finishTime":"2026-10-23T14:10:48.1100000Z","result":2},{"method":"AC02_BinContent_BothNegative_1033","startTime":"2026-10-23T14:10:48.1170000Z","finishTime":"2026-10-23T14:10:48.1300000Z","result":2},{"method":"AC02_BinContent_NegativeSkip_1039","startTime":"2026-10-23T14:10:48.1370000Z","finishTime":"2026-10-23T14:10:48.1470000Z","result":2},{"method":"AC02_BinContent_NegativeTake_1039","startTime":"2026-10-23T14:10:48.1530000Z","finishTime":"2026-10-23T14:10:48.1670000Z","result":2},{"method":"AC02_BinContent_BothNegative_1039","startTime":"2026-10-23T14:10:48.1730000Z","finishTime":"2026-10-23T14:10:48.1870000Z","result":2}]}
+Code Coverage Tracking Type
+Code Coverage Map
+Code Coverage Track All Sessions
+Code Coverage Exporter ID
+Code Coverage Results CSV
+Data Output
+Data Input
+Code Coverage Map CSV Text
+Code Coverage Information
+Stability run
+Company Name
+CRONUS International Ltd.
+Tenant ID
+default
+Language ID
+1033
+Manage
+Run Selected Tests
+Run Next Test
+Clear Test Results
+GetCodeCoverage
+
+
+
+		
+Line Type
+	
+	
+Codeunit ID
+	
+Name
+	
+Run
+	
+Result
+	
+Error Message
+	
+Stack Trace
+	
+Finish Time
+	
+Start Time
+	
+			
+									
+		
+0
+	
+	
+97032
+	
+Whse Negative Paging Tests ori
+	
+	
+2
+	
+		
+10/23/2026 2:10 PM
+	
+10/23/2026 2:10 PM
+	
+		
+1
+		
+97032
+	
+AC02_Activity_NegativeSkip_1033
+	
+	
+2
+	
+	
+	
+10/23/2026 2:10 PM
+	
+10/23/2026 2:10 PM
+	
+		
+1
+		
+97032
+	
+AC02_Activity_NegativeTake_1033
+	
+	
+2
+	
+	
+	
+10/23/2026 2:10 PM
+	
+10/23/2026 2:10 PM
+	
+		
+1
+		
+97032
+	
+AC02_Activity_BothNegative_1033
+	
+	
+2
+	
+	
+	
+10/23/2026 2:10 PM
+	
+10/23/2026 2:10 PM
+	
+		
+1
+		
+97032
+	
+AC02_Activity_NegativeSkip_1039
+	
+	
+2
+	
+	
+	
+10/23/2026 2:10 PM
+	
+10/23/2026 2:10 PM
+	
+		
+1
+		
+97032
+	
+AC02_Activity_NegativeTake_1039
+	
+	
+2
+	
+	
+	
+10/23/2026 2:10 PM
+	
+10/23/2026 2:10 PM
+	
+		
+1
+		
+97032
+	
+AC02_Activity_BothNegative_1039
+	
+	
+2
+	
+	
+	
+10/23/2026 2:10 PM
+	
+10/23/2026 2:10 PM
+	
+		
+1
+		
+97032
+	
+AC02_BinContent_NegativeSkip_1033
+	
+	
+2
+	
+	
+	
+10/23/2026 2:10 PM
+	
+10/23/2026 2:10 PM
+	
+		
+1
+		
+97032
+	
+AC02_BinContent_NegativeTake_1033
+	
+	
+2
+	
+	
+	
+10/23/2026 2:10 PM
+	
+10/23/2026 2:10 PM
+	
+		
+1
+		
+97032
+	
+AC02_BinContent_BothNegative_1033
+	
+	
+2
+	
+	
+	
+10/23/2026 2:10 PM
+	
+10/23/2026 2:10 PM
+	
+		
+1
+		
+97032
+	
+AC02_BinContent_NegativeSkip_1039
+	
+	
+2
+	
+	
+	
+10/23/2026 2:10 PM
+	
+10/23/2026 2:10 PM
+	
+		
+1
+		
+97032
+	
+AC02_BinContent_NegativeTake_1039
+	
+	
+2
+	
+	
+	
+10/23/2026 2:10 PM
+	
+10/23/2026 2:10 PM
+	
+		
+1
+		
+97032
+	
+AC02_BinContent_BothNegative_1039
+	
+	
+2
+	
+	
+	
+10/23/2026 2:10 PM
+	
+10/23/2026 2:10 PM
+	
+		
+		
+	
+		
+	
+	
+	
+	
+	
+Use the Left and Right arrow keys to adjust the size. Use the Escape key to undo or the Enter key to accept.
+
+List with title "Command Line Test Tool" now has 14 items
+
+Saved

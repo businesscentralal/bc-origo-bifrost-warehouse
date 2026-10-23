@@ -1,0 +1,84 @@
+{
+  "name": "Whse Negative Paging Tests ori",
+  "codeUnit": 97032,
+  "codeunitName": "Whse Negative Paging Tests ori",
+  "applicationID": "{6AE41D19-D457-4D62-BD87-0413FF18DE75}",
+  "applicationName": "Bifrost Warehouse - Tests",
+  "startTime": "2026-10-23T14:10:47.8600000Z",
+  "finishTime": "2026-10-23T14:10:48.1870000Z",
+  "result": 2,
+  "testResults": [
+    {
+      "method": "AC02_Activity_NegativeSkip_1033",
+      "startTime": "2026-10-23T14:10:47.8700000Z",
+      "finishTime": "2026-10-23T14:10:47.8870000Z",
+      "result": 2
+    },
+    {
+      "method": "AC02_Activity_NegativeTake_1033",
+      "startTime": "2026-10-23T14:10:47.9030000Z",
+      "finishTime": "2026-10-23T14:10:47.9300000Z",
+      "result": 2
+    },
+    {
+      "method": "AC02_Activity_BothNegative_1033",
+      "startTime": "2026-10-23T14:10:47.9370000Z",
+      "finishTime": "2026-10-23T14:10:47.9670000Z",
+      "result": 2
+    },
+    {
+      "method": "AC02_Activity_NegativeSkip_1039",
+      "startTime": "2026-10-23T14:10:47.9770000Z",
+      "finishTime": "2026-10-23T14:10:47.9930000Z",
+      "result": 2
+    },
+    {
+      "method": "AC02_Activity_NegativeTake_1039",
+      "startTime": "2026-10-23T14:10:48.0000000Z",
+      "finishTime": "2026-10-23T14:10:48.0270000Z",
+      "result": 2
+    },
+    {
+      "method": "AC02_Activity_BothNegative_1039",
+      "startTime": "2026-10-23T14:10:48.0370000Z",
+      "finishTime": "2026-10-23T14:10:48.0570000Z",
+      "result": 2
+    },
+    {
+      "method": "AC02_BinContent_NegativeSkip_1033",
+      "startTime": "2026-10-23T14:10:48.0630000Z",
+      "finishTime": "2026-10-23T14:10:48.0870000Z",
+      "result": 2
+    },
+    {
+      "method": "AC02_BinContent_NegativeTake_1033",
+      "startTime": "2026-10-23T14:10:48.0930000Z",
+      "finishTime": "2026-10-23T14:10:48.1100000Z",
+      "result": 2
+    },
+    {
+      "method": "AC02_BinContent_BothNegative_1033",
+      "startTime": "2026-10-23T14:10:48.1170000Z",
+      "finishTime": "2026-10-23T14:10:48.1300000Z",
+      "result": 2
+    },
+    {
+      "method": "AC02_BinContent_NegativeSkip_1039",
+      "startTime": "2026-10-23T14:10:48.1370000Z",
+      "finishTime": "2026-10-23T14:10:48.1470000Z",
+      "result": 2
+    },
+    {
+      "method": "AC02_BinContent_NegativeTake_1039",
+      "startTime": "2026-10-23T14:10:48.1530000Z",
+      "finishTime": "2026-10-23T14:10:48.1670000Z",
+      "result": 2
+    },
+    {
+      "method": "AC02_BinContent_BothNegative_1039",
+      "startTime": "2026-10-23T14:10:48.1730000Z",
+      "finishTime": "2026-10-23T14:10:48.1870000Z",
+      "result": 2
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "sha": "980403dea67d488536b490261e17ae7458436b3c",
+  "layer1": {
+    "scriptSummary": {
+      "ready": false,
+      "total": 23,
+      "failed": 4,
+      "passed": 19
+    },
+    "filesScanned": 3,
+    "baselineSha": "46b4194261d55fca345eefab9f012f14f6f89a5e",
+    "triage": [
+      {
+        "check": "xml_doc_comments",
+        "currentFindings": 41,
+        "mainFindings": 41,
+        "newFindings": [],
+        "disposition": "Existing missing XML docs outside scoped changes"
+      },
+      {
+        "check": "try_prefix_convention",
+        "currentFindings": 4,
+        "mainFindings": 4,
+        "newFindings": [],
+        "disposition": "False positive: bool-returning Try readers are not TryFunctions"
+      },
+      {
+        "check": "changelog",
+        "currentFindings": 1,
+        "mainFindings": 1,
+        "newFindings": [],
+        "disposition": "Unreleased entry includes scoped objects; no source version bump required"
+      },
+      {
+        "check": "one_statement_per_line",
+        "currentFindings": 15,
+        "mainFindings": 15,
+        "newFindings": [],
+        "disposition": "False positive: semicolon-separated procedure parameters are one declaration"
+      }
+    ]
+  },
+  "layer2": {
+    "newPublicSurfaceChanges": false,
+    "objectRanges": "test97032 within97000..97099; no new product IDs",
+    "permissions": "No new executable product objects; existing shared context and parts already granted",
+    "compatibility": "Both-app AppSourceCop against shipped main build28.3.0.36, no removed or renamed fields/procedures",
+    "logic": "Both types call same collecting parser before table queries; one error returns its own code/details, several retain ordered errors[]; negative/format nextStep declarations match actual collector",
+    "runtime": "Exact980403d: fullsuite442/442/0/0, MCP16/16/0/0, real Web Client1033/1039 each12/12 pass, language restored1033, owned fixture cleanup readbacks verified."
+  }
+}

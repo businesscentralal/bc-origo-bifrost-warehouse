@@ -1,0 +1,24 @@
+{
+  "currentCandidate": "980403dea67d488536b490261e17ae7458436b3c",
+  "attempts": [
+    {
+      "sha": "2ef7f9a2b8959b10027d0653a00d30809bdde98b",
+      "executed": 442,
+      "passed": 436,
+      "failed": 6,
+      "skipped": 0,
+      "finding": "New1039 test dispatch used Foundation default instead of envelope language; explicitLCID added."
+    },
+    {
+      "sha": "c98a0d6860a86726d3c103636541bb9d35e5efab",
+      "executed": 442,
+      "passed": 435,
+      "failed": 7,
+      "skipped": 0,
+      "finding": "6new1039 tests compared localized response to canonical English contract; preserved exact localized assertions and verified canonical counterpart. Existing97062 assertion updated to expect actual collector nextStep for the two changed types."
+    }
+  ],
+  "suppressedWarningsAdded": false,
+  "testsDisabledOrSkipped": false,
+  "assertionsRemoved": false
+}

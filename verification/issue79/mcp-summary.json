@@ -1,0 +1,379 @@
+{
+  "sha": "980403dea67d488536b490261e17ae7458436b3c",
+  "containerId": "f00f227f7231",
+  "appVersion": "28.3.0.79",
+  "startedAt": "2026-10-23T14:04:14.223Z",
+  "types": [
+    "Warehouse.Activity.Get",
+    "Warehouse.BinContent.Get"
+  ],
+  "dataSetup": {
+    "method": "Each scenario constructs its own request payload. Negative paging is validated before warehouse table access, so no database fixtures are required or read. Positive empty-result controls use a unique task-owned location filter and never depend on existing records.",
+    "fixtureRecordsCreated": 0,
+    "usesPreexistingFixtures": false
+  },
+  "scenarios": [
+    {
+      "type": "Warehouse.Activity.Get",
+      "lcid": 1033,
+      "data": {
+        "skip": -1
+      },
+      "result": "passed",
+      "response": {
+        "status": "Error",
+        "code": "InvalidParameter",
+        "error": "Parameter skip must be zero or greater.",
+        "parameter": "skip",
+        "received": "-1",
+        "expected": "zero or greater",
+        "nextStep": "Send a whole number of zero or more, or leave it out.",
+        "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"Warehouse.Activity.Get\". Always read the help before calling a message type."
+      }
+    },
+    {
+      "type": "Warehouse.Activity.Get",
+      "lcid": 1033,
+      "data": {
+        "take": -1
+      },
+      "result": "passed",
+      "response": {
+        "status": "Error",
+        "code": "InvalidParameter",
+        "error": "Parameter take must be zero or greater.",
+        "parameter": "take",
+        "received": "-1",
+        "expected": "zero or greater",
+        "nextStep": "Send a whole number of zero or more, or leave it out.",
+        "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"Warehouse.Activity.Get\". Always read the help before calling a message type."
+      }
+    },
+    {
+      "type": "Warehouse.Activity.Get",
+      "lcid": 1033,
+      "data": {
+        "skip": -1,
+        "take": -1
+      },
+      "result": "passed",
+      "response": {
+        "status": "Error",
+        "code": "MultipleErrors",
+        "error": "The warehouse query contains invalid paging values.",
+        "errors": [
+          {
+            "code": "InvalidParameter",
+            "error": "Parameter skip must be zero or greater.",
+            "parameter": "skip",
+            "received": "-1",
+            "expected": "zero or greater",
+            "nextStep": "Send a whole number of zero or more, or leave it out."
+          },
+          {
+            "code": "InvalidParameter",
+            "error": "Parameter take must be zero or greater.",
+            "parameter": "take",
+            "received": "-1",
+            "expected": "zero or greater",
+            "nextStep": "Send a whole number of zero or more, or leave it out."
+          }
+        ],
+        "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"Warehouse.Activity.Get\". Always read the help before calling a message type."
+      }
+    },
+    {
+      "type": "Warehouse.Activity.Get",
+      "lcid": 1033,
+      "data": {
+        "locationCode": "ZZW79MCP231023",
+        "skip": 0,
+        "take": 0
+      },
+      "result": "passed",
+      "response": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Warehouse.Activity.Get",
+        "status": "Success",
+        "noOfRecords": 0,
+        "skip": 0,
+        "take": 100,
+        "result": []
+      }
+    },
+    {
+      "type": "Warehouse.Activity.Get",
+      "lcid": 1039,
+      "data": {
+        "skip": -1
+      },
+      "result": "passed",
+      "response": {
+        "status": "Error",
+        "code": "InvalidParameter",
+        "error": "Færibreytan skip verður að vera núll eða stærri.",
+        "parameter": "skip",
+        "received": "-1",
+        "expected": "núll eða stærra",
+        "nextStep": "Sendu heiltölu sem er núll eða stærri, eða slepptu því.",
+        "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"Warehouse.Activity.Get\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund."
+      }
+    },
+    {
+      "type": "Warehouse.Activity.Get",
+      "lcid": 1039,
+      "data": {
+        "take": -1
+      },
+      "result": "passed",
+      "response": {
+        "status": "Error",
+        "code": "InvalidParameter",
+        "error": "Færibreytan take verður að vera núll eða stærri.",
+        "parameter": "take",
+        "received": "-1",
+        "expected": "núll eða stærra",
+        "nextStep": "Sendu heiltölu sem er núll eða stærri, eða slepptu því.",
+        "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"Warehouse.Activity.Get\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund."
+      }
+    },
+    {
+      "type": "Warehouse.Activity.Get",
+      "lcid": 1039,
+      "data": {
+        "skip": -1,
+        "take": -1
+      },
+      "result": "passed",
+      "response": {
+        "status": "Error",
+        "code": "MultipleErrors",
+        "error": "Fyrirspurn vöruhúss inniheldur ógild síðuskiptingargildi.",
+        "errors": [
+          {
+            "code": "InvalidParameter",
+            "error": "Færibreytan skip verður að vera núll eða stærri.",
+            "parameter": "skip",
+            "received": "-1",
+            "expected": "núll eða stærra",
+            "nextStep": "Sendu heiltölu sem er núll eða stærri, eða slepptu því."
+          },
+          {
+            "code": "InvalidParameter",
+            "error": "Færibreytan take verður að vera núll eða stærri.",
+            "parameter": "take",
+            "received": "-1",
+            "expected": "núll eða stærra",
+            "nextStep": "Sendu heiltölu sem er núll eða stærri, eða slepptu því."
+          }
+        ],
+        "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"Warehouse.Activity.Get\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund."
+      }
+    },
+    {
+      "type": "Warehouse.Activity.Get",
+      "lcid": 1039,
+      "data": {
+        "locationCode": "ZZW79MCP231023",
+        "skip": 0,
+        "take": 0
+      },
+      "result": "passed",
+      "response": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Warehouse.Activity.Get",
+        "status": "Success",
+        "noOfRecords": 0,
+        "skip": 0,
+        "take": 100,
+        "result": []
+      }
+    },
+    {
+      "type": "Warehouse.BinContent.Get",
+      "lcid": 1033,
+      "data": {
+        "skip": -1
+      },
+      "result": "passed",
+      "response": {
+        "status": "Error",
+        "code": "InvalidParameter",
+        "error": "Parameter skip must be zero or greater.",
+        "parameter": "skip",
+        "received": "-1",
+        "expected": "zero or greater",
+        "nextStep": "Send a whole number of zero or more, or leave it out.",
+        "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"Warehouse.BinContent.Get\". Always read the help before calling a message type."
+      }
+    },
+    {
+      "type": "Warehouse.BinContent.Get",
+      "lcid": 1033,
+      "data": {
+        "take": -1
+      },
+      "result": "passed",
+      "response": {
+        "status": "Error",
+        "code": "InvalidParameter",
+        "error": "Parameter take must be zero or greater.",
+        "parameter": "take",
+        "received": "-1",
+        "expected": "zero or greater",
+        "nextStep": "Send a whole number of zero or more, or leave it out.",
+        "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"Warehouse.BinContent.Get\". Always read the help before calling a message type."
+      }
+    },
+    {
+      "type": "Warehouse.BinContent.Get",
+      "lcid": 1033,
+      "data": {
+        "skip": -1,
+        "take": -1
+      },
+      "result": "passed",
+      "response": {
+        "status": "Error",
+        "code": "MultipleErrors",
+        "error": "The warehouse query contains invalid paging values.",
+        "errors": [
+          {
+            "code": "InvalidParameter",
+            "error": "Parameter skip must be zero or greater.",
+            "parameter": "skip",
+            "received": "-1",
+            "expected": "zero or greater",
+            "nextStep": "Send a whole number of zero or more, or leave it out."
+          },
+          {
+            "code": "InvalidParameter",
+            "error": "Parameter take must be zero or greater.",
+            "parameter": "take",
+            "received": "-1",
+            "expected": "zero or greater",
+            "nextStep": "Send a whole number of zero or more, or leave it out."
+          }
+        ],
+        "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"Warehouse.BinContent.Get\". Always read the help before calling a message type."
+      }
+    },
+    {
+      "type": "Warehouse.BinContent.Get",
+      "lcid": 1033,
+      "data": {
+        "locationCode": "ZZW79MCP231023",
+        "skip": 0,
+        "take": 0
+      },
+      "result": "passed",
+      "response": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Warehouse.BinContent.Get",
+        "status": "Success",
+        "noOfRecords": 0,
+        "skip": 0,
+        "take": 100,
+        "result": []
+      }
+    },
+    {
+      "type": "Warehouse.BinContent.Get",
+      "lcid": 1039,
+      "data": {
+        "skip": -1
+      },
+      "result": "passed",
+      "response": {
+        "status": "Error",
+        "code": "InvalidParameter",
+        "error": "Færibreytan skip verður að vera núll eða stærri.",
+        "parameter": "skip",
+        "received": "-1",
+        "expected": "núll eða stærra",
+        "nextStep": "Sendu heiltölu sem er núll eða stærri, eða slepptu því.",
+        "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"Warehouse.BinContent.Get\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund."
+      }
+    },
+    {
+      "type": "Warehouse.BinContent.Get",
+      "lcid": 1039,
+      "data": {
+        "take": -1
+      },
+      "result": "passed",
+      "response": {
+        "status": "Error",
+        "code": "InvalidParameter",
+        "error": "Færibreytan take verður að vera núll eða stærri.",
+        "parameter": "take",
+        "received": "-1",
+        "expected": "núll eða stærra",
+        "nextStep": "Sendu heiltölu sem er núll eða stærri, eða slepptu því.",
+        "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"Warehouse.BinContent.Get\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund."
+      }
+    },
+    {
+      "type": "Warehouse.BinContent.Get",
+      "lcid": 1039,
+      "data": {
+        "skip": -1,
+        "take": -1
+      },
+      "result": "passed",
+      "response": {
+        "status": "Error",
+        "code": "MultipleErrors",
+        "error": "Fyrirspurn vöruhúss inniheldur ógild síðuskiptingargildi.",
+        "errors": [
+          {
+            "code": "InvalidParameter",
+            "error": "Færibreytan skip verður að vera núll eða stærri.",
+            "parameter": "skip",
+            "received": "-1",
+            "expected": "núll eða stærra",
+            "nextStep": "Sendu heiltölu sem er núll eða stærri, eða slepptu því."
+          },
+          {
+            "code": "InvalidParameter",
+            "error": "Færibreytan take verður að vera núll eða stærri.",
+            "parameter": "take",
+            "received": "-1",
+            "expected": "núll eða stærra",
+            "nextStep": "Sendu heiltölu sem er núll eða stærri, eða slepptu því."
+          }
+        ],
+        "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"Warehouse.BinContent.Get\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund."
+      }
+    },
+    {
+      "type": "Warehouse.BinContent.Get",
+      "lcid": 1039,
+      "data": {
+        "locationCode": "ZZW79MCP231023",
+        "skip": 0,
+        "take": 0
+      },
+      "result": "passed",
+      "response": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Warehouse.BinContent.Get",
+        "status": "Success",
+        "noOfRecords": 0,
+        "skip": 0,
+        "take": 100,
+        "result": []
+      }
+    }
+  ],
+  "passed": 16,
+  "failed": 0,
+  "skipped": 0,
+  "cleanup": {
+    "recordsCreated": 0,
+    "recordsDeleted": 0,
+    "remainingOwnedRecords": 0,
+    "reason": "Pre-query validation and empty-result read controls create no database data."
+  },
+  "finishedAt": "2026-10-23T14:04:28.858Z"
+}

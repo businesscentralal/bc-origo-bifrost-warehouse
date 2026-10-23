@@ -1,0 +1,23 @@
+Microsoft (R) AL Compiler version 18.0.41.62505
+Copyright (C) Microsoft Corporation. All rights reserved
+
+Compilation started for project 'Bifrost Warehouse - Tests' containing '61' files at '14:02:17.812'.
+
+evidence/warehouse79-83-worker4/compile-source/test/test/WhseOmitCommitTestsori.Codeunit.al(4,1): info AA0477: The using statements are not in a sorted order.
+evidence/warehouse79-83-worker4/compile-source/test/test/WhseDocFlowHelpTestsori.Codeunit.al(8,1): info AA0477: The using statements are not in a sorted order.
+evidence/warehouse79-83-worker4/compile-source/test/test/WhsePickCreateTestsori.Codeunit.al(4,1): info AA0477: The using statements are not in a sorted order.
+evidence/warehouse79-83-worker4/compile-source/test/test/WhsePickRegisterTestsori.Codeunit.al(6,1): info AA0477: The using statements are not in a sorted order.
+evidence/warehouse79-83-worker4/compile-source/test/test/WhsePutawayCreateTestsori.Codeunit.al(4,1): info AA0477: The using statements are not in a sorted order.
+evidence/warehouse79-83-worker4/compile-source/test/test/WhsePutawayRegTestsori.Codeunit.al(4,1): info AA0477: The using statements are not in a sorted order.
+evidence/warehouse79-83-worker4/compile-source/test/test/WhseRcptPostPrevTestsori.Codeunit.al(4,1): info AA0477: The using statements are not in a sorted order.
+evidence/warehouse79-83-worker4/compile-source/test/test/WhseReceiptCreateTestsori.Codeunit.al(6,1): info AA0477: The using statements are not in a sorted order.
+evidence/warehouse79-83-worker4/compile-source/test/test/WhseReceiptPostTestsori.Codeunit.al(4,1): info AA0477: The using statements are not in a sorted order.
+evidence/warehouse79-83-worker4/compile-source/test/test/WhseReceiptTestHelperori.Codeunit.al(4,1): info AA0477: The using statements are not in a sorted order.
+evidence/warehouse79-83-worker4/compile-source/test/test/WhseRegUserTstori.PermissionSet.al(6,1): info AA0477: The using statements are not in a sorted order.
+evidence/warehouse79-83-worker4/compile-source/test/test/WhseShipmentCreateTestsori.Codeunit.al(6,1): info AA0477: The using statements are not in a sorted order.
+evidence/warehouse79-83-worker4/compile-source/test/test/WhseShipmentPostTestsori.Codeunit.al(4,1): info AA0477: The using statements are not in a sorted order.
+evidence/warehouse79-83-worker4/compile-source/test/test/WhseShipmentTestHelperori.Codeunit.al(4,1): info AA0477: The using statements are not in a sorted order.
+evidence/warehouse79-83-worker4/compile-source/test/test/WhseShipPrevPostTestsori.Codeunit.al(4,1): info AA0477: The using statements are not in a sorted order.
+
+Compilation ended at '14:02:28.040'.
+

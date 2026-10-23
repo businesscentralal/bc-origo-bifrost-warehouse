@@ -77,7 +77,7 @@ codeunit 97003 "Whse Setup Wizard Tests"
 
     /// <summary>AC03 invalid input: the displayed HTTP state cannot be edited and does not persist a setting.</summary>
     [Test]
-    procedure AC03_HttpStatusIsReadOnly()
+    procedure AC03_HttpDisplayIsReadOnlyAndCannotPersistInput()
     var
         Assert: Codeunit "Library Assert";
         WizardMgt: Codeunit "Whse Wizard Mgt ori";
@@ -88,8 +88,11 @@ codeunit 97003 "Whse Setup Wizard Tests"
         PreviousHttpEnabled := WizardMgt.IsHttpEnabled();
         Wizard.OpenView();
         Wizard.Next.Invoke();
-        // [WHEN] A caller attempts to edit the status control.
-        asserterror Wizard.HttpEnabled.SetValue(not PreviousHttpEnabled);
+        // [WHEN] The test adapter injects a local display value (SetValue bypasses client editability).
+        Assert.IsFalse(Wizard.HttpEnabled.Editable(), 'The actual UI control must be read-only.');
+        Wizard.HttpEnabled.SetValue(not PreviousHttpEnabled);
+        Wizard.Verify.Invoke();
+        Wizard.HttpEnabled.AssertEquals(PreviousHttpEnabled);
         Wizard.Close();
         // [THEN] The platform setting remains unchanged; no fixture writes NAV App Setting.
         Assert.AreEqual(PreviousHttpEnabled, WizardMgt.IsHttpEnabled(), 'The read-only HTTP display must not change extension settings.');
@@ -171,7 +174,7 @@ codeunit 97003 "Whse Setup Wizard Tests"
     end;
 
     /// <summary>Checks the actual platform page after it filters the Extensions group.</summary>
-    [PageHandler]
+    [ModalPageHandler]
     procedure AssistedSetupHandler(var AssistedSetup: TestPage "Assisted Setup")
     var
         Assert: Codeunit "Library Assert";

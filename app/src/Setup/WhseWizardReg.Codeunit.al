@@ -1,5 +1,6 @@
 namespace Origo.Bifrost.Warehouse;
 
+using Origo.Bifrost;
 using System.Environment.Configuration;
 using System.Media;
 
@@ -19,5 +20,14 @@ codeunit 10078385 "Whse Wizard Reg. ori"
         GuidedExperience.InsertAssistedSetup(TitleLbl, ShortTitleLbl, DescriptionLbl, 5,
             ObjectType::Page, Page::"Whse Setup Wizard ori", Enum::"Assisted Setup Group"::Extensions,
             '', Enum::"Video Category"::Uncategorized, 'https://docs.bifrost.origo.is/en-us/warehouse/');
+    end;
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"App Registry ori", OnRegisterApps, '', false, false)]
+    local procedure RegisterWarehouseApp(var Apps: Record "Registered App ori" temporary)
+    var
+        AppRegistry: Codeunit "App Registry ori";
+        AppInfo: ModuleInfo;
+    begin
+        NavApp.GetCurrentModuleInfo(AppInfo);
+        AppRegistry.AddApp(Apps, AppInfo.Id(), CopyStr(AppInfo.Name(), 1, MaxStrLen(Apps."App Name")), Page::"Whse Setup Wizard ori");
     end;
 }

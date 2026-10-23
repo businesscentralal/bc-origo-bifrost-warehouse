@@ -27,6 +27,25 @@ codeunit 97003 "Whse Setup Wizard Tests"
         Assert.IsFalse(GuidedExperience.IsAssistedSetupComplete(ObjectType::Page, Page::"Whse Setup Wizard ori"), 'Registration must leave the setup incomplete.');
     end;
 
+    /// <summary>AC03: Foundation's real registry includes Warehouse so its HTTP wizard can enable this app.</summary>
+    [Test]
+    procedure AC03_FoundationRegistryIncludesWarehouse()
+    var
+        TempApps: Record "Registered App ori" temporary;
+        AppRegistry: Codeunit "App Registry ori";
+        Assert: Codeunit "Library Assert";
+        WarehouseAppId: Guid;
+    begin
+        // [GIVEN] Installed Warehouse and Foundation, without writing HTTP or licence settings.
+        WarehouseAppId := '47acac54-3873-496f-9e88-157f36413e89';
+        // [WHEN] Foundation builds its registry through the actual integration event.
+        AppRegistry.GetApps(TempApps);
+        // [THEN] Foundation can list and configure the owning Warehouse module, rather than only itself.
+        Assert.IsTrue(TempApps.Get(WarehouseAppId), 'Foundation must include Warehouse in its HTTP application list.');
+        Assert.AreEqual('Bifrost Warehouse', TempApps."App Name", 'The registry must name the Warehouse module.');
+        Assert.AreEqual(Page::"Whse Setup Wizard ori", TempApps."Setup Page Id", 'Warehouse setup must open its own wizard.');
+    end;
+
     /// <summary>AC03: the status reader reflects this application's actual setting, with no test write.</summary>
     [Test]
     procedure AC03_HttpStatusReadsWarehouseOnly()

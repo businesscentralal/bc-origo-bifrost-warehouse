@@ -245,7 +245,7 @@ codeunit 97027 "Whse Msg Contract Tests ori"
         // #71: one entry per nextStep the lookup answers (a number or a SystemId that matches nothing; data or an identifier of the wrong type).
         // #74 adds the paging entry (skip or take is not a whole number), so InvalidParameterFormat has four entries.
         AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'RecordNotFound', 2);
-        AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'InvalidParameterFormat', 4);
+        AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'InvalidParameterFormat', 5);
         // Two distinct refusals: an activityType that is not valid, and (#74) a negative skip or take.
         AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'InvalidParameter', 2);
         AssertErrorCount("Message Type ori"::"Warehouse.Activity.Get", 'MultipleErrors', 1);
@@ -319,14 +319,14 @@ codeunit 97027 "Whse Msg Contract Tests ori"
 
     /// <summary>Issue #21 AC7: non-lookup types do not promise identifier aggregation.</summary>
     [Test]
-    procedure NonLookupTypes_ErrorsChapter_HasNoMultipleErrors()
+    procedure NonLookupTypes_DeclareOnlySupportedMultipleErrors()
     begin
         // Story #21, AC07 | Time: independent of Today/WorkDate | Risk: none.
-        AssertErrorCount("Message Type ori"::"Warehouse.BinContent.Get", 'MultipleErrors', 0);
+        AssertErrorCount("Message Type ori"::"Warehouse.BinContent.Get", 'MultipleErrors', 1);
         AssertErrorCount("Message Type ori"::"Warehouse.Shipment.Create", 'MultipleErrors', 0);
         AssertErrorCount("Message Type ori"::"Warehouse.Receipt.Create", 'MultipleErrors', 0);
-        // #74: one entry for an unreadable table-view filter value and one for a skip or take that is not a whole number.
-        AssertErrorCount("Message Type ori"::"Warehouse.BinContent.Get", 'InvalidParameterFormat', 2);
+        // #79: table-view format refusal and both declared paging nextSteps.
+        AssertErrorCount("Message Type ori"::"Warehouse.BinContent.Get", 'InvalidParameterFormat', 3);
     end;
 
     local procedure AssertRegisterAliases(MessageType: Enum "Message Type ori")

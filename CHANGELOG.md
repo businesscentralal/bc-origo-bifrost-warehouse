@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Fixed (2026-10-23) - Structured negative paging errors (#79)
+
+- `Warehouse.Activity.Get` and `Warehouse.BinContent.Get` collect invalid skip/take values before querying. A single negative value answers `InvalidParameter` with parameter, received, expected and nextStep; two answer `MultipleErrors` with both problems.
+- Updated the paging error contracts and added bilingual dispatcher regressions for negative skip, negative take and both together. New summary labels have is-IS translations.
+- Objects: codeunits 10078388, 10078390; test codeunits 97027 and 97032 (`Whse Negative Paging Tests ori`). No public procedure or field was removed or changed.
+
 ### Changed (2026-10-21) - Message type contract and discovery brought to Foundation parity
 
 - Every `Warehouse.*` type now declares all contract chapters the way Foundation's own types do. Added: **notes** on 35 types (`GetNotes` returned false), **examples** on 8 (`Warehouse.Activity.Get`, `Warehouse.BinContent.Get`, `Warehouse.Pick.Create`, `Warehouse.Pick.Register`, `Warehouse.Putaway.Create`, `Warehouse.Putaway.Register`, `Warehouse.Receipt.Create`, `Warehouse.Shipment.Create`) and a **workflow** on 15 (only the plain master-data reads `Warehouse.Bin.Get` and `Warehouse.BinContent.Get` have none, as in Foundation). Notes, examples and workflows are English text read from the implementation; no label or Icelandic text was added or changed, so the is-IS XLF is unchanged and in sync with the build.

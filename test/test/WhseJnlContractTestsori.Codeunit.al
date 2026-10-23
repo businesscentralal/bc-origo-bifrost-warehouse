@@ -137,11 +137,17 @@ codeunit 97062 "Whse Jnl Contract Tests ori"
         ContractAssert: Codeunit "Whse Contract Assert ori";
         Context: Codeunit "Whse Write Context ori";
         MessageType: Enum "Message Type ori";
+        FormatNextStep: Text;
     begin
         // Issue #74, AC2 | Time: none | Risk: none.
         foreach MessageType in PagedTypes() do begin
             Assert.IsTrue(ContractAssert.IsDeclared(MessageType, 'InvalidParameter', Context.PagingNextStep()), TypeName(MessageType) + ' declares a negative skip or take.');
-            Assert.IsTrue(ContractAssert.IsDeclared(MessageType, 'InvalidParameterFormat', 'Send the value as an integer.'), TypeName(MessageType) + ' declares a skip or take that is not a whole number.');
+            // #79: these two reads now use the collecting reader for single as well as multiple paging problems.
+            if MessageType in ["Message Type ori"::"Warehouse.Activity.Get", "Message Type ori"::"Warehouse.BinContent.Get"] then
+                FormatNextStep := Context.PagingNextStep()
+            else
+                FormatNextStep := 'Send the value as an integer.';
+            Assert.IsTrue(ContractAssert.IsDeclared(MessageType, 'InvalidParameterFormat', FormatNextStep), TypeName(MessageType) + ' declares the actual reader nextStep for a skip or take that is not a whole number.');
         end;
         foreach MessageType in DatedTypes() do
             Assert.IsTrue(ContractAssert.IsDeclared(MessageType, 'InvalidParameterFormat', 'Resend registeringDate as 2026-10-20.'), TypeName(MessageType) + ' declares the date to resend.');

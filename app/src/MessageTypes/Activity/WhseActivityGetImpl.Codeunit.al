@@ -157,7 +157,7 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
                 end;
         end;
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, 'activityType is not a valid warehouse activity type.', 'Use a value from the Warehouse Activity Type enum.'));
-        Parts.AddPagingErrors(Errors, false);
+        Parts.AddCollectedPagingErrors(Errors);
         exit(true);
     end;
 
@@ -249,6 +249,7 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
     var
         ActivityHeader: Record "Warehouse Activity Header";
         ActivityLine: Record "Warehouse Activity Line";
+        Context: Codeunit "Whse Write Context ori";
         WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
@@ -273,13 +274,15 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
         NotFoundErr: Label '%1 "%2" was not found (from %3).', Comment = '%1 = table caption, %2 = value received, %3 = JSON key, is-IS=%1 "%2" fannst ekki (úr %3).';
         NotFoundNextStepTxt: Label 'Check the number with Data.Records.Get on table %1.', Comment = '%1 = table caption, is-IS=Athugaðu númerið með Data.Records.Get á töflunni %1.';
         InvalidActivityTypeErr: Label '"%1" is not a valid warehouse activity type (from activityType).', Comment = '%1 = received value, is-IS="%1" er ekki gild tegund vöruhúsavirkni (úr activityType).';
+        PagingProblemsLbl: Label 'The warehouse query contains invalid paging values.', Comment = 'is-IS=Fyrirspurn vöruhúss inniheldur ógild síðuskiptingargildi.';
     begin
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
 
         if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,no=no,activityNo=no', RequestJson) then
             exit;
-        Argument.EvaluateSkipTake(RequestJson, Skip, Take);
+        if not Context.RespondOrReadPaging(RequestJson, Argument, PagingProblemsLbl, Skip, Take) then
+            exit;
 
         if TryGetRequestText(RequestJson, 'activityType', ActivityTypeText) then begin
             ActivityTypeSpecified := true;

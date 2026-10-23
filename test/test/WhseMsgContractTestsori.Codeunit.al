@@ -319,13 +319,13 @@ codeunit 97027 "Whse Msg Contract Tests ori"
 
     /// <summary>Issue #21 AC7: non-lookup types do not promise identifier aggregation.</summary>
     [Test]
-    procedure NonLookupTypes_ErrorsChapter_HasNoMultipleErrors()
+    procedure NonLookupTypes_DeclareOnlySupportedMultipleErrors()
     begin
         // Story #21, AC07 | Time: independent of Today/WorkDate | Risk: none.
-        AssertErrorCount("Message Type ori"::"Warehouse.BinContent.Get", 'MultipleErrors', 0);
+        AssertErrorCount("Message Type ori"::"Warehouse.BinContent.Get", 'MultipleErrors', 1);
         AssertErrorCount("Message Type ori"::"Warehouse.Shipment.Create", 'MultipleErrors', 0);
         AssertErrorCount("Message Type ori"::"Warehouse.Receipt.Create", 'MultipleErrors', 0);
-        // #74: one entry for an unreadable table-view filter value and one for a skip or take that is not a whole number.
+        // #79: table-view format refusal and the collecting reader's paging nextStep.
         AssertErrorCount("Message Type ori"::"Warehouse.BinContent.Get", 'InvalidParameterFormat', 2);
     end;
 

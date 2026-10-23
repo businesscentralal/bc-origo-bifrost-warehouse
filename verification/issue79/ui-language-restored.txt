@@ -1,0 +1,262 @@
+
+Dynamics 365 Business Central
+
+
+
+
+G
+
+Command Line Test Tool
+Saved
+
+
+
+Suite Name
+Test Codeunit Range
+Test Procedure Range
+Test Runner Codeunit ID
+Extension ID
+Required Test Isolation
+Test Type
+DisableTestMethod
+Test Result JSON
+Code Coverage Tracking Type
+Code Coverage Map
+Code Coverage Track All Sessions
+Code Coverage Exporter ID
+Code Coverage Results CSV
+Data Output
+Data Input
+Code Coverage Map CSV Text
+Code Coverage Information
+Stability run
+Company Name
+CRONUS International Ltd.
+Tenant ID
+default
+Language ID
+1033
+Manage
+Run Selected Tests
+Run Next Test
+Clear Test Results
+GetCodeCoverage
+
+
+
+		
+Line Type
+	
+	
+Codeunit ID
+	
+Name
+	
+Run
+	
+Result
+	
+Error Message
+	
+Stack Trace
+	
+Finish Time
+	
+Start Time
+	
+			
+									
+		
+0
+	
+	
+97032
+	
+Whse Negative Paging Tests ori
+	
+	
+0
+	
+		
+	
+	
+		
+1
+		
+97032
+	
+AC02_Activity_NegativeSkip_1033
+	
+	
+0
+	
+	
+	
+	
+	
+		
+1
+		
+97032
+	
+AC02_Activity_NegativeTake_1033
+	
+	
+0
+	
+	
+	
+	
+	
+		
+1
+		
+97032
+	
+AC02_Activity_BothNegative_1033
+	
+	
+0
+	
+	
+	
+	
+	
+		
+1
+		
+97032
+	
+AC02_Activity_NegativeSkip_1039
+	
+	
+0
+	
+	
+	
+	
+	
+		
+1
+		
+97032
+	
+AC02_Activity_NegativeTake_1039
+	
+	
+0
+	
+	
+	
+	
+	
+		
+1
+		
+97032
+	
+AC02_Activity_BothNegative_1039
+	
+	
+0
+	
+	
+	
+	
+	
+		
+1
+		
+97032
+	
+AC02_BinContent_NegativeSkip_1033
+	
+	
+0
+	
+	
+	
+	
+	
+		
+1
+		
+97032
+	
+AC02_BinContent_NegativeTake_1033
+	
+	
+0
+	
+	
+	
+	
+	
+		
+1
+		
+97032
+	
+AC02_BinContent_BothNegative_1033
+	
+	
+0
+	
+	
+	
+	
+	
+		
+1
+		
+97032
+	
+AC02_BinContent_NegativeSkip_1039
+	
+	
+0
+	
+	
+	
+	
+	
+		
+1
+		
+97032
+	
+AC02_BinContent_NegativeTake_1039
+	
+	
+0
+	
+	
+	
+	
+	
+		
+1
+		
+97032
+	
+AC02_BinContent_BothNegative_1039
+	
+	
+0
+	
+	
+	
+	
+	
+		
+		
+	
+		
+	
+	
+	
+	
+	
+Use the Left and Right arrow keys to adjust the size. Use the Escape key to undo or the Enter key to accept.
+
+List with title "Command Line Test Tool" now has 14 items

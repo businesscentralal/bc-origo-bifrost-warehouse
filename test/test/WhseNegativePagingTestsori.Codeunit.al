@@ -320,11 +320,10 @@ codeunit 97032 "Whse Negative Paging Tests ori"
         end;
         Assert.AreEqual(ParameterName, TextValue(ErrorJson, 'parameter'), 'The refusal must name the paging key.');
         Assert.AreNotEqual('', TextValue(ErrorJson, 'error'), 'The refusal must explain the problem.');
-        if LanguageId = 1039 then begin
-            Assert.AreEqual('Sendu heiltölu sem er núll eða stærri, eða slepptu því.', TextValue(ErrorJson, 'nextStep'), 'The nextStep must match the Icelandic help.');
-        end else begin
+        if LanguageId = 1039 then
+            Assert.AreEqual('Sendu heiltölu sem er núll eða stærri, eða slepptu því.', TextValue(ErrorJson, 'nextStep'), 'The nextStep must match the Icelandic help.')
+        else
             Assert.AreEqual('Send a whole number of zero or more, or leave it out.', TextValue(ErrorJson, 'nextStep'), 'The nextStep must match the English help.');
-        end;
     end;
     local procedure TextValue(Value: JsonObject; KeyName: Text): Text
     var

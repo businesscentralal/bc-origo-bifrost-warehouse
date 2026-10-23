@@ -6801,29 +6801,11 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Lokið</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - NamedType DoneLbl</note>
         </trans-unit>
-        <trans-unit id="Page 580138067 - NamedType 2546608014" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Bifrost Setup could not be opened. Ask an administrator to open the Foundation setup wizard and enable HTTP for Bifrost Warehouse.</source>
-          <target>Ekki tókst að opna Bifröst uppsetningu. Biddu stjórnanda um að opna uppsetningarleiðsögn grunnkerfisins og virkja HTTP fyrir Bifröst vöruhús.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Ekki tókst að opna Bifröst uppsetningu. Biddu stjórnanda um að opna uppsetningarleiðsögn grunnkerfisins og virkja HTTP fyrir Bifröst vöruhús.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - NamedType OpenFoundationErr</note>
-        </trans-unit>
-        <trans-unit id="Page 580138067 - NamedType 3441314609" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Bifrost operations could not be opened. Ask an administrator to open Bifrost Message Types from Bifrost Setup.</source>
-          <target>Ekki tókst að opna Bifröst-aðgerðir. Biddu stjórnanda um að opna Skilaboðategundir Bifröst í Bifröst uppsetningu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Ekki tókst að opna Bifröst-aðgerðir. Biddu stjórnanda um að opna Skilaboðategundir Bifröst í Bifröst uppsetningu.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - NamedType OpenOperationsErr</note>
-        </trans-unit>
-        <trans-unit id="Page 580138067 - NamedType 18003741" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Permission Sets could not be opened. Ask an administrator to review the Warehouse permission sets.</source>
-          <target>Ekki tókst að opna heimildasamstæður. Biddu stjórnanda um að fara yfir heimildasamstæður Vöruhúss.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Ekki tókst að opna heimildasamstæður. Biddu stjórnanda um að fara yfir heimildasamstæður Vöruhúss.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - NamedType OpenPermissionSetsErr</note>
-        </trans-unit>
-        <trans-unit id="Page 580138067 - NamedType 3533034885" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Users could not be opened. Ask an administrator to manage access on the Users page.</source>
-          <target>Ekki tókst að opna notendur. Biddu stjórnanda um að stjórna aðgangi á notendasíðunni.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Ekki tókst að opna notendur. Biddu stjórnanda um að stjórna aðgangi á notendasíðunni.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - NamedType OpenUsersErr</note>
+        <trans-unit id="Page 580138067 - NamedType 4076658803" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to change extension settings. Ask an administrator with the SUPER permission set (or write permission on table NAV App Setting) to enable Allow HttpClient Requests for Bifrost Warehouse.</source>
+          <target>Þú hefur ekki heimild til að breyta stillingum viðbóta. Biddu kerfisstjóra sem hefur SUPER heimildasamstæðuna (eða skrifheimild á töfluna NAV App Setting) um að virkja Leyfa HttpClient-beiðnir fyrir Bifröst vöruhús.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að breyta stillingum viðbóta. Biddu kerfisstjóra sem hefur SUPER heimildasamstæðuna (eða skrifheimild á töfluna NAV App Setting) um að virkja Leyfa HttpClient-beiðnir fyrir Bifröst vöruhús.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - NamedType HttpPermissionNoteLbl</note>
         </trans-unit>
         <trans-unit id="Page 580138067 - Control 1850829176 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
           <source>Users also need the Foundation Bifrost permission sets. Assign sets to users directly or through a Microsoft Entra security group. This wizard does not assign permissions.</source>
@@ -6873,11 +6855,11 @@
           <note from="Developer" annotates="general" priority="2">is-IS=HTTP virkt</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Control HttpEnabled - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 580138067 - Control 283970885 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
-          <source>You do not have permission to change extension settings. Ask an administrator with the SUPER permission set (or write permission on table NAV App Setting) to enable Allow HttpClient Requests for the applications listed above.</source>
-          <target>Þú hefur ekki heimild til að breyta stillingum viðbóta. Biddu kerfisstjóra sem hefur SUPER heimildasamstæðuna (eða skrifheimild á töfluna NAV App Setting) um að virkja Leyfa HttpClient-beiðnir fyrir forritin hér að ofan.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að breyta stillingum viðbóta. Biddu kerfisstjóra sem hefur SUPER heimildasamstæðuna (eða skrifheimild á töfluna NAV App Setting) um að virkja Leyfa HttpClient-beiðnir fyrir forritin hér að ofan.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Control HttpPermissionNote - Property InstructionalText</note>
+        <trans-unit id="Page 580138067 - Control 283970885 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Explains who can enable HTTP for Bifrost Warehouse.</source>
+          <target>Útskýrir hver getur virkjað HTTP fyrir Bifröst vöruhús.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Útskýrir hver getur virkjað HTTP fyrir Bifröst vöruhús.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Control HttpPermissionNote - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 580138067 - Control 2166945456 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
           <source>Review the summary. Finish marks this assisted setup complete, including when HTTP still needs an administrator. You can run the wizard again later.</source>

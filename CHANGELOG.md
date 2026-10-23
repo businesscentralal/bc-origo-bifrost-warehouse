@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Warehouse setup wizard (#83, PR #85): call modal pages directly so Foundation settings writes and errors retain platform behavior (page 10078385); grant read-only NAV App Setting access in management codeunit 10078386 while preserving the caller write-permission check. Add restricted-user regressions (test codeunit and test-only permission set 97004) and correct Icelandic Assisted Setup help terminology.
+
+
 ### Added (2026-10-23) - Warehouse setup wizard (#83)
 
 - Assisted Setup now lists Set up Bifrost Warehouse in Extensions. Four steps explain Warehouse operations, read this app's HTTP status, open Foundation for HTTP configuration, describe the posting/invoicing permission gates and complete only on Finish. Warehouse registers with Foundation's app registry so Foundation's HTTP step lists and enables this app. No permissions are assigned and no HTTP settings, consent or licensing records are written by Warehouse or its tests.

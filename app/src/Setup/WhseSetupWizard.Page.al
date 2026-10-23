@@ -41,11 +41,13 @@ page 10078385 "Whse Setup Wizard ori"
                     ToolTip = 'Shows whether Allow HttpClient Requests is enabled for Bifrost Warehouse.', Comment = 'is-IS=Sýnir hvort Leyfa HttpClient-beiðnir sé virkt fyrir Bifröst vöruhús.';
                     Editable = false;
                 }
-                group(HttpPermissionNote)
+                field(HttpPermissionNote; HttpPermissionNoteLbl)
                 {
                     ShowCaption = false;
+                    Editable = false;
+                    MultiLine = true;
                     Visible = not CanWriteAppSetting;
-                    InstructionalText = 'You do not have permission to change extension settings. Ask an administrator with the SUPER permission set (or write permission on table NAV App Setting) to enable Allow HttpClient Requests for the applications listed above.', Comment = 'is-IS=Þú hefur ekki heimild til að breyta stillingum viðbóta. Biddu kerfisstjóra sem hefur SUPER heimildasamstæðuna (eða skrifheimild á töfluna NAV App Setting) um að virkja Leyfa HttpClient-beiðnir fyrir forritin hér að ofan.';
+                    ToolTip = 'Explains who can enable HTTP for Bifrost Warehouse.', Comment = 'is-IS=Útskýrir hver getur virkjað HTTP fyrir Bifröst vöruhús.';
                 }
             }
             group(Access)
@@ -146,8 +148,7 @@ page 10078385 "Whse Setup Wizard ori"
 
                 trigger OnAction()
                 begin
-                    if not TryOpenPage(Page::"Message Type List ori") then
-                        Message(OpenOperationsErr);
+                    Page.RunModal(Page::"Message Type List ori");
                 end;
             }
             action(Documentation)
@@ -173,8 +174,7 @@ page 10078385 "Whse Setup Wizard ori"
 
                 trigger OnAction()
                 begin
-                    if not TryOpenPage(Page::"Setup Wizard ori") then
-                        Message(OpenFoundationErr);
+                    Page.RunModal(Page::"Setup Wizard ori");
                     RefreshStatus();
                 end;
             }
@@ -201,8 +201,7 @@ page 10078385 "Whse Setup Wizard ori"
 
                 trigger OnAction()
                 begin
-                    if not TryOpenPage(Page::Users) then
-                        Message(OpenUsersErr);
+                    Page.RunModal(Page::Users);
                 end;
             }
             action(OpenPermissionSets)
@@ -215,8 +214,7 @@ page 10078385 "Whse Setup Wizard ori"
 
                 trigger OnAction()
                 begin
-                    if not TryOpenPage(Page::"Permission Sets") then
-                        Message(OpenPermissionSetsErr);
+                    Page.RunModal(Page::"Permission Sets");
                 end;
             }
         }
@@ -228,12 +226,9 @@ page 10078385 "Whse Setup Wizard ori"
         HttpEnabled: Boolean;
         CanWriteAppSetting: Boolean;
         HttpSummary: Text;
+        HttpPermissionNoteLbl: Label 'You do not have permission to change extension settings. Ask an administrator with the SUPER permission set (or write permission on table NAV App Setting) to enable Allow HttpClient Requests for Bifrost Warehouse.', Comment = 'is-IS=Þú hefur ekki heimild til að breyta stillingum viðbóta. Biddu kerfisstjóra sem hefur SUPER heimildasamstæðuna (eða skrifheimild á töfluna NAV App Setting) um að virkja Leyfa HttpClient-beiðnir fyrir Bifröst vöruhús.';
         DoneLbl: Label 'Done', Comment = 'is-IS=Lokið';
         AdministratorLbl: Label 'Needs an administrator', Comment = 'is-IS=Þarf stjórnanda';
-        OpenOperationsErr: Label 'Bifrost operations could not be opened. Ask an administrator to open Bifrost Message Types from Bifrost Setup.', Comment = 'is-IS=Ekki tókst að opna Bifröst-aðgerðir. Biddu stjórnanda um að opna Skilaboðategundir Bifröst í Bifröst uppsetningu.';
-        OpenFoundationErr: Label 'Bifrost Setup could not be opened. Ask an administrator to open the Foundation setup wizard and enable HTTP for Bifrost Warehouse.', Comment = 'is-IS=Ekki tókst að opna Bifröst uppsetningu. Biddu stjórnanda um að opna uppsetningarleiðsögn grunnkerfisins og virkja HTTP fyrir Bifröst vöruhús.';
-        OpenUsersErr: Label 'Users could not be opened. Ask an administrator to manage access on the Users page.', Comment = 'is-IS=Ekki tókst að opna notendur. Biddu stjórnanda um að stjórna aðgangi á notendasíðunni.';
-        OpenPermissionSetsErr: Label 'Permission Sets could not be opened. Ask an administrator to review the Warehouse permission sets.', Comment = 'is-IS=Ekki tókst að opna heimildasamstæður. Biddu stjórnanda um að fara yfir heimildasamstæður Vöruhúss.';
 
     trigger OnOpenPage()
     begin
@@ -250,11 +245,5 @@ page 10078385 "Whse Setup Wizard ori"
         else
             HttpSummary := AdministratorLbl;
         CurrPage.Update(false);
-    end;
-
-    [TryFunction]
-    local procedure TryOpenPage(PageId: Integer)
-    begin
-        Page.RunModal(PageId);
     end;
 }

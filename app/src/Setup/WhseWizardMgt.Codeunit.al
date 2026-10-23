@@ -6,6 +6,7 @@ using System.Environment.Configuration;
 codeunit 10078386 "Whse Wizard Mgt ori"
 {
     Access = Internal;
+    Permissions = tabledata "NAV App Setting" = R;
 
     /// <summary>Reads only this application's HTTP setting without creating or changing it.</summary>
     internal procedure IsHttpEnabled(): Boolean

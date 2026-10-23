@@ -1,0 +1,12 @@
+{
+  "sha": "0342d46c23e1dd02ed6e7319336f9caba5895a44",
+  "owner": "Architect / Claude Code",
+  "status": "Pending separate repo-scoped docs publication",
+  "missing": [
+    "help/warehouse/warehouse-setup-wizard.md",
+    "i18n/is-IS/docusaurus-plugin-content-docs-help-warehouse/current/warehouse-setup-wizard.md"
+  ],
+  "repo": "businesscentralal/bifrost",
+  "sourceEvidence": "GitHub root GET200; both file GET404. Complete EN/IS content in source app/Help. SourceGuards currently leaves HelpLinks unwired because previously no pages; Architect owns CI wiring. No external docs source writes performed.",
+  "dependencyUrl": "https://github.com/businesscentralal/bc-origo-bifrost-warehouse/issues/83"
+}

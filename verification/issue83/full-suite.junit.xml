@@ -1,0 +1,547 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites>
+  <testsuite name="97000 Whse BinContent Get Tests ori" timestamp="2026-10-23T15:14:49" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="0.159" tests="4" errors="0" failures="0" skipped="0">
+    <testcase classname="97000 Whse BinContent Get Tests ori" name="GetReturnsMatchingBinContent" time="0.093" />
+    <testcase classname="97000 Whse BinContent Get Tests ori" name="GetPagesRowsAndReportsUnpagedCount" time="0.033" />
+    <testcase classname="97000 Whse BinContent Get Tests ori" name="GetWithNoMatchesReturnsEmptySuccess" time="0.017" />
+    <testcase classname="97000 Whse BinContent Get Tests ori" name="IsDisabledWithoutReadPermission" time="0.016" />
+  </testsuite>
+  <testsuite name="97001 Whse Activity Get Tests ori" timestamp="2026-10-23T15:14:51" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="0.491" tests="23" errors="0" failures="0" skipped="0">
+    <testcase classname="97001 Whse Activity Get Tests ori" name="GetByNumberReturnsHeaderAndLines" time="0.063" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="MissingNumberReturnsStructuredError" time="0.027" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="MissingSystemIdReturnsStructuredError" time="0.016" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="FiltersByActivityTypeDocumentLocationAndAssignedUser" time="0.04" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="PagesHeadersAndReportsUnpagedCount" time="0.02" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="IsDisabledWithoutReadPermission" time="0.017" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC01_NoAndSystemId_RejectConflict" time="0.026" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC01_SubjectAndSystemId_RejectConflict" time="0.02" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC01_NoAndSubject_RejectConflict" time="0.02" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC01_Aliases_RejectConflict" time="0.017" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC02_AllIdentifiers_ReturnOneRecord" time="0.017" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC03_ActivityNo_ReturnRecord" time="0.024" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC03_UnknownAlias_ReturnNotFound" time="0.02" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC04_id_ReturnRecord" time="0.014" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC04_id_RejectNonGuid" time="0.014" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC04_recordSystemId_ReturnRecord" time="0.017" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC04_recordSystemId_RejectNonGuid" time="0.02" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC04_InvalidAliasWithNo_RejectFormat" time="0.02" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC05_AliasesWithFilter_NoUnrelatedRow" time="0.03" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC06_BilingualHelp_DeclaresContract" time="0.01" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC04_IdObject_RejectFormat" time="0.013" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC04_RecordIdArray_RejectFormat" time="0.013" />
+    <testcase classname="97001 Whse Activity Get Tests ori" name="Scenario_AC05_AliasObjectFilter_RejectFormat" time="0.013" />
+  </testsuite>
+  <testsuite name="97003 Whse Setup Wizard Tests" timestamp="2026-10-23T15:14:55" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="2.906" tests="10" errors="0" failures="0" skipped="0">
+    <testcase classname="97003 Whse Setup Wizard Tests" name="AC01_RegistrationCreatesIncompleteSetup" time="0.823" />
+    <testcase classname="97003 Whse Setup Wizard Tests" name="AC03_FoundationRegistryIncludesWarehouse" time="0.017" />
+    <testcase classname="97003 Whse Setup Wizard Tests" name="AC03_HttpStatusReadsWarehouseOnly" time="0.007" />
+    <testcase classname="97003 Whse Setup Wizard Tests" name="AC04_PermissionSetsMatchInstalledMetadata" time="0.016" />
+    <testcase classname="97003 Whse Setup Wizard Tests" name="AC03_HttpDisplayIsReadOnlyAndCannotPersistInput" time="0.043" />
+    <testcase classname="97003 Whse Setup Wizard Tests" name="AC05_FinishCompletesSetup" time="0.4" />
+    <testcase classname="97003 Whse Setup Wizard Tests" name="AC05_EarlyCloseLeavesSetupIncomplete" time="0.413" />
+    <testcase classname="97003 Whse Setup Wizard Tests" name="AC05_ReopenPreservesPreviousCompletion" time="0.37" />
+    <testcase classname="97003 Whse Setup Wizard Tests" name="AC01_RegistrationIsInExtensionsGroup" time="0.464" />
+    <testcase classname="97003 Whse Setup Wizard Tests" name="AC02_ShowOperationsOpensFoundationList" time="0.353" />
+  </testsuite>
+  <testsuite name="97011 Whse Shipment Create Tests ori" timestamp="2026-10-23T15:14:59" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="3.716" tests="7" errors="0" failures="0" skipped="0">
+    <testcase classname="97011 Whse Shipment Create Tests ori" name="Create_SalesOrder_ReturnsShipmentNo" time="3.217" />
+    <testcase classname="97011 Whse Shipment Create Tests ori" name="Create_MissingSourceDocuments_ReturnsError" time="0.013" />
+    <testcase classname="97011 Whse Shipment Create Tests ori" name="Create_UnsupportedSourceType_ReturnsError" time="0.02" />
+    <testcase classname="97011 Whse Shipment Create Tests ori" name="Create_SalesOrderNotReleased_ReturnsError" time="0.387" />
+    <testcase classname="97011 Whse Shipment Create Tests ori" name="IsEnabledWithWritePermission" time="0.003" />
+    <testcase classname="97011 Whse Shipment Create Tests ori" name="IsDisabledWithoutWritePermission" time="0.013" />
+    <testcase classname="97011 Whse Shipment Create Tests ori" name="ShipmentCreate_Refusal_IsLocalized" time="0.063" />
+  </testsuite>
+  <testsuite name="97012 Whse Shipment Post Tests ori" timestamp="2026-10-23T15:15:02" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="2.386" tests="6" errors="0" failures="0" skipped="0">
+    <testcase classname="97012 Whse Shipment Post Tests ori" name="Post_Ship_ReturnsPostedWhseShipmentNo" time="1.027" />
+    <testcase classname="97012 Whse Shipment Post Tests ori" name="Post_ShipAndInvoice_ReturnsSuccess" time="1.07" />
+    <testcase classname="97012 Whse Shipment Post Tests ori" name="Post_MissingShipment_ReturnsError" time="0.01" />
+    <testcase classname="97012 Whse Shipment Post Tests ori" name="Post_InvalidInvoice_ReturnsErrorWithoutPosting" time="0.266" />
+    <testcase classname="97012 Whse Shipment Post Tests ori" name="IsEnabledWithWritePermission" time="0.006" />
+    <testcase classname="97012 Whse Shipment Post Tests ori" name="IsDisabledWithoutWritePermission" time="0.007" />
+  </testsuite>
+  <testsuite name="97013 Whse Ship Prev Post Tests ori" timestamp="2026-10-23T15:15:06" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="3.419" tests="7" errors="0" failures="0" skipped="0">
+    <testcase classname="97013 Whse Ship Prev Post Tests ori" name="PreviewPost_PostableShipment_ReturnsSuccessAndRollback" time="0.843" />
+    <testcase classname="97013 Whse Ship Prev Post Tests ori" name="PreviewPost_PostableShipment_DoesNotCreatePostedShipment" time="0.816" />
+    <testcase classname="97013 Whse Ship Prev Post Tests ori" name="PreviewPost_PostableShipment_ReturnsContextAndAlwaysInvoiceTrue" time="0.633" />
+    <testcase classname="97013 Whse Ship Prev Post Tests ori" name="PreviewPost_SystemIdSubject_ReturnsSuccess" time="0.697" />
+    <testcase classname="97013 Whse Ship Prev Post Tests ori" name="PreviewPost_ShipmentNotFound_ReturnsError" time="0.02" />
+    <testcase classname="97013 Whse Ship Prev Post Tests ori" name="PreviewPost_MissingIdentification_ReturnsError" time="0.013" />
+    <testcase classname="97013 Whse Ship Prev Post Tests ori" name="PreviewPost_NothingToShip_ReturnsNothingToPreview" time="0.397" />
+  </testsuite>
+  <testsuite name="97014 Whse Receipt Create Tests ori" timestamp="2026-10-23T15:15:08" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="1.971" tests="10" errors="0" failures="0" skipped="0">
+    <testcase classname="97014 Whse Receipt Create Tests ori" name="Create_PurchaseOrder_ReturnsReceiptNo" time="1.02" />
+    <testcase classname="97014 Whse Receipt Create Tests ori" name="Create_MissingSourceDocuments_ReturnsError" time="0.017" />
+    <testcase classname="97014 Whse Receipt Create Tests ori" name="Create_UnsupportedSourceType_ReturnsError" time="0.014" />
+    <testcase classname="97014 Whse Receipt Create Tests ori" name="Create_PurchaseOrderNotReleased_ReturnsError" time="0.237" />
+    <testcase classname="97014 Whse Receipt Create Tests ori" name="Create_LocationCodeMismatch_ReturnsError" time="0.247" />
+    <testcase classname="97014 Whse Receipt Create Tests ori" name="Create_ValidPostingDate_PersistsOverride" time="0.22" />
+    <testcase classname="97014 Whse Receipt Create Tests ori" name="Create_InvalidPostingDate_ReturnsErrorWithoutReceipt" time="0.18" />
+    <testcase classname="97014 Whse Receipt Create Tests ori" name="IsEnabledWithWritePermission" time="0.003" />
+    <testcase classname="97014 Whse Receipt Create Tests ori" name="IsDisabledWithoutWritePermission" time="0.006" />
+    <testcase classname="97014 Whse Receipt Create Tests ori" name="ReceiptCreate_Refusal_IsLocalized" time="0.027" />
+  </testsuite>
+  <testsuite name="97015 Whse Receipt Post Tests ori" timestamp="2026-10-23T15:15:10" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="0.973" tests="5" errors="0" failures="0" skipped="0">
+    <testcase classname="97015 Whse Receipt Post Tests ori" name="Post_PurchaseReceipt_ReturnsPostedWhseReceiptNo" time="0.65" />
+    <testcase classname="97015 Whse Receipt Post Tests ori" name="Post_MissingReceipt_ReturnsError" time="0.01" />
+    <testcase classname="97015 Whse Receipt Post Tests ori" name="Post_ReturnsEchoedReceiptNo" time="0.296" />
+    <testcase classname="97015 Whse Receipt Post Tests ori" name="IsEnabledWithWritePermission" time="0.007" />
+    <testcase classname="97015 Whse Receipt Post Tests ori" name="IsDisabledWithoutWritePermission" time="0.01" />
+  </testsuite>
+  <testsuite name="97016 Whse Rcpt Post Prev Tests ori" timestamp="2026-10-23T15:15:11" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="0.818" tests="3" errors="0" failures="0" skipped="0">
+    <testcase classname="97016 Whse Rcpt Post Prev Tests ori" name="PreviewPost_PurchaseReceipt_ReturnsPreviewAndRollsBack" time="0.53" />
+    <testcase classname="97016 Whse Rcpt Post Prev Tests ori" name="PreviewPost_MissingReceipt_ReturnsError" time="0.014" />
+    <testcase classname="97016 Whse Rcpt Post Prev Tests ori" name="PreviewPost_NothingToReceive_ReturnsNothingToPreview" time="0.274" />
+  </testsuite>
+  <testsuite name="97017 Whse Pick Create Tests ori" timestamp="2026-10-23T15:15:13" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="1.528" tests="8" errors="0" failures="0" skipped="0">
+    <testcase classname="97017 Whse Pick Create Tests ori" name="PickCreate_HappyPath_ReturnsPickNo" time="0.487" />
+    <testcase classname="97017 Whse Pick Create Tests ori" name="PickCreate_WithAssignedUserId_AppliesToHeader" time="0.356" />
+    <testcase classname="97017 Whse Pick Create Tests ori" name="PickCreate_InvalidSortingMethod_ReturnsError" time="0.347" />
+    <testcase classname="97017 Whse Pick Create Tests ori" name="PickCreate_ShipmentNotFound_ReturnsError" time="0.017" />
+    <testcase classname="97017 Whse Pick Create Tests ori" name="PickCreate_MissingIdentifier_ReturnsError" time="0.01" />
+    <testcase classname="97017 Whse Pick Create Tests ori" name="PickCreate_SetBreakbulkFilterTrue_ReturnsError" time="0.3" />
+    <testcase classname="97017 Whse Pick Create Tests ori" name="IsEnabledWithWritePermission" time="0.004" />
+    <testcase classname="97017 Whse Pick Create Tests ori" name="IsDisabledWithoutWritePermission" time="0.007" />
+  </testsuite>
+  <testsuite name="97018 Whse Pick Register Tests ori" timestamp="2026-10-23T15:15:14" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="1.279" tests="6" errors="0" failures="0" skipped="0">
+    <testcase classname="97018 Whse Pick Register Tests ori" name="PickRegister_HappyPath_ReturnsRegisteredPickNo" time="0.566" />
+    <testcase classname="97018 Whse Pick Register Tests ori" name="PickRegister_HappyPath_UpdatesShipmentLineQtyPicked" time="0.37" />
+    <testcase classname="97018 Whse Pick Register Tests ori" name="PickRegister_ResponseIncludesShipmentLines" time="0.3" />
+    <testcase classname="97018 Whse Pick Register Tests ori" name="PickRegister_PickNotFound_ReturnsError" time="0.01" />
+    <testcase classname="97018 Whse Pick Register Tests ori" name="PickRegister_MissingIdentifier_ReturnsError" time="0.01" />
+    <testcase classname="97018 Whse Pick Register Tests ori" name="PickRegister_Refusal_IsLocalized" time="0.023" />
+  </testsuite>
+  <testsuite name="97019 Whse Putaway Create Tests ori" timestamp="2026-10-23T15:15:17" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="1.998" tests="9" errors="0" failures="0" skipped="0">
+    <testcase classname="97019 Whse Putaway Create Tests ori" name="PutawayCreate_HappyPath_ReturnsPutawayNo" time="0.496" />
+    <testcase classname="97019 Whse Putaway Create Tests ori" name="PutawayCreate_AutoCreatedOnPosting_ReturnsExisting" time="0.33" />
+    <testcase classname="97019 Whse Putaway Create Tests ori" name="PutawayCreate_WithAssignedUserId_AppliesToHeader" time="0.35" />
+    <testcase classname="97019 Whse Putaway Create Tests ori" name="PutawayCreate_InvalidSortingMethod_ReturnsError" time="0.393" />
+    <testcase classname="97019 Whse Putaway Create Tests ori" name="PutawayCreate_ReceiptNotFound_ReturnsError" time="0.013" />
+    <testcase classname="97019 Whse Putaway Create Tests ori" name="PutawayCreate_MissingIdentifier_ReturnsError" time="0.013" />
+    <testcase classname="97019 Whse Putaway Create Tests ori" name="PutawayCreate_SetBreakbulkFilterTrue_ReturnsError" time="0.39" />
+    <testcase classname="97019 Whse Putaway Create Tests ori" name="IsEnabledWithWritePermission" time="0.006" />
+    <testcase classname="97019 Whse Putaway Create Tests ori" name="IsDisabledWithoutWritePermission" time="0.007" />
+  </testsuite>
+  <testsuite name="97020 Whse Putaway Reg Tests ori" timestamp="2026-10-23T15:15:19" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="1.65" tests="5" errors="0" failures="0" skipped="0">
+    <testcase classname="97020 Whse Putaway Reg Tests ori" name="PutawayRegister_HappyPath_ReturnsRegisteredPutawayNo" time="0.667" />
+    <testcase classname="97020 Whse Putaway Reg Tests ori" name="PutawayRegister_HappyPath_UpdatesPostedReceiptQtyPutAway" time="0.547" />
+    <testcase classname="97020 Whse Putaway Reg Tests ori" name="PutawayRegister_ResponseIncludesReceiptLines" time="0.41" />
+    <testcase classname="97020 Whse Putaway Reg Tests ori" name="PutawayRegister_PutawayNotFound_ReturnsError" time="0.013" />
+    <testcase classname="97020 Whse Putaway Reg Tests ori" name="PutawayRegister_MissingIdentifier_ReturnsError" time="0.013" />
+  </testsuite>
+  <testsuite name="97023 Whse Posting Gate Tests ori" timestamp="2026-10-23T15:15:19" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="0.136" tests="15" errors="0" failures="0" skipped="0">
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="ShipmentPost_WithoutWhsePost_IsDisabled" time="0.01" />
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="ReceiptPost_WithoutWhsePost_IsDisabled" time="0.003" />
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="PickRegister_WithoutWhsePost_IsDisabled" time="0.007" />
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="PutawayRegister_WithoutWhsePost_IsDisabled" time="0.003" />
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="AssertCanPost_WithoutWhsePost_NamesWhsePostSet" time="0.007" />
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="AssertCanInvoice_WithoutWhseInv_NamesWhseInvSet" time="0.007" />
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="ShipmentPost_InvoiceWithoutWhseInv_NamesWhseInvSet" time="0.017" />
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="MovementRegister_WithoutWhsePost_IsRefused" time="0.006" />
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="InventoryPickPost_WithoutWhsePost_IsRefused" time="0.006" />
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="InventoryPutAwayPost_WithoutWhsePost_IsRefused" time="0.007" />
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="InventoryMovementRegister_WithoutWhsePost_IsRefused" time="0.007" />
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="InventoryPickPost_InvoiceWithoutWhseInv_NamesWhseInvSet" time="0.013" />
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="InventoryPutAwayPost_InvoiceWithoutWhseInv_NamesWhseInvSet" time="0.02" />
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="ShipmentPreview_WithoutWhsePost_StaysEnabled" time="0.016" />
+    <testcase classname="97023 Whse Posting Gate Tests ori" name="ReceiptPreview_WithoutWhsePost_StaysEnabled" time="0.007" />
+  </testsuite>
+  <testsuite name="97024 Whse Post Gate Grant Tests ori" timestamp="2026-10-23T15:15:20" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="0.076" tests="8" errors="0" failures="0" skipped="0">
+    <testcase classname="97024 Whse Post Gate Grant Tests ori" name="ShipmentPost_WithWhsePost_IsEnabled" time="0.007" />
+    <testcase classname="97024 Whse Post Gate Grant Tests ori" name="ReceiptPost_WithWhsePost_IsEnabled" time="0.006" />
+    <testcase classname="97024 Whse Post Gate Grant Tests ori" name="PickRegister_WithWhsePost_IsEnabled" time="0.006" />
+    <testcase classname="97024 Whse Post Gate Grant Tests ori" name="PutawayRegister_WithWhsePost_IsEnabled" time="0.006" />
+    <testcase classname="97024 Whse Post Gate Grant Tests ori" name="AssertCanPost_WithBothSets_WritesNoError" time="0.007" />
+    <testcase classname="97024 Whse Post Gate Grant Tests ori" name="ShipmentPost_InvoiceWithWhseInv_ReachesLookup" time="0.024" />
+    <testcase classname="97024 Whse Post Gate Grant Tests ori" name="NewPostAndRegisterTypes_WithWhsePost_AreEnabled" time="0.007" />
+    <testcase classname="97024 Whse Post Gate Grant Tests ori" name="InventoryPickPost_InvoiceWithWhseInv_ReachesLookup" time="0.013" />
+  </testsuite>
+  <testsuite name="97026 Whse Write Restrict Tests ori" timestamp="2026-10-23T15:15:20" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="0.098" tests="7" errors="0" failures="0" skipped="0">
+    <testcase classname="97026 Whse Write Restrict Tests ori" name="GenericWrite_WarehouseDocumentTables_IsRefused" time="0.007" />
+    <testcase classname="97026 Whse Write Restrict Tests ori" name="GenericWrite_NonWarehouseTable_IsNotRestricted" time="0.003" />
+    <testcase classname="97026 Whse Write Restrict Tests ori" name="GenericRead_WarehouseDocumentTables_StaysAllowed" time="0.007" />
+    <testcase classname="97026 Whse Write Restrict Tests ori" name="GenericWrite_Bin_IsRefusedAndHinted" time="0.027" />
+    <testcase classname="97026 Whse Write Restrict Tests ori" name="GenericWrite_BinContentDefault_IsRefusedAndHinted" time="0.02" />
+    <testcase classname="97026 Whse Write Restrict Tests ori" name="GenericWrite_MovementWorksheetFields_IsRefusedAndHinted" time="0.014" />
+    <testcase classname="97026 Whse Write Restrict Tests ori" name="GenericWrite_MovementActivityFields_IsHinted" time="0.02" />
+  </testsuite>
+  <testsuite name="97027 Whse Msg Contract Tests ori" timestamp="2026-10-23T15:15:21" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="0.11" tests="11" errors="0" failures="0" skipped="0">
+    <testcase classname="97027 Whse Msg Contract Tests ori" name="EveryWarehouseType_HasContractAndDiscovery" time="0.017" />
+    <testcase classname="97027 Whse Msg Contract Tests ori" name="Scenario_AC01_ReceiptPreview_PreservesOrdinalAndCanonicalName" time="0.006" />
+    <testcase classname="97027 Whse Msg Contract Tests ori" name="Scenario_AC02_ReceiptHelp_UsesCanonicalPreviewNameInBothLanguages" time="0.01" />
+    <testcase classname="97027 Whse Msg Contract Tests ori" name="ActivityContractDescribesHeadersAndLines" time="0.006" />
+    <testcase classname="97027 Whse Msg Contract Tests ori" name="DocumentTargets_DeclareEachIdentifierKey" time="0.007" />
+    <testcase classname="97027 Whse Msg Contract Tests ori" name="ActivityGet_TargetListsEveryKeyItReads" time="0.007" />
+    <testcase classname="97027 Whse Msg Contract Tests ori" name="ActivityGet_ErrorsDoNotListUnanswerableCodes" time="0.01" />
+    <testcase classname="97027 Whse Msg Contract Tests ori" name="BinContentGet_DeclaresTableView" time="0.01" />
+    <testcase classname="97027 Whse Msg Contract Tests ori" name="ActivityRegister_TargetStillListsAliases" time="0.007" />
+    <testcase classname="97027 Whse Msg Contract Tests ori" name="LookupTypes_ErrorsChapter_ListsInvalidFormatAndMultipleErrors" time="0.024" />
+    <testcase classname="97027 Whse Msg Contract Tests ori" name="NonLookupTypes_ErrorsChapter_HasNoMultipleErrors" time="0.006" />
+  </testsuite>
+  <testsuite name="97028 Whse Omit Commit Tests ori" timestamp="2026-10-23T15:15:23" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="1.327" tests="4" errors="0" failures="0" skipped="0">
+    <testcase classname="97028 Whse Omit Commit Tests ori" name="PreviewShipment_OmitCommit_ReturnsPreconditionFailed" time="0.39" />
+    <testcase classname="97028 Whse Omit Commit Tests ori" name="PreviewReceipt_OmitCommit_ReturnsPreconditionFailed" time="0.24" />
+    <testcase classname="97028 Whse Omit Commit Tests ori" name="PostShipment_OmitCommit_PostingError_IsRaised" time="0.37" />
+    <testcase classname="97028 Whse Omit Commit Tests ori" name="PostShipment_NoOmitCommit_PostingError_ReturnsError" time="0.327" />
+  </testsuite>
+  <testsuite name="97029 Whse Id Format Tests ori" timestamp="2026-10-23T15:15:24" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="1.433" tests="7" errors="0" failures="0" skipped="0">
+    <testcase classname="97029 Whse Id Format Tests ori" name="AC01_AllLookupTypes_DataNotObject_IsInvalidFormat" time="0.2" />
+    <testcase classname="97029 Whse Id Format Tests ori" name="BinAndMovementTypes_DataNotObject_IsInvalidFormat" time="0.23" />
+    <testcase classname="97029 Whse Id Format Tests ori" name="AC02_ShipmentKeys_WrongJsonTypes_AreInvalidFormat" time="0.223" />
+    <testcase classname="97029 Whse Id Format Tests ori" name="AC03_ValidSubject_WrongKey_DoesNotPost" time="0.587" />
+    <testcase classname="97029 Whse Id Format Tests ori" name="AC04_TwoWrongKeys_ReturnOrderedMultipleErrors" time="0.026" />
+    <testcase classname="97029 Whse Id Format Tests ori" name="AC05_EmptyAndInvalidGuid_PreserveErrors" time="0.023" />
+    <testcase classname="97029 Whse Id Format Tests ori" name="ActivityAliases_WrongJsonTypes_AreInvalidFormat" time="0.144" />
+  </testsuite>
+  <testsuite name="97031 Whse Contract Parity Tests ori" timestamp="2026-10-23T15:15:25" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="0.213" tests="9" errors="0" failures="0" skipped="0">
+    <testcase classname="97031 Whse Contract Parity Tests ori" name="EveryType_DeclaresEveryRequiredChapter" time="0.024" />
+    <testcase classname="97031 Whse Contract Parity Tests ori" name="EveryChangingType_DeclaresAWorkflow" time="0.023" />
+    <testcase classname="97031 Whse Contract Parity Tests ori" name="EveryErrorEntry_CarriesCodeConditionAndFix" time="0.033" />
+    <testcase classname="97031 Whse Contract Parity Tests ori" name="EveryType_DirectionMatchesEffect" time="0.024" />
+    <testcase classname="97031 Whse Contract Parity Tests ori" name="EveryParameter_IsDescribed" time="0.027" />
+    <testcase classname="97031 Whse Contract Parity Tests ori" name="ResponseAndExamples_AreComplete" time="0.03" />
+    <testcase classname="97031 Whse Contract Parity Tests ori" name="RelatedAndWorkflow_NameExistingTypes" time="0.023" />
+    <testcase classname="97031 Whse Contract Parity Tests ori" name="EveryType_DiscoveryTextsExistInBothLanguages" time="0.006" />
+    <testcase classname="97031 Whse Contract Parity Tests ori" name="NotesAndOverview_NameNoAlObjects" time="0.023" />
+  </testsuite>
+  <testsuite name="97040 Whse Rcpt GetSrcDocs Tests ori" timestamp="2026-10-23T15:15:28" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="2.19" tests="12" errors="0" failures="0" skipped="0">
+    <testcase classname="97040 Whse Rcpt GetSrcDocs Tests ori" name="NewReceipt_TwoPurchaseOrders_AreAdded" time="0.43" />
+    <testcase classname="97040 Whse Rcpt GetSrcDocs Tests ori" name="ExistingReceipt_SecondOrder_IsAdded" time="0.36" />
+    <testcase classname="97040 Whse Rcpt GetSrcDocs Tests ori" name="SourceLineOnOtherReceipt_IsSkipped" time="0.37" />
+    <testcase classname="97040 Whse Rcpt GetSrcDocs Tests ori" name="UnknownReceipt_IsNotFound" time="0.013" />
+    <testcase classname="97040 Whse Rcpt GetSrcDocs Tests ori" name="NoReleasedRequest_IsRefused" time="0.12" />
+    <testcase classname="97040 Whse Rcpt GetSrcDocs Tests ori" name="NoReleasedRequest_NamesTheFilter" time="0.1" />
+    <testcase classname="97040 Whse Rcpt GetSrcDocs Tests ori" name="SourceAtOtherLocation_IsRefused" time="0.54" />
+    <testcase classname="97040 Whse Rcpt GetSrcDocs Tests ori" name="CommonRefusals" time="0.13" />
+    <testcase classname="97040 Whse Rcpt GetSrcDocs Tests ori" name="WithoutPermission_ReturnsPermissionDenied" time="0.007" />
+    <testcase classname="97040 Whse Rcpt GetSrcDocs Tests ori" name="LocalDate_AnswerIsDeclared" time="0.084" />
+    <testcase classname="97040 Whse Rcpt GetSrcDocs Tests ori" name="IndependentProblems_AreCollected" time="0.02" />
+    <testcase classname="97040 Whse Rcpt GetSrcDocs Tests ori" name="IndependentProblems_AreCollectedInIcelandic" time="0.016" />
+  </testsuite>
+  <testsuite name="97041 Whse Ship GetSrcDocs Tests ori" timestamp="2026-10-23T15:15:31" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="2.847" tests="9" errors="0" failures="0" skipped="0">
+    <testcase classname="97041 Whse Ship GetSrcDocs Tests ori" name="NewShipment_TwoSalesOrders_AreAdded" time="0.54" />
+    <testcase classname="97041 Whse Ship GetSrcDocs Tests ori" name="ExistingShipment_SecondOrder_IsAdded" time="0.446" />
+    <testcase classname="97041 Whse Ship GetSrcDocs Tests ori" name="SourceLineOnOtherShipment_IsSkipped" time="0.394" />
+    <testcase classname="97041 Whse Ship GetSrcDocs Tests ori" name="UnknownShipment_IsNotFound" time="0.014" />
+    <testcase classname="97041 Whse Ship GetSrcDocs Tests ori" name="ReleasedShipment_IsRefused" time="0.39" />
+    <testcase classname="97041 Whse Ship GetSrcDocs Tests ori" name="NoReleasedRequest_IsRefused" time="0.19" />
+    <testcase classname="97041 Whse Ship GetSrcDocs Tests ori" name="SourceAtOtherLocation_IsRefused" time="0.626" />
+    <testcase classname="97041 Whse Ship GetSrcDocs Tests ori" name="CommonRefusals" time="0.237" />
+    <testcase classname="97041 Whse Ship GetSrcDocs Tests ori" name="WithoutPermission_ReturnsPermissionDenied" time="0.01" />
+  </testsuite>
+  <testsuite name="97042 Whse Ship Release Tests ori" timestamp="2026-10-23T15:15:35" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="3.444" tests="14" errors="0" failures="0" skipped="0">
+    <testcase classname="97042 Whse Ship Release Tests ori" name="Release_OpenShipment_IsReleased" time="0.36" />
+    <testcase classname="97042 Whse Ship Release Tests ori" name="Release_AlreadyReleased_AnswersUnchanged" time="0.277" />
+    <testcase classname="97042 Whse Ship Release Tests ori" name="Release_NoLines_IsRefused" time="0.117" />
+    <testcase classname="97042 Whse Ship Release Tests ori" name="Release_UnknownShipment_IsNotFound" time="0.033" />
+    <testcase classname="97042 Whse Ship Release Tests ori" name="Release_CommonRefusals" time="0.606" />
+    <testcase classname="97042 Whse Ship Release Tests ori" name="Reopen_ReleasedShipment_IsOpen" time="0.273" />
+    <testcase classname="97042 Whse Ship Release Tests ori" name="Reopen_AlreadyOpen_AnswersUnchanged" time="0.293" />
+    <testcase classname="97042 Whse Ship Release Tests ori" name="Reopen_OpenPick_IsRefused" time="0.343" />
+    <testcase classname="97042 Whse Ship Release Tests ori" name="Release_NoLinesAsSubject_NamesSubject" time="0.106" />
+    <testcase classname="97042 Whse Ship Release Tests ori" name="Reopen_UnknownKey_IsRefused" time="0.423" />
+    <testcase classname="97042 Whse Ship Release Tests ori" name="ReleaseReopen_WithoutPermission_ReturnsPermissionDenied" time="0.01" />
+    <testcase classname="97042 Whse Ship Release Tests ori" name="Reopen_StrayIdentifier_IsRecordNotFound" time="0.28" />
+    <testcase classname="97042 Whse Ship Release Tests ori" name="Reopen_StrayIdentifier_IsRecordNotFoundInIcelandic" time="0.3" />
+    <testcase classname="97042 Whse Ship Release Tests ori" name="Release_UnknownKeyAndUnknownShipment_AreCollected" time="0.023" />
+  </testsuite>
+  <testsuite name="97043 Whse Request Get Tests ori" timestamp="2026-10-23T15:15:36" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="0.957" tests="8" errors="0" failures="0" skipped="0">
+    <testcase classname="97043 Whse Request Get Tests ori" name="Get_ReleasedInboundRequests_AreAnswered" time="0.357" />
+    <testcase classname="97043 Whse Request Get Tests ori" name="Get_NoMatch_AnswersEmptyList" time="0.183" />
+    <testcase classname="97043 Whse Request Get Tests ori" name="Get_Refusals" time="0.127" />
+    <testcase classname="97043 Whse Request Get Tests ori" name="Get_WithoutPermission_ReturnsPermissionDenied" time="0.007" />
+    <testcase classname="97043 Whse Request Get Tests ori" name="Get_DateNextStep_GivesTheValueToResend" time="0.116" />
+    <testcase classname="97043 Whse Request Get Tests ori" name="Get_PagingAndDateAnswers_AreDeclared" time="0.133" />
+    <testcase classname="97043 Whse Request Get Tests ori" name="Get_IndependentProblems_AreCollected" time="0.017" />
+    <testcase classname="97043 Whse Request Get Tests ori" name="Get_IndependentProblems_AreCollectedInIcelandic" time="0.017" />
+  </testsuite>
+  <testsuite name="97044 Whse PostedDoc Get Tests ori" timestamp="2026-10-23T15:15:37" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="0.143" tests="5" errors="0" failures="0" skipped="0">
+    <testcase classname="97044 Whse PostedDoc Get Tests ori" name="Get_PostedReceipt_BySourceNoAndNo" time="0.046" />
+    <testcase classname="97044 Whse PostedDoc Get Tests ori" name="Get_PostedShipment_ByLocationAndDate" time="0.03" />
+    <testcase classname="97044 Whse PostedDoc Get Tests ori" name="Get_NoMatch_AnswersEmptyList" time="0.02" />
+    <testcase classname="97044 Whse PostedDoc Get Tests ori" name="Get_Refusals" time="0.04" />
+    <testcase classname="97044 Whse PostedDoc Get Tests ori" name="Get_WithoutPermission_ReturnsPermissionDenied" time="0.007" />
+  </testsuite>
+  <testsuite name="97045 Whse RegActivity Get Tests ori" timestamp="2026-10-23T15:15:38" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="0.233" tests="5" errors="0" failures="0" skipped="0">
+    <testcase classname="97045 Whse RegActivity Get Tests ori" name="Get_RegisteredPick_BySourceNoAndNo" time="0.067" />
+    <testcase classname="97045 Whse RegActivity Get Tests ori" name="Get_PutAway_ByTypeAndDate" time="0.07" />
+    <testcase classname="97045 Whse RegActivity Get Tests ori" name="Get_Refusals" time="0.053" />
+    <testcase classname="97045 Whse RegActivity Get Tests ori" name="Get_NoMatch_AnswersEmptyList" time="0.03" />
+    <testcase classname="97045 Whse RegActivity Get Tests ori" name="Get_WithoutPermission_ReturnsPermissionDenied" time="0.013" />
+  </testsuite>
+  <testsuite name="97046 Whse Partial Post Tests ori" timestamp="2026-10-23T15:15:43" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="4.288" tests="14" errors="0" failures="0" skipped="0">
+    <testcase classname="97046 Whse Partial Post Tests ori" name="ReceiptPost_PartialLine_PostsPartOfIt" time="0.557" />
+    <testcase classname="97046 Whse Partial Post Tests ori" name="ReceiptPost_QuantityOutOfRange_IsRefused" time="0.257" />
+    <testcase classname="97046 Whse Partial Post Tests ori" name="ReceiptPost_UnknownLine_IsRefused" time="0.224" />
+    <testcase classname="97046 Whse Partial Post Tests ori" name="ReceiptPost_AllZero_IsRefused" time="0.19" />
+    <testcase classname="97046 Whse Partial Post Tests ori" name="ReceiptPost_LineFormatRefusals" time="0.216" />
+    <testcase classname="97046 Whse Partial Post Tests ori" name="ShipmentPost_PartialLine_PostsPartOfIt" time="0.493" />
+    <testcase classname="97046 Whse Partial Post Tests ori" name="ShipmentPost_AbovePicked_IsRefused" time="0.31" />
+    <testcase classname="97046 Whse Partial Post Tests ori" name="ReceiptPreview_WithLines_RollsBack" time="0.42" />
+    <testcase classname="97046 Whse Partial Post Tests ori" name="ShipmentPreview_QuantityOutOfRange_IsRefused" time="0.284" />
+    <testcase classname="97046 Whse Partial Post Tests ori" name="ShipmentPreview_AbovePicked_IsRefusedAndDeclared" time="0.3" />
+    <testcase classname="97046 Whse Partial Post Tests ori" name="ReceiptPreview_LineRefusals_AreDeclared" time="0.23" />
+    <testcase classname="97046 Whse Partial Post Tests ori" name="GenericWrite_StatusAndQuantities_AreRefusedAndHinted" time="0.027" />
+    <testcase classname="97046 Whse Partial Post Tests ori" name="ReceiptPost_UnknownKeyAndLineProblems_AreCollected" time="0.207" />
+    <testcase classname="97046 Whse Partial Post Tests ori" name="ReceiptPreview_Summary_IsTranslated" time="0.573" />
+  </testsuite>
+  <testsuite name="97047 Whse DocFlow Help Tests ori" timestamp="2026-10-23T15:15:43" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="0.33" tests="5" errors="0" failures="0" skipped="0">
+    <testcase classname="97047 Whse DocFlow Help Tests ori" name="NewTypes_HaveContractAndBilingualHelp" time="0.01" />
+    <testcase classname="97047 Whse DocFlow Help Tests ori" name="ErrorsChapters_ListRefusalsWithNextSteps" time="0.013" />
+    <testcase classname="97047 Whse DocFlow Help Tests ori" name="ReleaseRefusal_IsAnsweredInBothLanguages" time="0.297" />
+    <testcase classname="97047 Whse DocFlow Help Tests ori" name="PostErrorsChapters_CarryNextSteps" time="0.007" />
+    <testcase classname="97047 Whse DocFlow Help Tests ori" name="RegisteredActivity_IcelandicCallsMovementsTilfaerslur" time="0.003" />
+  </testsuite>
+  <testsuite name="97051 Whse Journal Create Tests ori" timestamp="2026-10-23T15:15:49" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="5.213" tests="17" errors="0" failures="0" skipped="0">
+    <testcase classname="97051 Whse Journal Create Tests ori" name="Create_ItemJournalLine_InsertedThroughValidate" time="0.474" />
+    <testcase classname="97051 Whse Journal Create Tests ori" name="Create_ReclassLineWithLot_InsertsTrackingLine" time="0.62" />
+    <testcase classname="97051 Whse Journal Create Tests ori" name="Create_BasicLocation_PreconditionFailed" time="0.087" />
+    <testcase classname="97051 Whse Journal Create Tests ori" name="Create_NegativeAboveBinContent_InvalidLine" time="0.567" />
+    <testcase classname="97051 Whse Journal Create Tests ori" name="Create_NegativeWithinBinContent_IsNegativeAdjustment" time="0.386" />
+    <testcase classname="97051 Whse Journal Create Tests ori" name="Create_UnknownBatch_RecordNotFound" time="0.237" />
+    <testcase classname="97051 Whse Journal Create Tests ori" name="Create_CommonRefusals_AnswerCodesWithNextStep" time="0.3" />
+    <testcase classname="97051 Whse Journal Create Tests ori" name="Create_OneFailingLine_WritesNothing" time="0.24" />
+    <testcase classname="97051 Whse Journal Create Tests ori" name="Create_SerialForTwoUnits_InvalidLine" time="0.243" />
+    <testcase classname="97051 Whse Journal Create Tests ori" name="Create_WithoutPermission_ReturnsPermissionDenied" time="0.007" />
+    <testcase classname="97051 Whse Journal Create Tests ori" name="Create_LineWithLot_EchoesLotNo" time="0.254" />
+    <testcase classname="97051 Whse Journal Create Tests ori" name="Create_LineWithLot_EchoesLotNoInIcelandic" time="0.277" />
+    <testcase classname="97051 Whse Journal Create Tests ori" name="Create_NegativeAboveBinContent_CountsLinesFromOne" time="0.39" />
+    <testcase classname="97051 Whse Journal Create Tests ori" name="Create_NegativeAboveBinContent_CountsLinesFromOneInIcelandic" time="0.434" />
+    <testcase classname="97051 Whse Journal Create Tests ori" name="Create_IndependentProblems_AreCollected" time="0.244" />
+    <testcase classname="97051 Whse Journal Create Tests ori" name="Create_IndependentProblems_AreCollectedInIcelandic" time="0.21" />
+    <testcase classname="97051 Whse Journal Create Tests ori" name="Create_PhysInventoryTemplate_IcelandicWording" time="0.243" />
+  </testsuite>
+  <testsuite name="97052 Whse Journal Reg Tests ori" timestamp="2026-10-23T15:15:51" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="1.46" tests="7" errors="0" failures="0" skipped="0">
+    <testcase classname="97052 Whse Journal Reg Tests ori" name="Register_ItemJournal_AnswersRegisterAndEntries" time="0.386" />
+    <testcase classname="97052 Whse Journal Reg Tests ori" name="Register_Reclassification_MovesBetweenBins" time="0.493" />
+    <testcase classname="97052 Whse Journal Reg Tests ori" name="Register_EmptyBatch_PreconditionFailed" time="0.214" />
+    <testcase classname="97052 Whse Journal Reg Tests ori" name="Register_BasicLocation_PreconditionFailed" time="0.087" />
+    <testcase classname="97052 Whse Journal Reg Tests ori" name="Register_Refusals_AnswerCodesWithNextStep" time="0.26" />
+    <testcase classname="97052 Whse Journal Reg Tests ori" name="Register_WithoutPermission_ReturnsPermissionDenied" time="0.01" />
+    <testcase classname="97052 Whse Journal Reg Tests ori" name="Register_WithoutPostingGate_NamesWhsePost" time="0.01" />
+  </testsuite>
+  <testsuite name="97053 Whse PhysInvt Calc Tests ori" timestamp="2026-10-23T15:15:52" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="1.063" tests="5" errors="0" failures="0" skipped="0">
+    <testcase classname="97053 Whse PhysInvt Calc Tests ori" name="Calculate_StockedBin_AnswersCalculatedLine" time="0.46" />
+    <testcase classname="97053 Whse PhysInvt Calc Tests ori" name="Calculate_NothingToCount_AnswersEmptyList" time="0.22" />
+    <testcase classname="97053 Whse PhysInvt Calc Tests ori" name="Calculate_BasicLocation_PreconditionFailed" time="0.093" />
+    <testcase classname="97053 Whse PhysInvt Calc Tests ori" name="Calculate_Refusals_AnswerCodesWithNextStep" time="0.28" />
+    <testcase classname="97053 Whse PhysInvt Calc Tests ori" name="Calculate_WithoutPermission_ReturnsPermissionDenied" time="0.01" />
+  </testsuite>
+  <testsuite name="97054 Whse PhysInvt Reg Tests ori" timestamp="2026-10-23T15:15:55" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="1.757" tests="7" errors="0" failures="0" skipped="0">
+    <testcase classname="97054 Whse PhysInvt Reg Tests ori" name="Register_CountedDifference_AnswersAdjustedLine" time="0.513" />
+    <testcase classname="97054 Whse PhysInvt Reg Tests ori" name="Register_NoDifferences_ZeroAdjustments" time="0.417" />
+    <testcase classname="97054 Whse PhysInvt Reg Tests ori" name="Register_LineNotInBatch_InvalidLine" time="0.354" />
+    <testcase classname="97054 Whse PhysInvt Reg Tests ori" name="Register_BasicLocation_PreconditionFailed" time="0.09" />
+    <testcase classname="97054 Whse PhysInvt Reg Tests ori" name="Register_Refusals_AnswerCodesWithNextStep" time="0.37" />
+    <testcase classname="97054 Whse PhysInvt Reg Tests ori" name="Register_WithoutPermission_ReturnsPermissionDenied" time="0.007" />
+    <testcase classname="97054 Whse PhysInvt Reg Tests ori" name="Register_WithoutPostingGate_NamesWhsePost" time="0.006" />
+  </testsuite>
+  <testsuite name="97055 Whse Adjustment Calc Tests ori" timestamp="2026-10-23T15:15:56" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="1.338" tests="12" errors="0" failures="0" skipped="0">
+    <testcase classname="97055 Whse Adjustment Calc Tests ori" name="Calculate_RegisteredAdjustment_AnswersItemJournalLine" time="0.444" />
+    <testcase classname="97055 Whse Adjustment Calc Tests ori" name="Calculate_NothingToAdjust_AnswersEmptyList" time="0.034" />
+    <testcase classname="97055 Whse Adjustment Calc Tests ori" name="Calculate_UnknownBatch_RecordNotFound" time="0.02" />
+    <testcase classname="97055 Whse Adjustment Calc Tests ori" name="Calculate_BatchWithLines_PreconditionFailed" time="0.043" />
+    <testcase classname="97055 Whse Adjustment Calc Tests ori" name="Calculate_CommonRefusals_AnswerCodesWithNextStep" time="0.113" />
+    <testcase classname="97055 Whse Adjustment Calc Tests ori" name="Calculate_WithoutPermission_ReturnsPermissionDenied" time="0.01" />
+    <testcase classname="97055 Whse Adjustment Calc Tests ori" name="Calculate_OnlyEmptyLeftoverLine_IsIgnored" time="0.28" />
+    <testcase classname="97055 Whse Adjustment Calc Tests ori" name="Calculate_OnlyEmptyLeftoverLine_IsIgnoredInIcelandic" time="0.27" />
+    <testcase classname="97055 Whse Adjustment Calc Tests ori" name="Calculate_BatchWithLines_NamesPostKeys" time="0.043" />
+    <testcase classname="97055 Whse Adjustment Calc Tests ori" name="Calculate_BatchWithLines_NamesPostKeysInIcelandic" time="0.04" />
+    <testcase classname="97055 Whse Adjustment Calc Tests ori" name="Calculate_IndependentProblems_AreCollected" time="0.024" />
+    <testcase classname="97055 Whse Adjustment Calc Tests ori" name="Calculate_IndependentProblems_AreCollectedInIcelandic" time="0.017" />
+  </testsuite>
+  <testsuite name="97056 Whse Wksh GetDocs Tests ori" timestamp="2026-10-23T15:15:59" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="1.907" tests="6" errors="0" failures="0" skipped="0">
+    <testcase classname="97056 Whse Wksh GetDocs Tests ori" name="GetDocuments_PickWorksheet_AddsShipmentLine" time="0.61" />
+    <testcase classname="97056 Whse Wksh GetDocs Tests ori" name="GetDocuments_PutAwayWorksheet_AddsReceiptLine" time="0.92" />
+    <testcase classname="97056 Whse Wksh GetDocs Tests ori" name="GetDocuments_NoOpenDocument_AnswersZeroLines" time="0.104" />
+    <testcase classname="97056 Whse Wksh GetDocs Tests ori" name="GetDocuments_LocationWithoutPick_PreconditionFailed" time="0.08" />
+    <testcase classname="97056 Whse Wksh GetDocs Tests ori" name="GetDocuments_Refusals_AnswerCodesWithNextStep" time="0.183" />
+    <testcase classname="97056 Whse Wksh GetDocs Tests ori" name="GetDocuments_WithoutPermission_ReturnsPermissionDenied" time="0.01" />
+  </testsuite>
+  <testsuite name="97057 Whse Wksh CreateAct Tests ori" timestamp="2026-10-23T15:16:01" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="2.339" tests="7" errors="0" failures="0" skipped="0">
+    <testcase classname="97057 Whse Wksh CreateAct Tests ori" name="CreateActivities_PickWorksheet_CreatesPick" time="0.474" />
+    <testcase classname="97057 Whse Wksh CreateAct Tests ori" name="CreateActivities_PutAwayWorksheet_CreatesPutAway" time="0.36" />
+    <testcase classname="97057 Whse Wksh CreateAct Tests ori" name="CreateActivities_ZeroQtyLine_IsSkipped" time="0.45" />
+    <testcase classname="97057 Whse Wksh CreateAct Tests ori" name="CreateActivities_NothingToHandle_PreconditionFailed" time="0.31" />
+    <testcase classname="97057 Whse Wksh CreateAct Tests ori" name="CreateActivities_LocationWithoutPick_PreconditionFailed" time="0.074" />
+    <testcase classname="97057 Whse Wksh CreateAct Tests ori" name="CreateActivities_Refusals_AnswerCodesWithNextStep" time="0.664" />
+    <testcase classname="97057 Whse Wksh CreateAct Tests ori" name="CreateActivities_WithoutPermission_ReturnsPermissionDenied" time="0.007" />
+  </testsuite>
+  <testsuite name="97058 Whse ActLine Split Tests ori" timestamp="2026-10-23T15:16:04" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="2.585" tests="5" errors="0" failures="0" skipped="0">
+    <testcase classname="97058 Whse ActLine Split Tests ori" name="Split_PartialQtyToHandle_AnswersBothLines" time="0.674" />
+    <testcase classname="97058 Whse ActLine Split Tests ori" name="Split_FullQtyToHandle_PreconditionFailed" time="0.404" />
+    <testcase classname="97058 Whse ActLine Split Tests ori" name="Split_LineOfOtherActivity_ConflictingIdentifiers" time="0.894" />
+    <testcase classname="97058 Whse ActLine Split Tests ori" name="Split_CommonRefusals_AnswerCodesWithNextStep" time="0.607" />
+    <testcase classname="97058 Whse ActLine Split Tests ori" name="Split_WithoutPermission_ReturnsPermissionDenied" time="0.006" />
+  </testsuite>
+  <testsuite name="97059 Whse ActLine ChgBin Tests ori" timestamp="2026-10-23T15:16:08" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="3.323" tests="7" errors="0" failures="0" skipped="0">
+    <testcase classname="97059 Whse ActLine ChgBin Tests ori" name="ChangeBin_TakeLineToStockedBin_LeavesPlaceLine" time="0.7" />
+    <testcase classname="97059 Whse ActLine ChgBin Tests ori" name="ChangeBin_TakeLineToEmptyBin_InvalidLine" time="0.504" />
+    <testcase classname="97059 Whse ActLine ChgBin Tests ori" name="ChangeBin_PlaceLineToAdjustmentBin_InvalidLine" time="0.497" />
+    <testcase classname="97059 Whse ActLine ChgBin Tests ori" name="ChangeBin_SameBin_ChangedFalse" time="0.426" />
+    <testcase classname="97059 Whse ActLine ChgBin Tests ori" name="ChangeBin_Refusals_AnswerCodesWithNextStep" time="0.65" />
+    <testcase classname="97059 Whse ActLine ChgBin Tests ori" name="ChangeBin_UnknownBin_AnswerIsDeclared" time="0.536" />
+    <testcase classname="97059 Whse ActLine ChgBin Tests ori" name="ChangeBin_WithoutPermission_ReturnsPermissionDenied" time="0.01" />
+  </testsuite>
+  <testsuite name="97060 Whse ActLine SetQty Tests ori" timestamp="2026-10-23T15:16:10" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="1.473" tests="4" errors="0" failures="0" skipped="0">
+    <testcase classname="97060 Whse ActLine SetQty Tests ori" name="SetQty_NamedLines_WritesQuantity" time="0.567" />
+    <testcase classname="97060 Whse ActLine SetQty Tests ori" name="SetQty_NoneThenAll_ClearsAndFills" time="0.45" />
+    <testcase classname="97060 Whse ActLine SetQty Tests ori" name="SetQty_Refusals_AnswerCodesWithNextStep" time="0.436" />
+    <testcase classname="97060 Whse ActLine SetQty Tests ori" name="SetQty_WithoutPermission_ReturnsPermissionDenied" time="0.02" />
+  </testsuite>
+  <testsuite name="97061 Whse ActLine Track Tests ori" timestamp="2026-10-23T15:16:12" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="1.459" tests="10" errors="0" failures="0" skipped="0">
+    <testcase classname="97061 Whse ActLine Track Tests ori" name="AssignTracking_TwoLots_SplitsLinePerEntry" time="0.206" />
+    <testcase classname="97061 Whse ActLine Track Tests ori" name="AssignTracking_SerialForTwoUnits_InvalidLine" time="0.117" />
+    <testcase classname="97061 Whse ActLine Track Tests ori" name="AssignTracking_LotNotInTakeBin_InvalidLine" time="0.227" />
+    <testcase classname="97061 Whse ActLine Track Tests ori" name="AssignTracking_UntrackedItem_PreconditionFailed" time="0.104" />
+    <testcase classname="97061 Whse ActLine Track Tests ori" name="AssignTracking_SameLot_ChangedFalse" time="0.113" />
+    <testcase classname="97061 Whse ActLine Track Tests ori" name="AssignTracking_Refusals_AnswerCodesWithNextStep" time="0.216" />
+    <testcase classname="97061 Whse ActLine Track Tests ori" name="AssignTracking_WithoutPermission_ReturnsPermissionDenied" time="0.01" />
+    <testcase classname="97061 Whse ActLine Track Tests ori" name="AssignTracking_LotNotInTakeBin_TextAndNextStep" time="0.246" />
+    <testcase classname="97061 Whse ActLine Track Tests ori" name="AssignTracking_LotNotInTakeBin_TextAndNextStepInIcelandic" time="0.21" />
+    <testcase classname="97061 Whse ActLine Track Tests ori" name="IsTypeInRoster_KnownAndUnknownTypes" time="0.01" />
+  </testsuite>
+  <testsuite name="97062 Whse Jnl Contract Tests ori" timestamp="2026-10-23T15:16:12" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="0.264" tests="13" errors="0" failures="0" skipped="0">
+    <testcase classname="97062 Whse Jnl Contract Tests ori" name="EveryNewType_HasContractAndDiscovery" time="0.024" />
+    <testcase classname="97062 Whse Jnl Contract Tests ori" name="EveryNewType_HelpInEnglishAndIcelandic" time="0.01" />
+    <testcase classname="97062 Whse Jnl Contract Tests ori" name="ErrorsChapters_DeclareTheAnsweredNextSteps" time="0.013" />
+    <testcase classname="97062 Whse Jnl Contract Tests ori" name="Help_NamesNoAlObjects" time="0.073" />
+    <testcase classname="97062 Whse Jnl Contract Tests ori" name="Help_Guard_FindsAlReferences" time="0.007" />
+    <testcase classname="97062 Whse Jnl Contract Tests ori" name="Help_NextStepPattern_MatchesTheAnswer" time="0.004" />
+    <testcase classname="97062 Whse Jnl Contract Tests ori" name="ErrorsChapters_DeclarePagingAndDateNextSteps" time="0.02" />
+    <testcase classname="97062 Whse Jnl Contract Tests ori" name="EveryWarehouseType_DescriptionIsTranslated" time="0.01" />
+    <testcase classname="97062 Whse Jnl Contract Tests ori" name="Help_DoesNotNameValidate" time="0.024" />
+    <testcase classname="97062 Whse Jnl Contract Tests ori" name="GenericWrite_WarehouseJournalLine_IsRefusedAndHinted" time="0.043" />
+    <testcase classname="97062 Whse Jnl Contract Tests ori" name="GenericWrite_QtyPhysInventory_IsHinted" time="0.003" />
+    <testcase classname="97062 Whse Jnl Contract Tests ori" name="GenericWrite_WorksheetQtyToHandle_IsRefusedAndHinted" time="0.026" />
+    <testcase classname="97062 Whse Jnl Contract Tests ori" name="GenericWrite_ActivityLineFields_PointAtActivityLineTypes" time="0.007" />
+  </testsuite>
+  <testsuite name="97080 Whse Bin Get Tests ori" timestamp="2026-10-23T15:16:13" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="0.512" tests="7" errors="0" failures="0" skipped="0">
+    <testcase classname="97080 Whse Bin Get Tests ori" name="Get_ReturnsCreatedBin" time="0.123" />
+    <testcase classname="97080 Whse Bin Get Tests ori" name="Get_PagesRowsAndReportsUnpagedCount" time="0.083" />
+    <testcase classname="97080 Whse Bin Get Tests ori" name="Get_EmptyFalse_ReturnsNoRows" time="0.17" />
+    <testcase classname="97080 Whse Bin Get Tests ori" name="Get_UnknownLocation_IsRecordNotFound" time="0.016" />
+    <testcase classname="97080 Whse Bin Get Tests ori" name="Get_ConflictingLocation_IsRefused" time="0.103" />
+    <testcase classname="97080 Whse Bin Get Tests ori" name="Get_HelpTranslatesConflict" time="0.007" />
+    <testcase classname="97080 Whse Bin Get Tests ori" name="Get_WithoutPermission_ReturnsPermissionDenied" time="0.01" />
+  </testsuite>
+  <testsuite name="97081 Whse Bin Create Tests ori" timestamp="2026-10-23T15:16:14" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="0.786" tests="10" errors="0" failures="0" skipped="0">
+    <testcase classname="97081 Whse Bin Create Tests ori" name="Create_TwoBins_InsertsBoth" time="0.1" />
+    <testcase classname="97081 Whse Bin Create Tests ori" name="Create_DuplicateInRequest_WritesNothing" time="0.077" />
+    <testcase classname="97081 Whse Bin Create Tests ori" name="Create_ExistingBin_LeavesTheOriginal" time="0.083" />
+    <testcase classname="97081 Whse Bin Create Tests ori" name="Create_LocationWithoutBinMandatory_IsRefused" time="0.09" />
+    <testcase classname="97081 Whse Bin Create Tests ori" name="Create_EmptyFalse_IsRefused" time="0.09" />
+    <testcase classname="97081 Whse Bin Create Tests ori" name="Create_ZoneOnBasicLocation_IsRefused" time="0.103" />
+    <testcase classname="97081 Whse Bin Create Tests ori" name="Create_SeveralBinFailures_WritesNothing" time="0.08" />
+    <testcase classname="97081 Whse Bin Create Tests ori" name="Create_UnknownKey_IsRefused" time="0.08" />
+    <testcase classname="97081 Whse Bin Create Tests ori" name="Create_MissingBins_IsMissingParameter" time="0.073" />
+    <testcase classname="97081 Whse Bin Create Tests ori" name="Create_WithoutPermission_ReturnsPermissionDenied" time="0.01" />
+  </testsuite>
+  <testsuite name="97082 Whse DefBin Set Tests ori" timestamp="2026-10-23T15:16:16" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="0.862" tests="9" errors="0" failures="0" skipped="0">
+    <testcase classname="97082 Whse DefBin Set Tests ori" name="Set_CreatesDefaultBinContent" time="0.143" />
+    <testcase classname="97082 Whse DefBin Set Tests ori" name="Set_SameBin_IsUnchanged" time="0.113" />
+    <testcase classname="97082 Whse DefBin Set Tests ori" name="Set_MovesPreviousDefault" time="0.113" />
+    <testcase classname="97082 Whse DefBin Set Tests ori" name="Set_BlockedBin_IsRefused" time="0.11" />
+    <testcase classname="97082 Whse DefBin Set Tests ori" name="Set_LocationWithNoBins_IsPrecondition" time="0.09" />
+    <testcase classname="97082 Whse DefBin Set Tests ori" name="Set_UnknownUnit_IsInvalidParameter" time="0.09" />
+    <testcase classname="97082 Whse DefBin Set Tests ori" name="Set_UnknownItem_IsNotFound" time="0.1" />
+    <testcase classname="97082 Whse DefBin Set Tests ori" name="Set_MissingBinCode_IsMissingParameter" time="0.09" />
+    <testcase classname="97082 Whse DefBin Set Tests ori" name="Set_WithoutPermission_ReturnsPermissionDenied" time="0.013" />
+  </testsuite>
+  <testsuite name="97083 Whse Movement Create Tests ori" timestamp="2026-10-23T15:16:19" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="2.6" tests="8" errors="0" failures="0" skipped="0">
+    <testcase classname="97083 Whse Movement Create Tests ori" name="Create_InlineLine_CreatesMovement" time="0.614" />
+    <testcase classname="97083 Whse Movement Create Tests ori" name="Create_BasicLocation_IsRefused" time="0.094" />
+    <testcase classname="97083 Whse Movement Create Tests ori" name="Create_MissingLocation_IsRefused" time="0.014" />
+    <testcase classname="97083 Whse Movement Create Tests ori" name="Create_UnknownKey_IsRefused" time="0.587" />
+    <testcase classname="97083 Whse Movement Create Tests ori" name="Create_ZeroQuantity_IsRefused" time="0.54" />
+    <testcase classname="97083 Whse Movement Create Tests ori" name="Create_QuantityAboveBinContent_IsRefused" time="0.354" />
+    <testcase classname="97083 Whse Movement Create Tests ori" name="Create_UnknownItem_IsNotFound" time="0.39" />
+    <testcase classname="97083 Whse Movement Create Tests ori" name="Create_WithoutPermission_ReturnsPermissionDenied" time="0.007" />
+  </testsuite>
+  <testsuite name="97084 Whse Movement Reg Tests ori" timestamp="2026-10-23T15:16:21" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="2.063" tests="8" errors="0" failures="0" skipped="0">
+    <testcase classname="97084 Whse Movement Reg Tests ori" name="Register_CreatedMovement_RegistersAll" time="0.486" />
+    <testcase classname="97084 Whse Movement Reg Tests ori" name="Register_UnknownNumber_IsNotFound" time="0.01" />
+    <testcase classname="97084 Whse Movement Reg Tests ori" name="Register_MissingIdentifier_IsRefused" time="0.01" />
+    <testcase classname="97084 Whse Movement Reg Tests ori" name="Register_UnknownKey_IsRefused" time="0.314" />
+    <testcase classname="97084 Whse Movement Reg Tests ori" name="Register_ZeroQtyOnEveryLine_IsRefused" time="0.333" />
+    <testcase classname="97084 Whse Movement Reg Tests ori" name="Register_PartialQuantity_LeavesRemainder" time="0.426" />
+    <testcase classname="97084 Whse Movement Reg Tests ori" name="Register_FullUserWithPostingGate_Registers" time="0.477" />
+    <testcase classname="97084 Whse Movement Reg Tests ori" name="Register_WithoutPermission_ReturnsPermissionDenied" time="0.007" />
+  </testsuite>
+  <testsuite name="97085 Whse InvtPick Create Tests ori" timestamp="2026-10-23T15:16:24" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="2.315" tests="11" errors="0" failures="0" skipped="0">
+    <testcase classname="97085 Whse InvtPick Create Tests ori" name="Create_ReleasedSalesOrder_CreatesPick" time="0.477" />
+    <testcase classname="97085 Whse InvtPick Create Tests ori" name="Create_UnreleasedSalesOrder_IsRefused" time="0.32" />
+    <testcase classname="97085 Whse InvtPick Create Tests ori" name="Create_RequireShipmentLocation_IsRefused" time="0.28" />
+    <testcase classname="97085 Whse InvtPick Create Tests ori" name="Create_LocationWithoutPick_IsRefused" time="0.236" />
+    <testcase classname="97085 Whse InvtPick Create Tests ori" name="Create_MissingSourceDocument_IsRefused" time="0.013" />
+    <testcase classname="97085 Whse InvtPick Create Tests ori" name="Create_UnknownKey_IsRefused" time="0.273" />
+    <testcase classname="97085 Whse InvtPick Create Tests ori" name="Create_WrongSourceDocumentType_IsRefused" time="0.013" />
+    <testcase classname="97085 Whse InvtPick Create Tests ori" name="Create_UnknownSourceNo_IsRefused" time="0.013" />
+    <testcase classname="97085 Whse InvtPick Create Tests ori" name="Create_ConflictingIdentifiers_IsRefused" time="0.35" />
+    <testcase classname="97085 Whse InvtPick Create Tests ori" name="Create_ExistingPick_ReturnsItWithWarning" time="0.327" />
+    <testcase classname="97085 Whse InvtPick Create Tests ori" name="Create_WithoutPermission_ReturnsPermissionDenied" time="0.013" />
+  </testsuite>
+  <testsuite name="97086 Whse InvtPick Post Tests ori" timestamp="2026-10-23T15:16:26" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="1.989" tests="7" errors="0" failures="0" skipped="0">
+    <testcase classname="97086 Whse InvtPick Post Tests ori" name="Post_SalesPick_ShipsTheOrder" time="0.58" />
+    <testcase classname="97086 Whse InvtPick Post Tests ori" name="Post_QuantityAboveOutstanding_IsRefused" time="0.293" />
+    <testcase classname="97086 Whse InvtPick Post Tests ori" name="Post_ZeroQuantity_IsRefused" time="0.306" />
+    <testcase classname="97086 Whse InvtPick Post Tests ori" name="Post_InvoiceOnPurchaseReturn_IsRefused" time="0.426" />
+    <testcase classname="97086 Whse InvtPick Post Tests ori" name="Post_MissingIdentifier_IsRefused" time="0.013" />
+    <testcase classname="97086 Whse InvtPick Post Tests ori" name="Post_UnknownKey_IsRefused" time="0.357" />
+    <testcase classname="97086 Whse InvtPick Post Tests ori" name="Post_WithoutPermission_ReturnsPermissionDenied" time="0.014" />
+  </testsuite>
+  <testsuite name="97087 Whse InvtPut Create Tests ori" timestamp="2026-10-23T15:16:28" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="1.569" tests="11" errors="0" failures="0" skipped="0">
+    <testcase classname="97087 Whse InvtPut Create Tests ori" name="Create_ReleasedPurchaseOrder_CreatesPutAway" time="0.347" />
+    <testcase classname="97087 Whse InvtPut Create Tests ori" name="Create_UnreleasedPurchaseOrder_IsRefused" time="0.237" />
+    <testcase classname="97087 Whse InvtPut Create Tests ori" name="Create_RequireReceiptLocation_IsRefused" time="0.22" />
+    <testcase classname="97087 Whse InvtPut Create Tests ori" name="Create_LocationWithoutPutAway_IsRefused" time="0.164" />
+    <testcase classname="97087 Whse InvtPut Create Tests ori" name="Create_MissingSourceDocument_IsRefused" time="0.01" />
+    <testcase classname="97087 Whse InvtPut Create Tests ori" name="Create_UnknownKey_IsRefused" time="0.16" />
+    <testcase classname="97087 Whse InvtPut Create Tests ori" name="Create_WrongSourceDocumentType_IsRefused" time="0.014" />
+    <testcase classname="97087 Whse InvtPut Create Tests ori" name="Create_UnknownSourceNo_IsRefused" time="0.01" />
+    <testcase classname="97087 Whse InvtPut Create Tests ori" name="Create_ConflictingIdentifiers_IsRefused" time="0.197" />
+    <testcase classname="97087 Whse InvtPut Create Tests ori" name="Create_ExistingPutAway_ReturnsItWithWarning" time="0.2" />
+    <testcase classname="97087 Whse InvtPut Create Tests ori" name="Create_WithoutPermission_ReturnsPermissionDenied" time="0.01" />
+  </testsuite>
+  <testsuite name="97088 Whse InvtPut Post Tests ori" timestamp="2026-10-23T15:16:30" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="1.715" tests="8" errors="0" failures="0" skipped="0">
+    <testcase classname="97088 Whse InvtPut Post Tests ori" name="Post_PurchasePutAway_ReceivesTheOrder" time="0.487" />
+    <testcase classname="97088 Whse InvtPut Post Tests ori" name="Post_QuantityAboveOutstanding_IsRefused" time="0.21" />
+    <testcase classname="97088 Whse InvtPut Post Tests ori" name="Post_BlockedBin_IsRefused" time="0.197" />
+    <testcase classname="97088 Whse InvtPut Post Tests ori" name="Post_TrackedItemWithoutLot_IsRefused" time="0.26" />
+    <testcase classname="97088 Whse InvtPut Post Tests ori" name="Post_InvoiceOnSalesReturn_IsRefused" time="0.287" />
+    <testcase classname="97088 Whse InvtPut Post Tests ori" name="Post_MissingIdentifier_IsRefused" time="0.017" />
+    <testcase classname="97088 Whse InvtPut Post Tests ori" name="Post_UnknownKey_IsRefused" time="0.247" />
+    <testcase classname="97088 Whse InvtPut Post Tests ori" name="Post_WithoutPermission_ReturnsPermissionDenied" time="0.01" />
+  </testsuite>
+  <testsuite name="97089 Whse InvtMove Create Tests ori" timestamp="2026-10-23T15:16:32" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="1.286" tests="8" errors="0" failures="0" skipped="0">
+    <testcase classname="97089 Whse InvtMove Create Tests ori" name="Create_InlineLine_CreatesMovement" time="0.41" />
+    <testcase classname="97089 Whse InvtMove Create Tests ori" name="Create_DirectedLocation_IsRefused" time="0.186" />
+    <testcase classname="97089 Whse InvtMove Create Tests ori" name="Create_LocationWithoutBins_IsRefused" time="0.083" />
+    <testcase classname="97089 Whse InvtMove Create Tests ori" name="Create_SameBin_IsRefused" time="0.196" />
+    <testcase classname="97089 Whse InvtMove Create Tests ori" name="Create_QuantityAboveBinContent_IsRefused" time="0.167" />
+    <testcase classname="97089 Whse InvtMove Create Tests ori" name="Create_MissingChoice_IsRefused" time="0.01" />
+    <testcase classname="97089 Whse InvtMove Create Tests ori" name="Create_UnknownKey_IsRefused" time="0.224" />
+    <testcase classname="97089 Whse InvtMove Create Tests ori" name="Create_WithoutPermission_ReturnsPermissionDenied" time="0.01" />
+  </testsuite>
+  <testsuite name="97090 Whse InvtMove Reg Tests ori" timestamp="2026-10-23T15:16:34" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="1.22" tests="7" errors="0" failures="0" skipped="0">
+    <testcase classname="97090 Whse InvtMove Reg Tests ori" name="Register_FullQuantity_RegistersMovement" time="0.353" />
+    <testcase classname="97090 Whse InvtMove Reg Tests ori" name="Register_PartialQuantity_LeavesRemainder" time="0.297" />
+    <testcase classname="97090 Whse InvtMove Reg Tests ori" name="Register_MissingMovement_IsRefused" time="0.013" />
+    <testcase classname="97090 Whse InvtMove Reg Tests ori" name="Register_MissingNumber_IsRefused" time="0.01" />
+    <testcase classname="97090 Whse InvtMove Reg Tests ori" name="Register_UnknownKey_IsRefused" time="0.23" />
+    <testcase classname="97090 Whse InvtMove Reg Tests ori" name="Register_FullUserWithPostingGate_Registers" time="0.31" />
+    <testcase classname="97090 Whse InvtMove Reg Tests ori" name="Register_WithoutPermission_ReturnsPermissionDenied" time="0.007" />
+  </testsuite>
+  <testsuite name="97091 Whse Bin Repl Tests ori" timestamp="2026-10-23T15:16:36" hostname="f00f227f7231-business-central-85d59566f9-zhng2" time="1.386" tests="10" errors="0" failures="0" skipped="0">
+    <testcase classname="97091 Whse Bin Repl Tests ori" name="Calculate_BelowMinimum_CreatesWorksheetLine" time="0.346" />
+    <testcase classname="97091 Whse Bin Repl Tests ori" name="Calculate_LocationNotDirected_IsRefused" time="0.077" />
+    <testcase classname="97091 Whse Bin Repl Tests ori" name="Calculate_MissingWorksheetName_IsRefused" time="0.15" />
+    <testcase classname="97091 Whse Bin Repl Tests ori" name="Calculate_MissingKeys_IsRefused" time="0.01" />
+    <testcase classname="97091 Whse Bin Repl Tests ori" name="Calculate_UnknownKey_IsRefused" time="0.153" />
+    <testcase classname="97091 Whse Bin Repl Tests ori" name="Calculate_WrongBooleanType_IsRefused" time="0.16" />
+    <testcase classname="97091 Whse Bin Repl Tests ori" name="Calculate_ConflictingLocation_IsRefused" time="0.157" />
+    <testcase classname="97091 Whse Bin Repl Tests ori" name="Calculate_NothingToReplenish_ReturnsEmptyLines" time="0.166" />
+    <testcase classname="97091 Whse Bin Repl Tests ori" name="Calculate_AutoCreateMovement_IsRefused" time="0.16" />
+    <testcase classname="97091 Whse Bin Repl Tests ori" name="Calculate_WithoutPermission_ReturnsPermissionDenied" time="0.007" />
+  </testsuite>
+</testsuites>

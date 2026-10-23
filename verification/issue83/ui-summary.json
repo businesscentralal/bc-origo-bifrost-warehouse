@@ -1,0 +1,140 @@
+{
+  "sha": "0342d46c23e1dd02ed6e7319336f9caba5895a44",
+  "containerId": "f00f227f7231",
+  "appVersion": "28.3.0.83",
+  "startedAt": "2026-10-23T15:16:40.115Z",
+  "scenarios": [
+    {
+      "name": "AC01 registration",
+      "completed": false,
+      "rowText": "\t\nSet up Bifrost Warehouse\n\t\t\n\tRead\tSet up Bifrost Warehouse\tLearn what Warehouse adds to Bifrost, check HTTP through Bifrost Setup, and review user access.\t",
+      "passed": true,
+      "at": "2026-10-23T15:16:46.178Z"
+    },
+    {
+      "name": "AC02 welcome plain business language",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T15:16:51.538Z"
+    },
+    {
+      "name": "AC02 installed operations page",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T15:16:52.943Z"
+    },
+    {
+      "name": "AC02 documentation link",
+      "url": "https://docs.bifrost.origo.is/en-us/warehouse/",
+      "passed": true,
+      "at": "2026-10-23T15:16:54.607Z"
+    },
+    {
+      "name": "AC03 HTTP disabled read-only",
+      "lcid": 1033,
+      "httpEnabled": false,
+      "passed": true,
+      "at": "2026-10-23T15:16:54.966Z"
+    },
+    {
+      "name": "AC03 Foundation wizard opens",
+      "lcid": 1033,
+      "consentOrLicenseAction": false,
+      "passed": true,
+      "at": "2026-10-23T15:16:55.436Z"
+    },
+    {
+      "name": "AC03 HTTP enabled through Foundation",
+      "lcid": 1033,
+      "httpEnabled": true,
+      "passed": true,
+      "at": "2026-10-23T15:17:09.271Z"
+    },
+    {
+      "name": "AC04 access guidance",
+      "lcid": 1033,
+      "sets": [
+        "BIFROST WhsePost ori",
+        "BIFROST WhseInv ori"
+      ],
+      "passed": true,
+      "at": "2026-10-23T15:17:09.606Z"
+    },
+    {
+      "name": "AC04 standard Users page opens",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T15:17:09.660Z"
+    },
+    {
+      "name": "AC04 standard Permission Sets page opens",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T15:17:10.529Z"
+    },
+    {
+      "name": "AC05 early close does not complete",
+      "lcid": 1033,
+      "completed": false,
+      "passed": true,
+      "at": "2026-10-23T15:20:59.973Z"
+    },
+    {
+      "name": "AC05 Finish completes setup",
+      "lcid": 1033,
+      "completed": true,
+      "recovery": "Read back existing completion after correcting selection-checkbox locator; no Finish write replayed",
+      "passed": true,
+      "at": "2026-10-23T15:27:52.695Z"
+    },
+    {
+      "name": "AC06 registration translated",
+      "lcid": 1039,
+      "passed": true,
+      "at": "2026-10-23T15:28:06.218Z"
+    },
+    {
+      "name": "AC06 welcome translated",
+      "lcid": 1039,
+      "passed": true,
+      "at": "2026-10-23T15:28:11.740Z"
+    },
+    {
+      "name": "AC06 HTTP captions/instructions/actions",
+      "lcid": 1039,
+      "passed": true,
+      "at": "2026-10-23T15:28:13.226Z"
+    },
+    {
+      "name": "AC06 access translated",
+      "lcid": 1039,
+      "passed": true,
+      "at": "2026-10-23T15:28:13.954Z"
+    },
+    {
+      "name": "AC06 Finish translated",
+      "lcid": 1039,
+      "passed": true,
+      "at": "2026-10-23T15:28:20.611Z"
+    }
+  ],
+  "passed": 17,
+  "failed": 0,
+  "skipped": 0,
+  "platformChanges": [
+    {
+      "action": "Explicit administrator click in Foundation Setup Wizard: Enable HTTP for all apps",
+      "scope": "Only owned container f00f227f7231, registered Foundation and Warehouse apps; no feature/test NAV App Setting write, EULA/trial/licence action, credential change or customer/backend write",
+      "at": "2026-10-23T15:16:57.151Z"
+    }
+  ],
+  "cleanup": {
+    "businessFixturesCreated": 0,
+    "permissionAssignments": 0,
+    "eulaTrialLicenseWrites": 0,
+    "languageRestored": true,
+    "intentionalSetupState": "Owned Warehouse assisted setup completed; HTTP enabled only through the explicit Foundation administrator flow. Retained development container kept for amendments/UAT; no business fixtures or permission assignments created."
+  },
+  "recoveryNote": "Reuse only completed scenarios at unchanged0342d46; do not repeat the already-proved Foundation HTTP write.",
+  "finishedAt": "2026-10-23T15:28:33.935Z"
+}

@@ -1,0 +1,22 @@
+{
+  "sha": "0342d46c23e1dd02ed6e7319336f9caba5895a44",
+  "baseSha": "46b4194261d55fca345eefab9f012f14f6f89a5e",
+  "files": {
+    "CHANGELOG.md": "df7719119e6433bea56d02660800925b05c293b3cfefc746c1240ffaa5e45515",
+    "README.md": "435bc5e5ddc6a9d8bc756ef6953278a1dee8d99588d64a61e769fb438d68194d",
+    "app/Help/en-US/index.html": "4959c0daefa6b50edeee066ff8cb52ddc3418e362954041192a87ee76e03e378",
+    "app/Help/en-US/warehouse-setup-wizard.html": "326cafddcac7bf0119da2a7552baef89c7d8f7d8db65e37768bf5dec98e5e48d",
+    "app/Help/is-IS/index.html": "90307e09cbf4e8031cf83c5446f0e1a1df3f57e113ac8ef1597fbbd4fdad3a5f",
+    "app/Help/is-IS/warehouse-setup-wizard.html": "038d1562601c5051d7633a8ac944344b53f7c02990bf311b1e7270aed4dbbdcb",
+    "app/Translations/Bifrost Warehouse.is-IS.xlf": "17a681b3c71c406a8c68db9e8d238bb3f41cd98ecc7e9d454eff898e06794cb3",
+    "app/docs/setup-wizard.md": "1c92d11b67504f66913d052caaaeb09f19306d524d42342b974b09d85f0eeb0d",
+    "app/src/Permissions/BIFROSTWhseFull.PermissionSetExt.al": "cc9ef9e8983a802402aa871e67dd96e34d3366e82c50e32c0b64c06504b4ab1a",
+    "app/src/Permissions/BIFROSTWhseInv.PermissionSet.al": "aafe8b7d95059bdb169fb702334eb842a42413ac6e0ebb3d295625579745f258",
+    "app/src/Permissions/BIFROSTWhsePost.PermissionSet.al": "b5a9601f5ef54557359fa4e96f02ad46ccc0452921733117bb8765e22adb57ac",
+    "app/src/Permissions/BIFROSTWhseRead.PermissionSetExt.al": "6237c801b14d5e698e638609c578613fcba84ab000af37f989806e0b62dab30e",
+    "app/src/Setup/WhseSetupWizard.Page.al": "ae7746faeb2d6714bb6cc85d41d7ee662419bfc6054a55f4dda2a37878b38b19",
+    "app/src/Setup/WhseWizardMgt.Codeunit.al": "efef3aabb051570266bec7523c5673b628dfe85a8f6ef67c1858b4c0569c3f02",
+    "app/src/Setup/WhseWizardReg.Codeunit.al": "96c00cd0c69f4b507633d25fb54c349416f1b32f4a6fff36562d6a0268eb1174",
+    "test/test/WhseSetupWizardTests.Codeunit.al": "25811994e36095d0a70b0fcabfc2e87fde41fdbd016345e410b27741d86f06de"
+  }
+}

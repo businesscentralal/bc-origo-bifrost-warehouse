@@ -1,0 +1,21 @@
+{
+  "sha": "0342d46c23e1dd02ed6e7319336f9caba5895a44",
+  "previousCandidates": [
+    {
+      "sha": "1694ff42c12fe1d01a933d547669c53ce8638c29",
+      "executed": 9,
+      "passed": 7,
+      "failed": 2,
+      "skipped": 0,
+      "diagnosis": "Test adapter bypasses Editable; corrected readonly metadata/Verify/nonpersistence assertions and ModalPageHandler kind."
+    },
+    {
+      "sha": "0cb5ea97c96e4662c05b6518626a7891f6455381",
+      "fullSuitePassed": 439,
+      "failed": 0,
+      "skipped": 0,
+      "uiDefect": "Warehouse missing from Foundation App Registry, so HTTP action could only enable Foundation. Added real registry event subscriber and regression;034full440passed."
+    }
+  ],
+  "currentUiRecovery": "First browser navigation needed client settling; Finish readback initially selected row-selection checkbox. Screenshot already proved Completed true. Locator corrected to actual booleancontrol-read/aria-checked, and completion read back without replaying Finish or HTTP. Original evidence retained privately."
+}

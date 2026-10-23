@@ -1,0 +1,13 @@
+{
+  "sha": "0342d46c23e1dd02ed6e7319336f9caba5895a44",
+  "containerId": "f00f227f7231",
+  "verified": true,
+  "businessFixturesCreated": 0,
+  "permissionAssignmentsCreated": 0,
+  "eulaTrialLicenseWrites": 0,
+  "languageRestored1033": true,
+  "retainedOwnedSetupState": "Assisted setup completed using explicit Finish; HTTP enabled through the standard Foundation wizard administrator action. No record or credential bypass. Native test data rolled back by configured AL isolation.",
+  "resourceDisposition": "Owned container retained for amendments and post-deployment UAT per current rule; deletion not yet performed or claimed.",
+  "evidence": "ui-summary.json",
+  "at": "2026-10-23T15:29:30.494144+00:00"
+}

@@ -1,0 +1,20 @@
+{
+  "sha": "0342d46c23e1dd02ed6e7319336f9caba5895a44",
+  "rawPassed": 20,
+  "rawTotal": 23,
+  "suppressed": false,
+  "findings": [
+    {
+      "check": "modernization",
+      "finding": "NAS substring heuristic in Icelandic translation; no NAS feature/API is used."
+    },
+    {
+      "check": "changelog",
+      "finding": "Version heading heuristic expects28.3.0.0; actual new entry under Unreleased identifies all changed object IDs."
+    },
+    {
+      "check": "page_code_minimal",
+      "finding": "EnableHttp has guarded standard modal navigation, translated error and status refresh. Its3 UI orchestration lines remain in page; all HTTP/permission/status/business logic is in codeunits or Foundation. No setting write in page."
+    }
+  ]
+}

@@ -1,0 +1,221 @@
+{
+  "sha": "0342d46c23e1dd02ed6e7319336f9caba5895a44",
+  "expectedConfiguredTests": 440,
+  "testCodeunits": 52,
+  "files": [
+    {
+      "file": "test/test/WhseActivityGetTestsori.Codeunit.al",
+      "tests": 23
+    },
+    {
+      "file": "test/test/WhseActLineChgBinTestsori.Codeunit.al",
+      "tests": 7
+    },
+    {
+      "file": "test/test/WhseActLineSetQtyTestsori.Codeunit.al",
+      "tests": 4
+    },
+    {
+      "file": "test/test/WhseActLineSplitTestsori.Codeunit.al",
+      "tests": 5
+    },
+    {
+      "file": "test/test/WhseActLineTrackTestsori.Codeunit.al",
+      "tests": 10
+    },
+    {
+      "file": "test/test/WhseAdjustmentCalcTestsori.Codeunit.al",
+      "tests": 12
+    },
+    {
+      "file": "test/test/WhseBinContentGetTestsori.Codeunit.al",
+      "tests": 4
+    },
+    {
+      "file": "test/test/WhseBinCreateTestsori.Codeunit.al",
+      "tests": 10
+    },
+    {
+      "file": "test/test/WhseBinGetTestsori.Codeunit.al",
+      "tests": 7
+    },
+    {
+      "file": "test/test/WhseBinReplTestsori.Codeunit.al",
+      "tests": 10
+    },
+    {
+      "file": "test/test/WhseContractParityTestsori.Codeunit.al",
+      "tests": 9
+    },
+    {
+      "file": "test/test/WhseDefBinSetTestsori.Codeunit.al",
+      "tests": 9
+    },
+    {
+      "file": "test/test/WhseDocFlowHelpTestsori.Codeunit.al",
+      "tests": 5
+    },
+    {
+      "file": "test/test/WhseIdFormatTestsori.Codeunit.al",
+      "tests": 7
+    },
+    {
+      "file": "test/test/WhseInvtMoveCreateTestsori.Codeunit.al",
+      "tests": 8
+    },
+    {
+      "file": "test/test/WhseInvtMoveRegTestsori.Codeunit.al",
+      "tests": 7
+    },
+    {
+      "file": "test/test/WhseInvtPickCreateTestsori.Codeunit.al",
+      "tests": 11
+    },
+    {
+      "file": "test/test/WhseInvtPickPostTestsori.Codeunit.al",
+      "tests": 7
+    },
+    {
+      "file": "test/test/WhseInvtPutCreateTestsori.Codeunit.al",
+      "tests": 11
+    },
+    {
+      "file": "test/test/WhseInvtPutPostTestsori.Codeunit.al",
+      "tests": 8
+    },
+    {
+      "file": "test/test/WhseJnlContractTestsori.Codeunit.al",
+      "tests": 13
+    },
+    {
+      "file": "test/test/WhseJournalCreateTestsori.Codeunit.al",
+      "tests": 17
+    },
+    {
+      "file": "test/test/WhseJournalRegTestsori.Codeunit.al",
+      "tests": 7
+    },
+    {
+      "file": "test/test/WhseMovementCreateTestsori.Codeunit.al",
+      "tests": 8
+    },
+    {
+      "file": "test/test/WhseMovementRegTestsori.Codeunit.al",
+      "tests": 8
+    },
+    {
+      "file": "test/test/WhseMsgContractTestsori.Codeunit.al",
+      "tests": 11
+    },
+    {
+      "file": "test/test/WhseOmitCommitTestsori.Codeunit.al",
+      "tests": 4
+    },
+    {
+      "file": "test/test/WhsePartialPostTestsori.Codeunit.al",
+      "tests": 14
+    },
+    {
+      "file": "test/test/WhsePhysInvtCalcTestsori.Codeunit.al",
+      "tests": 5
+    },
+    {
+      "file": "test/test/WhsePhysInvtRegTestsori.Codeunit.al",
+      "tests": 7
+    },
+    {
+      "file": "test/test/WhsePickCreateTestsori.Codeunit.al",
+      "tests": 8
+    },
+    {
+      "file": "test/test/WhsePickRegisterTestsori.Codeunit.al",
+      "tests": 6
+    },
+    {
+      "file": "test/test/WhsePostedDocGetTestsori.Codeunit.al",
+      "tests": 5
+    },
+    {
+      "file": "test/test/WhsePostGateGrantTestsori.Codeunit.al",
+      "tests": 8
+    },
+    {
+      "file": "test/test/WhsePostingGateTestsori.Codeunit.al",
+      "tests": 15
+    },
+    {
+      "file": "test/test/WhsePutawayCreateTestsori.Codeunit.al",
+      "tests": 9
+    },
+    {
+      "file": "test/test/WhsePutawayRegTestsori.Codeunit.al",
+      "tests": 5
+    },
+    {
+      "file": "test/test/WhseRcptGetSrcDocsTestsori.Codeunit.al",
+      "tests": 12
+    },
+    {
+      "file": "test/test/WhseRcptPostPrevTestsori.Codeunit.al",
+      "tests": 3
+    },
+    {
+      "file": "test/test/WhseReceiptCreateTestsori.Codeunit.al",
+      "tests": 10
+    },
+    {
+      "file": "test/test/WhseReceiptPostTestsori.Codeunit.al",
+      "tests": 5
+    },
+    {
+      "file": "test/test/WhseRegActivityGetTestsori.Codeunit.al",
+      "tests": 5
+    },
+    {
+      "file": "test/test/WhseRequestGetTestsori.Codeunit.al",
+      "tests": 8
+    },
+    {
+      "file": "test/test/WhseSetupWizardTests.Codeunit.al",
+      "tests": 10
+    },
+    {
+      "file": "test/test/WhseShipGetSrcDocsTestsori.Codeunit.al",
+      "tests": 9
+    },
+    {
+      "file": "test/test/WhseShipmentCreateTestsori.Codeunit.al",
+      "tests": 7
+    },
+    {
+      "file": "test/test/WhseShipmentPostTestsori.Codeunit.al",
+      "tests": 6
+    },
+    {
+      "file": "test/test/WhseShipPrevPostTestsori.Codeunit.al",
+      "tests": 7
+    },
+    {
+      "file": "test/test/WhseShipReleaseTestsori.Codeunit.al",
+      "tests": 14
+    },
+    {
+      "file": "test/test/WhseWkshCreateActTestsori.Codeunit.al",
+      "tests": 7
+    },
+    {
+      "file": "test/test/WhseWkshGetDocsTestsori.Codeunit.al",
+      "tests": 6
+    },
+    {
+      "file": "test/test/WhseWriteRestrictTestsori.Codeunit.al",
+      "tests": 7
+    }
+  ],
+  "actual": {
+    "executed": 440,
+    "passed": 440,
+    "failed": 0,
+    "skipped": 0
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "touchedMessageTypes": [],
+  "notApplicableReason": "Issue83 changes setup registration, readonly HTTP/status guidance, permissions to execute wizard objects and help only. No MessageTypes implementation/contract/enum or operation is changed relative to its main base.",
+  "verifiedBySourceDiff": true,
+  "sha": "0342d46c23e1dd02ed6e7319336f9caba5895a44"
+}

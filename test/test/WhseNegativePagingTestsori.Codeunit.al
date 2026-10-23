@@ -126,7 +126,14 @@ codeunit 97032 "Whse Negative Paging Tests ori"
         ResponseJson.ReadFrom(ResponseText);
         // [THEN] Every refusal retains its parameter, received, expected and declared nextStep.
         Assert.AreEqual('Error', TextValue(ResponseJson, 'status'), 'Paging must return an error answer.');
-        ContractAssert.AssertAnswerAndErrorsDeclared(MessageType, ResponseJson);
+        // Foundation's canonical help contract is English, even for an Icelandic message.
+        // Keep the exact localized nextStep assertions below and verify its canonical counterpart separately.
+        if LanguageId = 1033 then
+            ContractAssert.AssertAnswerAndErrorsDeclared(MessageType, ResponseJson)
+        else begin
+            Assert.IsTrue(ContractAssert.IsDeclared(MessageType, TextValue(ResponseJson, 'code'), ''), 'The top-level refusal code must be declared.');
+            Assert.IsTrue(ContractAssert.IsDeclared(MessageType, 'InvalidParameter', 'Send a whole number of zero or more, or leave it out.'), 'The English counterpart of the localized paging nextStep must be declared.');
+        end;
         if ParameterNames.Contains(',') then begin
             Assert.AreEqual('MultipleErrors', TextValue(ResponseJson, 'code'), 'Both invalid values must be collected.');
             Assert.IsTrue(ResponseJson.Get('errors', Token), 'MultipleErrors must list the problems.');

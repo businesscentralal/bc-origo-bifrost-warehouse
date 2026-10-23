@@ -6,7 +6,7 @@
 
 - `Warehouse.Activity.Get` and `Warehouse.BinContent.Get` collect invalid skip/take values before querying. A single negative value answers `InvalidParameter` with parameter, received, expected and nextStep; two answer `MultipleErrors` with both problems.
 - Updated the paging error contracts and added bilingual dispatcher regressions for negative skip, negative take and both together. New summary labels have is-IS translations.
-- Objects: codeunits 10078388, 10078390, 10078459; test codeunits 97027 and 97032 (`Whse Negative Paging Tests ori`). No public procedure or field was removed or changed.
+- Objects: codeunits 10078388, 10078390, 10078459; test codeunits 97027, 97032 and 97062 (`Whse Negative Paging Tests ori`). No public procedure or field was removed or changed.
 
 ### Changed (2026-10-21) - Message type contract and discovery brought to Foundation parity
 

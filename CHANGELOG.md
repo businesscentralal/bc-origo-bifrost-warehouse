@@ -5,7 +5,7 @@
 ### Fixed (2026-10-23) - Structured negative paging errors (#79)
 
 - `Warehouse.Activity.Get` and `Warehouse.BinContent.Get` collect invalid skip/take values before querying. A single negative value answers `InvalidParameter` with parameter, received, expected and nextStep; two answer `MultipleErrors` with both problems.
-- Updated the paging error contracts and added bilingual dispatcher regressions for negative skip, negative take and both together. New summary labels have is-IS translations.
+- Updated the paging error contracts and added bilingual dispatcher regressions for negative skip, negative take and both together. F1 adds text take, decimal skip and mixed format/negative paging cases on both types in 1033/1039, asserting all collected error fields and the paging nextStep (test codeunit 97032). New summary labels have is-IS translations.
 - Objects: codeunits 10078388, 10078390, 10078459; test codeunits 97027, 97032 and 97062 (`Whse Negative Paging Tests ori`). No public procedure or field was removed or changed.
 
 ### Changed (2026-10-21) - Message type contract and discovery brought to Foundation parity

@@ -103,6 +103,9 @@ codeunit 97032 "Whse Negative Paging Tests ori"
         ResponseContentType: Text[100];
         ResponseText: Text;
         OriginalLanguage: Integer;
+        EmptyTaskId: Guid;
+        MessageId: Guid;
+        ResponseTime: Duration;
         ResponseJson: JsonObject;
         Token: JsonToken;
         Errors: JsonArray;
@@ -114,9 +117,11 @@ codeunit 97032 "Whse Negative Paging Tests ori"
         OriginalLanguage := GlobalLanguage();
         GlobalLanguage(LanguageId);
         RequestContent.AddText(RequestText);
-        // [WHEN] The public dispatcher handles the request.
-        Dispatcher.Execute(MessageType, "Message Version ori"::"1.0", '', 'Warehouse negative paging tests',
-            'text/json', RequestContent, ResponseContent, ResponseContentType);
+        // [WHEN] The public dispatcher handles the request with the explicit envelope language.
+        // Execute uses Foundation's configured default, even when the test changed GlobalLanguage.
+        Clear(EmptyTaskId);
+        Dispatcher.EnqueueAndProcess(MessageType, "Message Version ori"::"1.0", '', 'Warehouse negative paging tests',
+            'text/json', RequestContent, EmptyTaskId, LanguageId, MessageId, ResponseContent, ResponseContentType, ResponseTime);
         ResponseContent.GetSubText(ResponseText, 1, ResponseContent.Length());
         ResponseJson.ReadFrom(ResponseText);
         // [THEN] Every refusal retains its parameter, received, expected and declared nextStep.

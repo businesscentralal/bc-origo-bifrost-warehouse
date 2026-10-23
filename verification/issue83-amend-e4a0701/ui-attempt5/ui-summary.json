@@ -1,0 +1,90 @@
+{
+  "sha": "e4a0701a2f8bcf53ca917e438e81b29bce32eb50",
+  "containerId": "f00f227f7231",
+  "appVersion": "28.3.0.85",
+  "startedAt": "2026-10-23T18:52:22.751Z",
+  "scenarios": [
+    {
+      "name": "Welcome translated",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T18:52:34.409Z"
+    },
+    {
+      "name": "Direct modal operations action",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T18:52:35.842Z"
+    },
+    {
+      "name": "Actual enabled HTTP read-only and Verify",
+      "lcid": 1033,
+      "httpEnabled": true,
+      "settingsWrites": 0,
+      "passed": true,
+      "at": "2026-10-23T18:52:37.228Z"
+    },
+    {
+      "name": "Access guidance",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T18:52:37.943Z"
+    },
+    {
+      "name": "Direct modal Users action",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T18:52:39.351Z"
+    },
+    {
+      "name": "Direct modal Permission Sets action",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T18:52:40.772Z"
+    },
+    {
+      "name": "Summary and cancel without completion write",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T18:52:42.295Z"
+    },
+    {
+      "name": "Welcome translated",
+      "lcid": 1039,
+      "passed": true,
+      "at": "2026-10-23T18:52:56.048Z"
+    },
+    {
+      "name": "Direct modal operations action",
+      "lcid": 1039,
+      "passed": true,
+      "at": "2026-10-23T18:52:57.467Z"
+    },
+    {
+      "name": "Actual enabled HTTP read-only and Verify",
+      "lcid": 1039,
+      "httpEnabled": true,
+      "settingsWrites": 0,
+      "passed": true,
+      "at": "2026-10-23T18:52:58.860Z"
+    },
+    {
+      "name": "Access guidance",
+      "lcid": 1039,
+      "passed": true,
+      "at": "2026-10-23T18:52:59.576Z"
+    }
+  ],
+  "passed": 11,
+  "failed": 1,
+  "skipped": 0,
+  "platformChanges": [],
+  "cleanup": {
+    "businessFixturesCreated": 0,
+    "permissionAssignments": 0,
+    "eulaTrialLicenseWrites": 0,
+    "languageRestored": false
+  },
+  "error": "Exact destination title missing: Notendur",
+  "finishedAt": "2026-10-23T18:53:20.664Z"
+}

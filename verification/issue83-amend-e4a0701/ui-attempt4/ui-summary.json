@@ -1,0 +1,52 @@
+{
+  "sha": "e4a0701a2f8bcf53ca917e438e81b29bce32eb50",
+  "containerId": "f00f227f7231",
+  "appVersion": "28.3.0.85",
+  "startedAt": "2026-10-23T18:51:19.190Z",
+  "scenarios": [
+    {
+      "name": "Welcome translated",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T18:51:30.762Z"
+    },
+    {
+      "name": "Direct modal operations action",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T18:51:32.156Z"
+    },
+    {
+      "name": "Actual enabled HTTP read-only and Verify",
+      "lcid": 1033,
+      "httpEnabled": true,
+      "settingsWrites": 0,
+      "passed": true,
+      "at": "2026-10-23T18:51:33.525Z"
+    },
+    {
+      "name": "Access guidance",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T18:51:34.226Z"
+    },
+    {
+      "name": "Direct modal Users action",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T18:51:35.590Z"
+    }
+  ],
+  "passed": 5,
+  "failed": 1,
+  "skipped": 0,
+  "platformChanges": [],
+  "cleanup": {
+    "businessFixturesCreated": 0,
+    "permissionAssignments": 0,
+    "eulaTrialLicenseWrites": 0,
+    "languageRestored": false
+  },
+  "error": "Missing native UI action /^(Close|Loka)$/",
+  "finishedAt": "2026-10-23T18:51:52.495Z"
+}

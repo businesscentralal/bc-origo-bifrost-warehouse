@@ -1,0 +1,119 @@
+{
+  "sha": "e4a0701a2f8bcf53ca917e438e81b29bce32eb50",
+  "containerId": "f00f227f7231",
+  "appVersion": "28.3.0.85",
+  "startedAt": "2026-10-23T18:56:17.308Z",
+  "scenarios": [
+    {
+      "name": "Welcome translated",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T18:56:28.288Z"
+    },
+    {
+      "name": "Direct modal operations action",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T18:56:29.702Z"
+    },
+    {
+      "name": "Actual enabled HTTP read-only and Verify",
+      "lcid": 1033,
+      "httpEnabled": true,
+      "settingsWrites": 0,
+      "passed": true,
+      "at": "2026-10-23T18:56:31.086Z"
+    },
+    {
+      "name": "Access guidance",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T18:56:31.800Z"
+    },
+    {
+      "name": "Direct modal Users action",
+      "lcid": 1033,
+      "stockPage": "Users",
+      "captionScope": "Stock Users title remains English at LCID1039 in this W1 image; own Opna notendur action required.",
+      "passed": true,
+      "at": "2026-10-23T18:56:33.213Z"
+    },
+    {
+      "name": "Direct modal Permission Sets action",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T18:56:34.652Z"
+    },
+    {
+      "name": "Summary and cancel without completion write",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T18:56:36.174Z"
+    },
+    {
+      "name": "Welcome translated",
+      "lcid": 1039,
+      "passed": true,
+      "at": "2026-10-23T18:56:50.787Z"
+    },
+    {
+      "name": "Direct modal operations action",
+      "lcid": 1039,
+      "passed": true,
+      "at": "2026-10-23T18:56:52.213Z"
+    },
+    {
+      "name": "Actual enabled HTTP read-only and Verify",
+      "lcid": 1039,
+      "httpEnabled": true,
+      "settingsWrites": 0,
+      "passed": true,
+      "at": "2026-10-23T18:56:53.578Z"
+    },
+    {
+      "name": "Access guidance",
+      "lcid": 1039,
+      "passed": true,
+      "at": "2026-10-23T18:56:54.283Z"
+    },
+    {
+      "name": "Direct modal Users action",
+      "lcid": 1039,
+      "stockPage": "Users",
+      "captionScope": "Stock Users title remains English at LCID1039 in this W1 image; own Opna notendur action required.",
+      "passed": true,
+      "at": "2026-10-23T18:56:55.662Z"
+    },
+    {
+      "name": "Direct modal Permission Sets action",
+      "lcid": 1039,
+      "passed": true,
+      "at": "2026-10-23T18:56:57.300Z"
+    },
+    {
+      "name": "Summary and cancel without completion write",
+      "lcid": 1039,
+      "passed": true,
+      "at": "2026-10-23T18:56:58.821Z"
+    }
+  ],
+  "passed": 14,
+  "failed": 0,
+  "skipped": 0,
+  "platformChanges": [],
+  "cleanup": {
+    "businessFixturesCreated": 0,
+    "permissionAssignments": 0,
+    "eulaTrialLicenseWrites": 0,
+    "languageRestored": true,
+    "completionPreserved": true,
+    "httpWriteReplayed": false
+  },
+  "notExercised": [
+    {
+      "scenario": "Enable HTTP in Bifrost Setup action",
+      "reason": "Owned environment already HTTP-enabled by recorded original explicit Foundation action; action correctly hidden. No repeated setting write or state manipulation."
+    }
+  ],
+  "finishedAt": "2026-10-23T18:57:17.839Z"
+}

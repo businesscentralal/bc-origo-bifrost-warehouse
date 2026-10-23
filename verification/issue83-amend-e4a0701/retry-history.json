@@ -16,8 +16,63 @@
   "runtime": [
     {
       "failure": "503 first deployment while container Pending after Start204",
-      "result": "No installed candidate or test pass claimed; read-only bounded readiness before retry."
+      "result": "Readiness succeeded after33checks; read-back showed Warehouse/Tests28.3.0.84, then current e4a0701 deployed .85 with200/200. No repeated successful publish."
     }
   ],
-  "noSuppressionsAdded": true
+  "noSuppressionsAdded": true,
+  "ui": [
+    {
+      "attempt": 1,
+      "status": "failed harness timing",
+      "detail": "Substring match accepted action captions before destination modal loaded; subsequent Escape closed wrong page. The recorded Users/Permission Sets successes are invalid for acceptance and are not carried into final counts.",
+      "evidence": "ui-attempt1/ui-summary.json"
+    },
+    {
+      "attempt": 2,
+      "status": "failed harness caption expectation",
+      "detail": "Exact operations title omitted standard selected-record suffix. Actual operations grid present. Tight anchored caption regex now permits only that suffix and requires actual Warehouse.Bin.Get row.",
+      "evidence": "ui-attempt2/ui-summary.json"
+    },
+    {
+      "attempt": 3,
+      "status": "failed harness selector",
+      "detail": "Visible Users title existed in actual captured page, but helper examined only the last DOM text match, which was hidden. Exact-title check now examines all matches for a visible title; page identity requirement retained.",
+      "evidence": "ui-attempt3/ui-summary.json"
+    },
+    {
+      "attempt": 4,
+      "status": "failed harness close selector",
+      "detail": "Destination identity check correctly found visible Users modal, but action helper still selected last hidden Close text match. Action helper now enumerates visible matches, as the title helper does; destination must disappear before continuing.",
+      "evidence": "ui-attempt4/ui-summary.json"
+    },
+    {
+      "attempt": 5,
+      "status": "failed harness scope expectation",
+      "detail": "Warehouse wizard controls correctly Icelandic, but stock Microsoft Users title remains English under1039 in W1. Destination identity now accepts only the actual Users/Notendur caption; own localized action remains required. Foreign partial translation disclosed rather than rewriting or treating it as a Warehouse label.",
+      "evidence": "ui-attempt5/ui-summary.json"
+    },
+    {
+      "attempt": 6,
+      "status": "failed recovery helper authentication",
+      "detail": "Legacy standalone language-restoration helper did not sign in after container restart; no language action occurred. Subsequent EN-first run correctly failed on current IS registration caption. Helper now signs in using existing credentials and records separate restoration proof without rewriting test counts or failures.",
+      "evidence": "restore-language-error.txt"
+    }
+  ],
+  "noSuppressionOrAssertionWeakening": true,
+  "finalUI": {
+    "sha": "e4a0701a2f8bcf53ca917e438e81b29bce32eb50",
+    "attempt": 7,
+    "executed": 14,
+    "passed": 14,
+    "failed": 0,
+    "skipped": 0,
+    "pending": [
+      {
+        "scenario": "Enable HTTP in Bifrost Setup action",
+        "reason": "Owned environment already HTTP-enabled by recorded original explicit Foundation action; action correctly hidden. No repeated setting write or state manipulation."
+      }
+    ],
+    "languageRestored": true,
+    "note": "Prior six harness/recovery failures are preserved separately; prior premature destination matches are not used as acceptance."
+  }
 }

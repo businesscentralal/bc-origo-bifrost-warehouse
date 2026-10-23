@@ -1,0 +1,46 @@
+{
+  "sha": "e4a0701a2f8bcf53ca917e438e81b29bce32eb50",
+  "containerId": "f00f227f7231",
+  "appVersion": "28.3.0.85",
+  "startedAt": "2026-10-23T18:50:18.458Z",
+  "scenarios": [
+    {
+      "name": "Welcome translated",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T18:50:29.960Z"
+    },
+    {
+      "name": "Direct modal operations action",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T18:50:31.364Z"
+    },
+    {
+      "name": "Actual enabled HTTP read-only and Verify",
+      "lcid": 1033,
+      "httpEnabled": true,
+      "settingsWrites": 0,
+      "passed": true,
+      "at": "2026-10-23T18:50:32.717Z"
+    },
+    {
+      "name": "Access guidance",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T18:50:33.436Z"
+    }
+  ],
+  "passed": 4,
+  "failed": 1,
+  "skipped": 0,
+  "platformChanges": [],
+  "cleanup": {
+    "businessFixturesCreated": 0,
+    "permissionAssignments": 0,
+    "eulaTrialLicenseWrites": 0,
+    "languageRestored": false
+  },
+  "error": "Exact destination title missing: Users",
+  "finishedAt": "2026-10-23T18:50:54.517Z"
+}

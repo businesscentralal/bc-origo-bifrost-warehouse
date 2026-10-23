@@ -1,0 +1,19 @@
+{
+  "sha": "e4a0701a2f8bcf53ca917e438e81b29bce32eb50",
+  "containerId": "f00f227f7231",
+  "appVersion": "28.3.0.85",
+  "startedAt": "2026-10-23T18:54:25.851Z",
+  "scenarios": [],
+  "passed": 0,
+  "failed": 1,
+  "skipped": 0,
+  "platformChanges": [],
+  "cleanup": {
+    "businessFixturesCreated": 0,
+    "permissionAssignments": 0,
+    "eulaTrialLicenseWrites": 0,
+    "languageRestored": false
+  },
+  "error": "Expected UI text missing: Set up Bifrost Warehouse",
+  "finishedAt": "2026-10-23T18:54:42.162Z"
+}

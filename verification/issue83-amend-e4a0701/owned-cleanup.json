@@ -1,0 +1,47 @@
+{
+  "sha": "e4a0701a2f8bcf53ca917e438e81b29bce32eb50",
+  "containerId": "f00f227f7231",
+  "at": "2026-10-23T18:49:17.297Z",
+  "mcpFixtureRecordsCreated": 0,
+  "mcpFixtureRecordsRemaining": 0,
+  "nativeIsolation": "Test Runner - Isol. Codeunit130450, TestIsolation=Codeunit",
+  "representativeNativeRollbackChecks": [
+    {
+      "type": "Warehouse.Activity.Get",
+      "data": {
+        "no": "WHSE-TEST-001"
+      },
+      "response": {
+        "status": "Error",
+        "code": "RecordNotFound",
+        "error": "Warehouse Activity Header \"WHSE-TEST-001\" was not found (from no).",
+        "parameter": "no",
+        "received": "WHSE-TEST-001",
+        "nextStep": "Check the number with Data.Records.Get on table Warehouse Activity Header.",
+        "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"Warehouse.Activity.Get\". Always read the help before calling a message type."
+      },
+      "passed": true
+    },
+    {
+      "type": "Warehouse.BinContent.Get",
+      "data": {
+        "locationCode": "WH-TEST",
+        "binCode": "BIN-01",
+        "itemNo": "ITEM-01",
+        "variantCode": "BLUE"
+      },
+      "response": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Warehouse.BinContent.Get",
+        "status": "Success",
+        "noOfRecords": 0,
+        "skip": 0,
+        "take": 100,
+        "result": []
+      },
+      "passed": true
+    }
+  ],
+  "ownedContainerDisposition": "Retain this development container for amendments and post-deployment Tester UAT per current16Oct rule; no container deletion claimed.",
+  "verified": true
+}

@@ -1,0 +1,58 @@
+{
+  "sha": "e4a0701a2f8bcf53ca917e438e81b29bce32eb50",
+  "containerId": "f00f227f7231",
+  "appVersion": "28.3.0.85",
+  "startedAt": "2026-10-23T18:47:19.834Z",
+  "scenarios": [
+    {
+      "name": "Welcome translated",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T18:47:31.350Z"
+    },
+    {
+      "name": "Direct modal operations action",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T18:47:32.898Z"
+    },
+    {
+      "name": "Actual enabled HTTP read-only and Verify",
+      "lcid": 1033,
+      "httpEnabled": true,
+      "settingsWrites": 0,
+      "passed": true,
+      "at": "2026-10-23T18:47:34.282Z"
+    },
+    {
+      "name": "Access guidance",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T18:47:35.014Z"
+    },
+    {
+      "name": "Direct modal Users action",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T18:47:36.535Z"
+    },
+    {
+      "name": "Direct modal Permission Sets action",
+      "lcid": 1033,
+      "passed": true,
+      "at": "2026-10-23T18:47:38.324Z"
+    }
+  ],
+  "passed": 6,
+  "failed": 1,
+  "skipped": 0,
+  "platformChanges": [],
+  "cleanup": {
+    "businessFixturesCreated": 0,
+    "permissionAssignments": 0,
+    "eulaTrialLicenseWrites": 0,
+    "languageRestored": false
+  },
+  "error": "Missing native UI action Next",
+  "finishedAt": "2026-10-23T18:47:54.174Z"
+}

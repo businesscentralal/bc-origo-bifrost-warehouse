@@ -1,0 +1,7 @@
+{
+  "sha": "e4a0701a2f8bcf53ca917e438e81b29bce32eb50",
+  "touchedMessageTypes": [],
+  "notApplicableReason": "Only setup wizard modal actions, system-setting read permission, administrator guidance, Icelandic help, translations and restricted wizard tests changed. No message handler, message enum, contract or dispatcher changed. Main integration preserves previously merged PR84 unchanged; no message-type file is changed by the PR85 diff against current main.",
+  "messageTypeTestsExecuted": 0,
+  "baseSha": "7a8c9317246e585356d12cb838d78c5511213194"
+}

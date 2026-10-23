@@ -1,0 +1,23 @@
+{
+  "sourceFixes": [
+    {
+      "failure": "AL0132: TestPage does not expose HttpPermissionNote group",
+      "fix": "Render the same administrator note as a read-only multiline field, preserving visibility and making actual guidance testable."
+    },
+    {
+      "failure": "AA0215 file naming warning",
+      "fix": "Rename test file to WhseWizardPermissionTests.Codeunit.al."
+    },
+    {
+      "failure": "Duplicate test object from stale copied compilation file after rename",
+      "fix": "Private compile staging now starts from a clean directory; no source exclusions."
+    }
+  ],
+  "runtime": [
+    {
+      "failure": "503 first deployment while container Pending after Start204",
+      "result": "No installed candidate or test pass claimed; read-only bounded readiness before retry."
+    }
+  ],
+  "noSuppressionsAdded": true
+}

@@ -1,0 +1,483 @@
+
+Dynamics 365 Business Central
+
+
+
+
+G
+
+Command Line Test Tool
+Saved
+
+
+
+Suite Name
+Test Codeunit Range
+Test Procedure Range
+Test Runner Codeunit ID
+Extension ID
+Required Test Isolation
+Test Type
+DisableTestMethod
+Test Result JSON
+{"name":"Whse Negative Paging Tests ori","codeUnit":97032,"codeunitName":"Whse Negative Paging Tests ori","applicationID":"{6AE41D19-D457-4D62-BD87-0413FF18DE75}","applicationName":"Bifrost Warehouse - Tests","startTime":"2026-10-23T16:03:09.8930000Z","finishTime":"2026-10-23T16:03:10.3470000Z","result":2,"testResults":[{"method":"AC02_Activity_NegativeSkip_1033","startTime":"2026-10-23T16:03:09.9000000Z","finishTime":"2026-10-23T16:03:09.9130000Z","result":2},{"method":"AC02_Activity_NegativeTake_1033","startTime":"2026-10-23T16:03:09.9230000Z","finishTime":"2026-10-23T16:03:09.9370000Z","result":2},{"method":"AC02_Activity_BothNegative_1033","startTime":"2026-10-23T16:03:09.9400000Z","finishTime":"2026-10-23T16:03:09.9530000Z","result":2},{"method":"AC02_Activity_NegativeSkip_1039","startTime":"2026-10-23T16:03:09.9600000Z","finishTime":"2026-10-23T16:03:09.9730000Z","result":2},{"method":"AC02_Activity_NegativeTake_1039","startTime":"2026-10-23T16:03:09.9770000Z","finishTime":"2026-10-23T16:03:09.9900000Z","result":2},{"method":"AC02_Activity_BothNegative_1039","startTime":"2026-10-23T16:03:09.9970000Z","finishTime":"2026-10-23T16:03:10.0170000Z","result":2},{"method":"AC02_BinContent_NegativeSkip_1033","startTime":"2026-10-23T16:03:10.0230000Z","finishTime":"2026-10-23T16:03:10.0400000Z","result":2},{"method":"AC02_BinContent_NegativeTake_1033","startTime":"2026-10-23T16:03:10.0470000Z","finishTime":"2026-10-23T16:03:10.0600000Z","result":2},{"method":"AC02_BinContent_BothNegative_1033","startTime":"2026-10-23T16:03:10.0670000Z","finishTime":"2026-10-23T16:03:10.0800000Z","result":2},{"method":"AC02_BinContent_NegativeSkip_1039","startTime":"2026-10-23T16:03:10.0870000Z","finishTime":"2026-10-23T16:03:10.1030000Z","result":2},{"method":"AC02_BinContent_NegativeTake_1039","startTime":"2026-10-23T16:03:10.1070000Z","finishTime":"2026-10-23T16:03:10.1200000Z","result":2},{"method":"AC02_BinContent_BothNegative_1039","startTime":"2026-10-23T16:03:10.1270000Z","finishTime":"2026-10-23T16:03:10.1400000Z","result":2},{"method":"Scenario_Activity_TextTake_1033","startTime":"2026-10-23T16:03:10.1430000Z","finishTime":"2026-10-23T16:03:10.1570000Z","result":2},{"method":"Scenario_Activity_DecimalSkip_1033","startTime":"2026-10-23T16:03:10.1600000Z","finishTime":"2026-10-23T16:03:10.1700000Z","result":2},{"method":"Scenario_Activity_MixedPaging_1033","startTime":"2026-10-23T16:03:10.1770000Z","finishTime":"2026-10-23T16:03:10.1870000Z","result":2},{"method":"Scenario_Activity_TextTake_1039","startTime":"2026-10-23T16:03:10.1930000Z","finishTime":"2026-10-23T16:03:10.2070000Z","result":2},{"method":"Scenario_Activity_DecimalSkip_1039","startTime":"2026-10-23T16:03:10.2100000Z","finishTime":"2026-10-23T16:03:10.2230000Z","result":2},{"method":"Scenario_Activity_MixedPaging_1039","startTime":"2026-10-23T16:03:10.2270000Z","finishTime":"2026-10-23T16:03:10.2370000Z","result":2},{"method":"Scenario_BinContent_TextTake_1033","startTime":"2026-10-23T16:03:10.2430000Z","finishTime":"2026-10-23T16:03:10.2530000Z","result":2},{"method":"Scenario_BinContent_DecimalSkip_1033","startTime":"2026-10-23T16:03:10.2600000Z","finishTime":"2026-10-23T16:03:10.2700000Z","result":2},{"method":"Scenario_BinContent_MixedPaging_1033","startTime":"2026-10-23T16:03:10.2770000Z","finishTime":"2026-10-23T16:03:10.2900000Z","result":2},{"method":"Scenario_BinContent_TextTake_1039","startTime":"2026-10-23T16:03:10.2970000Z","finishTime":"2026-10-23T16:03:10.3070000Z","result":2},{"method":"Scenario_BinContent_DecimalSkip_1039","startTime":"2026-10-23T16:03:10.3170000Z","finishTime":"2026-10-23T16:03:10.3270000Z","result":2},{"method":"Scenario_BinContent_MixedPaging_1039","startTime":"2026-10-23T16:03:10.3330000Z","finishTime":"2026-10-23T16:03:10.3470000Z","result":2}]}
+Code Coverage Tracking Type
+Code Coverage Map
+Code Coverage Track All Sessions
+Code Coverage Exporter ID
+Code Coverage Results CSV
+Data Output
+Data Input
+Code Coverage Map CSV Text
+Code Coverage Information
+Stability run
+Company Name
+CRONUS International Ltd.
+Tenant ID
+default
+Language ID
+1033
+Manage
+Run Selected Tests
+Run Next Test
+Clear Test Results
+GetCodeCoverage
+
+
+
+		
+Line Type
+	
+	
+Codeunit ID
+	
+Name
+	
+Run
+	
+Result
+	
+Error Message
+	
+Stack Trace
+	
+Finish Time
+	
+Start Time
+	
+			
+									
+		
+0
+	
+	
+97032
+	
+Whse Negative Paging Tests ori
+	
+	
+2
+	
+		
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+AC02_Activity_NegativeSkip_1033
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+AC02_Activity_NegativeTake_1033
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+AC02_Activity_BothNegative_1033
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+AC02_Activity_NegativeSkip_1039
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+AC02_Activity_NegativeTake_1039
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+AC02_Activity_BothNegative_1039
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+AC02_BinContent_NegativeSkip_1033
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+AC02_BinContent_NegativeTake_1033
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+AC02_BinContent_BothNegative_1033
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+AC02_BinContent_NegativeSkip_1039
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+AC02_BinContent_NegativeTake_1039
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+AC02_BinContent_BothNegative_1039
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+Scenario_Activity_TextTake_1033
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+Scenario_Activity_DecimalSkip_1033
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+Scenario_Activity_MixedPaging_1033
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+Scenario_Activity_TextTake_1039
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+Scenario_Activity_DecimalSkip_1039
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+Scenario_Activity_MixedPaging_1039
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+Scenario_BinContent_TextTake_1033
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+Scenario_BinContent_DecimalSkip_1033
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+Scenario_BinContent_MixedPaging_1033
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+Scenario_BinContent_TextTake_1039
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+Scenario_BinContent_DecimalSkip_1039
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+1
+		
+97032
+	
+Scenario_BinContent_MixedPaging_1039
+	
+	
+2
+	
+	
+	
+10/23/2026 4:03 PM
+	
+10/23/2026 4:03 PM
+	
+		
+		
+	
+		
+	
+	
+	
+	
+	
+Use the Left and Right arrow keys to adjust the size. Use the Escape key to undo or the Enter key to accept.
+
+List with title "Command Line Test Tool" now has 26 items
+
+Saved

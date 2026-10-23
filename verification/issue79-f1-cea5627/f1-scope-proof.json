@@ -1,0 +1,12 @@
+{
+  "sha": "cea562727bd9227a9ccdc6787a3d22ae4ca50c6a",
+  "comparedTo": "980403dea67d488536b490261e17ae7458436b3c",
+  "productFilesCompared": 66,
+  "productChanges": [],
+  "changedFiles": [
+    "test/test/WhseNegativePagingTestsori.Codeunit.al",
+    "CHANGELOG.md"
+  ],
+  "noPublicSurfaceChangeInF1": true,
+  "originalPRH2": "Still requires Gunnar own sign-off via Claude Decisions; this comparison does not waive it."
+}

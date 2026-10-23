@@ -1,0 +1,82 @@
+{
+  "repo": "businesscentralal/bc-origo-bifrost-warehouse",
+  "issueUrls": [
+    "https://github.com/businesscentralal/bc-origo-bifrost-warehouse/issues/79"
+  ],
+  "prUrl": "https://github.com/businesscentralal/bc-origo-bifrost-warehouse/pull/84",
+  "sha": "cea562727bd9227a9ccdc6787a3d22ae4ca50c6a",
+  "branchUrl": "https://github.com/businesscentralal/bc-origo-bifrost-warehouse/tree/codex/worker4-warehouse79-paging",
+  "commitUrl": "https://github.com/businesscentralal/bc-origo-bifrost-warehouse/commit/cea562727bd9227a9ccdc6787a3d22ae4ca50c6a",
+  "scope": "Original#79plusArchitect1792770731F1;#83separate;F2-F4optional",
+  "acceptance": [
+    {
+      "id": "AC01",
+      "implementation": "BothActivity/BinContentuseexistingcollectingreader;singleInvalidParameter/InvalidParameterFormatandmixedMultipleErrors",
+      "verified": "Fullnative454/454;24pagingregressionsincl12newF1;MCP28/28bothtypes1033/1039",
+      "status": "developer-verified"
+    },
+    {
+      "id": "AC02/F1",
+      "implementation": "Texttakeabc,decimalskip1.5,mixedskipabc/take-1foreachtypeand1033/1039;code/parameter/received/expected/nextStepasserted",
+      "verified": "All12newnativecasespassinfull454suite;24/24inactualWebClienteachUIlanguage;MCP28/28inclnewcases",
+      "status": "developer-verified"
+    },
+    {
+      "id": "AC03",
+      "implementation": "CHANGELOGupdated97032;product/XLFunchangedfrom980;1131unitsparity;cops0/0bothapps",
+      "verified": "FreshCIandindependentClaudereceiptatcea562727bd9227a9ccdc6787a3d22ae4ca50c6apending",
+      "status": "pending-independent-verification"
+    },
+    {
+      "id": "H2",
+      "implementation": "Original97027MultipleErrors0\u21921and97062formatnextStepchange",
+      "verified": "ArchitectrequiresClaudecardandGunnarfirst-personsign-off;noagentapproval",
+      "status": "named-external-dependency",
+      "owner": "Claude Code / Gunnar"
+    }
+  ],
+  "counts": {
+    "native": {
+      "executed": 454,
+      "passed": 454,
+      "failed": 0,
+      "skipped": 0,
+      "fullSuite": true,
+      "codeunits": 52
+    },
+    "ui": {
+      "lcid1033": {
+        "executed": 24,
+        "passed": 24,
+        "failed": 0,
+        "skipped": 0
+      },
+      "lcid1039": {
+        "executed": 24,
+        "passed": 24,
+        "failed": 0,
+        "skipped": 0
+      },
+      "languageRestored": 1033
+    },
+    "mcp": {
+      "executed": 28,
+      "passed": 28,
+      "failed": 0,
+      "skipped": 0,
+      "types": [
+        "Warehouse.Activity.Get",
+        "Warehouse.BinContent.Get"
+      ],
+      "fixtureRecordsCreated": 0
+    }
+  },
+  "resource": {
+    "id": "f00f227f7231",
+    "name": "alviss-worker4-warehouse79-20261023",
+    "installedVersion": "28.3.0.84",
+    "cleanup": "0businessfixtures;nativeisolationandrepresentativerollbackreadbacks;containerretainedthroughamendments/UAT/issueclosure"
+  },
+  "independentVerification": "Requestfreshbc28-w1receiptatfullSHA;old980receiptinvalidatedbynewpush",
+  "recordedAt": "2026-10-23T16:05:30.486750+00:00"
+}

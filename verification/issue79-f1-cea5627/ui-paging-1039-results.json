@@ -1,0 +1,156 @@
+{
+  "name": "Whse Negative Paging Tests ori",
+  "codeUnit": 97032,
+  "codeunitName": "Whse Negative Paging Tests ori",
+  "applicationID": "{6AE41D19-D457-4D62-BD87-0413FF18DE75}",
+  "applicationName": "Bifrost Warehouse - Tests",
+  "startTime": "2026-10-23T16:03:32.1530000Z",
+  "finishTime": "2026-10-23T16:03:32.6370000Z",
+  "result": 2,
+  "testResults": [
+    {
+      "method": "AC02_Activity_NegativeSkip_1033",
+      "startTime": "2026-10-23T16:03:32.1630000Z",
+      "finishTime": "2026-10-23T16:03:32.1770000Z",
+      "result": 2
+    },
+    {
+      "method": "AC02_Activity_NegativeTake_1033",
+      "startTime": "2026-10-23T16:03:32.1870000Z",
+      "finishTime": "2026-10-23T16:03:32.1970000Z",
+      "result": 2
+    },
+    {
+      "method": "AC02_Activity_BothNegative_1033",
+      "startTime": "2026-10-23T16:03:32.2030000Z",
+      "finishTime": "2026-10-23T16:03:32.2170000Z",
+      "result": 2
+    },
+    {
+      "method": "AC02_Activity_NegativeSkip_1039",
+      "startTime": "2026-10-23T16:03:32.2200000Z",
+      "finishTime": "2026-10-23T16:03:32.2330000Z",
+      "result": 2
+    },
+    {
+      "method": "AC02_Activity_NegativeTake_1039",
+      "startTime": "2026-10-23T16:03:32.2370000Z",
+      "finishTime": "2026-10-23T16:03:32.2530000Z",
+      "result": 2
+    },
+    {
+      "method": "AC02_Activity_BothNegative_1039",
+      "startTime": "2026-10-23T16:03:32.2570000Z",
+      "finishTime": "2026-10-23T16:03:32.2700000Z",
+      "result": 2
+    },
+    {
+      "method": "AC02_BinContent_NegativeSkip_1033",
+      "startTime": "2026-10-23T16:03:32.2770000Z",
+      "finishTime": "2026-10-23T16:03:32.2900000Z",
+      "result": 2
+    },
+    {
+      "method": "AC02_BinContent_NegativeTake_1033",
+      "startTime": "2026-10-23T16:03:32.2970000Z",
+      "finishTime": "2026-10-23T16:03:32.3100000Z",
+      "result": 2
+    },
+    {
+      "method": "AC02_BinContent_BothNegative_1033",
+      "startTime": "2026-10-23T16:03:32.3130000Z",
+      "finishTime": "2026-10-23T16:03:32.3370000Z",
+      "result": 2
+    },
+    {
+      "method": "AC02_BinContent_NegativeSkip_1039",
+      "startTime": "2026-10-23T16:03:32.3430000Z",
+      "finishTime": "2026-10-23T16:03:32.3530000Z",
+      "result": 2
+    },
+    {
+      "method": "AC02_BinContent_NegativeTake_1039",
+      "startTime": "2026-10-23T16:03:32.3600000Z",
+      "finishTime": "2026-10-23T16:03:32.3700000Z",
+      "result": 2
+    },
+    {
+      "method": "AC02_BinContent_BothNegative_1039",
+      "startTime": "2026-10-23T16:03:32.3770000Z",
+      "finishTime": "2026-10-23T16:03:32.3870000Z",
+      "result": 2
+    },
+    {
+      "method": "Scenario_Activity_TextTake_1033",
+      "startTime": "2026-10-23T16:03:32.3900000Z",
+      "finishTime": "2026-10-23T16:03:32.4030000Z",
+      "result": 2
+    },
+    {
+      "method": "Scenario_Activity_DecimalSkip_1033",
+      "startTime": "2026-10-23T16:03:32.4100000Z",
+      "finishTime": "2026-10-23T16:03:32.4200000Z",
+      "result": 2
+    },
+    {
+      "method": "Scenario_Activity_MixedPaging_1033",
+      "startTime": "2026-10-23T16:03:32.4270000Z",
+      "finishTime": "2026-10-23T16:03:32.4400000Z",
+      "result": 2
+    },
+    {
+      "method": "Scenario_Activity_TextTake_1039",
+      "startTime": "2026-10-23T16:03:32.4470000Z",
+      "finishTime": "2026-10-23T16:03:32.4630000Z",
+      "result": 2
+    },
+    {
+      "method": "Scenario_Activity_DecimalSkip_1039",
+      "startTime": "2026-10-23T16:03:32.4700000Z",
+      "finishTime": "2026-10-23T16:03:32.4800000Z",
+      "result": 2
+    },
+    {
+      "method": "Scenario_Activity_MixedPaging_1039",
+      "startTime": "2026-10-23T16:03:32.4870000Z",
+      "finishTime": "2026-10-23T16:03:32.4970000Z",
+      "result": 2
+    },
+    {
+      "method": "Scenario_BinContent_TextTake_1033",
+      "startTime": "2026-10-23T16:03:32.5070000Z",
+      "finishTime": "2026-10-23T16:03:32.5200000Z",
+      "result": 2
+    },
+    {
+      "method": "Scenario_BinContent_DecimalSkip_1033",
+      "startTime": "2026-10-23T16:03:32.5270000Z",
+      "finishTime": "2026-10-23T16:03:32.5370000Z",
+      "result": 2
+    },
+    {
+      "method": "Scenario_BinContent_MixedPaging_1033",
+      "startTime": "2026-10-23T16:03:32.5470000Z",
+      "finishTime": "2026-10-23T16:03:32.5630000Z",
+      "result": 2
+    },
+    {
+      "method": "Scenario_BinContent_TextTake_1039",
+      "startTime": "2026-10-23T16:03:32.5700000Z",
+      "finishTime": "2026-10-23T16:03:32.5930000Z",
+      "result": 2
+    },
+    {
+      "method": "Scenario_BinContent_DecimalSkip_1039",
+      "startTime": "2026-10-23T16:03:32.6000000Z",
+      "finishTime": "2026-10-23T16:03:32.6130000Z",
+      "result": 2
+    },
+    {
+      "method": "Scenario_BinContent_MixedPaging_1039",
+      "startTime": "2026-10-23T16:03:32.6230000Z",
+      "finishTime": "2026-10-23T16:03:32.6370000Z",
+      "result": 2
+    }
+  ]
+}

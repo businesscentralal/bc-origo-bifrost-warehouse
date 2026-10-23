@@ -1,0 +1,39 @@
+{
+  "sha": "cea562727bd9227a9ccdc6787a3d22ae4ca50c6a",
+  "containerId": "f00f227f7231",
+  "appVersion": "28.3.0.84",
+  "startedAt": "2026-10-23T16:02:57.359Z",
+  "scenarios": [
+    {
+      "lcid": 1033,
+      "suite": "W84F1EN",
+      "codeunit": 97032,
+      "executed": 24,
+      "passed": 24,
+      "failed": 0,
+      "skipped": 0,
+      "scenario": "Real Web Client invokes public-dispatcher negative skip/take/both regressions for both touched types in both envelope languages",
+      "evidence": "ui-paging-1033-results.json"
+    },
+    {
+      "lcid": 1039,
+      "suite": "W84F1IS",
+      "codeunit": 97032,
+      "executed": 24,
+      "passed": 24,
+      "failed": 0,
+      "skipped": 0,
+      "scenario": "Real Web Client invokes public-dispatcher negative skip/take/both regressions for both touched types in both envelope languages",
+      "evidence": "ui-paging-1039-results.json"
+    }
+  ],
+  "passed": 2,
+  "failed": 0,
+  "skipped": 0,
+  "cleanup": {
+    "businessFixtureRecordsCreated": 0,
+    "languageRestored": true,
+    "languageReadback": "ui-language-restored.txt"
+  },
+  "finishedAt": "2026-10-23T16:05:03.559Z"
+}

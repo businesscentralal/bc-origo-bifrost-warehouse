@@ -1,0 +1,27 @@
+{
+  "sourceSha": "cea562727bd9227a9ccdc6787a3d22ae4ca50c6a",
+  "attempts": [
+    {
+      "kind": "compile",
+      "candidate": "a7ad64c",
+      "result": "twoAA0005warnings",
+      "repair": "Removed begin/end around single statements; normal commitcea5627; bothapps0/0."
+    },
+    {
+      "kind": "deployment",
+      "result": "422priorPR85testdependency",
+      "diagnosis": "Priorwizardtest83couldnotrecompilewithPR84product84. Matchingtestfirstalsofailedmissingproductsymbols. Actualstateinspected;product/test84thenpublished200andreadbackinstalled. Noenvironmentreplacement/oldfixturewrite."
+    },
+    {
+      "kind": "MCP",
+      "result": "24successfulscenarioresults; one transportfetchfailed",
+      "repair": "Retained24passes;retriedonly4unfinishedrequests;terminal28/28/0/0. No record fixtures."
+    },
+    {
+      "kind": "UI",
+      "result": "No test executed;fieldsnotvisibleafterstartup",
+      "repair": "Read-onlyinspectionconfirmstestpage;waitforactualframeinputs. Freshactual24/24pass1033and24/24pass1039. Language-restoreselectorhitunderlyingtextbox;runscopedrestoreonly,noreplayoftests. Successfulscopedlanguagerestoreandactualreadback1033. No test replay."
+    }
+  ],
+  "recordedAt": "2026-10-23T16:02:58.288738+00:00"
+}

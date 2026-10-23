@@ -1,0 +1,33 @@
+{
+  "sourceSha": "cea562727bd9227a9ccdc6787a3d22ae4ca50c6a",
+  "files": {
+    "acceptance-matrix.json": "07fb7427d6251fc7ae1b5d951dfc4a224796869fc1901e2e314b294ceb11739a",
+    "app-compile.log": "ecb30a0e270e86a7f1887a73b91ab38017d9bec1f4e663d9c6f051cfa97010a7",
+    "artifact-provenance.json": "154c4961837c7c4f44f2968e21af1826cca8d2d650caf125df5de68d8c8b0001",
+    "compile-summary.json": "712370992cc435f1ca626eed9b764a00945407e4236d96ac8982b23085e1c2ec",
+    "f1-scope-proof.json": "fa3687731f729931ca3fb8595689ec3b4d7be30e7fd10d4de3af7a8c6ce89c10",
+    "foundation-provenance.json": "3a017dd9dc30935af8d57ebca6c75a1b6dcd0218962329e1c13bcdc35e2da4f6",
+    "full-suite-inventory.json": "56c9f376890586575576da3254cc699db9b74229bcd46600446b26620203dd9e",
+    "full-suite.junit.xml": "fc0cc35266e651debc5989d5dbf0cf2f6a5ea01172667ccb8ea40c53ea5204c5",
+    "github-candidate.json": "919ac7607f6025f30760f7ada61a049f0ed32160e9cbffb5cc8aded5f0125d48",
+    "mcp-summary.json": "bd9c5b714a9e90ad520527c6964e2eab80a4e80467be72dd78575b10f3413588",
+    "native-summary.json": "dc14aa624810003990ff52869ee4ffced3fec46c3406ce36b8ecdd6c8721d4fe",
+    "owned-cleanup.json": "32560c241bf66c4612f4d0494021e1be9a9928c8336712d08a0322419d5baca0",
+    "README.md": "ed0a5137c7620968cedb9ca1cd4e6ca33e618e34a6def98cdac482f8f3e8fc54",
+    "retry-history.json": "288f0219f1664d40b7528009b4d293fa93b2d2424f2e30c0daedc669d3c843a0",
+    "source-manifest.json": "9749d8cc5db45427fc55bf69eab5e5316b21f541c47b6365cfdff28b734e5758",
+    "test-compile.log": "2ce961c141d87cedecd564dd2729209677176a9a64276f4b5ba80f2747e1d3cb",
+    "ui-language-restored.png": "d7d2dd2bd2887fed9239ee408b99427f5aeb4784b32aa1a51a9eef4e875a7994",
+    "ui-language-restored.txt": "3a79830cd5c6aa9d37182bbeb3322f1c15e0ef441342509ff871395cb8160464",
+    "ui-paging-1033-results.json": "700104ae60015f723c07e43de7501e100611600ea50ecc1f408fad96b36e38e9",
+    "ui-paging-1033.png": "8a5bd5314e64c7c7146e8bb21e26cd704989e3198e09943951d40bf233895263",
+    "ui-paging-1033.txt": "fe73945bf27b5d8574c773e8a1802e754e9a59aea19da0246041e314aeacea75",
+    "ui-paging-1039-results.json": "33606bc4a787a069fd627d3d1058dca7fee9f8682097dd1b13e8a3ec0e33d0ee",
+    "ui-paging-1039.png": "ed5529d270cd118600986bb5c49190ef035775d89f69fe108e8e22fd6bdadb02",
+    "ui-paging-1039.txt": "60adf95ea04052ef0c0d4d3d983ccaf6dae121809a9abed5a97e891a6774c346",
+    "ui-summary.json": "5ea9f58ed32ff76481de052c6e38cca2d814e2ae9962d41daa3b205cba5b8120",
+    "versions-deployed.json": "e603c2d8e549c5d2e4f2ec9f88e70d5b230e7c633405a825f57bd9496f595352",
+    "warehouse-baseline-provenance.json": "82af60560e26df3920a639b279cf71903a94d448fcf732f66fa636c3ba5592c5",
+    "xlf-test.log": "fe1d7029181d1df776036de190a6e568e809b582975236bddbfe1527b6437598"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "sha": "cea562727bd9227a9ccdc6787a3d22ae4ca50c6a",
+  "containerId": "f00f227f7231",
+  "fullSuite": true,
+  "finishedAt": "2026-10-23T16:01:47.665Z",
+  "ok": true,
+  "mode": "ssh",
+  "durationMs": 133106,
+  "passed": 454,
+  "failed": 0,
+  "skipped": 0,
+  "errors": 0,
+  "failures": [],
+  "executed": 454,
+  "rawJUnitSha256": "f97dcff72050bd2e34fde0fc96e21cb6c49953deacea63f1cfe65da46e8a5669",
+  "sanitization": "Removed environment properties only; all454testcases and result fields retained."
+}

@@ -1,0 +1,648 @@
+
+Dynamics 365 Business Central
+
+
+
+
+G
+
+Command Line Test Tool
+Saved
+
+
+
+Suite Name
+Test Codeunit Range
+Test Procedure Range
+Test Runner Codeunit ID
+Extension ID
+Required Test Isolation
+Test Type
+DisableTestMethod
+Test Result JSON
+Code Coverage Tracking Type
+Code Coverage Map
+Code Coverage Track All Sessions
+Code Coverage Exporter ID
+Code Coverage Results CSV
+Data Output
+Data Input
+Code Coverage Map CSV Text
+Code Coverage Information
+Stability run
+Company Name
+CRONUS International Ltd.
+Tenant ID
+default
+Language ID
+1033
+Manage
+Run Selected Tests
+Run Next Test
+Clear Test Results
+GetCodeCoverage
+
+
+
+		
+Line Type
+	
+	
+Codeunit ID
+	
+Name
+	
+Run
+	
+Result
+	
+Error Message
+	
+Stack Trace
+	
+Finish Time
+	
+Start Time
+	
+			
+									
+		
+0
+	
+	
+97000
+	
+Whse BinContent Get Tests ori
+	
+	
+2
+	
+		
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97000
+	
+GetReturnsMatchingBinContent
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97000
+	
+GetPagesRowsAndReportsUnpagedCount
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97000
+	
+GetWithNoMatchesReturnsEmptySuccess
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97000
+	
+IsDisabledWithoutReadPermission
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+0
+		
+97001
+	
+Whse Activity Get Tests ori
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97001
+	
+GetByNumberReturnsHeaderAndLines
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97001
+	
+MissingNumberReturnsStructuredError
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97001
+	
+MissingSystemIdReturnsStructuredError
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97001
+	
+FiltersByActivityTypeDocumentLocationAndAssignedUser
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97001
+	
+PagesHeadersAndReportsUnpagedCount
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97001
+	
+IsDisabledWithoutReadPermission
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97001
+	
+Scenario_AC01_NoAndSystemId_RejectConflict
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97001
+	
+Scenario_AC01_SubjectAndSystemId_RejectConflict
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97001
+	
+Scenario_AC01_NoAndSubject_RejectConflict
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97001
+	
+Scenario_AC01_Aliases_RejectConflict
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97001
+	
+Scenario_AC02_AllIdentifiers_ReturnOneRecord
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97001
+	
+Scenario_AC03_ActivityNo_ReturnRecord
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97001
+	
+Scenario_AC03_UnknownAlias_ReturnNotFound
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97001
+	
+Scenario_AC04_id_ReturnRecord
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97001
+	
+Scenario_AC04_id_RejectNonGuid
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97001
+	
+Scenario_AC04_recordSystemId_ReturnRecord
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97001
+	
+Scenario_AC04_recordSystemId_RejectNonGuid
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97001
+	
+Scenario_AC04_InvalidAliasWithNo_RejectFormat
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97001
+	
+Scenario_AC05_AliasesWithFilter_NoUnrelatedRow
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97001
+	
+Scenario_AC06_BilingualHelp_DeclaresContract
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97001
+	
+Scenario_AC04_IdObject_RejectFormat
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97001
+	
+Scenario_AC04_RecordIdArray_RejectFormat
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97001
+	
+Scenario_AC05_AliasObjectFilter_RejectFormat
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+0
+		
+97011
+	
+Whse Shipment Create Tests ori
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97011
+	
+Create_SalesOrder_ReturnsShipmentNo
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97011
+	
+Create_MissingSourceDocuments_ReturnsError
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97011
+	
+Create_UnsupportedSourceType_ReturnsError
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97011
+	
+Create_SalesOrderNotReleased_ReturnsError
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97011
+	
+IsEnabledWithWritePermission
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+		
+1
+		
+97011
+	
+IsDisabledWithoutWritePermission
+	
+	
+2
+	
+	
+	
+10/23/2026 3:59 PM
+	
+10/23/2026 3:59 PM
+	
+
+Use the Left and Right arrow keys to adjust the size. Use the Escape key to undo or the Enter key to accept.
+
+List with title "Command Line Test Tool" now has 147 items

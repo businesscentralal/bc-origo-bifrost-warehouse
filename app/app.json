@@ -2,7 +2,7 @@
   "id": "47acac54-3873-496f-9e88-157f36413e89",
   "name": "Bifrost Warehouse",
   "publisher": "Origo",
-  "version": "28.3.0.0",
+  "version": "28.3.2.0",
   "brief": "Bifrost Warehouse - message types for warehouse operations",
   "description": "Adds Bifrost message types for Microsoft Dynamics 365 Business Central warehouse operations that Bifrost Foundation does not cover. Reads bin content and open warehouse activities, and creates, previews and posts warehouse shipments and receipts, creates and registers picks and put-aways - so an agent or integration can run inbound and outbound warehouse work through one governed API. Posting and registering need their own permission set, and invoicing a shipment needs a second one.",
   "url": "https://www.origo.is/",

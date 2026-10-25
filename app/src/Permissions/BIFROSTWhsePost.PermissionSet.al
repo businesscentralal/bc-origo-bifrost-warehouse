@@ -11,5 +11,8 @@ permissionset 10078454 "BIFROST WhsePost ori"
     Caption = 'Warehouse Posting Gate', MaxLength = 30, Comment = 'is-IS=Bókunarhlið vörugeymslu';
 
     Permissions =
+        page "Whse Setup Wizard ori" = X,
+        codeunit "Whse Wizard Reg. ori" = X,
+        codeunit "Whse Wizard Mgt ori" = X,
         tabledata "Whse Posting ori" = RIMD;
 }

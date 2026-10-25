@@ -311,3 +311,7 @@ locale pages in businesscentralal/bifrost.
 ---
 
 © 2026 Origo ehf.
+
+## Set up with the wizard
+
+Open **Set up Bifrost Warehouse** from Assisted Setup for Warehouse operations, HTTP through Foundation, and user access. See [setup instructions](app/docs/setup-wizard.md).

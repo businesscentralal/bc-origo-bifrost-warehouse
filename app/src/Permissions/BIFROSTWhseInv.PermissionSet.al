@@ -12,5 +12,8 @@ permissionset 10078457 "BIFROST WhseInv ori"
     Caption = 'Whse Invoice Gate', MaxLength = 30, Comment = 'is-IS=Reikningshlið vörugeymslu';
 
     Permissions =
+        page "Whse Setup Wizard ori" = X,
+        codeunit "Whse Wizard Reg. ori" = X,
+        codeunit "Whse Wizard Mgt ori" = X,
         tabledata "Whse Invoice ori" = RIMD;
 }

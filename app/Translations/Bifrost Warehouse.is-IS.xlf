@@ -6357,6 +6357,24 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Reopen Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 257719388 - Method 550388558 - NamedType 1582893390" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set up Bifrost Warehouse</source>
+          <target>Setja upp Bifröst vöruhús</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Setja upp Bifröst vöruhús</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wizard Reg. ori - Method RegisterWizard - NamedType TitleLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 257719388 - Method 550388558 - NamedType 3800423060" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bifrost Warehouse</source>
+          <target>Bifröst vöruhús</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bifröst vöruhús</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wizard Reg. ori - Method RegisterWizard - NamedType ShortTitleLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 257719388 - Method 550388558 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Learn what Warehouse adds to Bifrost, check HTTP through Bifrost Setup, and review user access.</source>
+          <target>Kynntu þér hvað Vöruhús bætir við Bifröst, athugaðu HTTP í Bifröst uppsetningu og farðu yfir aðgang notenda.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Kynntu þér hvað Vöruhús bætir við Bifröst, athugaðu HTTP í Bifröst uppsetningu og farðu yfir aðgang notenda.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wizard Reg. ori - Method RegisterWizard - NamedType DescriptionLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3297616556 - Method 3350175689 - NamedType 1481985999" size-unit="char" translate="yes" xml:space="preserve">
           <source>User %1 is not a warehouse employee of location %2.</source>
           <target>Notandi %1 er ekki vöruhússtarfsmaður staðsetningar %2.</target>
@@ -6776,6 +6794,258 @@
           <target>Sendu dagsetninguna sem texta, til dæmis 2026-10-19.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Sendu dagsetninguna sem texta, til dæmis 2026-10-19.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Write Context ori - Method TextDateNextStep - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set up Bifrost Warehouse</source>
+          <target>Setja upp Bifröst vöruhús</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Setja upp Bifröst vöruhús</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - NamedType 2062468955" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Needs an administrator</source>
+          <target>Þarf stjórnanda</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þarf stjórnanda</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - NamedType AdministratorLbl</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - NamedType 1248124158" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Done</source>
+          <target>Lokið</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lokið</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - NamedType DoneLbl</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - NamedType 4076658803" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to change extension settings. Ask an administrator with the SUPER permission set (or write permission on table NAV App Setting) to enable Allow HttpClient Requests for Bifrost Warehouse.</source>
+          <target>Þú hefur ekki heimild til að breyta stillingum viðbóta. Biddu kerfisstjóra sem hefur SUPER heimildasamstæðuna (eða skrifheimild á töfluna NAV App Setting) um að virkja Leyfa HttpClient-beiðnir fyrir Bifröst vöruhús.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að breyta stillingum viðbóta. Biddu kerfisstjóra sem hefur SUPER heimildasamstæðuna (eða skrifheimild á töfluna NAV App Setting) um að virkja Leyfa HttpClient-beiðnir fyrir Bifröst vöruhús.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - NamedType HttpPermissionNoteLbl</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Control 1850829176 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Users also need the Foundation Bifrost permission sets. Assign sets to users directly or through a Microsoft Entra security group. This wizard does not assign permissions.</source>
+          <target>Notendur þurfa einnig Bifröst-heimildasamstæður grunnkerfisins. Úthlutaðu samstæðum beint til notenda eða í gegnum Microsoft Entra öryggishóp. Þessi leiðsögn úthlutar ekki heimildum.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notendur þurfa einnig Bifröst-heimildasamstæður grunnkerfisins. Úthlutaðu samstæðum beint til notenda eða í gegnum Microsoft Entra öryggishóp. Þessi leiðsögn úthlutar ekki heimildum.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Control Access - Property InstructionalText</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Control 1850829176 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>User access</source>
+          <target>Aðgangur notenda</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Aðgangur notenda</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Control Access - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Control 1029751767 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
+          <source>BIFROST WhseInv ori: additionally allows invoicing when a warehouse shipment is posted.</source>
+          <target>BIFROST WhseInv ori: heimilar einnig reikningsfærslu þegar vöruhúsaafhending er bókuð.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=BIFROST WhseInv ori: heimilar einnig reikningsfærslu þegar vöruhúsaafhending er bókuð.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Control InvoiceAccess - Property InstructionalText</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Control 1168656128 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
+          <source>BIFROST WhsePost ori: allows warehouse posting and activity registration.</source>
+          <target>BIFROST WhsePost ori: heimilar bókun vöruhúss og skráningu vöruhúsaaðgerða.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=BIFROST WhsePost ori: heimilar bókun vöruhúss og skráningu vöruhúsaaðgerða.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Control PostingAccess - Property InstructionalText</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Control 1627599036 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bifrost needs outbound HTTP for licensing. Foundation enables Allow HttpClient Requests; this wizard only reads the setting for Bifrost Warehouse.</source>
+          <target>Bifröst þarf HTTP út á við fyrir leyfisveitingu. Grunnkerfið virkjar Leyfa HttpClient-beiðnir; þessi leiðsögn les aðeins stillinguna fyrir Bifröst vöruhús.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bifröst þarf HTTP út á við fyrir leyfisveitingu. Grunnkerfið virkjar Leyfa HttpClient-beiðnir; þessi leiðsögn les aðeins stillinguna fyrir Bifröst vöruhús.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Control Http - Property InstructionalText</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Control 1627599036 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>HTTP through Bifrost Setup</source>
+          <target>HTTP í gegnum Bifröst uppsetningu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=HTTP í gegnum Bifröst uppsetningu</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Control Http - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Control 2778804623 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows whether Allow HttpClient Requests is enabled for Bifrost Warehouse.</source>
+          <target>Sýnir hvort Leyfa HttpClient-beiðnir sé virkt fyrir Bifröst vöruhús.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir hvort Leyfa HttpClient-beiðnir sé virkt fyrir Bifröst vöruhús.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Control HttpEnabled - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Control 2778804623 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>HTTP enabled</source>
+          <target>HTTP virkt</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=HTTP virkt</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Control HttpEnabled - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Control 283970885 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Explains who can enable HTTP for Bifrost Warehouse.</source>
+          <target>Útskýrir hver getur virkjað HTTP fyrir Bifröst vöruhús.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Útskýrir hver getur virkjað HTTP fyrir Bifröst vöruhús.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Control HttpPermissionNote - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Control 2166945456 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Review the summary. Finish marks this assisted setup complete, including when HTTP still needs an administrator. You can run the wizard again later.</source>
+          <target>Farðu yfir yfirlitið. Ljúka merkir þessa leiðsögn sem lokið, einnig þegar HTTP þarfnast enn stjórnanda. Þú getur keyrt leiðsögnina aftur síðar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Farðu yfir yfirlitið. Ljúka merkir þessa leiðsögn sem lokið, einnig þegar HTTP þarfnast enn stjórnanda. Þú getur keyrt leiðsögnina aftur síðar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Control Summary - Property InstructionalText</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Control 2166945456 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ready to finish</source>
+          <target>Tilbúið til að ljúka</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilbúið til að ljúka</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Control Summary - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Control 3712887036 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Confirms that the permission sets and assignment options have been described.</source>
+          <target>Staðfestir að heimildasamstæðum og úthlutunarmöguleikum hafi verið lýst.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Staðfestir að heimildasamstæðum og úthlutunarmöguleikum hafi verið lýst.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Control AccessSummary - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Control 3712887036 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Access guidance</source>
+          <target>Leiðbeiningar um aðgang</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Leiðbeiningar um aðgang</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Control AccessSummary - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Control 3679675544 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows whether HTTP is enabled or needs an administrator.</source>
+          <target>Sýnir hvort HTTP sé virkt eða þarfnist stjórnanda.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir hvort HTTP sé virkt eða þarfnist stjórnanda.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Control HttpSummary - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Control 3679675544 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>HTTP</source>
+          <target>HTTP</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=HTTP</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Control HttpSummary - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Control 3186466314 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Confirms that the Warehouse operations have been described.</source>
+          <target>Staðfestir að vöruhúsaaðgerðunum hafi verið lýst.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Staðfestir að vöruhúsaaðgerðunum hafi verið lýst.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Control WelcomeSummary - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Control 3186466314 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warehouse operations</source>
+          <target>Vöruhúsaaðgerðir</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Vöruhúsaaðgerðir</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Control WelcomeSummary - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Control 3800514526 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warehouse adds bin content and open warehouse activities, receipts and shipments from creation through preview to posting, and picks and put-aways from creation to registering, in the Warehouse domain.</source>
+          <target>Vöruhús bætir við hólfainnihaldi og opnum vöruhúsaaðgerðum, móttökum og afhendingum frá stofnun, í gegnum forskoðun, til bókunar og tínslum og frágangi frá stofnun til skráningar á sviðinu Warehouse.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Vöruhús bætir við hólfainnihaldi og opnum vöruhúsaaðgerðum, móttökum og afhendingum frá stofnun, í gegnum forskoðun, til bókunar og tínslum og frágangi frá stofnun til skráningar á sviðinu Warehouse.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Control Welcome - Property InstructionalText</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Control 3800514526 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Welcome to Bifrost Warehouse</source>
+          <target>Velkomin í Bifröst vöruhús</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Velkomin í Bifröst vöruhús</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Control Welcome - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Control 3175620180 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
+          <source>AI assistants and other systems reach these operations through Bifrost, as the signed-in user and within their permissions. Installed operations are listed on the Bifrost Message Types page.</source>
+          <target>Gervigreindaraðstoð og önnur kerfi nálgast þessar aðgerðir í gegnum Bifröst í nafni innskráðs notanda og innan heimilda hans. Uppsettar aðgerðir eru skráðar á síðunni Skilaboðategundir Bifröst.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gervigreindaraðstoð og önnur kerfi nálgast þessar aðgerðir í gegnum Bifröst í nafni innskráðs notanda og innan heimilda hans. Uppsettar aðgerðir eru skráðar á síðunni Skilaboðategundir Bifröst.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Control AssistantAccess - Property InstructionalText</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Action 742034285 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Go to the previous step.</source>
+          <target>Fara í fyrra skref.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fara í fyrra skref.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Action Back - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Action 742034285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Back</source>
+          <target>Til baka</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Til baka</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Action Back - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Action 632153598 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open the Warehouse documentation.</source>
+          <target>Opna skjölun Vöruhúss.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opna skjölun Vöruhúss.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Action Documentation - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Action 632153598 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Documentation</source>
+          <target>Skjölun</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skjölun</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Action Documentation - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Action 3275419427 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open Foundation setup, then refresh this app’s HTTP status.</source>
+          <target>Opna uppsetningu grunnkerfisins og endurnýja svo HTTP-stöðu þessa forrits.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opna uppsetningu grunnkerfisins og endurnýja svo HTTP-stöðu þessa forrits.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Action EnableHttp - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Action 3275419427 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Enable HTTP in Bifrost Setup</source>
+          <target>Virkja HTTP í Bifröst uppsetningu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Virkja HTTP í Bifröst uppsetningu</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Action EnableHttp - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Action 2667510389 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Mark the Warehouse assisted setup complete.</source>
+          <target>Merkja leiðsögn Vöruhúss sem lokið.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Merkja leiðsögn Vöruhúss sem lokið.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Action Finish - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Action 2667510389 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Finish</source>
+          <target>Ljúka</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ljúka</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Action Finish - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Action 1235620153 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Go to the next step.</source>
+          <target>Fara í næsta skref.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fara í næsta skref.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Action Next - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Action 1235620153 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Next</source>
+          <target>Áfram</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Áfram</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Action Next - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Action 3933687258 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open the standard Permission Sets page.</source>
+          <target>Opna staðlaða síðu heimildasamstæðna.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opna staðlaða síðu heimildasamstæðna.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Action OpenPermissionSets - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Action 3933687258 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open Permission Sets</source>
+          <target>Opna heimildasamstæður</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opna heimildasamstæður</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Action OpenPermissionSets - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Action 2793276546 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open the standard Users page to manage user access.</source>
+          <target>Opna staðlaða notendasíðu til að stjórna aðgangi.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opna staðlaða notendasíðu til að stjórna aðgangi.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Action OpenUsers - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Action 2793276546 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open Users</source>
+          <target>Opna notendur</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opna notendur</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Action OpenUsers - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Action 719030663 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open the installed Bifrost operations.</source>
+          <target>Opna uppsettar Bifröst-aðgerðir.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opna uppsettar Bifröst-aðgerðir.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Action ShowOperations - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Action 719030663 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Show operations</source>
+          <target>Sýna aðgerðir</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sýna aðgerðir</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Action ShowOperations - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Action 2156087049 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Refresh the HTTP status for this app.</source>
+          <target>Endurnýja HTTP-stöðu þessa forrits.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Endurnýja HTTP-stöðu þessa forrits.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Action Verify - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 580138067 - Action 2156087049 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Verify</source>
+          <target>Staðfesta</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Staðfesta</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Whse Setup Wizard ori - Action Verify - Property Caption</note>
         </trans-unit>
         <trans-unit id="PermissionSet 1530598549 - Property 2879900210" maxwidth="30" size-unit="char" translate="yes" xml:space="preserve">
           <source>Whse Invoice Gate</source>

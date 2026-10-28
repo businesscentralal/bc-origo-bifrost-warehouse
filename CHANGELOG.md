@@ -4,6 +4,8 @@
 
 ### Fixed
 
+- Restricted licence administrators can open Bifröst Setup with Warehouse installed (#90). Registration codeunit 10078385 now has inherent Execute permission and entitlement; no table write permission is added. Test codeunit 97005 opens the real Setup page under the licence-admin role in English and Icelandic, with test-only platform baseline permission set 97005.
+
 - Warehouse setup wizard (#83, PR #85): call modal pages directly so Foundation settings writes and errors retain platform behavior (page 10078385); grant read-only NAV App Setting access in management codeunit 10078386 while preserving the caller write-permission check. Add restricted-user regressions (test codeunit and test-only permission set 97004) and correct Icelandic Assisted Setup help terminology.
 
 

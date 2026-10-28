@@ -319,10 +319,10 @@ codeunit 97062 "Whse Jnl Contract Tests ori"
             GlobalLanguage(OriginalLanguage);
             Assert.IsTrue(HasContract, ContractAssert.TypeName(MessageType) + ' has a contract.');
             foreach Entry in Errors do
-                    if Helper.TextValue(Entry.AsObject(), 'code') = 'UnknownParameter' then begin
-                        Assert.AreEqual(ExpectedNextStep, Helper.TextValue(Entry.AsObject(), 'nextStep'), ContractAssert.TypeName(MessageType) + ' unknown-key next step.');
-                        Checked += 1;
-                    end;
+                if Helper.TextValue(Entry.AsObject(), 'code') = 'UnknownParameter' then begin
+                    Assert.AreEqual(ExpectedNextStep, Helper.TextValue(Entry.AsObject(), 'nextStep'), ContractAssert.TypeName(MessageType) + ' unknown-key next step.');
+                    Checked += 1;
+                end;
         end;
         Assert.IsTrue(Checked >= 30, 'All Warehouse declarations of UnknownParameter are checked.');
     end;

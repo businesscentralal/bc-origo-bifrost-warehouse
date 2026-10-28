@@ -17,6 +17,8 @@
 
 - Assisted Setup now lists Set up Bifrost Warehouse in Extensions. Four steps explain Warehouse operations, read this app's HTTP status, open Foundation for HTTP configuration, describe the posting/invoicing permission gates and complete only on Finish. Warehouse registers with Foundation's app registry so Foundation's HTTP step lists and enables this app. No permissions are assigned and no HTTP settings, consent or licensing records are written by Warehouse or its tests.
 - Added en-US/is-IS wizard text, setup documentation and lifecycle/read-only configuration tests. Objects: page 10078385 `Whse Setup Wizard ori`, codeunits 10078385 `Whse Wizard Reg. ori`, 10078386 `Whse Wizard Mgt ori`; test codeunit 97003 `Whse Setup Wizard Tests`. Permission grants updated in 10078394, 10078395, 10078454 and 10078457. Existing public procedures and fields are preserved.
+## [28.3.1 and earlier]
+
 ### Fixed (2026-10-23) - Structured negative paging errors (#79)
 
 - `Warehouse.Activity.Get` and `Warehouse.BinContent.Get` collect invalid skip/take values before querying. A single negative value answers `InvalidParameter` with parameter, received, expected and nextStep; two answer `MultipleErrors` with both problems.

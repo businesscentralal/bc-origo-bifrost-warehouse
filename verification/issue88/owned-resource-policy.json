@@ -1,0 +1,16 @@
+{
+  "id": "f049001b97aa",
+  "displayName": "alviss-worker4-warehouse88-20261028",
+  "creationTimestamp": "2026-10-28T13:22:10Z",
+  "status": {
+    "state": "Running",
+    "statusMessage": "Running",
+    "imageBuilding": false,
+    "imageBuildError": false
+  },
+  "autoStopInfo": {
+    "time": "17:00",
+    "mode": "AutoStopDaily"
+  },
+  "inactivityInfo": {}
+}

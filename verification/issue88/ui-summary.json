@@ -1,0 +1,54 @@
+{
+  "sha": "9ac516b1af7ea1991387916f1af5897235a2a689",
+  "containerId": "f049001b97aa",
+  "appVersion": "28.3.2.88",
+  "startedAt": "2026-10-28T13:48:50.880Z",
+  "scenarios": [
+    {
+      "lcid": 1033,
+      "suite": "W88UIEN",
+      "codeunit": 97042,
+      "executed": 14,
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0,
+      "scenario": "Real Web Client runs all14shipment release/reopen tests, including unknown-key/no-execution, declared next-step parity and permission refusals; explicit payload LCIDs cover1033/1039",
+      "evidence": "ui-release-1033-results.json"
+    },
+    {
+      "lcid": 1039,
+      "suite": "W88UIIS",
+      "codeunit": 97042,
+      "executed": 14,
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0,
+      "scenario": "Real Web Client runs all14shipment release/reopen tests, including unknown-key/no-execution, declared next-step parity and permission refusals; explicit payload LCIDs cover1033/1039",
+      "evidence": "ui-release-1039-results.json"
+    }
+  ],
+  "passed": 2,
+  "failed": 0,
+  "skipped": 0,
+  "cleanup": {
+    "businessFixtureRecordsCreatedByBrowserHarness": 0,
+    "nativeFixtures": "Self-seeded by isolated AL tests; rollback readback recorded separately",
+    "languageRestored": true,
+    "languageRestorationEvidence": "language-restoration.json"
+  },
+  "finishedAt": "2026-10-28T13:52:23.896Z",
+  "harnessAttemptHistory": [
+    {
+      "initialHarnessExitCode": 1,
+      "phase": "restore user language after successful tests",
+      "error": "locator.dblclick: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByText('English (United States)', { exact: true }).first()\u001b[22m\n\u001b[2m    - locator resolved to <span id=\"b36ee\" tabindex=\"0\" role=\"textbox\" aria-readonly=\"true\" aria-labelledby=\"b36lbl b36ee\" title=\"English (United States)\" class=\"stringcontrol-read value thm-font-size-small thm-segoeNormal thm-color--style-standard_medmaxflat_45--not_FCM thm-bgcolor--medmaxflat thm-bdrcolor--brand-primary_minflat_45--focus--not_FCM thm-outlinecolor--brand-primary_minflat_45--focus--not_FCM\">English (United States)</span>\u001b[22m\n\u001b[2m  - attempting dblclick action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"ms-nav-scrollable scroll-source thm-bgcolor--medflat\">…</div> from <div class=\"spa-view spa-task-dialog appear-fadeout animate no-animations shown\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying dblclick action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"ms-nav-scrollable scroll-source thm-bgcolor--medflat\">…</div> from <div class=\"spa-view spa-task-dialog appear-fadeout animate no-animations shown\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying dblclick action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    55 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"ms-nav-scrollable scroll-source thm-bgcolor--medflat\">…</div> from <div class=\"spa-view spa-task-dialog appear-fadeout animate no-animations shown\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying dblclick action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+      "evidence": "ui-language-cleanup-failed-attempt.json"
+    }
+  ],
+  "executedTestFunctions": 28,
+  "passedTestFunctions": 28,
+  "failedTestFunctions": 0,
+  "skippedTestFunctions": 0,
+  "accounting": "passed/failed count UI test scenarios; initial cleanup harness error retained separately and recovered live, successful tests not replayed",
+  "cleanupRecoveryVerifiedAt": "2026-10-28T13:51:41.421Z"
+}

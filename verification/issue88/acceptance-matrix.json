@@ -1,0 +1,38 @@
+{
+  "issue": "https://github.com/businesscentralal/bc-origo-bifrost-warehouse/issues/88",
+  "owner": "Alv\u00edss (worker-4)",
+  "sha": "9ac516b1af7ea1991387916f1af5897235a2a689",
+  "branch": "https://github.com/businesscentralal/bc-origo-bifrost-warehouse/tree/codex/worker4-warehouse88-foundation-contract",
+  "commit": "https://github.com/businesscentralal/bc-origo-bifrost-warehouse/commit/9ac516b1af7ea1991387916f1af5897235a2a689",
+  "criteria": {
+    "AC01": {
+      "implemented": true,
+      "detail": "97042 unknown key with valid self-created shipment, unchanged status in1033/1039.97046 unknown line key has otherwise valid quantity; multi-line problems omit unknown top-level post.97051/97055 collect known-key batch/line/item errors without colour. Existing isolated unknown-key regressions retained. Direct permission nextStep now asserts exact1033/1039 session text after realUI failure; no weakening.",
+      "runtime": "468/468 configured tests pass on Foundation632; WebClient97042=14/14 in1033 and1039; MCP four preflight refusals in both languages"
+    },
+    "AC02": {
+      "implemented": true,
+      "detail": "EN next steps and is-IS comments/XLF aligned throughout Warehouse; canonical contracts remain English by Foundation design.97062 adds direct localized error-chapter checks1033/1039.",
+      "compile": "0errors/0warnings",
+      "runtime": "Bilingual97062 regressions pass; all42 canonical error chapters checked through MCP in1033/1039"
+    },
+    "AC03": {
+      "implemented": true,
+      "detail": "No dependency minimum change; exact-tip both-app all3cops clean against632 and minimum530.468tests/54codeunits; developer fullsuite running on632. PR CI minimum530 and independent Claude bc28-w1 still pending.",
+      "verified": false,
+      "developerVerified": true,
+      "independentClaudeVerified": false,
+      "minimum530CI": "pending PR CI"
+    },
+    "AC04": {
+      "implemented": true,
+      "detail": "#88 under Unreleased; only wizard notes introduced after28.3.1 grouped under28.3.2; older history separated. No release/tag/publish performed."
+    }
+  },
+  "remaining": [
+    "Actual minimum530 fullsuite CI",
+    "Independent Claude exact-head verification",
+    "Grok clearance and eligible approval",
+    "Architect merge/deploy; Tester same-SHA UAT and owned environment closure"
+  ]
+}

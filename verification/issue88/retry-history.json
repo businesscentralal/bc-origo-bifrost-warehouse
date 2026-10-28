@@ -1,0 +1,57 @@
+{
+  "previousCandidate": "15eb44ec91370a8fc2db859ffbfa7524b22c0655",
+  "fullSuite": {
+    "executed": 468,
+    "passed": 468,
+    "failed": 0,
+    "skipped": 0
+  },
+  "mcp": {
+    "executed": 92,
+    "passed": 92,
+    "failed": 0,
+    "skipped": 0,
+    "priorInfrastructureFailure": "MCPfetchfailed after20passes during initial SSH enable/service initialization; resumed after fullsuite and retained failed attempt."
+  },
+  "ui": {
+    "1033": {
+      "executed": 14,
+      "passed": 14,
+      "failed": 0
+    },
+    "1039": {
+      "executed": 14,
+      "passed": 13,
+      "failed": 1
+    }
+  },
+  "confirmedFinding": "Existing direct permission test expected hardcodedEnglish under1039; runtime correctly returned IS. Test now asserts exact localized nextStep, no weakened assertion. Product behavior unchanged by this follow-up.",
+  "evidence": "prior-tip-15eb44e",
+  "at": "2026-10-28T13:45:10.658364+00:00",
+  "currentCandidate": "9ac516b1af7ea1991387916f1af5897235a2a689",
+  "currentNative": {
+    "executed": 468,
+    "passed": 468,
+    "failed": 0,
+    "skipped": 0
+  },
+  "currentMCP": {
+    "executed": 92,
+    "passed": 92,
+    "failed": 0,
+    "skipped": 0
+  },
+  "currentUI": {
+    "1033": {
+      "executed": 14,
+      "passed": 14,
+      "failed": 0
+    },
+    "1039": {
+      "executed": 14,
+      "passed": 14,
+      "failed": 0
+    },
+    "languageCleanup": "Recovered using visible modal row; actual userLCID1033verified at2026-10-28T13:51:41.421Z; successful14testcasesperlanguage retained without replay"
+  }
+}

@@ -1,0 +1,801 @@
+{
+  "sha": "9ac516b1af7ea1991387916f1af5897235a2a689",
+  "containerId": "f049001b97aa",
+  "appVersion": "28.3.2.88",
+  "foundationVersion": "28.0.10.632",
+  "touchedMessageTypes": [
+    "Warehouse.Activity.Get",
+    "Warehouse.ActivityLine.AssignTracking",
+    "Warehouse.ActivityLine.ChangeBin",
+    "Warehouse.ActivityLine.SetQtyToHandle",
+    "Warehouse.ActivityLine.Split",
+    "Warehouse.Adjustment.Calculate",
+    "Warehouse.Bin.Create",
+    "Warehouse.Bin.Get",
+    "Warehouse.BinContent.Get",
+    "Warehouse.BinReplenishment.Calculate",
+    "Warehouse.DefaultBin.Set",
+    "Warehouse.InventoryMovement.Create",
+    "Warehouse.InventoryMovement.Register",
+    "Warehouse.InventoryPick.Create",
+    "Warehouse.InventoryPick.Post",
+    "Warehouse.InventoryPutAway.Create",
+    "Warehouse.InventoryPutAway.Post",
+    "Warehouse.Journal.Create",
+    "Warehouse.Journal.Register",
+    "Warehouse.Movement.Create",
+    "Warehouse.Movement.Register",
+    "Warehouse.PhysInventory.Calculate",
+    "Warehouse.PhysInventory.Register",
+    "Warehouse.Pick.Create",
+    "Warehouse.Pick.Register",
+    "Warehouse.PostedDocument.Get",
+    "Warehouse.Putaway.Create",
+    "Warehouse.Putaway.Register",
+    "Warehouse.Receipt.Create",
+    "Warehouse.Receipt.GetSourceDocuments",
+    "Warehouse.Receipt.Post",
+    "Warehouse.Receipt.PreviewPost",
+    "Warehouse.RegisteredActivity.Get",
+    "Warehouse.Request.Get",
+    "Warehouse.Shipment.Create",
+    "Warehouse.Shipment.GetSourceDocuments",
+    "Warehouse.Shipment.Post",
+    "Warehouse.Shipment.PreviewPost",
+    "Warehouse.Shipment.Release",
+    "Warehouse.Shipment.Reopen",
+    "Warehouse.Worksheet.CreateActivities",
+    "Warehouse.Worksheet.GetDocuments"
+  ],
+  "startedAt": "2026-10-28T13:47:01.363Z",
+  "dataSetup": {
+    "createsOwnData": true,
+    "usesPreexistingFixtures": false,
+    "fixtureRecordsCreated": 0,
+    "method": "Self-constructed help selections and task-unique unknown-key request payloads. Help is the changed production behavior for every type. Four changed test action types also exercise Foundation pre-execution refusal, before record lookup; no business-record fixture required."
+  },
+  "scenarios": [
+    {
+      "type": "Warehouse.Activity.Get",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 0,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Activity.Get",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 0,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.ActivityLine.AssignTracking",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.ActivityLine.AssignTracking",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.ActivityLine.ChangeBin",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.ActivityLine.ChangeBin",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.ActivityLine.SetQtyToHandle",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.ActivityLine.SetQtyToHandle",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.ActivityLine.Split",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.ActivityLine.Split",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Adjustment.Calculate",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Adjustment.Calculate",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Bin.Create",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Bin.Create",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Bin.Get",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Bin.Get",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.BinContent.Get",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 0,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.BinContent.Get",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 0,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.BinReplenishment.Calculate",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.BinReplenishment.Calculate",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.DefaultBin.Set",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.DefaultBin.Set",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.InventoryMovement.Create",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.InventoryMovement.Create",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.InventoryMovement.Register",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.InventoryMovement.Register",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.InventoryPick.Create",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.InventoryPick.Create",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.InventoryPick.Post",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.InventoryPick.Post",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.InventoryPutAway.Create",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.InventoryPutAway.Create",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.InventoryPutAway.Post",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.InventoryPutAway.Post",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Journal.Create",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Journal.Create",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Journal.Register",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Journal.Register",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Movement.Create",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Movement.Create",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Movement.Register",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Movement.Register",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.PhysInventory.Calculate",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.PhysInventory.Calculate",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.PhysInventory.Register",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.PhysInventory.Register",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Pick.Create",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 0,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Pick.Create",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 0,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Pick.Register",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 0,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Pick.Register",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 0,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.PostedDocument.Get",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.PostedDocument.Get",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Putaway.Create",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 0,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Putaway.Create",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 0,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Putaway.Register",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 0,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Putaway.Register",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 0,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Receipt.Create",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 0,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Receipt.Create",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 0,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Receipt.GetSourceDocuments",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Receipt.GetSourceDocuments",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Receipt.Post",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Receipt.Post",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Receipt.PreviewPost",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Receipt.PreviewPost",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.RegisteredActivity.Get",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.RegisteredActivity.Get",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Request.Get",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Request.Get",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Shipment.Create",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 0,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Shipment.Create",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 0,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Shipment.GetSourceDocuments",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Shipment.GetSourceDocuments",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Shipment.Post",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Shipment.Post",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Shipment.PreviewPost",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Shipment.PreviewPost",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Shipment.Release",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Shipment.Release",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Shipment.Reopen",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Shipment.Reopen",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Worksheet.CreateActivities",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Worksheet.CreateActivities",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Worksheet.GetDocuments",
+      "lcid": 1033,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Worksheet.GetDocuments",
+      "lcid": 1039,
+      "scenario": "Canonical help errors chapter; Foundation intentionally renders contracts in English",
+      "unknownDeclarations": 1,
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Shipment.Release",
+      "lcid": 1033,
+      "scenario": "Unknown key refused before record lookup or execution",
+      "data": {
+        "note": "WH88-f049001b97aa-1033"
+      },
+      "response": {
+        "status": "Error",
+        "code": "UnknownParameter",
+        "error": "Parameter \"note\" is not declared by this message type. Nothing was executed.",
+        "parameter": "note",
+        "expected": "declared request parameters",
+        "nextStep": "Remove this key or consult Help.Implementation.Get for the declared parameters.",
+        "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"Warehouse.Shipment.Release\". Always read the help before calling a message type."
+      },
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Shipment.Release",
+      "lcid": 1039,
+      "scenario": "Unknown key refused before record lookup or execution",
+      "data": {
+        "note": "WH88-f049001b97aa-1039"
+      },
+      "response": {
+        "status": "Error",
+        "code": "UnknownParameter",
+        "error": "Viðfangið \"note\" er ekki skilgreint fyrir þessa skilaboðategund. Ekkert var keyrt.",
+        "parameter": "note",
+        "expected": "skilgreind beiðniviðföng",
+        "nextStep": "Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.",
+        "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"Warehouse.Shipment.Release\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund."
+      },
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Receipt.Post",
+      "lcid": 1033,
+      "scenario": "Unknown key refused before record lookup or execution",
+      "data": {
+        "note": "WH88-f049001b97aa-1033"
+      },
+      "response": {
+        "status": "Error",
+        "code": "UnknownParameter",
+        "error": "Parameter \"note\" is not declared by this message type. Nothing was executed.",
+        "parameter": "note",
+        "expected": "declared request parameters",
+        "nextStep": "Remove this key or consult Help.Implementation.Get for the declared parameters.",
+        "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"Warehouse.Receipt.Post\". Always read the help before calling a message type."
+      },
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Receipt.Post",
+      "lcid": 1039,
+      "scenario": "Unknown key refused before record lookup or execution",
+      "data": {
+        "note": "WH88-f049001b97aa-1039"
+      },
+      "response": {
+        "status": "Error",
+        "code": "UnknownParameter",
+        "error": "Viðfangið \"note\" er ekki skilgreint fyrir þessa skilaboðategund. Ekkert var keyrt.",
+        "parameter": "note",
+        "expected": "skilgreind beiðniviðföng",
+        "nextStep": "Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.",
+        "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"Warehouse.Receipt.Post\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund."
+      },
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Journal.Create",
+      "lcid": 1033,
+      "scenario": "Unknown key refused before record lookup or execution",
+      "data": {
+        "note": "WH88-f049001b97aa-1033"
+      },
+      "response": {
+        "status": "Error",
+        "code": "UnknownParameter",
+        "error": "Parameter \"note\" is not declared by this message type. Nothing was executed.",
+        "parameter": "note",
+        "expected": "declared request parameters",
+        "nextStep": "Remove this key or consult Help.Implementation.Get for the declared parameters.",
+        "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"Warehouse.Journal.Create\". Always read the help before calling a message type."
+      },
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Journal.Create",
+      "lcid": 1039,
+      "scenario": "Unknown key refused before record lookup or execution",
+      "data": {
+        "note": "WH88-f049001b97aa-1039"
+      },
+      "response": {
+        "status": "Error",
+        "code": "UnknownParameter",
+        "error": "Viðfangið \"note\" er ekki skilgreint fyrir þessa skilaboðategund. Ekkert var keyrt.",
+        "parameter": "note",
+        "expected": "skilgreind beiðniviðföng",
+        "nextStep": "Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.",
+        "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"Warehouse.Journal.Create\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund."
+      },
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Adjustment.Calculate",
+      "lcid": 1033,
+      "scenario": "Unknown key refused before record lookup or execution",
+      "data": {
+        "note": "WH88-f049001b97aa-1033"
+      },
+      "response": {
+        "status": "Error",
+        "code": "UnknownParameter",
+        "error": "Parameter \"note\" is not declared by this message type. Nothing was executed.",
+        "parameter": "note",
+        "expected": "declared request parameters",
+        "nextStep": "Remove this key or consult Help.Implementation.Get for the declared parameters.",
+        "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"Warehouse.Adjustment.Calculate\". Always read the help before calling a message type."
+      },
+      "result": "passed"
+    },
+    {
+      "type": "Warehouse.Adjustment.Calculate",
+      "lcid": 1039,
+      "scenario": "Unknown key refused before record lookup or execution",
+      "data": {
+        "note": "WH88-f049001b97aa-1039"
+      },
+      "response": {
+        "status": "Error",
+        "code": "UnknownParameter",
+        "error": "Viðfangið \"note\" er ekki skilgreint fyrir þessa skilaboðategund. Ekkert var keyrt.",
+        "parameter": "note",
+        "expected": "skilgreind beiðniviðföng",
+        "nextStep": "Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.",
+        "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"Warehouse.Adjustment.Calculate\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund."
+      },
+      "result": "passed"
+    }
+  ],
+  "passed": 92,
+  "failed": 0,
+  "skipped": 0,
+  "cleanup": {
+    "recordsCreated": 0,
+    "recordsDeleted": 0,
+    "remainingOwnedRecords": 0,
+    "reason": "Only help reads and pre-execution refusals; request payloads are private evidence, no business data mutation."
+  },
+  "finishedAt": "2026-10-28T13:47:28.853Z"
+}

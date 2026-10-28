@@ -1,0 +1,330 @@
+{
+  "sha": "9ac516b1af7ea1991387916f1af5897235a2a689",
+  "total": 468,
+  "codeunits": [
+    {
+      "codeunit": 97000,
+      "name": "Whse BinContent Get Tests ori",
+      "tests": 4,
+      "source": "test/WhseBinContentGetTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97001,
+      "name": "Whse Activity Get Tests ori",
+      "tests": 23,
+      "source": "test/WhseActivityGetTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97003,
+      "name": "Whse Setup Wizard Tests",
+      "tests": 10,
+      "source": "test/WhseSetupWizardTests.Codeunit.al"
+    },
+    {
+      "codeunit": 97004,
+      "name": "Whse Wizard Permission Tests",
+      "tests": 2,
+      "source": "test/WhseWizardPermissionTests.Codeunit.al"
+    },
+    {
+      "codeunit": 97011,
+      "name": "Whse Shipment Create Tests ori",
+      "tests": 7,
+      "source": "test/WhseShipmentCreateTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97012,
+      "name": "Whse Shipment Post Tests ori",
+      "tests": 6,
+      "source": "test/WhseShipmentPostTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97013,
+      "name": "Whse Ship Prev Post Tests ori",
+      "tests": 7,
+      "source": "test/WhseShipPrevPostTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97014,
+      "name": "Whse Receipt Create Tests ori",
+      "tests": 10,
+      "source": "test/WhseReceiptCreateTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97015,
+      "name": "Whse Receipt Post Tests ori",
+      "tests": 5,
+      "source": "test/WhseReceiptPostTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97016,
+      "name": "Whse Rcpt Post Prev Tests ori",
+      "tests": 3,
+      "source": "test/WhseRcptPostPrevTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97017,
+      "name": "Whse Pick Create Tests ori",
+      "tests": 8,
+      "source": "test/WhsePickCreateTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97018,
+      "name": "Whse Pick Register Tests ori",
+      "tests": 6,
+      "source": "test/WhsePickRegisterTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97019,
+      "name": "Whse Putaway Create Tests ori",
+      "tests": 9,
+      "source": "test/WhsePutawayCreateTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97020,
+      "name": "Whse Putaway Reg Tests ori",
+      "tests": 5,
+      "source": "test/WhsePutawayRegTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97023,
+      "name": "Whse Posting Gate Tests ori",
+      "tests": 15,
+      "source": "test/WhsePostingGateTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97024,
+      "name": "Whse Post Gate Grant Tests ori",
+      "tests": 8,
+      "source": "test/WhsePostGateGrantTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97026,
+      "name": "Whse Write Restrict Tests ori",
+      "tests": 7,
+      "source": "test/WhseWriteRestrictTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97027,
+      "name": "Whse Msg Contract Tests ori",
+      "tests": 11,
+      "source": "test/WhseMsgContractTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97028,
+      "name": "Whse Omit Commit Tests ori",
+      "tests": 4,
+      "source": "test/WhseOmitCommitTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97029,
+      "name": "Whse Id Format Tests ori",
+      "tests": 7,
+      "source": "test/WhseIdFormatTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97031,
+      "name": "Whse Contract Parity Tests ori",
+      "tests": 9,
+      "source": "test/WhseContractParityTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97032,
+      "name": "Whse Negative Paging Tests ori",
+      "tests": 24,
+      "source": "test/WhseNegativePagingTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97040,
+      "name": "Whse Rcpt GetSrcDocs Tests ori",
+      "tests": 12,
+      "source": "test/WhseRcptGetSrcDocsTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97041,
+      "name": "Whse Ship GetSrcDocs Tests ori",
+      "tests": 9,
+      "source": "test/WhseShipGetSrcDocsTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97042,
+      "name": "Whse Ship Release Tests ori",
+      "tests": 14,
+      "source": "test/WhseShipReleaseTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97043,
+      "name": "Whse Request Get Tests ori",
+      "tests": 8,
+      "source": "test/WhseRequestGetTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97044,
+      "name": "Whse PostedDoc Get Tests ori",
+      "tests": 5,
+      "source": "test/WhsePostedDocGetTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97045,
+      "name": "Whse RegActivity Get Tests ori",
+      "tests": 5,
+      "source": "test/WhseRegActivityGetTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97046,
+      "name": "Whse Partial Post Tests ori",
+      "tests": 14,
+      "source": "test/WhsePartialPostTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97047,
+      "name": "Whse DocFlow Help Tests ori",
+      "tests": 5,
+      "source": "test/WhseDocFlowHelpTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97051,
+      "name": "Whse Journal Create Tests ori",
+      "tests": 17,
+      "source": "test/WhseJournalCreateTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97052,
+      "name": "Whse Journal Reg Tests ori",
+      "tests": 7,
+      "source": "test/WhseJournalRegTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97053,
+      "name": "Whse PhysInvt Calc Tests ori",
+      "tests": 5,
+      "source": "test/WhsePhysInvtCalcTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97054,
+      "name": "Whse PhysInvt Reg Tests ori",
+      "tests": 7,
+      "source": "test/WhsePhysInvtRegTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97055,
+      "name": "Whse Adjustment Calc Tests ori",
+      "tests": 12,
+      "source": "test/WhseAdjustmentCalcTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97056,
+      "name": "Whse Wksh GetDocs Tests ori",
+      "tests": 6,
+      "source": "test/WhseWkshGetDocsTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97057,
+      "name": "Whse Wksh CreateAct Tests ori",
+      "tests": 7,
+      "source": "test/WhseWkshCreateActTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97058,
+      "name": "Whse ActLine Split Tests ori",
+      "tests": 5,
+      "source": "test/WhseActLineSplitTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97059,
+      "name": "Whse ActLine ChgBin Tests ori",
+      "tests": 7,
+      "source": "test/WhseActLineChgBinTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97060,
+      "name": "Whse ActLine SetQty Tests ori",
+      "tests": 4,
+      "source": "test/WhseActLineSetQtyTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97061,
+      "name": "Whse ActLine Track Tests ori",
+      "tests": 10,
+      "source": "test/WhseActLineTrackTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97062,
+      "name": "Whse Jnl Contract Tests ori",
+      "tests": 15,
+      "source": "test/WhseJnlContractTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97080,
+      "name": "Whse Bin Get Tests ori",
+      "tests": 7,
+      "source": "test/WhseBinGetTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97081,
+      "name": "Whse Bin Create Tests ori",
+      "tests": 10,
+      "source": "test/WhseBinCreateTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97082,
+      "name": "Whse DefBin Set Tests ori",
+      "tests": 9,
+      "source": "test/WhseDefBinSetTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97083,
+      "name": "Whse Movement Create Tests ori",
+      "tests": 8,
+      "source": "test/WhseMovementCreateTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97084,
+      "name": "Whse Movement Reg Tests ori",
+      "tests": 8,
+      "source": "test/WhseMovementRegTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97085,
+      "name": "Whse InvtPick Create Tests ori",
+      "tests": 11,
+      "source": "test/WhseInvtPickCreateTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97086,
+      "name": "Whse InvtPick Post Tests ori",
+      "tests": 7,
+      "source": "test/WhseInvtPickPostTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97087,
+      "name": "Whse InvtPut Create Tests ori",
+      "tests": 11,
+      "source": "test/WhseInvtPutCreateTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97088,
+      "name": "Whse InvtPut Post Tests ori",
+      "tests": 8,
+      "source": "test/WhseInvtPutPostTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97089,
+      "name": "Whse InvtMove Create Tests ori",
+      "tests": 8,
+      "source": "test/WhseInvtMoveCreateTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97090,
+      "name": "Whse InvtMove Reg Tests ori",
+      "tests": 7,
+      "source": "test/WhseInvtMoveRegTestsori.Codeunit.al"
+    },
+    {
+      "codeunit": 97091,
+      "name": "Whse Bin Repl Tests ori",
+      "tests": 10,
+      "source": "test/WhseBinReplTestsori.Codeunit.al"
+    }
+  ]
+}

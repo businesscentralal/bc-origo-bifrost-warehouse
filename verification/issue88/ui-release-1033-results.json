@@ -1,0 +1,96 @@
+{
+  "name": "Whse Ship Release Tests ori",
+  "codeUnit": 97042,
+  "codeunitName": "Whse Ship Release Tests ori",
+  "applicationID": "{6AE41D19-D457-4D62-BD87-0413FF18DE75}",
+  "applicationName": "Bifrost Warehouse - Tests",
+  "startTime": "2026-10-28T13:49:14.2300000Z",
+  "finishTime": "2026-10-28T13:49:18.4200000Z",
+  "result": 2,
+  "testResults": [
+    {
+      "method": "Release_OpenShipment_IsReleased",
+      "startTime": "2026-10-28T13:49:14.2400000Z",
+      "finishTime": "2026-10-28T13:49:14.7200000Z",
+      "result": 2
+    },
+    {
+      "method": "Release_AlreadyReleased_AnswersUnchanged",
+      "startTime": "2026-10-28T13:49:14.7370000Z",
+      "finishTime": "2026-10-28T13:49:15.0670000Z",
+      "result": 2
+    },
+    {
+      "method": "Release_NoLines_IsRefused",
+      "startTime": "2026-10-28T13:49:15.0730000Z",
+      "finishTime": "2026-10-28T13:49:15.1900000Z",
+      "result": 2
+    },
+    {
+      "method": "Release_UnknownShipment_IsNotFound",
+      "startTime": "2026-10-28T13:49:15.1970000Z",
+      "finishTime": "2026-10-28T13:49:15.2270000Z",
+      "result": 2
+    },
+    {
+      "method": "Release_CommonRefusals",
+      "startTime": "2026-10-28T13:49:15.2330000Z",
+      "finishTime": "2026-10-28T13:49:15.8830000Z",
+      "result": 2
+    },
+    {
+      "method": "Reopen_ReleasedShipment_IsOpen",
+      "startTime": "2026-10-28T13:49:15.8930000Z",
+      "finishTime": "2026-10-28T13:49:16.2200000Z",
+      "result": 2
+    },
+    {
+      "method": "Reopen_AlreadyOpen_AnswersUnchanged",
+      "startTime": "2026-10-28T13:49:16.2270000Z",
+      "finishTime": "2026-10-28T13:49:16.5570000Z",
+      "result": 2
+    },
+    {
+      "method": "Reopen_OpenPick_IsRefused",
+      "startTime": "2026-10-28T13:49:16.5630000Z",
+      "finishTime": "2026-10-28T13:49:16.8770000Z",
+      "result": 2
+    },
+    {
+      "method": "Release_NoLinesAsSubject_NamesSubject",
+      "startTime": "2026-10-28T13:49:16.8830000Z",
+      "finishTime": "2026-10-28T13:49:16.9970000Z",
+      "result": 2
+    },
+    {
+      "method": "Reopen_UnknownKey_IsRefused",
+      "startTime": "2026-10-28T13:49:17.0030000Z",
+      "finishTime": "2026-10-28T13:49:17.3100000Z",
+      "result": 2
+    },
+    {
+      "method": "ReleaseReopen_WithoutPermission_ReturnsPermissionDenied",
+      "startTime": "2026-10-28T13:49:17.3270000Z",
+      "finishTime": "2026-10-28T13:49:17.3470000Z",
+      "result": 2
+    },
+    {
+      "method": "Reopen_StrayIdentifier_IsRecordNotFound",
+      "startTime": "2026-10-28T13:49:17.3570000Z",
+      "finishTime": "2026-10-28T13:49:17.6800000Z",
+      "result": 2
+    },
+    {
+      "method": "Reopen_StrayIdentifier_IsRecordNotFoundInIcelandic",
+      "startTime": "2026-10-28T13:49:17.6900000Z",
+      "finishTime": "2026-10-28T13:49:18.0200000Z",
+      "result": 2
+    },
+    {
+      "method": "Release_UnknownKey_DoesNotExecute",
+      "startTime": "2026-10-28T13:49:18.0300000Z",
+      "finishTime": "2026-10-28T13:49:18.4170000Z",
+      "result": 2
+    }
+  ]
+}

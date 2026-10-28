@@ -1,0 +1,1 @@
+Every contract parameter is a key the code reads, and every key the code reads is declared (0 allow-listed).

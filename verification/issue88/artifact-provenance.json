@@ -1,0 +1,33 @@
+{
+  "sha": "9ac516b1af7ea1991387916f1af5897235a2a689",
+  "appVersion": "28.3.2.88",
+  "containerId": "f049001b97aa",
+  "dependency": {
+    "release": "https://github.com/OrigoSoftwareSolutions/bc-origo-bifrost-core/releases/tag/28.0.10",
+    "sourceSha": "130955cdc524cf7da3f162d1aeb10777fde55ab1",
+    "assetId": 684711931,
+    "assetName": "bc-origo-bifrost-core-main-TestApps-1.0.10.632.zip",
+    "version": "28.0.10.632",
+    "sha256": "67e70551b8384829adf96ed9af67dd4d1e8e772ef040ceeae8177ba0b3e2eb98",
+    "digestVerified": true
+  },
+  "baseline": {
+    "release": "https://github.com/businesscentralal/bc-origo-bifrost-warehouse/releases/tag/28.3.1",
+    "sourceSha": "54a64b3c1c6ec0a70f9e3e2a5b0cbdc77e955fda",
+    "assetId": 675078312,
+    "assetName": "bc-origo-bifrost-warehouse-main-Apps-1.0.1.40.zip",
+    "version": "28.3.1.40",
+    "sha256": "e16c3570255450a2a3e469428d3c35c0b1a01b9dbd4c68805ba043da4ae7a01b",
+    "digestVerified": true
+  },
+  "artifacts": [
+    {
+      "name": "Warehouse",
+      "sha256": "da437ede1ebb9f135d3b9435f4fd7fa8c05971c3ecfead84fd4e7d77cd9db450"
+    },
+    {
+      "name": "WarehouseTests",
+      "sha256": "2a19c96ba2aa3f713908af43fcaebe7abec8214d98bb50552136543a88e2b75b"
+    }
+  ]
+}

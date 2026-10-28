@@ -1,0 +1,14 @@
+{
+  "sha": "9ac516b1af7ea1991387916f1af5897235a2a689",
+  "containerId": "f049001b97aa",
+  "fullSuite": true,
+  "finishedAt": "2026-10-28T13:48:50.614Z",
+  "ok": true,
+  "mode": "ssh",
+  "durationMs": 113483,
+  "passed": 468,
+  "failed": 0,
+  "skipped": 0,
+  "errors": 0,
+  "executed": 468
+}

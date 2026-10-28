@@ -1,0 +1,37 @@
+{
+  "sha": "9ac516b1af7ea1991387916f1af5897235a2a689",
+  "raw": {
+    "failed": 9,
+    "total": 23,
+    "passed": 14,
+    "ready": false
+  },
+  "filesScanned": 34,
+  "baselineSource": "origin/main17450af6d2cbbcd0123ba5de9a111c926c9ce08c; identical34scoped AL files",
+  "newFindings": {},
+  "unchangedFindingCounts": {
+    "xml_doc_comments": 131,
+    "reserved_var_names": 1,
+    "changelog": 1,
+    "modernization": 11,
+    "hardcoded_values": 1,
+    "read_isolation": 177,
+    "format_guid": 5,
+    "try_prefix_convention": 13,
+    "one_statement_per_line": 229
+  },
+  "notes": {
+    "changelog": "Version heuristic expects28.3.2.0; explicit issue AC04 uses28.3.2 release heading. #88 is under Unreleased.",
+    "hardcoded_values": "Basic location is user-facing Warehouse terminology, not an auth token.",
+    "modernization": "NAS substring occurs in Icelandic labels, no scheduling migration.",
+    "format_guid": "Flagged Format operands are numbers, quantities and enums; no changed GUID handling.",
+    "one_statement_per_line": "Procedure parameter semicolons are legal signature separators.",
+    "try_prefix_convention": "Existing bool-returning Try parsers, no changed TryFunction behavior.",
+    "xml_doc_comments": "Existing missing internal docs outside changed statements.",
+    "read_isolation": "Existing document-line access under posting transaction; unchanged.",
+    "reserved_var_names": "Existing JsonToken Field variable; unchanged."
+  },
+  "noSuppressionsAdded": true,
+  "standardsExecution": "Unmodified snapshot gateway and its matching config staged under private evidence to satisfy expected relative resource layout; shared/repository tools unchanged.",
+  "lastDiffReview": "9ac adds localized exact permission-test expectation and CHANGELOG sentence only;34scoped production AL files unchanged from15eb. No new source findings."
+}

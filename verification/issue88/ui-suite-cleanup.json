@@ -1,0 +1,26 @@
+{
+  "sha": "9ac516b1af7ea1991387916f1af5897235a2a689",
+  "containerId": "f049001b97aa",
+  "startedAt": "2026-10-28T13:54:31.407Z",
+  "ownedSuites": [
+    "W88UIEN",
+    "W88UIIS"
+  ],
+  "deleted": [
+    "W88UIEN",
+    "W88UIIS"
+  ],
+  "verification": [
+    {
+      "suite": "W88UIEN",
+      "remaining": 0
+    },
+    {
+      "suite": "W88UIIS",
+      "remaining": 0
+    }
+  ],
+  "defaultSuite": "Retained native468test evidence in owned container; not deleted",
+  "verified": true,
+  "finishedAt": "2026-10-28T13:54:42.565Z"
+}

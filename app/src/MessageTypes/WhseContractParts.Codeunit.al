@@ -209,6 +209,7 @@ codeunit 10078459 "Whse Contract Parts ori"
     internal procedure AddDocumentPreviewErrors(var Errors: JsonArray; RecordName: Text; IdentifierKeys: Text; QtyKey: Text; IsShipment: Boolean; OmitCommitNextStep: Text; NothingToPostNextStep: Text; LinesDeniedNextStep: Text)
     var
         LineTable: Text;
+        UnknownParameterNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         if IsShipment then
             LineTable := 'warehouse shipment lines'
@@ -245,7 +246,7 @@ codeunit 10078459 "Whse Contract Parts ori"
                 'Register the pick first.'));
         Errors.Add(NextStepEntry("Bifrost Error Code ori"::UnknownParameter,
             'The request or a line contains a key this type does not accept.',
-            'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.'));
+            UnknownParameterNextStepLbl));
         Errors.Add(NextStepEntry("Bifrost Error Code ori"::PermissionDenied,
             'lines was sent and the caller cannot write ' + LineTable + '.',
             LinesDeniedNextStep));
@@ -265,6 +266,7 @@ codeunit 10078459 "Whse Contract Parts ori"
     var
         PreconditionWhen: Text;
         PreconditionNextStep: Text;
+        UnknownParameterNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         Errors.Add(NextStepEntry("Bifrost Error Code ori"::MissingParameter,
             'No ' + RecordName + ' identifier was sent, or a line has no lineNo or no ' + QtyKey + '.',
@@ -302,7 +304,7 @@ codeunit 10078459 "Whse Contract Parts ori"
             'Read the lines first, send each line once, and read the outstanding quantity on the line and lower it.'));
         Errors.Add(NextStepEntry("Bifrost Error Code ori"::UnknownParameter,
             'The request or a line contains a key this type does not accept.',
-            'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.'));
+            UnknownParameterNextStepLbl));
         Errors.Add(NextStepEntry("Bifrost Error Code ori"::BusinessCentralError,
             'Business Central''s own error text. Typical causes: invalid quantities, posting setup or source-document state.',
             'Read the returned text; it names the field or setup to fix.'));

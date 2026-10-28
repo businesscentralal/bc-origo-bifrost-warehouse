@@ -4,6 +4,12 @@
 
 ### Fixed
 
+- Align Warehouse unknown-parameter help and localized refusal next steps with Foundation 28.0.10 (#88). Preserve the Foundation 28.0.3.530 minimum: tests isolate unknown keys from unrelated errors and retain collection assertions for multiple declared-key problems. A refused shipment release now explicitly proves no status change in both languages. Product objects: message-type implementation/helper codeunits 10078385–10078484; test codeunits 97042, 97046, 97047, 97051, 97055, 97062.
+
+## [28.3.2]
+
+### Fixed
+
 - Warehouse setup wizard (#83, PR #85): call modal pages directly so Foundation settings writes and errors retain platform behavior (page 10078385); grant read-only NAV App Setting access in management codeunit 10078386 while preserving the caller write-permission check. Add restricted-user regressions (test codeunit and test-only permission set 97004) and correct Icelandic Assisted Setup help terminology.
 
 

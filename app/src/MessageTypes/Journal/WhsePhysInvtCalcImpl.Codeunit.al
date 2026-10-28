@@ -182,6 +182,7 @@ codeunit 10078448 "Whse PhysInvt Calc Impl ori" implements "Msg Interface ori", 
         Parts: Codeunit "Whse Contract Parts ori";
         Context: Codeunit "Whse Write Context ori";
         Values: Codeunit "Whse Msg Values ori";
+        UnknownParameterNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PreconditionFailed, 'The location does not use directed put-away and pick.', 'Use Inventory.PhysInventory.* for basic locations.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::RecordNotFound, 'The journal template or batch was not found at the location.', 'Create the batch first.');
@@ -189,7 +190,7 @@ codeunit 10078448 "Whse PhysInvt Calc Impl ori" implements "Msg Interface ori", 
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::MissingParameter, 'journalTemplateName, journalBatchName or locationCode is missing, or documentNo is missing for a batch without a number series.', 'Send the batch keys, and documentNo when the batch has no number series.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameterFormat, 'A value has the wrong JSON type, is too long, or a date is not YYYY-MM-DD.', 'Send text for codes and dates and true or false for itemsNotOnInventory.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameter, 'The template is not a physical inventory template.', 'Use a physical inventory template, or Warehouse.Journal.Create for item and reclassification journals.');
-        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.');
+        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', UnknownParameterNextStepLbl);
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::ConflictingIdentifiers, 'subject and locationCode name different locations, or the bin is not in the named zone.', 'Send one location, and a bin that belongs to the named zone.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot write warehouse journal lines.', 'Ask an administrator to assign BIFROST Whse - Full ori.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::MultipleErrors, 'More than one value failed validation.', 'Correct every listed value and send the request again. Nothing was written.');

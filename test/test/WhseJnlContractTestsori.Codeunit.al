@@ -300,25 +300,25 @@ codeunit 97062 "Whse Jnl Contract Tests ori"
 
     local procedure AssertUnknownParameterHelp(LanguageId: Integer; ExpectedNextStep: Text)
     var
-        ContractMgt: Codeunit "Msg Contract Mgt ori";
         ContractAssert: Codeunit "Whse Contract Assert ori";
         MessageType: Enum "Message Type ori";
-        Contract: JsonObject;
-        ErrorsToken: JsonToken;
+        ContractInterface: Interface "Msg Contract ori";
+        Errors: JsonArray;
         Entry: JsonToken;
         OriginalLanguage: Integer;
         Checked: Integer;
         HasContract: Boolean;
     begin
         foreach MessageType in ContractAssert.WarehouseTypes() do begin
-            Clear(Contract);
+            Clear(Errors);
+            ContractInterface := MessageType;
             OriginalLanguage := GlobalLanguage();
             GlobalLanguage(LanguageId);
-            HasContract := ContractMgt.GetContract(MessageType, Contract);
+            // Foundation renders canonical contracts in English; exercise the localized chapter directly.
+            HasContract := ContractInterface.GetErrors(Errors);
             GlobalLanguage(OriginalLanguage);
             Assert.IsTrue(HasContract, ContractAssert.TypeName(MessageType) + ' has a contract.');
-            if Contract.Get('errors', ErrorsToken) then
-                foreach Entry in ErrorsToken.AsArray() do
+            foreach Entry in Errors do
                     if Helper.TextValue(Entry.AsObject(), 'code') = 'UnknownParameter' then begin
                         Assert.AreEqual(ExpectedNextStep, Helper.TextValue(Entry.AsObject(), 'nextStep'), ContractAssert.TypeName(MessageType) + ' unknown-key next step.');
                         Checked += 1;

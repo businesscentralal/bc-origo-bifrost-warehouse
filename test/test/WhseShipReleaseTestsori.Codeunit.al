@@ -246,6 +246,7 @@ codeunit 97042 "Whse Ship Release Tests ori"
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         MessageTypeInterface: Interface "Msg Interface ori";
         ResponseJson: JsonObject;
+        ExpectedNextStep: Text;
     begin
         // Story #53, AC08 | Time: independent of WorkDate | Risk: none.
         LibraryLowerPermissions.PushPermissionSetWithoutDefaults('Whse NoRead Test ori');
@@ -260,7 +261,12 @@ codeunit 97042 "Whse Ship Release Tests ori"
         ReleaseImpl.ExecuteBifrostTask(TempArgument);
         ResponseJson := TempArgument.GetResponseJson();
         Assert.AreEqual('PermissionDenied', TextValue(ResponseJson, 'code'), 'Release denial must use PermissionDenied.');
-        Assert.AreEqual('Ask an administrator to assign BIFROST Whse - Full ori.', TextValue(ResponseJson, 'nextStep'), 'The next step must name the full permission set.');
+        // #88: direct execution follows the Web Client session language. Keep the exact localized assertion.
+        if GlobalLanguage() = 1039 then
+            ExpectedNextStep := 'Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.'
+        else
+            ExpectedNextStep := 'Ask an administrator to assign BIFROST Whse - Full ori.';
+        Assert.AreEqual(ExpectedNextStep, TextValue(ResponseJson, 'nextStep'), 'The next step must name the full permission set in the session language.');
 
         TempArgument.Delete();
         TempArgument.Init();

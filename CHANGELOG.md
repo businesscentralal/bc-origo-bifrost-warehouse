@@ -4,7 +4,7 @@
 
 ### Fixed
 
-- Align Warehouse unknown-parameter help and localized refusal next steps with Foundation 28.0.10 (#88). Preserve the Foundation 28.0.3.530 minimum: tests isolate unknown keys from unrelated errors and retain collection assertions for multiple declared-key problems. A refused shipment release now explicitly proves no status change in both languages. Product objects: message-type implementation/helper codeunits 10078385–10078484; test codeunits 97042, 97046, 97047, 97051, 97055, 97062.
+- Align Warehouse unknown-parameter help and localized refusal next steps with Foundation 28.0.10 (#88). Preserve the Foundation 28.0.3.530 minimum: tests isolate unknown keys from unrelated errors and retain collection assertions for multiple declared-key problems. A refused shipment release now explicitly proves no status change in both languages. The direct-execution permission test checks the exact next step in the Web Client session language. Product objects: message-type implementation/helper codeunits 10078385–10078484; test codeunits 97042, 97046, 97047, 97051, 97055, 97062.
 
 ## [28.3.2]
 

@@ -146,13 +146,14 @@ codeunit 10078435 "Whse Request Get Impl ori" implements "Msg Interface ori", "M
         Context: Codeunit "Whse Write Context ori";
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Entry: JsonObject;
+        UnknownParameterNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MissingParameter, 'locationCode and the subject are both empty.', 'Send locationCode or the location code as the subject.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::RecordNotFound, 'The location does not exist.', 'Check the location code and try again.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::ConflictingIdentifiers, 'subject and locationCode name different locations.', 'Send one location: subject or locationCode.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameter, 'type, sourceDocument or status is not one of the listed values, or a date range ends before it starts.', 'Use one of the values listed in the help.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameterFormat, 'A value has the wrong JSON type or a date is not YYYY-MM-DD.', 'Send text for codes and values, and dates as YYYY-MM-DD.');
-        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.');
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', UnknownParameterNextStepLbl);
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot read warehouse requests.', 'Ask an administrator to assign BIFROST Whse - Read ori.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MultipleErrors, 'More than one value failed validation.', 'Correct every listed value and send the request again.');
         Parts.AddDateErrors(Errors, 'expectedReceiptDateFrom, expectedReceiptDateTo, shipmentDateFrom, shipmentDateTo', Context.TextDateNextStep());
@@ -457,7 +458,7 @@ codeunit 10078435 "Whse Request Get Impl ori" implements "Msg Interface ori", "M
     var
         KeyName: Text;
         UnknownLbl: Label 'The key %1 is not a parameter of this message type.', Comment = '%1 = key, is-IS=Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.';
-        UnknownNextStepLbl: Label 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.';
+        UnknownNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         foreach KeyName in RequestJson.Keys() do
             if not (KeyName in ['locationCode', 'type', 'sourceDocument', 'sourceNo', 'status', 'expectedReceiptDateFrom', 'expectedReceiptDateTo', 'shipmentDateFrom', 'shipmentDateTo', 'skip', 'take']) then

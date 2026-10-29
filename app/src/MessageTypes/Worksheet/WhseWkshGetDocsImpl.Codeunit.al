@@ -172,6 +172,7 @@ codeunit 10078460 "Whse Wksh GetDocs Impl ori" implements "Msg Interface ori", "
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
         Values: Codeunit "Whse Msg Values ori";
+        UnknownParameterNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PreconditionFailed, 'The location does not require pick and shipment (pick) or put-away and receipt (putAway).', 'Use the inventory activities instead.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::RecordNotFound, 'The worksheet template or worksheet name was not found at the location.', 'Create the worksheet name first.');
@@ -179,7 +180,7 @@ codeunit 10078460 "Whse Wksh GetDocs Impl ori" implements "Msg Interface ori", "
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::MissingParameter, 'worksheetType, worksheetTemplateName, worksheetName or locationCode is missing.', 'Send worksheetType, worksheetTemplateName, worksheetName and locationCode.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameterFormat, 'A value has the wrong JSON type or is too long.', 'Send text for every parameter.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameter, 'worksheetType is not pick or putAway, the template is not of that type, or documentType is not a document type of that worksheet.', 'Send a matching worksheetType, template and documentType.');
-        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.');
+        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', UnknownParameterNextStepLbl);
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::ConflictingIdentifiers, 'subject and locationCode name different locations.', 'Send one location: subject or locationCode.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot write worksheet lines.', 'Ask an administrator to assign BIFROST Whse - Full ori.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::MultipleErrors, 'More than one value failed validation.', 'Correct every listed value and send the request again. Nothing was written.');

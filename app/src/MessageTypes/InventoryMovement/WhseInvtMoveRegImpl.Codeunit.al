@@ -160,6 +160,7 @@ codeunit 10078428 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Entry: JsonObject;
+        UnknownParameterNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::RecordNotFound, 'The movement number or SystemId was not found.', 'Check the identifier with Warehouse.InventoryMovement.Create.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::RecordNotFound, 'A lineNo is not a line of the movement.', 'Read the movement lines with Warehouse.Activity.Get and send a line number on the movement.');
@@ -167,7 +168,7 @@ codeunit 10078428 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'Every line has zero quantity to handle.', 'Set Qty. to Handle on at least one movement line.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MissingParameter, 'movementNo and systemId are both missing, or a line has no lineNo or no qtyToHandle.', 'Send the movement number or its SystemId, and lineNo and qtyToHandle on every line.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameterFormat, 'A value has the wrong JSON type.', 'Send text for the movement number, an integer line number and a number for the quantity.');
-        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.');
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', UnknownParameterNextStepLbl);
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::ConflictingIdentifiers, 'movementNo and systemId name different movements.', 'Send one movement.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameter, 'qtyToHandle is negative or greater than the outstanding quantity.', 'Send a quantity from zero up to the outstanding quantity.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot write the warehouse documents, or does not hold the warehouse posting gate.', 'Ask an administrator to assign BIFROST Whse - Full ori and BIFROST WhsePost ori.');
@@ -539,7 +540,7 @@ codeunit 10078428 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
     var
         KeyName: Text;
         UnknownLbl: Label 'The key %1 is not a parameter of this message type.', Comment = '%1 = key, is-IS=Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.';
-        UnknownNextStepLbl: Label 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.';
+        UnknownNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         foreach KeyName in RequestJson.Keys() do
             if not (KeyName in ['movementNo', 'systemId', 'lines']) then
@@ -550,7 +551,7 @@ codeunit 10078428 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
     var
         KeyName: Text;
         UnknownLbl: Label 'The key %1 is not a parameter of this message type.', Comment = '%1 = key, is-IS=Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.';
-        UnknownNextStepLbl: Label 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.';
+        UnknownNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         foreach KeyName in LineObject.Keys() do
             if not (KeyName in ['lineNo', 'qtyToHandle']) then

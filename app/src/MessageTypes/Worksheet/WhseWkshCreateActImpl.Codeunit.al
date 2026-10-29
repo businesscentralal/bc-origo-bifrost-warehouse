@@ -246,6 +246,7 @@ codeunit 10078461 "Whse Wksh CreateAct Impl ori" implements "Msg Interface ori",
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
         Values: Codeunit "Whse Msg Values ori";
+        UnknownParameterNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PreconditionFailed, 'The location does not require pick and shipment (pick) or put-away and receipt (putAway).', 'Use the inventory activities instead.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PreconditionFailed, 'The worksheet has no lines, or no line has quantity to handle.', 'Fill the worksheet with Warehouse.Worksheet.GetDocuments and send qtyToHandle above zero on at least one line.');
@@ -254,7 +255,7 @@ codeunit 10078461 "Whse Wksh CreateAct Impl ori" implements "Msg Interface ori",
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameterFormat, 'A value has the wrong JSON type or is too long.', 'Send text for codes, an integer lineNo, a number for qtyToHandle and true or false for the grouping options.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameter, 'worksheetType is not valid, the template is not of the worksheet type, qtyToHandle is negative or above the outstanding quantity, assignedUserId is not a warehouse employee of the location, or a grouping option is sent for a put-away worksheet.', 'Correct the value as the message says.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameter, 'sortingMethod is not a warehouse activity sorting method.', 'Send one of "None", "Item", "Document", "Shelf or Bin", "Due Date", "Ship-To", "Bin Ranking" or "Action Type".');
-        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::UnknownParameter, 'The request or a line contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.');
+        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::UnknownParameter, 'The request or a line contains a key this type does not accept.', UnknownParameterNextStepLbl);
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::ConflictingIdentifiers, 'subject and locationCode name different locations.', 'Send one location: subject or locationCode.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot write worksheet lines and warehouse activities.', 'Ask an administrator to assign BIFROST Whse - Full ori.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::MultipleErrors, 'More than one value failed validation.', 'Correct every listed value and send the request again. Nothing was written.');

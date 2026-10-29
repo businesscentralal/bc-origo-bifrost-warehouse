@@ -174,6 +174,7 @@ codeunit 10078450 "Whse Adjustment Calc Impl ori" implements "Msg Interface ori"
         Parts: Codeunit "Whse Contract Parts ori";
         Context: Codeunit "Whse Write Context ori";
         Values: Codeunit "Whse Msg Values ori";
+        UnknownParameterNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::RecordNotFound, 'The item journal template or batch was not found.', 'Create the batch first.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::RecordNotFound, 'The item or location was not found.', 'Check the value and send the request again.');
@@ -182,7 +183,7 @@ codeunit 10078450 "Whse Adjustment Calc Impl ori" implements "Msg Interface ori"
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::MissingParameter, 'journalTemplateName or journalBatchName is missing, or documentNo is missing for a batch without a number series.', 'Send the batch keys, and documentNo when the batch has no number series.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameterFormat, 'A value has the wrong JSON type, is too long, or a date is not YYYY-MM-DD.', 'Send text for codes and dates.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameter, 'The item journal template is not of type Item.', 'Use an item journal template of type Item.');
-        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.');
+        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', UnknownParameterNextStepLbl);
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::ConflictingIdentifiers, 'subject and locationCode name different locations.', 'Send one location: subject or locationCode.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot write item journal lines.', 'Ask an administrator to assign BIFROST Whse - Full ori.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::MultipleErrors, 'More than one value failed validation.', 'Correct every listed value and send the request again. Nothing was written.');

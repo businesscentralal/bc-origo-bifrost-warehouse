@@ -176,6 +176,7 @@ codeunit 10078431 "Whse Rcpt GetSrcDocs Impl ori" implements "Msg Interface ori"
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Parts: Codeunit "Whse Contract Parts ori";
         Entry: JsonObject;
+        UnknownParameterNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MissingParameter, 'No receipt and no locationCode were sent.', 'Send receiptNo for an existing receipt or locationCode for a new one.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::RecordNotFound, 'The warehouse receipt or the location does not exist.', 'Create it with Warehouse.Receipt.Create or pass locationCode.');
@@ -183,7 +184,7 @@ codeunit 10078431 "Whse Rcpt GetSrcDocs Impl ori" implements "Msg Interface ori"
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'No released warehouse request matches the filters (the parameter names the filters that were sent), or the location does not require receive.', 'Release the source documents first; read Warehouse.Request.Get.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameter, 'sourceDocument is not one of the listed values, or a date range ends before it starts.', 'Use one of the values listed in the help.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameterFormat, 'A value has the wrong JSON type, sourceNos is not an array of strings, or a date is not YYYY-MM-DD.', 'Send text for codes, an array of strings for sourceNos and dates as YYYY-MM-DD.');
-        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.');
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', UnknownParameterNextStepLbl);
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot write warehouse receipts or read warehouse requests.', 'Ask an administrator to assign BIFROST Whse - Full ori.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MultipleErrors, 'More than one value failed validation.', 'Correct every listed value and send the request again. Nothing was written.');
         Parts.AddBusinessCentralError(Errors, 'a blocked item or vendor, or a location without a receipt number series');
@@ -667,7 +668,7 @@ codeunit 10078431 "Whse Rcpt GetSrcDocs Impl ori" implements "Msg Interface ori"
     var
         KeyName: Text;
         UnknownLbl: Label 'The key %1 is not a parameter of this message type.', Comment = '%1 = key, is-IS=Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.';
-        UnknownNextStepLbl: Label 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.';
+        UnknownNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         foreach KeyName in RequestJson.Keys() do
             if not (KeyName in ['receiptNo', 'systemId', 'locationCode', 'sourceDocument', 'sourceNos', 'vendorNo', 'expectedReceiptDateFrom', 'expectedReceiptDateTo']) then

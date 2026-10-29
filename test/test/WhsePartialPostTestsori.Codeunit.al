@@ -118,9 +118,9 @@ codeunit 97046 "Whse Partial Post Tests ori"
         Run(Enum::"Message Type ori"::"Warehouse.Receipt.Post", '{"receiptNo":"' + ReceiptLine."No." + '","lines":[{"lineNo":' + Format(ReceiptLine."Line No.") + ',"qtyToReceive":"3"}]}', ResponseJson);
         Assert.AreEqual('InvalidParameterFormat', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
 
-        Run(Enum::"Message Type ori"::"Warehouse.Receipt.Post", '{"receiptNo":"' + ReceiptLine."No." + '","lines":[{"lineNo":' + Format(ReceiptLine."Line No.") + ',"qtyToShip":3}]}', ResponseJson);
-        Assert.AreEqual('MultipleErrors', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
-        Assert.IsTrue(ResponseText(ResponseJson).Contains('UnknownParameter'), 'qtyToShip is not a receipt key.');
+        Run(Enum::"Message Type ori"::"Warehouse.Receipt.Post", '{"receiptNo":"' + ReceiptLine."No." + '","lines":[{"lineNo":' + Format(ReceiptLine."Line No.") + ',"qtyToShip":3,"qtyToReceive":1}]}', ResponseJson);
+        Assert.AreEqual('UnknownParameter', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('lines[0].qtyToShip', TextValue(ResponseJson, 'parameter'), 'qtyToShip is not a receipt key.');
 
         Run(Enum::"Message Type ori"::"Warehouse.Receipt.Post", '{"receiptNo":"' + ReceiptLine."No." + '","post":true}', ResponseJson);
         Assert.AreEqual('UnknownParameter', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
@@ -293,9 +293,9 @@ codeunit 97046 "Whse Partial Post Tests ori"
         AssertGenericSetRefused('Warehouse Shipment Line', '{"tableName":"Warehouse Shipment Line","force":true,"data":[{"primaryKey":{"No.":"SH-X","Line No.":10000},"fields":{"Qty. to Ship":1}}]}', 'Warehouse.Shipment.Post');
     end;
 
-    /// <summary>#67 item 3: an unknown top-level key no longer hides the problems in the lines (1033 and 1039).</summary>
+    /// <summary>#67 item 3: independent problems in declared line keys are collected (1033 and 1039).</summary>
     [Test]
-    procedure ReceiptPost_UnknownKeyAndLineProblems_AreCollected()
+    procedure ReceiptPost_IndependentLineProblems_AreCollected()
     var
         ReceiptLine: Record "Warehouse Receipt Line";
         ResponseJson: JsonObject;
@@ -303,17 +303,17 @@ codeunit 97046 "Whse Partial Post Tests ori"
     begin
         // Issue #67, AC1 (item 3) | Time: independent of WorkDate | Risk: none.
         CreateReceipt(ReceiptLine, 5);
-        RequestText := '{"receiptNo":"' + ReceiptLine."No." + '","post":true,"lines":[{"lineNo":999999,"qtyToReceive":1},{"lineNo":' + Format(ReceiptLine."Line No.") + ',"qtyToReceive":"3"}]}';
+        RequestText := '{"receiptNo":"' + ReceiptLine."No." + '","lines":[{"lineNo":999999,"qtyToReceive":1},{"lineNo":' + Format(ReceiptLine."Line No.") + ',"qtyToReceive":"3"}]}';
 
         Run(Enum::"Message Type ori"::"Warehouse.Receipt.Post", RequestText, ResponseJson);
         Assert.AreEqual('MultipleErrors', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
         Assert.AreEqual('Nothing was posted.', TextValue(ResponseJson, 'error'), 'English summary.');
-        Assert.AreEqual('post:UnknownParameter,lines[0].lineNo:InvalidLine,lines[1].qtyToReceive:InvalidParameterFormat', ErrorList(ResponseJson), 'Every problem is listed.');
+        Assert.AreEqual('lines[0].lineNo:InvalidLine,lines[1].qtyToReceive:InvalidParameterFormat', ErrorList(ResponseJson), 'Every problem is listed.');
 
         Assert.IsTrue(ReceiptHelper.RunMessageInLanguage(Enum::"Message Type ori"::"Warehouse.Receipt.Post", '', RequestText, ResponseJson, 1039), 'The response should be JSON.');
         Assert.AreEqual('MultipleErrors', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
         Assert.AreEqual('Ekkert var bókað.', TextValue(ResponseJson, 'error'), 'Icelandic summary.');
-        Assert.AreEqual('post:UnknownParameter,lines[0].lineNo:InvalidLine,lines[1].qtyToReceive:InvalidParameterFormat', ErrorList(ResponseJson), 'Every problem is listed in Icelandic too.');
+        Assert.AreEqual('lines[0].lineNo:InvalidLine,lines[1].qtyToReceive:InvalidParameterFormat', ErrorList(ResponseJson), 'Every problem is listed in Icelandic too.');
         AssertReceiptUnchanged(ReceiptLine, 5);
     end;
 

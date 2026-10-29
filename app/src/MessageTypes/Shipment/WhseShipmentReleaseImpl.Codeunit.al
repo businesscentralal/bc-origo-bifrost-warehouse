@@ -134,9 +134,10 @@ codeunit 10078433 "Whse Shipment Release Impl ori" implements "Msg Interface ori
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Parts: Codeunit "Whse Contract Parts ori";
         Entry: JsonObject;
+        UnknownParameterNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         Parts.AddLookupErrors(Errors, 'Warehouse Shipment Header', 'systemId, recordSystemId, id, shipmentNo, no');
-        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.');
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', UnknownParameterNextStepLbl);
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'The shipment has no lines with a quantity.', 'Add lines with Warehouse.Shipment.GetSourceDocuments.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot write warehouse shipments.', 'Ask an administrator to assign BIFROST Whse - Full ori.');
         Parts.AddBusinessCentralError(Errors, 'a line without a bin at a bin-mandatory location, or a line without a zone at a directed location');
@@ -216,7 +217,7 @@ codeunit 10078433 "Whse Shipment Release Impl ori" implements "Msg Interface ori
     /// <returns>True. The notes describe the refusals, the no-op case and the order with sibling types.</returns>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := 'The only input is the shipment identifier, as the subject or as systemId, recordSystemId, id, shipmentNo or no under data; any other key is refused as UnknownParameter, together with any lookup problem as MultipleErrors. ' +
+        Notes := 'The only input is the shipment identifier, as the subject or as systemId, recordSystemId, id, shipmentNo or no under data; any other key is refused as UnknownParameter. On Foundation 28.0.9 and later this happens before execution and before other request problems are collected. ' +
             'Releasing a shipment that is already released is not an error: the call answers success with changed false and writes nothing. ' +
             'A shipment with no line that has a quantity is refused as PreconditionFailed; add lines with Warehouse.Shipment.GetSourceDocuments first. ' +
             'Release is what Business Central does with the Release action: the status becomes Released and the pick request is created, so picks can be made with Warehouse.Pick.Create. If Business Central finds a line incomplete, for example without a bin at a bin-mandatory location, it refuses with its own error text and the shipment stays open. ' +
@@ -317,7 +318,7 @@ codeunit 10078433 "Whse Shipment Release Impl ori" implements "Msg Interface ori
     var
         KeyName: Text;
         UnknownLbl: Label 'The key %1 is not a parameter of this message type.', Comment = '%1 = key, is-IS=Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.';
-        UnknownNextStepLbl: Label 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.';
+        UnknownNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         foreach KeyName in RequestJson.Keys() do
             if not (KeyName in ['systemId', 'recordSystemId', 'id', 'shipmentNo', 'no']) then

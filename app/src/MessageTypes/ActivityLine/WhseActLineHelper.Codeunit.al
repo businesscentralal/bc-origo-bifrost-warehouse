@@ -309,12 +309,13 @@ codeunit 10078466 "Whse ActLine Helper ori"
     internal procedure AddActivityErrors(var Errors: JsonArray)
     var
         Values: Codeunit "Whse Msg Values ori";
+        UnknownParameterNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::MissingParameter, 'activityNo and systemId are both missing, activityType is needed for a number used by several types, or a line misses lineNo.', 'Send the activity and the line number.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameterFormat, 'A value has the wrong JSON type, is too long, or a SystemId is not a GUID.', 'Send text for codes and GUIDs, an integer lineNo and numbers for quantities.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::RecordNotFound, 'The activity or a line was not found.', 'Check the activity with Warehouse.Activity.Get.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::ConflictingIdentifiers, 'The identifiers name different activities, or a line belongs to a different activity than the one named.', 'Use the activity no. answered by Warehouse.Activity.Get.');
-        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::UnknownParameter, 'The request or a line contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.');
+        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::UnknownParameter, 'The request or a line contains a key this type does not accept.', UnknownParameterNextStepLbl);
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot write warehouse activity lines.', 'Ask an administrator to assign BIFROST Whse - Full ori.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::MultipleErrors, 'More than one value failed validation.', 'Correct every listed value and send the request again. Nothing was written.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::BusinessCentralError, 'Business Central rejected the change.', 'Read the returned text and correct the line. Nothing was written.');

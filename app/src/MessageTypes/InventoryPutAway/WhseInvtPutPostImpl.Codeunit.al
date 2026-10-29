@@ -167,6 +167,7 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Entry: JsonObject;
+        UnknownParameterNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidLine, 'qtyToHandle exceeds the outstanding quantity.', 'Lower qtyToHandle to the outstanding quantity.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidLine, 'binCode is not a bin at the location, or the bin is blocked for inbound movement.', 'Read Warehouse.Bin.Get for valid bins.');
@@ -175,7 +176,7 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MissingParameter, 'putawayNo or systemId is missing, or a line has no lineNo or no qtyToHandle.', 'Send putawayNo or systemId, and lineNo and qtyToHandle on every line.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameterFormat, 'A value has the wrong JSON type or is too long.', 'Send text for codes, numbers for quantities and true or false for invoice.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameter, 'invoice is true for a source that is not a purchase order, or a quantity is negative.', 'Send invoice false, or post a purchase order. Send qtyToHandle as zero or greater.');
-        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.');
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', UnknownParameterNextStepLbl);
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::RecordNotFound, 'The inventory put-away or line was not found.', 'Check the put-away number with Warehouse.InventoryPutAway.Create.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::ConflictingIdentifiers, 'subject, putawayNo and systemId name different put-aways.', 'Send one put-away: subject, putawayNo or systemId.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot write the warehouse documents, or does not hold the warehouse posting gate (or the invoicing gate when invoice is true).', 'Ask an administrator to assign BIFROST Whse - Full ori and BIFROST WhsePost ori, plus BIFROST WhseInv ori for invoice true.');
@@ -739,7 +740,7 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
     var
         KeyName: Text;
         UnknownLbl: Label 'The key %1 is not a parameter of this message type.', Comment = '%1 = key, is-IS=Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.';
-        UnknownNextStepLbl: Label 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.';
+        UnknownNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         foreach KeyName in RequestJson.Keys() do
             if not (KeyName in ['putawayNo', 'no', 'systemId', 'id', 'recordSystemId', 'invoice', 'lines']) then
@@ -750,7 +751,7 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
     var
         KeyName: Text;
         UnknownLbl: Label 'The key %1 is not a parameter of this message type.', Comment = '%1 = key, is-IS=Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.';
-        UnknownNextStepLbl: Label 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.';
+        UnknownNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         foreach KeyName in LineObject.Keys() do
             if not (KeyName in ['lineNo', 'qtyToHandle', 'binCode']) then

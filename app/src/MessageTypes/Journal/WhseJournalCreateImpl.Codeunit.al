@@ -193,6 +193,7 @@ codeunit 10078446 "Whse Journal Create Impl ori" implements "Msg Interface ori",
         Parts: Codeunit "Whse Contract Parts ori";
         Context: Codeunit "Whse Write Context ori";
         Values: Codeunit "Whse Msg Values ori";
+        UnknownParameterNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PreconditionFailed, 'The location does not use directed put-away and pick.', 'Use Inventory.ItemJournal.* or Inventory.Reclassification.* for basic locations.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidLine, 'A negative adjustment or a reclassification takes more than the bin content holds, or lot, serial or package numbers are sent for an item without warehouse item tracking, or a serial number is sent for more than one base unit.', 'Read Warehouse.BinContent.Get.');
@@ -201,7 +202,7 @@ codeunit 10078446 "Whse Journal Create Impl ori" implements "Msg Interface ori",
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::MissingParameter, 'journalTemplateName, journalBatchName, locationCode, lines, or itemNo, quantity or a bin on a line is missing.', 'Send the batch keys and, on every line, itemNo, quantity and binCode (item journal) or fromBin and toBin (reclassification journal).');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameterFormat, 'A value has the wrong JSON type, is too long, or a date is not YYYY-MM-DD.', 'Send text for codes and dates, numbers for quantities and an array of objects for lines.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameter, 'The template is a physical inventory template, a quantity is zero, a reclassification quantity is negative, or a line sends the bin keys of the other journal type.', 'Use Warehouse.PhysInventory.* for physical inventory, a non-zero quantity, and the bin keys of the journal type.');
-        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::UnknownParameter, 'The request or a line contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.');
+        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::UnknownParameter, 'The request or a line contains a key this type does not accept.', UnknownParameterNextStepLbl);
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::ConflictingIdentifiers, 'subject and locationCode name different locations, or zoneCode is not the zone of binCode.', 'Send one location, and a zone that holds the bin.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot write warehouse journal lines.', 'Ask an administrator to assign BIFROST Whse - Full ori.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::MultipleErrors, 'More than one value failed validation.', 'Correct every listed value and send the request again. Nothing was written.');

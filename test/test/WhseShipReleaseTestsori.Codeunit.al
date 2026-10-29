@@ -246,6 +246,7 @@ codeunit 97042 "Whse Ship Release Tests ori"
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         MessageTypeInterface: Interface "Msg Interface ori";
         ResponseJson: JsonObject;
+        ExpectedNextStep: Text;
     begin
         // Story #53, AC08 | Time: independent of WorkDate | Risk: none.
         LibraryLowerPermissions.PushPermissionSetWithoutDefaults('Whse NoRead Test ori');
@@ -260,7 +261,12 @@ codeunit 97042 "Whse Ship Release Tests ori"
         ReleaseImpl.ExecuteBifrostTask(TempArgument);
         ResponseJson := TempArgument.GetResponseJson();
         Assert.AreEqual('PermissionDenied', TextValue(ResponseJson, 'code'), 'Release denial must use PermissionDenied.');
-        Assert.AreEqual('Ask an administrator to assign BIFROST Whse - Full ori.', TextValue(ResponseJson, 'nextStep'), 'The next step must name the full permission set.');
+        // #88: direct execution follows the Web Client session language. Keep the exact localized assertion.
+        if GlobalLanguage() = 1039 then
+            ExpectedNextStep := 'Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.'
+        else
+            ExpectedNextStep := 'Ask an administrator to assign BIFROST Whse - Full ori.';
+        Assert.AreEqual(ExpectedNextStep, TextValue(ResponseJson, 'nextStep'), 'The next step must name the full permission set in the session language.');
 
         TempArgument.Delete();
         TempArgument.Init();
@@ -287,21 +293,28 @@ codeunit 97042 "Whse Ship Release Tests ori"
         AssertStrayIdentifierRefused(1039, 'fannst ekki');
     end;
 
-    /// <summary>#67 item 3: an unknown key and an unknown shipment are answered together as MultipleErrors.</summary>
+    /// <summary>#88 AC01: an unknown key is refused without releasing a valid shipment, in both languages.</summary>
     [Test]
-    procedure Release_UnknownKeyAndUnknownShipment_AreCollected()
+    procedure Release_UnknownKey_DoesNotExecute()
     var
         ResponseJson: JsonObject;
+        ShipmentNo: Code[20];
+        RequestText: Text;
     begin
-        // Issue #67, AC1 (item 3) | Time: independent of WorkDate | Risk: none.
-        Run(Enum::"Message Type ori"::"Warehouse.Shipment.Release", '{"shipmentNo":"NO-SUCH-SHIP","note":"x"}', ResponseJson);
-        Assert.AreEqual('MultipleErrors', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
-        Assert.AreEqual('UnknownParameter,RecordNotFound', ErrorCodes(ResponseJson), 'Both problems are listed in order.');
+        // Issue #88, AC01 | Time: independent of WorkDate | Risk: none.
+        ShipmentNo := CreateShipment();
+        RequestText := '{"shipmentNo":"' + ShipmentNo + '","note":"x"}';
+        Run(Enum::"Message Type ori"::"Warehouse.Shipment.Release", RequestText, ResponseJson);
+        Assert.AreEqual('UnknownParameter', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('note', TextValue(ResponseJson, 'parameter'), 'The unknown key is named.');
+        ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Shipment.Release", ResponseJson);
+        AssertStatus(ShipmentNo, false);
 
-        RunIn(1039, Enum::"Message Type ori"::"Warehouse.Shipment.Release", '{"shipmentNo":"NO-SUCH-SHIP","note":"x"}', '', ResponseJson);
-        Assert.AreEqual('MultipleErrors', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
-        Assert.AreEqual('UnknownParameter,RecordNotFound', ErrorCodes(ResponseJson), 'Both problems are listed in Icelandic too.');
-        Assert.AreEqual('Beiðnin hefur nokkur vandamál; errors telur hvert þeirra upp.', TextValue(ResponseJson, 'error'), 'The summary is Icelandic.');
+        RunIn(1039, Enum::"Message Type ori"::"Warehouse.Shipment.Release", RequestText, '', ResponseJson);
+        Assert.AreEqual('UnknownParameter', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual('note', TextValue(ResponseJson, 'parameter'), 'The unknown key is named in Icelandic too.');
+        Assert.AreEqual('Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.', TextValue(ResponseJson, 'nextStep'), 'The next step is Icelandic.');
+        AssertStatus(ShipmentNo, false);
     end;
 
     local procedure AssertStrayIdentifierRefused(LanguageId: Integer; NotFoundText: Text)
@@ -337,22 +350,6 @@ codeunit 97042 "Whse Ship Release Tests ori"
     local procedure RunIn(LanguageId: Integer; MessageType: Enum "Message Type ori"; RequestText: Text; Subject: Text; var ResponseJson: JsonObject)
     begin
         Assert.IsTrue(ReceiptHelper.RunMessageInLanguage(MessageType, Subject, RequestText, ResponseJson, LanguageId), 'The response should be JSON.');
-    end;
-
-    local procedure ErrorCodes(ResponseJson: JsonObject): Text
-    var
-        Token: JsonToken;
-        Entry: JsonToken;
-        Codes: TextBuilder;
-    begin
-        if not ResponseJson.Get('errors', Token) then
-            exit('');
-        foreach Entry in Token.AsArray() do begin
-            if Codes.Length() > 0 then
-                Codes.Append(',');
-            Codes.Append(TextValue(Entry.AsObject(), 'code'));
-        end;
-        exit(Codes.ToText());
     end;
 
     local procedure CreateShipment(): Code[20]

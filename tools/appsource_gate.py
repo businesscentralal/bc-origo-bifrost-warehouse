@@ -60,14 +60,18 @@ MEASURED_PACKAGE_PROFILES = {
     },
 }
 FOUNDATION_CANDIDATE = {
-    "identity": {"id": "7505e808-6e52-4b96-a328-82573391297a", "publisher": "Origo",
-                 "name": "Bifrost Foundation", "version": "28.0.3.530"},
-    "sha256": "b95e0eccf7a4038531cea08f0441e757ac176c7c4ff06b1b8eb9d25ac0dd3a88",
-    "sourceCommit": "8ec074f4ac69ac9bde15807cf16d21bee045332f",
-    "buildUrl": "https://github.com/OrigoSoftwareSolutions/bc-origo-bifrost-core/actions/runs/37679390622",
-    "compilerVersion": "18.1.43.7601",
-    "artifactId": 11508979803,
-    "archiveSha256": "21c6331c47d3134d1f3c8c77f240d021fa47710f6fbdebc974b733e0b708bad8",
+    "identity": {
+        "id": "7505e808-6e52-4b96-a328-82573391297a",
+        "publisher": "Origo",
+        "name": "Bifrost Foundation",
+        "version": "28.0.10.632"
+    },
+    "sha256": "3a9ca4f48568ff5b99d2a9f352bdd752e81cae28a91d606fc2f184465b1ce220",
+    "sourceCommit": "130955cdc524cf7da3f162d1aeb10777fde55ab1",
+    "buildUrl": "https://github.com/OrigoSoftwareSolutions/bc-origo-bifrost-core/actions/runs/40668907792",
+    "compilerVersion": "18.1.44.47295",
+    "artifactId": 12808162029,
+    "archiveSha256": "e9bbad2cea79fffb3d87c7fa30ce836928566e25235e6fdfbc1d940eec262771"
 }
 SYMBOL_POLICIES = {
     "appCache": {"packages": 128, "bytes": 512 * 1024 * 1024},
@@ -405,7 +409,7 @@ def check_foundation_candidate(info):
         require(info[key] == FOUNDATION_CANDIDATE[key], "Unapproved Foundation candidate " + key)
     require(info["friends"] == [] and info["signatureTailBytes"] > 0,
             "Foundation candidate friend/signature-content mismatch")
-    return {"candidate": "candidate530", "artifactId": FOUNDATION_CANDIDATE["artifactId"],
+    return {"candidate": "candidate632", "artifactId": FOUNDATION_CANDIDATE["artifactId"],
             "archiveSha256": FOUNDATION_CANDIDATE["archiveSha256"], "signatureTrustVerified": False,
             "runnerInputEqualityVerified": False}
 

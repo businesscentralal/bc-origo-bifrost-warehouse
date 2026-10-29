@@ -9,7 +9,8 @@
   registering, and `BIFROST WhseInv ori` (10078457; token table `Whse Invoice ori`) for
   `Warehouse.Shipment.Post` with `invoice` true. Both must stay assignable and stay out of the
   read/full extensions: nothing else grants posting or invoicing. Add no other assignable set.
-- Foundation floor 28.0.3.530 (release `28.0.3`, probed by `.AL-Go/settings.json`);
+- Product Foundation floor remains 28.0.3.530; the test app and CI use Foundation
+  28.0.10.632 (release `28.0.10`) for the restricted licence-admin role regression;
   `application` floor 28.3.0.0. CodeCop, UICop and AppSourceCop run on app and test app with
   `failOn: warning`.
 - No pages: `contextSensitiveHelpUrl` is `https://docs.bifrost.origo.is/{0}/help/warehouse/`; a new

@@ -13,6 +13,7 @@ OBJECT_KINDS = {
     "permissionset", "permissionsetextension",
 }
 FOUNDATION_ID = "7505e808-6e52-4b96-a328-82573391297a"
+WAREHOUSE_TEST_ID = "6ae41d19-d457-4d62-bd87-0413ff18de75"
 
 
 def tokens(source):
@@ -37,8 +38,9 @@ def check_project(project):
         if dependency["id"].lower() == FOUNDATION_ID:
             if (dependency["name"], dependency["publisher"]) != ("Bifrost Foundation", "Origo"):
                 errors.append("Foundation dependency identity does not match its AppId")
-            if tuple(map(int, dependency["version"].split("."))) < (28, 0, 3, 530):
-                errors.append("Foundation dependency is below 28.0.3.530")
+            floor = (28, 0, 10, 632) if manifest["id"].lower() == WAREHOUSE_TEST_ID else (28, 0, 3, 530)
+            if tuple(map(int, dependency["version"].split("."))) < floor:
+                errors.append("Foundation dependency is below " + ".".join(map(str, floor)))
 
     for path in sorted(project.rglob("*.al")):
         stream = tokens(path.read_text(encoding="utf-8-sig"))

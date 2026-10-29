@@ -123,7 +123,7 @@ class GenuinePackages(unittest.TestCase):
         # Missing real fixtures is a FAILURE, never a skipped/passing test.
         cls.fixtures = Path(os.environ["APPSOURCE_GATE_FIXTURES"])
         cls.foundation = Path(os.environ["APPSOURCE_GATE_FOUNDATION"])
-        cls.foundation_candidate = Path(os.environ["APPSOURCE_GATE_FOUNDATION530"])
+        cls.foundation_candidate = Path(os.environ["APPSOURCE_GATE_FOUNDATION632"])
         G.check_foundation_candidate(G.package_info(cls.foundation_candidate))
         for name in ("default", "friend", "wrongFriend", "testApp"):
             G.package_info(cls.fixtures / (name + ".app"))
@@ -610,14 +610,14 @@ class GenuinePackages(unittest.TestCase):
         self.state()
         folder = self.root / "compiler-symbols"
         shutil.copy2(self.foundation_candidate, folder / "Foundation.app")
-        shutil.copy2(self.foundation_candidate, folder / "Foundation_28.0.3.530.app")
+        shutil.copy2(self.foundation_candidate, folder / "Foundation_28.0.10.632.app")
         snapshot = G.before_compile(self.root, self.rejection_request())
         foundation_id = "7505e808-6e52-4b96-a328-82573391297a"
         compiler = [s for s in snapshot["compilerSymbols"] if s["identity"]["id"] == foundation_id]
         self.assertEqual(1, len(compiler))
         self.assertEqual(1, len(list(folder.glob("*.app"))))
         self.assertEqual(1, len(snapshot["compilerAliasRemovals"]))
-        self.assertTrue((folder / "Foundation_28.0.3.530.app").is_file())
+        self.assertTrue((folder / "Foundation_28.0.10.632.app").is_file())
         self.assertFalse((folder / "Foundation.app").is_file())
 
     def test_conflicting_compiler_versions_preserve_both_disk_hashes(self):

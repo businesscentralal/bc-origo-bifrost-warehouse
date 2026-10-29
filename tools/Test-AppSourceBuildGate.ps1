@@ -14,7 +14,7 @@ param(
 $ErrorActionPreference = 'Stop'
 $previousFixtures = $env:APPSOURCE_GATE_FIXTURES
 $previousFoundation = $env:APPSOURCE_GATE_FOUNDATION
-$previousCandidate = $env:APPSOURCE_GATE_FOUNDATION530
+$previousCandidate = $env:APPSOURCE_GATE_FOUNDATION632
 $previousBase = $env:APPSOURCE_GATE_BASE29
 $previousReadyToRun = @{}
 $readyToRunInputs = @{
@@ -28,7 +28,7 @@ foreach ($name in $readyToRunInputs.Keys) {
 try {
     $env:APPSOURCE_GATE_FIXTURES = (Resolve-Path -LiteralPath $FixtureFolder).Path
     $env:APPSOURCE_GATE_FOUNDATION = (Resolve-Path -LiteralPath $FoundationPackage).Path
-    $env:APPSOURCE_GATE_FOUNDATION530 = (Resolve-Path -LiteralPath $CandidateFoundationPackage).Path
+    $env:APPSOURCE_GATE_FOUNDATION632 = (Resolve-Path -LiteralPath $CandidateFoundationPackage).Path
     $env:APPSOURCE_GATE_BASE29 = (Resolve-Path -LiteralPath $MeasuredBasePackage).Path
     foreach ($name in $readyToRunInputs.Keys) {
         [Environment]::SetEnvironmentVariable($name, (Resolve-Path -LiteralPath $readyToRunInputs[$name]).Path)
@@ -61,7 +61,7 @@ try {
 finally {
     $env:APPSOURCE_GATE_FIXTURES = $previousFixtures
     $env:APPSOURCE_GATE_FOUNDATION = $previousFoundation
-    $env:APPSOURCE_GATE_FOUNDATION530 = $previousCandidate
+    $env:APPSOURCE_GATE_FOUNDATION632 = $previousCandidate
     $env:APPSOURCE_GATE_BASE29 = $previousBase
     foreach ($name in $previousReadyToRun.Keys) {
         [Environment]::SetEnvironmentVariable($name, $previousReadyToRun[$name])

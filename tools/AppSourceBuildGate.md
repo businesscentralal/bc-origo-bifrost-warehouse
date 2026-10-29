@@ -1,5 +1,23 @@
 # AppSource build gate
 
+## Current Foundation input for issue #90
+
+The active CI/test input is the signed, no-friend Foundation **28.0.10.632** from
+release `28.0.10`, source `130955cdc524cf7da3f162d1aeb10777fde55ab1`,
+[run 40668907792](https://github.com/OrigoSoftwareSolutions/bc-origo-bifrost-core/actions/runs/40668907792).
+`candidate632` replaces the historical candidate530 compilation/staging profile
+below. Apps artifact **12808162029** has archive SHA256
+`e9bbad2cea79fffb3d87c7fa30ce836928566e25235e6fdfbc1d940eec262771`;
+TestApps artifact **12809697604** has archive SHA256
+`67e70551b8384829adf96ed9af67dd4d1e8e772ef040ceeae8177ba0b3e2eb98`.
+The package hashes, source, build, compiler identity, no-friend requirement and
+known TestApps collision remain exact checks. Unknown bytes are still refused.
+The product minimum remains **28.0.3.530**; the test dependency is **28.0.10.632**
+because the licence-admin role must have Setup page access. `controlled523` remains
+an explicit historical test fixture. Historical 530 receipts below are not proof
+for the current input. Supply the 632 Apps package to `-CandidateFoundationPackage`
+and the 632 archives (`foundation632-<artifactId>.zip`) to `-CandidateArtifactFolder`.
+
 Ported on 2026-10-19 from Bifrost Attachments (`bc-origo-bifrost-attachments`, issue #78,
 `tools/AppSourceBuildGate.md` on main). The scripts are unchanged apart from the product
 identity: the Test friend is `Bifrost Warehouse - Tests` (`6ae41d19-d457-4d62-bd87-0413ff18de75`),

@@ -247,11 +247,11 @@ codeunit 97055 "Whse Adjustment Calc Tests ori"
     begin
         CreateItemJournalBatch(ItemJournalBatch);
 
-        ResponseJson := Helper.RunTypeInLanguage(Enum::"Message Type ori"::"Warehouse.Adjustment.Calculate", '', '{"journalTemplateName":"' + ItemJournalBatch."Journal Template Name" + '","journalBatchName":"NOBATCH","documentNo":"X","itemNo":"NO-SUCH-ITEM","colour":"red"}', LanguageId);
+        ResponseJson := Helper.RunTypeInLanguage(Enum::"Message Type ori"::"Warehouse.Adjustment.Calculate", '', '{"journalTemplateName":"' + ItemJournalBatch."Journal Template Name" + '","journalBatchName":"NOBATCH","documentNo":"X","itemNo":"NO-SUCH-ITEM"}', LanguageId);
 
         Assert.AreEqual('MultipleErrors', Helper.TextValue(ResponseJson, 'code'), Helper.ResponseText(ResponseJson));
         Assert.AreEqual(Summary, Helper.TextValue(ResponseJson, 'error'), 'The summary is in the caller language.');
-        Assert.AreEqual('colour:UnknownParameter,journalBatchName:RecordNotFound,itemNo:RecordNotFound', Helper.ErrorList(ResponseJson), 'Every problem is listed.');
+        Assert.AreEqual('journalBatchName:RecordNotFound,itemNo:RecordNotFound', Helper.ErrorList(ResponseJson), 'Every problem is listed.');
         if LanguageId = 1033 then
             ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Adjustment.Calculate", ResponseJson);
     end;

@@ -48,7 +48,7 @@ codeunit 97047 "Whse DocFlow Help Tests ori"
         AssertErrorEntry("Message Type ori"::"Warehouse.Shipment.GetSourceDocuments", 'RecordNotFound', 'Create it with Warehouse.Shipment.Create or pass locationCode.');
         AssertErrorEntry("Message Type ori"::"Warehouse.Shipment.Release", 'PreconditionFailed', 'Add lines with Warehouse.Shipment.GetSourceDocuments.');
         AssertErrorEntry("Message Type ori"::"Warehouse.Shipment.Reopen", 'PreconditionFailed', 'Register or delete the picks first.');
-        AssertErrorEntry("Message Type ori"::"Warehouse.Shipment.Release", 'UnknownParameter', 'Remove the unknown key.');
+        AssertErrorEntry("Message Type ori"::"Warehouse.Shipment.Release", 'UnknownParameter', 'Remove this key or consult Help.Implementation.Get');
         AssertErrorEntry("Message Type ori"::"Warehouse.Request.Get", 'InvalidParameter', 'Use one of the values listed in the help.');
         AssertErrorEntry("Message Type ori"::"Warehouse.PostedDocument.Get", 'RecordNotFound', 'Search with filters instead of a no.');
         AssertErrorEntry("Message Type ori"::"Warehouse.RegisteredActivity.Get", 'RecordNotFound', 'Search with filters instead of a no.');

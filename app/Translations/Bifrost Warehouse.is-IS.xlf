@@ -189,6 +189,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Gögn aðgerðarlínunnar voru tóm.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine ChgBin Impl ori - Method OnRun - NamedType MissingPayloadErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2675597613 - Method 460925089 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Helper ori - Method AddActivityErrors - NamedType UnknownParameterNextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2675597613 - Method 2053511923 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
           <source>activityNo or systemId is required.</source>
           <target>activityNo eða systemId er nauðsynlegt.</target>
@@ -777,6 +783,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Reiknar leiðréttingu vöruhúss á beinum staðsetningum inn í tóma keyrslu birgðabókar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 4252178793 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 4252178793 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>calculate warehouse adjustment, adjustment bin, item journal, synchronize item ledger, warehouse to inventory</source>
           <target>reikna leiðréttingu vöruhúss, leiðréttingarhólf, birgðabók, samstilla birgðahöfuðbók, vöruhús í birgðir</target>
@@ -964,9 +976,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType UnknownWhenLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetErrors - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 1399190847" size-unit="char" translate="yes" xml:space="preserve">
@@ -1156,9 +1168,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method RefuseUnknownBinKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 293481984 - Method 1591952781 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method RefuseUnknownBinKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 293481984 - Method 2054439282 - NamedType 1773691126" size-unit="char" translate="yes" xml:space="preserve">
@@ -1168,9 +1180,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 293481984 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 293481984 - Method 3841850974 - NamedType 776865932" size-unit="char" translate="yes" xml:space="preserve">
@@ -1336,9 +1348,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method GetErrors - NamedType UnknownWhenLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 406652802 - Method 1158096087 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method GetErrors - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 406652802 - Method 1158096087 - NamedType 1399190847" size-unit="char" translate="yes" xml:space="preserve">
@@ -1438,9 +1450,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 406652802 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 406652802 - Method 388409952 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
@@ -1551,6 +1563,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Reiknar endurnýjun hólfa inn á færsluvinnublað.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Repl Calc Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 219040042 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Repl Calc Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 219040042 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>bin replenishment, movement worksheet, directed put-away and pick, minimum quantity, pick bin</source>
           <target>endurnýjun hólfa, færsluvinnublað, bein innsetning og tínsla, lágmarksmagn, tínsluhólf</target>
@@ -1606,9 +1624,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Repl Calc Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 219040042 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Repl Calc Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 219040042 - Method 823412827 - NamedType 650235816" size-unit="char" translate="yes" xml:space="preserve">
@@ -1670,6 +1688,18 @@
           <target>Lesaðgangur. Les blaðsíðuskipt birgðainnihald hólfa; notaðu Warehouse.Activity.Get fyrir opnar tínslur og fráganga í vöruhúsi.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Lesaðgangur. Les blaðsíðuskipt birgðainnihald hólfa; notaðu Warehouse.Activity.Get fyrir opnar tínslur og fráganga í vöruhúsi.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse BinContent Get Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 1799397223 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method AddDocumentPostErrors - NamedType UnknownParameterNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 2743319857 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method AddDocumentPreviewErrors - NamedType UnknownParameterNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3968908717 - Method 4070406624 - NamedType 968172995" size-unit="char" translate="yes" xml:space="preserve">
           <source>Send the value as an integer.</source>
@@ -1816,9 +1846,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetErrors - NamedType UnknownWhenLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2355567171 - Method 1158096087 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetErrors - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2355567171 - Method 1158096087 - NamedType 3964979788" size-unit="char" translate="yes" xml:space="preserve">
@@ -1918,9 +1948,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2355567171 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2355567171 - Method 3776760185 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
@@ -2092,9 +2122,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Doc Line Qty ori - Method RefuseUnknownLineKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2079263393 - Method 2415149068 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Doc Line Qty ori - Method RefuseUnknownLineKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 301136191 - Method 1642629281 - NamedType 3917977900" size-unit="char" translate="yes" xml:space="preserve">
@@ -2168,6 +2198,12 @@
           <target>Stofnar birgðafærslu úr línum milli hólfa eða úr samsetningarnotkun.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Stofnar birgðafærslu úr línum milli hólfa eða úr samsetningarnotkun.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 301136191 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 301136191 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>inventory movement, move between bins, basic warehouse, internal movement, assembly consumption</source>
@@ -2260,9 +2296,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 301136191 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 301136191 - Method 2415149068 - NamedType 1773691126" size-unit="char" translate="yes" xml:space="preserve">
@@ -2272,9 +2308,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method RefuseUnknownLineKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 301136191 - Method 2415149068 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method RefuseUnknownLineKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 301136191 - Method 2242432169 - NamedType 151515437" size-unit="char" translate="yes" xml:space="preserve">
@@ -2487,6 +2523,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Skráir birgðafærslu og skilar skráða magninu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 3229165659 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3229165659 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>register inventory movement, move stock, basic warehouse, confirm bin move</source>
           <target>skrá birgðafærslu, færa birgðir, einfalt vöruhús, staðfesta hólfafærslu</target>
@@ -2584,9 +2626,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3229165659 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3229165659 - Method 2415149068 - NamedType 1773691126" size-unit="char" translate="yes" xml:space="preserve">
@@ -2596,9 +2638,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method RefuseUnknownLineKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3229165659 - Method 2415149068 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method RefuseUnknownLineKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3229165659 - Method 2887803892 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
@@ -2715,6 +2757,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Stofnar birgðatínslu úr staðfestu upprunaskjali á einfaldri staðsetningu sem krefst tínslu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPick Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 656571471 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPick Create Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 656571471 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>create inventory pick, inventory pick, pick from sales order, basic warehouse pick, require pick, source document</source>
           <target>stofna birgðatínslu, birgðatínsla, tínsla úr sölupöntun, einföld vöruhúsatínsla, krefst tínslu, upprunaskjal</target>
@@ -2800,9 +2848,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPick Create Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 656571471 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPick Create Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 656571471 - Method 339087082 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
@@ -2924,6 +2972,12 @@
           <target>Bókar birgðatínslu og sendir upprunaskjalið.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Bókar birgðatínslu og sendir upprunaskjalið.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPick Post Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3579358707 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPick Post Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3579358707 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>post inventory pick, ship inventory pick, inventory pick post, post source document, invoice inventory pick, basic warehouse</source>
@@ -3094,9 +3148,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPick Post Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3579358707 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPick Post Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3579358707 - Method 2415149068 - NamedType 1773691126" size-unit="char" translate="yes" xml:space="preserve">
@@ -3106,9 +3160,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPick Post Impl ori - Method RefuseUnknownLineKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3579358707 - Method 2415149068 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPick Post Impl ori - Method RefuseUnknownLineKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3579358707 - Method 2388874232 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
@@ -3195,6 +3249,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Stofnar birgðafrágang úr staðfestu innleiðsluupprunaskjali á einfaldri staðsetningu sem krefst frágangs.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 3890069751 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Create Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3890069751 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>create inventory put-away, inventory put-away, put away purchase order, basic warehouse put-away, require put-away, source document</source>
           <target>stofna birgðafrágang, birgðafrágangur, frágangur úr innkaupapöntun, einfaldur vöruhúsafrágangur, krefst frágangs, upprunaskjal</target>
@@ -3280,9 +3340,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Create Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3890069751 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Create Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3890069751 - Method 339087082 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
@@ -3404,6 +3464,12 @@
           <target>Bókar birgðafrágang og móttekur upprunaskjalið.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Bókar birgðafrágang og móttekur upprunaskjalið.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Post Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1222428267 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Post Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 1222428267 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>post inventory put-away, receive inventory put-away, inventory put-away post, post source document, invoice inventory put-away, basic warehouse</source>
@@ -3598,9 +3664,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Post Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 1222428267 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Post Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 1222428267 - Method 2415149068 - NamedType 1773691126" size-unit="char" translate="yes" xml:space="preserve">
@@ -3610,9 +3676,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Post Impl ori - Method RefuseUnknownLineKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 1222428267 - Method 2415149068 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Post Impl ori - Method RefuseUnknownLineKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 1222428267 - Method 1933182182 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
@@ -3722,6 +3788,12 @@
           <target>Stofnar línur í birgðabók vöruhúss eða endurflokkunarbók vöruhúss á beinni staðsetningu.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Stofnar línur í birgðabók vöruhúss eða endurflokkunarbók vöruhúss á beinni staðsetningu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 693199292 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 693199292 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>warehouse item journal, warehouse reclassification journal, bin adjustment, positive adjustment, negative adjustment, move between bins, reclassify lot</source>
@@ -3963,6 +4035,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Skráir keyrslu í birgðabók eða endurflokkunarbók vöruhúss og skilar vöruhúsaskránni.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Reg Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 3917713592 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Reg Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3917713592 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>register warehouse journal, register bin adjustment, register reclassification, warehouse register, post warehouse journal</source>
           <target>skrá birgðabók vöruhúss, skrá leiðréttingu hólfs, skrá endurflokkun, vöruhúsaskrá, bóka birgðabók vöruhúss</target>
@@ -4028,6 +4106,12 @@
           <target>Stofnar vöruhúsafærslu úr færslublaði eða úr línum í beiðninni.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Stofnar vöruhúsafærslu úr færslublaði eða úr línum í beiðninni.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Movement Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 296295310 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Movement Create Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 296295310 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>create movement, warehouse movement, move between bins, bin transfer, directed movement, movement worksheet</source>
@@ -4108,9 +4192,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Movement Create Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 296295310 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Movement Create Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 296295310 - Method 2415149068 - NamedType 1773691126" size-unit="char" translate="yes" xml:space="preserve">
@@ -4120,9 +4204,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Movement Create Impl ori - Method RefuseUnknownLineKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 296295310 - Method 2415149068 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Movement Create Impl ori - Method RefuseUnknownLineKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 296295310 - Method 528680182 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
@@ -4275,6 +4359,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Skráir vöruhúsafærslu og skilar númeri skráðu færslunnar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Movement Reg Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 3363668634 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Movement Reg Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3363668634 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>register movement, post movement, complete movement, warehouse movement register, move stock, confirm movement</source>
           <target>skrá færslu, bóka færslu, ljúka færslu, skráning vöruhúsafærslu, færa birgðir, staðfesta færslu</target>
@@ -4372,9 +4462,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Movement Reg Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3363668634 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Movement Reg Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3363668634 - Method 2415149068 - NamedType 1773691126" size-unit="char" translate="yes" xml:space="preserve">
@@ -4384,9 +4474,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Movement Reg Impl ori - Method RefuseUnknownLineKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3363668634 - Method 2415149068 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Movement Reg Impl ori - Method RefuseUnknownLineKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3363668634 - Method 2887803892 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
@@ -4468,9 +4558,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Msg Values ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3990130608 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Msg Values ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3990130608 - Method 2598010486 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
@@ -4551,6 +4641,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Reiknar talningu vöruhúss á beinni staðsetningu inn í keyrslu talningarbókar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Calc Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 35908569 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Calc Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 35908569 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>warehouse physical inventory, calculate inventory, stock count, cycle count, bin count, physical inventory journal</source>
           <target>talning vöruhúss, reikna birgðir, birgðatalning, reglubundin talning, talning hólfa, talningarbók</target>
@@ -4616,6 +4712,12 @@
           <target>Skrifar talið magn og skráir keyrslu talningarbókar vöruhúss.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Skrifar talið magn og skráir keyrslu talningarbókar vöruhúss.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Reg Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3419876046 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Reg Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3419876046 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>register physical inventory, counted quantity, stock count result, warehouse count, register count</source>
@@ -4827,6 +4929,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Les bókaðar vöruhúsamóttökur eða bókaðar vöruhúsaafhendingar, valfrjálst með línum.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PostedDoc Get Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 3794917806 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PostedDoc Get Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3794917806 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>posted warehouse receipt, posted warehouse shipment, what was received, what was shipped, warehouse history, posted receipt lines</source>
           <target>bókuð vöruhúsamóttaka, bókuð vöruhúsaafhending, hvað var móttekið, hvað var afhent, vöruhúsasaga, línur bókaðrar móttöku</target>
@@ -4852,9 +4960,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PostedDoc Get Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3794917806 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PostedDoc Get Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3794917806 - Method 1996368209 - NamedType 650235816" size-unit="char" translate="yes" xml:space="preserve">
@@ -5073,6 +5181,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Bætir línum úr útgefnum innkomandi upprunaskjölum við vöruhúsamóttöku eða nýja móttöku á staðsetningu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt GetSrcDocs Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 3318992449 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt GetSrcDocs Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3318992449 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>get source documents, add purchase orders to receipt, pull orders into warehouse receipt, receive several orders, combine receipts, inbound source documents</source>
           <target>sækja upprunaskjöl, bæta innkaupapöntunum við móttöku, draga pantanir í vöruhúsamóttöku, taka á móti mörgum pöntunum, sameina móttökur, innkomandi upprunaskjöl</target>
@@ -5104,9 +5218,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt GetSrcDocs Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3318992449 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt GetSrcDocs Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3318992449 - Method 3933796087 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
@@ -5272,9 +5386,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt Post Prev. Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3353061649 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt Post Prev. Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2572656007 - Method 2602747073 - NamedType 830660715" size-unit="char" translate="yes" xml:space="preserve">
@@ -5440,9 +5554,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Post Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3670300571 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Post Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 1135528022 - NamedType 3506339174" size-unit="char" translate="yes" xml:space="preserve">
@@ -5613,6 +5727,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Les skráðar tínslur, frágang eða tilfærslur, valfrjálst með línum.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse RegActivity Get Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2572066034 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse RegActivity Get Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2572066034 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>registered pick, registered put-away, registered movement, what was picked, where was it put away, warehouse activity history</source>
           <target>skráð tínsla, skráður frágangur, skráð tilfærsla, hvað var tínt, hvar var gengið frá, saga vöruhúsavirkni</target>
@@ -5638,9 +5758,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse RegActivity Get Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2572066034 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse RegActivity Get Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2572066034 - Method 1996368209 - NamedType 650235816" size-unit="char" translate="yes" xml:space="preserve">
@@ -5721,6 +5841,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Les vöruhúsabeiðnir á staðsetningu: upprunaskjöl sem bíða eftir vöruhúsamóttöku eða vöruhúsaafhendingu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Request Get Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 916876614 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Request Get Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 916876614 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>warehouse request, what is waiting, released orders, source documents to receive, source documents to ship, open warehouse work</source>
           <target>vöruhúsabeiðni, hvað bíður, útgefnar pantanir, upprunaskjöl til móttöku, upprunaskjöl til afhendingar, opin vöruhúsavinna</target>
@@ -5746,9 +5872,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Request Get Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 916876614 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Request Get Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 916876614 - Method 388409952 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
@@ -5847,6 +5973,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Bætir línum úr útgefnum útleiðandi upprunaskjölum við vöruhúsaafhendingu eða nýja afhendingu á staðsetningu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Ship GetSrcDocs Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2400538300 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Ship GetSrcDocs Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2400538300 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>get source documents, add sales orders to shipment, pull orders into warehouse shipment, ship several orders, combine shipments, outbound source documents</source>
           <target>sækja upprunaskjöl, bæta sölupöntunum við afhendingu, draga pantanir í vöruhúsaafhendingu, afhenda margar pantanir, sameina afhendingar, útleiðandi upprunaskjöl</target>
@@ -5878,9 +6010,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Ship GetSrcDocs Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2400538300 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Ship GetSrcDocs Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2400538300 - Method 3933796087 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
@@ -6058,9 +6190,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Ship. Prev. Post Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3796601114 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Ship. Prev. Post Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2578593995 - Method 2274743296 - NamedType 506796343" size-unit="char" translate="yes" xml:space="preserve">
@@ -6208,9 +6340,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Post Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2463241303 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Post Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3470883688 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
@@ -6249,6 +6381,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Gefur út vöruhúsaafhendingu svo hægt sé að stofna tínslu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Release Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 3470883688 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Release Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3470883688 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>release shipment, release warehouse shipment, ready to pick, shipment status released, approve shipment</source>
           <target>gefa út afhendingu, gefa út vöruhúsaafhendingu, tilbúið til tínslu, staða afhendingar útgefin, samþykkja afhendingu</target>
@@ -6280,9 +6418,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Release Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3470883688 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Release Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 4174471194 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
@@ -6321,6 +6459,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Opnar útgefna vöruhúsaafhendingu aftur svo hægt sé að breyta henni.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Reopen Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 4174471194 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Reopen Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 4174471194 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>reopen shipment, reopen warehouse shipment, change released shipment, shipment status open, unrelease shipment</source>
           <target>opna afhendingu aftur, opna vöruhúsaafhendingu aftur, breyta útgefinni afhendingu, staða afhendingar opin, afturkalla útgáfu afhendingar</target>
@@ -6352,9 +6496,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Reopen Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 4174471194 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remove the unknown key. Read Help.Implementation.Get for the declared parameters.</source>
-          <target>Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.</note>
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Reopen Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 257719388 - Method 550388558 - NamedType 1582893390" size-unit="char" translate="yes" xml:space="preserve">
@@ -6446,6 +6590,12 @@
           <target>Stofnar tínslur eða frágang úr línum tínslu- eða frágangsvinnublaðs.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Stofnar tínslur eða frágang úr línum tínslu- eða frágangsvinnublaðs.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3297616556 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3297616556 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>create pick from worksheet, create put-away from worksheet, pick worksheet, put-away worksheet, wave picking, group picks</source>
@@ -6542,6 +6692,12 @@
           <target>Fyllir tínslu- eða frágangsvinnublað úr útgefnum vöruhúsaskjölum.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Fyllir tínslu- eða frágangsvinnublað úr útgefnum vöruhúsaskjölum.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh GetDocs Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1247752009 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh GetDocs Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 1247752009 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>pick worksheet, put-away worksheet, get warehouse documents, plan picks, plan put-aways, worksheet lines</source>

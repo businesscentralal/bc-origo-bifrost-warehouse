@@ -142,6 +142,7 @@ codeunit 10078447 "Whse Journal Reg Impl ori" implements "Msg Interface ori", "M
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
         Values: Codeunit "Whse Msg Values ori";
+        UnknownParameterNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PreconditionFailed, 'The location does not use directed put-away and pick.', 'Use Inventory.ItemJournal.* or Inventory.Reclassification.* for basic locations.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PreconditionFailed, 'The batch has no lines.', 'Add lines with Warehouse.Journal.Create.');
@@ -150,7 +151,7 @@ codeunit 10078447 "Whse Journal Reg Impl ori" implements "Msg Interface ori", "M
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::MissingParameter, 'journalTemplateName, journalBatchName or locationCode is missing.', 'Send journalTemplateName, journalBatchName and locationCode.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameterFormat, 'A value has the wrong JSON type or is too long.', 'Send text for the batch keys.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameter, 'The template is a physical inventory template.', 'Use Warehouse.PhysInventory.Calculate and Warehouse.PhysInventory.Register for a physical inventory journal.');
-        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.');
+        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', UnknownParameterNextStepLbl);
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::ConflictingIdentifiers, 'subject and locationCode name different locations.', 'Send one location: subject or locationCode.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot write the warehouse journal and register, or does not hold the warehouse posting gate.', 'Ask an administrator to assign BIFROST Whse - Full ori and BIFROST WhsePost ori.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::MultipleErrors, 'More than one value failed validation.', 'Correct every listed value and send the request again. Nothing was registered.');

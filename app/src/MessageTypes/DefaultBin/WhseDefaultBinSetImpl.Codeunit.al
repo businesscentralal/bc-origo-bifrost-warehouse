@@ -145,7 +145,7 @@ codeunit 10078420 "Whse DefaultBin Set Impl ori" implements "Msg Interface ori",
         FormatWhenLbl: Label 'A code was not text.', Comment = 'is-IS=Kóði var ekki texti.';
         FormatNextStepLbl: Label 'Send text for locationCode, itemNo, variantCode, unitOfMeasureCode and binCode.', Comment = 'is-IS=Sendu texta fyrir locationCode, itemNo, variantCode, unitOfMeasureCode og binCode.';
         UnknownWhenLbl: Label 'The request contains a key this type does not accept.', Comment = 'is-IS=Beiðnin inniheldur lykil sem þessi gerð tekur ekki við.';
-        UnknownNextStepLbl: Label 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.';
+        UnknownNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
         ConflictWhenLbl: Label 'subject and locationCode name different locations.', Comment = 'is-IS=subject og locationCode nefna mismunandi staðsetningar.';
         ConflictNextStepLbl: Label 'Send one location: subject or locationCode.', Comment = 'is-IS=Sendu eina staðsetningu: subject eða locationCode.';
         DeniedWhenLbl: Label 'The caller cannot write bin content.', Comment = 'is-IS=Sá sem kallar getur ekki skrifað innihald hólfs.';
@@ -512,7 +512,7 @@ codeunit 10078420 "Whse DefaultBin Set Impl ori" implements "Msg Interface ori",
     var
         KeyName: Text;
         UnknownLbl: Label 'The key %1 is not a parameter of this message type.', Comment = '%1 = key, is-IS=Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.';
-        UnknownNextStepLbl: Label 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.';
+        UnknownNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         foreach KeyName in RequestJson.Keys() do
             if not (KeyName in ['locationCode', 'itemNo', 'variantCode', 'unitOfMeasureCode', 'binCode']) then

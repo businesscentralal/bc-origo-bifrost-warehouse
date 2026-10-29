@@ -284,6 +284,49 @@ codeunit 97062 "Whse Jnl Contract Tests ori"
         Assert.IsFalse(TempArgument.IsTableReadRestrictedForDataRecords(Database::"Warehouse Activity Line"), 'Reads stay allowed.');
     end;
 
+    /// <summary>#88 AC02: every declared unknown-key next step matches Foundation in English.</summary>
+    [Test]
+    procedure UnknownParameterHelp_MatchesFoundationEnglish()
+    begin
+        AssertUnknownParameterHelp(1033, 'Remove this key or consult Help.Implementation.Get for the declared parameters.');
+    end;
+
+    /// <summary>#88 AC02: every declared unknown-key next step matches Foundation in Icelandic.</summary>
+    [Test]
+    procedure UnknownParameterHelp_MatchesFoundationIcelandic()
+    begin
+        AssertUnknownParameterHelp(1039, 'Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.');
+    end;
+
+    local procedure AssertUnknownParameterHelp(LanguageId: Integer; ExpectedNextStep: Text)
+    var
+        ContractAssert: Codeunit "Whse Contract Assert ori";
+        MessageType: Enum "Message Type ori";
+        ContractInterface: Interface "Msg Contract ori";
+        Errors: JsonArray;
+        Entry: JsonToken;
+        OriginalLanguage: Integer;
+        Checked: Integer;
+        HasContract: Boolean;
+    begin
+        foreach MessageType in ContractAssert.WarehouseTypes() do begin
+            Clear(Errors);
+            ContractInterface := MessageType;
+            OriginalLanguage := GlobalLanguage();
+            GlobalLanguage(LanguageId);
+            // Foundation renders canonical contracts in English; exercise the localized chapter directly.
+            HasContract := ContractInterface.GetErrors(Errors);
+            GlobalLanguage(OriginalLanguage);
+            Assert.IsTrue(HasContract, ContractAssert.TypeName(MessageType) + ' has a contract.');
+            foreach Entry in Errors do
+                if Helper.TextValue(Entry.AsObject(), 'code') = 'UnknownParameter' then begin
+                    Assert.AreEqual(ExpectedNextStep, Helper.TextValue(Entry.AsObject(), 'nextStep'), ContractAssert.TypeName(MessageType) + ' unknown-key next step.');
+                    Checked += 1;
+                end;
+        end;
+        Assert.IsTrue(Checked >= 30, 'All Warehouse declarations of UnknownParameter are checked.');
+    end;
+
     local procedure AssertContractNamesNoAlObject(MessageType: Enum "Message Type ori"; LanguageId: Integer)
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";

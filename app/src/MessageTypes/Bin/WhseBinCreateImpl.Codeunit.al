@@ -158,7 +158,7 @@ codeunit 10078419 "Whse Bin Create Impl ori" implements "Msg Interface ori", "Ms
         FormatWhenLbl: Label 'A value has the wrong JSON type or is too long.', Comment = 'is-IS=Gildi er af rangri JSON-gerð eða of langt.';
         FormatNextStepLbl: Label 'Send text for codes, an integer for ranking, and true or false for dedicated and empty.', Comment = 'is-IS=Sendu texta fyrir kóða, heiltölu fyrir ranking og true eða false fyrir dedicated og empty.';
         UnknownWhenLbl: Label 'The request contains a key this type does not accept.', Comment = 'is-IS=Beiðnin inniheldur lykil sem þessi gerð tekur ekki við.';
-        UnknownNextStepLbl: Label 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.';
+        UnknownNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
         NotFoundWhenLbl: Label 'The location does not exist.', Comment = 'is-IS=Staðsetningin er ekki til.';
         NotFoundNextStepLbl: Label 'Check the location with the location setup, or read Warehouse.Bin.Get.', Comment = 'is-IS=Athugaðu staðsetninguna í uppsetningu staðsetningar, eða lestu Warehouse.Bin.Get.';
         ConflictWhenLbl: Label 'subject and locationCode name different locations.', Comment = 'is-IS=subject og locationCode nefna mismunandi staðsetningar.';
@@ -662,7 +662,7 @@ codeunit 10078419 "Whse Bin Create Impl ori" implements "Msg Interface ori", "Ms
     var
         KeyName: Text;
         UnknownLbl: Label 'The key %1 is not a parameter of this message type.', Comment = '%1 = key, is-IS=Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.';
-        UnknownNextStepLbl: Label 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.';
+        UnknownNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         foreach KeyName in RequestJson.Keys() do
             if not (KeyName in ['locationCode', 'bins']) then
@@ -673,7 +673,7 @@ codeunit 10078419 "Whse Bin Create Impl ori" implements "Msg Interface ori", "Ms
     var
         KeyName: Text;
         UnknownLbl: Label 'The key %1 is not a parameter of this message type.', Comment = '%1 = key, is-IS=Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.';
-        UnknownNextStepLbl: Label 'Remove the unknown key. Read Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu óþekkta lykilinn. Lestu Help.Implementation.Get fyrir skilgreindar færibreytur.';
+        UnknownNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         foreach KeyName in BinObject.Keys() do
             if not IsBinField(KeyName) then

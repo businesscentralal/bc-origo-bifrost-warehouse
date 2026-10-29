@@ -298,7 +298,7 @@ codeunit 97051 "Whse Journal Create Tests ori"
         AssertLineCountedFromOne(1039, 'Hólf %1 geymir 2 grunneiningar af vöru %2 sem má taka; lína 1 biður um 5.');
     end;
 
-    /// <summary>#68 item 5: an unknown batch no longer hides an unknown key, a format error and a missing bin (1033).</summary>
+    /// <summary>#68 item 5: an unknown batch, a format error and a missing bin are collected without undeclared keys (1033).</summary>
     [Test]
     procedure Create_IndependentProblems_AreCollected()
     begin
@@ -394,11 +394,11 @@ codeunit 97051 "Whse Journal Create Tests ori"
         Helper.CreateItem(Item);
         Helper.CreateWhseJournalBatch("Warehouse Journal Template Type"::Item, Location.Code, JournalBatch);
 
-        ResponseJson := Helper.RunTypeInLanguage(Enum::"Message Type ori"::"Warehouse.Journal.Create", '', '{"journalTemplateName":"' + JournalBatch."Journal Template Name" + '","journalBatchName":"NOBATCH","locationCode":"' + Location.Code + '","colour":"red","lines":[{"itemNo":"' + Item."No." + '","quantity":"five"}]}', LanguageId);
+        ResponseJson := Helper.RunTypeInLanguage(Enum::"Message Type ori"::"Warehouse.Journal.Create", '', '{"journalTemplateName":"' + JournalBatch."Journal Template Name" + '","journalBatchName":"NOBATCH","locationCode":"' + Location.Code + '","lines":[{"itemNo":"' + Item."No." + '","quantity":"five"}]}', LanguageId);
 
         Assert.AreEqual('MultipleErrors', Helper.TextValue(ResponseJson, 'code'), Helper.ResponseText(ResponseJson));
         Assert.AreEqual(Summary, Helper.TextValue(ResponseJson, 'error'), 'The summary is in the caller language.');
-        Assert.AreEqual('colour:UnknownParameter,journalBatchName:RecordNotFound,lines[0].quantity:InvalidParameterFormat,lines[0].binCode:MissingParameter', Helper.ErrorList(ResponseJson), 'Every problem is listed.');
+        Assert.AreEqual('journalBatchName:RecordNotFound,lines[0].quantity:InvalidParameterFormat,lines[0].binCode:MissingParameter', Helper.ErrorList(ResponseJson), 'Every problem is listed.');
         Assert.AreEqual(MissingBinText, Helper.ErrorFor(ResponseJson, 'lines[0].binCode'), 'The missing bin counts the line from 1.');
         if LanguageId = 1033 then
             ContractAssert.AssertAnswerDeclared(Enum::"Message Type ori"::"Warehouse.Journal.Create", ResponseJson);

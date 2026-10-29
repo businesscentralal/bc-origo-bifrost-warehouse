@@ -4,7 +4,7 @@
 
 ### Fixed
 
-- Restricted licence administrators can open Bifröst Setup with Warehouse installed (#90). Registration codeunit 10078385 now has inherent Execute permission and entitlement; no table write permission is added. Test codeunit 97005 opens the real Setup page under the licence-admin role in English and Icelandic, with test-only platform baseline permission set 97005.
+- Restricted licence administrators can open Bifröst Setup with Warehouse installed (#90). Registration codeunit 10078385 now has inherent Execute permission and entitlement; no table write permission is added. Test codeunit 97005 opens the real Setup page under the licence-admin role in English and Icelandic, with internal test-only platform baseline permission set 97005. CI and the test app use Foundation 28.0.10.632, including exact dependency restoration and AppSource input pins; the product minimum remains 28.0.3.530.
 - Align Warehouse unknown-parameter help and localized refusal next steps with Foundation 28.0.10 (#88). Preserve the Foundation 28.0.3.530 minimum: tests isolate unknown keys from unrelated errors and retain collection assertions for multiple declared-key problems. A refused shipment release now explicitly proves no status change in both languages. The direct-execution permission test checks the exact next step in the Web Client session language. Product objects: message-type implementation/helper codeunits 10078385–10078484; test codeunits 97042, 97046, 97047, 97051, 97055, 97062.
 
 ## [28.3.2]

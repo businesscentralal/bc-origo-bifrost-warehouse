@@ -8,6 +8,7 @@ using System.Environment.Configuration;
 /// </summary>
 permissionset 97005 "Whse Test Plat ori"
 {
+    Access = Internal;
     Assignable = true;
     Caption = 'Warehouse test platform', Locked = true;
     IncludedPermissionSets = "Guided Experience - View";

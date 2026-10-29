@@ -232,22 +232,22 @@ class Staging(unittest.TestCase):
         self.assertTrue((self.root/'stage-rejected.json').exists())
 
 
-class Candidate530(unittest.TestCase):
+class Candidate632(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
-        self.config = S.PROFILES['candidate530']
+        self.config = S.PROFILES['candidate632']
         inputs = Path(os.environ['FOUNDATION_CANDIDATE_ARTIFACTS'])
         context = dict(run='1234', attempt='1', sourceCommit='3' * 40, checkoutSha='4' * 40, mode='Default')
         artifacts = {}
         for kind, (artifact, sha) in self.config['artifacts'].items():
-            archive = inputs / f'foundation530-{artifact}.zip'
+            archive = inputs / f'foundation632-{artifact}.zip'
             self.assertEqual(sha, G.file_hash(archive))
             artifacts[kind] = dict(archive=str(archive), provenance=dict(repository='OrigoSoftwareSolutions/bc-origo-bifrost-core',
                 sourceSha=self.config['source'], run=self.config['run'], attempt=self.config['attempt'],
                 artifactId=artifact, archiveSha256=sha, expired=False, conclusion='success'))
-        # Default production staging profile is candidate530.523is only explicit controlled fixture.
+        # Default production staging profile is candidate632.523is only explicit controlled fixture.
         self.request = dict(context=context, artifacts=artifacts)
 
     def test_actual_candidate_staging_retains_signed_apps_and_excludes_only_exact_test_collision(self):
@@ -257,7 +257,7 @@ class Candidate530(unittest.TestCase):
         info = G.package_info(arrays['installApps'][0])
         G.check_foundation_candidate(info)
         receipt = S.validate(self.root / 'stage/selection.json', self.request['context'], arrays['installApps'], arrays['installTestApps'])
-        self.assertEqual('candidate530', receipt['profile'])
+        self.assertEqual('candidate632', receipt['profile'])
         self.assertFalse(receipt['signatureTrustVerified'])
         self.assertEqual(self.config['testPin'], receipt['selection']['excluded'][0]['sha256'])
         self.assertEqual([S.TEST_FRIEND], receipt['selection']['excluded'][0]['friends'])
@@ -274,7 +274,7 @@ class Candidate530(unittest.TestCase):
     def test_test_candidate_cannot_be_swapped_into_apps_or_mutated_after_staging(self):
         arrays = S.stage(self.request, self.root / 'stage')
         excluded = json.loads((self.root / 'stage/selection.json').read_text())['selection']['excluded'][0]['path']
-        with self.assertRaises(G.GateError): S.select([excluded], [excluded], 'candidate530')
+        with self.assertRaises(G.GateError): S.select([excluded], [excluded], 'candidate632')
         with open(arrays['installApps'][0], 'ab') as out: out.write(b'mutated-tail')
         with self.assertRaises(G.GateError):
             S.validate(self.root / 'stage/selection.json', self.request['context'], arrays['installApps'], arrays['installTestApps'])

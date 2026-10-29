@@ -136,14 +136,14 @@ class FoundationRestore(unittest.TestCase):
         self.root = Path(self.temp.name)
         self.dependencies = self.root / ".dependencies"
         self.dependencies.mkdir()
-        self.identity = dict(S.PROFILES["candidate530"]["identity"])
-        self.collision = self.dependencies / "Origo_Bifrost Foundation_28.0.3.530.app"
+        self.identity = dict(S.PROFILES["candidate632"]["identity"])
+        self.collision = self.dependencies / "Origo_Bifrost Foundation_28.0.10.632.app"
         fixture(self.collision, self.identity)
         with_friend(self.collision)
         self.approved_source = self.root / "approved.app"
         fixture(self.approved_source, self.identity)
         self.archive = archive_of(self.approved_source, self.root / "apps.zip")
-        self.config = copy.deepcopy(S.PROFILES["candidate530"])
+        self.config = copy.deepcopy(S.PROFILES["candidate632"])
         self.config["pin"] = S.file_hash(self.approved_source)
         self.config["testPin"] = S.file_hash(self.collision)
         self.config["source"] = ""
@@ -158,7 +158,7 @@ class FoundationRestore(unittest.TestCase):
         return destination
 
     def restore(self):
-        with patch.dict(S.PROFILES, {"candidate530": self.config}):
+        with patch.dict(S.PROFILES, {"candidate632": self.config}):
             return S.restore_overwritten_foundation(self.root, self.fetch)
 
     def test_testapps_collision_is_replaced_and_other_files_stay(self):
@@ -175,11 +175,11 @@ class FoundationRestore(unittest.TestCase):
         self.collision.unlink()
         symbols = self.root / "compiler-symbols"
         symbols.mkdir()
-        external = symbols / "Origo_Bifrost Foundation_28.0.3.530.app"
+        external = symbols / "Origo_Bifrost Foundation_28.0.10.632.app"
         fixture(external, self.identity)
         with_friend(external)
         self.config["testPin"] = S.file_hash(external)
-        with patch.dict(S.PROFILES, {"candidate530": self.config}):
+        with patch.dict(S.PROFILES, {"candidate632": self.config}):
             result = S.restore_overwritten_foundation(self.root, self.fetch, symbols=symbols)
         self.assertEqual([str(external)], result["restored"])
         self.assertEqual(self.config["pin"], S.file_hash(external))

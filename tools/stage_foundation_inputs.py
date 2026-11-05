@@ -36,15 +36,15 @@ MAX_BYTES = 128 * 1024 * 1024
 PROFILES = {
     'controlled523': dict(source=SOURCE, run=RUN, attempt=2, artifacts=ARTIFACTS,
                           identity=IDENTITY, pin=PIN, testPin=TEST_PIN, buildUrl=BUILD_URL),
-    'candidate632': dict(source='130955cdc524cf7da3f162d1aeb10777fde55ab1', run=40668907792, attempt=1,
+    'candidate677': dict(source='250ce91eacf94b766587f7f02b7650d7f7fcea75', run=42066062095, attempt=1,
         artifacts={
-            'Apps': (12808162029, 'e9bbad2cea79fffb3d87c7fa30ce836928566e25235e6fdfbc1d940eec262771'),
-            'TestApps': (12809697604, '67e70551b8384829adf96ed9af67dd4d1e8e772ef040ceeae8177ba0b3e2eb98'),
+            'Apps': (13435013060, 'da93b0ea9051175aebefad9bf433f1b49f408f287e40b99396f96a39e717062c'),
+            'TestApps': (13437865484, '87c93aa118c18dc5f1a1ff27028df66a3fee99b8d91da73924464d63689316b5'),
         },
-        identity=dict(id=FOUNDATION, publisher='Origo', name='Bifrost Foundation', version='28.0.10.632'),
-        pin='3a9ca4f48568ff5b99d2a9f352bdd752e81cae28a91d606fc2f184465b1ce220',
-        testPin='356dfc06533573b2d2351243f603ab6e4744f1a0dee933cff1c7d5b6cb4c40a2',
-        buildUrl='https://github.com/OrigoSoftwareSolutions/bc-origo-bifrost-core/actions/runs/40668907792'),
+        identity=dict(id=FOUNDATION, publisher='Origo', name='Bifrost Foundation', version='28.0.12.677'),
+        pin='636a612ca571d10b7a0bcd41fb977c3fed1a60e44bbf44d02274c3e68d5305b8',
+        testPin='0c8ec01efa9bca3948b16e94f3d6889e0733cf6574dc8f8af6f23fc50ae16a8e',
+        buildUrl='https://github.com/OrigoSoftwareSolutions/bc-origo-bifrost-core/actions/runs/42066062095'),
 }
 
 
@@ -157,7 +157,7 @@ def validate(receipt_path, context, install_apps, install_tests, symbols=None):
 
 def stage(request, destination):
     """Use immutable archives and a fresh directory. Never delete another input."""
-    profile = request.get('profile', 'candidate632')
+    profile = request.get('profile', 'candidate677')
     profile_config(profile)
     context = request['context']
     context_check(context)
@@ -193,7 +193,7 @@ def _foundation_filename(identity):
     return f"{identity['publisher']}_{identity['name']}_{identity['version']}.app"
 
 
-def restore_overwritten_foundation(root, fetch_archive, profile="candidate632", symbols=None):
+def restore_overwritten_foundation(root, fetch_archive, profile="candidate677", symbols=None):
     """Put the approved Apps package back when TestApps extracted over the same filename.
 
     AL-Go writes both artifacts into `.dependencies` as `Publisher_Name_Version.app`.
@@ -372,7 +372,7 @@ def _download_url(url, token, destination):
         time.sleep(attempt + 1)
 
 
-def download_apps_archive(destination, profile="candidate632"):
+def download_apps_archive(destination, profile="candidate677"):
     config = profile_config(profile)
     artifact_id = config["artifacts"]["Apps"][0]
     url = ("https://api.github.com/repos/OrigoSoftwareSolutions/bc-origo-bifrost-core/actions/artifacts/"

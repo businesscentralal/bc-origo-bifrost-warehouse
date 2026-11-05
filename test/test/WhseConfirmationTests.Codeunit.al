@@ -1,6 +1,7 @@
 namespace Origo.Bifrost.Warehouse.Test;
 
 using Origo.Bifrost;
+using Origo.Bifrost.Warehouse;
 using System.TestLibraries.Utilities;
 
 /// <summary>Guards the counted-confirmation fixture helper without disabling Foundation's confirmation gate.</summary>

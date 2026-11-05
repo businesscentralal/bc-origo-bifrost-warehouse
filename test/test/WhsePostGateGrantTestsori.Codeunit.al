@@ -172,8 +172,8 @@ codeunit 97024 "Whse Post Gate Grant Tests ori"
     var
         Dispatcher: Codeunit "Dispatcher ori";
         RequestContent: BigText;
-        RequestJson: JsonObject;
         ResponseContent: BigText;
+        RequestJson: JsonObject;
         ResponseContentType: Text[100];
         ResponseText: Text;
     begin
@@ -213,8 +213,8 @@ codeunit 97024 "Whse Post Gate Grant Tests ori"
     var
         Dispatcher: Codeunit "Dispatcher ori";
         RequestContent: BigText;
-        RequestJson: JsonObject;
         ResponseContent: BigText;
+        RequestJson: JsonObject;
         ResponseContentType: Text[100];
         ResponseText: Text;
     begin

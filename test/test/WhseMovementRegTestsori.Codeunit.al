@@ -372,8 +372,8 @@ codeunit 97084 "Whse Movement Reg Tests ori"
     var
         Dispatcher: Codeunit "Dispatcher ori";
         RequestContent: BigText;
-        RequestJson: JsonObject;
         ResponseContent: BigText;
+        RequestJson: JsonObject;
         ResponseContentType: Text[100];
         ResponseBody: Text;
     begin

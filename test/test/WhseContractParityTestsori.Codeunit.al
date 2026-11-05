@@ -300,8 +300,6 @@ codeunit 97031 "Whse Contract Parity Tests ori"
 
     local procedure NoParameterTypes() Names: List of [Text]
     begin
-        Names.Add('Warehouse.Pick.Register');
-        Names.Add('Warehouse.Putaway.Register');
         Names.Add('Warehouse.Shipment.Release');
         Names.Add('Warehouse.Shipment.Reopen');
     end;

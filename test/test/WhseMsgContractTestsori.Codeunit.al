@@ -26,9 +26,9 @@ codeunit 97027 "Whse Msg Contract Tests ori"
         AssertContract("Message Type ori"::"Warehouse.Receipt.Post", 'irreversible', true);
         AssertContract("Message Type ori"::"Warehouse.Receipt.PreviewPost", 'read', true);
         AssertContract("Message Type ori"::"Warehouse.Pick.Create", 'irreversible', true);
-        AssertContract("Message Type ori"::"Warehouse.Pick.Register", 'irreversible', false);
+        AssertContract("Message Type ori"::"Warehouse.Pick.Register", 'irreversible', true);
         AssertContract("Message Type ori"::"Warehouse.Putaway.Create", 'irreversible', true);
-        AssertContract("Message Type ori"::"Warehouse.Putaway.Register", 'irreversible', false);
+        AssertContract("Message Type ori"::"Warehouse.Putaway.Register", 'irreversible', true);
         AssertContract("Message Type ori"::"Warehouse.Bin.Get", 'read', true);
         AssertContract("Message Type ori"::"Warehouse.Bin.Create", 'write', true);
         AssertContract("Message Type ori"::"Warehouse.DefaultBin.Set", 'write', true);

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed (2026-11-05) - Confirm irreversible test fixtures (#93)
+
+- Test dispatcher helpers 97021/97022 use preview-and-confirm helper 97033 to send the count returned by Foundation for irreversible fixtures, retaining original payloads, subjects, transaction modes and explicit confirmations. Restricted caller tests 97023/97024/97084/97090 send Foundation's default count of one directly. Contract guards 97027/97031 accept Foundation's `expectedCount` parameter on pick and put-away registration. Regression codeunit 97034 checks automatic confirmation, explicit count mismatch and invalid-count preservation. No production code or confirmation setting changes.
+
 ### Fixed
 
 - Restricted licence administrators can open Bifröst Setup with Warehouse installed (#90). Registration codeunit 10078385 now has inherent Execute permission and entitlement; no table write permission is added. Test codeunit 97005 opens the real Setup page under the licence-admin role in English and Icelandic, with internal test-only platform baseline permission set 97005. CI and the test app use Foundation 28.0.10.632, including exact dependency restoration and AppSource input pins; the product minimum remains 28.0.3.530.

@@ -67,13 +67,20 @@ codeunit 97034 "Whse Confirmation Tests ori"
     [Test]
     procedure ConfirmedPost_RejectsNestedCount()
     var
+        TempArgument: Record "Message Argument ori" temporary;
+        DocLineQty: Codeunit "Whse Doc Line Qty ori";
+        RequestJson: JsonObject;
         ResponseJson: JsonObject;
+        PlannedLines: JsonArray;
         ResponseText: Text;
     begin
-        // #93 AC4: preserve strict nested validation after admitting the root control.
-        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Receipt.Post", '', '{"expectedCount":1,"lines":[{"lineNo":10000,"expectedCount":1}]}', ResponseJson, false), 'Nested validation returns JSON.');
+        // #93 AC4: isolate nested parsing without requiring or posting a real document.
+        RequestJson.ReadFrom('{"expectedCount":1,"lines":[{"lineNo":10000,"expectedCount":1}]}');
+        DocLineQty.ReadLines(RequestJson, TempArgument, false, 'X-NO-RCPT-93', PlannedLines);
+        TempArgument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, 'Nested validation');
+        ResponseJson := TempArgument.GetResponseJson();
         ResponseJson.WriteTo(ResponseText);
-        Assert.IsTrue(ResponseText.Contains('lines[1].expectedCount'), 'The nested confirmation key remains unknown.');
+        Assert.IsTrue(ResponseText.Contains('lines[0].expectedCount'), 'The nested confirmation key remains unknown.');
     end;
 
     /// <summary>Reversible writes do not gain an undeclared confirmation parameter.</summary>

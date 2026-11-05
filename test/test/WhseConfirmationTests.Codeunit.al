@@ -76,6 +76,9 @@ codeunit 97034 "Whse Confirmation Tests ori"
         ResponseText: Text;
     begin
         // #93 AC4: isolate nested parsing without requiring or posting a real document.
+        TempArgument.Init();
+        TempArgument.Version := "Message Version ori"::"1.0";
+        TempArgument.Insert(true);
         RequestJson.ReadFrom('{"expectedCount":1,"lines":[{"lineNo":10000,"expectedCount":1}]}');
         DocLineQty.ReadLines(RequestJson, TempArgument, false, 'X-NO-RCPT-93', PlannedLines);
         TempArgument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, 'Nested validation');

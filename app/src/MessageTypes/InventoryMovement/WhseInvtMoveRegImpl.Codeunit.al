@@ -543,7 +543,7 @@ codeunit 10078428 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
         UnknownNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         foreach KeyName in RequestJson.Keys() do
-            if not (KeyName in ['movementNo', 'systemId', 'lines']) then
+            if not (KeyName in ['expectedCount', 'movementNo', 'systemId', 'lines']) then
                 Argument.AddError("Bifrost Error Code ori"::UnknownParameter, StrSubstNo(UnknownLbl, KeyName), KeyName, KeyName, '', UnknownNextStepLbl);
     end;
 

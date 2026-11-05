@@ -52,6 +52,42 @@ codeunit 97034 "Whse Confirmation Tests ori"
         Assert.AreEqual('InvalidParameterFormat', ResponseCode(ResponseJson), 'The original invalid-count refusal remains.');
     end;
 
+    /// <summary>Confirmed posting must reach its original target validation.</summary>
+    [Test]
+    procedure ConfirmedPost_AcceptsRootCount()
+    var
+        ResponseJson: JsonObject;
+    begin
+        // #93 AC4: the full suite reproduced UnknownParameter for this platform control.
+        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Receipt.Post", '', '{"expectedCount":1}', ResponseJson, false), 'Confirmed request returns JSON.');
+        Assert.AreEqual('MissingParameter', ResponseCode(ResponseJson), 'Root confirmation is accepted before target validation.');
+    end;
+
+    /// <summary>The root confirmation control is not a warehouse line parameter.</summary>
+    [Test]
+    procedure ConfirmedPost_RejectsNestedCount()
+    var
+        ResponseJson: JsonObject;
+        ResponseText: Text;
+    begin
+        // #93 AC4: preserve strict nested validation after admitting the root control.
+        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Receipt.Post", '', '{"expectedCount":1,"lines":[{"lineNo":10000,"expectedCount":1}]}', ResponseJson, false), 'Nested validation returns JSON.');
+        ResponseJson.WriteTo(ResponseText);
+        Assert.IsTrue(ResponseText.Contains('lines[1].expectedCount'), 'The nested confirmation key remains unknown.');
+    end;
+
+    /// <summary>Reversible writes do not gain an undeclared confirmation parameter.</summary>
+    [Test]
+    procedure ReversibleWrite_RejectsCount()
+    var
+        ResponseJson: JsonObject;
+        ResponseText: Text;
+    begin
+        Assert.IsTrue(Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Journal.Create", '', '{"expectedCount":1}', ResponseJson, false), 'Write validation returns JSON.');
+        ResponseJson.WriteTo(ResponseText);
+        Assert.IsTrue(ResponseText.Contains('UnknownParameter'), 'An ordinary write keeps strict unknown-key validation.');
+    end;
+
     local procedure ResponseCode(ResponseJson: JsonObject): Text
     var
         Token: JsonToken;

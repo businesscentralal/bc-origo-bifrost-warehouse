@@ -281,6 +281,7 @@ codeunit 10078447 "Whse Journal Reg Impl ori" implements "Msg Interface ori", "M
         AllowedKeys.Add('journalTemplateName');
         AllowedKeys.Add('journalBatchName');
         AllowedKeys.Add('locationCode');
+        AllowedKeys.Add('expectedCount');
         Values.RefuseUnknownKeys(RequestJson, AllowedKeys, Argument, '', -1);
         Helper.ReadBatchKeys(RequestJson, Argument, TemplateName, BatchName, LocationCode);
         if Argument.HasCollectedErrors() then begin

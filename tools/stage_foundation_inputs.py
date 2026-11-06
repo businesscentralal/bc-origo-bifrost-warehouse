@@ -44,7 +44,12 @@ PROFILES = {
         identity=dict(id=FOUNDATION, publisher='Origo', name='Bifrost Foundation', version='28.0.12.677'),
         pin='636a612ca571d10b7a0bcd41fb977c3fed1a60e44bbf44d02274c3e68d5305b8',
         testPin='0c8ec01efa9bca3948b16e94f3d6889e0733cf6574dc8f8af6f23fc50ae16a8e',
-        buildUrl='https://github.com/OrigoSoftwareSolutions/bc-origo-bifrost-core/actions/runs/42066062095'),
+        buildUrl='https://github.com/OrigoSoftwareSolutions/bc-origo-bifrost-core/actions/runs/42066062095',
+        # Gunnar's release probe remains28.0.11; AC3 still verifies immutable677.
+        # Only these exact release669 bytes may be staged to the approved candidate.
+        probeIdentity=dict(id=FOUNDATION, publisher='Origo', name='Bifrost Foundation', version='28.0.11.669'),
+        probePin='050cb3b6f2c77ee74ab155831664a96b790781e27890c3632e32c29837452c08',
+        probeTestPin='47e6da5b1137898c712d36c3287922568b73e8276e876a1d546a0b37f231936d'),
 }
 
 
@@ -194,17 +199,20 @@ def _foundation_filename(identity):
 
 
 def restore_overwritten_foundation(root, fetch_archive, profile="candidate677", symbols=None):
-    """Put the approved Apps package back when TestApps extracted over the same filename.
+    """Restore approved677 bytes after a known TestApps or release-probe input.
 
-    AL-Go writes both artifacts into `.dependencies` as `Publisher_Name_Version.app`.
-    The TestApps package is the same id and version with the Foundation test friend
-    and a different hash. Only that exact collision is replaced, and only after the
-    Apps archive and extracted package match the pinned hashes. An already approved
-    file is left untouched. Any other hash fails without a download.
+    The pinned28.0.11 probe is not the AC3 test dependency. Recognize only its
+    exact Apps/TestApps hashes, then verify and stage the existing immutable677
+    artifact. Keep helper input filenames so AL-Go's captured install arrays
+    still publish the staged package. An approved alias is idempotent; unknown
+    bytes fail before downloading or changing any cache file.
     """
     config = profile_config(profile)
     root = Path(root)
-    filename = _foundation_filename(config["identity"]).casefold()
+    filenames = {_foundation_filename(config["identity"]).casefold()}
+    probe_identity = config.get("probeIdentity")
+    if probe_identity:
+        filenames.add(_foundation_filename(probe_identity).casefold())
     folders = [root / ".dependencies", root / ".packages", root / ".alpackages", root / "app" / ".alpackages"]
     if symbols:
         folders.append(Path(symbols))
@@ -212,7 +220,7 @@ def restore_overwritten_foundation(root, fetch_archive, profile="candidate677", 
     for folder in folders:
         if folder.is_dir() and not folder.is_symlink():
             for path in folder.iterdir():
-                if path.is_file() and not path.is_symlink() and path.name.casefold() == filename:
+                if path.is_file() and not path.is_symlink() and path.name.casefold() in filenames:
                     key = str(path.resolve())
                     if key not in seen:
                         seen.add(key)
@@ -222,15 +230,19 @@ def restore_overwritten_foundation(root, fetch_archive, profile="candidate677", 
     classified = []
     for path in found:
         info = package_info(path)
-        require(info["identity"] == config["identity"], "Unexpected Foundation filename identity")
-        if info["sha256"] == config["pin"] and info["friends"] == []:
+        require(info["identity"] in (config["identity"], probe_identity), "Unexpected Foundation filename identity")
+        if info["identity"] == config["identity"] and info["sha256"] == config["pin"] and info["friends"] == []:
             kind = "approved"
-        elif info["sha256"] == config["testPin"] and info["friends"] == [TEST_FRIEND]:
+        elif info["identity"] == config["identity"] and info["sha256"] == config["testPin"] and info["friends"] == [TEST_FRIEND]:
             kind = "collision"
+        elif probe_identity and info["identity"] == probe_identity and (
+                (info["sha256"] == config["probePin"] and info["friends"] == []) or
+                (info["sha256"] == config["probeTestPin"] and info["friends"] == [TEST_FRIEND])):
+            kind = "probe"
         else:
             raise GateError("Unapproved Foundation package in dependency cache")
         classified.append((path, kind, info["sha256"]))
-    collisions = [item for item in classified if item[1] == "collision"]
+    collisions = [item for item in classified if item[1] in ("collision", "probe")]
     if not collisions:
         return {"action": "already-approved", "restored": []}
     with tempfile.TemporaryDirectory(prefix="foundation-restore-") as temp:

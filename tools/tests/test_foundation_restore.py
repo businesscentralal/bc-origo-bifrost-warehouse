@@ -205,6 +205,49 @@ class FoundationRestore(unittest.TestCase):
             self.restore()
         self.assertEqual(before, self.collision.read_bytes())
 
+    def probe(self, friend=False):
+        self.collision.unlink()
+        identity = dict(self.identity, version="28.0.11.669")
+        path = self.dependencies / "Origo_Bifrost Foundation_28.0.11.669.app"
+        fixture(path, identity)
+        if friend:
+            with_friend(path)
+        self.config["probeIdentity"] = identity
+        self.config["probeTestPin" if friend else "probePin"] = S.file_hash(path)
+        return path
+
+    def test_pinned_release_probe_stages677_and_preserves_helper_input_path(self):
+        path = self.probe()
+        result = self.restore()
+        self.assertEqual([str(path)], result["restored"])
+        self.assertEqual(self.identity, S.package_info(path)["identity"])
+        self.assertEqual(self.config["pin"], S.file_hash(path))
+        self.assertEqual("already-approved", self.restore()["action"])
+        self.assertEqual(1, self.calls)
+
+    def test_pinned_release_testapps_probe_loses_its_test_friend(self):
+        path = self.probe(friend=True)
+        self.restore()
+        self.assertEqual([], S.package_info(path)["friends"])
+        self.assertEqual(self.config["pin"], S.file_hash(path))
+
+    def test_unrecognized_release_bytes_are_never_replaced(self):
+        path = self.probe()
+        before = path.read_bytes()
+        self.config["probePin"] = "0" * 64
+        with self.assertRaisesRegex(S.GateError, "Unapproved Foundation"):
+            self.restore()
+        self.assertEqual(before, path.read_bytes())
+        self.assertEqual(0, self.calls)
+
+    def test_invalid_download_leaves_the_release_probe_intact(self):
+        path = self.probe()
+        before = path.read_bytes()
+        self.config["artifacts"]["Apps"] = (13435013060, "0" * 64)
+        with self.assertRaisesRegex(S.GateError, "Changed Foundation Apps artifact"):
+            self.restore()
+        self.assertEqual(before, path.read_bytes())
+
 
 class PrecompileCache(unittest.TestCase):
     def setUp(self):

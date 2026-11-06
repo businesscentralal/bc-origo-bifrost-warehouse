@@ -123,6 +123,16 @@ Write-Host "::endgroup::"
 # after the downloaded overrides are installed, before any final app compile.
 & (Join-Path $env:GITHUB_WORKSPACE 'tools/Assert-AppSourceBuild.ps1') -Stage Initialize -AlpacaArchiveHash $script:AppSourceAlpacaArchiveHash
 
+# Restore approved validation bytes before Run-AlPipeline installs dependencies.
+# The release probe stays pinned; precompile restoration alone is too late for
+# the physical container's Foundation version and the captured install arrays.
+$foundationPython = Get-Command python3 -ErrorAction SilentlyContinue
+if (-not $foundationPython) { $foundationPython = Get-Command python -ErrorAction Stop }
+$foundationRestore = @(& $foundationPython.Source (Join-Path $env:GITHUB_WORKSPACE 'tools/stage_foundation_inputs.py') restore --root $env:GITHUB_WORKSPACE)
+$foundationRestoreExit = $LASTEXITCODE
+$foundationRestore | ForEach-Object { Write-Host $_ }
+if ($foundationRestoreExit -ne 0) { throw 'Initial Foundation candidate restore failed.' }
+
 # AL-Go v9.2 does NOT include CompileAppWithBcCompilerFolder in its automatic
 # override registry. Install Run-AlPipeline's real callback using the same
 # parent-context scope mechanism as the downloaded Alpaca initialization.

@@ -136,14 +136,14 @@ class FoundationRestore(unittest.TestCase):
         self.root = Path(self.temp.name)
         self.dependencies = self.root / ".dependencies"
         self.dependencies.mkdir()
-        self.identity = dict(S.PROFILES["candidate632"]["identity"])
-        self.collision = self.dependencies / "Origo_Bifrost Foundation_28.0.10.632.app"
+        self.identity = dict(S.PROFILES["candidate677"]["identity"])
+        self.collision = self.dependencies / "Origo_Bifrost Foundation_28.0.12.677.app"
         fixture(self.collision, self.identity)
         with_friend(self.collision)
         self.approved_source = self.root / "approved.app"
         fixture(self.approved_source, self.identity)
         self.archive = archive_of(self.approved_source, self.root / "apps.zip")
-        self.config = copy.deepcopy(S.PROFILES["candidate632"])
+        self.config = copy.deepcopy(S.PROFILES["candidate677"])
         self.config["pin"] = S.file_hash(self.approved_source)
         self.config["testPin"] = S.file_hash(self.collision)
         self.config["source"] = ""
@@ -158,7 +158,7 @@ class FoundationRestore(unittest.TestCase):
         return destination
 
     def restore(self):
-        with patch.dict(S.PROFILES, {"candidate632": self.config}):
+        with patch.dict(S.PROFILES, {"candidate677": self.config}):
             return S.restore_overwritten_foundation(self.root, self.fetch)
 
     def test_testapps_collision_is_replaced_and_other_files_stay(self):
@@ -175,11 +175,11 @@ class FoundationRestore(unittest.TestCase):
         self.collision.unlink()
         symbols = self.root / "compiler-symbols"
         symbols.mkdir()
-        external = symbols / "Origo_Bifrost Foundation_28.0.10.632.app"
+        external = symbols / "Origo_Bifrost Foundation_28.0.12.677.app"
         fixture(external, self.identity)
         with_friend(external)
         self.config["testPin"] = S.file_hash(external)
-        with patch.dict(S.PROFILES, {"candidate632": self.config}):
+        with patch.dict(S.PROFILES, {"candidate677": self.config}):
             result = S.restore_overwritten_foundation(self.root, self.fetch, symbols=symbols)
         self.assertEqual([str(external)], result["restored"])
         self.assertEqual(self.config["pin"], S.file_hash(external))
@@ -204,6 +204,49 @@ class FoundationRestore(unittest.TestCase):
         with self.assertRaisesRegex(S.GateError, "Changed Foundation Apps artifact"):
             self.restore()
         self.assertEqual(before, self.collision.read_bytes())
+
+    def probe(self, friend=False):
+        self.collision.unlink()
+        identity = dict(self.identity, version="28.0.11.669")
+        path = self.dependencies / "Origo_Bifrost Foundation_28.0.11.669.app"
+        fixture(path, identity)
+        if friend:
+            with_friend(path)
+        self.config["probeIdentity"] = identity
+        self.config["probeTestPin" if friend else "probePin"] = S.file_hash(path)
+        return path
+
+    def test_pinned_release_probe_stages677_and_preserves_helper_input_path(self):
+        path = self.probe()
+        result = self.restore()
+        self.assertEqual([str(path)], result["restored"])
+        self.assertEqual(self.identity, S.package_info(path)["identity"])
+        self.assertEqual(self.config["pin"], S.file_hash(path))
+        self.assertEqual("already-approved", self.restore()["action"])
+        self.assertEqual(1, self.calls)
+
+    def test_pinned_release_testapps_probe_loses_its_test_friend(self):
+        path = self.probe(friend=True)
+        self.restore()
+        self.assertEqual([], S.package_info(path)["friends"])
+        self.assertEqual(self.config["pin"], S.file_hash(path))
+
+    def test_unrecognized_release_bytes_are_never_replaced(self):
+        path = self.probe()
+        before = path.read_bytes()
+        self.config["probePin"] = "0" * 64
+        with self.assertRaisesRegex(S.GateError, "Unapproved Foundation"):
+            self.restore()
+        self.assertEqual(before, path.read_bytes())
+        self.assertEqual(0, self.calls)
+
+    def test_invalid_download_leaves_the_release_probe_intact(self):
+        path = self.probe()
+        before = path.read_bytes()
+        self.config["artifacts"]["Apps"] = (13435013060, "0" * 64)
+        with self.assertRaisesRegex(S.GateError, "Changed Foundation Apps artifact"):
+            self.restore()
+        self.assertEqual(before, path.read_bytes())
 
 
 class PrecompileCache(unittest.TestCase):

@@ -319,11 +319,19 @@ codeunit 97090 "Whse InvtMove Reg Tests ori"
         Dispatcher: Codeunit "Dispatcher ori";
         RequestContent: BigText;
         ResponseContent: BigText;
+        RequestJson: JsonObject;
         ResponseContentType: Text[100];
         ResponseBody: Text;
     begin
         // The public dispatcher, called directly so the lowered caller needs no test helper codeunit.
         Clear(ResponseJson);
+        if RequestText = '' then
+            RequestText := '{}';
+        if RequestJson.ReadFrom(RequestText) then
+            if not RequestJson.Contains('expectedCount') then begin
+                RequestJson.Add('expectedCount', 1);
+                RequestJson.WriteTo(RequestText);
+            end;
         RequestContent.AddText(RequestText);
         Dispatcher.Execute(
             Enum::"Message Type ori"::"Warehouse.InventoryMovement.Register",

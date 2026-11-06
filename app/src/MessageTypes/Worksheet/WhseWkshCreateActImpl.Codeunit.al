@@ -403,6 +403,7 @@ codeunit 10078461 "Whse Wksh CreateAct Impl ori" implements "Msg Interface ori",
         AllowedKeys.Add('assignedUserId');
         AllowedKeys.Add('sortingMethod');
         AllowedKeys.AddRange(GroupingKeys);
+        AllowedKeys.Add('expectedCount');
         Values.RefuseUnknownKeys(RequestJson, AllowedKeys, Argument, '', -1);
         Helper.ReadWorksheetKeys(RequestJson, Argument, IsPick, TemplateName, WorksheetName, LocationCode);
         Context.ReadText(RequestJson, 'assignedUserId', 50, Argument, AssignedText, Present, 'assignedUserId');

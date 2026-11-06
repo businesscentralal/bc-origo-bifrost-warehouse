@@ -256,10 +256,18 @@ codeunit 97023 "Whse Posting Gate Tests ori"
         Dispatcher: Codeunit "Dispatcher ori";
         RequestContent: BigText;
         ResponseContent: BigText;
+        RequestJson: JsonObject;
         ResponseContentType: Text[100];
         ResponseText: Text;
     begin
         Clear(ResponseJson);
+        if RequestText = '' then
+            RequestText := '{}';
+        if RequestJson.ReadFrom(RequestText) then
+            if not RequestJson.Contains('expectedCount') then begin
+                RequestJson.Add('expectedCount', 1);
+                RequestJson.WriteTo(RequestText);
+            end;
         RequestContent.AddText(RequestText);
         Dispatcher.Execute(
             Enum::"Message Type ori"::"Warehouse.Shipment.Post",
@@ -327,10 +335,18 @@ codeunit 97023 "Whse Posting Gate Tests ori"
         Dispatcher: Codeunit "Dispatcher ori";
         RequestContent: BigText;
         ResponseContent: BigText;
+        RequestJson: JsonObject;
         ResponseContentType: Text[100];
         ResponseText: Text;
     begin
         Clear(ResponseJson);
+        if RequestText = '' then
+            RequestText := '{}';
+        if RequestJson.ReadFrom(RequestText) then
+            if not RequestJson.Contains('expectedCount') then begin
+                RequestJson.Add('expectedCount', 1);
+                RequestJson.WriteTo(RequestText);
+            end;
         RequestContent.AddText(RequestText);
         Dispatcher.Execute(
             MessageType,

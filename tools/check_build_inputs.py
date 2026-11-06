@@ -38,7 +38,7 @@ def check_project(project):
         if dependency["id"].lower() == FOUNDATION_ID:
             if (dependency["name"], dependency["publisher"]) != ("Bifrost Foundation", "Origo"):
                 errors.append("Foundation dependency identity does not match its AppId")
-            floor = (28, 0, 10, 632) if manifest["id"].lower() == WAREHOUSE_TEST_ID else (28, 0, 3, 530)
+            floor = (28, 0, 12, 677) if manifest["id"].lower() == WAREHOUSE_TEST_ID else (28, 0, 3, 530)
             if tuple(map(int, dependency["version"].split("."))) < floor:
                 errors.append("Foundation dependency is below " + ".".join(map(str, floor)))
 

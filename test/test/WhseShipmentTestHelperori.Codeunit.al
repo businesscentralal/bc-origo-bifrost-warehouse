@@ -169,31 +169,9 @@ codeunit 97021 "Whse Shipment Test Helper ori"
     /// <returns>True when the response parses as JSON.</returns>
     internal procedure RunMessage(MessageType: Enum "Message Type ori"; Subject: Text; RequestText: Text; var ResponseJson: JsonObject; OmitCommit: Boolean): Boolean
     var
-        Dispatcher: Codeunit "Dispatcher ori";
-        RequestContent: BigText;
-        ResponseContent: BigText;
-        ResponseContentType: Text[100];
-        ResponseText: Text;
-        SubjectText: Text[250];
+        Confirmation: Codeunit "Whse Test Confirmation ori";
     begin
-        Clear(ResponseJson);
         Commit();
-        SubjectText := CopyStr(Subject, 1, MaxStrLen(SubjectText));
-        if RequestText <> '' then
-            RequestContent.AddText(RequestText);
-        Dispatcher.Execute(
-            MessageType,
-            Enum::"Message Version ori"::"1.0",
-            SubjectText,
-            'Bifrost Warehouse Tests',
-            'text/json',
-            RequestContent,
-            ResponseContent,
-            ResponseContentType,
-            OmitCommit);
-        if ResponseContent.Length() = 0 then
-            exit(false);
-        ResponseContent.GetSubText(ResponseText, 1, ResponseContent.Length());
-        exit(ResponseJson.ReadFrom(ResponseText));
+        exit(Confirmation.RunMessage(MessageType, Subject, RequestText, ResponseJson, OmitCommit));
     end;
 }

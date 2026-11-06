@@ -341,6 +341,7 @@ codeunit 10078449 "Whse PhysInvt Reg Impl ori" implements "Msg Interface ori", "
         AllowedKeys.Add('journalBatchName');
         AllowedKeys.Add('locationCode');
         AllowedKeys.Add('lines');
+        AllowedKeys.Add('expectedCount');
         Values.RefuseUnknownKeys(RequestJson, AllowedKeys, Argument, '', -1);
         Helper.ReadBatchKeys(RequestJson, Argument, TemplateName, BatchName, LocationCode);
         Values.ReadArray(RequestJson, 'lines', Argument, Lines, LinesPresent);

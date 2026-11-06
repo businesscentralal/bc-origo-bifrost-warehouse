@@ -63,8 +63,8 @@ class BuildInputsTests(unittest.TestCase):
         self.manifest["id"] = GUARD.WAREHOUSE_TEST_ID
         self.manifest["dependencies"] = [{"id": GUARD.FOUNDATION_ID, "name": "Bifrost Foundation",
                                            "publisher": "Origo", "version": "28.0.3.530"}]
-        self.assertEqual(["Foundation dependency is below 28.0.10.632"], self.check())
-        self.manifest["dependencies"][0]["version"] = "28.0.10.632"
+        self.assertEqual(["Foundation dependency is below 28.0.12.677"], self.check())
+        self.manifest["dependencies"][0]["version"] = "28.0.12.677"
         self.assertEqual([], self.check())
         self.manifest["id"] = "product-id"
         self.manifest["dependencies"][0]["version"] = "28.0.3.530"

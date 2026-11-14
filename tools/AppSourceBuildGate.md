@@ -56,7 +56,7 @@ The separate controlled523 Foundation fixture is main
 `Origo_Bifrost Foundation_28.0.2.523.app`, SHA256
 `5901bebe66b44e91ed6110620e62ee45d122ba9e0378dcfda4aeef4d00d3ae0f`.
 The controlled fixture retains these exact bytes. Current actual precompile inventory
-requires the internally approved exact candidate530 below, with zero product self-app inputs. Test must use the exact just-built product. Changing the approved
+requires the internally approved exact candidate530 below, with zero product self-app inputs. Test must use the exact just-built product, except when a PR does not touch `app/` and AL-Go incremental builds place a baseline-reused product under `.buildartifacts/Apps` (see Baseline product reuse below). Changing the approved
 input requires a reviewed tooling change; the app dependency floor is
 **28.0.3.530** (`tools/check_build_inputs.py` refuses a lower floor). Symbol inventories are independent of the donated manifest guard.
 
@@ -64,9 +64,28 @@ Run/attempt/job, checkout SHA, compiled-source SHA, build mode, script hashes,
 package/content digests and source hashes are retained in sanitized JSON under
 `.buildartifacts/AppSourceGate/<mode>`. The checkout can be a synthetic PR merge;
 the manifest's compiled-source commit is checked independently. Existing receipts
-cannot be reused. Missing/displaced hooks, truncated later logs, disabled cops,
+from a prior job cannot be reused; Initialize requires a clean AppSourceGate directory. Missing/displaced hooks, truncated later logs, disabled cops,
 fallbacks, workspace compilation and unsupported compiler collection fail closed.
 Container-only compilation needs a supported identity collector before acceptance.
+
+## Baseline product reuse (incremental builds, #95)
+
+When a pull request does **not** touch `app/` and AL-Go incremental builds reuse the
+product package from the baseline workflow run (copied into `.buildartifacts/Apps`
+without a current-run product compile), Finalize/Pipeline may accept that package
+instead of an `app` compile receipt. Evidence collected at Finalize (not from
+`BuildOutput.txt`) is:
+
+- `_baselineWorkflowRunId` / `baselineWorkflowRunId`: non-empty numeric baseline run id
+- `_baselineWorkflowSHA` / `baselineWorkflowSHA`: 40-hex baseline workflow SHA
+- exactly one `.buildartifacts/Apps/*.app` whose NAVX `sourceCommit` equals that SHA
+  and whose identity matches `app/app.json`
+
+In Test mode, BeforeCompile only seeks this reuse when compiling the test app (so a
+`tools/**` full rebuild can still compile the product normally). The test compile must
+consume the exact reused product bytes (`packageSha256`). **Signed** builds still require
+a current-run product compile receipt; baseline reuse is refused there. Diffs that touch
+`app/`, or missing/invalid baseline env or package binding, fail closed.
 
 ## Infrastructure and acceptance holds
 

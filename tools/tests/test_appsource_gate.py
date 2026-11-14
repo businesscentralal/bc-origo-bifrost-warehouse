@@ -695,6 +695,200 @@ class GenuinePackages(unittest.TestCase):
         with self.assertRaisesRegex(G.GateError, '128 packages'):
             G.symbol_inventory(folder)
 
+class ProductReuse(unittest.TestCase):
+    """Baseline product reuse when the PR does not touch app/ (#gate incremental)."""
+
+    PRODUCT_ID = "47acac54-3873-496f-9e88-157f36413e89"
+    BASELINE_SHA = "e" * 40
+    BASELINE_RUN = "42526647727"
+
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        self.root = Path(self.tmp)
+        self.addCleanup(shutil.rmtree, self.tmp, True)
+        context = dict(run="fixture", attempt="1", job="reuse-fixture", sourceCommit="1" * 40,
+                       checkoutSha="1" * 40, mode="Default", project=".",
+                       buildUrl="https://example.invalid/reuse-fixture")
+        self.context = context
+        directory = self.root / ".buildartifacts/AppSourceGate/Default"
+        directory.mkdir(parents=True)
+        # Real pipeline: Initialize pins logPrefixSha256 to the empty-file hash;
+        # Default reuse never compiles, so BuildOutput stays empty.
+        (self.root / "BuildOutput.txt").write_bytes(b"")
+        state = dict(context=context, startedNs=0, logBytes=0,
+                     logPrefixSha256=G.file_hash(self.root / "BuildOutput.txt"),
+                     receipts={}, hookHashes={})
+        (directory / "state.json").write_text(json.dumps(state))
+        (self.root / "app").mkdir()
+        (self.root / "app/app.json").write_text(json.dumps({
+            "id": self.PRODUCT_ID, "name": "Bifrost Warehouse",
+            "publisher": "Origo", "version": "28.3.3.0"
+        }))
+        (self.root / "test").mkdir()
+        (self.root / "test/app.json").write_text(json.dumps({
+            "id": "6ae41d19-d457-4d62-bd87-0413ff18de75", "name": "Bifrost Warehouse - Tests",
+            "publisher": "Origo", "version": "1.0.0.0", "dependencies": []
+        }))
+        apps = self.root / ".buildartifacts/Apps"
+        apps.mkdir(parents=True)
+        self.package = apps / "product.app"
+        self.package.write_bytes(b"baseline-reused-product-bytes")
+        self.package_sha = G.file_hash(self.package)
+        (self.root / "symbols").mkdir()
+        (self.root / "compiler-symbols").mkdir()
+
+    def reuse(self, **overrides):
+        payload = dict(allowed=True, appFolderUntouched=True,
+                       baselineWorkflowRunId=self.BASELINE_RUN,
+                       baselineWorkflowSHA=self.BASELINE_SHA,
+                       packageFile=".buildartifacts/Apps/product.app",
+                       packageSha256=self.package_sha,
+                       changedPaths=["test/x.al", "CHANGELOG.md"])
+        payload.update(overrides)
+        return payload
+
+    def _product_info(self, **overrides):
+        info = {"identity": {"id": self.PRODUCT_ID, "publisher": "Origo",
+                             "name": "Bifrost Warehouse", "version": "28.3.3.0"},
+                "sha256": self.package_sha, "contentSha256": "c" * 64,
+                "friends": [], "sourceCommit": self.BASELINE_SHA, "compilerVersion": "18.0.0.0",
+                "buildUrl": "https://example.invalid/baseline"}
+        info.update(overrides)
+        return info
+
+    def test_finalize_accepts_baseline_reused_product_when_app_untouched(self):
+        with patch.object(G, "package_info", return_value=self._product_info()):
+            result = G.reconcile(self.root, self.context, "finalize", product_reuse=self.reuse())
+        self.assertTrue(result["outputs"][0]["productReuse"])
+
+    def test_finalize_still_requires_compile_when_app_touched_or_reuse_unverified(self):
+        with self.assertRaises(G.GateError):
+            G.reconcile(self.root, self.context, "finalize")
+        with self.assertRaises(G.GateError):
+            G.reconcile(self.root, self.context, "finalize",
+                        product_reuse=self.reuse(appFolderUntouched=False))
+        with self.assertRaises(G.GateError):
+            G.reconcile(self.root, self.context, "finalize",
+                        product_reuse=self.reuse(allowed=False))
+        with self.assertRaises(G.GateError):
+            G.reconcile(self.root, self.context, "finalize",
+                        product_reuse=self.reuse(baselineWorkflowRunId=""))
+        with self.assertRaises(G.GateError):
+            G.reconcile(self.root, self.context, "finalize",
+                        product_reuse=self.reuse(baselineWorkflowRunId="not-numeric"))
+        with self.assertRaises(G.GateError):
+            G.reconcile(self.root, self.context, "finalize",
+                        product_reuse=self.reuse(baselineWorkflowSHA=""))
+        with self.assertRaises(G.GateError):
+            G.reconcile(self.root, self.context, "finalize",
+                        product_reuse=self.reuse(baselineWorkflowSHA="abcd"))
+        with patch.object(G, "package_info", return_value=self._product_info(sourceCommit="f" * 40)):
+            with self.assertRaises(G.GateError):
+                G.reconcile(self.root, self.context, "finalize", product_reuse=self.reuse())
+
+    def test_signed_rejects_baseline_reuse(self):
+        with patch.object(G, "package_info", return_value=self._product_info()):
+            with self.assertRaises(G.GateError):
+                G.reconcile(self.root, self.context, "signed",
+                            signature={"status": "Valid", "signerThumbprint": "ab",
+                                       "provider": "Windows Get-AuthenticodeSignature",
+                                       "sha256": self.package_sha},
+                            product_reuse=self.reuse())
+
+    def test_test_stage_finalize_accepts_baseline_reused_product(self):
+        """Test mode: only testApp was compiled; product comes from baseline Apps."""
+        context = dict(self.context, mode="Test", job="reuse-test-fixture",
+                       buildUrl="https://example.invalid/reuse-test-fixture")
+        directory = self.root / ".buildartifacts/AppSourceGate/Test"
+        directory.mkdir(parents=True)
+        (self.root / "test/Fixture.al").write_text("test fixture source")
+        test_src = "test/Fixture.al"
+        test_sha = G.file_hash(self.root / test_src)
+        tool = {"sha256": "a" * 64}
+        parameters = dict(enableCodeCop=True, enableUICop=True, enableAppSourceCop=True,
+                          failOn="warning", escapeFromCops=False, workspaceCompilation=False,
+                          rulesetValidated=True, compilerVersion="18.0.0.0",
+                          tools={name: tool for name in
+                                 ("compiler", "CodeCop", "UICop", "AppSourceCop",
+                                  "Analyzers.Common", "helper", "alpacaOverride")})
+        test_pkg_sha = "b" * 64
+        test_content = "d" * 64
+        state = dict(context=context, startedNs=0, logBytes=0,
+                     logPrefixSha256=G.file_hash(self.root / "BuildOutput.txt"),
+                     hookHashes={},
+                     receipts={"testApp": {
+                         "context": context, "appType": "testApp", "parameters": parameters,
+                         "package": {"sha256": test_pkg_sha, "contentSha256": test_content},
+                         "sourceFiles": [{"file": test_src, "sha256": test_sha}],
+                     }})
+        (directory / "state.json").write_text(json.dumps(state))
+        test_apps = self.root / ".buildartifacts/TestApps"
+        test_apps.mkdir(parents=True)
+        (test_apps / "test.app").write_bytes(b"test-app-bytes")
+        product_info = self._product_info()
+        test_info = {"identity": {"id": "6ae41d19-d457-4d62-bd87-0413ff18de75", "publisher": "Origo",
+                                  "name": "Bifrost Warehouse - Tests", "version": "1.0.0.0"},
+                     "sha256": test_pkg_sha, "contentSha256": test_content,
+                     "friends": [], "sourceCommit": self.BASELINE_SHA, "compilerVersion": "18.0.0.0",
+                     "buildUrl": context["buildUrl"]}
+
+        def package_info(path):
+            path = Path(path)
+            if "TestApps" in path.parts or path.name == "test.app":
+                return test_info
+            return product_info
+
+        with patch.object(G, "package_info", side_effect=package_info):
+            result = G.reconcile(self.root, context, "finalize", product_reuse=self.reuse())
+        reused = [o for o in result["outputs"] if o.get("productReuse")]
+        self.assertEqual(1, len(reused))
+        self.assertEqual(2, len(result["outputs"]))
+
+    def test_before_compile_test_app_accepts_baseline_reused_product(self):
+        """Test BeforeCompile: test app may consume baseline-reused product bytes."""
+        context = dict(self.context, mode="Test", job="reuse-before-fixture",
+                       buildUrl="https://example.invalid/reuse-before-fixture")
+        directory = self.root / ".buildartifacts/AppSourceGate/Test"
+        directory.mkdir(parents=True)
+        state = dict(context=context, startedNs=0, logBytes=0,
+                     logPrefixSha256=G.file_hash(self.root / "BuildOutput.txt"),
+                     receipts={}, hookHashes={})
+        (directory / "state.json").write_text(json.dumps(state))
+        foundation_id = "7505e808-6e52-4b96-a328-82573391297a"
+        foundation = {"sha256": "1" * 64, "bytes": 10, "expandedBytes": 10,
+                      "identity": {"id": foundation_id, "publisher": "Origo",
+                                   "name": "Bifrost Foundation", "version": "28.0.11.669"},
+                      "friends": [], "sourceCommit": "a" * 40, "compilerVersion": "18.0.0.0",
+                      "buildUrl": "https://example.invalid/foundation", "file": "Foundation.app"}
+        product = {"sha256": self.package_sha, "bytes": 20, "expandedBytes": 20,
+                   "identity": {"id": self.PRODUCT_ID, "publisher": "Origo",
+                                "name": "Bifrost Warehouse", "version": "28.3.3.0"},
+                   "friends": [], "sourceCommit": self.BASELINE_SHA, "compilerVersion": "18.0.0.0",
+                   "buildUrl": "https://example.invalid/baseline", "file": "Product.app"}
+
+        def fake_inventory(folder, policy="appCache", expanded_exemptions=()):
+            folder = Path(folder)
+            if folder.name == "compiler-symbols":
+                return G.SymbolInventory([dict(foundation)])
+            return G.SymbolInventory([dict(foundation), dict(product)])
+
+        request = dict(context=context, kind="final",
+                       manifest=str(self.root / "test/app.json"),
+                       symbolsFolder=str(self.root / "symbols"),
+                       compilerSymbolsFolder=str(self.root / "compiler-symbols"),
+                       productReuse=self.reuse())
+        with patch.object(G, "collapse_equivalent_compiler_symbols", return_value=[]), \
+             patch.object(G, "symbol_inventory", side_effect=fake_inventory), \
+             patch.object(G, "check_foundation_candidate",
+                          return_value={"candidate": "candidate669", "artifactId": "1",
+                                        "archiveSha256": "0" * 64, "signatureTrustVerified": False,
+                                        "runnerInputEqualityVerified": False}), \
+             patch.object(G, "resolve_helper_inputs",
+                          return_value={"copies": [], "trace": [], "available": []}):
+            snapshot = G._before_compile(self.root, request)
+        self.assertEqual("testApp", snapshot["appType"])
+        self.assertTrue((directory / "before.json").is_file())
 
 if __name__ == "__main__":
     unittest.main()
+

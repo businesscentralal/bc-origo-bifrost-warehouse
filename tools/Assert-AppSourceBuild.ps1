@@ -98,6 +98,107 @@ function Get-Setting {
     return $property.Value
 }
 
+
+function Get-PullRequestChangedPaths {
+    param([string] $RepositoryRoot)
+    # Fail closed: the AppSource gate must know whether app/ changed before it
+    # may accept a baseline-reused product package.
+    $paths = $null
+    if ($env:GITHUB_EVENT_PATH -and (Test-Path -LiteralPath $env:GITHUB_EVENT_PATH -PathType Leaf)) {
+        $event = Get-Content -LiteralPath $env:GITHUB_EVENT_PATH -Raw -Encoding UTF8 | ConvertFrom-Json
+        $pull = $event.PSObject.Properties['pull_request']
+        if ($null -ne $pull -and $null -ne $pull.Value) {
+            $base = [string]$pull.Value.base.sha
+            $head = [string]$pull.Value.head.sha
+            if ($base -match '^[a-f0-9]{40}$' -and $head -match '^[a-f0-9]{40}$') {
+                & git -C $RepositoryRoot cat-file -e "$base^{commit}" 2>$null
+                if ($LASTEXITCODE -ne 0) {
+                    & git -C $RepositoryRoot fetch --no-tags --depth 1 origin $base 2>$null | Out-Null
+                }
+                $paths = @(& git -C $RepositoryRoot -c core.quotepath=false diff --name-only "$base...$head")
+                if ($LASTEXITCODE -ne 0) {
+                    $paths = $null
+                }
+            }
+        }
+    }
+    if ($null -eq $paths) {
+        & git -C $RepositoryRoot rev-parse --verify origin/main 2>$null | Out-Null
+        if ($LASTEXITCODE -ne 0) {
+            throw 'Pull request changed paths unavailable (no event payload base/head and no origin/main); AppSource gate fails closed.'
+        }
+        $paths = @(& git -C $RepositoryRoot -c core.quotepath=false diff --name-only 'origin/main...HEAD')
+        if ($LASTEXITCODE -ne 0) {
+            throw 'Pull request changed paths unavailable (git diff origin/main...HEAD failed); AppSource gate fails closed.'
+        }
+    }
+    return @($paths | ForEach-Object { $_.Replace('\', '/') })
+}
+
+function Test-AppFolderUntouched {
+    param([string[]] $ChangedPaths)
+    foreach ($path in @($ChangedPaths)) {
+        if ($path -ceq 'app' -or $path.StartsWith('app/')) {
+            return $false
+        }
+    }
+    return $true
+}
+
+function Get-BaselineProductReuseEvidence {
+    param([string] $RepositoryRoot)
+    # AL-Go prints "Get unmodified apps from baseline workflow run" to job stdout,
+    # not BuildOutput.txt. Finalize evidence is the baseline env + Apps package.
+    $baselineRun = [string]$env:_baselineWorkflowRunId
+    if (-not $baselineRun) { $baselineRun = [string]$env:baselineWorkflowRunId }
+    $baselineSha = [string]$env:_baselineWorkflowSHA
+    if (-not $baselineSha) { $baselineSha = [string]$env:baselineWorkflowSHA }
+    if ($baselineRun -notmatch '^[0-9]+$' -or $baselineSha -notmatch '^[a-f0-9]{40}$') {
+        return $null
+    }
+    $apps = @(Get-ChildItem -LiteralPath (Join-Path $RepositoryRoot '.buildartifacts/Apps') -Filter '*.app' -File -ErrorAction SilentlyContinue)
+    if ($apps.Count -ne 1) {
+        return $null
+    }
+    $relative = $apps[0].FullName.Substring((Resolve-Path -LiteralPath $RepositoryRoot).Path.Length).TrimStart('\', '/')
+    return @{
+        baselineWorkflowRunId = $baselineRun
+        baselineWorkflowSHA = $baselineSha.ToLowerInvariant()
+        packageFile = $relative.Replace('\', '/')
+        packageSha256 = (Get-FileHash -LiteralPath $apps[0].FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+    }
+}
+
+function Get-ProductReuseRequest {
+    param([string] $RepositoryRoot, $State)
+    $hasAppReceipt = $false
+    if ($null -ne $State -and $null -ne $State.receipts) {
+        $hasAppReceipt = $null -ne $State.receipts.PSObject.Properties['app']
+    }
+    if ($hasAppReceipt) {
+        return $null
+    }
+    $changed = Get-PullRequestChangedPaths -RepositoryRoot $RepositoryRoot
+    $untouched = Test-AppFolderUntouched -ChangedPaths $changed
+    if (-not $untouched) {
+        return $null
+    }
+    $evidence = Get-BaselineProductReuseEvidence -RepositoryRoot $RepositoryRoot
+    if ($null -eq $evidence) {
+        throw 'Product compile receipt missing and baseline product reuse could not be verified from baseline env/Apps; AppSource gate fails closed.'
+    }
+    Write-Host ("AppSource gate: accepting baseline-reused product package (app/ untouched; baselineRun={0}; baselineSHA={1})." -f $evidence.baselineWorkflowRunId, $evidence.baselineWorkflowSHA)
+    return @{
+        allowed = $true
+        appFolderUntouched = $true
+        changedPaths = @($changed)
+        baselineWorkflowRunId = $evidence.baselineWorkflowRunId
+        baselineWorkflowSHA = $evidence.baselineWorkflowSHA
+        packageFile = $evidence.packageFile
+        packageSha256 = $evidence.packageSha256
+    }
+}
+
 function Invoke-Gate {
     param([string] $Action, $Request)
     $python = Get-Command python3 -ErrorAction SilentlyContinue
@@ -206,13 +307,29 @@ if ($Stage -eq 'BeforeCompile') {
     $pruneExitCode = $LASTEXITCODE
     $pruneOutput | ForEach-Object { Write-Host $_ }
     if ($pruneExitCode -ne 0) { throw 'Actual precompile cache/baseline preparation failed.' }
-    Invoke-Gate 'before' @{
+    $beforeRequest = @{
         context = $context
         kind = $kind
         manifest = (Join-Path $CompilationParams.appProjectFolder 'app.json')
         symbolsFolder = $CompilationParams.appSymbolsFolder
         compilerSymbolsFolder = (Join-Path $CompilationParams.compilerFolder 'symbols')
     }
+    if ($context.mode -eq 'Test') {
+        # Only the testApp BeforeCompile may need a baseline-reused product. The
+        # product BeforeCompile has no app receipt yet by definition; seeking
+        # reuse there false-fails when tools/** forces a full Test rebuild.
+        $statePath = Join-Path $directory 'state.json'
+        if (Test-Path -LiteralPath $statePath -PathType Leaf) {
+            $productManifest = Get-Content -LiteralPath (Join-Path $Root 'app/app.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+            $compileManifest = Get-Content -LiteralPath (Join-Path $CompilationParams.appProjectFolder 'app.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+            if ([string]$compileManifest.id -cne [string]$productManifest.id) {
+                $state = Get-Content -LiteralPath $statePath -Raw -Encoding UTF8 | ConvertFrom-Json
+                $reuse = Get-ProductReuseRequest -RepositoryRoot $Root -State $state
+                if ($null -ne $reuse) { $beforeRequest.productReuse = $reuse }
+            }
+        }
+    }
+    Invoke-Gate 'before' $beforeRequest
     return
 }
 
@@ -384,4 +501,19 @@ if ($Stage -eq 'Signed') {
         sha256 = (Get-FileReceipt $files[0].FullName).sha256
     }
 }
-Invoke-Gate $Stage.ToLowerInvariant() @{ context = $context; signature = $signature }
+$finalRequest = @{ context = $context; signature = $signature }
+if ($Stage -in @('Finalize', 'Pipeline', 'Signed')) {
+    $statePath = Join-Path $directory 'state.json'
+    if (-not (Test-Path -LiteralPath $statePath -PathType Leaf)) {
+        throw 'PipelineInitialize receipt missing before finalize/pipeline/signed.'
+    }
+    $state = Get-Content -LiteralPath $statePath -Raw -Encoding UTF8 | ConvertFrom-Json
+    $reuse = Get-ProductReuseRequest -RepositoryRoot $Root -State $state
+    if ($null -ne $reuse) {
+        if ($Stage -eq 'Signed') {
+            throw 'Signed stage requires a current-run product compile receipt; baseline reuse is not accepted.'
+        }
+        $finalRequest.productReuse = $reuse
+    }
+}
+Invoke-Gate $Stage.ToLowerInvariant() $finalRequest

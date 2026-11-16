@@ -105,6 +105,7 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
         LineChildren: JsonArray;
         LinesParameter: JsonObject;
     begin
@@ -115,6 +116,7 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
         Parameters.Add(LinesParameter);
         Parameters.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Warehouse receipt line number (inside lines).'));
         Parameters.Add(ContractMgt.Parameter('qtyToReceive', 'number', true, 'Quantity to receive on that line, from zero up to the outstanding quantity (inside lines).'));
+        Parts.AddExpectedCountParameter("Message Type ori"::"Warehouse.Receipt.Post", Parameters);
         exit(true);
     end;
 
@@ -146,7 +148,7 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect(Effect, 'Sets the listed quantities to receive and posts the Warehouse Receipt; Business Central commits the posting. Source documents are received but not invoiced.', 'BIFROST WhsePost ori');
+        Parts.IrreversibleEffect("Message Type ori"::"Warehouse.Receipt.Post", Effect, 'Sets the listed quantities to receive and posts the Warehouse Receipt; Business Central commits the posting. Source documents are received but not invoiced.', 'BIFROST WhsePost ori');
         exit(true);
     end;
 

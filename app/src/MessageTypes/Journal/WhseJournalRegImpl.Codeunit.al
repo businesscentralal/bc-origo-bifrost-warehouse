@@ -107,10 +107,12 @@ codeunit 10078447 "Whse Journal Reg Impl ori" implements "Msg Interface ori", "M
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
     begin
         Parameters.Add(ContractMgt.Parameter('journalTemplateName', 'string', true, 'Warehouse journal template of type Item or Reclassification.'));
         Parameters.Add(ContractMgt.Parameter('journalBatchName', 'string', true, 'Warehouse journal batch name.'));
         Parameters.Add(ContractMgt.Parameter('locationCode', 'string', false, 'Directed location of the batch. Required when subject is empty.'));
+        Parts.AddExpectedCountParameter("Message Type ori"::"Warehouse.Journal.Register", Parameters);
         exit(true);
     end;
 
@@ -166,7 +168,7 @@ codeunit 10078447 "Whse Journal Reg Impl ori" implements "Msg Interface ori", "M
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect(Effect, 'Registers the warehouse journal batch: writes warehouse entries and a warehouse register, posts the item ledger for reclassification lines and deletes the registered lines. Business Central commits the registration.', 'BIFROST Whse - Full ori and BIFROST WhsePost ori');
+        Parts.IrreversibleEffect("Message Type ori"::"Warehouse.Journal.Register", Effect, 'Registers the warehouse journal batch: writes warehouse entries and a warehouse register, posts the item ledger for reclassification lines and deletes the registered lines. Business Central commits the registration.', 'BIFROST Whse - Full ori and BIFROST WhsePost ori');
         exit(true);
     end;
 

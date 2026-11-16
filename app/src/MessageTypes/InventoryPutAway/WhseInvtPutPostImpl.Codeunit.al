@@ -109,6 +109,7 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
         LinesParameter: JsonObject;
         LineChildren: JsonArray;
     begin
@@ -124,6 +125,7 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
         LineChildren.Add(ContractMgt.Parameter('binCode', 'string', false, 'Bin to put the line into. Omitted or empty keeps the bin already on the put-away.'));
         LinesParameter.Add('children', LineChildren);
         Parameters.Add(LinesParameter);
+        Parts.AddExpectedCountParameter("Message Type ori"::"Warehouse.InventoryPutAway.Post", Parameters);
         exit(true);
     end;
 
@@ -192,7 +194,7 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect(Effect, 'Posts the inventory put-away and the source document receipt. Business Central commits the post. invoice true also posts the purchase invoice.', 'BIFROST Whse - Full ori and BIFROST WhsePost ori; BIFROST WhseInv ori when invoice is true');
+        Parts.IrreversibleEffect("Message Type ori"::"Warehouse.InventoryPutAway.Post", Effect, 'Posts the inventory put-away and the source document receipt. Business Central commits the post. invoice true also posts the purchase invoice.', 'BIFROST Whse - Full ori and BIFROST WhsePost ori; BIFROST WhseInv ori when invoice is true');
         exit(true);
     end;
 

@@ -117,4 +117,5 @@ Test range: `97000–97099`.
 | 97064 | permission set `Whse RegUser Tst ori` (#70 allowed-user register tests) |
 | 97065–97079 | Free |
 | 97080–97091 | Tests of #41-#47: `Whse Bin Get Tests ori`, `Whse Bin Create Tests ori`, `Whse DefBin Set Tests ori`, `Whse Movement Create Tests ori`, `Whse Movement Reg Tests ori`, `Whse InvtPick Create Tests ori`, `Whse InvtPick Post Tests ori`, `Whse InvtPut Create Tests ori`, `Whse InvtPut Post Tests ori`, `Whse InvtMove Create Tests ori`, `Whse InvtMove Reg Tests ori`, `Whse Bin Repl Tests ori` |
-| 97092–97099 | Free |
+| 97092 | `Whse Count Help Tests ori` (#97) |
+| 97093–97099 | Free |

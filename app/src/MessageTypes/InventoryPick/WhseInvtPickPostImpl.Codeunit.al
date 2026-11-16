@@ -107,6 +107,7 @@ codeunit 10078424 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
         LinesParameter: JsonObject;
         LineChildren: JsonArray;
     begin
@@ -121,6 +122,7 @@ codeunit 10078424 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
         LineChildren.Add(ContractMgt.Parameter('qtyToHandle', 'number', true, 'Quantity to handle on the line, in the line unit of measure, from zero up to the outstanding quantity and the quantity in the bin.'));
         LinesParameter.Add('children', LineChildren);
         Parameters.Add(LinesParameter);
+        Parts.AddExpectedCountParameter("Message Type ori"::"Warehouse.InventoryPick.Post", Parameters);
         exit(true);
     end;
 
@@ -187,7 +189,7 @@ codeunit 10078424 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect(Effect, 'Posts the inventory pick and the source document shipment. Business Central commits the post. invoice true also posts the sales invoice.', 'BIFROST Whse - Full ori and BIFROST WhsePost ori; BIFROST WhseInv ori when invoice is true');
+        Parts.IrreversibleEffect("Message Type ori"::"Warehouse.InventoryPick.Post", Effect, 'Posts the inventory pick and the source document shipment. Business Central commits the post. invoice true also posts the sales invoice.', 'BIFROST Whse - Full ori and BIFROST WhsePost ori; BIFROST WhseInv ori when invoice is true');
         exit(true);
     end;
 

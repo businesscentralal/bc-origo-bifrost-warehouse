@@ -129,6 +129,7 @@ codeunit 10078449 "Whse PhysInvt Reg Impl ori" implements "Msg Interface ori", "
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
         LineChildren: JsonArray;
         LinesParameter: JsonObject;
     begin
@@ -142,6 +143,7 @@ codeunit 10078449 "Whse PhysInvt Reg Impl ori" implements "Msg Interface ori", "
         Parameters.Add(LinesParameter);
         Parameters.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Line number answered by Warehouse.PhysInventory.Calculate.'));
         Parameters.Add(ContractMgt.Parameter('qtyPhysInventory', 'number', true, 'Counted quantity in the line unit of measure, zero or more.'));
+        Parts.AddExpectedCountParameter("Message Type ori"::"Warehouse.PhysInventory.Register", Parameters);
         exit(true);
     end;
 
@@ -223,7 +225,7 @@ codeunit 10078449 "Whse PhysInvt Reg Impl ori" implements "Msg Interface ori", "
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect(Effect, 'Writes the counted quantities and registers the warehouse physical inventory journal batch: warehouse entries for every difference, a warehouse register, and the registered lines are deleted. Business Central commits the registration.', 'BIFROST Whse - Full ori and BIFROST WhsePost ori');
+        Parts.IrreversibleEffect("Message Type ori"::"Warehouse.PhysInventory.Register", Effect, 'Writes the counted quantities and registers the warehouse physical inventory journal batch: warehouse entries for every difference, a warehouse register, and the registered lines are deleted. Business Central commits the registration.', 'BIFROST Whse - Full ori and BIFROST WhsePost ori');
         exit(true);
     end;
 

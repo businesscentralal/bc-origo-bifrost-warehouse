@@ -69,8 +69,11 @@ codeunit 10078414 "Whse Pick Register Impl ori" implements "Msg Interface ori", 
     end;
 
     procedure GetParameters(var Parameters: JsonArray): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
     begin
-        exit(false);
+        Parts.AddExpectedCountParameter("Message Type ori"::"Warehouse.Pick.Register", Parameters);
+        exit(true);
     end;
 
     procedure GetResponse(var Response: JsonObject): Boolean
@@ -109,7 +112,7 @@ codeunit 10078414 "Whse Pick Register Impl ori" implements "Msg Interface ori", 
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect(Effect, 'Registers the Warehouse Pick, moves it to history and updates the source shipment quantities.', 'BIFROST WhsePost ori');
+        Parts.IrreversibleEffect("Message Type ori"::"Warehouse.Pick.Register", Effect, 'Registers the Warehouse Pick, moves it to history and updates the source shipment quantities.', 'BIFROST WhsePost ori');
         exit(true);
     end;
 
@@ -176,6 +179,7 @@ codeunit 10078414 "Whse Pick Register Impl ori" implements "Msg Interface ori", 
         WhseShipmentHeader: Record "Warehouse Shipment Header";
         WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         WhsePostingGate: Codeunit "Whse Posting Gate ori";
+        Parts: Codeunit "Whse Contract Parts ori";
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
         ShipmentLinesArray: JsonArray;
@@ -192,6 +196,7 @@ codeunit 10078414 "Whse Pick Register Impl ori" implements "Msg Interface ori", 
 
         if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,pickNo=no,no=no', RequestJson) then
             exit;
+        Parts.ReadExpectedCount(RequestJson);
         if not FindWarehousePick(Argument, WarehouseActivityHeader) then
             exit;
 

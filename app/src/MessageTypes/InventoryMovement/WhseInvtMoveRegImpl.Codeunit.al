@@ -121,6 +121,7 @@ codeunit 10078428 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
         LinesParameter: JsonObject;
         LineChildren: JsonArray;
     begin
@@ -131,6 +132,7 @@ codeunit 10078428 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
         LineChildren.Add(ContractMgt.Parameter('qtyToHandle', 'number', true, 'Quantity to handle on that line, from zero up to the outstanding quantity. Zero on every line is refused.'));
         LinesParameter.Add('children', LineChildren);
         Parameters.Add(LinesParameter);
+        Parts.AddExpectedCountParameter("Message Type ori"::"Warehouse.InventoryMovement.Register", Parameters);
         exit(true);
     end;
 
@@ -184,7 +186,7 @@ codeunit 10078428 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect(Effect, 'Registers an inventory movement. Business Central commits the warehouse entries.', 'BIFROST Whse - Full ori and BIFROST WhsePost ori');
+        Parts.IrreversibleEffect("Message Type ori"::"Warehouse.InventoryMovement.Register", Effect, 'Registers an inventory movement. Business Central commits the warehouse entries.', 'BIFROST Whse - Full ori and BIFROST WhsePost ori');
         exit(true);
     end;
 

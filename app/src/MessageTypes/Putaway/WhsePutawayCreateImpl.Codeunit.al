@@ -213,7 +213,6 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
         Argument.AssertVersion1();
         if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,postedWhseReceiptNo=no,receiptNo=no,no=no', RequestJson) then
             exit;
-        Parts.ReadExpectedCount(RequestJson);
 
         if not FindPostedWhseReceiptHeader(Argument, PostedWhseReceiptHeader) then
             exit;

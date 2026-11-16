@@ -205,7 +205,6 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
         Argument.AssertVersion1();
         if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,whseShipmentNo=no,shipmentNo=no,no=no', RequestJson) then
             exit;
-        Parts.ReadExpectedCount(RequestJson);
 
         if not FindWhseShipmentHeader(Argument, WhseShipmentHeader) then
             exit;

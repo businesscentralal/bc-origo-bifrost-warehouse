@@ -183,7 +183,6 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
     var
         WhseReceiptHeader: Record "Warehouse Receipt Header";
         RequestValueReader: Codeunit "Request Value Reader ori";
-        Parts: Codeunit "Whse Contract Parts ori";
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
         SourceToken: JsonToken;
@@ -201,7 +200,6 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
         Argument.AssertIsLicensed();
         Argument.AssertVersion1();
         RequestJson := Argument.GetRequestJson();
-        Parts.ReadExpectedCount(RequestJson);
 
         if not RequestJson.Get('sourceDocuments', SourceToken) then begin
             Argument.RespondWithError(MissingSourcesErr);

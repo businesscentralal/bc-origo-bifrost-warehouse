@@ -109,10 +109,12 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
     begin
         Parameters.Add(ContractMgt.Parameter('sourceDocument', 'string', true, 'Purchase Order, Sales Return Order or Inbound Transfer.'));
         Parameters.Add(ContractMgt.Parameter('sourceNo', 'string', false, 'Source document number. Required when systemId and subject are empty.'));
         Parameters.Add(ContractMgt.Parameter('systemId', 'string', false, 'Source document SystemId. Required when sourceNo and subject are empty.'));
+        Parts.AddExpectedCountParameter("Message Type ori"::"Warehouse.InventoryPutAway.Create", Parameters);
         exit(true);
     end;
 
@@ -198,7 +200,7 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect(Effect, 'Creates an inventory put-away. Business Central commits the put-away when it is created, so a later failure does not roll it back. An existing open put-away is returned and nothing new is written.', 'BIFROST Whse - Full ori');
+        Parts.IrreversibleEffect("Message Type ori"::"Warehouse.InventoryPutAway.Create", Effect, 'Creates an inventory put-away. Business Central commits the put-away when it is created, so a later failure does not roll it back. An existing open put-away is returned and nothing new is written.', 'BIFROST Whse - Full ori');
         exit(true);
     end;
 

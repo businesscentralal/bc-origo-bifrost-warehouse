@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- #97: Every irreversible Warehouse message type names what `expectedCount` counts. The unit is one call (the named document when the call names one), not lines, created documents or ledger entries. The sentence is in `effect.changes` and on the `expectedCount` parameter, in en-US and is-IS. The parameter says to send the same request without `expectedCount` and read `expected`; nothing is changed. The effect stays irreversible. Objects: codeunit 10078459 `Whse Contract Parts ori` and the nineteen irreversible implementations 10078407, 10078409, 10078410, 10078412, 10078414, 10078415, 10078417, 10078421, 10078422, 10078423, 10078424, 10078425, 10078426, 10078427, 10078428, 10078429, 10078447, 10078449, 10078461. Test codeunit 97092 `Whse Count Help Tests ori`. No new app object ID.
+
 - Pin Foundation probing to approved release28.0.11 (#93, PR94). Before dependency installation, stage only the recognized release669 Apps/TestApps inputs to the existing immutable Foundation28.0.12.677 validation artifact required by the test suite. Unknown input bytes still fail; product dependency floor, expectedCount behavior and assertions are unchanged.
 
 - Accept Foundation's root `expectedCount` control in irreversible Warehouse handlers. The full issue #93 suite exposed their incorrect `UnknownParameter` refusal; nested and reversible-write validation remain strict.

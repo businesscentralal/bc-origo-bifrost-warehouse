@@ -69,8 +69,11 @@ codeunit 10078414 "Whse Pick Register Impl ori" implements "Msg Interface ori", 
     end;
 
     procedure GetParameters(var Parameters: JsonArray): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
     begin
-        exit(false);
+        Parts.AddExpectedCountParameter("Message Type ori"::"Warehouse.Pick.Register", Parameters);
+        exit(true);
     end;
 
     procedure GetResponse(var Response: JsonObject): Boolean
@@ -109,7 +112,7 @@ codeunit 10078414 "Whse Pick Register Impl ori" implements "Msg Interface ori", 
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect(Effect, 'Registers the Warehouse Pick, moves it to history and updates the source shipment quantities.', 'BIFROST WhsePost ori');
+        Parts.IrreversibleEffect("Message Type ori"::"Warehouse.Pick.Register", Effect, 'Registers the Warehouse Pick, moves it to history and updates the source shipment quantities.', 'BIFROST WhsePost ori');
         exit(true);
     end;
 

@@ -104,6 +104,7 @@ codeunit 10078407 "Whse Shipment Post Impl ori" implements "Msg Interface ori", 
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
         LineChildren: JsonArray;
         LinesParameter: JsonObject;
     begin
@@ -115,6 +116,7 @@ codeunit 10078407 "Whse Shipment Post Impl ori" implements "Msg Interface ori", 
         Parameters.Add(LinesParameter);
         Parameters.Add(ContractMgt.Parameter('lineNo', 'integer', true, 'Warehouse shipment line number (inside lines).'));
         Parameters.Add(ContractMgt.Parameter('qtyToShip', 'number', true, 'Quantity to ship on that line, from zero up to the outstanding quantity, and at a location that requires pick up to the picked quantity not yet shipped (inside lines).'));
+        Parts.AddExpectedCountParameter("Message Type ori"::"Warehouse.Shipment.Post", Parameters);
         exit(true);
     end;
 
@@ -147,7 +149,7 @@ codeunit 10078407 "Whse Shipment Post Impl ori" implements "Msg Interface ori", 
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect(Effect, 'Sets the listed quantities to ship and posts the Warehouse Shipment, optionally invoicing its source documents; Business Central commits the posting. The warehouse shipment is moved to history when it is fully shipped.', 'BIFROST WhsePost ori; BIFROST WhseInv ori when invoice is true');
+        Parts.IrreversibleEffect("Message Type ori"::"Warehouse.Shipment.Post", Effect, 'Sets the listed quantities to ship and posts the Warehouse Shipment, optionally invoicing its source documents; Business Central commits the posting. The warehouse shipment is moved to history when it is fully shipped.', 'BIFROST WhsePost ori; BIFROST WhseInv ori when invoice is true');
         exit(true);
     end;
 

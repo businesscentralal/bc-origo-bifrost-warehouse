@@ -74,6 +74,7 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
         SourceChildren: JsonArray;
         SourceParameter: JsonObject;
     begin
@@ -85,6 +86,7 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
         Parameters.Add(ContractMgt.Parameter('locationCode', 'string', false, 'Optional source-location check. It does not override the source document.'));
         Parameters.Add(ContractMgt.Parameter('assignedUserId', 'string', false, 'User assigned to each created Warehouse Receipt Header.'));
         Parameters.Add(ContractMgt.Parameter('postingDate', 'string', false, 'Posting date applied to each created Warehouse Receipt Header.'));
+        Parts.AddExpectedCountParameter("Message Type ori"::"Warehouse.Receipt.Create", Parameters);
         exit(true);
     end;
 
@@ -115,7 +117,7 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect(Effect, 'Creates Warehouse Receipt Header and Line records and applies requested header fields. Business Central commits after each receipt header it creates, so the receipts are not rolled back with the caller''s transaction.', 'BIFROST Full ori');
+        Parts.IrreversibleEffect("Message Type ori"::"Warehouse.Receipt.Create", Effect, 'Creates Warehouse Receipt Header and Line records and applies requested header fields. Business Central commits after each receipt header it creates, so the receipts are not rolled back with the caller''s transaction.', 'BIFROST Full ori');
         exit(true);
     end;
 

@@ -137,6 +137,7 @@ codeunit 10078429 "Whse Bin Repl Calc Impl ori" implements "Msg Interface ori", 
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Parts: Codeunit "Whse Contract Parts ori";
     begin
         Parameters.Add(ContractMgt.Parameter('locationCode', 'string', false, 'Directed put-away and pick location. Required when subject is empty.'));
         Parameters.Add(ContractMgt.Parameter('worksheetTemplateName', 'string', true, 'Movement worksheet template name.'));
@@ -147,6 +148,7 @@ codeunit 10078429 "Whse Bin Repl Calc Impl ori" implements "Msg Interface ori", 
         Parameters.Add(ContractMgt.Parameter('allowBreakbulk', 'boolean', false, 'Replenish from another unit of measure when the original unit is not available. Defaults to false.'));
         Parameters.Add(ContractMgt.Parameter('doNotFillQtyToHandle', 'boolean', false, 'Leave quantity to handle at zero on the new worksheet lines. Defaults to false.'));
         Parameters.Add(ContractMgt.Parameter('autoCreateMovement', 'boolean', false, 'Must be false or omitted. This type only writes worksheet lines. Defaults to false.'));
+        Parts.AddExpectedCountParameter("Message Type ori"::"Warehouse.BinReplenishment.Calculate", Parameters);
         exit(true);
     end;
 
@@ -211,7 +213,7 @@ codeunit 10078429 "Whse Bin Repl Calc Impl ori" implements "Msg Interface ori", 
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect(Effect, 'Writes movement worksheet lines for fixed bins below their minimum. It does not create a warehouse movement. Nothing to replenish writes no lines.', 'BIFROST Whse - Full ori');
+        Parts.IrreversibleEffect("Message Type ori"::"Warehouse.BinReplenishment.Calculate", Effect, 'Writes movement worksheet lines for fixed bins below their minimum. It does not create a warehouse movement. Nothing to replenish writes no lines.', 'BIFROST Whse - Full ori');
         exit(true);
     end;
 

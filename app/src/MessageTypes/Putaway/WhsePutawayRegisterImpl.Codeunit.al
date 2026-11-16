@@ -69,8 +69,11 @@ codeunit 10078417 "Whse Putaway Register Impl ori" implements "Msg Interface ori
     end;
 
     procedure GetParameters(var Parameters: JsonArray): Boolean
+    var
+        Parts: Codeunit "Whse Contract Parts ori";
     begin
-        exit(false);
+        Parts.AddExpectedCountParameter("Message Type ori"::"Warehouse.Putaway.Register", Parameters);
+        exit(true);
     end;
 
     procedure GetResponse(var Response: JsonObject): Boolean
@@ -109,7 +112,7 @@ codeunit 10078417 "Whse Putaway Register Impl ori" implements "Msg Interface ori
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect(Effect, 'Registers the Warehouse Put-away, moves it to history and updates bin contents.', 'BIFROST WhsePost ori');
+        Parts.IrreversibleEffect("Message Type ori"::"Warehouse.Putaway.Register", Effect, 'Registers the Warehouse Put-away, moves it to history and updates bin contents.', 'BIFROST WhsePost ori');
         exit(true);
     end;
 

@@ -1713,6 +1713,132 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Slepptu reitnum; stjórnandi hefur lokað fyrir skrif í hann.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method ClosedFieldNextStep - NamedType NextStepLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 3006126556" size-unit="char" translate="yes" xml:space="preserve">
+          <source>expectedCount counts the one named warehouse shipment (1 per call), not its lines, the quantities shipped or the source documents.</source>
+          <target>expectedCount telur eina nefnda vöruhúsaafhendingu (1 fyrir hvert kall), ekki línur hennar, afhent magn eða upprunaskjölin.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eina nefnda vöruhúsaafhendingu (1 fyrir hvert kall), ekki línur hennar, afhent magn eða upprunaskjölin.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType ShipmentPostTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 402689668" size-unit="char" translate="yes" xml:space="preserve">
+          <source>expectedCount counts one call (1), not the warehouse receipts created and not the source documents.</source>
+          <target>expectedCount telur eitt kall (1), ekki vöruhúsamóttökurnar sem eru stofnaðar og ekki upprunaskjölin.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eitt kall (1), ekki vöruhúsamóttökurnar sem eru stofnaðar og ekki upprunaskjölin.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType ReceiptCreateTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 759321424" size-unit="char" translate="yes" xml:space="preserve">
+          <source>expectedCount counts the one named warehouse receipt (1 per call), not its lines or the quantities received.</source>
+          <target>expectedCount telur eina nefnda vöruhúsamóttöku (1 fyrir hvert kall), ekki línur hennar eða móttekið magn.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eina nefnda vöruhúsamóttöku (1 fyrir hvert kall), ekki línur hennar eða móttekið magn.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType ReceiptPostTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 3698379719" size-unit="char" translate="yes" xml:space="preserve">
+          <source>expectedCount counts one call (1), not the warehouse picks created and not their lines.</source>
+          <target>expectedCount telur eitt kall (1), ekki vöruhúsatínslurnar sem eru stofnaðar og ekki línur þeirra.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eitt kall (1), ekki vöruhúsatínslurnar sem eru stofnaðar og ekki línur þeirra.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType PickCreateTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 2763062076" size-unit="char" translate="yes" xml:space="preserve">
+          <source>expectedCount counts the one named warehouse pick (1 per call), not its lines or the quantity registered.</source>
+          <target>expectedCount telur eina nefnda vöruhúsatínslu (1 fyrir hvert kall), ekki línur hennar eða skráð magn.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eina nefnda vöruhúsatínslu (1 fyrir hvert kall), ekki línur hennar eða skráð magn.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType PickRegisterTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 763465549" size-unit="char" translate="yes" xml:space="preserve">
+          <source>expectedCount counts one call (1), not the warehouse put-aways created and not their lines.</source>
+          <target>expectedCount telur eitt kall (1), ekki vöruhúsafrágangana sem eru stofnaðir og ekki línur þeirra.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eitt kall (1), ekki vöruhúsafrágangana sem eru stofnaðir og ekki línur þeirra.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType PutawayCreateTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 3834637626" size-unit="char" translate="yes" xml:space="preserve">
+          <source>expectedCount counts the one named warehouse put-away (1 per call), not its lines or the bin quantities changed.</source>
+          <target>expectedCount telur einn nefndan vöruhúsafrágang (1 fyrir hvert kall), ekki línur hans eða breytt magn í hólfum.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur einn nefndan vöruhúsafrágang (1 fyrir hvert kall), ekki línur hans eða breytt magn í hólfum.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType PutawayRegisterTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 2905091329" size-unit="char" translate="yes" xml:space="preserve">
+          <source>expectedCount counts one call (1), not the warehouse movements created and not their lines.</source>
+          <target>expectedCount telur eitt kall (1), ekki vöruhúsafærslurnar sem eru stofnaðar og ekki línur þeirra.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eitt kall (1), ekki vöruhúsafærslurnar sem eru stofnaðar og ekki línur þeirra.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType MovementCreateTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 1207246726" size-unit="char" translate="yes" xml:space="preserve">
+          <source>expectedCount counts the one named warehouse movement (1 per call), not its lines or the warehouse entries written.</source>
+          <target>expectedCount telur eina nefnda vöruhúsafærslu (1 fyrir hvert kall), ekki línur hennar eða vöruhúsfærslurnar sem eru skrifaðar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eina nefnda vöruhúsafærslu (1 fyrir hvert kall), ekki línur hennar eða vöruhúsfærslurnar sem eru skrifaðar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType MovementRegisterTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 2114821588" size-unit="char" translate="yes" xml:space="preserve">
+          <source>expectedCount counts one call (1), not the inventory picks created and not their lines.</source>
+          <target>expectedCount telur eitt kall (1), ekki birgðatínslurnar sem eru stofnaðar og ekki línur þeirra.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eitt kall (1), ekki birgðatínslurnar sem eru stofnaðar og ekki línur þeirra.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType InvtPickCreateTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 582229632" size-unit="char" translate="yes" xml:space="preserve">
+          <source>expectedCount counts the one named inventory pick (1 per call), not its lines, the quantity posted or the source documents.</source>
+          <target>expectedCount telur eina nefnda birgðatínslu (1 fyrir hvert kall), ekki línur hennar, bókað magn eða upprunaskjölin.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eina nefnda birgðatínslu (1 fyrir hvert kall), ekki línur hennar, bókað magn eða upprunaskjölin.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType InvtPickPostTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 2660821044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>expectedCount counts one call (1), not the inventory put-aways created and not their lines.</source>
+          <target>expectedCount telur eitt kall (1), ekki birgðafrágangana sem eru stofnaðir og ekki línur þeirra.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eitt kall (1), ekki birgðafrágangana sem eru stofnaðir og ekki línur þeirra.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType InvtPutCreateTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 3598175712" size-unit="char" translate="yes" xml:space="preserve">
+          <source>expectedCount counts the one named inventory put-away (1 per call), not its lines, the quantity posted or the source documents.</source>
+          <target>expectedCount telur einn nefndan birgðafrágang (1 fyrir hvert kall), ekki línur hans, bókað magn eða upprunaskjölin.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur einn nefndan birgðafrágang (1 fyrir hvert kall), ekki línur hans, bókað magn eða upprunaskjölin.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType InvtPutPostTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 1501249748" size-unit="char" translate="yes" xml:space="preserve">
+          <source>expectedCount counts one call (1), not the inventory movements created and not their lines.</source>
+          <target>expectedCount telur eitt kall (1), ekki birgðafærslurnar sem eru stofnaðar og ekki línur þeirra.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eitt kall (1), ekki birgðafærslurnar sem eru stofnaðar og ekki línur þeirra.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType InvtMoveCreateTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 1766142767" size-unit="char" translate="yes" xml:space="preserve">
+          <source>expectedCount counts the one named inventory movement (1 per call), not its lines or the warehouse entries written.</source>
+          <target>expectedCount telur eina nefnda birgðafærslu (1 fyrir hvert kall), ekki línur hennar eða vöruhúsfærslurnar sem eru skrifaðar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eina nefnda birgðafærslu (1 fyrir hvert kall), ekki línur hennar eða vöruhúsfærslurnar sem eru skrifaðar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType InvtMoveRegisterTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 902315207" size-unit="char" translate="yes" xml:space="preserve">
+          <source>expectedCount counts one call (1), not the movement worksheet lines written and not a warehouse movement.</source>
+          <target>expectedCount telur eitt kall (1), ekki línur færsluvinnublaðsins sem eru skrifaðar og ekki vöruhúsafærslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eitt kall (1), ekki línur færsluvinnublaðsins sem eru skrifaðar og ekki vöruhúsafærslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType BinReplenishmentTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 2811499356" size-unit="char" translate="yes" xml:space="preserve">
+          <source>expectedCount counts one call (1), not the warehouse journal lines, the warehouse entries or the warehouse register.</source>
+          <target>expectedCount telur eitt kall (1), ekki línur vöruhúsfærslubókarinnar, vöruhúsfærslurnar eða vöruhússkráninguna.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eitt kall (1), ekki línur vöruhúsfærslubókarinnar, vöruhúsfærslurnar eða vöruhússkráninguna.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType JournalRegisterTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 727122132" size-unit="char" translate="yes" xml:space="preserve">
+          <source>expectedCount counts one call (1), not the physical inventory journal lines, the differences or the warehouse entries.</source>
+          <target>expectedCount telur eitt kall (1), ekki línur birgðatalningarfærslubókarinnar, mismuninn eða vöruhúsfærslurnar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eitt kall (1), ekki línur birgðatalningarfærslubókarinnar, mismuninn eða vöruhúsfærslurnar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType PhysInventoryTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 2916933402" size-unit="char" translate="yes" xml:space="preserve">
+          <source>expectedCount counts one call (1), not the worksheet lines, the picks or put-aways created or their lines.</source>
+          <target>expectedCount telur eitt kall (1), ekki línur vinnublaðsins, tínslurnar eða frágangana sem eru stofnaðir eða línur þeirra.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eitt kall (1), ekki línur vinnublaðsins, tínslurnar eða frágangana sem eru stofnaðir eða línur þeirra.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType WorksheetTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 3795734514" size-unit="char" translate="yes" xml:space="preserve">
+          <source>expectedCount counts one call (1), not the records the call creates or changes.</source>
+          <target>expectedCount telur eitt kall (1), ekki færslurnar sem kallið stofnar eða breytir.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eitt kall (1), ekki færslurnar sem kallið stofnar eða breytir.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType OneCallTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3968908717 - Method 1197010441 - NamedType 715742884" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Always checked when sent. Required only when Require Confirmation for Irreversible Messages is enabled in Bifrost Setup (on by default; an administrator can turn it off per company). When enabled, call without expectedCount and read expected; nothing is changed.</source>
+          <target>Alltaf athugað við sendingu. Aðeins krafist þegar kveikt er á Krefjast staðfestingar fyrir óafturkræf skilaboð í Bifröst uppsetningu (kveikt sjálfgefið; stjórnandi getur slökkt á því fyrir hvert fyrirtæki). Þegar kveikt er á því skal senda beiðnina án expectedCount og lesa expected; engu er breytt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Alltaf athugað við sendingu. Aðeins krafist þegar kveikt er á Krefjast staðfestingar fyrir óafturkræf skilaboð í Bifröst uppsetningu (kveikt sjálfgefið; stjórnandi getur slökkt á því fyrir hvert fyrirtæki). Þegar kveikt er á því skal senda beiðnina án expectedCount og lesa expected; engu er breytt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method PreviewHowText - NamedType HowTxt</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3968908717 - Method 4057274724 - NamedType 680257497" size-unit="char" translate="yes" xml:space="preserve">
           <source>Send one of the sorting methods listed in expected.</source>
           <target>Sendu eina af röðunaraðferðunum sem taldar eru upp í expected.</target>

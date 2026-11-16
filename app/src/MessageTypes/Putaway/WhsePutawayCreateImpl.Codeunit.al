@@ -80,6 +80,7 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
         Parts: Codeunit "Whse Contract Parts ori";
     begin
         Parts.AddActivityParameters(Parameters, true);
+        Parts.AddExpectedCountParameter("Message Type ori"::"Warehouse.Putaway.Create", Parameters);
         exit(true);
     end;
 
@@ -120,7 +121,7 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect(Effect, 'Creates or returns Warehouse Activity Header and Line records of type Put-away and applies optional activity fields. Business Central commits each put-away it creates, so the put-away is not rolled back with the caller''s transaction.', 'BIFROST Full ori');
+        Parts.IrreversibleEffect("Message Type ori"::"Warehouse.Putaway.Create", Effect, 'Creates or returns Warehouse Activity Header and Line records of type Put-away and applies optional activity fields. Business Central commits each put-away it creates, so the put-away is not rolled back with the caller''s transaction.', 'BIFROST Full ori');
         // Returning an already-created open put-away makes a repeated call safe.
         Effect.Replace('idempotent', true);
         exit(true);

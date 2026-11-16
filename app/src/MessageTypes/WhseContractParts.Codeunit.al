@@ -458,6 +458,19 @@ codeunit 10078459 "Whse Contract Parts ori"
         Parameters.Add(ContractMgt.Parameter('expectedCount', 'integer', false, ExpectedCountParameterDescription(MessageType)));
     end;
 
+    /// <summary>
+    /// Reads expectedCount on the execute path. Foundation has already checked it (#97).
+    /// The handler does not confirm or refuse the count.
+    /// </summary>
+    /// <param name="RequestJson">The request.</param>
+    /// <returns>True when the request sends expectedCount.</returns>
+    internal procedure ReadExpectedCount(RequestJson: JsonObject): Boolean
+    var
+        Token: JsonToken;
+    begin
+        exit(RequestJson.Get('expectedCount', Token));
+    end;
+
     /// <summary>The expectedCount parameter text: the unit, then how to read it without a side effect.</summary>
     /// <param name="MessageType">The irreversible warehouse type.</param>
     /// <returns>The parameter description in the session language.</returns>

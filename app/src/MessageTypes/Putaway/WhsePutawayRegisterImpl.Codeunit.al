@@ -179,6 +179,7 @@ codeunit 10078417 "Whse Putaway Register Impl ori" implements "Msg Interface ori
         PostedWhseReceiptHeader: Record "Posted Whse. Receipt Header";
         WhseRecordLookup: Codeunit "Whse Record Lookup ori";
         WhsePostingGate: Codeunit "Whse Posting Gate ori";
+        Parts: Codeunit "Whse Contract Parts ori";
         RequestJson: JsonObject;
         ResponseJson: JsonObject;
         ReceiptLinesArray: JsonArray;
@@ -195,6 +196,7 @@ codeunit 10078417 "Whse Putaway Register Impl ori" implements "Msg Interface ori
 
         if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,putawayNo=no,no=no', RequestJson) then
             exit;
+        Parts.ReadExpectedCount(RequestJson);
         if not FindWarehousePutaway(Argument, WarehouseActivityHeader) then
             exit;
 

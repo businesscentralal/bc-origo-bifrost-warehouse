@@ -485,65 +485,38 @@ codeunit 10078459 "Whse Contract Parts ori"
     internal procedure CountDefinition(MessageType: Enum "Message Type ori"): Text
     var
         ShipmentPostTxt: Label 'expectedCount counts the one named warehouse shipment (1 per call), not its lines, the quantities shipped or the source documents.', Comment = 'is-IS=expectedCount telur eina nefnda vöruhúsaafhendingu (1 fyrir hvert kall), ekki línur hennar, afhent magn eða upprunaskjölin.';
-        ReceiptCreateTxt: Label 'expectedCount counts one call (1), not the warehouse receipts created and not the source documents.', Comment = 'is-IS=expectedCount telur eitt kall (1), ekki vöruhúsamóttökurnar sem eru stofnaðar og ekki upprunaskjölin.';
         ReceiptPostTxt: Label 'expectedCount counts the one named warehouse receipt (1 per call), not its lines or the quantities received.', Comment = 'is-IS=expectedCount telur eina nefnda vöruhúsamóttöku (1 fyrir hvert kall), ekki línur hennar eða móttekið magn.';
-        PickCreateTxt: Label 'expectedCount counts one call (1), not the warehouse picks created and not their lines.', Comment = 'is-IS=expectedCount telur eitt kall (1), ekki vöruhúsatínslurnar sem eru stofnaðar og ekki línur þeirra.';
         PickRegisterTxt: Label 'expectedCount counts the one named warehouse pick (1 per call), not its lines or the quantity registered.', Comment = 'is-IS=expectedCount telur eina nefnda vöruhúsatínslu (1 fyrir hvert kall), ekki línur hennar eða skráð magn.';
-        PutawayCreateTxt: Label 'expectedCount counts one call (1), not the warehouse put-aways created and not their lines.', Comment = 'is-IS=expectedCount telur eitt kall (1), ekki vöruhúsafrágangana sem eru stofnaðir og ekki línur þeirra.';
         PutawayRegisterTxt: Label 'expectedCount counts the one named warehouse put-away (1 per call), not its lines or the bin quantities changed.', Comment = 'is-IS=expectedCount telur einn nefndan vöruhúsafrágang (1 fyrir hvert kall), ekki línur hans eða breytt magn í hólfum.';
-        MovementCreateTxt: Label 'expectedCount counts one call (1), not the warehouse movements created and not their lines.', Comment = 'is-IS=expectedCount telur eitt kall (1), ekki vöruhúsafærslurnar sem eru stofnaðar og ekki línur þeirra.';
         MovementRegisterTxt: Label 'expectedCount counts the one named warehouse movement (1 per call), not its lines or the warehouse entries written.', Comment = 'is-IS=expectedCount telur eina nefnda vöruhúsafærslu (1 fyrir hvert kall), ekki línur hennar eða vöruhúsfærslurnar sem eru skrifaðar.';
-        InvtPickCreateTxt: Label 'expectedCount counts one call (1), not the inventory picks created and not their lines.', Comment = 'is-IS=expectedCount telur eitt kall (1), ekki birgðatínslurnar sem eru stofnaðar og ekki línur þeirra.';
         InvtPickPostTxt: Label 'expectedCount counts the one named inventory pick (1 per call), not its lines, the quantity posted or the source documents.', Comment = 'is-IS=expectedCount telur eina nefnda birgðatínslu (1 fyrir hvert kall), ekki línur hennar, bókað magn eða upprunaskjölin.';
-        InvtPutCreateTxt: Label 'expectedCount counts one call (1), not the inventory put-aways created and not their lines.', Comment = 'is-IS=expectedCount telur eitt kall (1), ekki birgðafrágangana sem eru stofnaðir og ekki línur þeirra.';
         InvtPutPostTxt: Label 'expectedCount counts the one named inventory put-away (1 per call), not its lines, the quantity posted or the source documents.', Comment = 'is-IS=expectedCount telur einn nefndan birgðafrágang (1 fyrir hvert kall), ekki línur hans, bókað magn eða upprunaskjölin.';
-        InvtMoveCreateTxt: Label 'expectedCount counts one call (1), not the inventory movements created and not their lines.', Comment = 'is-IS=expectedCount telur eitt kall (1), ekki birgðafærslurnar sem eru stofnaðar og ekki línur þeirra.';
         InvtMoveRegisterTxt: Label 'expectedCount counts the one named inventory movement (1 per call), not its lines or the warehouse entries written.', Comment = 'is-IS=expectedCount telur eina nefnda birgðafærslu (1 fyrir hvert kall), ekki línur hennar eða vöruhúsfærslurnar sem eru skrifaðar.';
-        BinReplenishmentTxt: Label 'expectedCount counts one call (1), not the movement worksheet lines written and not a warehouse movement.', Comment = 'is-IS=expectedCount telur eitt kall (1), ekki línur færsluvinnublaðsins sem eru skrifaðar og ekki vöruhúsafærslu.';
         JournalRegisterTxt: Label 'expectedCount counts one call (1), not the warehouse journal lines, the warehouse entries or the warehouse register.', Comment = 'is-IS=expectedCount telur eitt kall (1), ekki línur vöruhúsfærslubókarinnar, vöruhúsfærslurnar eða vöruhússkráninguna.';
         PhysInventoryTxt: Label 'expectedCount counts one call (1), not the physical inventory journal lines, the differences or the warehouse entries.', Comment = 'is-IS=expectedCount telur eitt kall (1), ekki línur birgðatalningarfærslubókarinnar, mismuninn eða vöruhúsfærslurnar.';
-        WorksheetTxt: Label 'expectedCount counts one call (1), not the worksheet lines, the picks or put-aways created or their lines.', Comment = 'is-IS=expectedCount telur eitt kall (1), ekki línur vinnublaðsins, tínslurnar eða frágangana sem eru stofnaðir eða línur þeirra.';
         OneCallTxt: Label 'expectedCount counts one call (1), not the records the call creates or changes.', Comment = 'is-IS=expectedCount telur eitt kall (1), ekki færslurnar sem kallið stofnar eða breytir.';
     begin
         case MessageType of
             "Message Type ori"::"Warehouse.Shipment.Post":
                 exit(ShipmentPostTxt);
-            "Message Type ori"::"Warehouse.Receipt.Create":
-                exit(ReceiptCreateTxt);
             "Message Type ori"::"Warehouse.Receipt.Post":
                 exit(ReceiptPostTxt);
-            "Message Type ori"::"Warehouse.Pick.Create":
-                exit(PickCreateTxt);
             "Message Type ori"::"Warehouse.Pick.Register":
                 exit(PickRegisterTxt);
-            "Message Type ori"::"Warehouse.Putaway.Create":
-                exit(PutawayCreateTxt);
             "Message Type ori"::"Warehouse.Putaway.Register":
                 exit(PutawayRegisterTxt);
-            "Message Type ori"::"Warehouse.Movement.Create":
-                exit(MovementCreateTxt);
             "Message Type ori"::"Warehouse.Movement.Register":
                 exit(MovementRegisterTxt);
-            "Message Type ori"::"Warehouse.InventoryPick.Create":
-                exit(InvtPickCreateTxt);
             "Message Type ori"::"Warehouse.InventoryPick.Post":
                 exit(InvtPickPostTxt);
-            "Message Type ori"::"Warehouse.InventoryPutAway.Create":
-                exit(InvtPutCreateTxt);
             "Message Type ori"::"Warehouse.InventoryPutAway.Post":
                 exit(InvtPutPostTxt);
-            "Message Type ori"::"Warehouse.InventoryMovement.Create":
-                exit(InvtMoveCreateTxt);
             "Message Type ori"::"Warehouse.InventoryMovement.Register":
                 exit(InvtMoveRegisterTxt);
-            "Message Type ori"::"Warehouse.BinReplenishment.Calculate":
-                exit(BinReplenishmentTxt);
             "Message Type ori"::"Warehouse.Journal.Register":
                 exit(JournalRegisterTxt);
             "Message Type ori"::"Warehouse.PhysInventory.Register":
                 exit(PhysInventoryTxt);
-            "Message Type ori"::"Warehouse.Worksheet.CreateActivities":
-                exit(WorksheetTxt);
             else
                 exit(OneCallTxt);
         end;

@@ -71,7 +71,7 @@ codeunit 10078421 "Whse Movement Create Impl ori" implements "Msg Interface ori"
     /// <returns>Selection description.</returns>
     procedure GetSelectionDescription(): Text
     var
-        SelectionLbl: Label 'Irreversible. Business Central commits the warehouse movement it creates. Use Warehouse.InventoryMovement.Create for a location without directed put-away and pick.', Comment = 'is-IS=Óafturkræft. Business Central staðfestir vöruhúsafærsluna sem það stofnar. Notaðu Warehouse.InventoryMovement.Create fyrir staðsetningu án beinnar innsetningar og tínslu.';
+        SelectionLbl: Label 'Business Central commits the warehouse movement it creates. Use Warehouse.InventoryMovement.Create for a location without directed put-away and pick.', Comment = 'is-IS=Business Central staðfestir vöruhúsafærsluna sem það stofnar. Notaðu Warehouse.InventoryMovement.Create fyrir staðsetningu án beinnar innsetningar og tínslu.';
     begin
         exit(SelectionLbl);
     end;
@@ -107,7 +107,6 @@ codeunit 10078421 "Whse Movement Create Impl ori" implements "Msg Interface ori"
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
-        Parts: Codeunit "Whse Contract Parts ori";
         LineChildren: JsonArray;
         LinesParameter: JsonObject;
     begin
@@ -123,7 +122,6 @@ codeunit 10078421 "Whse Movement Create Impl ori" implements "Msg Interface ori"
         LineChildren.Add(ContractMgt.Parameter('toBin', 'string', true, 'Bin the quantity is placed in.'));
         LinesParameter.Add('children', LineChildren);
         Parameters.Add(LinesParameter);
-        Parts.AddExpectedCountParameter("Message Type ori"::"Warehouse.Movement.Create", Parameters);
         exit(true);
     end;
 
@@ -189,7 +187,7 @@ codeunit 10078421 "Whse Movement Create Impl ori" implements "Msg Interface ori"
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect("Message Type ori"::"Warehouse.Movement.Create", Effect, 'Creates a warehouse movement. Business Central commits the movement when it is created, so a later failure does not roll it back.', 'BIFROST Whse - Full ori');
+        Parts.WriteEffect(Effect, 'Creates a warehouse movement. Business Central commits the movement when it is created, so a later failure does not roll it back.', 'BIFROST Whse - Full ori', false);
         exit(true);
     end;
 

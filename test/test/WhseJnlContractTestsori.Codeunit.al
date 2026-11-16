@@ -29,7 +29,7 @@ codeunit 97062 "Whse Jnl Contract Tests ori"
         AssertContract("Message Type ori"::"Warehouse.PhysInventory.Register", 'irreversible');
         AssertContract("Message Type ori"::"Warehouse.Adjustment.Calculate", 'write');
         AssertContract("Message Type ori"::"Warehouse.Worksheet.GetDocuments", 'write');
-        AssertContract("Message Type ori"::"Warehouse.Worksheet.CreateActivities", 'irreversible');
+        AssertContract("Message Type ori"::"Warehouse.Worksheet.CreateActivities", 'write');
         AssertContract("Message Type ori"::"Warehouse.ActivityLine.Split", 'write');
         AssertContract("Message Type ori"::"Warehouse.ActivityLine.ChangeBin", 'write');
         AssertContract("Message Type ori"::"Warehouse.ActivityLine.SetQtyToHandle", 'write');

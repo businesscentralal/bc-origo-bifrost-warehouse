@@ -139,7 +139,7 @@ codeunit 10078461 "Whse Wksh CreateAct Impl ori" implements "Msg Interface ori",
     /// <returns>Selection description.</returns>
     procedure GetSelectionDescription(): Text
     var
-        SelectionLbl: Label 'Irreversible. Creates warehouse picks or put-aways from the worksheet lines with quantity to handle, optionally grouped per ship-to, item, zone, bin, document or date; Business Central commits the documents it creates. Lines with nothing to handle stay in the worksheet.', Comment = 'is-IS=Óafturkræft. Stofnar tínslur eða frágang vöruhúss úr vinnublaðslínum með magni til meðhöndlunar, valfrjálst flokkað eftir sendist-til, vöru, svæði, hólfi, skjali eða dagsetningu; Business Central staðfestir skjölin sem það stofnar. Línur án magns til meðhöndlunar verða eftir á vinnublaðinu.';
+        SelectionLbl: Label 'Creates warehouse picks or put-aways from the worksheet lines with quantity to handle, optionally grouped per ship-to, item, zone, bin, document or date; Business Central commits the documents it creates. Lines with nothing to handle stay in the worksheet.', Comment = 'is-IS=Stofnar tínslur eða frágang vöruhúss úr vinnublaðslínum með magni til meðhöndlunar, valfrjálst flokkað eftir sendist-til, vöru, svæði, hólfi, skjali eða dagsetningu; Business Central staðfestir skjölin sem það stofnar. Línur án magns til meðhöndlunar verða eftir á vinnublaðinu.';
     begin
         exit(SelectionLbl);
     end;
@@ -175,7 +175,6 @@ codeunit 10078461 "Whse Wksh CreateAct Impl ori" implements "Msg Interface ori",
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
-        Parts: Codeunit "Whse Contract Parts ori";
         LineChildren: JsonArray;
         LinesParameter: JsonObject;
     begin
@@ -198,7 +197,6 @@ codeunit 10078461 "Whse Wksh CreateAct Impl ori" implements "Msg Interface ori",
         Parameters.Add(ContractMgt.Parameter('perBin', 'boolean', false, 'pick only. One pick per bin.'));
         Parameters.Add(ContractMgt.Parameter('perWhseDoc', 'boolean', false, 'pick only. One pick per warehouse document.'));
         Parameters.Add(ContractMgt.Parameter('perDate', 'boolean', false, 'pick only. One pick per due date.'));
-        Parts.AddExpectedCountParameter("Message Type ori"::"Warehouse.Worksheet.CreateActivities", Parameters);
         exit(true);
     end;
 
@@ -272,7 +270,7 @@ codeunit 10078461 "Whse Wksh CreateAct Impl ori" implements "Msg Interface ori",
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect("Message Type ori"::"Warehouse.Worksheet.CreateActivities", Effect, 'Writes quantities to handle on worksheet lines, creates warehouse pick or put-away documents and reduces or deletes the handled worksheet lines. Business Central commits the documents it creates.', 'BIFROST Whse - Full ori');
+        Parts.WriteEffect(Effect, 'Writes quantities to handle on worksheet lines, creates warehouse pick or put-away documents and reduces or deletes the handled worksheet lines. Business Central commits the documents it creates.', 'BIFROST Whse - Full ori', false);
         exit(true);
     end;
 

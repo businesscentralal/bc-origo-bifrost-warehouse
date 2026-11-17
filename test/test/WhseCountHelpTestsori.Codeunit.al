@@ -6,6 +6,7 @@ using System.TestLibraries.Utilities;
 
 /// <summary>
 /// #97: irreversible warehouse types keep that effect and name what expectedCount counts, in en-US and is-IS.
+/// #99: commit-only create and calculate types declare write instead.
 /// </summary>
 codeunit 97092 "Whse Count Help Tests ori"
 {
@@ -91,6 +92,69 @@ codeunit 97092 "Whse Count Help Tests ori"
 
         Assert.IsTrue(Send("Message Type ori"::"Warehouse.Journal.Create", '', '{}', WriteResponse), 'Write call returns JSON.');
         Assert.AreNotEqual('ConfirmationRequired', ResponseCode(WriteResponse), 'A write does not require expectedCount.');
+    end;
+
+    /// <summary>#99 AC01: commit-only create and calculate types declare write and no longer name or declare expectedCount.</summary>
+    [Test]
+    procedure CommitOnlyTypes_DeclareWriteWithoutExpectedCount()
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        MessageType: Enum "Message Type ori";
+        Contract: JsonObject;
+        TypeName: Text;
+    begin
+        // #99 AC01 | Time: independent of WorkDate | Risk: none.
+        GlobalLanguage(1033);
+        foreach MessageType in WriteTypes() do begin
+            TypeName := TypeNameOf(MessageType);
+            Assert.IsTrue(ContractMgt.GetContract(MessageType, Contract), TypeName + ' contract.');
+            Assert.AreEqual('write', EffectKind(Contract), TypeName + ' declares write.');
+            Assert.AreEqual(0, OccurrenceCount(EffectChanges(Contract), 'expectedCount'), TypeName + ' effect names no count.');
+            Assert.IsFalse(HasParameter(Contract, 'expectedCount'), TypeName + ' declares no expectedCount.');
+        end;
+    end;
+
+    /// <summary>#99 AC02: each write type runs without expectedCount while confirmation of irreversible messages is on.</summary>
+    [Test]
+    procedure CommitOnlyTypes_RunWithoutExpectedCount()
+    var
+        MessageType: Enum "Message Type ori";
+        ResponseJson: JsonObject;
+    begin
+        // #99 AC02 | Time: independent of WorkDate | Risk: an empty request creates nothing and returns its own refusal.
+        foreach MessageType in WriteTypes() do begin
+            Assert.IsTrue(Send(MessageType, '', '{}', ResponseJson), TypeNameOf(MessageType) + ' returns JSON.');
+            Assert.AreNotEqual('ConfirmationRequired', ResponseCode(ResponseJson), TypeNameOf(MessageType) + ' does not ask for expectedCount.');
+        end;
+    end;
+
+    /// <summary>#99 AC03: postings and registrations stay irreversible, and the types that remain irreversible are not changed.</summary>
+    [Test]
+    procedure PostingTypes_StayIrreversible()
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        MessageType: Enum "Message Type ori";
+        Contract: JsonObject;
+    begin
+        // #99 AC03 | Time: independent of WorkDate | Risk: none.
+        foreach MessageType in IrreversibleTypes() do begin
+            Assert.IsTrue(ContractMgt.GetContract(MessageType, Contract), TypeNameOf(MessageType) + ' contract.');
+            Assert.AreEqual('irreversible', EffectKind(Contract), TypeNameOf(MessageType) + ' stays irreversible.');
+            Assert.IsTrue(HasParameter(Contract, 'expectedCount'), TypeNameOf(MessageType) + ' still declares expectedCount.');
+        end;
+    end;
+
+    local procedure WriteTypes() Types: List of [Enum "Message Type ori"]
+    begin
+        Types.Add("Message Type ori"::"Warehouse.Receipt.Create");
+        Types.Add("Message Type ori"::"Warehouse.Pick.Create");
+        Types.Add("Message Type ori"::"Warehouse.Putaway.Create");
+        Types.Add("Message Type ori"::"Warehouse.Movement.Create");
+        Types.Add("Message Type ori"::"Warehouse.InventoryPick.Create");
+        Types.Add("Message Type ori"::"Warehouse.InventoryPutAway.Create");
+        Types.Add("Message Type ori"::"Warehouse.InventoryMovement.Create");
+        Types.Add("Message Type ori"::"Warehouse.BinReplenishment.Calculate");
+        Types.Add("Message Type ori"::"Warehouse.Worksheet.CreateActivities");
     end;
 
     local procedure AssertEnglishContract(MessageType: Enum "Message Type ori")
@@ -235,24 +299,15 @@ codeunit 97092 "Whse Count Help Tests ori"
     local procedure IrreversibleTypes() Types: List of [Enum "Message Type ori"]
     begin
         Types.Add("Message Type ori"::"Warehouse.Shipment.Post");
-        Types.Add("Message Type ori"::"Warehouse.Receipt.Create");
         Types.Add("Message Type ori"::"Warehouse.Receipt.Post");
-        Types.Add("Message Type ori"::"Warehouse.Pick.Create");
         Types.Add("Message Type ori"::"Warehouse.Pick.Register");
-        Types.Add("Message Type ori"::"Warehouse.Putaway.Create");
         Types.Add("Message Type ori"::"Warehouse.Putaway.Register");
-        Types.Add("Message Type ori"::"Warehouse.Movement.Create");
         Types.Add("Message Type ori"::"Warehouse.Movement.Register");
-        Types.Add("Message Type ori"::"Warehouse.InventoryPick.Create");
         Types.Add("Message Type ori"::"Warehouse.InventoryPick.Post");
-        Types.Add("Message Type ori"::"Warehouse.InventoryPutAway.Create");
         Types.Add("Message Type ori"::"Warehouse.InventoryPutAway.Post");
-        Types.Add("Message Type ori"::"Warehouse.InventoryMovement.Create");
         Types.Add("Message Type ori"::"Warehouse.InventoryMovement.Register");
-        Types.Add("Message Type ori"::"Warehouse.BinReplenishment.Calculate");
         Types.Add("Message Type ori"::"Warehouse.Journal.Register");
         Types.Add("Message Type ori"::"Warehouse.PhysInventory.Register");
-        Types.Add("Message Type ori"::"Warehouse.Worksheet.CreateActivities");
     end;
 
     local procedure Send(MessageType: Enum "Message Type ori"; Subject: Text; RequestText: Text; var ResponseJson: JsonObject): Boolean

@@ -49,7 +49,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
 
     procedure GetSelectionDescription(): Text
     var
-        SelectionLbl: Label 'Irreversible. Creates a Warehouse Pick from an existing shipment; use Warehouse.Pick.Register after quantities are picked.', Comment = 'is-IS=Óafturkræft. Stofnar tínslu úr fyrirliggjandi afhendingu; notaðu Warehouse.Pick.Register eftir að vörur hafa verið tíndar.';
+        SelectionLbl: Label 'Creates a Warehouse Pick from an existing shipment; use Warehouse.Pick.Register after quantities are picked.', Comment = 'is-IS=Stofnar tínslu úr fyrirliggjandi afhendingu; notaðu Warehouse.Pick.Register eftir að vörur hafa verið tíndar.';
     begin
         exit(SelectionLbl);
     end;
@@ -80,7 +80,6 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
         Parts: Codeunit "Whse Contract Parts ori";
     begin
         Parts.AddActivityParameters(Parameters, true);
-        Parts.AddExpectedCountParameter("Message Type ori"::"Warehouse.Pick.Create", Parameters);
         exit(true);
     end;
 
@@ -119,7 +118,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect("Message Type ori"::"Warehouse.Pick.Create", Effect, 'Creates a warehouse pick with its lines and applies the optional activity fields. Outside Omit Commit the pick is created and committed in its own transaction, so it is not rolled back with the caller''s transaction.', 'BIFROST Full ori');
+        Parts.WriteEffect(Effect, 'Creates a warehouse pick with its lines and applies the optional activity fields. Outside Omit Commit the pick is created and committed in its own transaction, so it is not rolled back with the caller''s transaction.', 'BIFROST Full ori', false);
         exit(true);
     end;
 
@@ -206,7 +205,6 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
         Argument.AssertVersion1();
         if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,whseShipmentNo=no,shipmentNo=no,no=no', RequestJson) then
             exit;
-        Parts.ReadExpectedCount(RequestJson);
 
         if not FindWhseShipmentHeader(Argument, WhseShipmentHeader) then
             exit;

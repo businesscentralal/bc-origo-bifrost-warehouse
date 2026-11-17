@@ -1719,23 +1719,11 @@
           <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eina nefnda vöruhúsaafhendingu (1 fyrir hvert kall), ekki línur hennar, afhent magn eða upprunaskjölin.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType ShipmentPostTxt</note>
         </trans-unit>
-        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 402689668" size-unit="char" translate="yes" xml:space="preserve">
-          <source>expectedCount counts one call (1), not the warehouse receipts created and not the source documents.</source>
-          <target>expectedCount telur eitt kall (1), ekki vöruhúsamóttökurnar sem eru stofnaðar og ekki upprunaskjölin.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eitt kall (1), ekki vöruhúsamóttökurnar sem eru stofnaðar og ekki upprunaskjölin.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType ReceiptCreateTxt</note>
-        </trans-unit>
         <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 759321424" size-unit="char" translate="yes" xml:space="preserve">
           <source>expectedCount counts the one named warehouse receipt (1 per call), not its lines or the quantities received.</source>
           <target>expectedCount telur eina nefnda vöruhúsamóttöku (1 fyrir hvert kall), ekki línur hennar eða móttekið magn.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eina nefnda vöruhúsamóttöku (1 fyrir hvert kall), ekki línur hennar eða móttekið magn.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType ReceiptPostTxt</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 3698379719" size-unit="char" translate="yes" xml:space="preserve">
-          <source>expectedCount counts one call (1), not the warehouse picks created and not their lines.</source>
-          <target>expectedCount telur eitt kall (1), ekki vöruhúsatínslurnar sem eru stofnaðar og ekki línur þeirra.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eitt kall (1), ekki vöruhúsatínslurnar sem eru stofnaðar og ekki línur þeirra.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType PickCreateTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 2763062076" size-unit="char" translate="yes" xml:space="preserve">
           <source>expectedCount counts the one named warehouse pick (1 per call), not its lines or the quantity registered.</source>
@@ -1743,23 +1731,11 @@
           <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eina nefnda vöruhúsatínslu (1 fyrir hvert kall), ekki línur hennar eða skráð magn.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType PickRegisterTxt</note>
         </trans-unit>
-        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 763465549" size-unit="char" translate="yes" xml:space="preserve">
-          <source>expectedCount counts one call (1), not the warehouse put-aways created and not their lines.</source>
-          <target>expectedCount telur eitt kall (1), ekki vöruhúsafrágangana sem eru stofnaðir og ekki línur þeirra.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eitt kall (1), ekki vöruhúsafrágangana sem eru stofnaðir og ekki línur þeirra.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType PutawayCreateTxt</note>
-        </trans-unit>
         <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 3834637626" size-unit="char" translate="yes" xml:space="preserve">
           <source>expectedCount counts the one named warehouse put-away (1 per call), not its lines or the bin quantities changed.</source>
           <target>expectedCount telur einn nefndan vöruhúsafrágang (1 fyrir hvert kall), ekki línur hans eða breytt magn í hólfum.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur einn nefndan vöruhúsafrágang (1 fyrir hvert kall), ekki línur hans eða breytt magn í hólfum.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType PutawayRegisterTxt</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 2905091329" size-unit="char" translate="yes" xml:space="preserve">
-          <source>expectedCount counts one call (1), not the warehouse movements created and not their lines.</source>
-          <target>expectedCount telur eitt kall (1), ekki vöruhúsafærslurnar sem eru stofnaðar og ekki línur þeirra.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eitt kall (1), ekki vöruhúsafærslurnar sem eru stofnaðar og ekki línur þeirra.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType MovementCreateTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 1207246726" size-unit="char" translate="yes" xml:space="preserve">
           <source>expectedCount counts the one named warehouse movement (1 per call), not its lines or the warehouse entries written.</source>
@@ -1767,23 +1743,11 @@
           <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eina nefnda vöruhúsafærslu (1 fyrir hvert kall), ekki línur hennar eða vöruhúsfærslurnar sem eru skrifaðar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType MovementRegisterTxt</note>
         </trans-unit>
-        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 2114821588" size-unit="char" translate="yes" xml:space="preserve">
-          <source>expectedCount counts one call (1), not the inventory picks created and not their lines.</source>
-          <target>expectedCount telur eitt kall (1), ekki birgðatínslurnar sem eru stofnaðar og ekki línur þeirra.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eitt kall (1), ekki birgðatínslurnar sem eru stofnaðar og ekki línur þeirra.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType InvtPickCreateTxt</note>
-        </trans-unit>
         <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 582229632" size-unit="char" translate="yes" xml:space="preserve">
           <source>expectedCount counts the one named inventory pick (1 per call), not its lines, the quantity posted or the source documents.</source>
           <target>expectedCount telur eina nefnda birgðatínslu (1 fyrir hvert kall), ekki línur hennar, bókað magn eða upprunaskjölin.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eina nefnda birgðatínslu (1 fyrir hvert kall), ekki línur hennar, bókað magn eða upprunaskjölin.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType InvtPickPostTxt</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 2660821044" size-unit="char" translate="yes" xml:space="preserve">
-          <source>expectedCount counts one call (1), not the inventory put-aways created and not their lines.</source>
-          <target>expectedCount telur eitt kall (1), ekki birgðafrágangana sem eru stofnaðir og ekki línur þeirra.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eitt kall (1), ekki birgðafrágangana sem eru stofnaðir og ekki línur þeirra.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType InvtPutCreateTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 3598175712" size-unit="char" translate="yes" xml:space="preserve">
           <source>expectedCount counts the one named inventory put-away (1 per call), not its lines, the quantity posted or the source documents.</source>
@@ -1791,23 +1755,11 @@
           <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur einn nefndan birgðafrágang (1 fyrir hvert kall), ekki línur hans, bókað magn eða upprunaskjölin.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType InvtPutPostTxt</note>
         </trans-unit>
-        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 1501249748" size-unit="char" translate="yes" xml:space="preserve">
-          <source>expectedCount counts one call (1), not the inventory movements created and not their lines.</source>
-          <target>expectedCount telur eitt kall (1), ekki birgðafærslurnar sem eru stofnaðar og ekki línur þeirra.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eitt kall (1), ekki birgðafærslurnar sem eru stofnaðar og ekki línur þeirra.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType InvtMoveCreateTxt</note>
-        </trans-unit>
         <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 1766142767" size-unit="char" translate="yes" xml:space="preserve">
           <source>expectedCount counts the one named inventory movement (1 per call), not its lines or the warehouse entries written.</source>
           <target>expectedCount telur eina nefnda birgðafærslu (1 fyrir hvert kall), ekki línur hennar eða vöruhúsfærslurnar sem eru skrifaðar.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eina nefnda birgðafærslu (1 fyrir hvert kall), ekki línur hennar eða vöruhúsfærslurnar sem eru skrifaðar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType InvtMoveRegisterTxt</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 902315207" size-unit="char" translate="yes" xml:space="preserve">
-          <source>expectedCount counts one call (1), not the movement worksheet lines written and not a warehouse movement.</source>
-          <target>expectedCount telur eitt kall (1), ekki línur færsluvinnublaðsins sem eru skrifaðar og ekki vöruhúsafærslu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eitt kall (1), ekki línur færsluvinnublaðsins sem eru skrifaðar og ekki vöruhúsafærslu.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType BinReplenishmentTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 2811499356" size-unit="char" translate="yes" xml:space="preserve">
           <source>expectedCount counts one call (1), not the warehouse journal lines, the warehouse entries or the warehouse register.</source>
@@ -1820,12 +1772,6 @@
           <target>expectedCount telur eitt kall (1), ekki línur birgðatalningarfærslubókarinnar, mismuninn eða vöruhúsfærslurnar.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eitt kall (1), ekki línur birgðatalningarfærslubókarinnar, mismuninn eða vöruhúsfærslurnar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType PhysInventoryTxt</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 2916933402" size-unit="char" translate="yes" xml:space="preserve">
-          <source>expectedCount counts one call (1), not the worksheet lines, the picks or put-aways created or their lines.</source>
-          <target>expectedCount telur eitt kall (1), ekki línur vinnublaðsins, tínslurnar eða frágangana sem eru stofnaðir eða línur þeirra.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=expectedCount telur eitt kall (1), ekki línur vinnublaðsins, tínslurnar eða frágangana sem eru stofnaðir eða línur þeirra.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Contract Parts ori - Method CountDefinition - NamedType WorksheetTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 3968908717 - Method 2780827850 - NamedType 3795734514" size-unit="char" translate="yes" xml:space="preserve">
           <source>expectedCount counts one call (1), not the records the call creates or changes.</source>
@@ -2902,9 +2848,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPick Create Impl ori - Method GetOverview - NamedType OverviewLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 656571471 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Irreversible. Business Central commits the inventory pick it creates. Use Warehouse.Shipment.Create and Warehouse.Pick.Create when the location uses warehouse shipments.</source>
-          <target>Óafturkræft. Business Central staðfestir birgðatínsluna sem það stofnar. Notaðu Warehouse.Shipment.Create og Warehouse.Pick.Create þegar staðsetningin notar vöruhúsaafhendingar.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Óafturkræft. Business Central staðfestir birgðatínsluna sem það stofnar. Notaðu Warehouse.Shipment.Create og Warehouse.Pick.Create þegar staðsetningin notar vöruhúsaafhendingar.</note>
+          <source>Business Central commits the inventory pick it creates. Use Warehouse.Shipment.Create and Warehouse.Pick.Create when the location uses warehouse shipments.</source>
+          <target>Business Central staðfestir birgðatínsluna sem það stofnar. Notaðu Warehouse.Shipment.Create og Warehouse.Pick.Create þegar staðsetningin notar vöruhúsaafhendingar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Business Central staðfestir birgðatínsluna sem það stofnar. Notaðu Warehouse.Shipment.Create og Warehouse.Pick.Create þegar staðsetningin notar vöruhúsaafhendingar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPick Create Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 656571471 - Method 3133017589 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
@@ -3394,9 +3340,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Create Impl ori - Method GetOverview - NamedType OverviewLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3890069751 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Irreversible. Business Central commits the inventory put-away it creates. Use Warehouse.Receipt.Create and Warehouse.Putaway.Create when the location uses warehouse receipts.</source>
-          <target>Óafturkræft. Business Central staðfestir birgðafráganginn sem það stofnar. Notaðu Warehouse.Receipt.Create og Warehouse.Putaway.Create þegar staðsetningin notar vöruhúsamóttökur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Óafturkræft. Business Central staðfestir birgðafráganginn sem það stofnar. Notaðu Warehouse.Receipt.Create og Warehouse.Putaway.Create þegar staðsetningin notar vöruhúsamóttökur.</note>
+          <source>Business Central commits the inventory put-away it creates. Use Warehouse.Receipt.Create and Warehouse.Putaway.Create when the location uses warehouse receipts.</source>
+          <target>Business Central staðfestir birgðafráganginn sem það stofnar. Notaðu Warehouse.Receipt.Create og Warehouse.Putaway.Create þegar staðsetningin notar vöruhúsamóttökur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Business Central staðfestir birgðafráganginn sem það stofnar. Notaðu Warehouse.Receipt.Create og Warehouse.Putaway.Create þegar staðsetningin notar vöruhúsamóttökur.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Create Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3890069751 - Method 3133017589 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
@@ -4252,9 +4198,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Movement Create Impl ori - Method GetOverview - NamedType OverviewLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 296295310 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Irreversible. Business Central commits the warehouse movement it creates. Use Warehouse.InventoryMovement.Create for a location without directed put-away and pick.</source>
-          <target>Óafturkræft. Business Central staðfestir vöruhúsafærsluna sem það stofnar. Notaðu Warehouse.InventoryMovement.Create fyrir staðsetningu án beinnar innsetningar og tínslu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Óafturkræft. Business Central staðfestir vöruhúsafærsluna sem það stofnar. Notaðu Warehouse.InventoryMovement.Create fyrir staðsetningu án beinnar innsetningar og tínslu.</note>
+          <source>Business Central commits the warehouse movement it creates. Use Warehouse.InventoryMovement.Create for a location without directed put-away and pick.</source>
+          <target>Business Central staðfestir vöruhúsafærsluna sem það stofnar. Notaðu Warehouse.InventoryMovement.Create fyrir staðsetningu án beinnar innsetningar og tínslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Business Central staðfestir vöruhúsafærsluna sem það stofnar. Notaðu Warehouse.InventoryMovement.Create fyrir staðsetningu án beinnar innsetningar og tínslu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Movement Create Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 296295310 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
@@ -4936,9 +4882,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2230900036 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Irreversible. Creates a Warehouse Pick from an existing shipment; use Warehouse.Pick.Register after quantities are picked.</source>
-          <target>Óafturkræft. Stofnar tínslu úr fyrirliggjandi afhendingu; notaðu Warehouse.Pick.Register eftir að vörur hafa verið tíndar.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Óafturkræft. Stofnar tínslu úr fyrirliggjandi afhendingu; notaðu Warehouse.Pick.Register eftir að vörur hafa verið tíndar.</note>
+          <source>Creates a Warehouse Pick from an existing shipment; use Warehouse.Pick.Register after quantities are picked.</source>
+          <target>Stofnar tínslu úr fyrirliggjandi afhendingu; notaðu Warehouse.Pick.Register eftir að vörur hafa verið tíndar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar tínslu úr fyrirliggjandi afhendingu; notaðu Warehouse.Pick.Register eftir að vörur hafa verið tíndar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2230900036 - Method 544333279 - NamedType 64170927" size-unit="char" translate="yes" xml:space="preserve">
@@ -5170,9 +5116,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Putaway Create Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 344402154 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Irreversible. Creates or returns a Warehouse Put-away from a posted receipt; use Warehouse.Putaway.Register after the goods are put away.</source>
-          <target>Óafturkræft. Stofnar eða skilar frágangi úr bókaðri móttöku; notaðu Warehouse.Putaway.Register eftir að gengið hefur verið frá vörunum.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Óafturkræft. Stofnar eða skilar frágangi úr bókaðri móttöku; notaðu Warehouse.Putaway.Register eftir að gengið hefur verið frá vörunum.</note>
+          <source>Creates or returns a Warehouse Put-away from a posted receipt; use Warehouse.Putaway.Register after the goods are put away.</source>
+          <target>Stofnar eða skilar frágangi úr bókaðri móttöku; notaðu Warehouse.Putaway.Register eftir að gengið hefur verið frá vörunum.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar eða skilar frágangi úr bókaðri móttöku; notaðu Warehouse.Putaway.Register eftir að gengið hefur verið frá vörunum.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Putaway Create Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 344402154 - Method 2774196013 - NamedType 64170927" size-unit="char" translate="yes" xml:space="preserve">
@@ -5596,9 +5542,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Create Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2572656007 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Irreversible. Creates inbound warehouse receipts from released sales return, purchase, or transfer orders; use Warehouse.Receipt.Post to receive one.</source>
-          <target>Óafturkræft. Stofnar innleiðarmóttökur úr útgefnum söluskila-, innkaupa- eða millifærslupöntunum; notaðu Warehouse.Receipt.Post til að móttaka.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Óafturkræft. Stofnar innleiðarmóttökur úr útgefnum söluskila-, innkaupa- eða millifærslupöntunum; notaðu Warehouse.Receipt.Post til að móttaka.</note>
+          <source>Creates inbound warehouse receipts from released sales return, purchase, or transfer orders; use Warehouse.Receipt.Post to receive one.</source>
+          <target>Stofnar innleiðarmóttökur úr útgefnum söluskila-, innkaupa- eða millifærslupöntunum; notaðu Warehouse.Receipt.Post til að móttaka.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar innleiðarmóttökur úr útgefnum söluskila-, innkaupa- eða millifærslupöntunum; notaðu Warehouse.Receipt.Post til að móttaka.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Create Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2572656007 - Method 3648765730 - NamedType 1465600059" size-unit="char" translate="yes" xml:space="preserve">
@@ -6736,9 +6682,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method GetOverview - NamedType OverviewLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3297616556 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Irreversible. Creates warehouse picks or put-aways from the worksheet lines with quantity to handle, optionally grouped per ship-to, item, zone, bin, document or date; Business Central commits the documents it creates. Lines with nothing to handle stay in the worksheet.</source>
-          <target>Óafturkræft. Stofnar tínslur eða frágang vöruhúss úr vinnublaðslínum með magni til meðhöndlunar, valfrjálst flokkað eftir sendist-til, vöru, svæði, hólfi, skjali eða dagsetningu; Business Central staðfestir skjölin sem það stofnar. Línur án magns til meðhöndlunar verða eftir á vinnublaðinu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Óafturkræft. Stofnar tínslur eða frágang vöruhúss úr vinnublaðslínum með magni til meðhöndlunar, valfrjálst flokkað eftir sendist-til, vöru, svæði, hólfi, skjali eða dagsetningu; Business Central staðfestir skjölin sem það stofnar. Línur án magns til meðhöndlunar verða eftir á vinnublaðinu.</note>
+          <source>Creates warehouse picks or put-aways from the worksheet lines with quantity to handle, optionally grouped per ship-to, item, zone, bin, document or date; Business Central commits the documents it creates. Lines with nothing to handle stay in the worksheet.</source>
+          <target>Stofnar tínslur eða frágang vöruhúss úr vinnublaðslínum með magni til meðhöndlunar, valfrjálst flokkað eftir sendist-til, vöru, svæði, hólfi, skjali eða dagsetningu; Business Central staðfestir skjölin sem það stofnar. Línur án magns til meðhöndlunar verða eftir á vinnublaðinu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar tínslur eða frágang vöruhúss úr vinnublaðslínum með magni til meðhöndlunar, valfrjálst flokkað eftir sendist-til, vöru, svæði, hólfi, skjali eða dagsetningu; Business Central staðfestir skjölin sem það stofnar. Línur án magns til meðhöndlunar verða eftir á vinnublaðinu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3297616556 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">

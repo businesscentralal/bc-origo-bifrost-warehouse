@@ -119,7 +119,6 @@ codeunit 10078427 "Whse InvtMove Create Impl ori" implements "Msg Interface ori"
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
-        Parts: Codeunit "Whse Contract Parts ori";
         LinesParameter: JsonObject;
         LineChildren: JsonArray;
     begin
@@ -136,7 +135,6 @@ codeunit 10078427 "Whse InvtMove Create Impl ori" implements "Msg Interface ori"
         LineChildren.Add(ContractMgt.Parameter('toBin', 'string', true, 'Bin the quantity is placed in. Must differ from fromBin.'));
         LinesParameter.Add('children', LineChildren);
         Parameters.Add(LinesParameter);
-        Parts.AddExpectedCountParameter("Message Type ori"::"Warehouse.InventoryMovement.Create", Parameters);
         exit(true);
     end;
 
@@ -207,7 +205,7 @@ codeunit 10078427 "Whse InvtMove Create Impl ori" implements "Msg Interface ori"
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect("Message Type ori"::"Warehouse.InventoryMovement.Create", Effect, 'Creates an inventory movement. Business Central commits a movement created from assembly consumption, so a later failure does not roll that movement back.', 'BIFROST Whse - Full ori');
+        Parts.WriteEffect(Effect, 'Creates an inventory movement. Business Central commits a movement created from assembly consumption, so a later failure does not roll that movement back.', 'BIFROST Whse - Full ori', false);
         exit(true);
     end;
 

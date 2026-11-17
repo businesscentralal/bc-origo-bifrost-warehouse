@@ -49,7 +49,7 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
 
     procedure GetSelectionDescription(): Text
     var
-        SelectionLbl: Label 'Irreversible. Creates or returns a Warehouse Put-away from a posted receipt; use Warehouse.Putaway.Register after the goods are put away.', Comment = 'is-IS=Óafturkræft. Stofnar eða skilar frágangi úr bókaðri móttöku; notaðu Warehouse.Putaway.Register eftir að gengið hefur verið frá vörunum.';
+        SelectionLbl: Label 'Creates or returns a Warehouse Put-away from a posted receipt; use Warehouse.Putaway.Register after the goods are put away.', Comment = 'is-IS=Stofnar eða skilar frágangi úr bókaðri móttöku; notaðu Warehouse.Putaway.Register eftir að gengið hefur verið frá vörunum.';
     begin
         exit(SelectionLbl);
     end;
@@ -80,7 +80,6 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
         Parts: Codeunit "Whse Contract Parts ori";
     begin
         Parts.AddActivityParameters(Parameters, true);
-        Parts.AddExpectedCountParameter("Message Type ori"::"Warehouse.Putaway.Create", Parameters);
         exit(true);
     end;
 
@@ -121,7 +120,7 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect("Message Type ori"::"Warehouse.Putaway.Create", Effect, 'Creates or returns Warehouse Activity Header and Line records of type Put-away and applies optional activity fields. Business Central commits each put-away it creates, so the put-away is not rolled back with the caller''s transaction.', 'BIFROST Full ori');
+        Parts.WriteEffect(Effect, 'Creates or returns Warehouse Activity Header and Line records of type Put-away and applies optional activity fields. Business Central commits each put-away it creates, so the put-away is not rolled back with the caller''s transaction.', 'BIFROST Full ori', false);
         // Returning an already-created open put-away makes a repeated call safe.
         Effect.Replace('idempotent', true);
         exit(true);
@@ -214,7 +213,6 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
         Argument.AssertVersion1();
         if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,postedWhseReceiptNo=no,receiptNo=no,no=no', RequestJson) then
             exit;
-        Parts.ReadExpectedCount(RequestJson);
 
         if not FindPostedWhseReceiptHeader(Argument, PostedWhseReceiptHeader) then
             exit;

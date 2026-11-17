@@ -71,7 +71,7 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
     /// <returns>Selection description.</returns>
     procedure GetSelectionDescription(): Text
     var
-        SelectionLbl: Label 'Irreversible. Business Central commits the inventory put-away it creates. Use Warehouse.Receipt.Create and Warehouse.Putaway.Create when the location uses warehouse receipts.', Comment = 'is-IS=Óafturkræft. Business Central staðfestir birgðafráganginn sem það stofnar. Notaðu Warehouse.Receipt.Create og Warehouse.Putaway.Create þegar staðsetningin notar vöruhúsamóttökur.';
+        SelectionLbl: Label 'Business Central commits the inventory put-away it creates. Use Warehouse.Receipt.Create and Warehouse.Putaway.Create when the location uses warehouse receipts.', Comment = 'is-IS=Business Central staðfestir birgðafráganginn sem það stofnar. Notaðu Warehouse.Receipt.Create og Warehouse.Putaway.Create þegar staðsetningin notar vöruhúsamóttökur.';
     begin
         exit(SelectionLbl);
     end;
@@ -109,12 +109,10 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
-        Parts: Codeunit "Whse Contract Parts ori";
     begin
         Parameters.Add(ContractMgt.Parameter('sourceDocument', 'string', true, 'Purchase Order, Sales Return Order or Inbound Transfer.'));
         Parameters.Add(ContractMgt.Parameter('sourceNo', 'string', false, 'Source document number. Required when systemId and subject are empty.'));
         Parameters.Add(ContractMgt.Parameter('systemId', 'string', false, 'Source document SystemId. Required when sourceNo and subject are empty.'));
-        Parts.AddExpectedCountParameter("Message Type ori"::"Warehouse.InventoryPutAway.Create", Parameters);
         exit(true);
     end;
 
@@ -200,7 +198,7 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
     var
         Parts: Codeunit "Whse Contract Parts ori";
     begin
-        Parts.IrreversibleEffect("Message Type ori"::"Warehouse.InventoryPutAway.Create", Effect, 'Creates an inventory put-away. Business Central commits the put-away when it is created, so a later failure does not roll it back. An existing open put-away is returned and nothing new is written.', 'BIFROST Whse - Full ori');
+        Parts.WriteEffect(Effect, 'Creates an inventory put-away. Business Central commits the put-away when it is created, so a later failure does not roll it back. An existing open put-away is returned and nothing new is written.', 'BIFROST Whse - Full ori', false);
         exit(true);
     end;
 

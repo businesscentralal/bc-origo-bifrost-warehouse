@@ -1,0 +1,748 @@
+name: Runtime Package
+
+# Source of truth: OrigoSoftwareSolutions/bc-origo-bifrost-core (.github/workflows/RuntimePackage.yaml and
+# tools/New-BifrostRuntimePackage.ps1). Copied unchanged to every Bifrost app repository on 19.11.2026 (Gunnar,
+# 19.11.2026: the runtime workflow is part of the release process for all apps). Change it in core first, then
+# copy both files unchanged to every app repository. Do not edit a copy on its own.
+#
+# Builds the public on-prem runtime zip for a released Bifrost app and uploads it to storage account
+# origopublic, container runtime, at bc<major>/<app name>/<Publisher>_<App>_runtime.zip (#1241).
+# The previous blob at that path is replaced (latest release only, Gunnar's decisions of 02.11.2026).
+#
+# What is published (#1269): a real Business Central runtime package, never the release .app. The release
+# .app carries every .al source file, and the repositories are private. The job publishes the released product
+# .app (from the release's "-Apps-" asset, never rebuilt) to a COSMO Alpaca container of the BC version the
+# app targets, exports it with Get-NAVAppRuntimePackage over the container's COSMO SSH endpoint (the same
+# flow as the origo-bc-mcp tool bc_dev_build_runtime_package), and removes the container at the end, also on
+# failure. tools/New-BifrostRuntimePackage.ps1 refuses any input .app with a .al entry, and the read-back
+# downloads the public zip anonymously and fails if the .app inside has one or is not served as
+# application/zip. The container is created, found and removed with the GITHUB_TOKEN through the COSMO
+# Alpaca API, exactly as the CICD "Create/Remove COSMO Alpaca Containers" jobs do (Alpaca-Actions v2.11).
+# The container is always created with the repository's default branch as its configuration branch (COSMO
+# reads the project configuration from that branch), whatever ref started the run: on a "release" event the
+# ref is the tag, and COSMO refused it ("reference 'refs/remotes/origin/28.0.13' not found", core run
+# 44203441200). The packaged app is still the release asset of the given tag.
+# BC version (Gunnar, 05.11.2026: "we must build 28 version with artifact 28.0.0.0"): a runtime package is
+# exported on the FIRST build of <major>.<minor>, where <major>.<minor> is app.json "application" (28.0.0.0 ->
+# 28.0, 28.3.0.0 -> 28.3), so it installs on every later build. An app that needs application 28.3 cannot be
+# published on 28.0. The workflow lists Microsoft's public artifact store (the CDN BcContainerHelper uses),
+# sorts the <major>.<minor>.* builds numerically and pins the first one that has an artifact for the country
+# (the equivalent of Get-BCArtifactUrl -version <major>.<minor> -select First). For BC 28.0 on 05.11.2026
+# that is OnPrem 28.0.46665.48549 (the first Sandbox build is 28.0.46665.53459). The exact build and the
+# container's platform version go to the step summary. Default type OnPrem; input bcArtifactType Sandbox
+# switches. Input bcArtifactVersion overrides: a four-part version is used as is, a shorter one is a prefix
+# whose first build is taken; it must stay on <major>.<minor>. The export fails unless the container's platform
+# is <major>.<minor>.x. Country: input bcArtifactCountry; "auto" (default) takes "is" when the app or one of its
+# Bifrost dependencies depends on the Microsoft app "IS Core", otherwise "w1".
+#
+# Location rule (one rule for publisher and dependant): the zip is always stored under the app name,
+# bc<major>/<app name>/<Publisher>_<App>_runtime.zip. There is no folder-name input; the packager refuses any
+# other folder. A dependant computes the same location from the dependency's name and publisher with the same
+# packager function (-Locate), so a published dependency is always found.
+#
+# Dependencies: before the released app is published, every Bifrost (non-Microsoft) dependency is installed
+# from its PUBLIC runtime package at
+# https://origopublic.blob.core.windows.net/runtime/bc<major>/<dependency name>/<Publisher>_<Name>_runtime.zip
+# (anonymous download, the same URL the read-back uses). The package must be a genuine runtime package
+# (PackageKind runtime, no .al source, -VerifyZipPath -Dependency). Dependencies of dependencies are read from
+# each runtime package's manifest and installed first. The run fails with the missing dependency's name and URL
+# when its runtime package is not published, or when it is older than the version an app requires: run this
+# workflow in that dependency's repository for its latest release first. Private release assets of other
+# repositories are never read (a feature repository's GITHUB_TOKEN cannot read core). Microsoft dependencies
+# come with the BC artifact; one that is published but not installed is synced and installed, and one that is
+# not published is published from the container's C:\Applications folder. Test apps are refused by the packager.
+# Untrusted values: every app id, name, publisher and version (from app.json or a dependency manifest) must
+# pass the packager's identity rules (A-Z, Icelandic letters, digits, space, '.', '-', '_'; four-part numeric
+# versions; GUID ids) or the run fails. The container installs dependencies with a FIXED script
+# (-WriteDependencyInstallScript) that reads the records from a JSON data file; no value is spliced into code.
+#
+# Trigger: AL-Go's CreateRelease workflow creates the GitHub release with GITHUB_TOKEN. GitHub does not start
+# workflows for events caused by GITHUB_TOKEN, so "release: published" does NOT fire for AL-Go releases. After
+# each release, run this workflow by hand (Actions > Runtime Package > Run workflow, tag = the release tag, for
+# example 28.0.11). The release trigger stays for a release published by a person in the GitHub UI.
+# CreateRelease.yaml is an AL-Go system file (template updates overwrite it), so it does not call this one.
+# Release order: Bifrost Foundation first, then the apps that depend on it (an app's run needs the runtime
+# packages of its Bifrost dependencies to be public already).
+#
+# Credential: secret BIFROST_RUNTIME_SAS, a write-only SAS for the runtime container (the fallback named in
+# design/runtime-package-blob.md section 6 of bc-origo-bifrost-core). Only Gunnar or an Azure/GitHub org admin
+# creates it. Until it exists the upload step is skipped with a warning and the run stays green; the zip is
+# still kept as a workflow artifact. The secret is referenced by name only and is never printed. The upload
+# sends Content-Type application/zip. The container password and SSH key are masked and never written to disk
+# outside RUNNER_TEMP (the key file is deleted after use).
+#
+# Self-contained: the tooling (tools/New-BifrostRuntimePackage.ps1) is checked out from this repository, never
+# from another one. workflow_call: a caller in this repository can reuse the job.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to package, for example 28.0.11
+        required: true
+        type: string
+      bcArtifactVersion:
+        description: BC artifact version override (default the first build of app.json application major.minor, for example 28.0; four parts pin one build)
+        required: false
+        type: string
+        default: ''
+      bcArtifactType:
+        description: BC artifact type for the export container
+        required: false
+        type: choice
+        options:
+          - OnPrem
+          - Sandbox
+        default: OnPrem
+      bcArtifactCountry:
+        description: BC artifact country (auto = is when IS Core is a dependency, otherwise w1)
+        required: false
+        type: choice
+        options:
+          - auto
+          - w1
+          - is
+        default: auto
+  workflow_call:
+    inputs:
+      tag:
+        description: Release tag to package
+        required: true
+        type: string
+      appFolder:
+        description: Folder that holds the product app.json
+        required: false
+        type: string
+        default: app
+      toolingRef:
+        description: Ref of this repository that provides tools/New-BifrostRuntimePackage.ps1 (default the run's commit)
+        required: false
+        type: string
+        default: ''
+      bcArtifactVersion:
+        description: BC artifact version override (default the first build of app.json application major.minor; four parts pin one build)
+        required: false
+        type: string
+        default: ''
+      bcArtifactType:
+        description: BC artifact type for the export container (OnPrem or Sandbox)
+        required: false
+        type: string
+        default: OnPrem
+      bcArtifactCountry:
+        description: BC artifact country (auto, w1 or is)
+        required: false
+        type: string
+        default: auto
+    secrets:
+      BIFROST_RUNTIME_SAS:
+        required: false
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: runtime-package-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  RuntimePackage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    env:
+      RELEASE_TAG: ${{ inputs.tag || github.event.release.tag_name }}
+      APP_FOLDER: ${{ inputs.appFolder || 'app' }}
+      BC_ARTIFACT_VERSION: ${{ inputs.bcArtifactVersion || '' }}
+      BC_ARTIFACT_TYPE: ${{ inputs.bcArtifactType || 'OnPrem' }}
+      BC_ARTIFACT_COUNTRY: ${{ inputs.bcArtifactCountry || 'auto' }}
+      HAS_RUNTIME_CREDENTIAL: ${{ secrets.BIFROST_RUNTIME_SAS != '' }}
+      ALPACA_BACKEND_URL: ${{ vars.ALPACA_BACKEND_URL }}
+    steps:
+      - name: Check the release tag
+        shell: pwsh
+        run: |
+          if ($env:RELEASE_TAG -notmatch '^\d+\.\d+\.\d+(\.\d+)?$') {
+              throw "Release tag '$($env:RELEASE_TAG)' is not a version tag (for example 28.0.11)."
+          }
+          if ($env:APP_FOLDER -notmatch '^[A-Za-z0-9_.-]+$' -or $env:APP_FOLDER -match '(^|[\\/])test($|[\\/])') {
+              throw "App folder '$($env:APP_FOLDER)' is not a product app folder."
+          }
+          if ($env:BC_ARTIFACT_VERSION -and $env:BC_ARTIFACT_VERSION -notmatch '^\d+(\.\d+){1,3}$') {
+              throw "BC artifact version '$($env:BC_ARTIFACT_VERSION)' is not a version (for example 28.0)."
+          }
+          if ($env:BC_ARTIFACT_TYPE -cnotin @('Sandbox', 'OnPrem')) {
+              throw "BC artifact type '$($env:BC_ARTIFACT_TYPE)' must be Sandbox or OnPrem."
+          }
+          if ($env:BC_ARTIFACT_COUNTRY -cnotin @('auto', 'w1', 'is')) {
+              throw "BC artifact country '$($env:BC_ARTIFACT_COUNTRY)' must be auto, w1 or is."
+          }
+
+      - name: Checkout the release
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: refs/tags/${{ env.RELEASE_TAG }}
+          path: release
+
+      - name: Checkout the runtime package tooling
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.toolingRef || github.sha }}
+          path: tooling
+          sparse-checkout: tools
+
+      - name: Install the pinned Microsoft BC package reader
+        shell: pwsh
+        run: |
+          # NAVX has no reliable byte-signature shortcut for encrypted runtime contents. Use the
+          # official AL reader for both packaging and anonymous read-back. Pin version AND digest.
+          if ([System.Environment]::Version.Major -lt 10) { throw 'The pinned AL package reader requires PowerShell 7.6 / .NET 10.' }
+          $vsix = Join-Path $env:RUNNER_TEMP 'bifrost-package-reader.vsix'
+          curl --fail --silent --show-error --location --compressed --output $vsix 'https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-dynamics-smb/vsextensions/al/30.0.2863738/vspackage'
+          if ($LASTEXITCODE -ne 0) { throw 'Could not download the pinned Microsoft AL extension.' }
+          if ((Get-FileHash -LiteralPath $vsix -Algorithm SHA256).Hash -ne '881FC1F5C7C6B1A82699CA1B6BCA466BA623F754E5EABFE5D6F1DF3D2966DF00') { throw 'Microsoft AL extension digest mismatch.' }
+          $readerRoot = Join-Path $env:RUNNER_TEMP 'bifrost-package-reader'
+          [System.IO.Compression.ZipFile]::ExtractToDirectory($vsix, $readerRoot)
+          $reader = Join-Path $readerRoot 'extension/bin/Microsoft.Dynamics.Nav.CodeAnalysis.dll'
+          if (-not (Test-Path -LiteralPath $reader)) { throw 'Microsoft BC package reader is missing from the extension.' }
+          "BIFROST_PACKAGE_READER_PATH=$reader" >> $env:GITHUB_ENV
+
+      - name: The packager checks itself
+        shell: pwsh
+        run: ./tooling/tools/New-BifrostRuntimePackage.ps1 -SelfTest
+
+      - name: Download the released product app
+        id: app
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # CreateRelease publishes the release before its UploadArtifacts job attaches the assets,
+          # so wait for the "-Apps-" asset (TestApps never match: the dash before Apps is required).
+          $asset = $null
+          for ($i = 1; $i -le 40; $i++) {
+              $names = @(gh release view $env:RELEASE_TAG -R $env:GITHUB_REPOSITORY --json assets --jq '.assets[].name')
+              if ($LASTEXITCODE -ne 0) { throw "Cannot read release $($env:RELEASE_TAG)." }
+              $apps = @($names | Where-Object { $_ -like '*-Apps-*.zip' })
+              if ($apps.Count -gt 1) { throw "Release $($env:RELEASE_TAG) has more than one Apps asset: $($apps -join ', ')" }
+              if ($apps.Count -eq 1) { $asset = $apps[0]; break }
+              Write-Host "Waiting for the Apps asset on release $($env:RELEASE_TAG) ($i of 40)."
+              Start-Sleep -Seconds 30
+          }
+          if (-not $asset) { throw "Release $($env:RELEASE_TAG) has no Apps asset after 20 minutes." }
+          New-Item -ItemType Directory -Path assets, apps | Out-Null
+          gh release download $env:RELEASE_TAG -R $env:GITHUB_REPOSITORY --pattern $asset -D assets
+          if ($LASTEXITCODE -ne 0) { throw "Cannot download $asset." }
+          Expand-Archive -LiteralPath (Join-Path assets $asset) -DestinationPath apps
+
+          $appJson = Get-Content -Raw -LiteralPath (Join-Path release "$($env:APP_FOLDER)/app.json") | ConvertFrom-Json
+          $candidates = @(Get-ChildItem -Path apps -Recurse -File -Filter '*.app' | Where-Object { $_.Name -like "$($appJson.publisher)_$($appJson.name)_*.app" })
+          if ($candidates.Count -ne 1) { throw "Expected one $($appJson.publisher)_$($appJson.name)_*.app in $asset, found $($candidates.Count)." }
+          $appFile = $candidates[0]
+          if ($appFile.Name -notmatch '_(\d+\.\d+\.\d+\.\d+)\.app$') { throw "Cannot read the version from $($appFile.Name)." }
+          $appVersion = $Matches[1]
+
+          # The tag is major.minor.build; AL-Go stamps the revision, so 28.0.10 ships as 28.0.10.632.
+          $tagParts = $env:RELEASE_TAG.Split('.')
+          $versionParts = $appVersion.Split('.')
+          $prefix = ($versionParts[0..($tagParts.Count - 1)] -join '.')
+          if ($prefix -ne $env:RELEASE_TAG) { throw "App version $appVersion does not belong to release $($env:RELEASE_TAG)." }
+
+          if ([string]$appJson.application -notmatch '^(\d+)\.(\d+)\.') { throw "app.json application '$($appJson.application)' is not a version." }
+          $major = $Matches[1]
+          $minor = $Matches[2]
+          # The app's own identity goes into the export script, so it must pass the identity rules too.
+          ./tooling/tools/New-BifrostRuntimePackage.ps1 -Locate -LocateId ([string]$appJson.id) -LocateName ([string]$appJson.name) -LocatePublisher ([string]$appJson.publisher) -LocateVersion $appVersion -BcMajor $major | Out-Null
+          if ($LASTEXITCODE -ne 0) { throw 'The app identity in app.json does not pass the identity rules.' }
+
+          "path=$($appFile.FullName)" >> $env:GITHUB_OUTPUT
+          "version=$appVersion" >> $env:GITHUB_OUTPUT
+          "name=$($appJson.name)" >> $env:GITHUB_OUTPUT
+          "publisher=$($appJson.publisher)" >> $env:GITHUB_OUTPUT
+          "bcMajor=$major" >> $env:GITHUB_OUTPUT
+          "bcMinor=$minor" >> $env:GITHUB_OUTPUT
+          Write-Host "Packaging $($appFile.Name) for release $($env:RELEASE_TAG) (application $($appJson.application))."
+
+      - name: Download the Bifrost dependency runtime packages
+        id: deps
+        shell: pwsh
+        env:
+          BC_MAJOR: ${{ steps.app.outputs.bcMajor }}
+        run: |
+          # Every non-Microsoft dependency is installed from its PUBLIC runtime package (anonymous download),
+          # never from another repository's private release. Dependencies of dependencies come from each
+          # runtime package's manifest. Order: a dependency is installed before every app that needs it.
+          $appJson = Get-Content -Raw -LiteralPath (Join-Path release "$($env:APP_FOLDER)/app.json") | ConvertFrom-Json
+          $depsDir = Join-Path $env:RUNNER_TEMP 'bifrost-dependencies'
+          New-Item -ItemType Directory -Path $depsDir -Force | Out-Null
+          $bifrost = [ordered]@{}
+          $microsoft = [ordered]@{}
+          $required = [System.Collections.Generic.List[object]]::new()
+          $queue = [System.Collections.Generic.Queue[object]]::new()
+          $addRequirement = {
+              param($dependency, [string]$requiredBy)
+              # Identity rules first (id, name, publisher, four-part version); the packager computes the
+              # canonical public location with the same function the publishing run uses.
+              $located = ./tooling/tools/New-BifrostRuntimePackage.ps1 -Locate -LocateId ([string]$dependency.id) -LocateName ([string]$dependency.name) -LocatePublisher ([string]$dependency.publisher) -LocateVersion ([string]$dependency.version) -BcMajor $env:BC_MAJOR | Select-Object -Last 1
+              if ($LASTEXITCODE -ne 0) { throw "A dependency of $requiredBy does not pass the identity rules." }
+              $location = $located | ConvertFrom-Json
+              $id = ([string]$location.Id).ToLowerInvariant()
+              $entry = [pscustomobject]@{ Id = $id; Name = [string]$location.Name; Publisher = [string]$location.Publisher; MinVersion = [string]$location.Version; RequiredBy = $requiredBy; Url = [string]$location.PublicUrl }
+              if ($entry.Publisher -eq 'Microsoft') {
+                  if (-not $microsoft.Contains($id)) { $microsoft[$id] = $entry }
+                  elseif ($entry.MinVersion -and (-not $microsoft[$id].MinVersion -or [version]$entry.MinVersion -gt [version]$microsoft[$id].MinVersion)) { $microsoft[$id] = $entry }
+                  return
+              }
+              $required.Add($entry)
+              $queue.Enqueue($entry)
+          }
+          foreach ($dependency in @($appJson.dependencies | Where-Object { $_ })) { & $addRequirement $dependency $appJson.name }
+
+          while ($queue.Count -gt 0) {
+              $entry = $queue.Dequeue()
+              if ($bifrost.Contains($entry.Id)) { continue }
+              $url = $entry.Url
+              $zipPath = Join-Path $depsDir ("{0}.zip" -f $entry.Id)
+              curl --silent --show-error --fail --location --output $zipPath $url
+              if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $zipPath)) {
+                  throw "Missing dependency runtime package: $($entry.Name) ($($entry.Publisher)), needed by $($entry.RequiredBy), is not published at $url. Run Actions > Runtime Package in the $($entry.Name) repository for its latest release first, then run this workflow again."
+              }
+              # -Dependency: genuine runtime package (PackageKind runtime), no .al source, and the manifest
+              # identity and every manifest dependency pass the identity rules.
+              $json = ./tooling/tools/New-BifrostRuntimePackage.ps1 -VerifyZipPath $zipPath -Dependency | Select-Object -Last 1
+              if ($LASTEXITCODE -ne 0) { throw "The public runtime package of $($entry.Name) at $url failed verification." }
+              $result = $json | ConvertFrom-Json
+              if (-not $result.Verified -or $result.AlEntries -ne 0 -or $result.PackageKind -ne 'runtime') { throw "The public runtime package of $($entry.Name) at $url is not a genuine source-free runtime package." }
+              if (([string]$result.ManifestId).ToLowerInvariant() -ne $entry.Id -or $result.ManifestName -ne $entry.Name -or $result.ManifestPublisher -ne $entry.Publisher) {
+                  throw "The runtime package at $url is $($result.ManifestPublisher) $($result.ManifestName) ($($result.ManifestId)), not $($entry.Publisher) $($entry.Name) ($($entry.Id))."
+              }
+              $appPath = Join-Path $depsDir ("{0}.runtime.app" -f $entry.Id)
+              $zip = [System.IO.Compression.ZipFile]::OpenRead($zipPath)
+              try {
+                  $stream = $zip.Entries[0].Open()
+                  $file = [System.IO.File]::Create($appPath)
+                  try { $stream.CopyTo($file) } finally { $file.Dispose(); $stream.Dispose() }
+              }
+              finally { $zip.Dispose() }
+              $childIds = [System.Collections.Generic.List[string]]::new()
+              foreach ($child in @($result.ManifestDependencies | Where-Object { $_ })) {
+                  $childDependency = [pscustomobject]@{ id = $child.Id; name = $child.Name; publisher = $child.Publisher; version = $child.Version }
+                  & $addRequirement $childDependency $entry.Name
+                  if ($child.Publisher -ne 'Microsoft') { $childIds.Add(([string]$child.Id).ToLowerInvariant()) }
+              }
+              $bifrost[$entry.Id] = [pscustomobject]@{ Id = $entry.Id; Name = $entry.Name; Publisher = $entry.Publisher; Version = [string]$result.ManifestVersion; Path = $appPath; Url = $url; DependsOn = @($childIds) }
+              Write-Host "Downloaded $($entry.Publisher) $($entry.Name) $($result.ManifestVersion) from $url."
+          }
+
+          # Every app's minimum version must be met by the public runtime package.
+          foreach ($requirement in $required) {
+              $found = $bifrost[$requirement.Id]
+              if ($requirement.MinVersion -and [version]$found.Version -lt [version]$requirement.MinVersion) {
+                  throw "The public runtime package of $($found.Name) is $($found.Version), but $($requirement.RequiredBy) needs at least $($requirement.MinVersion). Run Actions > Runtime Package in the $($found.Name) repository for a newer release first ($($found.Url))."
+              }
+          }
+
+          # Dependencies first (depth-first topological order).
+          $order = [System.Collections.Generic.List[object]]::new()
+          $state = @{}
+          $visit = $null
+          $visit = {
+              param([string]$id, [string[]]$path)
+              if ($state[$id] -eq 'done') { return }
+              if ($state[$id] -eq 'visiting') { throw "Dependency cycle: $(($path + $bifrost[$id].Name) -join ' -> ')" }
+              $state[$id] = 'visiting'
+              foreach ($child in $bifrost[$id].DependsOn) { & $visit $child ($path + $bifrost[$id].Name) }
+              $state[$id] = 'done'
+              $order.Add($bifrost[$id])
+          }
+          foreach ($id in @($bifrost.Keys)) { & $visit $id @() }
+
+          $country = $env:BC_ARTIFACT_COUNTRY
+          if ($country -eq 'auto') {
+              $country = if (@($microsoft.Values | Where-Object { $_.Name -eq 'IS Core' }).Count -gt 0) { 'is' } else { 'w1' }
+          }
+          ConvertTo-Json -InputObject @($order | Select-Object Name, Publisher, Version, Path) -Depth 5 | Set-Content -LiteralPath (Join-Path $env:RUNNER_TEMP 'bifrost-dependency-order.json')
+          ConvertTo-Json -InputObject @($microsoft.Values | Select-Object Id, Name, Publisher, MinVersion) -Depth 5 | Set-Content -LiteralPath (Join-Path $env:RUNNER_TEMP 'bifrost-microsoft-dependencies.json')
+          foreach ($item in $order) { "Bifrost dependency (public runtime package): $($item.Publisher) $($item.Name) $($item.Version)" >> $env:GITHUB_STEP_SUMMARY }
+          foreach ($item in $microsoft.Values) { "Microsoft dependency (from the BC artifact): $($item.Name) $($item.MinVersion)" >> $env:GITHUB_STEP_SUMMARY }
+          "country=$country" >> $env:GITHUB_OUTPUT
+          "count=$($order.Count + $microsoft.Count)" >> $env:GITHUB_OUTPUT
+          Write-Host "$($order.Count) Bifrost and $($microsoft.Count) Microsoft dependencies. BC artifact country: $country."
+
+      - name: Pick the BC artifact
+        id: artifact
+        shell: pwsh
+        env:
+          BC_MAJOR: ${{ steps.app.outputs.bcMajor }}
+          BC_MINOR: ${{ steps.app.outputs.bcMinor }}
+          COUNTRY: ${{ steps.deps.outputs.country }}
+        run: |
+          $major = $env:BC_MAJOR
+          $minor = $env:BC_MINOR
+          $requested = if ($env:BC_ARTIFACT_VERSION) { $env:BC_ARTIFACT_VERSION } else { "$major.$minor" }
+          $requestedParts = $requested.Split('.')
+          if ($requestedParts[0] -ne $major -or ($requestedParts.Count -ge 2 -and $requestedParts[1] -ne $minor)) {
+              throw "BC artifact version $requested is not BC $major.$minor. A runtime package for this app is exported on BC $major.$minor (app.json application) so it installs on every later build."
+          }
+
+          # Resolve the exact first build (Get-BCArtifactUrl -version <major>.<minor> -select First) from the
+          # public artifact store, so the container is pinned and the run records which build it used.
+          $store = "https://bcartifacts-exdbf9fwegejdqak.b02.azurefd.net/$($env:BC_ARTIFACT_TYPE.ToLowerInvariant())"
+          if ($requestedParts.Count -eq 4) {
+              $candidates = @($requested)
+          }
+          else {
+              $names = [System.Collections.Generic.List[string]]::new()
+              $marker = ''
+              do {
+                  $listUrl = "$($store)/?comp=list&restype=container&delimiter=/&prefix=$([Uri]::EscapeDataString("$requested."))"
+                  if ($marker) { $listUrl += "&marker=$([Uri]::EscapeDataString($marker))" }
+                  # The listing starts with a byte order mark, which [xml] refuses.
+                  [xml]$listing = ([string](Invoke-WebRequest -Uri $listUrl -UseBasicParsing).Content).TrimStart([char]0xFEFF)
+                  foreach ($prefixNode in @($listing.EnumerationResults.Blobs.BlobPrefix)) {
+                      if ($prefixNode -and $prefixNode.Name) { $names.Add($prefixNode.Name.TrimEnd('/')) }
+                  }
+                  $marker = [string]$listing.EnumerationResults.NextMarker
+              } while ($marker)
+              $candidates = @($names | Where-Object { $_ -match '^\d+\.\d+\.\d+\.\d+$' } | Sort-Object { [version]$_ })
+              if ($candidates.Count -eq 0) { throw "No $($env:BC_ARTIFACT_TYPE) artifact build starts with $requested." }
+          }
+          $artifactVersion = $null
+          foreach ($candidate in $candidates) {
+              try {
+                  Invoke-WebRequest -Uri "$($store)/$($candidate)/$($env:COUNTRY)" -Method Head -UseBasicParsing | Out-Null
+                  $artifactVersion = $candidate
+                  break
+              }
+              catch { Write-Host "No $($env:COUNTRY) artifact for $($env:BC_ARTIFACT_TYPE) $candidate." }
+          }
+          if (-not $artifactVersion) { throw "No $($env:COUNTRY) $($env:BC_ARTIFACT_TYPE) artifact found for BC $requested." }
+          "BC artifact for the export container: $($env:BC_ARTIFACT_TYPE) $($env:COUNTRY) $artifactVersion (requested $requested, first build)." >> $env:GITHUB_STEP_SUMMARY
+          "artifactVersion=$artifactVersion" >> $env:GITHUB_OUTPUT
+          Write-Host "Exporting on BC $($env:BC_ARTIFACT_TYPE) $($env:COUNTRY) $artifactVersion."
+
+      - name: Checkout the COSMO Alpaca scripts
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: cosmoconsult/Alpaca-Actions
+          ref: v2.11
+          path: alpaca
+
+      - name: Create a COSMO Alpaca container
+        id: container
+        shell: pwsh
+        env:
+          _token: ${{ github.token }}
+          ARTIFACT_VERSION: ${{ steps.artifact.outputs.artifactVersion }}
+          COUNTRY: ${{ steps.deps.outputs.country }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          Import-Module ./alpaca/Scripts/Modules/Alpaca.psd1 -DisableNameChecking
+          # The request New-AlpacaContainer sends (so RemoveContainers finds it by run), plus the BC
+          # artifact of the app's BC version and SSH, which Get-NAVAppRuntimePackage needs.
+          $owner = $env:GITHUB_REPOSITORY_OWNER
+          $repository = $env:GITHUB_REPOSITORY.Replace($owner, '').Replace('/', '')
+          # COSMO reads the project configuration from this branch. Always the default branch: a release
+          # run's ref is the tag, which COSMO cannot resolve (core run 44203441200).
+          $branch = if ($env:DEFAULT_BRANCH) { $env:DEFAULT_BRANCH } else { 'main' }
+          $request = @{
+              owner = $owner
+              type = 'Build'
+              sshEnabled = $true
+              bcArtifact = @{
+                  storageAccount = 'BcArtifacts'
+                  type = $env:BC_ARTIFACT_TYPE
+                  country = $env:COUNTRY
+                  version = $env:ARTIFACT_VERSION
+                  select = 'First'
+              }
+              containerOriginIdentifier = @{
+                  origin = 'GitHub'
+                  organizationId = "$($env:GITHUB_REPOSITORY_OWNER_ID)"
+                  organizationName = $owner
+                  projectName = '.'
+                  repositoryId = "$($env:GITHUB_REPOSITORY_ID)"
+                  repositoryName = $repository
+                  branch = $branch
+                  workflowName = "$($env:GITHUB_WORKFLOW)"
+                  runId = "$($env:GITHUB_RUN_ID)"
+                  alGoBuildMode = 'Default'
+              }
+          }
+          $headers = Get-AlpacaAuthenticationHeaders -Token $env:_token
+          $headers.Add('Content-Type', 'application/json')
+          $url = Get-AlpacaEndpointUrlWithParam -Controller 'Container' -Endpoint 'Container'
+          $response = Invoke-AlpacaApiRequest -Url $url -Method 'POST' -Headers $headers -Body ($request | ConvertTo-Json -Depth 10) -Retries 3
+          if ($response.Password) { Write-Host "::add-mask::$($response.Password)" }
+          $id = [string]$response.id
+          if (-not $id) { throw 'COSMO Alpaca did not return a container id.' }
+          "BIFROST_RUNTIME_CONTAINER_ID=$id" >> $env:GITHUB_ENV
+          "id=$id" >> $env:GITHUB_OUTPUT
+          Write-Host "Created COSMO Alpaca container $id (BC $($env:BC_ARTIFACT_TYPE) $($env:ARTIFACT_VERSION) $($env:COUNTRY), SSH enabled, configuration branch $branch)."
+
+      - name: Export the runtime package
+        id: export
+        shell: pwsh
+        env:
+          _token: ${{ github.token }}
+          RELEASE_APP_PATH: ${{ steps.app.outputs.path }}
+          APP_VERSION: ${{ steps.app.outputs.version }}
+          APP_NAME: ${{ steps.app.outputs.name }}
+          APP_PUBLISHER: ${{ steps.app.outputs.publisher }}
+          BC_MAJOR: ${{ steps.app.outputs.bcMajor }}
+          BC_MINOR: ${{ steps.app.outputs.bcMinor }}
+          ARTIFACT_VERSION: ${{ steps.artifact.outputs.artifactVersion }}
+          COUNTRY: ${{ steps.deps.outputs.country }}
+        run: |
+          Import-Module ./alpaca/Scripts/Modules/Alpaca.psd1 -DisableNameChecking
+          $id = $env:BIFROST_RUNTIME_CONTAINER_ID
+          $container = @(Get-AlpacaContainer -Token $env:_token | Where-Object { $_.Id -eq $id }) | Select-Object -First 1
+          if (-not $container) { throw "COSMO Alpaca container $id is not listed for this run." }
+          if ($container.Password) { Write-Host "::add-mask::$($container.Password)" }
+
+          Wait-AlpacaContainerImageReady -ContainerName $id -Token $env:_token
+          # Wait-AlpacaContainerReady has no timeout (see tools/SharedAlpacaContainer.ps1 in core), so poll the
+          # live app-info endpoint with our own deadline instead.
+          $deadline = [datetime]::UtcNow.AddMinutes(30)
+          $ready = $false
+          while (-not $ready -and [datetime]::UtcNow -lt $deadline) {
+              try {
+                  $installed = @(Get-AlpacaAppInfo -ContainerName $id -Token $env:_token)
+                  $ready = @($installed | Where-Object { $_.Id -and $_.Version }).Count -gt 0
+              }
+              catch { Write-Host 'Container not answering app info yet.' }
+              if (-not $ready) { Start-Sleep -Seconds 30 }
+          }
+          if (-not $ready) { throw "Container $id was not ready after 30 minutes." }
+
+          # SSH endpoint: enable it when it is not there yet and wait for ip, key and an open port.
+          $headers = Get-AlpacaAuthenticationHeaders -Token $env:_token
+          $headers.Add('Content-Type', 'application/json')
+          $sshUrl = Get-AlpacaEndpointUrlWithParam -Controller 'Container' -Endpoint 'Ssh' -Ressource $id
+          $patchUrl = Get-AlpacaEndpointUrlWithParam -Controller 'Container' -Endpoint 'Container' -Ressource $id
+          $ssh = $null
+          $enabled = $false
+          $sshDeadline = [datetime]::UtcNow.AddMinutes(10)
+          while ([datetime]::UtcNow -lt $sshDeadline) {
+              try { $info = Invoke-AlpacaApiRequest -Url $sshUrl -Method 'GET' -Headers $headers -Retries 2 } catch { $info = $null }
+              $ip = if ($info.ipAddress) { [string]$info.ipAddress } elseif ($info.host) { [string]$info.host } else { '' }
+              $key = if ($info.privateKey) { [string]$info.privateKey } elseif ($info.PrivateKey) { [string]$info.PrivateKey } else { '' }
+              $port = if ($info.port) { [int]$info.port } else { 22 }
+              if ($ip -and $key) {
+                  foreach ($line in ($key -split "`r?`n")) { if ($line.Trim().Length -ge 8) { Write-Host "::add-mask::$($line.Trim())" } }
+                  if (Test-Connection -TargetName $ip -TcpPort $port -TimeoutSeconds 3 -Quiet) {
+                      $ssh = [pscustomobject]@{ Ip = $ip; Port = $port; Key = $key }
+                      break
+                  }
+              }
+              elseif (-not $enabled) {
+                  Invoke-AlpacaApiRequest -Url $patchUrl -Method 'PATCH' -Headers $headers -Body (@{ sshEnabled = $true } | ConvertTo-Json) -Retries 2 | Out-Null
+                  $enabled = $true
+                  Write-Host "Enabled SSH on container $id."
+              }
+              Start-Sleep -Seconds 10
+          }
+          if (-not $ssh) { throw "The COSMO SSH endpoint of container $id was not usable within 10 minutes." }
+
+          $work = Join-Path $env:RUNNER_TEMP 'bifrost-runtime-ssh'
+          New-Item -ItemType Directory -Path $work -Force | Out-Null
+          $keyPath = Join-Path $work 'key'
+          try {
+              $keyText = $ssh.Key -replace "`r`n", "`n"
+              if (-not $keyText.EndsWith("`n")) { $keyText += "`n" }
+              [System.IO.File]::WriteAllText($keyPath, $keyText)
+              chmod 600 $keyPath
+              $common = @('-i', $keyPath, '-o', 'StrictHostKeyChecking=no', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'BatchMode=yes', '-o', 'IdentitiesOnly=yes', '-o', 'ConnectTimeout=15', '-o', 'LogLevel=ERROR')
+              $target = "sshuser@$($ssh.Ip)"
+              # Only values that passed the identity rules (app step) reach this script, as single-quoted literals.
+              $quote = { param($value) ([string]$value).Replace("'", "''") }
+              $prologue = @(
+                  "`$ErrorActionPreference = 'Stop'"
+                  "if (Test-Path 'C:\Run\Prompt.ps1') { . 'C:\Run\Prompt.ps1' | Out-Null }"
+                  "`$inst = Get-NAVServerInstance | Select-Object -First 1"
+                  "if (-not `$inst) { Write-Host '[BIFROST_RUNTIME_ERROR] No BC server instance.'; exit 3 }"
+                  "`$si = `$inst.ServerInstance -replace '^.*\`$', ''"
+              )
+
+              # Dependencies: Microsoft ones from the BC artifact, then Bifrost ones from their public runtime
+              # packages, in dependency order, before the released app is published. The container runs the
+              # packager's FIXED install script; the records travel as a JSON data file, never as code.
+              $bifrostDependencies = @(Get-Content -Raw -LiteralPath (Join-Path $env:RUNNER_TEMP 'bifrost-dependency-order.json') | ConvertFrom-Json | Where-Object { $_ })
+              $microsoftDependencies = @(Get-Content -Raw -LiteralPath (Join-Path $env:RUNNER_TEMP 'bifrost-microsoft-dependencies.json') | ConvertFrom-Json | Where-Object { $_ })
+              if ($bifrostDependencies.Count -gt 0 -or $microsoftDependencies.Count -gt 0) {
+                  $depId = [guid]::NewGuid().ToString('n')
+                  $localInstall = Join-Path $work 'install-dependencies.ps1'
+                  ./tooling/tools/New-BifrostRuntimePackage.ps1 -WriteDependencyInstallScript $localInstall
+                  if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $localInstall)) { throw 'The packager did not write the dependency install script.' }
+                  $records = [System.Collections.Generic.List[object]]::new()
+                  $index = 0
+                  foreach ($dependency in $bifrostDependencies) {
+                      $index++
+                      # The remote file name is generated here (guid and counter), never taken from a manifest.
+                      $remoteName = "bifrost-dep-$depId-$index.app"
+                      & scp @common -P $ssh.Port $dependency.Path "$($target):C:/Windows/Temp/$remoteName"
+                      if ($LASTEXITCODE -ne 0) { throw "scp of the $($dependency.Name) runtime package to container $id failed ($LASTEXITCODE)." }
+                      $records.Add([pscustomobject]@{ Name = $dependency.Name; Publisher = $dependency.Publisher; Version = $dependency.Version; File = $remoteName })
+                  }
+                  $data = [pscustomobject]@{
+                      Microsoft = @($microsoftDependencies | ForEach-Object { [pscustomobject]@{ Id = $_.Id; Name = $_.Name; MinVersion = $_.MinVersion } })
+                      Bifrost = @($records)
+                  }
+                  $localData = Join-Path $work 'dependencies.json'
+                  [System.IO.File]::WriteAllText($localData, ($data | ConvertTo-Json -Depth 5))
+                  $remoteInstall = "C:/Windows/Temp/bifrost-deps-$depId.ps1"
+                  $remoteData = "C:/Windows/Temp/bifrost-deps-$depId.json"
+                  & scp @common -P $ssh.Port $localInstall "$($target):$remoteInstall"
+                  if ($LASTEXITCODE -ne 0) { throw "scp of the dependency install script to container $id failed ($LASTEXITCODE)." }
+                  & scp @common -P $ssh.Port $localData "$($target):$remoteData"
+                  if ($LASTEXITCODE -ne 0) { throw "scp of the dependency data to container $id failed ($LASTEXITCODE)." }
+                  $output = & ssh @common -p $ssh.Port $target powershell.exe -NoProfile -File $remoteInstall.Replace('/', '\') -DataPath $remoteData.Replace('/', '\') 2>&1 | Out-String
+                  $exitCode = $LASTEXITCODE
+                  Write-Host $output
+                  & ssh @common -p $ssh.Port $target powershell.exe -NoProfile -Command "Remove-Item -LiteralPath '$($remoteInstall.Replace('/', '\'))','$($remoteData.Replace('/', '\'))' -Force -ErrorAction SilentlyContinue" | Out-Null
+                  if ($exitCode -ne 0 -or $output -notmatch '\[BIFROST_DEPENDENCIES_OK\]') { throw "Installing the dependencies in container $id failed (exit $exitCode)." }
+                  "Installed $($microsoftDependencies.Count) Microsoft and $($bifrostDependencies.Count) Bifrost dependencies in the export container." >> $env:GITHUB_STEP_SUMMARY
+              }
+
+              $password = ConvertTo-SecureString -String ([string]$container.Password) -AsPlainText -Force
+              Publish-AlpacaBcApp -ContainerUrl $container.Url -ContainerUser $container.User -ContainerPassword $password -Path $env:RELEASE_APP_PATH -SyncMode ForceSync
+
+              $remoteId = [guid]::NewGuid().ToString('n')
+              $remoteScript = "C:/Windows/Temp/bifrost-runtime-$remoteId.ps1"
+              $remoteScriptWin = "C:\Windows\Temp\bifrost-runtime-$remoteId.ps1"
+              $remotePackage = "C:\Windows\Temp\bifrost-runtime-$remoteId.app"
+              $script = @(
+                  $prologue
+                  "if (-not (Get-Command Get-NAVAppRuntimePackage -ErrorAction SilentlyContinue)) { Write-Host '[BIFROST_RUNTIME_ERROR] Get-NAVAppRuntimePackage is not available.'; exit 3 }"
+                  "Write-Host ""[BIFROST_RUNTIME_PLATFORM] `$(`$inst.Version)"""
+                  "`$params = @{ ServerInstance = `$si; AppName = '$(& $quote $env:APP_NAME)'; Publisher = '$(& $quote $env:APP_PUBLISHER)'; Version = '$(& $quote $env:APP_VERSION)'; Path = '$remotePackage'; IncludeSourceInPackageFile = `$false }"
+                  "if ((Get-Command Get-NAVAppRuntimePackage).Parameters.ContainsKey('Tenant')) { `$params.Tenant = 'default' }"
+                  "try { Get-NAVAppRuntimePackage @params } catch { Write-Host ""[BIFROST_RUNTIME_ERROR] `$(`$_.Exception.Message)""; exit 4 }"
+                  "if (-not (Test-Path '$remotePackage')) { Write-Host '[BIFROST_RUNTIME_ERROR] The runtime package was not written.'; exit 5 }"
+                  "Write-Host ""[BIFROST_RUNTIME_OK] `$((Get-Item '$remotePackage').Length)"""
+              ) -join "`r`n"
+              $localScript = Join-Path $work 'export.ps1'
+              [System.IO.File]::WriteAllText($localScript, $script)
+
+              & scp @common -P $ssh.Port $localScript "$($target):$remoteScript"
+              if ($LASTEXITCODE -ne 0) { throw "scp of the export script to container $id failed ($LASTEXITCODE)." }
+              $output = & ssh @common -p $ssh.Port $target powershell.exe -NoProfile -File $remoteScriptWin 2>&1 | Out-String
+              Write-Host $output
+              if ($LASTEXITCODE -ne 0 -or $output -notmatch '\[BIFROST_RUNTIME_OK\]') { throw "Get-NAVAppRuntimePackage failed in container $id (exit $LASTEXITCODE)." }
+              if ($output -notmatch '\[BIFROST_RUNTIME_PLATFORM\]\s*((\d+)\.(\d+)\.[\d.]+)') { throw 'The container did not report its BC platform version.' }
+              $platform = $Matches[1]
+              if ($Matches[2] -ne $env:BC_MAJOR -or $Matches[3] -ne $env:BC_MINOR) { throw "The container runs BC $platform; the runtime package must be exported on BC $($env:BC_MAJOR).$($env:BC_MINOR).x (app.json application)." }
+              "Runtime package exported on container platform $platform (artifact $($env:BC_ARTIFACT_TYPE) $($env:COUNTRY) $($env:ARTIFACT_VERSION))." >> $env:GITHUB_STEP_SUMMARY
+
+              New-Item -ItemType Directory -Path runtime -Force | Out-Null
+              $runtimeApp = Join-Path (Resolve-Path runtime) ("{0}_{1}_{2}.runtime.app" -f $env:APP_PUBLISHER, $env:APP_NAME, $env:APP_VERSION)
+              & scp @common -P $ssh.Port "$($target):$($remotePackage.Replace('\', '/'))" $runtimeApp
+              if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $runtimeApp)) { throw "scp of the runtime package from container $id failed ($LASTEXITCODE)." }
+              & ssh @common -p $ssh.Port $target powershell.exe -NoProfile -Command "Remove-Item -LiteralPath '$remoteScriptWin','$remotePackage' -Force -ErrorAction SilentlyContinue" | Out-Null
+          }
+          finally {
+              Remove-Item -LiteralPath $work -Recurse -Force -ErrorAction SilentlyContinue
+          }
+          "path=$runtimeApp" >> $env:GITHUB_OUTPUT
+          Write-Host "Exported $([System.IO.Path]::GetFileName($runtimeApp)) ($((Get-Item -LiteralPath $runtimeApp).Length) bytes)."
+
+      - name: Remove the COSMO Alpaca container
+        if: always() && steps.container.outcome != 'skipped'
+        uses: cosmoconsult/Alpaca-Actions/Actions/RemoveContainers@v2.11
+        with:
+          shell: pwsh
+          token: ${{ github.token }}
+
+      - name: Build the runtime zip
+        id: zip
+        shell: pwsh
+        env:
+          RUNTIME_APP_PATH: ${{ steps.export.outputs.path }}
+          APP_VERSION: ${{ steps.app.outputs.version }}
+        run: |
+          # Exercise the genuine exported runtime as well as all malformed-input regressions.
+          ./tooling/tools/New-BifrostRuntimePackage.ps1 -SelfTest -RuntimeFixturePath $env:RUNTIME_APP_PATH
+          if ($LASTEXITCODE -ne 0) { throw 'The exported runtime package failed integration self-tests.' }
+          # The packager validates NAVX structure/identity and refuses every .al source entry (#1269).
+          $arguments = @{
+              AppJsonPath     = "release/$($env:APP_FOLDER)/app.json"
+              RuntimeAppPath  = $env:RUNTIME_APP_PATH
+              ExpectedVersion = $env:APP_VERSION
+              OutputDirectory = 'out'
+          }
+          $json = ./tooling/tools/New-BifrostRuntimePackage.ps1 @arguments | Select-Object -Last 1
+          $result = $json | ConvertFrom-Json
+          if ($result.AlEntries -ne 0) { throw 'The runtime zip has AL source entries.' }
+          Write-Host "Built $($result.ZipPath) for $($result.PublicUrl) (0 .al entries)."
+          "zip=$($result.ZipPath)" >> $env:GITHUB_OUTPUT
+          "url=$($result.PublicUrl)" >> $env:GITHUB_OUTPUT
+          "runtimeSha256=$($result.RuntimeSha256)" >> $env:GITHUB_OUTPUT
+
+      - name: Keep the runtime zip
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: RuntimePackage-${{ env.RELEASE_TAG }}
+          path: ${{ steps.zip.outputs.zip }}
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload skipped (no credential)
+        if: env.HAS_RUNTIME_CREDENTIAL != 'true'
+        shell: pwsh
+        run: |
+          $message = 'Runtime zip built but not uploaded: secret BIFROST_RUNTIME_SAS does not exist yet. Gunnar or an Azure/GitHub org admin must create the origopublic runtime write credential.'
+          Write-Host "::warning::$message"
+          "$message" >> $env:GITHUB_STEP_SUMMARY
+
+      - name: Upload to origopublic
+        if: env.HAS_RUNTIME_CREDENTIAL == 'true'
+        shell: pwsh
+        env:
+          BIFROST_RUNTIME_SAS: ${{ secrets.BIFROST_RUNTIME_SAS }}
+          RUNTIME_APP_PATH: ${{ steps.export.outputs.path }}
+          APP_VERSION: ${{ steps.app.outputs.version }}
+        run: |
+          $arguments = @{
+              AppJsonPath       = "release/$($env:APP_FOLDER)/app.json"
+              RuntimeAppPath    = $env:RUNTIME_APP_PATH
+              ExpectedVersion   = $env:APP_VERSION
+              OutputDirectory   = 'out'
+              CredentialEnvName = 'BIFROST_RUNTIME_SAS'
+              Upload            = $true
+          }
+          $json = ./tooling/tools/New-BifrostRuntimePackage.ps1 @arguments | Select-Object -Last 1
+          $result = $json | ConvertFrom-Json
+          if (-not $result.Uploaded) { throw 'The packager did not report an upload.' }
+
+      - name: Anonymous read-back
+        if: env.HAS_RUNTIME_CREDENTIAL == 'true'
+        shell: pwsh
+        env:
+          PUBLIC_URL: ${{ steps.zip.outputs.url }}
+          EXPECTED_RUNTIME_SHA256: ${{ steps.zip.outputs.runtimeSha256 }}
+          APP_VERSION: ${{ steps.app.outputs.version }}
+        run: |
+          $headerLines = @(curl --silent --show-error --head $env:PUBLIC_URL)
+          $statusLine = @($headerLines | Where-Object { $_ -match '^HTTP/' }) | Select-Object -Last 1
+          if ($statusLine -notmatch '^HTTP/\S+\s+200\b') { throw "Anonymous HEAD of $($env:PUBLIC_URL) returned '$statusLine'." }
+          $contentType = @($headerLines | Where-Object { $_ -match '^(?i)content-type:' }) | Select-Object -Last 1
+          if ("$contentType" -notmatch '(?i)^content-type:\s*application/zip\s*$') { throw "The blob is served as '$("$contentType".Trim())', not application/zip." }
+
+          # Download it the way a customer does (no credential) and check the .app inside has no source.
+          $readback = Join-Path $env:RUNNER_TEMP 'runtime-readback.zip'
+          curl --silent --show-error --fail --output $readback $env:PUBLIC_URL
+          if ($LASTEXITCODE -ne 0) { throw "Anonymous download of $($env:PUBLIC_URL) failed ($LASTEXITCODE)." }
+          if ($env:EXPECTED_RUNTIME_SHA256 -notmatch '^[a-fA-F0-9]{64}$') { throw 'Validated export SHA256 is missing; read-back cannot be trusted.' }
+          $arguments = @{
+              VerifyZipPath   = $readback
+              ExpectedRuntimeSha256 = $env:EXPECTED_RUNTIME_SHA256
+              AppJsonPath     = "release/$($env:APP_FOLDER)/app.json"
+              ExpectedVersion = $env:APP_VERSION
+          }
+          $json = ./tooling/tools/New-BifrostRuntimePackage.ps1 @arguments | Select-Object -Last 1
+          if ($LASTEXITCODE -ne 0) { throw 'The published runtime zip failed verification.' }
+          $result = $json | ConvertFrom-Json
+          if (-not $result.Verified -or $result.AlEntries -ne 0) { throw 'The published runtime zip holds AL source.' }
+          "Uploaded and publicly readable as application/zip, 0 .al entries ($($result.ManifestVersion)): $($env:PUBLIC_URL)" >> $env:GITHUB_STEP_SUMMARY

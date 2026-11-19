@@ -35,16 +35,26 @@ name: Runtime Package
 # is <major>.<minor>.x. Country: input bcArtifactCountry; "auto" (default) takes "is" when the app or one of its
 # Bifrost dependencies depends on the Microsoft app "IS Core", otherwise "w1".
 #
+# Location rule (one rule for publisher and dependant): the zip is always stored under the app name,
+# bc<major>/<app name>/<Publisher>_<App>_runtime.zip. There is no folder-name input; the packager refuses any
+# other folder. A dependant computes the same location from the dependency's name and publisher with the same
+# packager function (-Locate), so a published dependency is always found.
+#
 # Dependencies: before the released app is published, every Bifrost (non-Microsoft) dependency is installed
 # from its PUBLIC runtime package at
 # https://origopublic.blob.core.windows.net/runtime/bc<major>/<dependency name>/<Publisher>_<Name>_runtime.zip
-# (anonymous download, the same URL the read-back uses). Dependencies of dependencies are read from each
-# runtime package's manifest and installed first. The run fails with the missing dependency's name and URL when
-# its runtime package is not published, or when it is older than the version an app requires: run this
+# (anonymous download, the same URL the read-back uses). The package must be a genuine runtime package
+# (PackageKind runtime, no .al source, -VerifyZipPath -Dependency). Dependencies of dependencies are read from
+# each runtime package's manifest and installed first. The run fails with the missing dependency's name and URL
+# when its runtime package is not published, or when it is older than the version an app requires: run this
 # workflow in that dependency's repository for its latest release first. Private release assets of other
 # repositories are never read (a feature repository's GITHUB_TOKEN cannot read core). Microsoft dependencies
 # come with the BC artifact; one that is published but not installed is synced and installed, and one that is
 # not published is published from the container's C:\Applications folder. Test apps are refused by the packager.
+# Untrusted values: every app id, name, publisher and version (from app.json or a dependency manifest) must
+# pass the packager's identity rules (A-Z, Icelandic letters, digits, space, '.', '-', '_'; four-part numeric
+# versions; GUID ids) or the run fails. The container installs dependencies with a FIXED script
+# (-WriteDependencyInstallScript) that reads the records from a JSON data file; no value is spliced into code.
 #
 # Trigger: AL-Go's CreateRelease workflow creates the GitHub release with GITHUB_TOKEN. GitHub does not start
 # workflows for events caused by GITHUB_TOKEN, so "release: published" does NOT fire for AL-Go releases. After
@@ -106,11 +116,6 @@ on:
         required: false
         type: string
         default: app
-      folderName:
-        description: Blob folder name (default the app name)
-        required: false
-        type: string
-        default: ''
       toolingRef:
         description: Ref of this repository that provides tools/New-BifrostRuntimePackage.ps1 (default the run's commit)
         required: false
@@ -150,13 +155,11 @@ jobs:
     env:
       RELEASE_TAG: ${{ inputs.tag || github.event.release.tag_name }}
       APP_FOLDER: ${{ inputs.appFolder || 'app' }}
-      FOLDER_NAME: ${{ inputs.folderName || '' }}
       BC_ARTIFACT_VERSION: ${{ inputs.bcArtifactVersion || '' }}
       BC_ARTIFACT_TYPE: ${{ inputs.bcArtifactType || 'OnPrem' }}
       BC_ARTIFACT_COUNTRY: ${{ inputs.bcArtifactCountry || 'auto' }}
       HAS_RUNTIME_CREDENTIAL: ${{ secrets.BIFROST_RUNTIME_SAS != '' }}
       ALPACA_BACKEND_URL: ${{ vars.ALPACA_BACKEND_URL }}
-      RUNTIME_STORE: https://origopublic.blob.core.windows.net/runtime
     steps:
       - name: Check the release tag
         shell: pwsh
@@ -250,6 +253,9 @@ jobs:
           if ([string]$appJson.application -notmatch '^(\d+)\.(\d+)\.') { throw "app.json application '$($appJson.application)' is not a version." }
           $major = $Matches[1]
           $minor = $Matches[2]
+          # The app's own identity goes into the export script, so it must pass the identity rules too.
+          ./tooling/tools/New-BifrostRuntimePackage.ps1 -Locate -LocateId ([string]$appJson.id) -LocateName ([string]$appJson.name) -LocatePublisher ([string]$appJson.publisher) -LocateVersion $appVersion -BcMajor $major | Out-Null
+          if ($LASTEXITCODE -ne 0) { throw 'The app identity in app.json does not pass the identity rules.' }
 
           "path=$($appFile.FullName)" >> $env:GITHUB_OUTPUT
           "version=$appVersion" >> $env:GITHUB_OUTPUT
@@ -277,9 +283,13 @@ jobs:
           $queue = [System.Collections.Generic.Queue[object]]::new()
           $addRequirement = {
               param($dependency, [string]$requiredBy)
-              $id = ([string]$dependency.id).ToLowerInvariant()
-              if (-not $id) { throw "A dependency of $requiredBy has no id." }
-              $entry = [pscustomobject]@{ Id = $id; Name = [string]$dependency.name; Publisher = [string]$dependency.publisher; MinVersion = [string]$dependency.version; RequiredBy = $requiredBy }
+              # Identity rules first (id, name, publisher, four-part version); the packager computes the
+              # canonical public location with the same function the publishing run uses.
+              $located = ./tooling/tools/New-BifrostRuntimePackage.ps1 -Locate -LocateId ([string]$dependency.id) -LocateName ([string]$dependency.name) -LocatePublisher ([string]$dependency.publisher) -LocateVersion ([string]$dependency.version) -BcMajor $env:BC_MAJOR | Select-Object -Last 1
+              if ($LASTEXITCODE -ne 0) { throw "A dependency of $requiredBy does not pass the identity rules." }
+              $location = $located | ConvertFrom-Json
+              $id = ([string]$location.Id).ToLowerInvariant()
+              $entry = [pscustomobject]@{ Id = $id; Name = [string]$location.Name; Publisher = [string]$location.Publisher; MinVersion = [string]$location.Version; RequiredBy = $requiredBy; Url = [string]$location.PublicUrl }
               if ($entry.Publisher -eq 'Microsoft') {
                   if (-not $microsoft.Contains($id)) { $microsoft[$id] = $entry }
                   elseif ($entry.MinVersion -and (-not $microsoft[$id].MinVersion -or [version]$entry.MinVersion -gt [version]$microsoft[$id].MinVersion)) { $microsoft[$id] = $entry }
@@ -293,21 +303,22 @@ jobs:
           while ($queue.Count -gt 0) {
               $entry = $queue.Dequeue()
               if ($bifrost.Contains($entry.Id)) { continue }
-              $zipName = "$($entry.Publisher)_$($entry.Name)_runtime.zip"
-              $url = "$($env:RUNTIME_STORE)/bc$($env:BC_MAJOR)/$([Uri]::EscapeDataString($entry.Name))/$([Uri]::EscapeDataString($zipName))"
+              $url = $entry.Url
               $zipPath = Join-Path $depsDir ("{0}.zip" -f $entry.Id)
               curl --silent --show-error --fail --location --output $zipPath $url
               if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $zipPath)) {
                   throw "Missing dependency runtime package: $($entry.Name) ($($entry.Publisher)), needed by $($entry.RequiredBy), is not published at $url. Run Actions > Runtime Package in the $($entry.Name) repository for its latest release first, then run this workflow again."
               }
-              $json = ./tooling/tools/New-BifrostRuntimePackage.ps1 -VerifyZipPath $zipPath | Select-Object -Last 1
+              # -Dependency: genuine runtime package (PackageKind runtime), no .al source, and the manifest
+              # identity and every manifest dependency pass the identity rules.
+              $json = ./tooling/tools/New-BifrostRuntimePackage.ps1 -VerifyZipPath $zipPath -Dependency | Select-Object -Last 1
               if ($LASTEXITCODE -ne 0) { throw "The public runtime package of $($entry.Name) at $url failed verification." }
               $result = $json | ConvertFrom-Json
-              if (-not $result.Verified -or $result.AlEntries -ne 0) { throw "The public runtime package of $($entry.Name) at $url is not a source-free runtime package." }
+              if (-not $result.Verified -or $result.AlEntries -ne 0 -or $result.PackageKind -ne 'runtime') { throw "The public runtime package of $($entry.Name) at $url is not a genuine source-free runtime package." }
               if (([string]$result.ManifestId).ToLowerInvariant() -ne $entry.Id -or $result.ManifestName -ne $entry.Name -or $result.ManifestPublisher -ne $entry.Publisher) {
                   throw "The runtime package at $url is $($result.ManifestPublisher) $($result.ManifestName) ($($result.ManifestId)), not $($entry.Publisher) $($entry.Name) ($($entry.Id))."
               }
-              $appPath = Join-Path $depsDir ("{0}_{1}_{2}.runtime.app" -f $entry.Publisher, $entry.Name, $result.ManifestVersion)
+              $appPath = Join-Path $depsDir ("{0}.runtime.app" -f $entry.Id)
               $zip = [System.IO.Compression.ZipFile]::OpenRead($zipPath)
               try {
                   $stream = $zip.Entries[0].Open()
@@ -545,6 +556,7 @@ jobs:
               chmod 600 $keyPath
               $common = @('-i', $keyPath, '-o', 'StrictHostKeyChecking=no', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'BatchMode=yes', '-o', 'IdentitiesOnly=yes', '-o', 'ConnectTimeout=15', '-o', 'LogLevel=ERROR')
               $target = "sshuser@$($ssh.Ip)"
+              # Only values that passed the identity rules (app step) reach this script, as single-quoted literals.
               $quote = { param($value) ([string]$value).Replace("'", "''") }
               $prologue = @(
                   "`$ErrorActionPreference = 'Stop'"
@@ -555,60 +567,41 @@ jobs:
               )
 
               # Dependencies: Microsoft ones from the BC artifact, then Bifrost ones from their public runtime
-              # packages, in dependency order, before the released app is published.
+              # packages, in dependency order, before the released app is published. The container runs the
+              # packager's FIXED install script; the records travel as a JSON data file, never as code.
               $bifrostDependencies = @(Get-Content -Raw -LiteralPath (Join-Path $env:RUNNER_TEMP 'bifrost-dependency-order.json') | ConvertFrom-Json | Where-Object { $_ })
               $microsoftDependencies = @(Get-Content -Raw -LiteralPath (Join-Path $env:RUNNER_TEMP 'bifrost-microsoft-dependencies.json') | ConvertFrom-Json | Where-Object { $_ })
               if ($bifrostDependencies.Count -gt 0 -or $microsoftDependencies.Count -gt 0) {
                   $depId = [guid]::NewGuid().ToString('n')
-                  $lines = [System.Collections.Generic.List[string]]::new()
-                  $prologue | ForEach-Object { $lines.Add($_) }
-                  $lines.Add('try {')
-                  foreach ($dependency in $microsoftDependencies) {
-                      $name = & $quote $dependency.Name
-                      $minVersion = & $quote $dependency.MinVersion
-                      $lines.Add("`$info = @(Get-NAVAppInfo -ServerInstance `$si -Id '$(& $quote $dependency.Id)' -Tenant default -TenantSpecificProperties) | Sort-Object Version -Descending | Select-Object -First 1")
-                      $lines.Add("if (-not `$info) {")
-                      $lines.Add("  `$files = @(Get-ChildItem -Path 'C:\Applications*' -Recurse -File -Filter '*.app' -ErrorAction SilentlyContinue)")
-                      $lines.Add("  `$file = @(`$files | Where-Object { `$_.Name -like '*$name*' } | Where-Object { try { (Get-NAVAppInfo -Path `$_.FullName).AppId -eq '$(& $quote $dependency.Id)' } catch { `$false } }) | Select-Object -First 1")
-                      $lines.Add("  if (-not `$file) { `$file = @(`$files | Where-Object { try { (Get-NAVAppInfo -Path `$_.FullName).AppId -eq '$(& $quote $dependency.Id)' } catch { `$false } }) | Select-Object -First 1 }")
-                      $lines.Add("  if (-not `$file) { Write-Host '[BIFROST_RUNTIME_ERROR] Microsoft dependency $name is not published and not in the BC artifact applications of this container.'; exit 6 }")
-                      $lines.Add("  Publish-NAVApp -ServerInstance `$si -Path `$file.FullName -SkipVerification")
-                      $lines.Add("  `$info = @(Get-NAVAppInfo -ServerInstance `$si -Id '$(& $quote $dependency.Id)' -Tenant default -TenantSpecificProperties) | Sort-Object Version -Descending | Select-Object -First 1")
-                      $lines.Add("}")
-                      if ($dependency.MinVersion) {
-                          $lines.Add("if ([version]`$info.Version -lt [version]'$minVersion') { Write-Host ""[BIFROST_RUNTIME_ERROR] Microsoft dependency $name is `$(`$info.Version) in this BC artifact; the app needs $minVersion.""; exit 6 }")
-                      }
-                      $lines.Add("if (-not `$info.IsInstalled) { Sync-NAVApp -ServerInstance `$si -Name `$info.Name -Publisher `$info.Publisher -Version `$info.Version -Tenant default; Install-NAVApp -ServerInstance `$si -Name `$info.Name -Publisher `$info.Publisher -Version `$info.Version -Tenant default }")
-                      $lines.Add("Write-Host ""[BIFROST_DEPENDENCY_OK] Microsoft $name `$(`$info.Version)""")
-                  }
+                  $localInstall = Join-Path $work 'install-dependencies.ps1'
+                  ./tooling/tools/New-BifrostRuntimePackage.ps1 -WriteDependencyInstallScript $localInstall
+                  if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $localInstall)) { throw 'The packager did not write the dependency install script.' }
+                  $records = [System.Collections.Generic.List[object]]::new()
                   $index = 0
                   foreach ($dependency in $bifrostDependencies) {
                       $index++
-                      $remoteApp = "C:/Windows/Temp/bifrost-dep-$depId-$index.app"
-                      & scp @common -P $ssh.Port $dependency.Path "$($target):$remoteApp"
+                      # The remote file name is generated here (guid and counter), never taken from a manifest.
+                      $remoteName = "bifrost-dep-$depId-$index.app"
+                      & scp @common -P $ssh.Port $dependency.Path "$($target):C:/Windows/Temp/$remoteName"
                       if ($LASTEXITCODE -ne 0) { throw "scp of the $($dependency.Name) runtime package to container $id failed ($LASTEXITCODE)." }
-                      $remoteAppWin = $remoteApp.Replace('/', '\')
-                      $name = & $quote $dependency.Name
-                      $publisher = & $quote $dependency.Publisher
-                      $version = & $quote $dependency.Version
-                      $lines.Add("Publish-NAVApp -ServerInstance `$si -Path '$remoteAppWin' -SkipVerification")
-                      $lines.Add("Sync-NAVApp -ServerInstance `$si -Name '$name' -Publisher '$publisher' -Version '$version' -Tenant default")
-                      $lines.Add("Install-NAVApp -ServerInstance `$si -Name '$name' -Publisher '$publisher' -Version '$version' -Tenant default")
-                      $lines.Add("Remove-Item -LiteralPath '$remoteAppWin' -Force -ErrorAction SilentlyContinue")
-                      $lines.Add("Write-Host '[BIFROST_DEPENDENCY_OK] $publisher $name $version'")
+                      $records.Add([pscustomobject]@{ Name = $dependency.Name; Publisher = $dependency.Publisher; Version = $dependency.Version; File = $remoteName })
                   }
-                  $lines.Add('} catch { Write-Host "[BIFROST_RUNTIME_ERROR] $($_.Exception.Message)"; exit 7 }')
-                  $lines.Add("Write-Host '[BIFROST_DEPENDENCIES_OK]'")
-                  $localDepScript = Join-Path $work 'dependencies.ps1'
-                  [System.IO.File]::WriteAllText($localDepScript, ($lines -join "`r`n"))
-                  $remoteDepScript = "C:/Windows/Temp/bifrost-deps-$depId.ps1"
-                  $remoteDepScriptWin = $remoteDepScript.Replace('/', '\')
-                  & scp @common -P $ssh.Port $localDepScript "$($target):$remoteDepScript"
-                  if ($LASTEXITCODE -ne 0) { throw "scp of the dependency script to container $id failed ($LASTEXITCODE)." }
-                  $output = & ssh @common -p $ssh.Port $target powershell.exe -NoProfile -File $remoteDepScriptWin 2>&1 | Out-String
+                  $data = [pscustomobject]@{
+                      Microsoft = @($microsoftDependencies | ForEach-Object { [pscustomobject]@{ Id = $_.Id; Name = $_.Name; MinVersion = $_.MinVersion } })
+                      Bifrost = @($records)
+                  }
+                  $localData = Join-Path $work 'dependencies.json'
+                  [System.IO.File]::WriteAllText($localData, ($data | ConvertTo-Json -Depth 5))
+                  $remoteInstall = "C:/Windows/Temp/bifrost-deps-$depId.ps1"
+                  $remoteData = "C:/Windows/Temp/bifrost-deps-$depId.json"
+                  & scp @common -P $ssh.Port $localInstall "$($target):$remoteInstall"
+                  if ($LASTEXITCODE -ne 0) { throw "scp of the dependency install script to container $id failed ($LASTEXITCODE)." }
+                  & scp @common -P $ssh.Port $localData "$($target):$remoteData"
+                  if ($LASTEXITCODE -ne 0) { throw "scp of the dependency data to container $id failed ($LASTEXITCODE)." }
+                  $output = & ssh @common -p $ssh.Port $target powershell.exe -NoProfile -File $remoteInstall.Replace('/', '\') -DataPath $remoteData.Replace('/', '\') 2>&1 | Out-String
                   $exitCode = $LASTEXITCODE
                   Write-Host $output
-                  & ssh @common -p $ssh.Port $target powershell.exe -NoProfile -Command "Remove-Item -LiteralPath '$remoteDepScriptWin' -Force -ErrorAction SilentlyContinue" | Out-Null
+                  & ssh @common -p $ssh.Port $target powershell.exe -NoProfile -Command "Remove-Item -LiteralPath '$($remoteInstall.Replace('/', '\'))','$($remoteData.Replace('/', '\'))' -Force -ErrorAction SilentlyContinue" | Out-Null
                   if ($exitCode -ne 0 -or $output -notmatch '\[BIFROST_DEPENDENCIES_OK\]') { throw "Installing the dependencies in container $id failed (exit $exitCode)." }
                   "Installed $($microsoftDependencies.Count) Microsoft and $($bifrostDependencies.Count) Bifrost dependencies in the export container." >> $env:GITHUB_STEP_SUMMARY
               }
@@ -679,7 +672,6 @@ jobs:
               ExpectedVersion = $env:APP_VERSION
               OutputDirectory = 'out'
           }
-          if ($env:FOLDER_NAME) { $arguments.FolderName = $env:FOLDER_NAME }
           $json = ./tooling/tools/New-BifrostRuntimePackage.ps1 @arguments | Select-Object -Last 1
           $result = $json | ConvertFrom-Json
           if ($result.AlEntries -ne 0) { throw 'The runtime zip has AL source entries.' }
@@ -720,7 +712,6 @@ jobs:
               CredentialEnvName = 'BIFROST_RUNTIME_SAS'
               Upload            = $true
           }
-          if ($env:FOLDER_NAME) { $arguments.FolderName = $env:FOLDER_NAME }
           $json = ./tooling/tools/New-BifrostRuntimePackage.ps1 @arguments | Select-Object -Last 1
           $result = $json | ConvertFrom-Json
           if (-not $result.Uploaded) { throw 'The packager did not report an upload.' }
@@ -750,7 +741,6 @@ jobs:
               AppJsonPath     = "release/$($env:APP_FOLDER)/app.json"
               ExpectedVersion = $env:APP_VERSION
           }
-          if ($env:FOLDER_NAME) { $arguments.FolderName = $env:FOLDER_NAME }
           $json = ./tooling/tools/New-BifrostRuntimePackage.ps1 @arguments | Select-Object -Last 1
           if ($LASTEXITCODE -ne 0) { throw 'The published runtime zip failed verification.' }
           $result = $json | ConvertFrom-Json

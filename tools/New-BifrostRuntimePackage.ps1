@@ -27,8 +27,24 @@
     public runtime zip of every Bifrost dependency before it installs that dependency. The
     result lists the manifest id and dependencies (ManifestId, ManifestDependencies).
 
-    The folder defaults to the app name, which is what the Cloud Events example uses
-    (bc28/Cloud Events/...). Pass -FolderName when the caller wants the repository name instead.
+    The folder is always the app name, which is what the Cloud Events example uses
+    (bc28/Cloud Events/...). One rule for both sides: the publisher stores the zip under the
+    app name and an app that depends on it computes the same location from the dependency's
+    name and publisher (-Locate). -FolderName is accepted only when it equals the app name;
+    any other folder is refused, because dependants could not find the zip there.
+
+    -Locate checks an app identity (-LocateId, -LocateName, -LocatePublisher, -LocateVersion)
+    against the strict identity rules and prints its public runtime zip location. Names and
+    publishers may hold letters A-Z, Icelandic letters, digits, space, '.', '-' and '_'; versions
+    are four numeric parts; ids are GUIDs. Anything else is refused, so a manifest value can never
+    become code in a generated script.
+
+    -VerifyZipPath with -Dependency checks the public runtime zip of a dependency: the same
+    source-free checks, plus the package must be a genuine runtime package (PackageKind runtime)
+    and the manifest identity and every manifest dependency must pass the identity rules.
+
+    -WriteDependencyInstallScript writes the fixed container script that installs dependencies.
+    It reads the dependency records from a JSON data file (-DataPath) and never runs generated code.
     The major comes from app.json "application" (28.0.0.0 -> bc28). A later BC 29 app.json
     yields bc29. This script does not hard-code a single major.
 
@@ -102,7 +118,14 @@ param(
     [string]$ExpectedRuntimeSha256,
     [string]$PackageReaderPath = $env:BIFROST_PACKAGE_READER_PATH,
     [string]$RuntimeFixturePath,
+    [string]$LocateId,
+    [string]$LocateName,
+    [string]$LocatePublisher,
+    [string]$LocateVersion,
+    [string]$WriteDependencyInstallScript,
     [scriptblock]$UploadHandler,
+    [switch]$Locate,
+    [switch]$Dependency,
     [switch]$Upload,
     [switch]$WhatIf,
     [switch]$SelfTest
@@ -116,6 +139,11 @@ $script:StorageAccount = 'origopublic'
 $script:Container = 'runtime'
 $script:StorageHost = 'origopublic.blob.core.windows.net'
 $script:ZipContentType = 'application/zip'
+# Strict identity rules for anything that reaches a generated script, a URL or a log line.
+$script:SafeNameCharacters = 'A-Za-z0-9\u00C1\u00E1\u00D0\u00F0\u00C9\u00E9\u00CD\u00ED\u00D3\u00F3\u00DA\u00FA\u00DD\u00FD\u00DE\u00FE\u00C6\u00E6\u00D6\u00F6'
+$script:SafeNamePattern = '^[' + $script:SafeNameCharacters + '][' + $script:SafeNameCharacters + ' ._\-]{0,99}\z'
+$script:SafeVersionPattern = '^\d{1,9}\.\d{1,9}\.\d{1,9}\.\d{1,9}\z'
+$script:SafeIdPattern = '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\z'
 
 function Protect-BifrostLogText {
     param(
@@ -141,6 +169,35 @@ function Write-BifrostSafe {
     )
     $safe = Protect-BifrostLogText -Text $Message -SecretValues $SecretValues
     Write-Information $safe -InformationAction Continue
+}
+
+function Test-BifrostSafeName {
+    param([AllowNull()][AllowEmptyString()][string]$Value)
+    if ($null -eq $Value) { return $false }
+    return [regex]::IsMatch($Value, $script:SafeNamePattern)
+}
+
+function Assert-BifrostSafeIdentity {
+    param(
+        [AllowNull()][AllowEmptyString()][string]$Id,
+        [AllowNull()][AllowEmptyString()][string]$Name,
+        [AllowNull()][AllowEmptyString()][string]$Publisher,
+        [AllowNull()][AllowEmptyString()][string]$Version,
+        [string]$Context = 'app'
+    )
+    # Values are never echoed back: a hostile value must not reach a log or a script.
+    if ($null -eq $Id -or -not [regex]::IsMatch($Id, $script:SafeIdPattern)) { throw "Refusing $($Context): the app id is not a GUID." }
+    if (-not (Test-BifrostSafeName $Name)) { throw "Refusing $($Context) $($Id): the app name has characters outside A-Z, Icelandic letters, digits, space, '.', '-' and '_' (or is empty or longer than 100)." }
+    if (-not (Test-BifrostSafeName $Publisher)) { throw "Refusing $($Context) $($Id): the publisher has characters outside A-Z, Icelandic letters, digits, space, '.', '-' and '_' (or is empty or longer than 100)." }
+    if ($null -eq $Version -or -not [regex]::IsMatch($Version, $script:SafeVersionPattern)) { throw "Refusing $($Context) $($Id): the version is not four numeric parts." }
+}
+
+function Assert-BifrostDependencyManifest {
+    param([Parameter(Mandatory = $true)]$Manifest)
+    Assert-BifrostSafeIdentity -Id ([string]$Manifest.Id) -Name ([string]$Manifest.Name) -Publisher ([string]$Manifest.Publisher) -Version ([string]$Manifest.Version) -Context 'dependency runtime package'
+    foreach ($child in @($Manifest.Dependencies | Where-Object { $_ })) {
+        Assert-BifrostSafeIdentity -Id ([string]$child.Id) -Name ([string]$child.Name) -Publisher ([string]$child.Publisher) -Version ([string]$child.Version) -Context "a dependency of $($Manifest.Id)"
+    }
 }
 
 function ConvertTo-BifrostFourPartVersion {
@@ -228,8 +285,10 @@ function Get-BifrostRuntimePackageLayout {
     if ($major -notmatch '^\d+$') {
         throw "BC major must be the leading number of app.json application (got '$major')."
     }
-    $folder = $FolderName
-    if ([string]::IsNullOrWhiteSpace($folder)) { $folder = [string]$Identity.Name }
+    $folder = [string]$Identity.Name
+    if (-not [string]::IsNullOrWhiteSpace($FolderName) -and $FolderName -cne $folder) {
+        throw ("Refusing package folder '{0}': the runtime zip is always stored under the app name '{1}' (bc<major>/<app name>/<Publisher>_<App>_runtime.zip), so apps that depend on it find it." -f $FolderName, $folder)
+    }
     if ($folder -match '(?i)(^test\b|\btests\b)') {
         throw "Refusing package folder '$folder'."
     }
@@ -651,7 +710,81 @@ function Invoke-BifrostRuntimeZipVerification {
         $identity = Get-BifrostAppIdentity $AppJsonPath
         $innerName = (Get-BifrostRuntimePackageLayout -Identity $identity -BcMajor $BcMajor -FolderName $FolderName).InnerAppFileName
     }
+    if ($Dependency) { return Test-BifrostDependencyRuntimeZip -ZipPath $VerifyZipPath }
     return Test-BifrostRuntimePackageZip -ZipPath $VerifyZipPath -InnerAppFileName $innerName -Identity $identity -ExpectedVersion $ExpectedVersion -ExpectedRuntimeSha256 $ExpectedRuntimeSha256
+}
+
+function Test-BifrostDependencyRuntimeZip {
+    param([Parameter(Mandatory = $true)][string]$ZipPath)
+    # A dependency is installed in the export container, so it must be a genuine runtime package
+    # (the NAVX runtime checks the packager applies to its own export), not just a source-free zip.
+    $result = Test-BifrostRuntimePackageZip -ZipPath $ZipPath
+    if ($result.PackageKind -ne 'runtime') {
+        throw ("Refusing dependency runtime zip '{0}': the package inside is not a genuine Business Central runtime package (PackageKind {1})." -f [System.IO.Path]::GetFileName($ZipPath), $result.PackageKind)
+    }
+    Assert-BifrostDependencyManifest -Manifest ([pscustomobject]@{ Id = $result.ManifestId; Name = $result.ManifestName; Publisher = $result.ManifestPublisher; Version = $result.ManifestVersion; Dependencies = @($result.ManifestDependencies) })
+    $expectedName = (Get-BifrostRuntimePackageLayout -Identity ([pscustomobject]@{ Name = $result.ManifestName; Publisher = $result.ManifestPublisher; ApplicationMajor = '0' }) -BcMajor '0').InnerAppFileName
+    if ($result.InnerAppFileName -cne $expectedName) { throw ("Refusing dependency runtime zip '{0}': it holds {1}, expected {2}." -f [System.IO.Path]::GetFileName($ZipPath), $result.InnerAppFileName, $expectedName) }
+    return $result
+}
+
+function Get-BifrostRuntimeLocation {
+    param([string]$Id, [string]$Name, [string]$Publisher, [string]$Version, [string]$BcMajor)
+    Assert-BifrostSafeIdentity -Id $Id -Name $Name -Publisher $Publisher -Version $Version -Context 'app'
+    # The same derivation the publisher uses (Get-BifrostRuntimePackageLayout), so a dependant always
+    # looks where the dependency's own run stored its zip.
+    $layout = Get-BifrostRuntimePackageLayout -Identity ([pscustomobject]@{ Name = $Name; Publisher = $Publisher; ApplicationMajor = $BcMajor }) -BcMajor $BcMajor
+    return [pscustomobject]@{ Id = $Id; Name = $Name; Publisher = $Publisher; Version = $Version; BlobPath = $layout.BlobPath; PublicUrl = $layout.PublicUrl; InnerAppFileName = $layout.InnerAppFileName }
+}
+
+function Get-BifrostDependencyInstallScript {
+    # Fixed text: no value is ever spliced into it. Dependency records arrive as JSON data.
+    return @'
+param([Parameter(Mandatory = $true)][string]$DataPath)
+$ErrorActionPreference = 'Stop'
+if (Test-Path 'C:\Run\Prompt.ps1') { . 'C:\Run\Prompt.ps1' | Out-Null }
+try {
+    $data = Get-Content -Raw -LiteralPath $DataPath | ConvertFrom-Json
+    $folder = Split-Path -Parent $DataPath
+    $inst = Get-NAVServerInstance | Select-Object -First 1
+    if (-not $inst) { throw 'No BC server instance.' }
+    $si = $inst.ServerInstance -replace '^.*\$', ''
+    $files = $null
+    foreach ($dep in @($data.Microsoft | Where-Object { $_ })) {
+        $info = @(Get-NAVAppInfo -ServerInstance $si -Id $dep.Id -Tenant default -TenantSpecificProperties) | Sort-Object Version -Descending | Select-Object -First 1
+        if (-not $info) {
+            if ($null -eq $files) { $files = @(Get-ChildItem -Path 'C:\Applications*' -Recurse -File -Filter '*.app' -ErrorAction SilentlyContinue) }
+            $pattern = '*' + [System.Management.Automation.WildcardPattern]::Escape([string]$dep.Name) + '*'
+            $file = $null
+            foreach ($candidate in @(@($files | Where-Object { $_.Name -like $pattern }) + @($files))) {
+                try { if ([string](Get-NAVAppInfo -Path $candidate.FullName).AppId -eq [string]$dep.Id) { $file = $candidate; break } } catch { }
+            }
+            if (-not $file) { throw ('Microsoft dependency {0} is not published and not in the BC artifact applications of this container.' -f $dep.Name) }
+            Publish-NAVApp -ServerInstance $si -Path $file.FullName -SkipVerification
+            $info = @(Get-NAVAppInfo -ServerInstance $si -Id $dep.Id -Tenant default -TenantSpecificProperties) | Sort-Object Version -Descending | Select-Object -First 1
+        }
+        if ($dep.MinVersion -and [version][string]$info.Version -lt [version][string]$dep.MinVersion) { throw ('Microsoft dependency {0} is {1} in this BC artifact; the app needs {2}.' -f $dep.Name, $info.Version, $dep.MinVersion) }
+        if (-not $info.IsInstalled) {
+            Sync-NAVApp -ServerInstance $si -Name $info.Name -Publisher $info.Publisher -Version $info.Version -Tenant default
+            Install-NAVApp -ServerInstance $si -Name $info.Name -Publisher $info.Publisher -Version $info.Version -Tenant default
+        }
+        Write-Host ('[BIFROST_DEPENDENCY_OK] Microsoft {0} {1}' -f $dep.Name, $info.Version)
+    }
+    foreach ($dep in @($data.Bifrost | Where-Object { $_ })) {
+        $path = Join-Path $folder ([System.IO.Path]::GetFileName([string]$dep.File))
+        Publish-NAVApp -ServerInstance $si -Path $path -SkipVerification
+        Sync-NAVApp -ServerInstance $si -Name $dep.Name -Publisher $dep.Publisher -Version $dep.Version -Tenant default
+        Install-NAVApp -ServerInstance $si -Name $dep.Name -Publisher $dep.Publisher -Version $dep.Version -Tenant default
+        Remove-Item -LiteralPath $path -Force -ErrorAction SilentlyContinue
+        Write-Host ('[BIFROST_DEPENDENCY_OK] {0} {1} {2}' -f $dep.Publisher, $dep.Name, $dep.Version)
+    }
+}
+catch {
+    Write-Host ('[BIFROST_RUNTIME_ERROR] ' + $_.Exception.Message)
+    exit 7
+}
+Write-Host '[BIFROST_DEPENDENCIES_OK]'
+'@
 }
 
 function New-BifrostSelfTestApp {
@@ -943,6 +1076,84 @@ function Invoke-BifrostRuntimePackageSelfTest {
             Assert-True ($_.Exception.Message -match 'BIFROST_RUNTIME_STORAGE_CREDENTIAL_ABSENT') 'missing-credential error names the env var'
         }
         Assert-True $missing 'empty credential must fail closed'
+
+        # Review AMEND on #1448, blocker 1: manifest values never become code. Strict identity rules.
+        $goodId = '7505e808-6e52-4b96-a328-82573391297a'
+        foreach ($okName in @('Bifrost Foundation', 'IS Core', 'Amazon via Bifrost', ('Bifr' + [char]0x00F6 + 'st ' + [char]0x00CD + 'sland ' + [char]0x00DE + 'j' + [char]0x00F3 + 'nusta'), 'Quality_Management-2.0')) {
+            Assert-True (Test-BifrostSafeName $okName) "safe name refused: $okName"
+        }
+        $hostileNames = @('Evil $(Write-Host pwned)', 'Back`tick', 'Quote"d', "Single'quote", 'semi;colon', 'pipe|name', ('new' + "`n" + 'line'), '', ' leading space', '-dash first', ('x' * 101), 'curly{brace}', ('Bifrost' + [char]0x00E4))
+        foreach ($badName in $hostileNames) {
+            Assert-True (-not (Test-BifrostSafeName $badName)) "hostile name accepted: $($badName.Length) chars"
+            $nameRefused = $false
+            try { Assert-BifrostSafeIdentity -Id $goodId -Name $badName -Publisher 'Origo' -Version '28.0.11.669' } catch { $nameRefused = $_.Exception.Message -notmatch [regex]::Escape('pwned') }
+            Assert-True $nameRefused 'hostile dependency name must be refused without echoing it'
+            $publisherRefused = $false
+            try { Assert-BifrostSafeIdentity -Id $goodId -Name 'Bifrost Foundation' -Publisher $badName -Version '28.0.11.669' } catch { $publisherRefused = $true }
+            Assert-True $publisherRefused "hostile publisher must be refused: $($badName.Length) chars"
+        }
+        foreach ($badVersion in @('28.0.11', '28.0.11.669;x', '28.0.11.$(1)', 'a.b.c.d', '')) {
+            $versionRefused = $false
+            try { Assert-BifrostSafeIdentity -Id $goodId -Name 'Bifrost Foundation' -Publisher 'Origo' -Version $badVersion } catch { $versionRefused = $true }
+            Assert-True $versionRefused "bad version accepted: $badVersion"
+        }
+        $idRefused = $false
+        try { Assert-BifrostSafeIdentity -Id 'not-a-guid' -Name 'Bifrost Foundation' -Publisher 'Origo' -Version '28.0.11.669' } catch { $idRefused = $true }
+        Assert-True $idRefused 'a non-GUID id must be refused'
+        Assert-BifrostSafeIdentity -Id $goodId -Name 'Bifrost Foundation' -Publisher 'Origo' -Version '28.0.11.669'
+        Assert-True $true 'a normal identity passes'
+
+        # A runtime manifest that lists a hostile dependency is refused before anything is installed.
+        $hostileManifest = @'
+<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/navx/2015/manifest">
+  <App Id="7505e808-6e52-4b96-a328-82573391297a" Name="Bifrost Foundation" Publisher="Origo" Version="28.0.11.669" Application="28.0.0.0" />
+  <Dependencies>
+    <Dependency Id="11111111-2222-3333-4444-555555555555" Name="Evil $(Write-Host pwned) `b &quot;x" Publisher="Origo" MinVersion="28.0.0.0" />
+  </Dependencies>
+</Package>
+'@
+        $hostileApp = New-BifrostSelfTestApp -Path (Join-Path $root 'hostile-dependency.app') -Entries @{ 'NavxManifest.xml' = $hostileManifest } -NoNavxHeader
+        $hostileIdentity = Get-NavxAppIdentity $hostileApp
+        Assert-True (@($hostileIdentity.Dependencies).Count -eq 1 -and $hostileIdentity.Dependencies[0].Name -like 'Evil $(*') 'manifest dependencies are read from NavxManifest.xml'
+        $hostileRefused = $false
+        try { Assert-BifrostDependencyManifest -Manifest $hostileIdentity } catch { $hostileRefused = $_.Exception.Message -notmatch 'pwned' }
+        Assert-True $hostileRefused 'a manifest with a hostile dependency name must be refused without echoing it'
+
+        # The install script is fixed text that takes data, not generated code.
+        $installScript = Get-BifrostDependencyInstallScript
+        $installTokens = $null
+        $installErrors = $null
+        [void][System.Management.Automation.Language.Parser]::ParseInput($installScript, [ref]$installTokens, [ref]$installErrors)
+        Assert-True (@($installErrors).Count -eq 0) 'the dependency install script parses'
+        Assert-True ($installScript -match 'param\(\[Parameter\(Mandatory = \$true\)\]\[string\]\$DataPath\)') 'the dependency install script takes a data file'
+        Assert-True ($installScript -notmatch 'Invoke-Expression|iex |\[scriptblock\]::Create|Add-Type') 'the dependency install script never evaluates text'
+
+        # Blocker 2: a dependency must be a genuine runtime package, not a zip with only a manifest.
+        $manifestOnlyApp = New-BifrostSelfTestApp -Path (Join-Path $root 'manifest-only.app') -Entries @{ 'NavxManifest.xml' = $manifest } -NoNavxHeader
+        $manifestOnlyZip = New-BifrostSelfTestZip -ZipPath (Join-Path $root 'manifest-only-dependency.zip') -Files @{ 'Origo_Bifrost Foundation_runtime.app' = $manifestOnlyApp }
+        $plainVerified = Test-BifrostRuntimePackageZip -ZipPath $manifestOnlyZip
+        Assert-True ($plainVerified.Verified -and $plainVerified.AlEntries -eq 0 -and $plainVerified.PackageKind -eq 'zip') 'the manifest-only fixture passes the plain source-free check (the review case)'
+        $plainRefused = $false
+        try { Test-BifrostDependencyRuntimeZip -ZipPath $manifestOnlyZip | Out-Null } catch { $plainRefused = $_.Exception.Message -match 'not a genuine Business Central runtime package' }
+        Assert-True $plainRefused 'a manifest-only zip must be refused as a dependency runtime package'
+        if ($RuntimeFixturePath) {
+            $genuineZip = New-BifrostSelfTestZip -ZipPath (Join-Path $root 'genuine-dependency.zip') -Files @{ ('{0}_{1}_runtime.app' -f (Get-NavxAppIdentity $RuntimeFixturePath).Publisher, (Get-NavxAppIdentity $RuntimeFixturePath).Name) = $RuntimeFixturePath }
+            $genuine = Test-BifrostDependencyRuntimeZip -ZipPath $genuineZip
+            Assert-True ($genuine.PackageKind -eq 'runtime') 'a genuine runtime package is accepted as a dependency'
+        }
+
+        # Blocker 3: one location rule for publisher and dependant.
+        $folderRefused = $false
+        try { Get-BifrostRuntimePackageLayout -Identity $identity -FolderName 'bc-origo-bifrost-core' | Out-Null } catch { $folderRefused = $_.Exception.Message -match 'always stored under the app name' }
+        Assert-True $folderRefused 'a folder name other than the app name must be refused'
+        $sameFolder = Get-BifrostRuntimePackageLayout -Identity $identity -FolderName 'Bifrost Foundation'
+        Assert-True ($sameFolder.PublicUrl -eq $layout.PublicUrl) 'a folder name equal to the app name is the canonical location'
+        $located = Get-BifrostRuntimeLocation -Id $goodId -Name 'Bifrost Foundation' -Publisher 'Origo' -Version '28.0.11.669' -BcMajor '28'
+        Assert-True ($located.PublicUrl -eq $layout.PublicUrl) "the dependant computes the publisher's URL, got $($located.PublicUrl)"
+        $locateRefused = $false
+        try { Get-BifrostRuntimeLocation -Id $goodId -Name 'Evil $(x)' -Publisher 'Origo' -Version '28.0.11.669' -BcMajor '28' | Out-Null } catch { $locateRefused = $true }
+        Assert-True $locateRefused 'locating a hostile name must be refused'
     }
     finally {
         if (Test-Path -LiteralPath $root) { Remove-Item -LiteralPath $root -Recurse -Force }
@@ -951,12 +1162,22 @@ function Invoke-BifrostRuntimePackageSelfTest {
         $failed | ForEach-Object { Write-Error $_ -ErrorAction Continue }
         exit 1
     }
-    Write-Output ("SelfTest passed: $script:selfTestAssertions assertions, 0 failed. Genuine runtime fixture supplied: $([bool]$RuntimeFixturePath). Layout, identity, malformed input/source refusal, ZIP/read-back/hash verification, upload headers and redaction.")
+    Write-Output ("SelfTest passed: $script:selfTestAssertions assertions, 0 failed. Genuine runtime fixture supplied: $([bool]$RuntimeFixturePath). Layout, identity, malformed input/source refusal, ZIP/read-back/hash verification, upload headers, redaction, identity rules, dependency runtime kind and location.")
     exit 0
 }
 
 if ($SelfTest) {
     Invoke-BifrostRuntimePackageSelfTest
+}
+
+if ($Locate) {
+    Get-BifrostRuntimeLocation -Id $LocateId -Name $LocateName -Publisher $LocatePublisher -Version $LocateVersion -BcMajor $BcMajor | ConvertTo-Json -Compress
+    exit 0
+}
+
+if (-not [string]::IsNullOrWhiteSpace($WriteDependencyInstallScript)) {
+    [System.IO.File]::WriteAllText($WriteDependencyInstallScript, ((Get-BifrostDependencyInstallScript) -replace "`r?`n", "`r`n"))
+    exit 0
 }
 
 if (-not [string]::IsNullOrWhiteSpace($VerifyZipPath)) {

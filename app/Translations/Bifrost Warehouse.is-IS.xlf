@@ -2199,6 +2199,378 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Doc Line Qty ori - Method RefuseUnknownLineKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send text for codes, numbers for quantities and true or false for switches.</source>
+          <target>Sendu texta fyrir kóða, tölur fyrir magn og true eða false fyrir rofa.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu texta fyrir kóða, tölur fyrir magn og true eða false fyrir rofa.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check the code with Warehouse.BinContent.Get or Warehouse.Bin.Get.</source>
+          <target>Athugaðu kóðann með Warehouse.BinContent.Get eða Warehouse.Bin.Get.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu kóðann með Warehouse.BinContent.Get eða Warehouse.Bin.Get.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - NamedType 4292033227" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Read the returned text, correct the bin, the bin content or the quantity, and send the request again. Nothing was written.</source>
+          <target>Lestu textann sem skilaði sér, leiðréttu hólfið, hólfainnihaldið eða magnið og sendu beiðnina aftur. Ekkert var skrifað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lestu textann sem skilaði sér, leiðréttu hólfið, hólfainnihaldið eða magnið og sendu beiðnina aftur. Ekkert var skrifað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - NamedType RefusedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 3669371098 - NamedType 461926420" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bin %1 holds %2 of item %3 in the base unit, less than the %4 asked for.</source>
+          <target>Hólf %1 inniheldur %2 af vöru %3 í grunneiningu, minna en þau %4 sem beðið var um.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = bin, %2 = quantity in bin, %3 = item, %4 = quantity asked, is-IS=Hólf %1 inniheldur %2 af vöru %3 í grunneiningu, minna en þau %4 sem beðið var um.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method AddShortBinError - NamedType ShortLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 3669371098 - NamedType 842100143" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Read Warehouse.BinContent.Get for the bin and lower the quantity.</source>
+          <target>Lestu Warehouse.BinContent.Get fyrir hólfið og lækkaðu magnið.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lestu Warehouse.BinContent.Get fyrir hólfið og lækkaðu magnið.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method AddShortBinError - NamedType ShortNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 27234714 - NamedType 4221581950" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bin %1 is blocked for movement (%2).</source>
+          <target>Hólf %1 er lokað fyrir hreyfingu (%2).</target>
+          <note from="Developer" annotates="general" priority="2">%1 = bin, %2 = block movement value, is-IS=Hólf %1 er lokað fyrir hreyfingu (%2).</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method CheckBinNotBlocked - NamedType BlockedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 3157874445 - NamedType 1066607173" size-unit="char" translate="yes" xml:space="preserve">
+          <source>sortingMethod %1 is not a Business Central sorting method.</source>
+          <target>sortingMethod %1 er ekki röðunaraðferð í Business Central.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = value, is-IS=sortingMethod %1 er ekki röðunaraðferð í Business Central.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method CheckSortingMethod - NamedType InvalidLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 849754713 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>User %1 is not a warehouse employee.</source>
+          <target>Notandinn %1 er ekki starfsmaður vöruhúss.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = user, is-IS=Notandinn %1 er ekki starfsmaður vöruhúss.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method CheckUser - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 1840080031 - NamedType 3917977900" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The internal pick has no lines.</source>
+          <target>Innri tínslan hefur engar línur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Innri tínslan hefur engar línur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method CreatePick - NamedType NothingErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 1840080031 - NamedType 3101883699" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Business Central created no pick from the internal pick.</source>
+          <target>Business Central stofnaði enga tínslu úr innri tínslunni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Business Central stofnaði enga tínslu úr innri tínslunni.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method CreatePick - NamedType NoActivityErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 1840080031 - NamedType 1096760905" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Only %1 of the %2 asked for, in the base unit, is available to pick. Nothing was written.</source>
+          <target>Aðeins %1 af þeim %2 sem beðið var um, í grunneiningu, er tiltækt til tínslu. Ekkert var skrifað.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = quantity available, %2 = quantity asked, is-IS=Aðeins %1 af þeim %2 sem beðið var um, í grunneiningu, er tiltækt til tínslu. Ekkert var skrifað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method CreatePick - NamedType ShortErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 90897845 - NamedType 3917977900" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The internal put-away has no lines.</source>
+          <target>Innri frágangurinn hefur engar línur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Innri frágangurinn hefur engar línur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method CreatePutAway - NamedType NothingErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 90897845 - NamedType 3101883699" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Business Central created no put-away from the internal put-away.</source>
+          <target>Business Central stofnaði engan frágang úr innri frágangnum.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Business Central stofnaði engan frágang úr innri frágangnum.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method CreatePutAway - NamedType NoActivityErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 4283908577 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
+          <source>getBinContent must be an object.</source>
+          <target>getBinContent verður að vera hlutur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=getBinContent verður að vera hlutur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadBinContentRequest - NamedType FormatLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 4283908577 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>getBinContent needs binCode or zoneCode.</source>
+          <target>getBinContent þarf binCode eða zoneCode.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=getBinContent þarf binCode eða zoneCode.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadBinContentRequest - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 4283908577 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send getBinContent with binCode or zoneCode, and optionally itemNo.</source>
+          <target>Sendu getBinContent með binCode eða zoneCode og valfrjálst itemNo.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu getBinContent með binCode eða zoneCode og valfrjálst itemNo.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadBinContentRequest - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 4283908577 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 %2 was not found.</source>
+          <target>%1 %2 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = table, %2 = value, is-IS=%1 %2 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadBinContentRequest - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 3760188529 - NamedType 436939961" size-unit="char" translate="yes" xml:space="preserve">
+          <source>lines must hold at least one line.</source>
+          <target>lines verður að innihalda að minnsta kosti eina línu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=lines verður að innihalda að minnsta kosti eina línu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadLines - NamedType EmptyLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 2769887436 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line %1 is missing %2.</source>
+          <target>Línu %1 vantar %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line position in the request, counted from 1, %2 = field, is-IS=Línu %1 vantar %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadOneLine - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 2769887436 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send itemNo and quantity on every line, and a from-bin on the line or on the request.</source>
+          <target>Sendu itemNo og quantity á hverri línu og frá-hólf á línunni eða í beiðninni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu itemNo og quantity á hverri línu og frá-hólf á línunni eða í beiðninni.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadOneLine - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 2769887436 - NamedType 2682578334" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send itemNo and quantity on every line.</source>
+          <target>Sendu itemNo og quantity á hverri línu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu itemNo og quantity á hverri línu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadOneLine - NamedType MissingPickNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 2769887436 - NamedType 2174691427" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Quantity must be greater than zero.</source>
+          <target>Magn verður að vera stærra en núll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Magn verður að vera stærra en núll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadOneLine - NamedType QuantityLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 2769887436 - NamedType 2759986912" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a quantity greater than zero.</source>
+          <target>Sendu magn sem er stærra en núll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu magn sem er stærra en núll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadOneLine - NamedType QuantityNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 2769887436 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 %2 was not found.</source>
+          <target>%1 %2 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = table, %2 = value, is-IS=%1 %2 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadOneLine - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 2769887436 - NamedType 1401719882" size-unit="char" translate="yes" xml:space="preserve">
+          <source>A line with serialNo must have a base quantity of 1.</source>
+          <target>Lína með serialNo verður að hafa grunnmagnið 1.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lína með serialNo verður að hafa grunnmagnið 1.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadOneLine - NamedType SerialQtyLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 2769887436 - NamedType 3172052749" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send one line for each serial number, with quantity 1 in the base unit.</source>
+          <target>Sendu eina línu fyrir hvert raðnúmer, með magnið 1 í grunneiningu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu eina línu fyrir hvert raðnúmer, með magnið 1 í grunneiningu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadOneLine - NamedType SerialQtyNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 2735994069 - NamedType 2252517138" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location %1 does not use directed put-away and pick.</source>
+          <target>Staðsetning %1 notar ekki beina innsetningu og tínslu.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = location, is-IS=Staðsetning %1 notar ekki beina innsetningu og tínslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadRequest - NamedType DirectedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 2735994069 - NamedType 3313326517" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use Warehouse.InventoryMovement.Create for basic warehouse locations.</source>
+          <target>Notaðu Warehouse.InventoryMovement.Create fyrir einfaldar vöruhúsastaðsetningar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notaðu Warehouse.InventoryMovement.Create fyrir einfaldar vöruhúsastaðsetningar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadRequest - NamedType DirectedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 2735994069 - NamedType 2914969869" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send lines or getBinContent.</source>
+          <target>Sendu lines eða getBinContent.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu lines eða getBinContent.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadRequest - NamedType LinesMissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 2735994069 - NamedType 2632011142" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send at least one line.</source>
+          <target>Sendu að minnsta kosti eina línu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu að minnsta kosti eina línu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadRequest - NamedType LinesMissingPickLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 2735994069 - NamedType 151515437" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send lines or getBinContent, not both.</source>
+          <target>Sendu lines eða getBinContent, ekki hvort tveggja.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu lines eða getBinContent, ekki hvort tveggja.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadRequest - NamedType BothLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 2735994069 - NamedType 4286420657" size-unit="char" translate="yes" xml:space="preserve">
+          <source>createActivity needs a released document. Do not send release false together with createActivity true.</source>
+          <target>createActivity þarf útgefið skjal. Ekki senda release false ásamt createActivity true.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=createActivity þarf útgefið skjal. Ekki senda release false ásamt createActivity true.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadRequest - NamedType ActivityNeedsReleaseLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 2735994069 - NamedType 1191002070" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send release true, or leave createActivity out.</source>
+          <target>Sendu release true eða slepptu createActivity.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu release true eða slepptu createActivity.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadRequest - NamedType ActivityNeedsReleaseNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 2735994069 - NamedType 2537499893" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 is only used with createActivity true.</source>
+          <target>%1 er aðeins notað með createActivity true.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=%1 er aðeins notað með createActivity true.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadRequest - NamedType ActivityOnlyLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 2735994069 - NamedType 967667090" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send createActivity true, or leave the parameter out.</source>
+          <target>Sendu createActivity true eða slepptu færibreytunni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu createActivity true eða slepptu færibreytunni.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadRequest - NamedType ActivityOnlyNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 1406400110 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 %2 was not found at location %3.</source>
+          <target>%1 %2 fannst ekki á staðsetningu %3.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = table, %2 = code, %3 = location, is-IS=%1 %2 fannst ekki á staðsetningu %3.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadZoneAndBin - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 1406400110 - NamedType 131080182" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bin %1 is in zone %2, not in zone %3.</source>
+          <target>Hólf %1 er á svæði %2, ekki á svæði %3.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = bin, %2 = zone of the bin, %3 = zone sent, is-IS=Hólf %1 er á svæði %2, ekki á svæði %3.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadZoneAndBin - NamedType ZoneConflictLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 1406400110 - NamedType 2673229841" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send the zone of the bin, or leave the zone out.</source>
+          <target>Sendu svæði hólfsins eða slepptu svæðinu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu svæði hólfsins eða slepptu svæðinu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method ReadZoneAndBin - NamedType ZoneConflictNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 2251054666 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>locationCode is required.</source>
+          <target>locationCode er nauðsynlegt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=locationCode er nauðsynlegt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method TryResolveLocation - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 2251054666 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send locationCode of a location with directed put-away and pick.</source>
+          <target>Sendu locationCode staðsetningar með beinni innsetningu og tínslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu locationCode staðsetningar með beinni innsetningu og tínslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method TryResolveLocation - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 2251054666 - NamedType 650235816" size-unit="char" translate="yes" xml:space="preserve">
+          <source>subject and locationCode name different locations.</source>
+          <target>subject og locationCode nefna mismunandi staðsetningar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=subject og locationCode nefna mismunandi staðsetningar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method TryResolveLocation - NamedType ConflictLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 2251054666 - NamedType 1132247979" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send one location: subject or locationCode.</source>
+          <target>Sendu eina staðsetningu: subject eða locationCode.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu eina staðsetningu: subject eða locationCode.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method TryResolveLocation - NamedType ConflictNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 2251054666 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location %1 was not found.</source>
+          <target>Staðsetning %1 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = location code, is-IS=Staðsetning %1 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method TryResolveLocation - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 1506114554 - NamedType 3528737996" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The internal document was created but its number was not returned.</source>
+          <target>Innra skjalið var stofnað en númer þess skilaði sér ekki.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Innra skjalið var stofnað en númer þess skilaði sér ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method WriteResponse - NamedType MissingResultErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4088920829 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to create an internal pick.</source>
+          <target>Þú hefur ekki heimild til að stofna innri tínslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að stofna innri tínslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse IntPick Create Impl ori - Method ExecuteBifrostTask - NamedType DeniedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4088920829 - Method 3571782927 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Full ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse IntPick Create Impl ori - Method ExecuteBifrostTask - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4088920829 - Method 3571782927 - NamedType 1300278838" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Nothing was written.</source>
+          <target>Ekkert var skrifað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekkert var skrifað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse IntPick Create Impl ori - Method ExecuteBifrostTask - NamedType ProblemsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4088920829 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Creates an internal pick to a bin at a directed location, and optionally the pick.</source>
+          <target>Stofnar innri tínslu í hólf á beinni staðsetningu og valfrjálst tínslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar innri tínslu í hólf á beinni staðsetningu og valfrjálst tínslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse IntPick Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4088920829 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse IntPick Create Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4088920829 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
+          <source>internal pick, pick to bin, replenish production bin, stage stock, directed pick</source>
+          <target>innri tínsla, tína í hólf, fylla á framleiðsluhólf, taka til birgðir, bein tínsla</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=innri tínsla, tína í hólf, fylla á framleiðsluhólf, taka til birgðir, bein tínsla</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse IntPick Create Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4088920829 - Method 2340569551 - NamedType 3593894611" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Creates an internal pick at a directed location for stock that no source document asks for, releases it and can create the pick. Business Central chooses the take bins.</source>
+          <target>Stofnar innri tínslu á beinni staðsetningu fyrir birgðir sem ekkert upprunaskjal biður um, gefur hana út og getur stofnað tínslu. Business Central velur hólfin sem tekið er úr.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar innri tínslu á beinni staðsetningu fyrir birgðir sem ekkert upprunaskjal biður um, gefur hana út og getur stofnað tínslu. Business Central velur hólfin sem tekið er úr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse IntPick Create Impl ori - Method GetOverview - NamedType OverviewLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4088920829 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Creates and releases an internal pick at a directed location. Use Warehouse.InventoryMovement.Create for a location without directed put-away and pick.</source>
+          <target>Stofnar og gefur út innri tínslu á beinni staðsetningu. Notaðu Warehouse.InventoryMovement.Create fyrir staðsetningu án beinnar innsetningar og tínslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar og gefur út innri tínslu á beinni staðsetningu. Notaðu Warehouse.InventoryMovement.Create fyrir staðsetningu án beinnar innsetningar og tínslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse IntPick Create Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4088920829 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The internal pick payload was empty.</source>
+          <target>Gögnin til að stofna innri tínslu voru tóm.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gögnin til að stofna innri tínslu voru tóm.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse IntPick Create Impl ori - Method OnRun - NamedType MissingPayloadErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 768031591 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to create an internal put-away.</source>
+          <target>Þú hefur ekki heimild til að stofna innri frágang.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að stofna innri frágang.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse IntPutAw Create Impl ori - Method ExecuteBifrostTask - NamedType DeniedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 768031591 - Method 3571782927 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Full ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse IntPutAw Create Impl ori - Method ExecuteBifrostTask - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 768031591 - Method 3571782927 - NamedType 1300278838" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Nothing was written.</source>
+          <target>Ekkert var skrifað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekkert var skrifað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse IntPutAw Create Impl ori - Method ExecuteBifrostTask - NamedType ProblemsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 768031591 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Creates an internal put-away for stock in a bin at a directed location, and optionally the put-away.</source>
+          <target>Stofnar innri frágang fyrir birgðir í hólfi á beinni staðsetningu og valfrjálst frágang.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar innri frágang fyrir birgðir í hólfi á beinni staðsetningu og valfrjálst frágang.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse IntPutAw Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 768031591 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse IntPutAw Create Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 768031591 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
+          <source>internal put-away, put away from bin, return to stock, empty receive bin, adjustment bin, directed put-away</source>
+          <target>innri frágangur, ganga frá úr hólfi, skila á lager, tæma móttökuhólf, leiðréttingarhólf, bein innsetning</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=innri frágangur, ganga frá úr hólfi, skila á lager, tæma móttökuhólf, leiðréttingarhólf, bein innsetning</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse IntPutAw Create Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 768031591 - Method 2340569551 - NamedType 3593894611" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Creates an internal put-away at a directed location for stock that no source document covers, releases it and can create the put-away. Business Central chooses the place bins.</source>
+          <target>Stofnar innri frágang á beinni staðsetningu fyrir birgðir sem ekkert upprunaskjal nær til, gefur hann út og getur stofnað frágang. Business Central velur hólfin sem gengið er frá í.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar innri frágang á beinni staðsetningu fyrir birgðir sem ekkert upprunaskjal nær til, gefur hann út og getur stofnað frágang. Business Central velur hólfin sem gengið er frá í.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse IntPutAw Create Impl ori - Method GetOverview - NamedType OverviewLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 768031591 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Creates and releases an internal put-away at a directed location. Use Warehouse.InventoryMovement.Create for a location without directed put-away and pick.</source>
+          <target>Stofnar og gefur út innri frágang á beinni staðsetningu. Notaðu Warehouse.InventoryMovement.Create fyrir staðsetningu án beinnar innsetningar og tínslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar og gefur út innri frágang á beinni staðsetningu. Notaðu Warehouse.InventoryMovement.Create fyrir staðsetningu án beinnar innsetningar og tínslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse IntPutAw Create Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 768031591 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The internal put-away payload was empty.</source>
+          <target>Gögnin til að stofna innri frágang voru tóm.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gögnin til að stofna innri frágang voru tóm.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse IntPutAw Create Impl ori - Method OnRun - NamedType MissingPayloadErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 1975501152 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
           <source>You do not have permission to read open warehouse receipts and shipments.</source>
           <target>Þú hefur ekki heimild til að lesa opnar vöruhúsamóttökur og vöruhúsaafhendingar.</target>

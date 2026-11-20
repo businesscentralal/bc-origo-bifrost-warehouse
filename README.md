@@ -48,6 +48,8 @@ The list is the enum extension `Whse MsgType EnumExt ori` in
 | `Warehouse.Bin.Create` | Inbound | Create one or more bins at a location, all or nothing | `BIFROST Full ori` |
 | `Warehouse.DefaultBin.Set` | Inbound | Set the default bin for an item at a location | `BIFROST Full ori` |
 | `Warehouse.Movement.Create` | Inbound | Create a warehouse movement at a directed location from a movement worksheet or inline lines | `BIFROST Full ori` |
+| `Warehouse.InternalPutaway.Create` | Inbound | Create and release an internal put-away at a directed location, from lines or bin content, and optionally the put-away | `BIFROST Full ori` |
+| `Warehouse.InternalPick.Create` | Inbound | Create and release an internal pick to a bin at a directed location, and optionally the pick | `BIFROST Full ori` |
 | `Warehouse.Movement.Register` | Inbound | Register a warehouse movement, fully or partially | `BIFROST WhsePost ori` |
 | `Warehouse.InventoryPick.Create` | Inbound | Create an inventory pick for a released outbound source document | `BIFROST Full ori` |
 | `Warehouse.InventoryPick.Post` | Inbound | Post an inventory pick, optionally invoicing a sales order | `BIFROST WhsePost ori`; `BIFROST WhseInv ori` when `invoice` is true |

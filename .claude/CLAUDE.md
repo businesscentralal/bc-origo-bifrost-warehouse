@@ -75,11 +75,16 @@ App range: `10078385–10078484` (private block, 100 IDs).
 | 10078466 | `Whse ActLine Helper ori` (shared by #56 and #57) |
 | 10078467 | `Whse Msg Values ori` (readers shared by #48-#50 and #55-#57) |
 | 10078468 | `Whse Worksheet Helper ori` (shared by #55) |
+| 10078405 | `Whse Internal Doc Helper ori` (helper-only number, shared by #106) |
+| 10078483 | `Whse IntPutAw Create Impl ori` and enum value `Warehouse.InternalPutaway.Create` (#106) |
+| 10078484 | `Whse IntPick Create Impl ori` and enum value `Warehouse.InternalPick.Create` (#106) |
+| 10078385 | page `Whse Setup Wizard ori`, codeunit `Whse Wizard Reg. ori` (ledger drift fixed in #106) |
+| 10078386 | codeunit `Whse Wizard Mgt ori` (ledger drift fixed in #106) |
 | 10078389, 10078391 | Reserved (do not use) |
 | 10078439 | `Whse Document Get Impl ori` and enum value `Warehouse.Document.Get` (#104) |
 | 10078440 | `Whse Availability Get Impl ori` and enum value `Warehouse.Availability.Get` (#107; moved from 10078439, which #104 owns on main) |
 | 10078441–10078445 | Free (5 IDs) |
-| 10078469–10078484 | Free (16 IDs) |
+| 10078469–10078482 | Free (14 IDs; #106 took 10078483–10078484) |
 
 Test range: `97000–97099`.
 
@@ -91,7 +96,7 @@ Test range: `97000–97099`.
 | 97003–97005 | Setup wizard tests (in use; see the test sources) |
 | 97006 | `Whse Document Get Tests ori` (#104) |
 | 97007 | codeunit `Whse Availability Tests ori` (#107; moved from 97006, which #104 owns) and permission set `Whse AvRead Tst ori` (#107) |
-| 97008–97009 | Free |
+| 97008–97009 | Free (the P2 Warehouse Movement tests use 97080–97091) |
 | 97010 | permission set `Whse NoRead Test ori` |
 | 97011–97020 | Test codeunits of the ten moved `Warehouse.*` types |
 | 97021–97022 | `Whse Shipment Test Helper ori`, `Whse Receipt Test Helper ori` |
@@ -124,4 +129,6 @@ Test range: `97000–97099`.
 | 97065–97079 | Free |
 | 97080–97091 | Tests of #41-#47: `Whse Bin Get Tests ori`, `Whse Bin Create Tests ori`, `Whse DefBin Set Tests ori`, `Whse Movement Create Tests ori`, `Whse Movement Reg Tests ori`, `Whse InvtPick Create Tests ori`, `Whse InvtPick Post Tests ori`, `Whse InvtPut Create Tests ori`, `Whse InvtPut Post Tests ori`, `Whse InvtMove Create Tests ori`, `Whse InvtMove Reg Tests ori`, `Whse Bin Repl Tests ori` |
 | 97092 | `Whse Count Help Tests ori` (#97) |
-| 97093–97099 | Free |
+| 97093–97097 | Free |
+| 97098 | `Whse IntPutAw Tests ori` (#106) |
+| 97099 | `Whse IntPick Tests ori` (#106) |

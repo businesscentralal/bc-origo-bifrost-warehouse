@@ -2217,23 +2217,23 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Lestu textann sem skilaði sér, leiðréttu hólfið, hólfainnihaldið eða magnið og sendu beiðnina aftur. Ekkert var skrifað.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - NamedType RefusedNextStepLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 3669371098 - NamedType 461926420" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bin %1 holds %2 of item %3 in the base unit, less than the %4 asked for.</source>
+          <target>Hólf %1 inniheldur %2 af vöru %3 í grunneiningu, minna en þau %4 sem beðið var um.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = bin, %2 = quantity in bin, %3 = item, %4 = quantity asked, is-IS=Hólf %1 inniheldur %2 af vöru %3 í grunneiningu, minna en þau %4 sem beðið var um.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method AddShortBinError - NamedType ShortLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4059217944 - Method 3669371098 - NamedType 842100143" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Read Warehouse.BinContent.Get for the bin and lower the quantity.</source>
+          <target>Lestu Warehouse.BinContent.Get fyrir hólfið og lækkaðu magnið.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lestu Warehouse.BinContent.Get fyrir hólfið og lækkaðu magnið.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method AddShortBinError - NamedType ShortNextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 4059217944 - Method 27234714 - NamedType 4221581950" size-unit="char" translate="yes" xml:space="preserve">
           <source>Bin %1 is blocked for movement (%2).</source>
           <target>Hólf %1 er lokað fyrir hreyfingu (%2).</target>
           <note from="Developer" annotates="general" priority="2">%1 = bin, %2 = block movement value, is-IS=Hólf %1 er lokað fyrir hreyfingu (%2).</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method CheckBinNotBlocked - NamedType BlockedLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 4059217944 - Method 2039989564 - NamedType 461926420" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Bin %1 holds %2 of item %3 in the base unit, less than the %4 asked for.</source>
-          <target>Hólf %1 inniheldur %2 af vöru %3 í grunneiningu, minna en þau %4 sem beðið var um.</target>
-          <note from="Developer" annotates="general" priority="2">%1 = bin, %2 = quantity in bin, %3 = item, %4 = quantity asked, is-IS=Hólf %1 inniheldur %2 af vöru %3 í grunneiningu, minna en þau %4 sem beðið var um.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method CheckBinQuantity - NamedType ShortLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 4059217944 - Method 2039989564 - NamedType 842100143" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Read Warehouse.BinContent.Get for the bin and lower the quantity.</source>
-          <target>Lestu Warehouse.BinContent.Get fyrir hólfið og lækkaðu magnið.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Lestu Warehouse.BinContent.Get fyrir hólfið og lækkaðu magnið.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Internal Doc Helper ori - Method CheckBinQuantity - NamedType ShortNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 4059217944 - Method 3157874445 - NamedType 1066607173" size-unit="char" translate="yes" xml:space="preserve">
           <source>sortingMethod %1 is not a Business Central sorting method.</source>

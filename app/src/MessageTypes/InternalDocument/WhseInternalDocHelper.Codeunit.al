@@ -290,6 +290,8 @@ codeunit 10078405 "Whse Internal Doc Helper ori"
         for Index := 0 to Lines.Count() - 1 do
             if Values.TryGetLineObject(Lines, Index, 'lines', Argument, LineObject) then
                 ReadOneLine(LineObject, Index, Argument, LocationCode, HeaderBinCode, IsPick, Planned);
+        if not IsPick then
+            CheckPooledBinQuantity(Argument, LocationCode, Planned);
     end;
 
     local procedure ReadOneLine(LineObject: JsonObject; Index: Integer; var Argument: Record "Message Argument ori"; LocationCode: Code[10]; HeaderBinCode: Code[20]; IsPick: Boolean; var Planned: JsonArray)
@@ -409,6 +411,8 @@ codeunit 10078405 "Whse Internal Doc Helper ori"
         PlannedLine.Add('lotNo', LotNo);
         PlannedLine.Add('serialNo', SerialNo);
         PlannedLine.Add('packageNo', PackageNo);
+        PlannedLine.Add('quantityBase', Quantity * ItemUnit."Qty. per Unit of Measure");
+        PlannedLine.Add('lineIndex', Index);
         Planned.Add(PlannedLine);
     end;
 
@@ -421,11 +425,108 @@ codeunit 10078405 "Whse Internal Doc Helper ori"
 
     local procedure CheckBinQuantity(var Argument: Record "Message Argument ori"; Index: Integer; LocationCode: Code[10]; BinCode: Code[20]; ItemNo: Code[20]; VariantCode: Text; LotNo: Text; SerialNo: Text; PackageNo: Text; RequestedBase: Decimal; var Valid: Boolean)
     var
-        BinContent: Record "Bin Content";
-        Values: Codeunit "Whse Msg Values ori";
         AvailableBase: Decimal;
-        ShortLbl: Label 'Bin %1 holds %2 of item %3 in the base unit, less than the %4 asked for.', Comment = '%1 = bin, %2 = quantity in bin, %3 = item, %4 = quantity asked, is-IS=Hólf %1 inniheldur %2 af vöru %3 í grunneiningu, minna en þau %4 sem beðið var um.';
-        ShortNextStepLbl: Label 'Read Warehouse.BinContent.Get for the bin and lower the quantity.', Comment = 'is-IS=Lestu Warehouse.BinContent.Get fyrir hólfið og lækkaðu magnið.';
+    begin
+        AvailableBase := BinAvailableBase(LocationCode, BinCode, ItemNo, VariantCode, LotNo, SerialNo, PackageNo);
+        if AvailableBase >= RequestedBase then
+            exit;
+        AddShortBinError(Argument, Index, BinCode, ItemNo, AvailableBase, RequestedBase);
+        Valid := false;
+    end;
+
+    /// <summary>
+    /// Refuses lines that together ask a bin for more than it holds. Each stock scope (bin, item, variant and the tracking a line names, plus the untracked pool of the bin) must hold the sum of every line drawing from it.
+    /// </summary>
+    local procedure CheckPooledBinQuantity(var Argument: Record "Message Argument ori"; LocationCode: Code[10]; Planned: JsonArray)
+    var
+        Values: Codeunit "Whse Msg Values ori";
+        Scope: JsonObject;
+        Scopes: List of [Text];
+        FailedPools: List of [Text];
+        ScopeKey: Text;
+        PoolKey: Text;
+        RequestedBase: Decimal;
+        AvailableBase: Decimal;
+        LineCount: Integer;
+        LastIndex: Integer;
+        Index: Integer;
+        Pass: Integer;
+    begin
+        if Planned.Count() < 2 then
+            exit;
+        for Index := 0 to Planned.Count() - 1 do
+            for Pass := 1 to 2 do begin
+                Scope := PlannedLineAt(Planned, Index);
+                if Pass = 2 then begin
+                    Scope.Replace('lotNo', '');
+                    Scope.Replace('serialNo', '');
+                    Scope.Replace('packageNo', '');
+                end;
+                PoolKey := StockKey(Scope, false);
+                ScopeKey := StockKey(Scope, true);
+                if not Scopes.Contains(ScopeKey) and not FailedPools.Contains(PoolKey) then begin
+                    Scopes.Add(ScopeKey);
+                    SumScope(Planned, Scope, RequestedBase, LineCount, LastIndex);
+                    if LineCount > 1 then begin
+                        AvailableBase := BinAvailableBase(LocationCode, CopyStr(Values.TextValue(Scope, 'binCode'), 1, 20), CopyStr(Values.TextValue(Scope, 'itemNo'), 1, 20), Values.TextValue(Scope, 'variantCode'), Values.TextValue(Scope, 'lotNo'), Values.TextValue(Scope, 'serialNo'), Values.TextValue(Scope, 'packageNo'));
+                        if AvailableBase < RequestedBase then begin
+                            AddShortBinError(Argument, LastIndex, CopyStr(Values.TextValue(Scope, 'binCode'), 1, 20), CopyStr(Values.TextValue(Scope, 'itemNo'), 1, 20), AvailableBase, RequestedBase);
+                            FailedPools.Add(PoolKey);
+                        end;
+                    end;
+                end;
+            end;
+    end;
+
+    local procedure PlannedLineAt(Planned: JsonArray; Index: Integer): JsonObject
+    var
+        Token: JsonToken;
+    begin
+        Planned.Get(Index, Token);
+        exit(Token.AsObject().Clone().AsObject());
+    end;
+
+    local procedure StockKey(Scope: JsonObject; WithTracking: Boolean): Text
+    var
+        Values: Codeunit "Whse Msg Values ori";
+        KeyText: Text;
+    begin
+        KeyText := Values.TextValue(Scope, 'binCode') + '|' + Values.TextValue(Scope, 'itemNo') + '|' + Values.TextValue(Scope, 'variantCode');
+        if WithTracking then
+            KeyText += '|' + Values.TextValue(Scope, 'lotNo') + '|' + Values.TextValue(Scope, 'serialNo') + '|' + Values.TextValue(Scope, 'packageNo');
+        exit(KeyText);
+    end;
+
+    local procedure SumScope(Planned: JsonArray; Scope: JsonObject; var RequestedBase: Decimal; var LineCount: Integer; var LastIndex: Integer)
+    var
+        Values: Codeunit "Whse Msg Values ori";
+        Token: JsonToken;
+        LineObject: JsonObject;
+    begin
+        RequestedBase := 0;
+        LineCount := 0;
+        foreach Token in Planned do begin
+            LineObject := Token.AsObject();
+            if StockKey(LineObject, false) = StockKey(Scope, false) then
+                if TrackingWithin(Values.TextValue(Scope, 'lotNo'), Values.TextValue(LineObject, 'lotNo')) and
+                   TrackingWithin(Values.TextValue(Scope, 'serialNo'), Values.TextValue(LineObject, 'serialNo')) and
+                   TrackingWithin(Values.TextValue(Scope, 'packageNo'), Values.TextValue(LineObject, 'packageNo'))
+                then begin
+                    RequestedBase += Values.DecimalValue(LineObject, 'quantityBase');
+                    LineCount += 1;
+                    LastIndex := Values.IntegerValue(LineObject, 'lineIndex');
+                end;
+        end;
+    end;
+
+    local procedure TrackingWithin(ScopeValue: Text; LineValue: Text): Boolean
+    begin
+        exit((ScopeValue = '') or (ScopeValue = LineValue));
+    end;
+
+    local procedure BinAvailableBase(LocationCode: Code[10]; BinCode: Code[20]; ItemNo: Code[20]; VariantCode: Text; LotNo: Text; SerialNo: Text; PackageNo: Text) AvailableBase: Decimal
+    var
+        BinContent: Record "Bin Content";
     begin
         BinContent.SetRange("Location Code", LocationCode);
         BinContent.SetRange("Bin Code", BinCode);
@@ -442,10 +543,15 @@ codeunit 10078405 "Whse Internal Doc Helper ori"
             repeat
                 AvailableBase += BinContent."Quantity (Base)";
             until BinContent.Next() = 0;
-        if AvailableBase >= RequestedBase then
-            exit;
+    end;
+
+    local procedure AddShortBinError(var Argument: Record "Message Argument ori"; Index: Integer; BinCode: Code[20]; ItemNo: Code[20]; AvailableBase: Decimal; RequestedBase: Decimal)
+    var
+        Values: Codeunit "Whse Msg Values ori";
+        ShortLbl: Label 'Bin %1 holds %2 of item %3 in the base unit, less than the %4 asked for.', Comment = '%1 = bin, %2 = quantity in bin, %3 = item, %4 = quantity asked, is-IS=Hólf %1 inniheldur %2 af vöru %3 í grunneiningu, minna en þau %4 sem beðið var um.';
+        ShortNextStepLbl: Label 'Read Warehouse.BinContent.Get for the bin and lower the quantity.', Comment = 'is-IS=Lestu Warehouse.BinContent.Get fyrir hólfið og lækkaðu magnið.';
+    begin
         Argument.AddError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(ShortLbl, BinCode, Format(AvailableBase, 0, 9), ItemNo, Format(RequestedBase, 0, 9)), Values.LineParameter('lines', Index, 'quantity'), Format(RequestedBase, 0, 9), Format(AvailableBase, 0, 9), ShortNextStepLbl);
-        Valid := false;
     end;
 
     local procedure ReadBinContentRequest(RequestJson: JsonObject; var Argument: Record "Message Argument ori"; LocationCode: Code[10]; var Payload: JsonObject)

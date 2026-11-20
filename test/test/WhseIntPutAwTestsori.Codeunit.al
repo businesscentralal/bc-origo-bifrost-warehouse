@@ -114,6 +114,21 @@ BinContent.SetRange("Location Code", Location.Code);
         AssertNothingWritten(Location.Code);
     end;
 
+    /// <summary>AC04: lines that together ask a bin for more than it holds are refused with PreconditionFailed and nothing is written.</summary>
+    [Test]
+    procedure Create_RepeatedLinesOverBinQuantity_IsRefused()
+    var
+        Location: Record Location;
+        Item: Record Item;
+        ReceiveBin: Record Bin;
+        ResponseJson: JsonObject;
+    begin
+        PrepareReceiveBinStock(Location, Item, ReceiveBin, 5);
+        Run('{"locationCode":"' + Location.Code + '","fromBinCode":"' + ReceiveBin.Code + '","lines":[{"itemNo":"' + Item."No." + '","quantity":3},{"itemNo":"' + Item."No." + '","quantity":3}]}', ResponseJson);
+        AssertRefused(ResponseJson, 'PreconditionFailed', 'Read Warehouse.BinContent.Get for the bin and lower the quantity.');
+        AssertNothingWritten(Location.Code);
+    end;
+
     /// <summary>AC04: a lot that is not in the bin is refused like a short quantity.</summary>
     [Test]
     procedure Create_UnknownLotInBin_IsRefused()

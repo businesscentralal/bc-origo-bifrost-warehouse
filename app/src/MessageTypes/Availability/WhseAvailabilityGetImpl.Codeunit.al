@@ -192,10 +192,11 @@ codeunit 10078439 "Whse Availability Get Impl ori" implements "Msg Interface ori
     begin
         Related.Add(ContractMgt.RelatedEntry('Warehouse.BinContent.Get', 'You want the raw quantity in each bin, without what is assigned or blocked.'));
         Related.Add(ContractMgt.RelatedEntry('Warehouse.Pick.Create', 'Create the pick once you know what is available.'));
-        Related.Add(ContractMgt.RelatedEntry('Inventory.AvailableToPromise.Get', 'You want availability to promise at item and location level, not the warehouse view.'));
-        Related.Add(ContractMgt.RelatedEntry('Inventory.AvailabilityByEvent.Get', 'You want the availability by supply and demand event.'));
-        Related.Add(ContractMgt.RelatedEntry('Inventory.AvailabilityByPeriod.Get', 'You want the availability by period.'));
-        Related.Add(ContractMgt.RelatedEntry('Inventory.TrackingAvailability.Get', 'You want lot and serial availability at item level.'));
+        // Bifrost Inventory is not a dependency (#107, same rule as #68). Name its types only when that app is installed.
+        AddInstalledRelated(Related, ContractMgt, 'Inventory.AvailableToPromise.Get', 'You want availability to promise at item and location level, not the warehouse view.');
+        AddInstalledRelated(Related, ContractMgt, 'Inventory.AvailabilityByEvent.Get', 'You want the availability by supply and demand event.');
+        AddInstalledRelated(Related, ContractMgt, 'Inventory.AvailabilityByPeriod.Get', 'You want the availability by period.');
+        AddInstalledRelated(Related, ContractMgt, 'Inventory.TrackingAvailability.Get', 'You want lot and serial availability at item level.');
         exit(true);
     end;
 
@@ -235,7 +236,8 @@ codeunit 10078439 "Whse Availability Get Impl ori" implements "Msg Interface ori
             'The totals add up to qtyInWarehouse only roughly, because one quantity can be counted in more than one of them, for example a dedicated bin that is also blocked. ' +
             'includeBins adds one row per bin that holds the item; binCode and zoneCode narrow the list. includeTracking adds one row per lot, serial and package number that is not blocked, with the expiration date; lotNo, serialNo and packageNo narrow the list and the totals. ' +
             'A location without bins answers the inventory of the location with an empty bins list and a note. An item without stock is Success with zeros. ' +
-            'A pick that created for a shipment can still take less when that shipment line has its own reservation.';
+            'A pick that created for a shipment can still take less when that shipment line has its own reservation. ' +
+            'When Bifrost Inventory is installed, related also names Inventory.AvailableToPromise.Get, Inventory.AvailabilityByEvent.Get, Inventory.AvailabilityByPeriod.Get and Inventory.TrackingAvailability.Get. Those names are left out when that app is not installed.';
         exit(true);
     end;
 
@@ -779,6 +781,17 @@ codeunit 10078439 "Whse Availability Get Impl ori" implements "Msg Interface ori
         TempRowLine."Package No." := Row."Package No.";
         TempRowLine.Insert();
         exit(CreatePick.CalcTotalAvailQtyToPick(Location.Code, ItemNo, VariantCode, TempRowLine, 0, 0, '', 0, 0, 0, Location."Bin Mandatory"));
+    end;
+
+    /// <summary>
+    /// Adds a related type only when that name exists on Message Type ori.
+    /// Warehouse does not depend on Bifrost Inventory, so its types are absent until that app is installed (#107).
+    /// </summary>
+    local procedure AddInstalledRelated(var Related: JsonArray; ContractMgt: Codeunit "Msg Contract Mgt ori"; TypeName: Text; UseInsteadWhen: Text)
+    begin
+        if not Enum::"Message Type ori".Names().Contains(TypeName) then
+            exit;
+        Related.Add(ContractMgt.RelatedEntry(TypeName, UseInsteadWhen));
     end;
 
     local procedure RefuseUnknownKeys(RequestJson: JsonObject; var Argument: Record "Message Argument ori")

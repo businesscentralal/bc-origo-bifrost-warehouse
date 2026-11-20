@@ -272,7 +272,7 @@ codeunit 97006 "Whse Availability Tests ori"
         Assert.AreEqual('Ask an administrator to assign BIFROST Whse - Read ori.', TextValue(ResponseJson, 'nextStep'), 'The next step names the read permission set.');
     end;
 
-    /// <summary>AC06: help is declared, names the related Inventory types and translates the next steps.</summary>
+    /// <summary>AC06: help is declared, lists Inventory types only when that app is installed, and translates the next steps.</summary>
     [Test]
     procedure Availability_Help_IsDeclaredInBothLanguages()
     var
@@ -288,10 +288,12 @@ codeunit 97006 "Whse Availability Tests ori"
         GlobalLanguage(1033);
         Assert.IsTrue(Contract.GetRelated(Related), 'Related types are declared.');
         Related.WriteTo(RelatedText);
-        Assert.IsTrue(RelatedText.Contains('Inventory.AvailableToPromise.Get'), 'Inventory.AvailableToPromise.Get is related.');
-        Assert.IsTrue(RelatedText.Contains('Inventory.AvailabilityByEvent.Get'), 'Inventory.AvailabilityByEvent.Get is related.');
-        Assert.IsTrue(RelatedText.Contains('Inventory.AvailabilityByPeriod.Get'), 'Inventory.AvailabilityByPeriod.Get is related.');
-        Assert.IsTrue(RelatedText.Contains('Inventory.TrackingAvailability.Get'), 'Inventory.TrackingAvailability.Get is related.');
+        Assert.IsTrue(RelatedText.Contains('Warehouse.BinContent.Get'), 'Warehouse.BinContent.Get is related.');
+        Assert.IsTrue(RelatedText.Contains('Warehouse.Pick.Create'), 'Warehouse.Pick.Create is related.');
+        AssertInventoryRelated(RelatedText, 'Inventory.AvailableToPromise.Get');
+        AssertInventoryRelated(RelatedText, 'Inventory.AvailabilityByEvent.Get');
+        AssertInventoryRelated(RelatedText, 'Inventory.AvailabilityByPeriod.Get');
+        AssertInventoryRelated(RelatedText, 'Inventory.TrackingAvailability.Get');
         Assert.AreEqual('Check the code named in the error and try again.', NotFoundNextStep(Contract), 'English next step.');
         GlobalLanguage(1039);
         Assert.AreEqual('Athugaðu kóðann sem villan nefnir og reyndu aftur.', NotFoundNextStep(Contract), 'Icelandic next step.');
@@ -395,6 +397,15 @@ codeunit 97006 "Whse Availability Tests ori"
             end;
         end;
         LibraryInventory.PostItemJournalLine(ItemJournalTemplate.Name, ItemJournalBatch.Name);
+    end;
+
+    local procedure AssertInventoryRelated(RelatedText: Text; TypeName: Text)
+    begin
+        // The same rule as GetRelated: the name is a related entry only when the enum value exists.
+        if Enum::"Message Type ori".Names().Contains(TypeName) then
+            Assert.IsTrue(RelatedText.Contains(TypeName), TypeName + ' is related when Bifrost Inventory is installed.')
+        else
+            Assert.IsFalse(RelatedText.Contains(TypeName), TypeName + ' is omitted when Bifrost Inventory is not installed.');
     end;
 
     local procedure RunPickCreate(WhseShipmentNo: Code[20])

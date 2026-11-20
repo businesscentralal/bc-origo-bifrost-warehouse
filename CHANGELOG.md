@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Add `Warehouse.Document.Get` to read open receipts and shipments, identifiers, filters, quantities and paging (#104). Added implementation and enum value 10078439, test codeunit 97006; synchronized Icelandic discovery and refusal labels.
+
 ## [Unreleased]
 
 - #99 (core#1365 D1, Gunnar 16.11.2026): Warehouse.Receipt.Create, Warehouse.Pick.Create, Warehouse.Putaway.Create, Warehouse.Movement.Create, Warehouse.InventoryPick.Create, Warehouse.InventoryPutAway.Create, Warehouse.InventoryMovement.Create, Warehouse.BinReplenishment.Calculate and Warehouse.Worksheet.CreateActivities now declare effect `write` instead of `irreversible`: a commit alone does not make them irreversible. They no longer declare `expectedCount` and run without it while *Require Confirmation for Irreversible Messages* is on. The count wording (en-US help and is-IS XLF) and the `Irreversible.` lead of the selection help are removed for them. Postings, registrations and the other types stay irreversible. No object IDs added; tests in codeunit 97092 (`Whse Count Help Tests ori`), 97027 and the journal contract tests updated.

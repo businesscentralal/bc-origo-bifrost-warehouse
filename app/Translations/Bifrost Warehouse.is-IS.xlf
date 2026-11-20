@@ -2199,6 +2199,102 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Doc Line Qty ori - Method RefuseUnknownLineKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 1975501152 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to read open warehouse receipts and shipments.</source>
+          <target>Þú hefur ekki heimild til að lesa opnar vöruhúsamóttökur og vöruhúsaafhendingar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að lesa opnar vöruhúsamóttökur og vöruhúsaafhendingar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Get Impl ori - Method ExecuteBifrostTask - NamedType DeniedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1975501152 - Method 3571782927 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Read ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Read ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Read ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Get Impl ori - Method ExecuteBifrostTask - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1975501152 - Method 3571782927 - NamedType 1300278838" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The request has invalid values.</source>
+          <target>Beiðnin hefur ógild gildi.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Beiðnin hefur ógild gildi.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Get Impl ori - Method ExecuteBifrostTask - NamedType ProblemsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1975501152 - Method 3571782927 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>documentType is required.</source>
+          <target>documentType er nauðsynlegt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=documentType er nauðsynlegt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Get Impl ori - Method ExecuteBifrostTask - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1975501152 - Method 3571782927 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send documentType Receipt or Shipment.</source>
+          <target>Sendu documentType Receipt eða Shipment.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu documentType Receipt eða Shipment.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Get Impl ori - Method ExecuteBifrostTask - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1975501152 - Method 3571782927 - NamedType 2442600875" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Parameter %1 has the value %2, which is not one of the values listed in the help.</source>
+          <target>Færibreytan %1 hefur gildið %2 sem er ekki eitt af gildunum sem talin eru upp í hjálpinni.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter, %2 = value, is-IS=Færibreytan %1 hefur gildið %2 sem er ekki eitt af gildunum sem talin eru upp í hjálpinni.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Get Impl ori - Method ExecuteBifrostTask - NamedType ValueLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1975501152 - Method 3571782927 - NamedType 3082154152" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use one of the values listed in the help.</source>
+          <target>Notaðu eitt af gildunum sem talin eru upp í hjálpinni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notaðu eitt af gildunum sem talin eru upp í hjálpinni.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Get Impl ori - Method ExecuteBifrostTask - NamedType ValueNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1975501152 - Method 3571782927 - NamedType 2666638023" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The date range %1 ends before it starts.</source>
+          <target>Dagsetningabilið %1 endar áður en það byrjar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=Dagsetningabilið %1 endar áður en það byrjar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Get Impl ori - Method ExecuteBifrostTask - NamedType RangeLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1975501152 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reads open warehouse receipts or open warehouse shipments, optionally with lines.</source>
+          <target>Les opnar vöruhúsamóttökur eða opnar vöruhúsaafhendingar, valfrjálst með línum.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Les opnar vöruhúsamóttökur eða opnar vöruhúsaafhendingar, valfrjálst með línum.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Get Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1975501152 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Get Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1975501152 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
+          <source>open warehouse receipt, open warehouse shipment, outstanding receipt, outstanding shipment, picked quantity, open document lines</source>
+          <target>opin vöruhúsamóttaka, opin vöruhúsaafhending, óafgreidd móttaka, óafgreidd afhending, tínt magn, línur opinna skjala</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=opin vöruhúsamóttaka, opin vöruhúsaafhending, óafgreidd móttaka, óafgreidd afhending, tínt magn, línur opinna skjala</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Get Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1975501152 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Read-only. Reads open warehouse receipts or shipments by number or by location, source number and posting date, paged.</source>
+          <target>Lesaðgangur. Les opnar vöruhúsamóttökur eða vöruhúsaafhendingar eftir númeri eða eftir staðsetningu, númeri upprunaskjals og bókunardegi, blaðsíðuskipt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lesaðgangur. Les opnar vöruhúsamóttökur eða vöruhúsaafhendingar eftir númeri eða eftir staðsetningu, númeri upprunaskjals og bókunardegi, blaðsíðuskipt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Get Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1975501152 - Method 2054439282 - NamedType 1773691126" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The key %1 is not a parameter of this message type.</source>
+          <target>Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = key, is-IS=Lykillinn %1 er ekki færibreyta þessarar skilaboðagerðar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Get Impl ori - Method RefuseUnknownKeys - NamedType UnknownLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1975501152 - Method 2054439282 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Get Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1975501152 - Method 384696941 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The named open warehouse document was not found.</source>
+          <target>Tilgreint opið vöruhúsaskjal fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreint opið vöruhúsaskjal fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Get Impl ori - Method ResolveDocument - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1975501152 - Method 384696941 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Search with filters instead of a document identifier.</source>
+          <target>Leitaðu með síum í stað auðkennis skjals.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Leitaðu með síum í stað auðkennis skjals.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Get Impl ori - Method ResolveDocument - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 301136191 - Method 1642629281 - NamedType 3917977900" size-unit="char" translate="yes" xml:space="preserve">
           <source>No inventory movement was created.</source>
           <target>Engin birgðafærsla var stofnuð.</target>

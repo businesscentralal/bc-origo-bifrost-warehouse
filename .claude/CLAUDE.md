@@ -7,7 +7,7 @@
 - Own permission sets only for the posting and invoicing gates (`BIFROST WhsePost ori`, `BIFROST WhseInv ori`). Both are `Assignable = true` on purpose: they are the only grants of the gate token tables (`Whse Posting ori`, `Whse Invoice ori`) and must stay out of the read/full extensions. No direct `Setup ori` tabledata access.
 - No pages; context-sensitive help base `https://docs.bifrost.origo.is/{0}/help/warehouse/`.
 - AppSource build gate: see `tools/AppSourceBuildGate.md` (ported from Bifrost Inventory / Attachments). Build runs with `failOn: warning`.
-- Message types: all forty-three `Warehouse.*` types in `app/src/MessageTypes/`.
+- Message types: all forty-four `Warehouse.*` types in `app/src/MessageTypes/`.
 - One Impl codeunit per message type. The write types of #41-#50 and #55-#57 run their own `OnRun` in
   `Codeunit.Run` isolation and share `Whse Write Context ori` for payload, result and request readers;
   do not add a Proc or Context codeunit per type. Their enum values reuse the Impl codeunit number.
@@ -82,8 +82,9 @@ App range: `10078385–10078484` (private block, 100 IDs).
 | 10078386 | codeunit `Whse Wizard Mgt ori` (ledger drift fixed in #106) |
 | 10078389, 10078391 | Reserved (do not use) |
 | 10078439 | `Whse Document Get Impl ori` and enum value `Warehouse.Document.Get` (#104) |
-| 10078440–10078445 | Free (6 IDs) |
-| 10078469–10078482 | Free (14 IDs; #106 took 10078483–10078484 from the top so the parallel wave-1 issues #104 and #107 can take the next free numbers) |
+| 10078440 | `Whse Availability Get Impl ori` and enum value `Warehouse.Availability.Get` (#107; moved from 10078439, which #104 owns on main) |
+| 10078441–10078445 | Free (5 IDs) |
+| 10078469–10078482 | Free (14 IDs; #106 took 10078483–10078484) |
 
 Test range: `97000–97099`.
 
@@ -92,9 +93,10 @@ Test range: `97000–97099`.
 | 97000 | `Whse BinContent Get Tests ori` |
 | 97001 | `Whse Activity Get Tests ori` |
 | 97002 | `Whse Test Data ori` |
-| 97003–97005 | Setup wizard tests |
+| 97003–97005 | Setup wizard tests (in use; see the test sources) |
 | 97006 | `Whse Document Get Tests ori` (#104) |
-| 97007–97009 | Free (the P2 Warehouse Movement tests use 97080–97091) |
+| 97007 | codeunit `Whse Availability Tests ori` (#107; moved from 97006, which #104 owns) and permission set `Whse AvRead Tst ori` (#107) |
+| 97008–97009 | Free (the P2 Warehouse Movement tests use 97080–97091) |
 | 97010 | permission set `Whse NoRead Test ori` |
 | 97011–97020 | Test codeunits of the ten moved `Warehouse.*` types |
 | 97021–97022 | `Whse Shipment Test Helper ori`, `Whse Receipt Test Helper ori` |

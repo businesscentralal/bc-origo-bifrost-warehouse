@@ -7755,6 +7755,162 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Bókunarhlið vörugeymslu</note>
           <note from="Xliff Generator" annotates="general" priority="3">PermissionSet BIFROST WhsePost ori - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 2658456857 - NamedType 3351566181" size-unit="char" translate="yes" xml:space="preserve">
+          <source>locationCode is required.</source>
+          <target>locationCode er nauðsynlegt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=locationCode er nauðsynlegt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method CheckRequired - NamedType LocationMissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 2658456857 - NamedType 2865466285" size-unit="char" translate="yes" xml:space="preserve">
+          <source>itemNo is required.</source>
+          <target>itemNo er nauðsynlegt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=itemNo er nauðsynlegt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method CheckRequired - NamedType ItemMissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 2658456857 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send locationCode and itemNo.</source>
+          <target>Sendu locationCode og itemNo.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu locationCode og itemNo.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method CheckRequired - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to read warehouse availability.</source>
+          <target>Þú hefur ekki heimild til að lesa framboð í vöruhúsi.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að lesa framboð í vöruhúsi.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method ExecuteBifrostTask - NamedType DeniedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 3571782927 - NamedType 3389031044" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Read ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Read ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Read ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method ExecuteBifrostTask - NamedType DeniedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 3571782927 - NamedType 1300278838" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The availability query was refused.</source>
+          <target>Fyrirspurn um framboð var hafnað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fyrirspurn um framboð var hafnað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method ExecuteBifrostTask - NamedType ProblemsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 1089523835 - NamedType 3351566181" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location %1 was not found.</source>
+          <target>Staðsetning %1 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = location code, is-IS=Staðsetning %1 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method FindMasterData - NamedType LocationMissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 1089523835 - NamedType 2865466285" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item %1 was not found.</source>
+          <target>Vara %1 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = item number, is-IS=Vara %1 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method FindMasterData - NamedType ItemMissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 1089523835 - NamedType 3516176243" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Variant %1 of item %2 was not found.</source>
+          <target>Afbrigði %1 af vöru %2 fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = variant code, %2 = item number, is-IS=Afbrigði %1 af vöru %2 fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method FindMasterData - NamedType VariantMissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 1089523835 - NamedType 1135109524" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Unit of measure %1 is not a unit of measure of item %2.</source>
+          <target>Mælieining %1 er ekki mælieining vöru %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = unit of measure code, %2 = item number, is-IS=Mælieining %1 er ekki mælieining vöru %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method FindMasterData - NamedType UnitMissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 1089523835 - NamedType 3075542797" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bin %1 was not found at location %2.</source>
+          <target>Hólf %1 fannst ekki á staðsetningu %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = bin code, %2 = location code, is-IS=Hólf %1 fannst ekki á staðsetningu %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method FindMasterData - NamedType BinMissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 1089523835 - NamedType 3444492268" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Zone %1 was not found at location %2.</source>
+          <target>Svæði %1 fannst ekki á staðsetningu %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = zone code, %2 = location code, is-IS=Svæði %1 fannst ekki á staðsetningu %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method FindMasterData - NamedType ZoneMissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 1089523835 - NamedType 1017105382" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check the location code and try again.</source>
+          <target>Athugaðu kóða staðsetningar og reyndu aftur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu kóða staðsetningar og reyndu aftur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method FindMasterData - NamedType LocationNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 1089523835 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check the code named in the error and try again.</source>
+          <target>Athugaðu kóðann sem villan nefnir og reyndu aftur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu kóðann sem villan nefnir og reyndu aftur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method FindMasterData - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reads how much of an item can be picked at a location, per bin and per lot, serial or package.</source>
+          <target>Les hversu mikið af vöru er hægt að tína á staðsetningu, eftir hólfum og eftir lotu, raðnúmeri eða pakka.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Les hversu mikið af vöru er hægt að tína á staðsetningu, eftir hólfum og eftir lotu, raðnúmeri eða pakka.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 1158096087 - NamedType 2408295350" size-unit="char" translate="yes" xml:space="preserve">
+          <source>locationCode or itemNo was not sent.</source>
+          <target>locationCode eða itemNo var ekki sent.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=locationCode eða itemNo var ekki sent.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method GetErrors - NamedType MissingWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 1158096087 - NamedType 2259951957" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send locationCode and itemNo.</source>
+          <target>Sendu locationCode og itemNo.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu locationCode og itemNo.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method GetErrors - NamedType MissingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 1158096087 - NamedType 731885583" size-unit="char" translate="yes" xml:space="preserve">
+          <source>A code was not text, or includeBins or includeTracking was not true or false.</source>
+          <target>Kóði var ekki texti, eða includeBins eða includeTracking var ekki true eða false.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Kóði var ekki texti, eða includeBins eða includeTracking var ekki true eða false.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method GetErrors - NamedType FormatWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 1158096087 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send text for codes and true or false for includeBins and includeTracking.</source>
+          <target>Sendu texta fyrir kóða og true eða false fyrir includeBins og includeTracking.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu texta fyrir kóða og true eða false fyrir includeBins og includeTracking.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method GetErrors - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 1158096087 - NamedType 2469653682" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The request contains a key this type does not accept.</source>
+          <target>Beiðnin inniheldur lykil sem þessi gerð tekur ekki við.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Beiðnin inniheldur lykil sem þessi gerð tekur ekki við.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method GetErrors - NamedType UnknownWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 1158096087 - NamedType 2270216465" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method GetErrors - NamedType UnknownNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 1158096087 - NamedType 1399190847" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The location, item, variant, unit of measure, bin or zone does not exist.</source>
+          <target>Staðsetningin, varan, afbrigðið, mælieiningin, hólfið eða svæðið er ekki til.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Staðsetningin, varan, afbrigðið, mælieiningin, hólfið eða svæðið er ekki til.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method GetErrors - NamedType NotFoundWhenLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 1158096087 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check the code named in the error and try again.</source>
+          <target>Athugaðu kóðann sem villan nefnir og reyndu aftur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu kóðann sem villan nefnir og reyndu aftur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method GetErrors - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
+          <source>available to pick, pick availability, why is the pick short, bin availability, lot availability, stock on pick, blocked bin, dedicated bin</source>
+          <target>tiltækt til tínslu, tínsluframboð, af hverju er tínslan of lítil, framboð í hólfum, framboð eftir lotu, birgðir á tínslu, læst hólf, hólf með sérstakt hlutverk</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=tiltækt til tínslu, tínsluframboð, af hverju er tínslan of lítil, framboð í hólfum, framboð eftir lotu, birgðir á tínslu, læst hólf, hólf með sérstakt hlutverk</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Read-only. Shows how much of one item can be picked at one location and why the rest cannot. Use Inventory.AvailableToPromise.Get for availability to promise.</source>
+          <target>Lesaðgangur. Sýnir hversu mikið af einni vöru er hægt að tína á einni staðsetningu og hvers vegna afgangurinn er ekki tiltækur. Notaðu Inventory.AvailableToPromise.Get fyrir loforðsframboð.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lesaðgangur. Sýnir hversu mikið af einni vöru er hægt að tína á einni staðsetningu og hvers vegna afgangurinn er ekki tiltækur. Notaðu Inventory.AvailableToPromise.Get fyrir loforðsframboð.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 323364814 - Method 2045771536 - NamedType 1296478263" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The location has no bins, so the quantities are inventory quantities of the location and bins is empty.</source>
+          <target>Staðsetningin er án hólfa, því eru magntölur birgðamagn staðsetningarinnar og hólfalistinn er tómur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Staðsetningin er án hólfa, því eru magntölur birgðamagn staðsetningarinnar og hólfalistinn er tómur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method WriteAvailability - NamedType NoBinsLbl</note>
+        </trans-unit>
       </group>
     </body>
   </file>

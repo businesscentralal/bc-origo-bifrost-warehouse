@@ -235,7 +235,7 @@ codeunit 10078439 "Whse Document Get Impl ori" implements "Msg Interface ori", "
     begin
         Related.Add(ContractMgt.RelatedEntry('Warehouse.Receipt.Post', 'Receive the quantities selected on the receipt.'));
         Related.Add(ContractMgt.RelatedEntry('Warehouse.Shipment.Post', 'Ship the quantities selected on the shipment.'));
-        Related.Add(ContractMgt.RelatedEntry('Warehouse.Putaway.Create', 'Use it with a open warehouse receipt number to create the put-away.'));
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.Putaway.Create', 'After posting the receipt, create the put-away from the posted receipt number (see Warehouse.PostedDocument.Get).'));
         Related.Add(ContractMgt.RelatedEntry('Warehouse.Pick.Create', 'Create picks for a released shipment.'));
         Related.Add(ContractMgt.RelatedEntry('Warehouse.PostedDocument.Get', 'Read receipts and shipments after posting.'));
         exit(true);
@@ -243,7 +243,7 @@ codeunit 10078439 "Whse Document Get Impl ori" implements "Msg Interface ori", "
 
     /// <summary>Returns the workflow chapter.</summary>
     /// <param name="Workflow">Receives the workflow.</param>
-    /// <returns>True. The read finds the posted receipt that the put-away is created from.</returns>
+    /// <returns>True. The read returns an open warehouse document; the put-away is created later from the posted receipt.</returns>
     procedure GetWorkflow(var Workflow: JsonObject): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";

@@ -401,4 +401,11 @@ enumextension 10078385 "Whse MsgType EnumExt ori" extends "Message Type ori"
         Caption = 'Warehouse.InternalPick.Create', Locked = true;
         Implementation = "Msg Interface ori" = "Whse IntPick Create Impl ori", "Msg Contract ori" = "Whse IntPick Create Impl ori", "Msg Discovery ori" = "Whse IntPick Create Impl ori";
     }
+
+    /// <summary>Reads open warehouse receipts and shipments with their lines and quantities.</summary>
+    value(10078439; "Warehouse.Document.Get")
+    {
+        Caption = 'Warehouse.Document.Get', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Document Get Impl ori", "Msg Contract ori" = "Whse Document Get Impl ori", "Msg Discovery ori" = "Whse Document Get Impl ori";
+    }
 }

@@ -21,7 +21,7 @@ codeunit 10078439 "Whse Availability Get Impl ori" implements "Msg Interface ori
     Access = Internal;
 
     var
-        TempTrackingSetup: Record "Item Tracking Setup";
+        TempTrackingSetup: Record "Item Tracking Setup" temporary;
         TempWhseItemTrackingLine: Record "Whse. Item Tracking Line" temporary;
         HasTrackingFilter: Boolean;
 

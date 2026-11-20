@@ -90,6 +90,8 @@ codeunit 97006 "Whse Document Get Tests ori"
         ShipmentHelper.RegisterCurrentUserAsWarehouseEmployee(Location.Code);
         CreateOwnedSale(SalesHeader, Item, Location);
         ShipmentHelper.CreateWhseShipmentFromSalesOrder(Header, SalesHeader);
+        ShipmentHelper.RunMessage("Message Type ori"::"Warehouse.Shipment.Release", Header."No.", '{}', Response, false);
+        Success(Response);
         ShipmentHelper.RunMessage("Message Type ori"::"Warehouse.Pick.Create", Header."No.", '{}', Response, false);
         Success(Response);
         Assert.IsTrue(ShipmentHelper.FindPickForShipment(Header."No.", Pick), 'A pick was created for our shipment.');
@@ -441,6 +443,15 @@ codeunit 97006 "Whse Document Get Tests ori"
         Refusal('{"documentType":"receipt","sourceType":-1}', 'InvalidParameter', 1039);
     end;
 
+    /// <summary>AC04: an overlong number cannot silently select a different document.</summary>
+    [Test]
+    procedure OverlongNumber_BilingualRefusal()
+    begin
+        // Story #104, AC04 | Time: independent | Risk: none.
+        Refusal('{"documentType":"receipt","documentNo":"X12345678901234567890"}', 'InvalidParameterFormat', 1033);
+        Refusal('{"documentType":"receipt","documentNo":"X12345678901234567890"}', 'InvalidParameterFormat', 1039);
+    end;
+
     local procedure SetupOwnedFixture(var Location: Record Location; var Item: Record Item; Shipment: Boolean)
     var
         Account: Record "G/L Account";
@@ -744,7 +755,7 @@ codeunit 97006 "Whse Document Get Tests ori"
         Field := MessageRecord.Field(1);
         Field.SetRange(MessageId);
         Assert.IsTrue(MessageRecord.FindFirst(), 'Foundation persisted this request.');
-        TempBlob.FromRecordRef(MessageRecord, 8);
+        TempBlob.FromRecordRef(MessageRecord, 9);
         TempBlob.CreateInStream(Content, TextEncoding::UTF8);
         Content.ReadText(LoggedText);
         MessageRecord.Close();

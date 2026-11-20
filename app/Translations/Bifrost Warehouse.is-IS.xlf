@@ -2283,17 +2283,17 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Get Impl ori - Method RefuseUnknownKeys - NamedType UnknownNextStepLbl</note>
         </trans-unit>
-        <trans-unit id="Codeunit 1975501152 - Method 384696941 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
-          <source>The named open warehouse document was not found.</source>
-          <target>Tilgreint opið vöruhúsaskjal fannst ekki.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreint opið vöruhúsaskjal fannst ekki.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Get Impl ori - Method ResolveDocument - NamedType NotFoundLbl</note>
-        </trans-unit>
         <trans-unit id="Codeunit 1975501152 - Method 384696941 - NamedType 2160166432" size-unit="char" translate="yes" xml:space="preserve">
           <source>Search with filters instead of a document identifier.</source>
           <target>Leitaðu með síum í stað auðkennis skjals.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Leitaðu með síum í stað auðkennis skjals.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Get Impl ori - Method ResolveDocument - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1975501152 - Method 384696941 - NamedType 839293764" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send the SystemId as a GUID, or send the number in documentNo.</source>
+          <target>Sendu SystemId sem GUID eða sendu númerið í documentNo.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu SystemId sem GUID eða sendu númerið í documentNo.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Get Impl ori - Method ResolveDocument - NamedType GuidNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 301136191 - Method 1642629281 - NamedType 3917977900" size-unit="char" translate="yes" xml:space="preserve">
           <source>No inventory movement was created.</source>

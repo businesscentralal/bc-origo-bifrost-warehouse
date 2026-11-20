@@ -267,7 +267,7 @@ codeunit 10078439 "Whse Document Get Impl ori" implements "Msg Interface ori", "
         Examples.Add(ContractMgt.Example(
             'Open receipts for a purchase order',
             '{"documentType":"receipt","sourceType":39,"sourceNo":"XPO001","includeLines":true}',
-            '{"status":"Success","documentType":"Receipt","noOfRecords":0,"skip":0,"take":20,"documents":[]}'));
+            '{"status":"Success","documentType":"Receipt","noOfRecords":0,"skip":0,"take":100,"documents":[]}'));
         exit(true);
     end;
 
@@ -309,6 +309,7 @@ codeunit 10078439 "Whse Document Get Impl ori" implements "Msg Interface ori", "
         RequestJson: JsonObject;
         DocumentTypeText: Text;
         DocumentId: Guid;
+        DocumentNo: Text;
         AssignedUserId: Text;
         StatusText: Text;
         SourceType: Integer;
@@ -352,6 +353,7 @@ codeunit 10078439 "Whse Document Get Impl ori" implements "Msg Interface ori", "
                     else
                         Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(ValueLbl, 'documentType', DocumentTypeText), 'documentType', DocumentTypeText, 'Receipt, Shipment', ValueNextStepLbl);
                 end;
+        Context.ReadText(RequestJson, 'documentNo', 20, Argument, DocumentNo, Present, 'documentNo');
         Context.ReadText(RequestJson, 'assignedUserId', 50, Argument, AssignedUserId, Present, 'assignedUserId');
         Context.ReadText(RequestJson, 'status', 20, Argument, StatusText, Present, 'status');
         if Present then
@@ -615,12 +617,14 @@ codeunit 10078439 "Whse Document Get Impl ori" implements "Msg Interface ori", "
 
     local procedure ResolveDocument(RequestJson: JsonObject; var Argument: Record "Message Argument ori"; IsShipment: Boolean; var DocumentId: Guid): Boolean
     var
+        TempLookupArgument: Record "Message Argument ori" temporary;
         Lookup: Codeunit "Whse Record Lookup ori";
         Values: Codeunit "Whse Msg Values ori";
         Response: JsonObject;
         TableNo: Integer;
-        NotFoundLbl: Label 'The named open warehouse document was not found.', Comment = 'is-IS=Tilgreint opið vöruhúsaskjal fannst ekki.';
         NotFoundNextStepLbl: Label 'Search with filters instead of a document identifier.', Comment = 'is-IS=Leitaðu með síum í stað auðkennis skjals.';
+        GuidNextStepLbl: Label 'Send the SystemId as a GUID, or send the number in documentNo.', Comment = 'is-IS=Sendu SystemId sem GUID eða sendu númerið í documentNo.';
+        NextStep: Text;
     begin
         if (Argument.Subject = '') and (Values.TextValue(RequestJson, 'documentNo') = '') and
            (Values.TextValue(RequestJson, 'systemId') = '') and (Values.TextValue(RequestJson, 'id') = '') then
@@ -628,12 +632,23 @@ codeunit 10078439 "Whse Document Get Impl ori" implements "Msg Interface ori", "
         TableNo := Database::"Warehouse Receipt Header";
         if IsShipment then
             TableNo := Database::"Warehouse Shipment Header";
-        if Lookup.FindRecord(Argument, TableNo, 'no|guid', 'documentNo=no,systemId=guid,id=guid', DocumentId) then
+        TempLookupArgument := Argument;
+        if Lookup.FindRecord(TempLookupArgument, TableNo, 'no|guid', 'documentNo=no,systemId=guid,id=guid', DocumentId) then
             exit(true);
-        Response := Argument.GetResponseJson();
-        if Values.TextValue(Response, 'code') = 'RecordNotFound' then
-            Argument.RespondWithError("Bifrost Error Code ori"::RecordNotFound, NotFoundLbl,
-                Values.TextValue(Response, 'parameter'), Values.TextValue(Response, 'received'), '', NotFoundNextStepLbl);
+        Response := TempLookupArgument.GetResponseJson();
+        case Values.TextValue(Response, 'code') of
+            'RecordNotFound':
+                NextStep := NotFoundNextStepLbl;
+            'InvalidParameterFormat':
+                NextStep := GuidNextStepLbl;
+        end;
+        if NextStep <> '' then
+            if Response.Contains('nextStep') then
+                Response.Replace('nextStep', NextStep)
+            else
+                Response.Add('nextStep', NextStep);
+        Argument.SetResponseJson(Response);
+        Argument."Content Type" := Argument.GetContentTypeJson();
         exit(false);
     end;
 

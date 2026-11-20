@@ -28,6 +28,7 @@ permissionsetextension 10078395 "BIFROST Whse - Full ori" extends "BIFROST Full 
         codeunit "Whse Putaway Create Proc. ori" = X,
         codeunit "Whse Putaway Register Impl ori" = X,
         codeunit "Whse Bin Get Impl ori" = X,
+        codeunit "Whse Availability Get Impl ori" = X,
         codeunit "Whse Bin Create Impl ori" = X,
         codeunit "Whse DefaultBin Set Impl ori" = X,
         codeunit "Whse Write Context ori" = X,

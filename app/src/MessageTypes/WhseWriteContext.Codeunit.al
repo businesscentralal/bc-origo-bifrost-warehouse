@@ -23,6 +23,7 @@ codeunit 10078430 "Whse Write Context ori"
         HasResultNo: Boolean;
         SnapshotLineNo: Integer;
         HasSnapshot: Boolean;
+        PendingDocumentNo: Code[20];
 
     /// <summary>Stores the payload the isolated run will write.</summary>
     /// <param name="Payload">Normalized request that already passed validation.</param>
@@ -101,8 +102,25 @@ codeunit 10078430 "Whse Write Context ori"
     end;
 
     /// <summary>Drops the payload, results and snapshot so a later call cannot reuse them.</summary>
+    /// <summary>Remembers the number of a document the write created, so a failed call can remove what Business Central committed (#106).</summary>
+    /// <param name="DocumentNo">The document number.</param>
+    internal procedure SetPendingDocument(DocumentNo: Code[20])
+    begin
+        PendingDocumentNo := DocumentNo;
+    end;
+
+    /// <summary>Returns the document number the write created, if any.</summary>
+    /// <param name="DocumentNo">Receives the document number.</param>
+    /// <returns>True when a document number was remembered.</returns>
+    internal procedure TryGetPendingDocument(var DocumentNo: Code[20]): Boolean
+    begin
+        DocumentNo := PendingDocumentNo;
+        exit(PendingDocumentNo <> '');
+    end;
+
     internal procedure Reset()
     begin
+        PendingDocumentNo := '';
         PayloadText := '';
         ResultText := '';
         HasResultJson := false;

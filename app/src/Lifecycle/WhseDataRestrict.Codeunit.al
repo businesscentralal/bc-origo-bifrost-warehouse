@@ -2,6 +2,7 @@ namespace Origo.Bifrost.Warehouse;
 
 using Microsoft.Warehouse.Activity;
 using Microsoft.Warehouse.Document;
+using Microsoft.Warehouse.InternalDocument;
 using Microsoft.Warehouse.Journal;
 using Microsoft.Warehouse.Structure;
 using Microsoft.Warehouse.Worksheet;
@@ -45,6 +46,11 @@ codeunit 10078458 "Whse Data Restrict ori"
         // The warehouse journal line stays wholly write-restricted (#48, #49); the Qty. (Phys. Inventory) field hint below is the precise pointer.
         if TableNo = Database::"Warehouse Journal Line" then
             Hint := 'Warehouse.Journal.Create, Warehouse.Journal.Register, Warehouse.PhysInventory.Calculate, Warehouse.PhysInventory.Register';
+        // Internal put-aways and picks are written only through their create types (#106).
+        if TableNo in [Database::"Whse. Internal Put-away Header", Database::"Whse. Internal Put-away Line"] then
+            Hint := 'Warehouse.InternalPutaway.Create';
+        if TableNo in [Database::"Whse. Internal Pick Header", Database::"Whse. Internal Pick Line"] then
+            Hint := 'Warehouse.InternalPick.Create';
     end;
 
     [EventSubscriber(ObjectType::Table, Database::"Message Argument ori", 'OnGetDedicatedMessageTypeHintForField', '', false, false)]
@@ -223,6 +229,10 @@ codeunit 10078458 "Whse Data Restrict ori"
             Database::"Warehouse Activity Header",
             Database::"Warehouse Activity Line",
             Database::"Warehouse Journal Line",
+            Database::"Whse. Internal Put-away Header",
+            Database::"Whse. Internal Put-away Line",
+            Database::"Whse. Internal Pick Header",
+            Database::"Whse. Internal Pick Line",
             Database::Bin]);
     end;
 }

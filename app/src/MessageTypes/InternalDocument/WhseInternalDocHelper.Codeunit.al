@@ -5,8 +5,8 @@ using Microsoft.Inventory.Location;
 using Microsoft.Inventory.Tracking;
 using Microsoft.Warehouse.Activity;
 using Microsoft.Warehouse.Document;
-using Microsoft.Warehouse.Ledger;
 using Microsoft.Warehouse.InternalDocument;
+using Microsoft.Warehouse.Ledger;
 using Microsoft.Warehouse.Request;
 using Microsoft.Warehouse.Setup;
 using Microsoft.Warehouse.Structure;
@@ -557,7 +557,7 @@ codeunit 10078405 "Whse Internal Doc Helper ori"
             for Node := 1 to Lines + Groups do
                 Parent.Add(0);
             for Line := 1 to Lines do
-                if Demand.Get(Line) - LineFlow(Flow, Line, Lines, Groups) > 0 then begin
+                if Demand.Get(Line) - LineFlow(Flow, Line, Groups) > 0 then begin
                     Parent.Set(Line, -1);
                     Queue.Add(Line);
                 end;
@@ -566,7 +566,15 @@ codeunit 10078405 "Whse Internal Doc Helper ori"
             while (Head <= Queue.Count()) and (Sink = 0) do begin
                 Node := Queue.Get(Head);
                 Head += 1;
-                if Node <= Lines then begin
+                // Inverted so the reverse-edge path stays bound to this if (AA0005). A bare forward for would bind else to the inner if.
+                if Node > Lines then begin
+                    Group := Node - Lines;
+                    for Line := 1 to Lines do
+                        if (Parent.Get(Line) = 0) and (Flow.Get((Line - 1) * Groups + Group) > 0) then begin
+                            Parent.Set(Line, Node);
+                            Queue.Add(Line);
+                        end;
+                end else
                     for Group := 1 to Groups do
                         if (Parent.Get(Lines + Group) = 0) and LineMatchesGroup(PlannedLineAt(Planned, PoolLines.Get(Node)), GroupLot.Get(Group), GroupSerial.Get(Group), GroupPackage.Get(Group)) then begin
                             Parent.Set(Lines + Group, Node);
@@ -574,14 +582,6 @@ codeunit 10078405 "Whse Internal Doc Helper ori"
                             if (Sink = 0) and (Supply.Get(Group) - GroupFlow(Flow, Group, Lines, Groups) > 0) then
                                 Sink := Lines + Group;
                         end;
-                end else begin
-                    Group := Node - Lines;
-                    for Line := 1 to Lines do
-                        if (Parent.Get(Line) = 0) and (Flow.Get((Line - 1) * Groups + Group) > 0) then begin
-                            Parent.Set(Line, Node);
-                            Queue.Add(Line);
-                        end;
-                end;
             end;
             Amount := 0;
             if Sink <> 0 then begin
@@ -597,7 +597,7 @@ codeunit 10078405 "Whse Internal Doc Helper ori"
                     end;
                     Node := Next;
                 end;
-                Slack := Demand.Get(Node) - LineFlow(Flow, Node, Lines, Groups);
+                Slack := Demand.Get(Node) - LineFlow(Flow, Node, Groups);
                 if Slack < Amount then
                     Amount := Slack;
                 Node := Sink;
@@ -614,7 +614,7 @@ codeunit 10078405 "Whse Internal Doc Helper ori"
         until Amount <= 0;
     end;
 
-    local procedure LineFlow(Flow: List of [Decimal]; Line: Integer; Lines: Integer; Groups: Integer) Result: Decimal
+    local procedure LineFlow(Flow: List of [Decimal]; Line: Integer; Groups: Integer) Result: Decimal
     var
         Group: Integer;
     begin

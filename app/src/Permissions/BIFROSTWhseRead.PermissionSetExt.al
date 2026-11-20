@@ -31,6 +31,7 @@ permissionsetextension 10078394 "BIFROST Whse - Read ori" extends "BIFROST Read 
         codeunit "Whse Availability Get Impl ori" = X,
         codeunit "Whse Request Get Impl ori" = X,
         codeunit "Whse PostedDoc Get Impl ori" = X,
+        codeunit "Whse Document Get Impl ori" = X,
         codeunit "Whse RegActivity Get Impl ori" = X,
         codeunit "Whse Write Context ori" = X,
         codeunit "Whse Doc Line Qty ori" = X,

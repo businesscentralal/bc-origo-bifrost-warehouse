@@ -16,7 +16,7 @@ using System.TestLibraries.Utilities;
 /// <summary>
 /// Tests Warehouse.Availability.Get through the public dispatcher: totals, bins, tracking, refusals, permissions and help in 1033 and 1039.
 /// </summary>
-codeunit 97006 "Whse Availability Tests ori"
+codeunit 97007 "Whse Availability Tests ori"
 {
     Subtype = Test;
     TestPermissions = Disabled;

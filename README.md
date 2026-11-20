@@ -61,6 +61,7 @@ The list is the enum extension `Whse MsgType EnumExt ori` in
 | `Warehouse.Shipment.Release` | Inbound | Release a warehouse shipment so picks can be created | `BIFROST Full ori` |
 | `Warehouse.Shipment.Reopen` | Inbound | Reopen a released warehouse shipment; refused while open picks exist | `BIFROST Full ori` |
 | `Warehouse.Request.Get` | Outbound | Read the warehouse requests at a location (source documents waiting for a receipt or shipment), with paging | `BIFROST Read ori` |
+| `Warehouse.Document.Get` | Outbound | Read open receipts and shipments with lines, outstanding quantities and picking progress; filter and page results. | `BIFROST Read ori` |
 | `Warehouse.PostedDocument.Get` | Outbound | Read posted warehouse receipts or shipments, optionally with lines, with paging | `BIFROST Read ori` |
 | `Warehouse.RegisteredActivity.Get` | Outbound | Read registered picks, put-aways or movements, optionally with lines, with paging | `BIFROST Read ori` |
 | `Warehouse.Journal.Create` | Inbound | Insert warehouse item or reclassification journal lines (with lot, serial or package numbers) at a directed location | `BIFROST Full ori` |
@@ -213,7 +214,8 @@ None. The app has no pages or page extensions.
 | 10078467 | Readers | `Whse Msg Values ori` |
 | 10078430 | Write isolation | `Whse Write Context ori` |
 | 10078431–10078434, 10078438 | Document flow | `Whse Rcpt GetSrcDocs Impl ori`, `Whse Ship GetSrcDocs Impl ori`, `Whse Shipment Release Impl ori`, `Whse Shipment Reopen Impl ori`, `Whse Doc Line Qty ori` |
-| 10078439 | Availability | `Whse Availability Get Impl ori` |
+| 10078439 | Open documents | `Whse Document Get Impl ori` |
+| 10078440 | Availability | `Whse Availability Get Impl ori` |
 | 10078435–10078437 | Requests and history | `Whse Request Get Impl ori`, `Whse PostedDoc Get Impl ori`, `Whse RegActivity Get Impl ori` |
 | 10078392, 10078393, 10078458 | Lifecycle | `Warehouse Install ori`, `Warehouse Upgrade ori`, `Whse Data Restrict ori` |
 | 10078453, 10078455, 10078459 | Shared | `Whse Posting Gate ori`, `Whse Record Lookup ori`, `Whse Contract Parts ori` |

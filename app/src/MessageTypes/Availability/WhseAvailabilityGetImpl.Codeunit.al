@@ -16,7 +16,7 @@ using Origo.Bifrost;
 /// Implements Warehouse.Availability.Get: how much of an item Business Central lets a user pick at a location,
 /// per bin and per lot, serial or package. Every number comes from Business Central's own calculations.
 /// </summary>
-codeunit 10078439 "Whse Availability Get Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
+codeunit 10078440 "Whse Availability Get Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
 {
     Access = Internal;
 

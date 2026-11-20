@@ -187,8 +187,11 @@ codeunit 10078439 "Whse Document Get Impl ori" implements "Msg Interface ori", "
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Entry: JsonObject;
         OriginalLanguage: Integer;
+        UnknownNextStep: Text;
         UnknownParameterNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
+        // Read before the language switch: the declared unknown-key next step is rendered in the caller's language (#88 AC02).
+        UnknownNextStep := UnknownParameterNextStepLbl;
         OriginalLanguage := GlobalLanguage();
         GlobalLanguage(1033);
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MissingParameter, 'documentType is missing.', 'Send documentType Receipt or Shipment.');
@@ -196,7 +199,7 @@ codeunit 10078439 "Whse Document Get Impl ori" implements "Msg Interface ori", "
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::RecordNotFound, 'The named open document does not exist.', 'Search with filters instead of a document identifier.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::ConflictingIdentifiers, 'The supplied identifiers name different documents.', 'Send only identifiers for the same document.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameterFormat, 'A value has the wrong JSON type or a date is not YYYY-MM-DD.', 'Send text for codes, true or false for includeLines, and dates as YYYY-MM-DD.');
-        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', UnknownParameterNextStepLbl);
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', UnknownNextStep);
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot read open warehouse receipts and shipments.', 'Ask an administrator to assign BIFROST Whse - Read ori.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MultipleErrors, 'More than one value failed validation.', 'Correct every listed value and send the request again.');
         Parts.AddDateErrors(Errors, 'postingDateFrom, postingDateTo', Context.TextDateNextStep());

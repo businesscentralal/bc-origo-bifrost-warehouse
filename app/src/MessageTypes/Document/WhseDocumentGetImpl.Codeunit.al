@@ -100,7 +100,7 @@ codeunit 10078439 "Whse Document Get Impl ori" implements "Msg Interface ori", "
         Parameters.Add(ContractMgt.Parameter('assignedUserId', 'string', false, 'Exact assigned user ID.'));
         Parameters.Add(ContractMgt.Parameter('status', 'string', false, 'Open or Released. Shipments only.'));
         Parameters.Add(ContractMgt.Parameter('sourceType', 'integer', false, 'Source type number on the same line as sourceNo, for example 39 for purchase lines or 37 for sales lines.'));
-        Parameters.Add(ContractMgt.Parameter('sourceNo', 'string', false, 'Source document number on any line of the posted document.'));
+        Parameters.Add(ContractMgt.Parameter('sourceNo', 'string', false, 'Source document number on any line of the open document.'));
         Parameters.Add(ContractMgt.Parameter('postingDateFrom', 'date', false, 'First posting date, YYYY-MM-DD.'));
         Parameters.Add(ContractMgt.Parameter('postingDateTo', 'date', false, 'Last posting date, YYYY-MM-DD.'));
         Parameters.Add(ContractMgt.Parameter('includeLines', 'boolean', false, 'Return the lines of each document. Defaults to false.'));
@@ -300,7 +300,7 @@ codeunit 10078439 "Whse Document Get Impl ori" implements "Msg Interface ori", "
         exit(Enum::"Msg Direction ori"::Outbound);
     end;
 
-    /// <summary>Validates the filters and writes one page of posted documents.</summary>
+    /// <summary>Validates the filters and writes one page of open documents.</summary>
     /// <param name="Argument">The request and response message argument.</param>
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var

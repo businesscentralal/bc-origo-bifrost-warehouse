@@ -230,10 +230,25 @@ BinContent.SetRange("Location Code", Location.Code);
         Assert.AreEqual('Ask an administrator to assign BIFROST Whse - Full ori.', TextValue(ResponseJson, 'nextStep'), 'The next step must name the full permission set.');
     end;
 
+    local procedure EnsureInternalDocumentNos()
+    var
+        WarehouseSetup: Record "Warehouse Setup";
+        LibraryUtility: Codeunit "Library - Utility";
+    begin
+        // A fresh CRONUS company has no internal pick and put-away number series; Business Central needs them to insert the documents.
+        WarehouseSetup.Get();
+        if WarehouseSetup."Whse. Internal Pick Nos." = '' then
+            WarehouseSetup.Validate("Whse. Internal Pick Nos.", LibraryUtility.GetGlobalNoSeriesCode());
+        if WarehouseSetup."Whse. Internal Put-away Nos." = '' then
+            WarehouseSetup.Validate("Whse. Internal Put-away Nos.", LibraryUtility.GetGlobalNoSeriesCode());
+        WarehouseSetup.Modify(true);
+    end;
+
     local procedure PrepareReceiveBinStock(var Location: Record Location; var Item: Record Item; var ReceiveBin: Record Bin; Quantity: Decimal)
     var
         Zone: Record Zone;
     begin
+        EnsureInternalDocumentNos();
         LibraryWarehouse.CreateFullWMSLocation(Location, 2);
         EnsureDefaultDirectedEmployee(Location.Code);
         LibraryInventory.CreateItem(Item);

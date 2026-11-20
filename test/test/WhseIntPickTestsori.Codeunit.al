@@ -166,8 +166,23 @@ codeunit 97099 "Whse IntPick Tests ori"
         GlobalLanguage(PreviousLanguage);
     end;
 
+    local procedure EnsureInternalDocumentNos()
+    var
+        WarehouseSetup: Record "Warehouse Setup";
+        LibraryUtility: Codeunit "Library - Utility";
+    begin
+        // A fresh CRONUS company has no internal pick and put-away number series; Business Central needs them to insert the documents.
+        WarehouseSetup.Get();
+        if WarehouseSetup."Whse. Internal Pick Nos." = '' then
+            WarehouseSetup.Validate("Whse. Internal Pick Nos.", LibraryUtility.GetGlobalNoSeriesCode());
+        if WarehouseSetup."Whse. Internal Put-away Nos." = '' then
+            WarehouseSetup.Validate("Whse. Internal Put-away Nos.", LibraryUtility.GetGlobalNoSeriesCode());
+        WarehouseSetup.Modify(true);
+    end;
+
     local procedure PreparePickStock(var Location: Record Location; var Item: Record Item; var ToBin: Record Bin; Quantity: Decimal)
     begin
+        EnsureInternalDocumentNos();
         LibraryWarehouse.CreateFullWMSLocation(Location, 2);
         EnsureDefaultDirectedEmployee(Location.Code);
         LibraryInventory.CreateItem(Item);

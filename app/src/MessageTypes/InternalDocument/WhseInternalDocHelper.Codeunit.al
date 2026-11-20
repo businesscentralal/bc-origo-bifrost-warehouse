@@ -30,8 +30,9 @@ codeunit 10078405 "Whse Internal Doc Helper ori"
     /// <param name="RequestJson">The request data.</param>
     /// <param name="Argument">Collects the problems.</param>
     /// <param name="IsPick">True for the internal pick, false for the internal put-away.</param>
+    /// <param name="HasBinContent">True when the internal put-away request sends getBinContent; the caller reads it with ReadBinContentRequest.</param>
     /// <param name="Payload">Receives the validated payload.</param>
-    internal procedure ReadRequest(RequestJson: JsonObject; var Argument: Record "Message Argument ori"; IsPick: Boolean; var Payload: JsonObject)
+    internal procedure ReadRequest(RequestJson: JsonObject; var Argument: Record "Message Argument ori"; IsPick: Boolean; HasBinContent: Boolean; var Payload: JsonObject)
     var
         Context: Codeunit "Whse Write Context ori";
         LocationCode: Code[10];
@@ -39,14 +40,12 @@ codeunit 10078405 "Whse Internal Doc Helper ori"
         BinCode: Code[20];
         AssignedUserId: Text;
         SortingText: Text;
-        DueDate: Date;
         Release: Boolean;
         CreateActivity: Boolean;
         Present: Boolean;
         Lines: JsonArray;
         Token: JsonToken;
         HasLines: Boolean;
-        HasBinContent: Boolean;
         DirectedLbl: Label 'Location %1 does not use directed put-away and pick.', Comment = '%1 = location, is-IS=Staðsetning %1 notar ekki beina innsetningu og tínslu.';
         DirectedNextStepLbl: Label 'Use Warehouse.InventoryMovement.Create for basic warehouse locations.', Comment = 'is-IS=Notaðu Warehouse.InventoryMovement.Create fyrir einfaldar vöruhúsastaðsetningar.';
         LinesMissingLbl: Label 'Send lines or getBinContent.', Comment = 'is-IS=Sendu lines eða getBinContent.';
@@ -90,14 +89,12 @@ codeunit 10078405 "Whse Internal Doc Helper ori"
             Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(ActivityOnlyLbl, 'sortingMethod'), 'sortingMethod', SortingText, '', ActivityOnlyNextStepLbl);
         if Present then
             CheckSortingMethod(Argument, SortingText);
-        if IsPick then
-            if not Context.ReadDate(RequestJson, 'dueDate', Argument, DueDate, Present, 'dueDate') then
-                DueDate := 0D;
 
         HasLines := false;
         if RequestJson.Get('lines', Token) then
             HasLines := true;
-        HasBinContent := (not IsPick) and RequestJson.Contains('getBinContent');
+        if IsPick then
+            HasBinContent := false;
         if HasLines and HasBinContent then
             Argument.AddError("Bifrost Error Code ori"::ConflictingIdentifiers, BothLbl, 'getBinContent', '', '', BothLbl);
         if not HasLines and not HasBinContent then
@@ -107,8 +104,6 @@ codeunit 10078405 "Whse Internal Doc Helper ori"
                 Argument.AddError("Bifrost Error Code ori"::MissingParameter, LinesMissingLbl, 'lines', '', '', LinesMissingLbl);
         if HasLines then
             ReadLines(RequestJson, Argument, LocationCode, BinCode, IsPick, Lines);
-        if HasBinContent then
-            ReadBinContentRequest(RequestJson, Argument, LocationCode, Payload);
 
         Payload.Add('locationCode', LocationCode);
         Payload.Add('zoneCode', ZoneCode);
@@ -117,9 +112,44 @@ codeunit 10078405 "Whse Internal Doc Helper ori"
         Payload.Add('createActivity', CreateActivity);
         Payload.Add('assignedUserId', UpperCase(AssignedUserId));
         Payload.Add('sortingMethod', SortingText);
+        Payload.Add('lines', Lines);
+    end;
+
+    /// <summary>
+    /// Reads the optional due date of an internal pick into the payload. Runs only after ReadRequest accepted the location.
+    /// </summary>
+    /// <param name="RequestJson">The request data.</param>
+    /// <param name="Argument">Collects the problems.</param>
+    /// <param name="Payload">The payload ReadRequest filled.</param>
+    internal procedure ReadPickDueDate(RequestJson: JsonObject; var Argument: Record "Message Argument ori"; var Payload: JsonObject)
+    var
+        Context: Codeunit "Whse Write Context ori";
+        DueDate: Date;
+        Present: Boolean;
+    begin
+        if not Payload.Contains('locationCode') then
+            exit;
+        if not Context.ReadDate(RequestJson, 'dueDate', Argument, DueDate, Present, 'dueDate') then
+            DueDate := 0D;
         if DueDate <> 0D then
             Payload.Add('dueDate', Format(DueDate, 0, 9));
-        Payload.Add('lines', Lines);
+    end;
+
+    /// <summary>
+    /// Reads getBinContent of an internal put-away into the payload. Runs only after ReadRequest accepted the location.
+    /// </summary>
+    /// <param name="RequestJson">The request data.</param>
+    /// <param name="Argument">Collects the problems.</param>
+    /// <param name="Payload">The payload ReadRequest filled.</param>
+    internal procedure ReadPutAwayBinContent(RequestJson: JsonObject; var Argument: Record "Message Argument ori"; var Payload: JsonObject)
+    var
+        Values: Codeunit "Whse Msg Values ori";
+        LocationCode: Code[10];
+    begin
+        if not Payload.Contains('locationCode') then
+            exit;
+        LocationCode := CopyStr(Values.TextValue(Payload, 'locationCode'), 1, MaxStrLen(LocationCode));
+        ReadBinContentRequest(RequestJson, Argument, LocationCode, Payload);
     end;
 
     local procedure TryResolveLocation(RequestJson: JsonObject; var Argument: Record "Message Argument ori"; var LocationCode: Code[10]): Boolean

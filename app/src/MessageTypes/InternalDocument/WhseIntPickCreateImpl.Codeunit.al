@@ -302,7 +302,8 @@ codeunit 10078484 "Whse IntPick Create Impl ori" implements "Msg Interface ori",
         Argument.AssertVersion1();
         if not WhseRecordLookup.TryReadIdentifiers(Argument, '', RequestJson) then
             exit;
-        Helper.ReadRequest(RequestJson, Argument, true, Payload);
+        Helper.ReadRequest(RequestJson, Argument, true, false, Payload);
+        Helper.ReadPickDueDate(RequestJson, Argument, Payload);
         if Argument.HasCollectedErrors() then begin
             Context.Reset();
             Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, ProblemsLbl);

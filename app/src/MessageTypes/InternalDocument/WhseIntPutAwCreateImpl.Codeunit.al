@@ -310,7 +310,9 @@ codeunit 10078483 "Whse IntPutAw Create Impl ori" implements "Msg Interface ori"
         Argument.AssertVersion1();
         if not WhseRecordLookup.TryReadIdentifiers(Argument, '', RequestJson) then
             exit;
-        Helper.ReadRequest(RequestJson, Argument, false, Payload);
+        Helper.ReadRequest(RequestJson, Argument, false, RequestJson.Contains('getBinContent'), Payload);
+        if RequestJson.Contains('getBinContent') then
+            Helper.ReadPutAwayBinContent(RequestJson, Argument, Payload);
         if Argument.HasCollectedErrors() then begin
             Context.Reset();
             Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, ProblemsLbl);

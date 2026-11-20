@@ -383,4 +383,13 @@ enumextension 10078385 "Whse MsgType EnumExt ori" extends "Message Type ori"
         Caption = 'Warehouse.RegisteredActivity.Get', Locked = true;
         Implementation = "Msg Interface ori" = "Whse RegActivity Get Impl ori", "Msg Contract ori" = "Whse RegActivity Get Impl ori", "Msg Discovery ori" = "Whse RegActivity Get Impl ori";
     }
+
+    /// <summary>
+    /// Reads how much of an item can be picked at a location, per bin and per lot, serial or package.
+    /// </summary>
+    value(10078439; "Warehouse.Availability.Get")
+    {
+        Caption = 'Warehouse.Availability.Get', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Availability Get Impl ori", "Msg Contract ori" = "Whse Availability Get Impl ori", "Msg Discovery ori" = "Whse Availability Get Impl ori";
+    }
 }

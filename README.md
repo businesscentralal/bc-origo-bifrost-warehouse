@@ -44,6 +44,7 @@ The list is the enum extension `Whse MsgType EnumExt ori` in
 | `Warehouse.Putaway.Create` | Inbound | Create (or return the open) put-away for a posted warehouse receipt | `BIFROST Full ori` |
 | `Warehouse.Putaway.Register` | Inbound | Register a put-away | `BIFROST WhsePost ori` |
 | `Warehouse.Bin.Get` | Outbound | Read bins at a location, optionally with their content, with paging | `BIFROST Read ori` |
+| `Warehouse.Availability.Get` | Outbound | Read how much of an item can be picked at a location, per bin and per lot, serial or package | `BIFROST Read ori` |
 | `Warehouse.Bin.Create` | Inbound | Create one or more bins at a location, all or nothing | `BIFROST Full ori` |
 | `Warehouse.DefaultBin.Set` | Inbound | Set the default bin for an item at a location | `BIFROST Full ori` |
 | `Warehouse.Movement.Create` | Inbound | Create a warehouse movement at a directed location from a movement worksheet or inline lines | `BIFROST Full ori` |
@@ -191,7 +192,7 @@ None. The app has no pages or page extensions.
 
 | ID | Name | Purpose |
 | --- | --- | --- |
-| 10078385 | `Whse MsgType EnumExt ori` | The forty-two `Warehouse.*` values on Foundation's `Message Type ori` |
+| 10078385 | `Whse MsgType EnumExt ori` | The forty-three `Warehouse.*` values on Foundation's `Message Type ori` |
 
 ### Codeunits
 
@@ -212,6 +213,7 @@ None. The app has no pages or page extensions.
 | 10078467 | Readers | `Whse Msg Values ori` |
 | 10078430 | Write isolation | `Whse Write Context ori` |
 | 10078431–10078434, 10078438 | Document flow | `Whse Rcpt GetSrcDocs Impl ori`, `Whse Ship GetSrcDocs Impl ori`, `Whse Shipment Release Impl ori`, `Whse Shipment Reopen Impl ori`, `Whse Doc Line Qty ori` |
+| 10078439 | Availability | `Whse Availability Get Impl ori` |
 | 10078435–10078437 | Requests and history | `Whse Request Get Impl ori`, `Whse PostedDoc Get Impl ori`, `Whse RegActivity Get Impl ori` |
 | 10078392, 10078393, 10078458 | Lifecycle | `Warehouse Install ori`, `Warehouse Upgrade ori`, `Whse Data Restrict ori` |
 | 10078453, 10078455, 10078459 | Shared | `Whse Posting Gate ori`, `Whse Record Lookup ori`, `Whse Contract Parts ori` |

@@ -633,6 +633,8 @@ codeunit 10078439 "Whse Document Get Impl ori" implements "Msg Interface ori", "
         if IsShipment then
             TableNo := Database::"Warehouse Shipment Header";
         TempLookupArgument := Argument;
+        TempLookupArgument.Insert();
+        TempLookupArgument.SetRequestJson(RequestJson);
         if Lookup.FindRecord(TempLookupArgument, TableNo, 'no|guid', 'documentNo=no,systemId=guid,id=guid', DocumentId) then
             exit(true);
         Response := TempLookupArgument.GetResponseJson();

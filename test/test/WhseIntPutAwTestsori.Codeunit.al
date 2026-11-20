@@ -4,6 +4,7 @@ using Microsoft.Inventory.Item;
 using Microsoft.Inventory.Location;
 using Microsoft.Warehouse.Activity;
 using Microsoft.Warehouse.InternalDocument;
+using Microsoft.Warehouse.Ledger;
 using Microsoft.Warehouse.Setup;
 using Microsoft.Warehouse.Structure;
 using Origo.Bifrost;
@@ -125,6 +126,22 @@ BinContent.SetRange("Location Code", Location.Code);
     begin
         PrepareReceiveBinStock(Location, Item, ReceiveBin, 5);
         Run('{"locationCode":"' + Location.Code + '","fromBinCode":"' + ReceiveBin.Code + '","lines":[{"itemNo":"' + Item."No." + '","quantity":3},{"itemNo":"' + Item."No." + '","quantity":3}]}', ResponseJson);
+        AssertRefused(ResponseJson, 'PreconditionFailed', 'Read Warehouse.BinContent.Get for the bin and lower the quantity.');
+        AssertNothingWritten(Location.Code);
+    end;
+
+    /// <summary>AC04: a lot-only line and a package-only line that draw on the same stock are refused together, and nothing is written.</summary>
+    [Test]
+    procedure Create_OverlappingTrackingLines_AreRefusedTogether()
+    var
+        Location: Record Location;
+        Item: Record Item;
+        ReceiveBin: Record Bin;
+        ResponseJson: JsonObject;
+    begin
+        PrepareReceiveBinStock(Location, Item, ReceiveBin, 10);
+        ReplaceBinStockByTrackedStock(ReceiveBin, Item, 10);
+        Run('{"locationCode":"' + Location.Code + '","fromBinCode":"' + ReceiveBin.Code + '","lines":[{"itemNo":"' + Item."No." + '","quantity":4,"lotNo":"LOT-A"},{"itemNo":"' + Item."No." + '","quantity":4,"packageNo":"PACK-P"}]}', ResponseJson);
         AssertRefused(ResponseJson, 'PreconditionFailed', 'Read Warehouse.BinContent.Get for the bin and lower the quantity.');
         AssertNothingWritten(Location.Code);
     end;
@@ -271,6 +288,39 @@ BinContent.SetRange("Location Code", Location.Code);
         LibraryWarehouse.FindZone(Zone, Location.Code, LibraryWarehouse.SelectBinType(false, false, true, true), false);
         LibraryWarehouse.FindBin(ReceiveBin, Location.Code, Zone.Code, 1);
         LibraryWarehouse.UpdateWarehouseStockOnBin(ReceiveBin, Item."No.", Quantity, false);
+    end;
+
+    local procedure ReplaceBinStockByTrackedStock(Bin: Record Bin; Item: Record Item; UntrackedQuantity: Decimal)
+    begin
+        // Offsets the untracked stock and books 5 units in LOT-A/PACK-P and 5 in LOT-B/PACK-Q, so only 5 units can satisfy a lot-only and a package-only line together.
+        InsertWarehouseEntry(Bin, Item, -UntrackedQuantity, '', '');
+        InsertWarehouseEntry(Bin, Item, 5, 'LOT-A', 'PACK-P');
+        InsertWarehouseEntry(Bin, Item, 5, 'LOT-B', 'PACK-Q');
+    end;
+
+    local procedure InsertWarehouseEntry(Bin: Record Bin; Item: Record Item; Quantity: Decimal; LotNo: Code[50]; PackageNo: Code[50])
+    var
+        WarehouseEntry: Record "Warehouse Entry";
+        LastEntry: Record "Warehouse Entry";
+    begin
+        // Entry numbers come from a sequence that this insert must not consume, so the fixture takes numbers far above it; the test run rolls them back.
+        LastEntry.SetLoadFields("Entry No.");
+        if LastEntry.FindLast() then
+            WarehouseEntry."Entry No." := LastEntry."Entry No." + 1000000
+        else
+            WarehouseEntry."Entry No." := 1000000;
+        WarehouseEntry."Location Code" := Bin."Location Code";
+        WarehouseEntry."Zone Code" := Bin."Zone Code";
+        WarehouseEntry."Bin Code" := Bin.Code;
+        WarehouseEntry."Item No." := Item."No.";
+        WarehouseEntry."Unit of Measure Code" := Item."Base Unit of Measure";
+        WarehouseEntry."Qty. per Unit of Measure" := 1;
+        WarehouseEntry.Quantity := Quantity;
+        WarehouseEntry."Qty. (Base)" := Quantity;
+        WarehouseEntry."Lot No." := LotNo;
+        WarehouseEntry."Package No." := PackageNo;
+        WarehouseEntry."Registering Date" := WorkDate();
+        WarehouseEntry.Insert();
     end;
 
     local procedure EnsureDefaultDirectedEmployee(LocationCode: Code[10])

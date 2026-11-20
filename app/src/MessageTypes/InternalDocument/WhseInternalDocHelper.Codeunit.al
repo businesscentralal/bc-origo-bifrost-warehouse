@@ -5,6 +5,7 @@ using Microsoft.Inventory.Location;
 using Microsoft.Inventory.Tracking;
 using Microsoft.Warehouse.Activity;
 using Microsoft.Warehouse.Document;
+using Microsoft.Warehouse.Ledger;
 using Microsoft.Warehouse.InternalDocument;
 using Microsoft.Warehouse.Request;
 using Microsoft.Warehouse.Setup;
@@ -435,47 +436,198 @@ codeunit 10078405 "Whse Internal Doc Helper ori"
     end;
 
     /// <summary>
-    /// Refuses lines that together ask a bin for more than it holds. Each stock scope (bin, item, variant and the tracking a line names, plus the untracked pool of the bin) must hold the sum of every line drawing from it.
+    /// Refuses lines that together ask a bin for more than it can give. Lines of the same bin, item and variant draw on the tracked stock groups (lot, serial, package) of the bin they match; the request passes only when every line can be served from its own matching groups at the same time, which is a maximum-flow check, so lot-only and package-only lines on the same entries are not counted twice.
     /// </summary>
     local procedure CheckPooledBinQuantity(var Argument: Record "Message Argument ori"; LocationCode: Code[10]; Planned: JsonArray)
     var
         Values: Codeunit "Whse Msg Values ori";
-        Scope: JsonObject;
-        Scopes: List of [Text];
-        FailedPools: List of [Text];
-        ScopeKey: Text;
+        Checked: List of [Text];
+        PoolLines: List of [Integer];
         PoolKey: Text;
-        RequestedBase: Decimal;
-        AvailableBase: Decimal;
-        LineCount: Integer;
-        LastIndex: Integer;
         Index: Integer;
-        Pass: Integer;
+        Other: Integer;
+        LineObject: JsonObject;
     begin
         if Planned.Count() < 2 then
             exit;
-        for Index := 0 to Planned.Count() - 1 do
-            for Pass := 1 to 2 do begin
-                Scope := PlannedLineAt(Planned, Index);
-                if Pass = 2 then begin
-                    Scope.Replace('lotNo', '');
-                    Scope.Replace('serialNo', '');
-                    Scope.Replace('packageNo', '');
+        for Index := 0 to Planned.Count() - 1 do begin
+            LineObject := PlannedLineAt(Planned, Index);
+            PoolKey := StockKey(LineObject, false);
+            if not Checked.Contains(PoolKey) then begin
+                Checked.Add(PoolKey);
+                Clear(PoolLines);
+                for Other := Index to Planned.Count() - 1 do
+                    if StockKey(PlannedLineAt(Planned, Other), false) = PoolKey then
+                        PoolLines.Add(Other);
+                if PoolLines.Count() > 1 then
+                    CheckPool(Argument, LocationCode, Planned, PoolLines, Values.TextValue(LineObject, 'binCode'), Values.TextValue(LineObject, 'itemNo'), Values.TextValue(LineObject, 'variantCode'));
+            end;
+        end;
+    end;
+
+    local procedure CheckPool(var Argument: Record "Message Argument ori"; LocationCode: Code[10]; Planned: JsonArray; PoolLines: List of [Integer]; BinCode: Text; ItemNo: Text; VariantCode: Text)
+    var
+        WarehouseEntry: Record "Warehouse Entry";
+        Values: Codeunit "Whse Msg Values ori";
+        LineObject: JsonObject;
+        GroupLot: List of [Text];
+        GroupSerial: List of [Text];
+        GroupPackage: List of [Text];
+        Supply: List of [Decimal];
+        Demand: List of [Decimal];
+        Flow: List of [Decimal];
+        GroupKey: Text;
+        Group: Integer;
+        Line: Integer;
+        TotalDemand: Decimal;
+        MatchedSupply: Decimal;
+        Matched: Boolean;
+        GroupKeys: List of [Text];
+    begin
+        WarehouseEntry.SetRange("Location Code", LocationCode);
+        WarehouseEntry.SetRange("Bin Code", CopyStr(BinCode, 1, MaxStrLen(WarehouseEntry."Bin Code")));
+        WarehouseEntry.SetRange("Item No.", CopyStr(ItemNo, 1, MaxStrLen(WarehouseEntry."Item No.")));
+        WarehouseEntry.SetRange("Variant Code", CopyStr(VariantCode, 1, MaxStrLen(WarehouseEntry."Variant Code")));
+        if WarehouseEntry.FindSet() then
+            repeat
+                GroupKey := WarehouseEntry."Lot No." + '|' + WarehouseEntry."Serial No." + '|' + WarehouseEntry."Package No.";
+                Group := GroupKeys.IndexOf(GroupKey);
+                if Group = 0 then begin
+                    GroupKeys.Add(GroupKey);
+                    GroupLot.Add(WarehouseEntry."Lot No.");
+                    GroupSerial.Add(WarehouseEntry."Serial No.");
+                    GroupPackage.Add(WarehouseEntry."Package No.");
+                    Supply.Add(WarehouseEntry."Qty. (Base)");
+                end else
+                    Supply.Set(Group, Supply.Get(Group) + WarehouseEntry."Qty. (Base)");
+            until WarehouseEntry.Next() = 0;
+        for Group := 1 to Supply.Count() do
+            if Supply.Get(Group) < 0 then
+                Supply.Set(Group, 0);
+        for Line := 1 to PoolLines.Count() do begin
+            LineObject := PlannedLineAt(Planned, PoolLines.Get(Line));
+            Demand.Add(Values.DecimalValue(LineObject, 'quantityBase'));
+            TotalDemand += Demand.Get(Line);
+        end;
+        for Line := 1 to PoolLines.Count() * Supply.Count() do
+            Flow.Add(0);
+        for Group := 1 to Supply.Count() do begin
+            Matched := false;
+            for Line := 1 to PoolLines.Count() do
+                if LineMatchesGroup(PlannedLineAt(Planned, PoolLines.Get(Line)), GroupLot.Get(Group), GroupSerial.Get(Group), GroupPackage.Get(Group)) then
+                    Matched := true;
+            if Matched then
+                MatchedSupply += Supply.Get(Group);
+        end;
+        if MaxFlow(Planned, PoolLines, Demand, Supply, GroupLot, GroupSerial, GroupPackage, Flow) >= TotalDemand then
+            exit;
+        AddShortBinError(Argument, Values.IntegerValue(PlannedLineAt(Planned, PoolLines.Get(PoolLines.Count())), 'lineIndex'), CopyStr(BinCode, 1, 20), CopyStr(ItemNo, 1, 20), MatchedSupply, TotalDemand);
+    end;
+
+    local procedure LineMatchesGroup(LineObject: JsonObject; Lot: Text; Serial: Text; Package: Text): Boolean
+    var
+        Values: Codeunit "Whse Msg Values ori";
+    begin
+        exit(TrackingWithin(Values.TextValue(LineObject, 'lotNo'), Lot) and
+             TrackingWithin(Values.TextValue(LineObject, 'serialNo'), Serial) and
+             TrackingWithin(Values.TextValue(LineObject, 'packageNo'), Package));
+    end;
+
+    /// <summary>Augmenting-path maximum flow between lines (demand) and stock groups (supply); a line may draw on every group it matches. Nodes 1..n are lines, n+1..n+m are groups.</summary>
+    local procedure MaxFlow(Planned: JsonArray; PoolLines: List of [Integer]; Demand: List of [Decimal]; Supply: List of [Decimal]; GroupLot: List of [Text]; GroupSerial: List of [Text]; GroupPackage: List of [Text]; var Flow: List of [Decimal]) Total: Decimal
+    var
+        Parent: List of [Integer];
+        Queue: List of [Integer];
+        Lines: Integer;
+        Groups: Integer;
+        Node: Integer;
+        Next: Integer;
+        Head: Integer;
+        Sink: Integer;
+        Line: Integer;
+        Group: Integer;
+        Amount: Decimal;
+        Slack: Decimal;
+    begin
+        Lines := PoolLines.Count();
+        Groups := Supply.Count();
+        repeat
+            Clear(Parent);
+            Clear(Queue);
+            for Node := 1 to Lines + Groups do
+                Parent.Add(0);
+            for Line := 1 to Lines do
+                if Demand.Get(Line) - LineFlow(Flow, Line, Lines, Groups) > 0 then begin
+                    Parent.Set(Line, -1);
+                    Queue.Add(Line);
                 end;
-                PoolKey := StockKey(Scope, false);
-                ScopeKey := StockKey(Scope, true);
-                if not Scopes.Contains(ScopeKey) and not FailedPools.Contains(PoolKey) then begin
-                    Scopes.Add(ScopeKey);
-                    SumScope(Planned, Scope, RequestedBase, LineCount, LastIndex);
-                    if LineCount > 1 then begin
-                        AvailableBase := BinAvailableBase(LocationCode, CopyStr(Values.TextValue(Scope, 'binCode'), 1, 20), CopyStr(Values.TextValue(Scope, 'itemNo'), 1, 20), Values.TextValue(Scope, 'variantCode'), Values.TextValue(Scope, 'lotNo'), Values.TextValue(Scope, 'serialNo'), Values.TextValue(Scope, 'packageNo'));
-                        if AvailableBase < RequestedBase then begin
-                            AddShortBinError(Argument, LastIndex, CopyStr(Values.TextValue(Scope, 'binCode'), 1, 20), CopyStr(Values.TextValue(Scope, 'itemNo'), 1, 20), AvailableBase, RequestedBase);
-                            FailedPools.Add(PoolKey);
+            Sink := 0;
+            Head := 1;
+            while (Head <= Queue.Count()) and (Sink = 0) do begin
+                Node := Queue.Get(Head);
+                Head += 1;
+                if Node <= Lines then begin
+                    for Group := 1 to Groups do
+                        if (Parent.Get(Lines + Group) = 0) and LineMatchesGroup(PlannedLineAt(Planned, PoolLines.Get(Node)), GroupLot.Get(Group), GroupSerial.Get(Group), GroupPackage.Get(Group)) then begin
+                            Parent.Set(Lines + Group, Node);
+                            Queue.Add(Lines + Group);
+                            if (Sink = 0) and (Supply.Get(Group) - GroupFlow(Flow, Group, Lines, Groups) > 0) then
+                                Sink := Lines + Group;
                         end;
-                    end;
+                end else begin
+                    Group := Node - Lines;
+                    for Line := 1 to Lines do
+                        if (Parent.Get(Line) = 0) and (Flow.Get((Line - 1) * Groups + Group) > 0) then begin
+                            Parent.Set(Line, Node);
+                            Queue.Add(Line);
+                        end;
                 end;
             end;
+            Amount := 0;
+            if Sink <> 0 then begin
+                Group := Sink - Lines;
+                Amount := Supply.Get(Group) - GroupFlow(Flow, Group, Lines, Groups);
+                Node := Sink;
+                while Parent.Get(Node) <> -1 do begin
+                    Next := Parent.Get(Node);
+                    if Node <= Lines then begin
+                        Slack := Flow.Get((Node - 1) * Groups + (Next - Lines));
+                        if Slack < Amount then
+                            Amount := Slack;
+                    end;
+                    Node := Next;
+                end;
+                Slack := Demand.Get(Node) - LineFlow(Flow, Node, Lines, Groups);
+                if Slack < Amount then
+                    Amount := Slack;
+                Node := Sink;
+                while Parent.Get(Node) <> -1 do begin
+                    Next := Parent.Get(Node);
+                    if Node > Lines then
+                        Flow.Set((Next - 1) * Groups + (Node - Lines), Flow.Get((Next - 1) * Groups + (Node - Lines)) + Amount)
+                    else
+                        Flow.Set((Node - 1) * Groups + (Next - Lines), Flow.Get((Node - 1) * Groups + (Next - Lines)) - Amount);
+                    Node := Next;
+                end;
+                Total += Amount;
+            end;
+        until Amount <= 0;
+    end;
+
+    local procedure LineFlow(Flow: List of [Decimal]; Line: Integer; Lines: Integer; Groups: Integer) Result: Decimal
+    var
+        Group: Integer;
+    begin
+        for Group := 1 to Groups do
+            Result += Flow.Get((Line - 1) * Groups + Group);
+    end;
+
+    local procedure GroupFlow(Flow: List of [Decimal]; Group: Integer; Lines: Integer; Groups: Integer) Result: Decimal
+    var
+        Line: Integer;
+    begin
+        for Line := 1 to Lines do
+            Result += Flow.Get((Line - 1) * Groups + Group);
     end;
 
     local procedure PlannedLineAt(Planned: JsonArray; Index: Integer): JsonObject
@@ -495,28 +647,6 @@ codeunit 10078405 "Whse Internal Doc Helper ori"
         if WithTracking then
             KeyText += '|' + Values.TextValue(Scope, 'lotNo') + '|' + Values.TextValue(Scope, 'serialNo') + '|' + Values.TextValue(Scope, 'packageNo');
         exit(KeyText);
-    end;
-
-    local procedure SumScope(Planned: JsonArray; Scope: JsonObject; var RequestedBase: Decimal; var LineCount: Integer; var LastIndex: Integer)
-    var
-        Values: Codeunit "Whse Msg Values ori";
-        Token: JsonToken;
-        LineObject: JsonObject;
-    begin
-        RequestedBase := 0;
-        LineCount := 0;
-        foreach Token in Planned do begin
-            LineObject := Token.AsObject();
-            if StockKey(LineObject, false) = StockKey(Scope, false) then
-                if TrackingWithin(Values.TextValue(Scope, 'lotNo'), Values.TextValue(LineObject, 'lotNo')) and
-                   TrackingWithin(Values.TextValue(Scope, 'serialNo'), Values.TextValue(LineObject, 'serialNo')) and
-                   TrackingWithin(Values.TextValue(Scope, 'packageNo'), Values.TextValue(LineObject, 'packageNo'))
-                then begin
-                    RequestedBase += Values.DecimalValue(LineObject, 'quantityBase');
-                    LineCount += 1;
-                    LastIndex := Values.IntegerValue(LineObject, 'lineIndex');
-                end;
-        end;
     end;
 
     local procedure TrackingWithin(ScopeValue: Text; LineValue: Text): Boolean

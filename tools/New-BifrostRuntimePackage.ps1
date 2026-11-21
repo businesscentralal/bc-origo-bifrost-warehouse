@@ -43,6 +43,14 @@
     source-free checks, plus the package must be a genuine runtime package (PackageKind runtime)
     and the manifest identity and every manifest dependency must pass the identity rules.
 
+    -VerifyZipPath with -CheckPublishedOrder checks the zip that is public now (the anonymous
+    download of the blob the run is about to replace) against the version being published
+    (-ExpectedVersion, four parts) and app.json (-AppJsonPath). An older version never replaces
+    a newer public one: the check fails, naming both versions, unless -AllowOlder is given. The
+    same version may be uploaded again (a rebuild); a newer one replaces the older one. A public
+    zip that cannot be verified, or that holds another app, also fails unless -AllowOlder.
+    The workflow runs it only when the blob exists (HTTP 200); a missing blob (404) needs no check.
+
     -WriteDependencyInstallScript writes the fixed container script that installs dependencies.
     It reads the dependency records from a JSON data file (-DataPath) and never runs generated code.
     The major comes from app.json "application" (28.0.0.0 -> bc28). A later BC 29 app.json
@@ -126,6 +134,8 @@ param(
     [scriptblock]$UploadHandler,
     [switch]$Locate,
     [switch]$Dependency,
+    [switch]$CheckPublishedOrder,
+    [switch]$AllowOlder,
     [switch]$Upload,
     [switch]$WhatIf,
     [switch]$SelfTest
@@ -711,7 +721,55 @@ function Invoke-BifrostRuntimeZipVerification {
         $innerName = (Get-BifrostRuntimePackageLayout -Identity $identity -BcMajor $BcMajor -FolderName $FolderName).InnerAppFileName
     }
     if ($Dependency) { return Test-BifrostDependencyRuntimeZip -ZipPath $VerifyZipPath }
+    if ($CheckPublishedOrder) { return Test-BifrostPublishedVersionOrder -PublishedZipPath $VerifyZipPath -AppJsonPath $AppJsonPath -NewVersion $ExpectedVersion -AllowOlder:$AllowOlder }
     return Test-BifrostRuntimePackageZip -ZipPath $VerifyZipPath -InnerAppFileName $innerName -Identity $identity -ExpectedVersion $ExpectedVersion -ExpectedRuntimeSha256 $ExpectedRuntimeSha256
+}
+
+function Get-BifrostVersionOrderDecision {
+    param(
+        [AllowNull()][AllowEmptyString()][string]$PublishedVersion,
+        [Parameter(Mandatory = $true)][string]$NewVersion,
+        [switch]$AllowOlder
+    )
+    # Latest release only (Gunnar, 02.11.2026): the public zip must never go back to an older version.
+    $new = ConvertTo-BifrostFourPartVersion $NewVersion
+    if (-not $new -or $NewVersion -notmatch '^\d+\.\d+\.\d+\.\d+$') { throw "The version being published must have four numeric parts (got '$NewVersion')." }
+    if ([string]::IsNullOrWhiteSpace($PublishedVersion)) {
+        return [pscustomobject]@{ Allowed = $true; Reason = 'none-published'; PublishedVersion = $null; NewVersion = $new }
+    }
+    $published = ConvertTo-BifrostFourPartVersion $PublishedVersion
+    if (-not $published) { throw "The public runtime zip reports version '$PublishedVersion', which is not a version." }
+    $comparison = ([version]$new).CompareTo([version]$published)
+    if ($comparison -gt 0) { return [pscustomobject]@{ Allowed = $true; Reason = 'newer'; PublishedVersion = $published; NewVersion = $new } }
+    if ($comparison -eq 0) { return [pscustomobject]@{ Allowed = $true; Reason = 'same-version-rebuild'; PublishedVersion = $published; NewVersion = $new } }
+    if ($AllowOlder) { return [pscustomobject]@{ Allowed = $true; Reason = 'older-allowed'; PublishedVersion = $published; NewVersion = $new } }
+    return [pscustomobject]@{ Allowed = $false; Reason = 'older'; PublishedVersion = $published; NewVersion = $new }
+}
+
+function Test-BifrostPublishedVersionOrder {
+    param(
+        [Parameter(Mandatory = $true)][string]$PublishedZipPath,
+        [Parameter(Mandatory = $true)][string]$AppJsonPath,
+        [Parameter(Mandatory = $true)][string]$NewVersion,
+        [switch]$AllowOlder
+    )
+    $identity = Get-BifrostAppIdentity $AppJsonPath
+    $verified = $null
+    try { $verified = Test-BifrostRuntimePackageZip -ZipPath $PublishedZipPath }
+    catch {
+        if (-not $AllowOlder) {
+            throw ("The public runtime zip of {0} could not be verified, so its version is unknown and it is not replaced: {1} Run again with allowOlder to replace it." -f $identity.Name, $_.Exception.Message)
+        }
+    }
+    if ($verified -and ($verified.ManifestName -cne $identity.Name -or $verified.ManifestPublisher -cne $identity.Publisher) -and -not $AllowOlder) {
+        throw ("The public runtime zip at the {0} location holds {1} {2}, not {3} {4}. It is not replaced. Run again with allowOlder to replace it." -f $identity.Name, $verified.ManifestPublisher, $verified.ManifestName, $identity.Publisher, $identity.Name)
+    }
+    $publishedVersion = if ($verified) { [string]$verified.ManifestVersion } else { $null }
+    $decision = Get-BifrostVersionOrderDecision -PublishedVersion $publishedVersion -NewVersion $NewVersion -AllowOlder:$AllowOlder
+    if (-not $decision.Allowed) {
+        throw ("Refusing to replace the public runtime package of {0} {1} with the older {2}. The public zip always holds the latest release. Run again with allowOlder only to roll back on purpose; the built zip is kept as a workflow artifact." -f $identity.Name, $decision.PublishedVersion, $decision.NewVersion)
+    }
+    return $decision
 }
 
 function Test-BifrostDependencyRuntimeZip {
@@ -1143,6 +1201,52 @@ function Invoke-BifrostRuntimePackageSelfTest {
             Assert-True ($genuine.PackageKind -eq 'runtime') 'a genuine runtime package is accepted as a dependency'
         }
 
+        # Release order: an older tag never replaces a newer public runtime (worker reviews on the app copies).
+        $order = Get-BifrostVersionOrderDecision -PublishedVersion $null -NewVersion '28.0.11.669'
+        Assert-True ($order.Allowed -and $order.Reason -eq 'none-published') 'no public zip (404): upload'
+        $order = Get-BifrostVersionOrderDecision -PublishedVersion '28.0.13.741' -NewVersion '28.0.14.1'
+        Assert-True ($order.Allowed -and $order.Reason -eq 'newer') 'a newer version replaces the public one'
+        $order = Get-BifrostVersionOrderDecision -PublishedVersion '28.0.13.741' -NewVersion '28.0.13.741'
+        Assert-True ($order.Allowed -and $order.Reason -eq 'same-version-rebuild') 'the same version may be uploaded again'
+        $order = Get-BifrostVersionOrderDecision -PublishedVersion '28.0.13.741' -NewVersion '28.0.11.669'
+        Assert-True (-not $order.Allowed -and $order.Reason -eq 'older') 'an older version must not replace a newer one'
+        $order = Get-BifrostVersionOrderDecision -PublishedVersion '28.0.13.741' -NewVersion '28.0.13.740'
+        Assert-True (-not $order.Allowed) 'an older revision of the same build must not replace a newer one'
+        $order = Get-BifrostVersionOrderDecision -PublishedVersion '28.0.10.632' -NewVersion '28.0.9.999'
+        Assert-True (-not $order.Allowed) 'versions compare numerically, not as text'
+        $order = Get-BifrostVersionOrderDecision -PublishedVersion '28.0.13.741' -NewVersion '28.0.11.669' -AllowOlder
+        Assert-True ($order.Allowed -and $order.Reason -eq 'older-allowed') 'allowOlder rolls back on purpose'
+        $threePartRefused = $false
+        try { Get-BifrostVersionOrderDecision -PublishedVersion '28.0.13.741' -NewVersion '28.0.14' | Out-Null } catch { $threePartRefused = $true }
+        Assert-True $threePartRefused 'the published version must have four parts'
+
+        # Newer-then-older end to end: the public zip holds 28.0.13.741, an older 28.0.11.669 run is refused.
+        $newerManifest = $manifest.Replace('Version="28.0.11.669"', 'Version="28.0.13.741"')
+        $newerApp = New-BifrostSelfTestApp -Path (Join-Path $root 'published-newer.app') -Entries @{ 'NavxManifest.xml' = $newerManifest; 'Bifrost Foundation.runtime' = 'compiled' } -NoNavxHeader
+        $publishedZip = New-BifrostSelfTestZip -ZipPath (Join-Path $root 'published-newer.zip') -Files @{ 'Origo_Bifrost Foundation_runtime.app' = $newerApp }
+        $olderRefused = $false
+        try { Test-BifrostPublishedVersionOrder -PublishedZipPath $publishedZip -AppJsonPath $productJson -NewVersion '28.0.11.669' | Out-Null }
+        catch { $olderRefused = $_.Exception.Message -match '28\.0\.13\.741' -and $_.Exception.Message -match '28\.0\.11\.669' }
+        Assert-True $olderRefused 'an older run is refused against a newer public zip, naming both versions'
+        $same = Test-BifrostPublishedVersionOrder -PublishedZipPath $publishedZip -AppJsonPath $productJson -NewVersion '28.0.13.741'
+        Assert-True ($same.Allowed -and $same.PublishedVersion -eq '28.0.13.741') 'a rebuild of the public version is allowed'
+        $newer = Test-BifrostPublishedVersionOrder -PublishedZipPath $publishedZip -AppJsonPath $productJson -NewVersion '28.0.14.1'
+        Assert-True ($newer.Allowed -and $newer.Reason -eq 'newer') 'a newer run replaces the public zip'
+        $rollback = Test-BifrostPublishedVersionOrder -PublishedZipPath $publishedZip -AppJsonPath $productJson -NewVersion '28.0.11.669' -AllowOlder
+        Assert-True ($rollback.Allowed -and $rollback.Reason -eq 'older-allowed') 'allowOlder lets an older run replace the public zip'
+        $otherApp = New-BifrostSelfTestApp -Path (Join-Path $root 'published-other.app') -Entries @{ 'NavxManifest.xml' = $newerManifest.Replace('Name="Bifrost Foundation"', 'Name="Bifrost Iceland"'); 'x.runtime' = 'compiled' } -NoNavxHeader
+        $otherZip = New-BifrostSelfTestZip -ZipPath (Join-Path $root 'published-other.zip') -Files @{ 'Origo_Bifrost Iceland_runtime.app' = $otherApp }
+        $otherRefused = $false
+        try { Test-BifrostPublishedVersionOrder -PublishedZipPath $otherZip -AppJsonPath $productJson -NewVersion '28.0.14.1' | Out-Null } catch { $otherRefused = $_.Exception.Message -match 'not Origo Bifrost Foundation' }
+        Assert-True $otherRefused 'a public zip of another app is not silently replaced'
+        $brokenZip = Join-Path $root 'published-broken.zip'
+        [System.IO.File]::WriteAllBytes($brokenZip, [System.Text.Encoding]::ASCII.GetBytes('not a zip'))
+        $brokenRefused = $false
+        try { Test-BifrostPublishedVersionOrder -PublishedZipPath $brokenZip -AppJsonPath $productJson -NewVersion '28.0.14.1' | Out-Null } catch { $brokenRefused = $_.Exception.Message -match 'could not be verified' }
+        Assert-True $brokenRefused 'an unverifiable public zip is not replaced without allowOlder'
+        $brokenAllowed = Test-BifrostPublishedVersionOrder -PublishedZipPath $brokenZip -AppJsonPath $productJson -NewVersion '28.0.14.1' -AllowOlder
+        Assert-True ($brokenAllowed.Allowed -and $brokenAllowed.Reason -eq 'none-published') 'allowOlder replaces an unverifiable public zip'
+
         # Blocker 3: one location rule for publisher and dependant.
         $folderRefused = $false
         try { Get-BifrostRuntimePackageLayout -Identity $identity -FolderName 'bc-origo-bifrost-core' | Out-Null } catch { $folderRefused = $_.Exception.Message -match 'always stored under the app name' }
@@ -1162,7 +1266,7 @@ function Invoke-BifrostRuntimePackageSelfTest {
         $failed | ForEach-Object { Write-Error $_ -ErrorAction Continue }
         exit 1
     }
-    Write-Output ("SelfTest passed: $script:selfTestAssertions assertions, 0 failed. Genuine runtime fixture supplied: $([bool]$RuntimeFixturePath). Layout, identity, malformed input/source refusal, ZIP/read-back/hash verification, upload headers, redaction, identity rules, dependency runtime kind and location.")
+    Write-Output ("SelfTest passed: $script:selfTestAssertions assertions, 0 failed. Genuine runtime fixture supplied: $([bool]$RuntimeFixturePath). Layout, identity, malformed input/source refusal, ZIP/read-back/hash verification, upload headers, redaction, identity rules, dependency runtime kind, location and release order.")
     exit 0
 }
 

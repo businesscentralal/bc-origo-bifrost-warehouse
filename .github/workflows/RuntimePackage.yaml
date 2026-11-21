@@ -90,8 +90,10 @@ name: Runtime Package
 # organization VARIABLE, referenced by name only: BIFROST_COSMO_SSH_HOST_KEYS, one host public key per line
 # ("ssh-ed25519 AAAA..."). When it is set, ssh and scp run with StrictHostKeyChecking=yes against exactly those
 # keys (HostKeyAlias bifrost-cosmo-container) and the run fails closed on any other key. When it is not set, the
-# run warns, writes the container's host key fingerprints (ssh-keyscan) to the step summary so the value can be
-# checked and set, and connects without a pin as before. What limits the risk without a pin: the endpoint address
+# run warns, writes the container's host key fingerprints (ssh-keyscan) to the step summary and connects without
+# a pin. COSMO generates a new host key for every container (21.11.2026: three runs, three different ED25519
+# keys), so a fixed pin cannot match a COSMO container today: leave the variable unset until COSMO exposes the
+# key, because setting it makes every run fail closed. What limits the risk without a pin: the endpoint address
 # comes from the authenticated API, the container lives a few minutes in COSMO's network, the client key is per
 # container, and the downloaded package must pass the Microsoft package reader (runtime package, identity,
 # version, no AL source) before it is zipped.

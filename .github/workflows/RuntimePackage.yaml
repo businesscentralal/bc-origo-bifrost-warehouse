@@ -25,9 +25,14 @@ name: Runtime Package
 # BC version (Gunnar, 05.11.2026: "we must build 28 version with artifact 28.0.0.0"): a runtime package is
 # exported on the FIRST build of <major>.<minor>, where <major>.<minor> is app.json "application" (28.0.0.0 ->
 # 28.0, 28.3.0.0 -> 28.3), so it installs on every later build. An app that needs application 28.3 cannot be
-# published on 28.0. The workflow lists Microsoft's public artifact store (the CDN BcContainerHelper uses),
-# sorts the <major>.<minor>.* builds numerically and pins the first one that has an artifact for the country
-# (the equivalent of Get-BCArtifactUrl -version <major>.<minor> -select First). For BC 28.0 on 05.11.2026
+# published on 28.0. The workflow reads the per-country version index of Microsoft's public artifact store
+# (<cdn>/<type>/indexes/<country>.json, the index BcContainerHelper uses), keeps the <major>.<minor>.* builds that
+# are at least every Microsoft dependency's minimum version (the app's own and its Bifrost dependencies'), sorts
+# them numerically and pins the first one whose artifact answers (the equivalent of Get-BCArtifactUrl -version
+# <major>.<minor> -select First). It does not use the container listing (?comp=list&prefix=...): the CDN caches
+# that response without its query string, so a listing for prefix 28.3. returned the cached 28.0. listing and
+# Subscription Billing (application 28.3) was exported on 28.0.46665.48549 (run 44909614376). Every candidate
+# must also start with the requested prefix. For BC 28.0 on 05.11.2026
 # that is OnPrem 28.0.46665.48549 (the first Sandbox build is 28.0.46665.53459). The exact build and the
 # container's platform version go to the step summary. Default type OnPrem; input bcArtifactType Sandbox
 # switches. Input bcArtifactVersion overrides: a four-part version is used as is, a shorter one is a prefix
@@ -429,25 +434,26 @@ jobs:
           # Resolve the exact first build (Get-BCArtifactUrl -version <major>.<minor> -select First) from the
           # public artifact store, so the container is pinned and the run records which build it used.
           $store = "https://bcartifacts-exdbf9fwegejdqak.b02.azurefd.net/$($env:BC_ARTIFACT_TYPE.ToLowerInvariant())"
+          # Floor: every Microsoft dependency's minimum version (the app's and its Bifrost dependencies').
+          $floor = [version]'0.0.0.0'
+          $floorBy = ''
+          foreach ($dependency in @(Get-Content -Raw -LiteralPath (Join-Path $env:RUNNER_TEMP 'bifrost-microsoft-dependencies.json') | ConvertFrom-Json | Where-Object { $_ })) {
+              if ($dependency.MinVersion -and [version]$dependency.MinVersion -gt $floor) { $floor = [version]$dependency.MinVersion; $floorBy = $dependency.Name }
+          }
           if ($requestedParts.Count -eq 4) {
               $candidates = @($requested)
           }
           else {
-              $names = [System.Collections.Generic.List[string]]::new()
-              $marker = ''
-              do {
-                  $listUrl = "$($store)/?comp=list&restype=container&delimiter=/&prefix=$([Uri]::EscapeDataString("$requested."))"
-                  if ($marker) { $listUrl += "&marker=$([Uri]::EscapeDataString($marker))" }
-                  # The listing starts with a byte order mark, which [xml] refuses.
-                  [xml]$listing = ([string](Invoke-WebRequest -Uri $listUrl -UseBasicParsing).Content).TrimStart([char]0xFEFF)
-                  foreach ($prefixNode in @($listing.EnumerationResults.Blobs.BlobPrefix)) {
-                      if ($prefixNode -and $prefixNode.Name) { $names.Add($prefixNode.Name.TrimEnd('/')) }
-                  }
-                  $marker = [string]$listing.EnumerationResults.NextMarker
-              } while ($marker)
-              $candidates = @($names | Where-Object { $_ -match '^\d+\.\d+\.\d+\.\d+$' } | Sort-Object { [version]$_ })
-              if ($candidates.Count -eq 0) { throw "No $($env:BC_ARTIFACT_TYPE) artifact build starts with $requested." }
+              # The per-country index (a distinct path per country); never the ?comp=list container listing,
+              # whose CDN cache ignores the query string (see the header).
+              $index = Invoke-RestMethod -Uri "$($store)/indexes/$($env:COUNTRY).json" -TimeoutSec 120
+              $candidates = @(@($index) | ForEach-Object { [string]$_.Version } | Where-Object { $_ -match '^\d+\.\d+\.\d+\.\d+$' -and $_.StartsWith("$requested.") } | Sort-Object { [version]$_ })
+              if ($candidates.Count -eq 0) { throw "No $($env:COUNTRY) $($env:BC_ARTIFACT_TYPE) artifact build starts with $requested." }
           }
+          $belowFloor = @($candidates | Where-Object { [version]$_ -lt $floor })
+          if ($belowFloor.Count -gt 0) { Write-Host "Skipping $($belowFloor -join ', '): below $floorBy $floor." }
+          $candidates = @($candidates | Where-Object { [version]$_ -ge $floor })
+          if ($candidates.Count -eq 0) { throw "No $($env:COUNTRY) $($env:BC_ARTIFACT_TYPE) artifact build of BC $requested is at least $floorBy $floor (Microsoft dependency minimum)." }
           $artifactVersion = $null
           foreach ($candidate in $candidates) {
               try {
@@ -458,7 +464,7 @@ jobs:
               catch { Write-Host "No $($env:COUNTRY) artifact for $($env:BC_ARTIFACT_TYPE) $candidate." }
           }
           if (-not $artifactVersion) { throw "No $($env:COUNTRY) $($env:BC_ARTIFACT_TYPE) artifact found for BC $requested." }
-          "BC artifact for the export container: $($env:BC_ARTIFACT_TYPE) $($env:COUNTRY) $artifactVersion (requested $requested, first build)." >> $env:GITHUB_STEP_SUMMARY
+          "BC artifact for the export container: $($env:BC_ARTIFACT_TYPE) $($env:COUNTRY) $artifactVersion (requested $requested, first build at least $(if ($floorBy) { "$floorBy $floor" } else { 'any' }))." >> $env:GITHUB_STEP_SUMMARY
           "artifactVersion=$artifactVersion" >> $env:GITHUB_OUTPUT
           Write-Host "Exporting on BC $($env:BC_ARTIFACT_TYPE) $($env:COUNTRY) $artifactVersion."
 

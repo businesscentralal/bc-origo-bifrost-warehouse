@@ -31,9 +31,19 @@ name: Runtime Package
 # that is OnPrem 28.0.46665.48549 (the first Sandbox build is 28.0.46665.53459). The exact build and the
 # container's platform version go to the step summary. Default type OnPrem; input bcArtifactType Sandbox
 # switches. Input bcArtifactVersion overrides: a four-part version is used as is, a shorter one is a prefix
-# whose first build is taken; it must stay on <major>.<minor>. The export fails unless the container's platform
-# is <major>.<minor>.x. Country: input bcArtifactCountry; "auto" (default) takes "is" when the app or one of its
-# Bifrost dependencies depends on the Microsoft app "IS Core", otherwise "w1".
+# whose first build is taken; it must stay on <major>.<minor>. The export fails unless the container's System
+# Application is <major>.<minor>.x and its platform is <major>.x. The platform alone cannot be compared with the
+# minor: BC keeps platform <major>.0 for every minor update (BC 28.3 runs platform 28.0.52201.0), which failed
+# Subscription Billing 28.0.2 (application 28.3, run 44789043952) after a good export. Country: input
+# bcArtifactCountry; "auto" (default) takes "is" when the app or one of its Bifrost dependencies depends on the
+# Microsoft app "IS Core", otherwise "w1".
+#
+# Time limits: the export step stops after 75 minutes (the job after 150), so the container is still removed and
+# the run fails instead of hanging. The readiness poll calls the COSMO app-info endpoint itself with a 2-minute
+# request timeout: Alpaca-Actions' Get-AlpacaAppInfo calls Invoke-RestMethod without -TimeoutSec (no timeout in
+# PowerShell 7), and on core run 44751609656 (28.0.14, attempt 1) its first call to a container in state
+# "Starting" never returned, so the 30-minute readiness deadline was never checked again and the job was
+# cancelled at 150 minutes. ssh and scp send keep-alives, so a dead SSH connection fails within 5 minutes.
 #
 # Location rule (one rule for publisher and dependant): the zip is always stored under the app name,
 # bc<major>/<app name>/<Publisher>_<App>_runtime.zip. There is no folder-name input; the packager refuses any
@@ -63,6 +73,23 @@ name: Runtime Package
 # CreateRelease.yaml is an AL-Go system file (template updates overwrite it), so it does not call this one.
 # Release order: Bifrost Foundation first, then the apps that depend on it (an app's run needs the runtime
 # packages of its Bifrost dependencies to be public already).
+#
+# Release order: the public zip always holds the latest release. Before the upload the run downloads the
+# public zip anonymously (a 404 means none yet) and the packager compares its manifest version with the
+# version being published (-VerifyZipPath -CheckPublishedOrder). An older version is refused with both versions
+# named; the same version may be uploaded again (a rebuild); a newer one replaces it. Input allowOlder (default
+# false) rolls back on purpose. The refused zip is still kept as a workflow artifact.
+#
+# SSH host key (#1450): the COSMO Alpaca API returns no host key or fingerprint (GET Container/Ssh/{id} gives
+# only ipAddress/host, port and a per-container client private key), so the pin comes from a repository or
+# organization VARIABLE, referenced by name only: BIFROST_COSMO_SSH_HOST_KEYS, one host public key per line
+# ("ssh-ed25519 AAAA..."). When it is set, ssh and scp run with StrictHostKeyChecking=yes against exactly those
+# keys (HostKeyAlias bifrost-cosmo-container) and the run fails closed on any other key. When it is not set, the
+# run warns, writes the container's host key fingerprints (ssh-keyscan) to the step summary so the value can be
+# checked and set, and connects without a pin as before. What limits the risk without a pin: the endpoint address
+# comes from the authenticated API, the container lives a few minutes in COSMO's network, the client key is per
+# container, and the downloaded package must pass the Microsoft package reader (runtime package, identity,
+# version, no AL source) before it is zipped.
 #
 # Credential: secret BIFROST_RUNTIME_SAS, a write-only SAS for the runtime container (the fallback named in
 # design/runtime-package-blob.md section 6 of bc-origo-bifrost-core). Only Gunnar or an Azure/GitHub org admin
@@ -105,6 +132,11 @@ on:
           - w1
           - is
         default: auto
+      allowOlder:
+        description: Replace a NEWER public runtime zip with this older release (roll back on purpose). Default off.
+        required: false
+        type: boolean
+        default: false
   workflow_call:
     inputs:
       tag:
@@ -136,6 +168,11 @@ on:
         required: false
         type: string
         default: auto
+      allowOlder:
+        description: Replace a newer public runtime zip with this older release
+        required: false
+        type: boolean
+        default: false
     secrets:
       BIFROST_RUNTIME_SAS:
         required: false
@@ -158,8 +195,10 @@ jobs:
       BC_ARTIFACT_VERSION: ${{ inputs.bcArtifactVersion || '' }}
       BC_ARTIFACT_TYPE: ${{ inputs.bcArtifactType || 'OnPrem' }}
       BC_ARTIFACT_COUNTRY: ${{ inputs.bcArtifactCountry || 'auto' }}
+      ALLOW_OLDER: ${{ inputs.allowOlder == true && 'true' || 'false' }}
       HAS_RUNTIME_CREDENTIAL: ${{ secrets.BIFROST_RUNTIME_SAS != '' }}
       ALPACA_BACKEND_URL: ${{ vars.ALPACA_BACKEND_URL }}
+      BIFROST_COSMO_SSH_HOST_KEYS: ${{ vars.BIFROST_COSMO_SSH_HOST_KEYS }}
     steps:
       - name: Check the release tag
         shell: pwsh
@@ -485,6 +524,7 @@ jobs:
       - name: Export the runtime package
         id: export
         shell: pwsh
+        timeout-minutes: 75
         env:
           _token: ${{ github.token }}
           RELEASE_APP_PATH: ${{ steps.app.outputs.path }}
@@ -503,19 +543,27 @@ jobs:
           if ($container.Password) { Write-Host "::add-mask::$($container.Password)" }
 
           Wait-AlpacaContainerImageReady -ContainerName $id -Token $env:_token
-          # Wait-AlpacaContainerReady has no timeout (see tools/SharedAlpacaContainer.ps1 in core), so poll the
-          # live app-info endpoint with our own deadline instead.
+          # Wait-AlpacaContainerReady has no timeout (see tools/SharedAlpacaContainer.ps1 in core), and
+          # Get-AlpacaAppInfo has no request timeout (one call hung for 2.5 hours, run 44751609656), so poll the
+          # live app-info endpoint ourselves: 2 minutes per request, 30 minutes in all.
+          $appInfoHeaders = Get-AlpacaAuthenticationHeaders -Token $env:_token
+          $appInfoHeaders.Add('accept', 'application/text')
+          $appInfoUrl = Get-AlpacaEndpointUrlWithParam -Controller 'Container' -Endpoint 'Exec' -Ressource $id -RouteSuffix 'appInfo'
           $deadline = [datetime]::UtcNow.AddMinutes(30)
           $ready = $false
+          $attempt = 0
           while (-not $ready -and [datetime]::UtcNow -lt $deadline) {
+              $attempt++
               try {
-                  $installed = @(Get-AlpacaAppInfo -ContainerName $id -Token $env:_token)
+                  $installed = @(Invoke-RestMethod -Uri $appInfoUrl -Method Get -Headers $appInfoHeaders -TimeoutSec 120 -AllowInsecureRedirect)
                   $ready = @($installed | Where-Object { $_.Id -and $_.Version }).Count -gt 0
+                  if (-not $ready) { Write-Host "App info attempt $($attempt): no installed apps listed yet." }
               }
-              catch { Write-Host 'Container not answering app info yet.' }
+              catch { Write-Host "App info attempt $($attempt): container not answering yet ($($_.Exception.GetType().Name))." }
               if (-not $ready) { Start-Sleep -Seconds 30 }
           }
-          if (-not $ready) { throw "Container $id was not ready after 30 minutes." }
+          if (-not $ready) { throw "Container $id was not ready after 30 minutes ($attempt app info attempts)." }
+          Write-Host "Container $id is ready (app info attempt $attempt)."
 
           # SSH endpoint: enable it when it is not there yet and wait for ip, key and an open port.
           $headers = Get-AlpacaAuthenticationHeaders -Token $env:_token
@@ -554,7 +602,28 @@ jobs:
               if (-not $keyText.EndsWith("`n")) { $keyText += "`n" }
               [System.IO.File]::WriteAllText($keyPath, $keyText)
               chmod 600 $keyPath
-              $common = @('-i', $keyPath, '-o', 'StrictHostKeyChecking=no', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'BatchMode=yes', '-o', 'IdentitiesOnly=yes', '-o', 'ConnectTimeout=15', '-o', 'LogLevel=ERROR')
+              # Host key pin from variable BIFROST_COSMO_SSH_HOST_KEYS (see the header). Public keys only, never secret.
+              $hostKeyOptions = @('-o', 'StrictHostKeyChecking=no', '-o', 'UserKnownHostsFile=/dev/null')
+              $pinnedKeys = @(([string]$env:BIFROST_COSMO_SSH_HOST_KEYS) -split "`r?`n" | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+              if ($pinnedKeys.Count -gt 0) {
+                  $knownHosts = Join-Path $work 'known_hosts'
+                  $lines = foreach ($pinnedKey in $pinnedKeys) {
+                      if ($pinnedKey -notmatch '^(ssh-ed25519|ecdsa-sha2-nistp(256|384|521)|ssh-rsa) [A-Za-z0-9+/]+={0,2}$') { throw 'Variable BIFROST_COSMO_SSH_HOST_KEYS must hold one "<type> <base64 key>" host public key per line.' }
+                      "bifrost-cosmo-container $pinnedKey"
+                  }
+                  [System.IO.File]::WriteAllText($knownHosts, (($lines -join "`n") + "`n"))
+                  $hostKeyOptions = @('-o', 'StrictHostKeyChecking=yes', '-o', "UserKnownHostsFile=$knownHosts", '-o', 'HostKeyAlias=bifrost-cosmo-container')
+                  "SSH host key pinned: $($pinnedKeys.Count) key(s) from variable BIFROST_COSMO_SSH_HOST_KEYS." >> $env:GITHUB_STEP_SUMMARY
+              }
+              else {
+                  $scanned = @(ssh-keyscan -T 15 -p $ssh.Port $ssh.Ip 2>$null | Where-Object { $_ -and -not $_.StartsWith('#') })
+                  $fingerprints = @($scanned | ssh-keygen -lf - 2>$null)
+                  $message = 'SSH host key NOT pinned: variable BIFROST_COSMO_SSH_HOST_KEYS is not set (#1450).'
+                  Write-Host "::warning::$message"
+                  "$message Container host key fingerprints: $(if ($fingerprints) { $fingerprints -join '; ' } else { 'none read' })." >> $env:GITHUB_STEP_SUMMARY
+                  foreach ($fingerprint in $fingerprints) { Write-Host "Container $id host key: $fingerprint" }
+              }
+              $common = @('-i', $keyPath) + $hostKeyOptions + @('-o', 'BatchMode=yes', '-o', 'IdentitiesOnly=yes', '-o', 'ConnectTimeout=15', '-o', 'ServerAliveInterval=30', '-o', 'ServerAliveCountMax=10', '-o', 'LogLevel=ERROR')
               $target = "sshuser@$($ssh.Ip)"
               # Only values that passed the identity rules (app step) reach this script, as single-quoted literals.
               $quote = { param($value) ([string]$value).Replace("'", "''") }
@@ -617,6 +686,8 @@ jobs:
                   $prologue
                   "if (-not (Get-Command Get-NAVAppRuntimePackage -ErrorAction SilentlyContinue)) { Write-Host '[BIFROST_RUNTIME_ERROR] Get-NAVAppRuntimePackage is not available.'; exit 3 }"
                   "Write-Host ""[BIFROST_RUNTIME_PLATFORM] `$(`$inst.Version)"""
+                  "`$systemApp = Get-NAVAppInfo -ServerInstance `$si -Name 'System Application' -Publisher 'Microsoft' | Sort-Object { [version]`$_.Version } | Select-Object -Last 1"
+                  "Write-Host ""[BIFROST_RUNTIME_APPLICATION] `$(`$systemApp.Version)"""
                   "`$params = @{ ServerInstance = `$si; AppName = '$(& $quote $env:APP_NAME)'; Publisher = '$(& $quote $env:APP_PUBLISHER)'; Version = '$(& $quote $env:APP_VERSION)'; Path = '$remotePackage'; IncludeSourceInPackageFile = `$false }"
                   "if ((Get-Command Get-NAVAppRuntimePackage).Parameters.ContainsKey('Tenant')) { `$params.Tenant = 'default' }"
                   "try { Get-NAVAppRuntimePackage @params } catch { Write-Host ""[BIFROST_RUNTIME_ERROR] `$(`$_.Exception.Message)""; exit 4 }"
@@ -633,8 +704,12 @@ jobs:
               if ($LASTEXITCODE -ne 0 -or $output -notmatch '\[BIFROST_RUNTIME_OK\]') { throw "Get-NAVAppRuntimePackage failed in container $id (exit $LASTEXITCODE)." }
               if ($output -notmatch '\[BIFROST_RUNTIME_PLATFORM\]\s*((\d+)\.(\d+)\.[\d.]+)') { throw 'The container did not report its BC platform version.' }
               $platform = $Matches[1]
-              if ($Matches[2] -ne $env:BC_MAJOR -or $Matches[3] -ne $env:BC_MINOR) { throw "The container runs BC $platform; the runtime package must be exported on BC $($env:BC_MAJOR).$($env:BC_MINOR).x (app.json application)." }
-              "Runtime package exported on container platform $platform (artifact $($env:BC_ARTIFACT_TYPE) $($env:COUNTRY) $($env:ARTIFACT_VERSION))." >> $env:GITHUB_STEP_SUMMARY
+              if ($Matches[2] -ne $env:BC_MAJOR) { throw "The container runs BC platform $platform; the runtime package must be exported on BC $($env:BC_MAJOR) (app.json application)." }
+              # BC keeps platform <major>.0 for every minor update, so the minor is checked on the System Application.
+              if ($output -notmatch '\[BIFROST_RUNTIME_APPLICATION\]\s*((\d+)\.(\d+)\.[\d.]+)') { throw 'The container did not report its System Application version.' }
+              $application = $Matches[1]
+              if ($Matches[2] -ne $env:BC_MAJOR -or $Matches[3] -ne $env:BC_MINOR) { throw "The container runs BC application $application; the runtime package must be exported on BC $($env:BC_MAJOR).$($env:BC_MINOR).x (app.json application)." }
+              "Runtime package exported on container application $application, platform $platform (artifact $($env:BC_ARTIFACT_TYPE) $($env:COUNTRY) $($env:ARTIFACT_VERSION))." >> $env:GITHUB_STEP_SUMMARY
 
               New-Item -ItemType Directory -Path runtime -Force | Out-Null
               $runtimeApp = Join-Path (Resolve-Path runtime) ("{0}_{1}_{2}.runtime.app" -f $env:APP_PUBLISHER, $env:APP_NAME, $env:APP_VERSION)
@@ -695,6 +770,35 @@ jobs:
           $message = 'Runtime zip built but not uploaded: secret BIFROST_RUNTIME_SAS does not exist yet. Gunnar or an Azure/GitHub org admin must create the origopublic runtime write credential.'
           Write-Host "::warning::$message"
           "$message" >> $env:GITHUB_STEP_SUMMARY
+
+      - name: Check the public version (no older release over a newer one)
+        if: env.HAS_RUNTIME_CREDENTIAL == 'true'
+        shell: pwsh
+        env:
+          PUBLIC_URL: ${{ steps.zip.outputs.url }}
+          APP_VERSION: ${{ steps.app.outputs.version }}
+        run: |
+          # Anonymous download of the zip that is public now, exactly as a customer gets it.
+          $current = Join-Path $env:RUNNER_TEMP 'runtime-current.zip'
+          $status = curl --silent --show-error --location --output $current --write-out '%{http_code}' $env:PUBLIC_URL
+          if ($LASTEXITCODE -ne 0) { throw "Anonymous download of $($env:PUBLIC_URL) failed (curl $LASTEXITCODE)." }
+          if ($status -eq '404') {
+              "No public runtime zip yet at $($env:PUBLIC_URL); $($env:APP_VERSION) is the first." >> $env:GITHUB_STEP_SUMMARY
+              exit 0
+          }
+          if ($status -ne '200') { throw "Anonymous GET of $($env:PUBLIC_URL) returned HTTP $status; the public version cannot be checked." }
+          $arguments = @{
+              VerifyZipPath       = $current
+              CheckPublishedOrder = $true
+              AppJsonPath         = "release/$($env:APP_FOLDER)/app.json"
+              ExpectedVersion     = $env:APP_VERSION
+          }
+          if ($env:ALLOW_OLDER -eq 'true') { $arguments.AllowOlder = $true }
+          $json = ./tooling/tools/New-BifrostRuntimePackage.ps1 @arguments | Select-Object -Last 1
+          if ($LASTEXITCODE -ne 0) { throw 'The public version check failed.' }
+          $decision = $json | ConvertFrom-Json
+          if (-not $decision.Allowed) { throw "Refusing to replace public $($decision.PublishedVersion) with $($decision.NewVersion)." }
+          "Public version $($decision.PublishedVersion), publishing $($decision.NewVersion): $($decision.Reason)." >> $env:GITHUB_STEP_SUMMARY
 
       - name: Upload to origopublic
         if: env.HAS_RUNTIME_CREDENTIAL == 'true'

@@ -1,7 +1,8 @@
-namespace Origo.Bifrost.Warehouse;
+﻿namespace Origo.Bifrost.Warehouse;
 
 using Microsoft.Inventory.Location;
 using Microsoft.Inventory.Transfer;
+using Microsoft.Manufacturing.Document;
 using Microsoft.Purchases.Document;
 using Microsoft.Sales.Document;
 using Microsoft.Warehouse.Activity;
@@ -110,7 +111,7 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        Parameters.Add(ContractMgt.Parameter('sourceDocument', 'string', true, 'Purchase Order, Sales Return Order or Inbound Transfer.'));
+        Parameters.Add(ContractMgt.Parameter('sourceDocument', 'string', true, 'Purchase Order, Sales Return Order, Inbound Transfer or Prod. Output.'));
         Parameters.Add(ContractMgt.Parameter('sourceNo', 'string', false, 'Source document number. Required when systemId and subject are empty.'));
         Parameters.Add(ContractMgt.Parameter('systemId', 'string', false, 'Source document SystemId. Required when sourceNo and subject are empty.'));
         exit(true);
@@ -179,9 +180,10 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
     begin
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'The source document is not released, or the location does not require put-away.', 'Release the document first, or post it directly.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'The location uses warehouse receipts.', 'Use Warehouse.Receipt.Create and Warehouse.Putaway.Create instead.');
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'Prod. Output: the location does not set Prod. Output Whse. Handling to Inventory Put-away.', 'Set Prod. Output Whse. Handling on the location to Inventory Put-away, or post the output without warehouse handling.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MissingParameter, 'sourceDocument, or a document number or SystemId, is missing.', 'Send sourceDocument and sourceNo or systemId.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameterFormat, 'A value has the wrong JSON type or is too long.', 'Send text for codes and a GUID for systemId.');
-        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameter, 'sourceDocument is not a supported inventory put-away source.', 'Send Purchase Order, Sales Return Order or Inbound Transfer.');
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameter, 'sourceDocument is not a supported inventory put-away source.', 'Send Purchase Order, Sales Return Order, Inbound Transfer or Prod. Output.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::UnknownParameter, 'The request contains a key this type does not accept.', UnknownParameterNextStepLbl);
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::RecordNotFound, 'The source document was not found.', 'Check sourceDocument and the document number or SystemId.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::ConflictingIdentifiers, 'subject, sourceNo and systemId name different documents.', 'Send one document: subject, sourceNo or systemId.');
@@ -258,7 +260,7 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
     /// <returns>True when an overview is declared.</returns>
     procedure GetOverview(var Overview: Text): Boolean
     var
-        OverviewLbl: Label 'Creates an inventory put-away from a released purchase order, sales return order or inbound transfer at a location that requires put-away but not a warehouse receipt. Business Central commits the put-away. An open inventory put-away for the same document is returned with a warning.', Comment = 'is-IS=Stofnar birgðafrágang úr staðfestri innkaupapöntun, söluskilapöntun eða innleiðsflutningi á staðsetningu sem krefst frágangs en ekki vöruhúsamóttöku. Business Central staðfestir fráganginn. Opinn birgðafrágangur fyrir sama skjal er skilaður með viðvörun.';
+        OverviewLbl: Label 'Creates an inventory put-away from a released purchase order, sales return order, inbound transfer or the output of a released production order at a location that requires put-away but not a warehouse receipt. Business Central commits the put-away. An open inventory put-away for the same document is returned with a warning.', Comment = 'is-IS=Stofnar birgðafrágang úr staðfestri innkaupapöntun, söluskilapöntun, innleiðsflutningi eða frálagi útgefinnar framleiðslupöntunar á staðsetningu sem krefst frágangs en ekki vöruhúsamóttöku. Business Central staðfestir fráganginn. Opinn birgðafrágangur fyrir sama skjal er skilaður með viðvörun.';
     begin
         Overview := OverviewLbl;
         exit(true);
@@ -270,7 +272,8 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
     procedure GetNotes(var Notes: Text): Boolean
     begin
         Notes := 'The source document must be released, and every item line must sit at a location that requires put-away. A location that uses warehouse receipts or directed put-away and pick is refused: use Warehouse.Receipt.Create and Warehouse.Putaway.Create there. A document with no item line at such a location is refused as not released or not requiring put-away. ' +
-            'sourceDocument takes Purchase Order, Sales Return Order or Inbound Transfer. ' +
+            'sourceDocument takes Purchase Order, Sales Return Order, Inbound Transfer or Prod. Output. ' +
+            'Prod. Output puts away the output of a released production order, found by its number. Its location must set Prod. Output Whse. Handling to Inventory Put-away; posting that put-away with Warehouse.InventoryPutAway.Post posts the output and the put-away together, as Business Central does. ' +
             'If an open inventory put-away already exists for the document, nothing is created: that put-away is returned with a warning, also when the document has lines that put-away does not cover. ' +
             'When Business Central creates no put-away, the call is refused with the error No inventory put-away was created. A created put-away is committed, so a later failure does not roll it back. ' +
             'Quantity to handle is set to the outstanding quantity on every line, so the put-away can be posted straight away with Warehouse.InventoryPutAway.Post. The bin on each line is the one Business Central suggests; it is empty at a location without bins. ' +
@@ -473,7 +476,10 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
             RefuseNotReleased(Argument, IdentifierKey, IdentifierValue);
             exit;
         end;
-        CheckLocations(Argument, Locations, IdentifierKey, IdentifierValue);
+        if SourceDocument = SourceDocument::"Prod. Output" then
+            CheckOutputLocations(Argument, Locations, IdentifierKey, IdentifierValue)
+        else
+            CheckLocations(Argument, Locations, IdentifierKey, IdentifierValue);
     end;
 
     local procedure IdentifierSource(SubjectText: Text; SourceNoText: Text; SourceNoPresent: Boolean; SystemIdText: Text; SystemPresent: Boolean; var IdentifierKey: Text; var IdentifierValue: Text)
@@ -530,6 +536,8 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
                 exit(LoadSalesReturn(Argument, SourceNoText, SystemIdText, DocumentNo, Released, Locations));
             SourceDocument::"Inbound Transfer":
                 exit(LoadInboundTransfer(Argument, SourceNoText, SystemIdText, DocumentNo, Released, Locations));
+            SourceDocument::"Prod. Output":
+                exit(LoadProductionOutput(Argument, SourceNoText, SystemIdText, DocumentNo, Released, Locations));
         end;
         exit(false);
     end;
@@ -660,6 +668,88 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
         exit(NotFound(Argument, SourceNoText, SystemIdText));
     end;
 
+    local procedure LoadProductionOutput(var Argument: Record "Message Argument ori"; SourceNoText: Text; SystemIdText: Text; var DocumentNo: Code[20]; var Released: Boolean; var Locations: List of [Code[10]]): Boolean
+    var
+        ProductionOrder: Record "Production Order";
+        ProdOrderLine: Record "Prod. Order Line";
+    begin
+        if not FindProductionOrder(Argument, ProductionOrder, SourceNoText, SystemIdText) then
+            exit(false);
+        DocumentNo := ProductionOrder."No.";
+        Released := ProductionOrder.Status = ProductionOrder.Status::Released;
+        ProdOrderLine.SetRange(Status, ProductionOrder.Status);
+        ProdOrderLine.SetRange("Prod. Order No.", ProductionOrder."No.");
+        if ProdOrderLine.FindSet() then
+            repeat
+                AddLocation(Locations, ProdOrderLine."Location Code");
+            until ProdOrderLine.Next() = 0;
+        if Locations.Count() = 0 then
+            AddLocation(Locations, ProductionOrder."Location Code");
+        exit(true);
+    end;
+
+    local procedure FindProductionOrder(var Argument: Record "Message Argument ori"; var ProductionOrder: Record "Production Order"; SourceNoText: Text; SystemIdText: Text): Boolean
+    var
+        SystemId: Guid;
+        ById: Boolean;
+    begin
+        if not TryReadGuid(Argument, SystemIdText, SystemId, ById) then
+            exit(false);
+        if ById then begin
+            if ProductionOrder.GetBySystemId(SystemId) then begin
+                if (SourceNoText <> '') and (ProductionOrder."No." <> CopyStr(SourceNoText, 1, MaxStrLen(ProductionOrder."No."))) then
+                    exit(Conflict(Argument, SourceNoText, SystemIdText));
+                exit(true);
+            end;
+            if SourceNoText <> '' then begin
+                ProductionOrder.Reset();
+                ProductionOrder.SetRange("No.", CopyStr(SourceNoText, 1, MaxStrLen(ProductionOrder."No.")));
+                if ProductionOrder.FindFirst() then
+                    exit(Conflict(Argument, SourceNoText, SystemIdText));
+            end;
+            exit(NotFound(Argument, SourceNoText, SystemIdText));
+        end;
+        // Released orders first: the same number can exist as a planned or finished order too.
+        ProductionOrder.SetRange("No.", CopyStr(SourceNoText, 1, MaxStrLen(ProductionOrder."No.")));
+        ProductionOrder.SetRange(Status, ProductionOrder.Status::Released);
+        if ProductionOrder.FindFirst() then
+            exit(true);
+        ProductionOrder.SetRange(Status);
+        if ProductionOrder.FindFirst() then
+            exit(true);
+        exit(NotFound(Argument, SourceNoText, SystemIdText));
+    end;
+
+    local procedure CheckOutputLocations(var Argument: Record "Message Argument ori"; Locations: List of [Code[10]]; IdentifierKey: Text; IdentifierValue: Text)
+    var
+        Location: Record Location;
+        LocationCode: Code[10];
+    begin
+        if Locations.Count() = 0 then begin
+            RefuseNotReleased(Argument, IdentifierKey, IdentifierValue);
+            exit;
+        end;
+        foreach LocationCode in Locations do begin
+            Location.SetLoadFields(Code, "Prod. Output Whse. Handling");
+            if not Location.Get(LocationCode) then begin
+                NotFound(Argument, LocationCode, '');
+                exit;
+            end;
+            if Location."Prod. Output Whse. Handling" <> Location."Prod. Output Whse. Handling"::"Inventory Put-away" then begin
+                RefuseOutputHandling(Argument, LocationCode, IdentifierKey, IdentifierValue);
+                exit;
+            end;
+        end;
+    end;
+
+    local procedure RefuseOutputHandling(var Argument: Record "Message Argument ori"; LocationCode: Code[10]; IdentifierKey: Text; IdentifierValue: Text)
+    var
+        HandlingLbl: Label 'Location %1 does not set Prod. Output Whse. Handling to Inventory Put-away.', Comment = '%1 = location, is-IS=Staðsetning %1 stillir ekki Prod. Output Whse. Handling á Inventory Put-away.';
+        HandlingNextStepLbl: Label 'Set Prod. Output Whse. Handling on the location to Inventory Put-away, or post the output without warehouse handling.', Comment = 'is-IS=Stilltu Prod. Output Whse. Handling á staðsetningunni á Inventory Put-away, eða bókaðu frálagið án vöruhúsameðhöndlunar.';
+    begin
+        Argument.AddError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(HandlingLbl, LocationCode), IdentifierKey, IdentifierValue, '', HandlingNextStepLbl);
+    end;
+
     local procedure CheckLocations(var Argument: Record "Message Argument ori"; Locations: List of [Code[10]]; IdentifierKey: Text; IdentifierValue: Text)
     var
         Location: Record Location;
@@ -724,6 +814,8 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
                 SourceDocument := SourceDocument::"Sales Return Order";
             'INBOUNDTRANSFER':
                 SourceDocument := SourceDocument::"Inbound Transfer";
+            'PROD.OUTPUT', 'PRODOUTPUT', 'PRODUCTIONOUTPUT':
+                SourceDocument := SourceDocument::"Prod. Output";
             else
                 exit(false);
         end;
@@ -739,6 +831,8 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
                 exit('Sales Return Order');
             SourceDocument::"Inbound Transfer":
                 exit('Inbound Transfer');
+            SourceDocument::"Prod. Output":
+                exit('Prod. Output');
         end;
     end;
 
@@ -751,6 +845,8 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
                 exit(ActivitySource::"Sales Return Order");
             SourceDocument::"Inbound Transfer":
                 exit(ActivitySource::"Inbound Transfer");
+            SourceDocument::"Prod. Output":
+                exit(ActivitySource::"Prod. Output");
         end;
     end;
 
@@ -773,7 +869,7 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
     local procedure RefuseSourceDocument(var Argument: Record "Message Argument ori"; SourceText: Text)
     var
         InvalidLbl: Label 'sourceDocument %1 is not a supported inventory put-away source.', Comment = '%1 = source document, is-IS=sourceDocument %1 er ekki studd birgðafrágangsuppspretta.';
-        InvalidNextStepLbl: Label 'Send Purchase Order, Sales Return Order or Inbound Transfer.', Comment = 'is-IS=Sendu Purchase Order, Sales Return Order eða Inbound Transfer.';
+        InvalidNextStepLbl: Label 'Send Purchase Order, Sales Return Order, Inbound Transfer or Prod. Output.', Comment = 'is-IS=Sendu Purchase Order, Sales Return Order, Inbound Transfer eða Prod. Output.';
     begin
         Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(InvalidLbl, SourceText), 'sourceDocument', SourceText, '', InvalidNextStepLbl);
     end;
@@ -854,6 +950,8 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
     begin
         SourceDocument := ParseSourceDocument(TextValue(Payload, 'sourceDocument'));
         SourceNo := CopyStr(TextValue(Payload, 'sourceNo'), 1, MaxStrLen(SourceNo));
+        if SourceDocument = SourceDocument::"Prod. Output" then
+            ReleaseOutputRequest(SourceNo);
         WarehouseRequest.SetRange("Source Document", SourceDocument);
         WarehouseRequest.SetRange("Source No.", SourceNo);
         WarehouseRequest.SetRange(Type, WarehouseRequest.Type::Inbound);
@@ -870,6 +968,17 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
         Result.Add('sourceDocument', TextValue(Payload, 'sourceDocument'));
         Result.Add('sourceNo', SourceNo);
         Result.Add('putaways', Putaways);
+    end;
+
+    local procedure ReleaseOutputRequest(SourceNo: Code[20])
+    var
+        ProductionOrder: Record "Production Order";
+        WhseOutputProdRelease: Codeunit "Whse.-Output Prod. Release";
+    begin
+        // Business Central creates the inbound request for output only when the put-away is created,
+        // not when the order is released; the order page does the same before it runs report 7323.
+        ProductionOrder.Get(ProductionOrder.Status::Released, SourceNo);
+        WhseOutputProdRelease.Release(ProductionOrder);
     end;
 
     local procedure BuildPutaways(SourceDocument: Enum "Warehouse Request Source Document"; SourceNo: Code[20]; var Putaways: JsonArray)
@@ -961,6 +1070,8 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
                 exit(SourceDocument::"Sales Return Order");
             'INBOUNDTRANSFER':
                 exit(SourceDocument::"Inbound Transfer");
+            'PROD.OUTPUT', 'PRODOUTPUT', 'PRODUCTIONOUTPUT':
+                exit(SourceDocument::"Prod. Output");
         end;
         Error(UnsupportedErr, SourceText);
     end;

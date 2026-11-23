@@ -2685,6 +2685,12 @@
           <note from="Developer" annotates="general" priority="2">%1 = line no., %2 = document no., is-IS=Lína %1 fannst ekki í skjali %2.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Update Impl ori - Method ReadLines - NamedType LineNotFoundLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 232874797 - Method 3760188529 - NamedType 3060861571" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Field %1 is restricted for write on table %2.</source>
+          <target>Ekki er heimilt að skrifa í reitinn %1 í töflunni %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = field caption, %2 = table caption, is-IS=Ekki er heimilt að skrifa í reitinn %1 í töflunni %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Update Impl ori - Method ReadLines - NamedType LineRestrictedLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 232874797 - Method 3813443549 - NamedType 680257497" size-unit="char" translate="yes" xml:space="preserve">
           <source>Correct the value Business Central refused and send the request again; nothing was changed.</source>
           <target>Leiðréttu gildið sem Business Central hafnaði og sendu beiðnina aftur; engu var breytt.</target>

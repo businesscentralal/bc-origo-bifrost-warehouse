@@ -514,6 +514,7 @@ codeunit 10078441 "Whse Document Update Impl ori" implements "Msg Interface ori"
     var
         Context: Codeunit "Whse Write Context ori";
         Values: Codeunit "Whse Msg Values ori";
+        RequestValueReader: Codeunit "Request Value Reader ori";
         LineRef: RecordRef;
         LineJson: JsonObject;
         PayloadLine: JsonObject;
@@ -527,6 +528,7 @@ codeunit 10078441 "Whse Document Update Impl ori" implements "Msg Interface ori"
         BinPresent: Boolean;
         LineMissingLbl: Label 'lineNo is required on every line.', Comment = 'is-IS=lineNo er nauðsynlegt í hverri línu.';
         LineNotFoundLbl: Label 'Line %1 was not found on document %2.', Comment = '%1 = line no., %2 = document no., is-IS=Lína %1 fannst ekki í skjali %2.';
+        LineRestrictedLbl: Label 'Field %1 is restricted for write on table %2.', Comment = '%1 = field caption, %2 = table caption, is-IS=Ekki er heimilt að skrifa í reitinn %1 í töflunni %2.';
     begin
         AllowedKeys.Add('lineNo');
         AllowedKeys.Add('zoneCode');
@@ -541,6 +543,13 @@ codeunit 10078441 "Whse Document Update Impl ori" implements "Msg Interface ori"
                 Context.ReadInteger(LineJson, 'lineNo', Argument, LineNo, LinePresent, Values.LineParameter('lines', Index, 'lineNo'));
                 Context.ReadText(LineJson, 'zoneCode', 10, Argument, ZoneText, ZonePresent, Values.LineParameter('lines', Index, 'zoneCode'));
                 Context.ReadText(LineJson, 'binCode', 20, Argument, BinText, BinPresent, Values.LineParameter('lines', Index, 'binCode'));
+                // Company Field Access applies to every supplied line field, before anything is validated or written.
+                if LineJson.Contains('zoneCode') then
+                    if RequestValueReader.IsFieldWriteRestricted(LineRef.Number(), 13) then
+                        Argument.AddError("Bifrost Error Code ori"::PermissionDenied, StrSubstNo(LineRestrictedLbl, LineRef.Field(13).Caption(), LineRef.Caption()), Values.LineParameter('lines', Index, 'zoneCode'), '', '', DeniedNextStep());
+                if LineJson.Contains('binCode') then
+                    if RequestValueReader.IsFieldWriteRestricted(LineRef.Number(), 12) then
+                        Argument.AddError("Bifrost Error Code ori"::PermissionDenied, StrSubstNo(LineRestrictedLbl, LineRef.Field(12).Caption(), LineRef.Caption()), Values.LineParameter('lines', Index, 'binCode'), '', '', DeniedNextStep());
                 if not LinePresent then
                     Argument.AddError("Bifrost Error Code ori"::MissingParameter, LineMissingLbl, Values.LineParameter('lines', Index, 'lineNo'), '', '', MissingNextStep())
                 else
@@ -575,6 +584,7 @@ codeunit 10078441 "Whse Document Update Impl ori" implements "Msg Interface ori"
     local procedure ApplyUpdate(Payload: JsonObject; Persist: Boolean) Result: JsonObject
     var
         Values: Codeunit "Whse Msg Values ori";
+        ShipDateConfirm: Codeunit "Whse Ship Date Confirm ori";
         DocumentRef: RecordRef;
         LineRef: RecordRef;
         FieldReference: FieldRef;
@@ -595,6 +605,9 @@ codeunit 10078441 "Whse Document Update Impl ori" implements "Msg Interface ori"
         DocumentNo := Values.TextValue(Payload, 'documentNo');
         DocumentRef.Field(1).SetRange(DocumentNo);
         DocumentRef.FindFirst();
+        // A shipment date change asks to copy the date to the lines: answered without a dialog, yes only when writing.
+        ShipDateConfirm.SetCopyToLines(Persist);
+        BindSubscription(ShipDateConfirm);
         Payload.Get('header', Token);
         HeaderJson := Token.AsObject();
         // Fixed order: the zone before the bin, because validating a bin sets its zone.

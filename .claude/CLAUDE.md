@@ -85,7 +85,8 @@ App range: `10078385–10078484` (private block, 100 IDs).
 | 10078440 | `Whse Availability Get Impl ori` and enum value `Warehouse.Availability.Get` (#107; moved from 10078439, which #104 owns on main) |
 | 10078441 | `Whse Document Update Impl ori` and enum value `Warehouse.Document.Update` (#105) |
 | 10078442 | `Whse Activity Assign Impl ori` and enum value `Warehouse.Activity.Assign` (#105) |
-| 10078443–10078445 | Free (3 IDs) |
+| 10078443 | `Whse Ship Date Confirm ori` (#105: noninteractive shipment date) |
+| 10078444–10078445 | Free (2 IDs) |
 | 10078469–10078482 | Free (14 IDs; #106 took 10078483–10078484) |
 
 Test range: `97000–97099`.

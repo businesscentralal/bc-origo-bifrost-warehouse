@@ -33,6 +33,7 @@ codeunit 97008 "Whse Activity Assign Tests ori"
         AssignRequest7Lbl: Label '{"activities":[{"activityType":"Put-away","activityNo":"%1","systemId":"%2"}],"assignedUserId":""}', Locked = true;
         AssignRequest8Lbl: Label '{"activities":[{"activityType":"Pick","activityNo":"%1"}],"assignedUserId":"%2"}', Locked = true;
         AssignRequest9Lbl: Label '{"activities":[{"activityType":"Pick","activityNo":"%1"}],"assignedUserId":"%2","sortingMethod":"%3"}', Locked = true;
+        AssignRequest10Lbl: Label '{"activities":[{"activityType":"Pick","activityNo":"%1"}],"assignedUserId":"%2","dueDate":"%3"}', Locked = true;
 
     /// <summary>AC01: another warehouse employee is assigned with today's date, Activity.Get finds it, and an empty user unassigns.</summary>
     [Test]
@@ -103,6 +104,30 @@ codeunit 97008 "Whse Activity Assign Tests ori"
 
         ActivityHeader.Get(ActivityHeader.Type::Pick, PickNo);
         Assert.AreEqual('', ActivityHeader."Assigned User ID", 'The first pick is rolled back too.');
+    end;
+
+    /// <summary>A dueDate on a line field that company Field Access closes is refused with PermissionDenied and nothing changes.</summary>
+    [Test]
+    procedure Assign_ClosedLineDueDate_PermissionDenied_NothingChanged()
+    var
+        ActivityHeader: Record "Warehouse Activity Header";
+        ActivityLine: Record "Warehouse Activity Line";
+        PickNo: Code[20];
+        Employee: Code[50];
+        DueDateBefore: Date;
+    begin
+        PickNo := CreatePick();
+        Employee := CreateEmployee(Location.Code);
+        Helper.FindLine(Enum::"Warehouse Activity Type"::Pick, PickNo, Enum::"Warehouse Action Type"::Take, ActivityLine);
+        DueDateBefore := ActivityLine."Due Date";
+        Helper.CloseFieldForWrite(Database::"Warehouse Activity Line", ActivityLine.FieldNo("Due Date"));
+
+        Helper.ExpectError(Send(StrSubstNo(AssignRequest10Lbl, PickNo, Employee, Format(CalcDate('<+5D>', WorkDate()), 0, 9))), 'PermissionDenied', '');
+
+        ActivityHeader.Get(ActivityHeader.Type::Pick, PickNo);
+        Assert.AreEqual('', ActivityHeader."Assigned User ID", 'The assignment is not written.');
+        ActivityLine.Get(ActivityLine."Activity Type", ActivityLine."No.", ActivityLine."Line No.");
+        Assert.AreEqual(DueDateBefore, ActivityLine."Due Date", 'The due date is not written.');
     end;
 
     /// <summary>AC03: changing the sorting method re-sorts the lines.</summary>
@@ -191,6 +216,7 @@ codeunit 97008 "Whse Activity Assign Tests ori"
 
     local procedure CreatePick(): Code[20]
     begin
+        Helper.SkipCommittedGuidAccounts();
         Helper.CreateDirectedLocation(Location);
         Helper.CreateItem(Item);
         Helper.FindPickBin(Location.Code, 1, FirstBin);

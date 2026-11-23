@@ -3,6 +3,7 @@ namespace Origo.Bifrost.Warehouse.Test;
 using Microsoft.Inventory.Item;
 using Microsoft.Inventory.Location;
 using Microsoft.Purchases.Document;
+using Microsoft.Sales.Document;
 using Microsoft.Warehouse.Document;
 using Microsoft.Warehouse.Structure;
 using Origo.Bifrost;
@@ -34,6 +35,7 @@ codeunit 97009 "Whse Document Update Tests ori"
         UpdateRequest7Lbl: Label '{"documentType":"receipt","documentNo":"%1","header":{"externalDocumentNo":"X"}}', Locked = true;
         UpdateRequest8Lbl: Label '{"documentType":"receipt","documentNo":"%1","lines":[{"lineNo":999999}]}', Locked = true;
         UpdateRequest9Lbl: Label '{"documentType":"receipt","documentNo":"%1","systemId":"%2","header":{"vendorShipmentNo":"X"}}', Locked = true;
+        UpdateRequest10Lbl: Label '{"documentType":"shipment","documentNo":"%1","header":{"shipmentDate":"%2"}}', Locked = true;
 
     /// <summary>AC04: posting date, vendor shipment no. and a line bin are validated and stored on a receipt.</summary>
     [Test]
@@ -58,6 +60,49 @@ codeunit 97009 "Whse Document Update Tests ori"
         Assert.AreEqual('VS-105', ReceiptHeader."Vendor Shipment No.", 'The vendor shipment no. is stored.');
         ReceiptLine.Get(ReceiptLine."No.", ReceiptLine."Line No.");
         Assert.AreEqual(LineBin.Code, ReceiptLine."Bin Code", 'The line bin is stored.');
+    end;
+
+    /// <summary>The shipment date of an open shipment with lines changes without a dialog and is copied to the lines in the write.</summary>
+    [Test]
+    procedure Update_OpenShipmentWithLines_ShipmentDate_CopiedToLines()
+    var
+        ShipmentHeader: Record "Warehouse Shipment Header";
+        ShipmentLine: Record "Warehouse Shipment Line";
+        NewDate: Date;
+    begin
+        CreateOpenShipment(ShipmentHeader);
+        NewDate := CalcDate('<+4D>', WorkDate());
+
+        Helper.AssertSuccess(Send(StrSubstNo(UpdateRequest10Lbl, ShipmentHeader."No.", Format(NewDate, 0, 9))));
+
+        ShipmentHeader.Get(ShipmentHeader."No.");
+        Assert.AreEqual(NewDate, ShipmentHeader."Shipment Date", 'The shipment date is stored on the header.');
+        ShipmentLine.SetRange("No.", ShipmentHeader."No.");
+        Assert.IsFalse(ShipmentLine.IsEmpty(), 'The shipment has lines.');
+        ShipmentLine.FindSet();
+        repeat
+            Assert.AreEqual(NewDate, ShipmentLine."Shipment Date", 'The shipment date is copied to every line.');
+        until ShipmentLine.Next() = 0;
+    end;
+
+    /// <summary>A line bin that company Field Access closes is refused with PermissionDenied before anything is written.</summary>
+    [Test]
+    procedure Update_ClosedLineBin_PermissionDenied_NothingChanged()
+    var
+        ReceiptHeader: Record "Warehouse Receipt Header";
+        ReceiptLine: Record "Warehouse Receipt Line";
+        BinBefore: Code[20];
+    begin
+        CreateReceipt(ReceiptHeader, ReceiptLine);
+        BinBefore := ReceiptLine."Bin Code";
+        Helper.CloseFieldForWrite(Database::"Warehouse Receipt Line", ReceiptLine.FieldNo("Bin Code"));
+
+        Helper.ExpectError(Send(StrSubstNo(UpdateRequest1Lbl, ReceiptHeader."No.", Format(CalcDate('<+3D>', WorkDate()), 0, 9), ReceiptLine."Line No.", LineBin.Code)), 'PermissionDenied', '');
+
+        ReceiptHeader.Get(ReceiptHeader."No.");
+        Assert.AreEqual('', ReceiptHeader."Vendor Shipment No.", 'The header is unchanged.');
+        ReceiptLine.Get(ReceiptLine."No.", ReceiptLine."Line No.");
+        Assert.AreEqual(BinBefore, ReceiptLine."Bin Code", 'The line bin is unchanged.');
     end;
 
     /// <summary>AC05: a bin that does not exist leaves the header unchanged although its fields were valid.</summary>
@@ -170,6 +215,7 @@ codeunit 97009 "Whse Document Update Tests ori"
         PurchaseHeader: Record "Purchase Header";
         ReceiptHelper: Codeunit "Whse Receipt Test Helper ori";
     begin
+        Helper.SkipCommittedGuidAccounts();
         // Bin mandatory, receive required, no put-away or pick.
         LibraryWarehouse.CreateLocationWMS(Location, true, false, false, true, false);
         LibraryWarehouse.CreateBin(LineBin, Location.Code, CopyStr('B105' + Helper.NewCode(), 1, 20), '', '');
@@ -178,6 +224,17 @@ codeunit 97009 "Whse Document Update Tests ori"
         ReceiptHelper.CreateWhseReceiptFromPurchaseOrder(ReceiptHeader, PurchaseHeader);
         ReceiptLine.SetRange("No.", ReceiptHeader."No.");
         ReceiptLine.FindFirst();
+    end;
+
+    local procedure CreateOpenShipment(var ShipmentHeader: Record "Warehouse Shipment Header")
+    var
+        SalesHeader: Record "Sales Header";
+        ShipmentHelper: Codeunit "Whse Shipment Test Helper ori";
+    begin
+        Helper.SkipCommittedGuidAccounts();
+        ShipmentHelper.SetupPickLocationAndItem(Location, Item, 20);
+        ShipmentHelper.CreateReleasedSalesOrder(SalesHeader, Item."No.", Location.Code, 1);
+        ShipmentHelper.CreateWhseShipmentFromSalesOrder(ShipmentHeader, SalesHeader);
     end;
 
     local procedure Send(RequestText: Text): JsonObject

@@ -245,6 +245,7 @@ codeunit 10078442 "Whse Activity Assign Impl ori" implements "Msg Interface ori"
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var
         ActivityHeader: Record "Warehouse Activity Header";
+        ActivityLine: Record "Warehouse Activity Line";
         Context: Codeunit "Whse Write Context ori";
         Values: Codeunit "Whse Msg Values ori";
         Helper: Codeunit "Whse ActLine Helper ori";
@@ -301,6 +302,9 @@ codeunit 10078442 "Whse Activity Assign Impl ori" implements "Msg Interface ori"
             Argument.AddError("Bifrost Error Code ori"::MissingParameter, UserMissingLbl, 'assignedUserId', '', '', MissingNextStep());
         if UserPresent and RequestValueReader.IsFieldWriteRestricted(Database::"Warehouse Activity Header", ActivityHeader.FieldNo("Assigned User ID")) then
             Argument.AddError("Bifrost Error Code ori"::PermissionDenied, StrSubstNo(RestrictedLbl, ActivityHeader.FieldCaption("Assigned User ID"), ActivityHeader.TableCaption()), 'assignedUserId', '', '', Parts.ClosedFieldNextStep());
+        if DuePresent then
+            if RequestValueReader.IsFieldWriteRestricted(Database::"Warehouse Activity Line", ActivityLine.FieldNo("Due Date")) then
+                Argument.AddError("Bifrost Error Code ori"::PermissionDenied, StrSubstNo(RestrictedLbl, ActivityLine.FieldCaption("Due Date"), ActivityLine.TableCaption()), 'dueDate', '', '', Parts.ClosedFieldNextStep());
         SortingOrdinal := -1;
         if SortingPresent then
             if not TryParseSortingMethod(SortingText, SortingOrdinal) then

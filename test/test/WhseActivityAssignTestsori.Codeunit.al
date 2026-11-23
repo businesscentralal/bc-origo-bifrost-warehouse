@@ -24,6 +24,15 @@ codeunit 97008 "Whse Activity Assign Tests ori"
         SecondBin: Record Bin;
         Assert: Codeunit "Library Assert";
         Helper: Codeunit "Whse Jnl Test Helper ori";
+        AssignRequest1Lbl: Label '{"activityType":"Pick","assignedUserId":"%1"}', Locked = true;
+        AssignRequest2Lbl: Label '{"activities":[{"activityType":"Pick","activityNo":"%1"},{"activityType":"Pick","activityNo":"%2"}],"assignedUserId":"%3"}', Locked = true;
+        AssignRequest3Lbl: Label '{"activities":[{"activityType":"Pick","activityNo":"%1"}]}', Locked = true;
+        AssignRequest4Lbl: Label '{"activities":[{"activityType":"Pick","activityNo":"%1"}],"assignedUserId":"","colour":"red"}', Locked = true;
+        AssignRequest5Lbl: Label '{"activities":[{"activityType":"Pick","activityNo":"%1","systemId":"%2"}],"assignedUserId":""}', Locked = true;
+        AssignRequest6Lbl: Label '{"activities":[{"activityType":"Pick","activityNo":"%1"}],"assignedUserId":"","sortingMethod":"Colour"}', Locked = true;
+        AssignRequest7Lbl: Label '{"activities":[{"activityType":"Put-away","activityNo":"%1","systemId":"%2"}],"assignedUserId":""}', Locked = true;
+        AssignRequest8Lbl: Label '{"activities":[{"activityType":"Pick","activityNo":"%1"}],"assignedUserId":"%2"}', Locked = true;
+        AssignRequest9Lbl: Label '{"activities":[{"activityType":"Pick","activityNo":"%1"}],"assignedUserId":"%2","sortingMethod":"%3"}', Locked = true;
 
     /// <summary>AC01: another warehouse employee is assigned with today's date, Activity.Get finds it, and an empty user unassigns.</summary>
     [Test]
@@ -48,7 +57,7 @@ codeunit 97008 "Whse Activity Assign Tests ori"
         Assert.AreEqual(Employee, ActivityHeader."Assigned User ID", 'The user is stored.');
         Assert.AreEqual(Today(), ActivityHeader."Assignment Date", 'The assignment date is today.');
 
-        ResponseJson := Helper.RunType(Enum::"Message Type ori"::"Warehouse.Activity.Get", '', StrSubstNo('{"activityType":"Pick","assignedUserId":"%1"}', Employee));
+        ResponseJson := Helper.RunType(Enum::"Message Type ori"::"Warehouse.Activity.Get", '', StrSubstNo(AssignRequest1Lbl, Employee));
         Assert.IsTrue(Helper.ResponseText(ResponseJson).Contains(PickNo), 'Activity.Get with assignedUserId finds the pick. ' + Helper.ResponseText(ResponseJson));
 
         Helper.AssertSuccess(Send(AssignRequest(PickNo, '', '')));
@@ -90,7 +99,7 @@ codeunit 97008 "Whse Activity Assign Tests ori"
         Helper.CreateBasicLocation(OtherLocation);
         OtherPickNo := Helper.CreateRawActivity(Enum::"Warehouse Activity Type"::Pick, Enum::"Warehouse Action Type"::" ", OtherLocation.Code, Item."No.", '', '', 1);
 
-        Helper.ExpectError(Send(StrSubstNo('{"activities":[{"activityType":"Pick","activityNo":"%1"},{"activityType":"Pick","activityNo":"%2"}],"assignedUserId":"%3"}', PickNo, OtherPickNo, Employee)), 'PreconditionFailed', '');
+        Helper.ExpectError(Send(StrSubstNo(AssignRequest2Lbl, PickNo, OtherPickNo, Employee)), 'PreconditionFailed', '');
 
         ActivityHeader.Get(ActivityHeader.Type::Pick, PickNo);
         Assert.AreEqual('', ActivityHeader."Assigned User ID", 'The first pick is rolled back too.');
@@ -128,13 +137,13 @@ codeunit 97008 "Whse Activity Assign Tests ori"
         PickNo: Code[20];
     begin
         PickNo := CreatePick();
-        Helper.ExpectError(Send(StrSubstNo('{"activities":[{"activityType":"Pick","activityNo":"%1"}]}', PickNo)), 'MissingParameter', '');
-        Helper.ExpectError(Send(StrSubstNo('{"activities":[{"activityType":"Pick","activityNo":"%1"}],"assignedUserId":"","colour":"red"}', PickNo)), 'UnknownParameter', 'Remove this key or consult Help.Implementation.Get for the declared parameters.');
+        Helper.ExpectError(Send(StrSubstNo(AssignRequest3Lbl, PickNo)), 'MissingParameter', '');
+        Helper.ExpectError(Send(StrSubstNo(AssignRequest4Lbl, PickNo)), 'UnknownParameter', 'Remove this key or consult Help.Implementation.Get for the declared parameters.');
         Helper.ExpectError(Send('{"activities":[{"activityType":"Pick","activityNo":"NOPICK105"}],"assignedUserId":""}'), 'RecordNotFound', '');
         Helper.ExpectError(Send('{"activities":[{"systemId":"not-a-guid"}],"assignedUserId":""}'), 'InvalidParameterFormat', '');
-        Helper.ExpectError(Send(StrSubstNo('{"activities":[{"activityType":"Pick","activityNo":"%1","systemId":"%2"}],"assignedUserId":""}', PickNo, Format(CreateGuid(), 0, 4))), 'RecordNotFound', '');
-        Helper.ExpectError(Send(StrSubstNo('{"activities":[{"activityType":"Pick","activityNo":"%1"}],"assignedUserId":"","sortingMethod":"Colour"}', PickNo)), 'InvalidParameter', '');
-        Helper.ExpectError(Send(StrSubstNo('{"activities":[{"activityType":"Put-away","activityNo":"%1","systemId":"%2"}],"assignedUserId":""}', PickNo, PickSystemId(PickNo))), 'ConflictingIdentifiers', '');
+        Helper.ExpectError(Send(StrSubstNo(AssignRequest5Lbl, PickNo, Format(CreateGuid(), 0, 4))), 'RecordNotFound', '');
+        Helper.ExpectError(Send(StrSubstNo(AssignRequest6Lbl, PickNo)), 'InvalidParameter', '');
+        Helper.ExpectError(Send(StrSubstNo(AssignRequest7Lbl, PickNo, PickSystemId(PickNo))), 'ConflictingIdentifiers', '');
     end;
 
     /// <summary>AC07: without activity write permission the type is disabled and answers PermissionDenied.</summary>
@@ -211,8 +220,8 @@ codeunit 97008 "Whse Activity Assign Tests ori"
     local procedure AssignRequest(PickNo: Code[20]; UserCode: Text; SortingMethod: Text): Text
     begin
         if SortingMethod = '' then
-            exit(StrSubstNo('{"activities":[{"activityType":"Pick","activityNo":"%1"}],"assignedUserId":"%2"}', PickNo, UserCode));
-        exit(StrSubstNo('{"activities":[{"activityType":"Pick","activityNo":"%1"}],"assignedUserId":"%2","sortingMethod":"%3"}', PickNo, UserCode, SortingMethod));
+            exit(StrSubstNo(AssignRequest8Lbl, PickNo, UserCode));
+        exit(StrSubstNo(AssignRequest9Lbl, PickNo, UserCode, SortingMethod));
     end;
 
     local procedure Send(RequestText: Text): JsonObject

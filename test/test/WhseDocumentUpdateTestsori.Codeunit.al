@@ -25,6 +25,15 @@ codeunit 97009 "Whse Document Update Tests ori"
         Assert: Codeunit "Library Assert";
         Helper: Codeunit "Whse Jnl Test Helper ori";
         LibraryWarehouse: Codeunit "Library - Warehouse";
+        UpdateRequest1Lbl: Label '{"documentType":"receipt","documentNo":"%1","header":{"postingDate":"%2","vendorShipmentNo":"VS-105"},"lines":[{"lineNo":%3,"binCode":"%4"}]}', Locked = true;
+        UpdateRequest2Lbl: Label '{"documentType":"receipt","documentNo":"%1","header":{"vendorShipmentNo":"VS-BAD"},"lines":[{"lineNo":%2,"binCode":"NOBIN105"}]}', Locked = true;
+        UpdateRequest3Lbl: Label '{"documentType":"shipment","documentNo":"%1","header":{"externalDocumentNo":"EXT-105"}}', Locked = true;
+        UpdateRequest4Lbl: Label '{"documentNo":"%1","header":{"vendorShipmentNo":"X"}}', Locked = true;
+        UpdateRequest5Lbl: Label '{"documentType":"invoice","documentNo":"%1","header":{"vendorShipmentNo":"X"}}', Locked = true;
+        UpdateRequest6Lbl: Label '{"documentType":"receipt","documentNo":"%1","header":{"postingDate":"tomorrow-ish"}}', Locked = true;
+        UpdateRequest7Lbl: Label '{"documentType":"receipt","documentNo":"%1","header":{"externalDocumentNo":"X"}}', Locked = true;
+        UpdateRequest8Lbl: Label '{"documentType":"receipt","documentNo":"%1","lines":[{"lineNo":999999}]}', Locked = true;
+        UpdateRequest9Lbl: Label '{"documentType":"receipt","documentNo":"%1","systemId":"%2","header":{"vendorShipmentNo":"X"}}', Locked = true;
 
     /// <summary>AC04: posting date, vendor shipment no. and a line bin are validated and stored on a receipt.</summary>
     [Test]
@@ -38,7 +47,7 @@ codeunit 97009 "Whse Document Update Tests ori"
         CreateReceipt(ReceiptHeader, ReceiptLine);
         NewDate := CalcDate('<+3D>', WorkDate());
 
-        ResponseJson := Send(StrSubstNo('{"documentType":"receipt","documentNo":"%1","header":{"postingDate":"%2","vendorShipmentNo":"VS-105"},"lines":[{"lineNo":%3,"binCode":"%4"}]}', ReceiptHeader."No.", Format(NewDate, 0, 9), ReceiptLine."Line No.", LineBin.Code));
+        ResponseJson := Send(StrSubstNo(UpdateRequest1Lbl, ReceiptHeader."No.", Format(NewDate, 0, 9), ReceiptLine."Line No.", LineBin.Code));
 
         Helper.AssertSuccess(ResponseJson);
         Assert.AreEqual(1, Helper.IntegerValue(ResponseJson, 'updatedCount'), Helper.ResponseText(ResponseJson));
@@ -61,7 +70,7 @@ codeunit 97009 "Whse Document Update Tests ori"
     begin
         CreateReceipt(ReceiptHeader, ReceiptLine);
 
-        ResponseJson := Send(StrSubstNo('{"documentType":"receipt","documentNo":"%1","header":{"vendorShipmentNo":"VS-BAD"},"lines":[{"lineNo":%2,"binCode":"NOBIN105"}]}', ReceiptHeader."No.", ReceiptLine."Line No."));
+        ResponseJson := Send(StrSubstNo(UpdateRequest2Lbl, ReceiptHeader."No.", ReceiptLine."Line No."));
 
         Helper.ExpectError(ResponseJson, 'PreconditionFailed', 'Correct the value Business Central refused and send the request again; nothing was changed.');
         ReceiptHeader.Get(ReceiptHeader."No.");
@@ -78,7 +87,7 @@ codeunit 97009 "Whse Document Update Tests ori"
         Helper.CreateReleasedShipment(Location, ShipmentHeader, 1);
         ExternalDocumentNo := ShipmentHeader."External Document No.";
 
-        Helper.ExpectError(Send(StrSubstNo('{"documentType":"shipment","documentNo":"%1","header":{"externalDocumentNo":"EXT-105"}}', ShipmentHeader."No.")), 'PreconditionFailed', 'Reopen the shipment first with Warehouse.Shipment.Reopen.');
+        Helper.ExpectError(Send(StrSubstNo(UpdateRequest3Lbl, ShipmentHeader."No.")), 'PreconditionFailed', 'Reopen the shipment first with Warehouse.Shipment.Reopen.');
         ShipmentHeader.Get(ShipmentHeader."No.");
         Assert.AreEqual(ShipmentHeader.Status::Released, ShipmentHeader.Status, 'The shipment stays released.');
         Assert.AreEqual(ExternalDocumentNo, ShipmentHeader."External Document No.", 'Nothing is changed.');
@@ -92,12 +101,12 @@ codeunit 97009 "Whse Document Update Tests ori"
         ReceiptLine: Record "Warehouse Receipt Line";
     begin
         CreateReceipt(ReceiptHeader, ReceiptLine);
-        Helper.ExpectError(Send(StrSubstNo('{"documentNo":"%1","header":{"vendorShipmentNo":"X"}}', ReceiptHeader."No.")), 'MissingParameter', '');
-        Helper.ExpectError(Send(StrSubstNo('{"documentType":"invoice","documentNo":"%1","header":{"vendorShipmentNo":"X"}}', ReceiptHeader."No.")), 'InvalidParameter', '');
-        Helper.ExpectError(Send(StrSubstNo('{"documentType":"receipt","documentNo":"%1","header":{"postingDate":"tomorrow-ish"}}', ReceiptHeader."No.")), 'InvalidParameterFormat', '');
-        Helper.ExpectError(Send(StrSubstNo('{"documentType":"receipt","documentNo":"%1","header":{"externalDocumentNo":"X"}}', ReceiptHeader."No.")), 'UnknownParameter', 'Remove this key or consult Help.Implementation.Get for the declared parameters.');
+        Helper.ExpectError(Send(StrSubstNo(UpdateRequest4Lbl, ReceiptHeader."No.")), 'MissingParameter', '');
+        Helper.ExpectError(Send(StrSubstNo(UpdateRequest5Lbl, ReceiptHeader."No.")), 'InvalidParameter', '');
+        Helper.ExpectError(Send(StrSubstNo(UpdateRequest6Lbl, ReceiptHeader."No.")), 'InvalidParameterFormat', '');
+        Helper.ExpectError(Send(StrSubstNo(UpdateRequest7Lbl, ReceiptHeader."No.")), 'UnknownParameter', 'Remove this key or consult Help.Implementation.Get for the declared parameters.');
         Helper.ExpectError(Send('{"documentType":"receipt","documentNo":"NORCPT105","header":{"vendorShipmentNo":"X"}}'), 'RecordNotFound', '');
-        Helper.ExpectError(Send(StrSubstNo('{"documentType":"receipt","documentNo":"%1","lines":[{"lineNo":999999}]}', ReceiptHeader."No.")), 'RecordNotFound', '');
+        Helper.ExpectError(Send(StrSubstNo(UpdateRequest8Lbl, ReceiptHeader."No.")), 'RecordNotFound', '');
         ReceiptHeader.Get(ReceiptHeader."No.");
         Assert.AreEqual('', ReceiptHeader."Vendor Shipment No.", 'Nothing is changed by a refusal.');
     end;
@@ -113,7 +122,7 @@ codeunit 97009 "Whse Document Update Tests ori"
     begin
         CreateReceipt(ReceiptHeader, ReceiptLine);
         CreateReceipt(OtherHeader, OtherLine);
-        Helper.ExpectError(Send(StrSubstNo('{"documentType":"receipt","documentNo":"%1","systemId":"%2","header":{"vendorShipmentNo":"X"}}', ReceiptHeader."No.", Format(OtherHeader.SystemId, 0, 4))), 'ConflictingIdentifiers', 'Send one identifier, or identifiers that name the same document.');
+        Helper.ExpectError(Send(StrSubstNo(UpdateRequest9Lbl, ReceiptHeader."No.", Format(OtherHeader.SystemId, 0, 4))), 'ConflictingIdentifiers', 'Send one identifier, or identifiers that name the same document.');
         ReceiptHeader.Get(ReceiptHeader."No.");
         Assert.AreEqual('', ReceiptHeader."Vendor Shipment No.", 'Nothing is changed.');
     end;

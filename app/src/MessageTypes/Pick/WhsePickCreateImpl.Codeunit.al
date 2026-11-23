@@ -506,8 +506,8 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
         ProductionOrder: Record "Production Order";
         AssemblyHeader: Record "Assembly Header";
         Job: Record Job;
-        AssemblyLineManagement: Codeunit "Assembly Line Management";
         WhseSourceCreateDocument: Report "Whse.-Source - Create Document";
+        AssemblyLineManagement: Codeunit "Assembly Line Management";
         ExistingPicks: List of [Code[20]];
         SourceType: Option Shipment,ProductionOrder,AssemblyOrder,Project;
         SourceNo: Code[20];
@@ -569,6 +569,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
         NewestNo: Code[20];
     begin
         // Only a pick this call created is returned, never an older pick for the same order.
+        NewestNo := '';
         CollectPicks(DocumentType, SourceNo, AfterPicks);
         foreach PickNo in AfterPicks do
             if not ExistingPicks.Contains(PickNo) then

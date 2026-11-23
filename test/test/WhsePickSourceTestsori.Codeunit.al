@@ -4,7 +4,10 @@ using Microsoft.Assembly.Document;
 using Microsoft.Inventory.BOM;
 using Microsoft.Inventory.Item;
 using Microsoft.Inventory.Location;
+using Microsoft.Warehouse.Structure;
 using Microsoft.Manufacturing.Document;
+using Microsoft.Projects.Project.Job;
+using Microsoft.Projects.Project.Planning;
 using Microsoft.Warehouse.Activity;
 using Origo.Bifrost;
 using System.TestLibraries.Utilities;
@@ -22,6 +25,7 @@ codeunit 97094 "Whse Pick Source Tests ori"
         Assert: Codeunit "Library Assert";
         LibraryAssembly: Codeunit "Library - Assembly";
         LibraryInventory: Codeunit "Library - Inventory";
+        LibraryJob: Codeunit "Library - Job";
         LibraryManufacturing: Codeunit "Library - Manufacturing";
         LibraryUtility: Codeunit "Library - Utility";
         LibraryWarehouse: Codeunit "Library - Warehouse";
@@ -60,6 +64,41 @@ codeunit 97094 "Whse Pick Source Tests ori"
         Assert.IsFalse(ActivityHeader.Get(ActivityHeader.Type::Pick, PickNo), 'The registered pick should be gone.');
     end;
 
+    /// <summary>At a directed location, sourceType productionOrder creates a pick to the to-production bin, and registering it marks the component picked (#111 AC01).</summary>
+    [Test]
+    procedure Create_ProductionOrderDirected_RegistersToProductionBin()
+    var
+        ProductionOrder: Record "Production Order";
+        ComponentItem: Record Item;
+        ActivityLine: Record "Warehouse Activity Line";
+        ProdOrderComponent: Record "Prod. Order Component";
+        ResponseJson: JsonObject;
+        PickNo: Code[20];
+        ToProductionBinCode: Code[20];
+    begin
+        PrepareDirectedProductionOrder(ProductionOrder, ComponentItem, ToProductionBinCode);
+
+        Run(SourceRequest('productionOrder', ProductionOrder."No."), '', ResponseJson);
+
+        Assert.AreEqual('Success', TextValue(ResponseJson, 'status'), ResponseText(ResponseJson));
+        PickNo := CopyStr(TextValue(ResponseJson, 'pickNo'), 1, MaxStrLen(PickNo));
+        ActivityLine.SetRange("Activity Type", ActivityLine."Activity Type"::Pick);
+        ActivityLine.SetRange("No.", PickNo);
+        ActivityLine.SetRange("Action Type", ActivityLine."Action Type"::Place);
+        ActivityLine.FindFirst();
+        Assert.AreEqual(ToProductionBinCode, ActivityLine."Bin Code", 'The pick should place the component in the to-production bin.');
+
+        Helper.RunMessage(Enum::"Message Type ori"::"Warehouse.Pick.Register", PickNo, '{}', ResponseJson);
+
+        Assert.AreEqual('Success', TextValue(ResponseJson, 'status'), ResponseText(ResponseJson));
+        ProdOrderComponent.SetRange(Status, ProductionOrder.Status);
+        ProdOrderComponent.SetRange("Prod. Order No.", ProductionOrder."No.");
+        ProdOrderComponent.SetRange("Item No.", ComponentItem."No.");
+        ProdOrderComponent.FindFirst();
+        Assert.AreEqual(2, ProdOrderComponent."Qty. Picked", 'The registered pick should mark the component as picked.');
+        Assert.AreEqual(ToProductionBinCode, ProdOrderComponent."Bin Code", 'The component should be consumed from the to-production bin.');
+    end;
+
     /// <summary>sourceType assemblyOrder creates a pick for the assembly component of a released assembly order (#111 AC02).</summary>
     [Test]
     procedure Create_AssemblyOrder_CreatesPick()
@@ -82,6 +121,31 @@ codeunit 97094 "Whse Pick Source Tests ori"
         ActivityLine.FindFirst();
         Assert.AreEqual(ActivityLine."Source Document"::"Assembly Consumption", ActivityLine."Source Document", 'The pick should be for assembly consumption.');
         Assert.AreEqual(ComponentItem."No.", ActivityLine."Item No.", 'The pick should take the component.');
+    end;
+
+    /// <summary>sourceType project creates a pick for the item planning line of a project (#111 AC02).</summary>
+    [Test]
+    procedure Create_Project_CreatesPick()
+    var
+        Job: Record Job;
+        ComponentItem: Record Item;
+        ActivityLine: Record "Warehouse Activity Line";
+        ResponseJson: JsonObject;
+        PickNo: Code[20];
+    begin
+        PrepareProject(Job, ComponentItem);
+
+        Run(SourceRequest('project', Job."No."), '', ResponseJson);
+
+        Assert.AreEqual('Success', TextValue(ResponseJson, 'status'), ResponseText(ResponseJson));
+        Assert.AreEqual('project', TextValue(ResponseJson, 'sourceType'), 'The source type should be returned.');
+        Assert.AreEqual(Job."No.", TextValue(ResponseJson, 'sourceNo'), 'The project number should be returned.');
+        PickNo := CopyStr(TextValue(ResponseJson, 'pickNo'), 1, MaxStrLen(PickNo));
+        ActivityLine.SetRange("Activity Type", ActivityLine."Activity Type"::Pick);
+        ActivityLine.SetRange("No.", PickNo);
+        ActivityLine.FindFirst();
+        Assert.AreEqual(ActivityLine."Source Document"::"Job Usage", ActivityLine."Source Document", 'The pick should be for project usage.');
+        Assert.AreEqual(ComponentItem."No.", ActivityLine."Item No.", 'The pick should take the planned item.');
     end;
 
     /// <summary>A second call creates nothing new and is refused with PreconditionFailed instead of returning the older pick.</summary>
@@ -190,10 +254,6 @@ codeunit 97094 "Whse Pick Source Tests ori"
     local procedure PrepareProductionOrder(var ProductionOrder: Record "Production Order"; var ComponentItem: Record Item; Release: Boolean)
     var
         Location: Record Location;
-        ParentItem: Record Item;
-        FirmPlannedOrder: Record "Production Order";
-        ProdOrderLine: Record "Prod. Order Line";
-        ProdOrderComponent: Record "Prod. Order Component";
     begin
         LibraryWarehouse.CreateLocationWMS(Location, false, false, true, false, true);
         Location.Validate("Prod. Consump. Whse. Handling", Location."Prod. Consump. Whse. Handling"::"Warehouse Pick (mandatory)");
@@ -201,11 +261,42 @@ codeunit 97094 "Whse Pick Source Tests ori"
         Helper.RegisterCurrentUserAsWarehouseEmployee(Location.Code);
         LibraryInventory.CreateItem(ComponentItem);
         Helper.CreatePositiveAdjustment(ComponentItem."No.", Location.Code, 5);
+        CreateProductionOrderAt(Location.Code, ProductionOrder, ComponentItem, Release);
+    end;
+
+    local procedure PrepareDirectedProductionOrder(var ProductionOrder: Record "Production Order"; var ComponentItem: Record Item; var ToProductionBinCode: Code[20])
+    var
+        Location: Record Location;
+        PickBin: Record Bin;
+        ProductionBin: Record Bin;
+    begin
+        LibraryWarehouse.CreateFullWMSLocation(Location, 2);
+        if Location."To-Production Bin Code" = '' then begin
+            LibraryWarehouse.FindBin(ProductionBin, Location.Code, 'PRODUCTION', 1);
+            Location.Validate("To-Production Bin Code", ProductionBin.Code);
+        end;
+        Location.Validate("Prod. Consump. Whse. Handling", Location."Prod. Consump. Whse. Handling"::"Warehouse Pick (mandatory)");
+        Location.Modify(true);
+        ToProductionBinCode := Location."To-Production Bin Code";
+        Helper.RegisterCurrentUserAsWarehouseEmployee(Location.Code);
+        LibraryInventory.CreateItem(ComponentItem);
+        LibraryWarehouse.FindBin(PickBin, Location.Code, 'PICK', 1);
+        LibraryWarehouse.UpdateInventoryInBinUsingWhseJournal(PickBin, ComponentItem."No.", 5, false);
+        CreateProductionOrderAt(Location.Code, ProductionOrder, ComponentItem, true);
+    end;
+
+    local procedure CreateProductionOrderAt(LocationCode: Code[10]; var ProductionOrder: Record "Production Order"; ComponentItem: Record Item; Release: Boolean)
+    var
+        ParentItem: Record Item;
+        FirmPlannedOrder: Record "Production Order";
+        ProdOrderLine: Record "Prod. Order Line";
+        ProdOrderComponent: Record "Prod. Order Component";
+    begin
         LibraryInventory.CreateItem(ParentItem);
         ParentItem.Validate("Replenishment System", ParentItem."Replenishment System"::"Prod. Order");
         ParentItem.Modify(true);
         LibraryManufacturing.CreateProductionOrder(FirmPlannedOrder, FirmPlannedOrder.Status::"Firm Planned", FirmPlannedOrder."Source Type"::Item, ParentItem."No.", 2);
-        FirmPlannedOrder.Validate("Location Code", Location.Code);
+        FirmPlannedOrder.Validate("Location Code", LocationCode);
         FirmPlannedOrder.Modify(true);
         LibraryManufacturing.RefreshProdOrder(FirmPlannedOrder, false, true, false, false, false);
         ProdOrderLine.SetRange(Status, FirmPlannedOrder.Status);
@@ -214,7 +305,7 @@ codeunit 97094 "Whse Pick Source Tests ori"
         LibraryManufacturing.CreateProductionOrderComponent(ProdOrderComponent, FirmPlannedOrder.Status, FirmPlannedOrder."No.", ProdOrderLine."Line No.");
         ProdOrderComponent.Validate("Item No.", ComponentItem."No.");
         ProdOrderComponent.Validate("Quantity per", 1);
-        ProdOrderComponent.Validate("Location Code", Location.Code);
+        ProdOrderComponent.Validate("Location Code", LocationCode);
         ProdOrderComponent.Modify(true);
         if not Release then begin
             ProductionOrder := FirmPlannedOrder;
@@ -247,6 +338,28 @@ codeunit 97094 "Whse Pick Source Tests ori"
         AssemblyLine.Modify(true);
         ReleaseAssemblyDoc.Run(AssemblyHeader);
         AssemblyHeader.Get(AssemblyHeader."Document Type", AssemblyHeader."No.");
+    end;
+
+    local procedure PrepareProject(var Job: Record Job; var ComponentItem: Record Item)
+    var
+        Location: Record Location;
+        JobTask: Record "Job Task";
+        JobPlanningLine: Record "Job Planning Line";
+    begin
+        LibraryWarehouse.CreateLocationWMS(Location, false, false, true, false, true);
+        Location.Validate("Job Consump. Whse. Handling", Location."Job Consump. Whse. Handling"::"Warehouse Pick (mandatory)");
+        Location.Modify(true);
+        Helper.RegisterCurrentUserAsWarehouseEmployee(Location.Code);
+        LibraryInventory.CreateItem(ComponentItem);
+        Helper.CreatePositiveAdjustment(ComponentItem."No.", Location.Code, 5);
+        LibraryJob.CreateJob(Job);
+        Job.Validate(Status, Job.Status::Open);
+        Job.Modify(true);
+        LibraryJob.CreateJobTask(Job, JobTask);
+        LibraryJob.CreateJobPlanningLine(JobTask, "Job Planning Line Line Type"::Budget, "Job Planning Line Type"::Item, ComponentItem."No.", 2, JobPlanningLine);
+        JobPlanningLine.Validate("Location Code", Location.Code);
+        JobPlanningLine.Modify(true);
+        Job.Get(Job."No.");
     end;
 
     local procedure SourceRequest(SourceType: Text; SourceNo: Text): Text

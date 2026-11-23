@@ -540,9 +540,14 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
                 end;
             SourceType::Project:
                 begin
+                    // Job.CreateWarehousePick always opens the request page of report 7305; run the report without it.
                     Job.Get(SourceNo);
-                    Job.SetHideValidationDialog(true);
-                    Job.CreateWarehousePick();
+                    Job.TestField(Status, Job.Status::Open);
+                    WhseSourceCreateDocument.SetJob(Job);
+                    WhseSourceCreateDocument.SetHideValidationDialog(true);
+                    WhseSourceCreateDocument.Initialize(CopyStr(UserId(), 1, 50), "Whse. Activity Sorting Method"::None, false, false, false);
+                    WhseSourceCreateDocument.UseRequestPage(false);
+                    WhseSourceCreateDocument.RunModal();
                 end;
         end;
         Result.Add('pickNo', NewPickNo(DocumentType, SourceNo, ExistingPicks));

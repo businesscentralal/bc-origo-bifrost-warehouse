@@ -1,4 +1,4 @@
-namespace Origo.Bifrost.Warehouse;
+﻿namespace Origo.Bifrost.Warehouse;
 
 /// <summary>
 /// Implementation of the Warehouse.Pick.Create message type.
@@ -12,6 +12,9 @@ namespace Origo.Bifrost.Warehouse;
 /// outer message-task transaction.
 /// </summary>
 
+using Microsoft.Assembly.Document;
+using Microsoft.Manufacturing.Document;
+using Microsoft.Projects.Project.Job;
 using Microsoft.Warehouse.Activity;
 using Microsoft.Warehouse.Document;
 
@@ -20,6 +23,20 @@ using Origo.Bifrost;
 codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "Msg Contract ori", "Msg Discovery ori"
 {
     Access = Internal;
+
+    trigger OnRun()
+    var
+        Context: Codeunit "Whse Write Context ori";
+        Payload: JsonObject;
+        Result: JsonObject;
+        MissingPayloadErr: Label 'The pick create payload was empty.', Comment = 'is-IS=Gögnin til að stofna tínslu voru tóm.';
+    begin
+        // Only the production, assembly and project sources run here (#111); a shipment runs "Whse Pick Create Process ori".
+        if not Context.TryGetPayload(Payload) then
+            Error(MissingPayloadErr);
+        CreateOrderPick(Payload, Result);
+        Context.SetResult(Result);
+    end;
 
     procedure IsEnabled(): Boolean
     var
@@ -77,9 +94,12 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
 
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
         Parts: Codeunit "Whse Contract Parts ori";
     begin
         Parts.AddActivityParameters(Parameters, true);
+        Parameters.Add(ContractMgt.Parameter('sourceType', 'string', false, 'shipment (default), productionOrder, assemblyOrder or project. Leave it out to pick from a warehouse shipment as before.'));
+        Parameters.Add(ContractMgt.Parameter('sourceNo', 'string', false, 'Released production order, assembly order or project number. Required when sourceType is not shipment.'));
         exit(true);
     end;
 
@@ -90,7 +110,9 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
         Fields: JsonArray;
     begin
         Parts.AddStatusField(Fields);
-        Fields.Add(ContractMgt.ResponseField('whseShipmentNo', 'string', 'Source Warehouse Shipment number.'));
+        Fields.Add(ContractMgt.ResponseField('whseShipmentNo', 'string', 'Source Warehouse Shipment number. Empty when sourceType names an order or project.'));
+        Fields.Add(ContractMgt.ResponseField('sourceType', 'string', 'productionOrder, assemblyOrder or project. Present only when sourceType was sent.'));
+        Fields.Add(ContractMgt.ResponseField('sourceNo', 'string', 'Order or project number. Present only when sourceType was sent.'));
         Fields.Add(ContractMgt.ResponseField('pickNo', 'string', 'Created Warehouse Pick number.'));
         Fields.Add(ContractMgt.ResponseField('pickSystemId', 'string', 'Created Warehouse Pick SystemId.'));
         Fields.Add(ContractMgt.ResponseField('locationCode', 'string', 'Warehouse location code.'));
@@ -110,6 +132,10 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
         Parts.AddLookupErrors(Errors, 'Warehouse Shipment Header', 'systemId, recordSystemId, id, whseShipmentNo, shipmentNo, no');
         Parts.AddActivityOptionErrors(Errors);
         Parts.AddNextStepError(Errors, "Bifrost Error Code ori"::PreconditionFailed, 'Business Central created no pick for the shipment: there is nothing to pick, the location does not require pick, or the lines are already on a pick.', NoPickCreatedNextStep());
+        Parts.AddNextStepError(Errors, "Bifrost Error Code ori"::PreconditionFailed, 'sourceType names an order or project and Business Central created no pick or refused it with its own text: the order is not released, the location does not set its consumption warehouse handling to Warehouse Pick, or nothing is left to pick.', OrderNoPickNextStep());
+        Parts.AddNextStepError(Errors, "Bifrost Error Code ori"::InvalidParameter, 'sourceType is not shipment, productionOrder, assemblyOrder or project.', SourceTypeNextStep());
+        Parts.AddNextStepError(Errors, "Bifrost Error Code ori"::MissingParameter, 'sourceType names an order or project and sourceNo is missing, or sourceNo was sent without sourceType.', SourceNoNextStep());
+        Parts.AddNextStepError(Errors, "Bifrost Error Code ori"::RecordNotFound, 'sourceType names an order or project and no order or project has that sourceNo.', OrderNotFoundNextStep());
         Parts.AddBusinessCentralError(Errors, 'missing warehouse setup, no quantities to pick or a validation failure');
         exit(true);
     end;
@@ -133,6 +159,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
     begin
         Related.Add(ContractMgt.RelatedEntry('Warehouse.Shipment.Create', 'Use it first when the Warehouse Shipment does not exist.'));
         Related.Add(ContractMgt.RelatedEntry('Warehouse.Pick.Register', 'Use it after picking to register the created pick.'));
+        Related.Add(ContractMgt.RelatedEntry('Warehouse.Worksheet.GetDocuments', 'Use it, with Warehouse.Worksheet.CreateActivities, to plan picks for several orders in a pick worksheet.'));
         exit(true);
     end;
 
@@ -161,7 +188,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
 
     procedure GetOverview(var Overview: Text): Boolean
     begin
-        Overview := 'Irreversibly creates a warehouse pick from an existing warehouse shipment, the same as the Create Pick action (committed in its own transaction), and applies the optional activity fields.';
+        Overview := 'Irreversibly creates a warehouse pick from an existing warehouse shipment, or with sourceType from a released production order, assembly order or project, the same as the Create Pick action (committed in its own transaction), and applies the optional activity fields.';
         exit(true);
     end;
 
@@ -173,7 +200,10 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
             'assignedUserId and sortingMethod are applied to the pick after it is created. assignedUserId is upper-cased and sortingMethod is matched without regard to case. An unknown sortingMethod is refused with its valid values in expected, and a field an administrator has closed to writes is refused with PermissionDenied; both are checked before the pick is created. ' +
             'setBreakbulkFilter and doNotFillQtyToHandle can only be false or left out; true is refused. ' +
             'Outside Omit Commit the pick is created and committed in its own transaction, so a later problem does not remove it. ' +
-            'totalQtyToHandle is the quantity to handle that Business Central filled on the pick lines. Register the pick with Warehouse.Pick.Register once the goods are picked.';
+            'totalQtyToHandle is the quantity to handle that Business Central filled on the pick lines. Register the pick with Warehouse.Pick.Register once the goods are picked. ' +
+            'sourceType productionOrder, assemblyOrder or project picks the components of a released production order, the lines of a released assembly order or the item planning lines of a project, the same as the Create Warehouse Pick action on that order; no pick worksheet is needed. Send sourceNo with it and no shipment identifier or subject. ' +
+            'The location must set Prod. Consump. Whse. Handling, Asm. Consump. Whse. Handling or Job Consump. Whse. Handling to Warehouse Pick. Only a pick created by this call is returned; when Business Central creates none, the call is refused with PreconditionFailed. ' +
+            'The answer then also carries sourceType and sourceNo, and whseShipmentNo is empty. Without sourceType the call and its answer are unchanged.';
         exit(true);
     end;
 
@@ -198,6 +228,9 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
         DoNotFillQtyToHandle: Boolean;
         HasAssignedUserId: Boolean;
         HasSortingMethod: Boolean;
+        IsOrderSource: Boolean;
+        SourceType: Option Shipment,ProductionOrder,AssemblyOrder,Project;
+        SourceNo: Code[20];
         FieldWriteRestrictedErr: Label 'Field %1 is restricted for write on table %2.', Comment = '%1 = field caption, %2 = table caption, is-IS=Ekki er heimilt að skrifa í reitinn %1 í töflunni %2.';
         UnsupportedOptionErr: Label '%1 = true is not supported by this API version. Only the BC defaults (false) are honoured.', Comment = '%1 = option name, is-IS=%1 = true er ekki stutt í þessari útgáfu API. Aðeins sjálfgefin gildi BC (false) eru notuð.';
     begin
@@ -206,8 +239,12 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
         if not WhseRecordLookup.TryReadIdentifiers(Argument, 'systemId=guid,recordSystemId=guid,id=guid,whseShipmentNo=no,shipmentNo=no,no=no', RequestJson) then
             exit;
 
-        if not FindWhseShipmentHeader(Argument, WhseShipmentHeader) then
+        if not ReadSource(Argument, RequestJson, SourceType, SourceNo) then
             exit;
+        IsOrderSource := SourceType <> SourceType::Shipment;
+        if not IsOrderSource then
+            if not FindWhseShipmentHeader(Argument, WhseShipmentHeader) then
+                exit;
 
         // Optional assignedUserId — written to Warehouse Activity Header after creation; honour write restriction.
         AssignedUserIdValue := ReadCode50(RequestJson, 'assignedUserId');
@@ -245,6 +282,11 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
             exit;
         end;
 
+        if IsOrderSource then begin
+            ExecuteOrderPick(Argument, SourceType, SourceNo, HasAssignedUserId, AssignedUserIdValue, HasSortingMethod, SortingMethodValue);
+            exit;
+        end;
+
         // Delegate the report invocation to an isolated codeunit so report-time errors are
         // caught here without aborting the outer message-task transaction.
         if Argument."Omit Commit" then
@@ -274,6 +316,354 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
         BuildResponse(WhseShipmentHeader, WarehouseActivityHeader, ResponseJson);
         Argument.SetResponseJson(ResponseJson);
         Argument."Content Type" := Argument.GetContentTypeJson();
+    end;
+
+    local procedure ReadSource(var Argument: Record "Message Argument ori"; RequestJson: JsonObject; var SourceType: Option Shipment,ProductionOrder,AssemblyOrder,Project; var SourceNo: Code[20]): Boolean
+    var
+        Token: JsonToken;
+        SourceTypeText: Text;
+        SourceNoText: Text;
+        ShipmentKey: Text;
+        HasSourceType: Boolean;
+        HasSourceNo: Boolean;
+        SourceTypeLbl: Label 'sourceType %1 is not supported.', Comment = '%1 = sent value, is-IS=sourceType %1 er ekki stutt.';
+        SourceNoMissingLbl: Label 'sourceNo is required when sourceType is %1.', Comment = '%1 = source type, is-IS=sourceNo er nauðsynlegt þegar sourceType er %1.';
+        SourceTypeMissingLbl: Label 'sourceNo needs sourceType.', Comment = 'is-IS=sourceNo krefst sourceType.';
+        ConflictLbl: Label 'sourceType %1 cannot be combined with the shipment identifier %2.', Comment = '%1 = source type, %2 = key, is-IS=Ekki er hægt að sameina sourceType %1 og afhendingarauðkennið %2.';
+        FormatLbl: Label 'Parameter "%1" must be a JSON string.', Comment = '%1 = key, is-IS=Færibreytan "%1" verður að vera JSON-strengur.';
+        FormatNextStepLbl: Label 'Send the value as a JSON string.', Comment = 'is-IS=Sendu gildið sem JSON-streng.';
+    begin
+        SourceType := SourceType::Shipment;
+        Clear(SourceNo);
+        HasSourceType := RequestJson.Get('sourceType', Token);
+        if HasSourceType then begin
+            if not (Token.IsValue() and IsJsonString(Token)) then begin
+                Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(FormatLbl, 'sourceType'), 'sourceType', '', 'string', FormatNextStepLbl);
+                exit(false);
+            end;
+            SourceTypeText := Token.AsValue().AsText();
+        end;
+        HasSourceNo := RequestJson.Get('sourceNo', Token);
+        if HasSourceNo then begin
+            if not (Token.IsValue() and IsJsonString(Token)) then begin
+                Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(FormatLbl, 'sourceNo'), 'sourceNo', '', 'string', FormatNextStepLbl);
+                exit(false);
+            end;
+            SourceNoText := DelChr(Token.AsValue().AsText(), '<>', ' ');
+        end;
+        if not HasSourceType then begin
+            if HasSourceNo then begin
+                Argument.RespondWithError("Bifrost Error Code ori"::MissingParameter, SourceTypeMissingLbl, 'sourceType', '', '', SourceTypeNextStep());
+                exit(false);
+            end;
+            exit(true);
+        end;
+        case LowerCase(DelChr(SourceTypeText, '=', ' ')) of
+            'shipment':
+                SourceType := SourceType::Shipment;
+            'productionorder':
+                SourceType := SourceType::ProductionOrder;
+            'assemblyorder':
+                SourceType := SourceType::AssemblyOrder;
+            'project':
+                SourceType := SourceType::Project;
+            else begin
+                Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(SourceTypeLbl, CopyStr(SourceTypeText, 1, 80)), 'sourceType', CopyStr(SourceTypeText, 1, 80), 'shipment, productionOrder, assemblyOrder, project', SourceTypeNextStep());
+                exit(false);
+            end;
+        end;
+        if SourceType = SourceType::Shipment then begin
+            if HasSourceNo then begin
+                Argument.RespondWithError("Bifrost Error Code ori"::ConflictingIdentifiers, StrSubstNo(ConflictLbl, 'shipment', 'sourceNo'), 'sourceNo', CopyStr(SourceNoText, 1, 80), '', ConflictNextStep());
+                exit(false);
+            end;
+            exit(true);
+        end;
+        foreach ShipmentKey in ShipmentKeys() do
+            if RequestJson.Contains(ShipmentKey) then begin
+                Argument.RespondWithError("Bifrost Error Code ori"::ConflictingIdentifiers, StrSubstNo(ConflictLbl, SourceTypeName(SourceType), ShipmentKey), ShipmentKey, '', '', ConflictNextStep());
+                exit(false);
+            end;
+        if DelChr(Argument.Subject, '<>', ' ') <> '' then begin
+            Argument.RespondWithError("Bifrost Error Code ori"::ConflictingIdentifiers, StrSubstNo(ConflictLbl, SourceTypeName(SourceType), 'subject'), 'subject', CopyStr(Argument.Subject, 1, 80), '', ConflictNextStep());
+            exit(false);
+        end;
+        if SourceNoText = '' then begin
+            Argument.RespondWithError("Bifrost Error Code ori"::MissingParameter, StrSubstNo(SourceNoMissingLbl, SourceTypeName(SourceType)), 'sourceNo', '', '', SourceNoNextStep());
+            exit(false);
+        end;
+        if StrLen(SourceNoText) > MaxStrLen(SourceNo) then begin
+            Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameterFormat, StrSubstNo(FormatLbl, 'sourceNo'), 'sourceNo', CopyStr(SourceNoText, 1, 80), 'code[20]', OrderNotFoundNextStep());
+            exit(false);
+        end;
+        SourceNo := CopyStr(UpperCase(SourceNoText), 1, MaxStrLen(SourceNo));
+        exit(true);
+    end;
+
+    local procedure ShipmentKeys() Keys: List of [Text]
+    begin
+        Keys.Add('systemId');
+        Keys.Add('recordSystemId');
+        Keys.Add('id');
+        Keys.Add('whseShipmentNo');
+        Keys.Add('shipmentNo');
+        Keys.Add('no');
+    end;
+
+    local procedure IsJsonString(Token: JsonToken): Boolean
+    var
+        Written: Text;
+    begin
+        Token.WriteTo(Written);
+        exit(CopyStr(Written, 1, 1) = '"');
+    end;
+
+    local procedure ExecuteOrderPick(var Argument: Record "Message Argument ori"; SourceType: Option Shipment,ProductionOrder,AssemblyOrder,Project; SourceNo: Code[20]; HasAssignedUserId: Boolean; AssignedUserIdValue: Code[50]; HasSortingMethod: Boolean; SortingMethodValue: Enum "Whse. Activity Sorting Method")
+    var
+        WarehouseActivityHeader: Record "Warehouse Activity Header";
+        Context: Codeunit "Whse Write Context ori";
+        Payload: JsonObject;
+        Result: JsonObject;
+        ResponseJson: JsonObject;
+        PickNo: Code[20];
+        NoPickLbl: Label 'Business Central created no warehouse pick for %1 %2.', Comment = '%1 = source type, %2 = number, is-IS=Business Central stofnaði enga vöruhúsatínslu fyrir %1 %2.';
+    begin
+        if not CheckOrderSource(Argument, SourceType, SourceNo) then
+            exit;
+        Context.Reset();
+        Payload.Add('sourceType', SourceType);
+        Payload.Add('sourceNo', SourceNo);
+        Context.SetPayload(Payload);
+        // Codeunit.Run with a return value is illegal inside the Omit Commit write transaction (#18).
+        if Argument."Omit Commit" then
+            Codeunit.Run(Codeunit::"Whse Pick Create Impl ori")
+        else
+            if not Codeunit.Run(Codeunit::"Whse Pick Create Impl ori") then begin
+                Context.Reset();
+                // Business Central refuses an order with nothing left to pick ("Nothing to handle"); its text is the answer.
+                Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, GetLastErrorText(), 'sourceNo', SourceNo, '', OrderNoPickNextStep());
+                exit;
+            end;
+        if Context.TryGetResult(Result) then
+            PickNo := CopyStr(TextValue(Result, 'pickNo'), 1, MaxStrLen(PickNo));
+        Context.Reset();
+        if PickNo = '' then begin
+            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(NoPickLbl, SourceTypeName(SourceType), SourceNo), 'sourceNo', SourceNo, '', OrderNoPickNextStep());
+            exit;
+        end;
+        WarehouseActivityHeader.Get(WarehouseActivityHeader.Type::Pick, PickNo);
+        if HasAssignedUserId then begin
+            WarehouseActivityHeader.Validate("Assigned User ID", AssignedUserIdValue);
+            WarehouseActivityHeader.Modify(true);
+        end;
+        if HasSortingMethod then begin
+            WarehouseActivityHeader.Validate("Sorting Method", SortingMethodValue);
+            WarehouseActivityHeader.Modify(true);
+        end;
+        BuildOrderResponse(SourceType, SourceNo, WarehouseActivityHeader, ResponseJson);
+        Argument.SetResponseJson(ResponseJson);
+        Argument."Content Type" := Argument.GetContentTypeJson();
+    end;
+
+    local procedure CheckOrderSource(var Argument: Record "Message Argument ori"; SourceType: Option Shipment,ProductionOrder,AssemblyOrder,Project; SourceNo: Code[20]): Boolean
+    var
+        ProductionOrder: Record "Production Order";
+        AssemblyHeader: Record "Assembly Header";
+        Job: Record Job;
+        NotFoundLbl: Label 'No %1 %2 was found.', Comment = '%1 = source type, %2 = number, is-IS=Ekkert %1 %2 fannst.';
+        NotReleasedLbl: Label '%1 %2 is not released.', Comment = '%1 = source type, %2 = number, is-IS=%1 %2 er ekki staðfest.';
+        NotReleasedNextStepLbl: Label 'Release the order first, then send the request again.', Comment = 'is-IS=Staðfestu pöntunina fyrst og sendu svo beiðnina aftur.';
+    begin
+        case SourceType of
+            SourceType::ProductionOrder:
+                begin
+                    if ProductionOrder.Get(ProductionOrder.Status::Released, SourceNo) then
+                        exit(true);
+                    ProductionOrder.SetRange("No.", SourceNo);
+                    if not ProductionOrder.IsEmpty() then begin
+                        Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(NotReleasedLbl, SourceTypeName(SourceType), SourceNo), 'sourceNo', SourceNo, '', NotReleasedNextStepLbl);
+                        exit(false);
+                    end;
+                end;
+            SourceType::AssemblyOrder:
+                if AssemblyHeader.Get(AssemblyHeader."Document Type"::Order, SourceNo) then begin
+                    if AssemblyHeader.Status = AssemblyHeader.Status::Released then
+                        exit(true);
+                    Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(NotReleasedLbl, SourceTypeName(SourceType), SourceNo), 'sourceNo', SourceNo, '', NotReleasedNextStepLbl);
+                    exit(false);
+                end;
+            SourceType::Project:
+                if Job.Get(SourceNo) then
+                    exit(true);
+        end;
+        Argument.RespondWithError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(NotFoundLbl, SourceTypeName(SourceType), SourceNo), 'sourceNo', SourceNo, '', OrderNotFoundNextStep());
+        exit(false);
+    end;
+
+    local procedure CreateOrderPick(Payload: JsonObject; var Result: JsonObject)
+    var
+        ProductionOrder: Record "Production Order";
+        AssemblyHeader: Record "Assembly Header";
+        Job: Record Job;
+        ExistingPicks: List of [Code[20]];
+        SourceType: Option Shipment,ProductionOrder,AssemblyOrder,Project;
+        SourceNo: Code[20];
+        DocumentType: Enum "Warehouse Activity Document Type";
+        Token: JsonToken;
+    begin
+        Payload.Get('sourceType', Token);
+        SourceType := Token.AsValue().AsInteger();
+        SourceNo := CopyStr(TextValue(Payload, 'sourceNo'), 1, MaxStrLen(SourceNo));
+        DocumentType := ActivityDocumentType(SourceType);
+        CollectPicks(DocumentType, SourceNo, ExistingPicks);
+        case SourceType of
+            SourceType::ProductionOrder:
+                begin
+                    ProductionOrder.Get(ProductionOrder.Status::Released, SourceNo);
+                    ProductionOrder.SetHideValidationDialog(true);
+                    ProductionOrder.CreatePick(CopyStr(UserId(), 1, 50), 0, false, false, false);
+                end;
+            SourceType::AssemblyOrder:
+                begin
+                    AssemblyHeader.Get(AssemblyHeader."Document Type"::Order, SourceNo);
+                    AssemblyHeader.SetHideValidationDialog(true);
+                    AssemblyHeader.CreatePick(false, CopyStr(UserId(), 1, 50), 0, false, false, false);
+                end;
+            SourceType::Project:
+                begin
+                    Job.Get(SourceNo);
+                    Job.SetHideValidationDialog(true);
+                    Job.CreateWarehousePick();
+                end;
+        end;
+        Result.Add('pickNo', NewPickNo(DocumentType, SourceNo, ExistingPicks));
+    end;
+
+    local procedure CollectPicks(DocumentType: Enum "Warehouse Activity Document Type"; SourceNo: Code[20]; var Picks: List of [Code[20]])
+    var
+        WarehouseActivityLine: Record "Warehouse Activity Line";
+    begin
+        WarehouseActivityLine.SetRange("Activity Type", WarehouseActivityLine."Activity Type"::Pick);
+        WarehouseActivityLine.SetRange("Whse. Document Type", DocumentType);
+        WarehouseActivityLine.SetRange("Whse. Document No.", SourceNo);
+        if WarehouseActivityLine.FindSet() then
+            repeat
+                if not Picks.Contains(WarehouseActivityLine."No.") then
+                    Picks.Add(WarehouseActivityLine."No.");
+            until WarehouseActivityLine.Next() = 0;
+    end;
+
+    local procedure NewPickNo(DocumentType: Enum "Warehouse Activity Document Type"; SourceNo: Code[20]; ExistingPicks: List of [Code[20]]): Text
+    var
+        AfterPicks: List of [Code[20]];
+        PickNo: Code[20];
+        NewestNo: Code[20];
+    begin
+        // Only a pick this call created is returned, never an older pick for the same order.
+        CollectPicks(DocumentType, SourceNo, AfterPicks);
+        foreach PickNo in AfterPicks do
+            if not ExistingPicks.Contains(PickNo) then
+                if PickNo > NewestNo then
+                    NewestNo := PickNo;
+        exit(NewestNo);
+    end;
+
+    local procedure ActivityDocumentType(SourceType: Option Shipment,ProductionOrder,AssemblyOrder,Project): Enum "Warehouse Activity Document Type"
+    begin
+        case SourceType of
+            SourceType::ProductionOrder:
+                exit("Warehouse Activity Document Type"::Production);
+            SourceType::AssemblyOrder:
+                exit("Warehouse Activity Document Type"::Assembly);
+            SourceType::Project:
+                exit("Warehouse Activity Document Type"::Job);
+        end;
+        exit("Warehouse Activity Document Type"::Shipment);
+    end;
+
+    local procedure SourceTypeName(SourceType: Option Shipment,ProductionOrder,AssemblyOrder,Project): Text
+    begin
+        case SourceType of
+            SourceType::ProductionOrder:
+                exit('productionOrder');
+            SourceType::AssemblyOrder:
+                exit('assemblyOrder');
+            SourceType::Project:
+                exit('project');
+        end;
+        exit('shipment');
+    end;
+
+    local procedure BuildOrderResponse(SourceType: Option Shipment,ProductionOrder,AssemblyOrder,Project; SourceNo: Code[20]; WarehouseActivityHeader: Record "Warehouse Activity Header"; var ResponseJson: JsonObject)
+    var
+        WarehouseActivityLine: Record "Warehouse Activity Line";
+        TotalLines: Integer;
+        SuccessMsg: Label 'Warehouse Pick %1 created from %2 %3 with %4 lines.', Comment = '%1 = pick no., %2 = source type, %3 = number, %4 = line count', Locked = true;
+    begin
+        WarehouseActivityLine.SetRange("Activity Type", WarehouseActivityLine."Activity Type"::Pick);
+        WarehouseActivityLine.SetRange("No.", WarehouseActivityHeader."No.");
+        TotalLines := WarehouseActivityLine.Count();
+        WarehouseActivityLine.CalcSums("Qty. to Handle");
+        ResponseJson.Add('status', 'Success');
+        ResponseJson.Add('whseShipmentNo', '');
+        ResponseJson.Add('sourceType', SourceTypeName(SourceType));
+        ResponseJson.Add('sourceNo', SourceNo);
+        ResponseJson.Add('pickNo', WarehouseActivityHeader."No.");
+        ResponseJson.Add('pickSystemId', Format(WarehouseActivityHeader.SystemId, 0, 4));
+        ResponseJson.Add('locationCode', WarehouseActivityHeader."Location Code");
+        ResponseJson.Add('assignedUserId', WarehouseActivityHeader."Assigned User ID");
+        ResponseJson.Add('sortingMethod', SortingMethodName(WarehouseActivityHeader."Sorting Method"));
+        ResponseJson.Add('totalPickLines', TotalLines);
+        ResponseJson.Add('totalQtyToHandle', WarehouseActivityLine."Qty. to Handle");
+        ResponseJson.Add('message', StrSubstNo(SuccessMsg, WarehouseActivityHeader."No.", SourceTypeName(SourceType), SourceNo, TotalLines));
+    end;
+
+    local procedure TextValue(Parent: JsonObject; Name: Text): Text
+    var
+        Token: JsonToken;
+    begin
+        if not Parent.Get(Name, Token) then
+            exit('');
+        if not Token.IsValue() then
+            exit('');
+        if Token.AsValue().IsNull() then
+            exit('');
+        exit(Token.AsValue().AsText());
+    end;
+
+    local procedure OrderNoPickNextStep(): Text
+    var
+        NextStepLbl: Label 'Release the order, set Prod. Consump. Whse. Handling, Asm. Consump. Whse. Handling or Job Consump. Whse. Handling on the location to Warehouse Pick and check that quantity is left to pick; or use Warehouse.Worksheet.GetDocuments and Warehouse.Worksheet.CreateActivities.', Comment = 'is-IS=Staðfestu pöntunina, stilltu Prod. Consump. Whse. Handling, Asm. Consump. Whse. Handling eða Job Consump. Whse. Handling á staðsetningunni á Warehouse Pick og athugaðu að magn sé eftir til tínslu; eða notaðu Warehouse.Worksheet.GetDocuments og Warehouse.Worksheet.CreateActivities.';
+    begin
+        exit(NextStepLbl);
+    end;
+
+    local procedure SourceTypeNextStep(): Text
+    var
+        NextStepLbl: Label 'Send sourceType shipment, productionOrder, assemblyOrder or project.', Comment = 'is-IS=Sendu sourceType shipment, productionOrder, assemblyOrder eða project.';
+    begin
+        exit(NextStepLbl);
+    end;
+
+    local procedure SourceNoNextStep(): Text
+    var
+        NextStepLbl: Label 'Send sourceNo with the order or project number.', Comment = 'is-IS=Sendu sourceNo með númeri pöntunarinnar eða verksins.';
+    begin
+        exit(NextStepLbl);
+    end;
+
+    local procedure ConflictNextStep(): Text
+    var
+        NextStepLbl: Label 'Send either a shipment identifier or sourceType with sourceNo, not both.', Comment = 'is-IS=Sendu annaðhvort afhendingarauðkenni eða sourceType með sourceNo, ekki hvort tveggja.';
+    begin
+        exit(NextStepLbl);
+    end;
+
+    local procedure OrderNotFoundNextStep(): Text
+    var
+        NextStepLbl: Label 'Check sourceType and sourceNo.', Comment = 'is-IS=Athugaðu sourceType og sourceNo.';
+    begin
+        exit(NextStepLbl);
     end;
 
     local procedure FindWhseShipmentHeader(var Argument: Record "Message Argument ori"; var WhseShipmentHeader: Record "Warehouse Shipment Header"): Boolean

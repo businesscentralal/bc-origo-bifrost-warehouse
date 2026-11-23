@@ -22,7 +22,7 @@ codeunit 10078441 "Whse Document Update Impl ori" implements "Msg Interface ori"
     begin
         if not Context.TryGetPayload(Payload) then
             Error(MissingPayloadErr);
-        Result := ApplyUpdate(Payload);
+        Result := ApplyUpdate(Payload, true);
         Context.SetResult(Result);
     end;
 
@@ -348,14 +348,21 @@ codeunit 10078441 "Whse Document Update Impl ori" implements "Msg Interface ori"
             Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::MultipleErrors, ProblemsLbl);
             exit;
         end;
-        if IsShipment and IsReleased(DocumentRef) then begin
-            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(ReleasedLbl, Format(DocumentRef.Field(1).Value())), 'documentNo', Format(DocumentRef.Field(1).Value()), 'Open', ReopenNextStep());
-            exit;
-        end;
+        // AL evaluates both operands of and, so the shipment check is nested.
+        if IsShipment then
+            if IsReleased(DocumentRef) then begin
+                Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(ReleasedLbl, Format(DocumentRef.Field(1).Value())), 'documentNo', Format(DocumentRef.Field(1).Value()), 'Open', ReopenNextStep());
+                exit;
+            end;
         Payload.Add('tableNo', DocumentRef.Number());
         Payload.Add('documentNo', Format(DocumentRef.Field(1).Value()));
         Payload.Add('header', PayloadHeader);
         Payload.Add('lines', PayloadLines);
+        // Business Central's own checks run first without writing, so a refusal never depends on a rollback.
+        if not TryPrevalidate(Payload) then begin
+            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, GetLastErrorText(), '', '', '', RefusedNextStep());
+            exit;
+        end;
         Context.SetPayload(Payload);
         // Codeunit.Run with a return value is illegal inside the Omit Commit write transaction (#18).
         if Argument."Omit Commit" then
@@ -496,6 +503,7 @@ codeunit 10078441 "Whse Document Update Impl ori" implements "Msg Interface ori"
                                     Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(SortingLbl, TextValue), 'header.' + KeyName, TextValue, EnumNames(FieldReference), DocumentTypeNextStep());
                         else
                             if Context.ReadText(HeaderJson, KeyName, FieldReference.Length(), Argument, TextValue, Present, 'header.' + KeyName) then
+                                // An empty string is a value here: it clears the field.
                                 PayloadHeader.Add(KeyName, TextValue);
                     end;
             end;
@@ -541,9 +549,9 @@ codeunit 10078441 "Whse Document Update Impl ori" implements "Msg Interface ori"
                     else begin
                         Clear(PayloadLine);
                         PayloadLine.Add('lineNo', LineNo);
-                        if ZonePresent then
+                        if ZonePresent or LineJson.Contains('zoneCode') then
                             PayloadLine.Add('zoneCode', ZoneText);
-                        if BinPresent then
+                        if BinPresent or LineJson.Contains('binCode') then
                             PayloadLine.Add('binCode', BinText);
                         PayloadLines.Add(PayloadLine);
                     end;
@@ -558,7 +566,13 @@ codeunit 10078441 "Whse Document Update Impl ori" implements "Msg Interface ori"
         exit(not LineRef.IsEmpty());
     end;
 
-    local procedure ApplyUpdate(Payload: JsonObject) Result: JsonObject
+    [TryFunction]
+    local procedure TryPrevalidate(Payload: JsonObject)
+    begin
+        ApplyUpdate(Payload, false);
+    end;
+
+    local procedure ApplyUpdate(Payload: JsonObject; Persist: Boolean) Result: JsonObject
     var
         Values: Codeunit "Whse Msg Values ori";
         DocumentRef: RecordRef;
@@ -595,12 +609,14 @@ codeunit 10078441 "Whse Document Update Impl ori" implements "Msg Interface ori"
                             FieldReference.Validate(DateValue);
                         end;
                     FieldType::Option:
-                        FieldReference.Validate(Token.AsValue().AsInteger());
+                        // Re-sorting writes the lines, so the sorting method is only applied in the write transaction.
+                        if Persist then
+                            FieldReference.Validate(Token.AsValue().AsInteger());
                     else
                         FieldReference.Validate(Token.AsValue().AsText());
                 end;
             end;
-        if HeaderJson.Keys().Count() > 0 then
+        if Persist and (HeaderJson.Keys().Count() > 0) then
             DocumentRef.Modify(true);
         if DocumentRef.Number() = Database::"Warehouse Receipt Header" then
             LineRef.Open(Database::"Warehouse Receipt Line")
@@ -619,13 +635,16 @@ codeunit 10078441 "Whse Document Update Impl ori" implements "Msg Interface ori"
                 LineRef.Field(13).Validate(Token.AsValue().AsText());
             if LineJson.Get('binCode', Token) then
                 LineRef.Field(12).Validate(Token.AsValue().AsText());
-            LineRef.Modify(true);
+            if Persist then
+                LineRef.Modify(true);
             Clear(ResultLine);
             ResultLine.Add('lineNo', Values.IntegerValue(LineJson, 'lineNo'));
             ResultLine.Add('zoneCode', Format(LineRef.Field(13).Value()));
             ResultLine.Add('binCode', Format(LineRef.Field(12).Value()));
             ResultLines.Add(ResultLine);
         end;
+        if not Persist then
+            exit;
         DocumentRef.Find();
         foreach KeyName in HeaderKeys() do begin
             FieldNo := HeaderFieldNo(DocumentRef.Number(), KeyName);

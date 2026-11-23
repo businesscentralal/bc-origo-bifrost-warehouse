@@ -22,7 +22,7 @@ codeunit 10078442 "Whse Activity Assign Impl ori" implements "Msg Interface ori"
     begin
         if not Context.TryGetPayload(Payload) then
             Error(MissingPayloadErr);
-        Result := ApplyAssignment(Payload);
+        Result := ApplyAssignment(Payload, true);
         Context.SetResult(Result);
     end;
 
@@ -294,6 +294,9 @@ codeunit 10078442 "Whse Activity Assign Impl ori" implements "Msg Interface ori"
         Context.ReadText(RequestJson, 'sortingMethod', 50, Argument, SortingText, SortingPresent, 'sortingMethod');
         Context.ReadDate(RequestJson, 'dueDate', Argument, DueDate, DuePresent, 'dueDate');
         Values.ReadArray(RequestJson, 'activities', Argument, Activities, ActivitiesPresent);
+        // An empty string is a value here: it unassigns.
+        if not UserPresent and RequestJson.Contains('assignedUserId') and not Argument.HasCollectedErrors() then
+            UserPresent := true;
         if not UserPresent and not Argument.HasCollectedErrors() then
             Argument.AddError("Bifrost Error Code ori"::MissingParameter, UserMissingLbl, 'assignedUserId', '', '', MissingNextStep());
         if UserPresent and RequestValueReader.IsFieldWriteRestricted(Database::"Warehouse Activity Header", ActivityHeader.FieldNo("Assigned User ID")) then
@@ -327,6 +330,11 @@ codeunit 10078442 "Whse Activity Assign Impl ori" implements "Msg Interface ori"
         Payload.Add('sortingMethod', SortingOrdinal);
         if DuePresent then
             Payload.Add('dueDate', Format(DueDate, 0, 9));
+        // Business Central's own checks run first without writing, so a refusal never depends on a rollback.
+        if not TryPrevalidate(Payload) then begin
+            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, GetLastErrorText(), 'assignedUserId', UserText, '', RefusedNextStep());
+            exit;
+        end;
         Context.SetPayload(Payload);
         // Codeunit.Run with a return value is illegal inside the Omit Commit write transaction (#18).
         if Argument."Omit Commit" then
@@ -344,7 +352,13 @@ codeunit 10078442 "Whse Activity Assign Impl ori" implements "Msg Interface ori"
         Argument."Content Type" := Argument.GetContentTypeJson();
     end;
 
-    local procedure ApplyAssignment(Payload: JsonObject) Result: JsonObject
+    [TryFunction]
+    local procedure TryPrevalidate(Payload: JsonObject)
+    begin
+        ApplyAssignment(Payload, false);
+    end;
+
+    local procedure ApplyAssignment(Payload: JsonObject; Persist: Boolean) Result: JsonObject
     var
         ActivityHeader: Record "Warehouse Activity Header";
         ActivityLine: Record "Warehouse Activity Line";
@@ -371,6 +385,16 @@ codeunit 10078442 "Whse Activity Assign Impl ori" implements "Msg Interface ori"
             Evaluate(ActivitySystemId, IdToken.AsValue().AsText());
             ActivityHeader.GetBySystemId(ActivitySystemId);
             ActivityHeader.Validate("Assigned User ID", CopyStr(Values.TextValue(Payload, 'assignedUserId'), 1, MaxStrLen(ActivityHeader."Assigned User ID")));
+            if not Persist then begin
+                // Prevalidation: the user check only; re-sorting writes lines, so it runs in the write transaction.
+                if HasDueDate then begin
+                    ActivityLine.SetRange("Activity Type", ActivityHeader.Type);
+                    ActivityLine.SetRange("No.", ActivityHeader."No.");
+                    if ActivityLine.FindFirst() then
+                        ActivityLine.Validate("Due Date", DueDate);
+                end;
+                continue;
+            end;
             if SortingOrdinal >= 0 then
                 ActivityHeader.Validate("Sorting Method", Enum::"Whse. Activity Sorting Method".FromInteger(SortingOrdinal));
             ActivityHeader.Modify(true);

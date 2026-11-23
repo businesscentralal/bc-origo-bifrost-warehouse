@@ -73,13 +73,15 @@ codeunit 97009 "Whse Document Update Tests ori"
     procedure Update_ReleasedShipment_PreconditionFailed()
     var
         ShipmentHeader: Record "Warehouse Shipment Header";
+        ExternalDocumentNo: Code[35];
     begin
         Helper.CreateReleasedShipment(Location, ShipmentHeader, 1);
+        ExternalDocumentNo := ShipmentHeader."External Document No.";
 
         Helper.ExpectError(Send(StrSubstNo('{"documentType":"shipment","documentNo":"%1","header":{"externalDocumentNo":"EXT-105"}}', ShipmentHeader."No.")), 'PreconditionFailed', 'Reopen the shipment first with Warehouse.Shipment.Reopen.');
         ShipmentHeader.Get(ShipmentHeader."No.");
         Assert.AreEqual(ShipmentHeader.Status::Released, ShipmentHeader.Status, 'The shipment stays released.');
-        Assert.AreEqual('', ShipmentHeader."External Document No.", 'Nothing is changed.');
+        Assert.AreEqual(ExternalDocumentNo, ShipmentHeader."External Document No.", 'Nothing is changed.');
     end;
 
     /// <summary>AC06: each refusal answers its code with a nextStep and changes nothing.</summary>

@@ -70,7 +70,7 @@ codeunit 97008 "Whse Activity Assign Tests ori"
         ResponseJson := Send(AssignRequest(PickNo, 'NOEMPLOYEE105', ''));
 
         Helper.ExpectError(ResponseJson, 'PreconditionFailed', '');
-        Assert.IsTrue(Helper.TextValue(ResponseJson, 'message') <> '', 'The answer carries the reason. ' + Helper.ResponseText(ResponseJson));
+        Assert.IsTrue(Helper.TextValue(ResponseJson, 'error').Contains('NOEMPLOYEE105'), 'The answer carries Business Central''s reason. ' + Helper.ResponseText(ResponseJson));
         ActivityHeader.Get(ActivityHeader.Type::Pick, PickNo);
         Assert.AreEqual('', ActivityHeader."Assigned User ID", 'Nothing is changed.');
     end;

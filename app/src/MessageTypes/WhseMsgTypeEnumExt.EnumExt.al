@@ -417,4 +417,18 @@ enumextension 10078385 "Whse MsgType EnumExt ori" extends "Message Type ori"
         Caption = 'Warehouse.Availability.Get', Locked = true;
         Implementation = "Msg Interface ori" = "Whse Availability Get Impl ori", "Msg Contract ori" = "Whse Availability Get Impl ori", "Msg Discovery ori" = "Whse Availability Get Impl ori";
     }
+
+    /// <summary>Changes header data and line bins on an open warehouse receipt or shipment (#105).</summary>
+    value(10078441; "Warehouse.Document.Update")
+    {
+        Caption = 'Warehouse.Document.Update', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Document Update Impl ori", "Msg Contract ori" = "Whse Document Update Impl ori", "Msg Discovery ori" = "Whse Document Update Impl ori";
+    }
+
+    /// <summary>Assigns warehouse activities to a warehouse employee and re-sorts them (#105).</summary>
+    value(10078442; "Warehouse.Activity.Assign")
+    {
+        Caption = 'Warehouse.Activity.Assign', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Activity Assign Impl ori", "Msg Contract ori" = "Whse Activity Assign Impl ori", "Msg Discovery ori" = "Whse Activity Assign Impl ori";
+    }
 }

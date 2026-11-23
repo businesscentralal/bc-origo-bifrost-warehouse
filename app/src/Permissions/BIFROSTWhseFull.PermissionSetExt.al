@@ -68,5 +68,7 @@ permissionsetextension 10078395 "BIFROST Whse - Full ori" extends "BIFROST Full 
         codeunit "Whse Doc Line Qty ori" = X,
         codeunit "Whse Internal Doc Helper ori" = X,
         codeunit "Whse IntPutAw Create Impl ori" = X,
-        codeunit "Whse IntPick Create Impl ori" = X;
+        codeunit "Whse IntPick Create Impl ori" = X,
+        codeunit "Whse Document Update Impl ori" = X,
+        codeunit "Whse Activity Assign Impl ori" = X;
 }

@@ -183,6 +183,23 @@ codeunit 97050 "Whse Jnl Test Helper ori"
         FieldAccessRef.Insert(false);
     end;
 
+    /// <summary>
+    /// Removes the Field Access row CloseFieldForWrite wrote. The test runner isolates per codeunit, so a test that closes
+    /// a field opens it again before its assertions, and the next test of the codeunit starts with the field open.
+    /// </summary>
+    /// <param name="TableNo">The table.</param>
+    /// <param name="FieldNo">The field.</param>
+    internal procedure OpenFieldForWrite(TableNo: Integer; FieldNo: Integer)
+    var
+        FieldAccessRef: RecordRef;
+    begin
+        FieldAccessRef.Open(10077889);
+        FieldAccessRef.Field(1).SetRange(UserSecurityId());
+        FieldAccessRef.Field(2).SetRange(TableNo);
+        FieldAccessRef.Field(3).SetRange(FieldNo);
+        FieldAccessRef.DeleteAll(false);
+    end;
+
     /// <summary>Returns a new unique code.</summary>
     /// <returns>A code of up to 10 characters.</returns>
     internal procedure NewCode(): Code[10]

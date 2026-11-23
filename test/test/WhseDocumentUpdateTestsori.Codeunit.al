@@ -91,13 +91,16 @@ codeunit 97009 "Whse Document Update Tests ori"
     var
         ReceiptHeader: Record "Warehouse Receipt Header";
         ReceiptLine: Record "Warehouse Receipt Line";
+        ResponseJson: JsonObject;
         BinBefore: Code[20];
     begin
         CreateReceipt(ReceiptHeader, ReceiptLine);
         BinBefore := ReceiptLine."Bin Code";
         Helper.CloseFieldForWrite(Database::"Warehouse Receipt Line", ReceiptLine.FieldNo("Bin Code"));
 
-        Helper.ExpectError(Send(StrSubstNo(UpdateRequest1Lbl, ReceiptHeader."No.", Format(CalcDate('<+3D>', WorkDate()), 0, 9), ReceiptLine."Line No.", LineBin.Code)), 'PermissionDenied', '');
+        ResponseJson := Send(StrSubstNo(UpdateRequest1Lbl, ReceiptHeader."No.", Format(CalcDate('<+3D>', WorkDate()), 0, 9), ReceiptLine."Line No.", LineBin.Code));
+        Helper.OpenFieldForWrite(Database::"Warehouse Receipt Line", ReceiptLine.FieldNo("Bin Code"));
+        Helper.ExpectError(ResponseJson, 'PermissionDenied', '');
 
         ReceiptHeader.Get(ReceiptHeader."No.");
         Assert.AreEqual('', ReceiptHeader."Vendor Shipment No.", 'The header is unchanged.');

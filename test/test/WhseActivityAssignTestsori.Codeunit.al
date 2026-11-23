@@ -112,6 +112,7 @@ codeunit 97008 "Whse Activity Assign Tests ori"
     var
         ActivityHeader: Record "Warehouse Activity Header";
         ActivityLine: Record "Warehouse Activity Line";
+        ResponseJson: JsonObject;
         PickNo: Code[20];
         Employee: Code[50];
         DueDateBefore: Date;
@@ -122,7 +123,9 @@ codeunit 97008 "Whse Activity Assign Tests ori"
         DueDateBefore := ActivityLine."Due Date";
         Helper.CloseFieldForWrite(Database::"Warehouse Activity Line", ActivityLine.FieldNo("Due Date"));
 
-        Helper.ExpectError(Send(StrSubstNo(AssignRequest10Lbl, PickNo, Employee, Format(CalcDate('<+5D>', WorkDate()), 0, 9))), 'PermissionDenied', '');
+        ResponseJson := Send(StrSubstNo(AssignRequest10Lbl, PickNo, Employee, Format(CalcDate('<+5D>', WorkDate()), 0, 9)));
+        Helper.OpenFieldForWrite(Database::"Warehouse Activity Line", ActivityLine.FieldNo("Due Date"));
+        Helper.ExpectError(ResponseJson, 'PermissionDenied', '');
 
         ActivityHeader.Get(ActivityHeader.Type::Pick, PickNo);
         Assert.AreEqual('', ActivityHeader."Assigned User ID", 'The assignment is not written.');

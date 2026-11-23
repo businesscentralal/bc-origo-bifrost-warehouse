@@ -1,5 +1,7 @@
 namespace Origo.Bifrost.Warehouse.Test;
 
+using Microsoft.Assembly.Document;
+using Microsoft.Inventory.BOM;
 using Microsoft.Inventory.Item;
 using Microsoft.Inventory.Location;
 using Microsoft.Manufacturing.Document;
@@ -18,6 +20,7 @@ codeunit 97094 "Whse Pick Source Tests ori"
 
     var
         Assert: Codeunit "Library Assert";
+        LibraryAssembly: Codeunit "Library - Assembly";
         LibraryInventory: Codeunit "Library - Inventory";
         LibraryManufacturing: Codeunit "Library - Manufacturing";
         LibraryUtility: Codeunit "Library - Utility";
@@ -55,6 +58,30 @@ codeunit 97094 "Whse Pick Source Tests ori"
 
         Assert.AreEqual('Success', TextValue(ResponseJson, 'status'), ResponseText(ResponseJson));
         Assert.IsFalse(ActivityHeader.Get(ActivityHeader.Type::Pick, PickNo), 'The registered pick should be gone.');
+    end;
+
+    /// <summary>sourceType assemblyOrder creates a pick for the assembly component of a released assembly order (#111 AC02).</summary>
+    [Test]
+    procedure Create_AssemblyOrder_CreatesPick()
+    var
+        AssemblyHeader: Record "Assembly Header";
+        ComponentItem: Record Item;
+        ActivityLine: Record "Warehouse Activity Line";
+        ResponseJson: JsonObject;
+        PickNo: Code[20];
+    begin
+        PrepareAssemblyOrder(AssemblyHeader, ComponentItem);
+
+        Run(SourceRequest('assemblyOrder', AssemblyHeader."No."), '', ResponseJson);
+
+        Assert.AreEqual('Success', TextValue(ResponseJson, 'status'), ResponseText(ResponseJson));
+        Assert.AreEqual('assemblyOrder', TextValue(ResponseJson, 'sourceType'), 'The source type should be returned.');
+        PickNo := CopyStr(TextValue(ResponseJson, 'pickNo'), 1, MaxStrLen(PickNo));
+        ActivityLine.SetRange("Activity Type", ActivityLine."Activity Type"::Pick);
+        ActivityLine.SetRange("No.", PickNo);
+        ActivityLine.FindFirst();
+        Assert.AreEqual(ActivityLine."Source Document"::"Assembly Consumption", ActivityLine."Source Document", 'The pick should be for assembly consumption.');
+        Assert.AreEqual(ComponentItem."No.", ActivityLine."Item No.", 'The pick should take the component.');
     end;
 
     /// <summary>A second call creates nothing new and is refused with PreconditionFailed instead of returning the older pick.</summary>
@@ -198,6 +225,28 @@ codeunit 97094 "Whse Pick Source Tests ori"
         ProductionOrder.SetRange(Status, ProductionOrder.Status::Released);
         ProductionOrder.SetRange("Source No.", ParentItem."No.");
         ProductionOrder.FindLast();
+    end;
+
+    local procedure PrepareAssemblyOrder(var AssemblyHeader: Record "Assembly Header"; var ComponentItem: Record Item)
+    var
+        Location: Record Location;
+        ParentItem: Record Item;
+        AssemblyLine: Record "Assembly Line";
+        ReleaseAssemblyDoc: Codeunit "Release Assembly Document";
+    begin
+        LibraryWarehouse.CreateLocationWMS(Location, false, false, true, false, true);
+        Location.Validate("Asm. Consump. Whse. Handling", Location."Asm. Consump. Whse. Handling"::"Warehouse Pick (mandatory)");
+        Location.Modify(true);
+        Helper.RegisterCurrentUserAsWarehouseEmployee(Location.Code);
+        LibraryInventory.CreateItem(ComponentItem);
+        Helper.CreatePositiveAdjustment(ComponentItem."No.", Location.Code, 5);
+        LibraryInventory.CreateItem(ParentItem);
+        LibraryAssembly.CreateAssemblyHeader(AssemblyHeader, WorkDate() + 1, ParentItem."No.", Location.Code, 1, '');
+        LibraryAssembly.CreateAssemblyLine(AssemblyHeader, AssemblyLine, "BOM Component Type"::Item, ComponentItem."No.", ComponentItem."Base Unit of Measure", 2, 2, '');
+        AssemblyLine.Validate("Location Code", Location.Code);
+        AssemblyLine.Modify(true);
+        ReleaseAssemblyDoc.Run(AssemblyHeader);
+        AssemblyHeader.Get(AssemblyHeader."Document Type", AssemblyHeader."No.");
     end;
 
     local procedure SourceRequest(SourceType: Text; SourceNo: Text): Text

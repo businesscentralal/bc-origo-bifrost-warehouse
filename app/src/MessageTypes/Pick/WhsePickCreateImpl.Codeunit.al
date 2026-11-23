@@ -17,6 +17,7 @@ using Microsoft.Manufacturing.Document;
 using Microsoft.Projects.Project.Job;
 using Microsoft.Warehouse.Activity;
 using Microsoft.Warehouse.Document;
+using Microsoft.Warehouse.Request;
 
 using Origo.Bifrost;
 
@@ -505,6 +506,8 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
         ProductionOrder: Record "Production Order";
         AssemblyHeader: Record "Assembly Header";
         Job: Record Job;
+        AssemblyLineManagement: Codeunit "Assembly Line Management";
+        WhseSourceCreateDocument: Report "Whse.-Source - Create Document";
         ExistingPicks: List of [Code[20]];
         SourceType: Option Shipment,ProductionOrder,AssemblyOrder,Project;
         SourceNo: Code[20];
@@ -525,9 +528,15 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
                 end;
             SourceType::AssemblyOrder:
                 begin
+                    // Assembly Header.CreatePick always shows its result message; run its steps without the message.
                     AssemblyHeader.Get(AssemblyHeader."Document Type"::Order, SourceNo);
-                    AssemblyHeader.SetHideValidationDialog(true);
-                    AssemblyHeader.CreatePick(false, CopyStr(UserId(), 1, 50), 0, false, false, false);
+                    AssemblyLineManagement.CreateWhseItemTrkgForAsmLines(AssemblyHeader);
+                    AssemblyHeader.TestField(Status, AssemblyHeader.Status::Released);
+                    WhseSourceCreateDocument.SetAssemblyOrder(AssemblyHeader);
+                    WhseSourceCreateDocument.SetHideValidationDialog(true);
+                    WhseSourceCreateDocument.Initialize(CopyStr(UserId(), 1, 50), "Whse. Activity Sorting Method"::None, false, false, false);
+                    WhseSourceCreateDocument.UseRequestPage(false);
+                    WhseSourceCreateDocument.RunModal();
                 end;
             SourceType::Project:
                 begin

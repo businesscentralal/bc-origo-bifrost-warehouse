@@ -180,6 +180,7 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
     begin
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'The source document is not released, or the location does not require put-away.', 'Release the document first, or post it directly.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'The location uses warehouse receipts.', 'Use Warehouse.Receipt.Create and Warehouse.Putaway.Create instead.');
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'Nothing is waiting to be put away (for Prod. Output: no output is open for warehouse handling).', 'Check the open quantity on the source document; for Prod. Output, post the output first or without warehouse handling.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'Prod. Output: the location does not set Prod. Output Whse. Handling to Inventory Put-away.', 'Set Prod. Output Whse. Handling on the location to Inventory Put-away, or post the output without warehouse handling.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MissingParameter, 'sourceDocument, or a document number or SystemId, is missing.', 'Send sourceDocument and sourceNo or systemId.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidParameterFormat, 'A value has the wrong JSON type or is too long.', 'Send text for codes and a GUID for systemId.');
@@ -332,7 +333,10 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
         else
             if not Codeunit.Run(Codeunit::"Whse InvtPut Create Impl ori") then begin
                 Context.Reset();
-                Argument.RespondWithLastError();
+                if GetLastErrorText() = NothingToPutAwayText() then
+                    Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, NothingToPutAwayText(), 'sourceNo', DocumentNo, '', NothingNextStep())
+                else
+                    Argument.RespondWithLastError();
                 exit;
             end;
         WriteCreated(Argument);
@@ -476,10 +480,31 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
             RefuseNotReleased(Argument, IdentifierKey, IdentifierValue);
             exit;
         end;
-        if SourceDocument = SourceDocument::"Prod. Output" then
-            CheckOutputLocations(Argument, Locations, IdentifierKey, IdentifierValue)
-        else
+        if SourceDocument = SourceDocument::"Prod. Output" then begin
+            CheckOutputLocations(Argument, Locations, IdentifierKey, IdentifierValue);
+            if not Argument.HasCollectedErrors() then
+                CheckOutputRemaining(Argument, DocumentNo, IdentifierKey, IdentifierValue);
+        end else
             CheckLocations(Argument, Locations, IdentifierKey, IdentifierValue);
+    end;
+
+    local procedure CheckOutputRemaining(var Argument: Record "Message Argument ori"; DocumentNo: Code[20]; IdentifierKey: Text; IdentifierValue: Text)
+    var
+        ProdOrderLine: Record "Prod. Order Line";
+    begin
+        // Output that is fully posted leaves nothing for report 7323; refuse before anything is written (#111 AC05).
+        ProdOrderLine.SetRange(Status, ProdOrderLine.Status::Released);
+        ProdOrderLine.SetRange("Prod. Order No.", DocumentNo);
+        ProdOrderLine.SetFilter("Remaining Quantity", '>0');
+        if ProdOrderLine.IsEmpty() then
+            Argument.AddError("Bifrost Error Code ori"::PreconditionFailed, NothingToPutAwayText(), IdentifierKey, IdentifierValue, '', NothingNextStep());
+    end;
+
+    local procedure NothingNextStep(): Text
+    var
+        NothingNextStepLbl: Label 'Check that the source document has open quantity to put away at an Inventory Put-away location; for Prod. Output, post output for the order first or post it without warehouse handling.', Comment = 'is-IS=Athugaðu að upprunaskjalið hafi opið magn til frágangs á staðsetningu með Inventory Put-away; fyrir Prod. Output skaltu fyrst bóka frálag pöntunarinnar eða bóka það án vöruhúsameðhöndlunar.';
+    begin
+        exit(NothingNextStepLbl);
     end;
 
     local procedure IdentifierSource(SubjectText: Text; SourceNoText: Text; SourceNoPresent: Boolean; SystemIdText: Text; SystemPresent: Boolean; var IdentifierKey: Text; var IdentifierValue: Text)
@@ -946,7 +971,6 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
         SourceDocument: Enum "Warehouse Request Source Document";
         SourceNo: Code[20];
         Putaways: JsonArray;
-        NothingErr: Label 'No inventory put-away was created.', Comment = 'is-IS=Enginn birgðafrágangur var stofnaður.';
     begin
         SourceDocument := ParseSourceDocument(TextValue(Payload, 'sourceDocument'));
         SourceNo := CopyStr(TextValue(Payload, 'sourceNo'), 1, MaxStrLen(SourceNo));
@@ -964,10 +988,17 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
         FillQtyToHandle(SourceDocument, SourceNo);
         BuildPutaways(SourceDocument, SourceNo, Putaways);
         if Putaways.Count() = 0 then
-            Error(NothingErr);
+            Error(NothingToPutAwayText());
         Result.Add('sourceDocument', TextValue(Payload, 'sourceDocument'));
         Result.Add('sourceNo', SourceNo);
         Result.Add('putaways', Putaways);
+    end;
+
+    local procedure NothingToPutAwayText(): Text
+    var
+        NothingErr: Label 'No inventory put-away was created: nothing is waiting to be put away.', Comment = 'is-IS=Enginn birgðafrágangur var stofnaður: ekkert bíður frágangs.';
+    begin
+        exit(NothingErr);
     end;
 
     local procedure ReleaseOutputRequest(SourceNo: Code[20])

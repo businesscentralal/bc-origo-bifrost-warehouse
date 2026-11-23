@@ -3915,12 +3915,6 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Sendu eitt skjal: subject, sourceNo eða systemId.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Create Impl ori - Method Conflict - NamedType ConflictNextStepLbl</note>
         </trans-unit>
-        <trans-unit id="Codeunit 3890069751 - Method 732895916 - NamedType 3917977900" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No inventory put-away was created.</source>
-          <target>Enginn birgðafrágangur var stofnaður.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Enginn birgðafrágangur var stofnaður.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Create Impl ori - Method CreatePutaways - NamedType NothingErr</note>
-        </trans-unit>
         <trans-unit id="Codeunit 3890069751 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
           <source>You do not have permission to create an inventory put-away.</source>
           <target>Þú hefur ekki heimild til að stofna birgðafrágang.</target>
@@ -3980,6 +3974,18 @@
           <target>Athugaðu sourceDocument og skjalnúmer eða SystemId.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu sourceDocument og skjalnúmer eða SystemId.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Create Impl ori - Method NotFound - NamedType NotFoundNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3890069751 - Method 1553442668 - NamedType 2480365606" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check that the source document has open quantity to put away at an Inventory Put-away location; for Prod. Output, post output for the order first or post it without warehouse handling.</source>
+          <target>Athugaðu að upprunaskjalið hafi opið magn til frágangs á staðsetningu með Inventory Put-away; fyrir Prod. Output skaltu fyrst bóka frálag pöntunarinnar eða bóka það án vöruhúsameðhöndlunar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu að upprunaskjalið hafi opið magn til frágangs á staðsetningu með Inventory Put-away; fyrir Prod. Output skaltu fyrst bóka frálag pöntunarinnar eða bóka það án vöruhúsameðhöndlunar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Create Impl ori - Method NothingNextStep - NamedType NothingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3890069751 - Method 1946877232 - NamedType 3917977900" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No inventory put-away was created: nothing is waiting to be put away.</source>
+          <target>Enginn birgðafrágangur var stofnaður: ekkert bíður frágangs.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Enginn birgðafrágangur var stofnaður: ekkert bíður frágangs.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Create Impl ori - Method NothingToPutAwayText - NamedType NothingErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 3890069751 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
           <source>The inventory put-away create payload was empty.</source>

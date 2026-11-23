@@ -27,6 +27,7 @@ codeunit 97093 "Whse InvtPut ProdOut Tests ori"
         LibraryUtility: Codeunit "Library - Utility";
         LibraryWarehouse: Codeunit "Library - Warehouse";
         NotReleasedNextStepTxt: Label 'Release the document first, or post it directly.', Locked = true;
+        NothingNextStepTxt: Label 'Check that the source document has open quantity to put away at an Inventory Put-away location; for Prod. Output, post output for the order first or post it without warehouse handling.', Locked = true;
         HandlingNextStepTxt: Label 'Set Prod. Output Whse. Handling on the location to Inventory Put-away, or post the output without warehouse handling.', Locked = true;
         OutputQty: Decimal;
 
@@ -89,6 +90,31 @@ codeunit 97093 "Whse InvtPut ProdOut Tests ori"
 
         Assert.AreEqual('Success', TextValue(ResponseJson, 'status'), ResponseText(ResponseJson));
         Assert.AreEqual('Prod. Output', TextValue(ResponseJson, 'sourceDocument'), 'The canonical source name should be returned.');
+    end;
+
+    /// <summary>Output that is fully put away and posted leaves nothing to put away: refused as a precondition, nothing created.</summary>
+    [Test]
+    procedure Create_NothingToPutAway_IsPreconditionFailed()
+    var
+        Location: Record Location;
+        Item: Record Item;
+        ProductionOrder: Record "Production Order";
+        ResponseJson: JsonObject;
+        PutawayNo: Code[20];
+    begin
+        PrepareProductionOrder(Location, Item, ProductionOrder, true, true);
+        RunCreate(OutputRequest(ProductionOrder."No."), '', ResponseJson);
+        Assert.AreEqual('Success', TextValue(ResponseJson, 'status'), ResponseText(ResponseJson));
+        PutawayNo := CopyStr(TextValue(FirstPutaway(ResponseJson), 'putawayNo'), 1, MaxStrLen(PutawayNo));
+        RunPost('{"putawayNo":"' + PutawayNo + '","expectedCount":1}', ResponseJson);
+        Assert.AreEqual('Success', TextValue(ResponseJson, 'status'), ResponseText(ResponseJson));
+
+        RunCreate(OutputRequest(ProductionOrder."No."), '', ResponseJson);
+
+        Assert.AreEqual('Error', TextValue(ResponseJson, 'status'), ResponseText(ResponseJson));
+        Assert.AreEqual('PreconditionFailed', TextValue(ResponseJson, 'code'), ResponseText(ResponseJson));
+        Assert.AreEqual(NothingNextStepTxt, TextValue(ResponseJson, 'nextStep'), 'The next step should name the open quantity.');
+        Assert.AreEqual(0, CountPutaways(ProductionOrder."No."), 'Nothing to put away must not create an inventory put-away.');
     end;
 
     /// <summary>A firm planned production order is refused and gets no put-away.</summary>

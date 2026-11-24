@@ -9,6 +9,20 @@ name: Runtime Package
 # origopublic, container runtime, at bc<major>/<app name>/<Publisher>_<App>_runtime.zip (#1241).
 # The previous blob at that path is replaced (latest release only, Gunnar's decisions of 02.11.2026).
 #
+# BC majors (Gunnar, 21.11.2026: runtime packages for BC 28 and BC 29.0 for all apps): every run builds one
+# package per major in a matrix job, bc28 and bc29, each exported on its own container of that major and
+# uploaded to bc<major>/<app name>/<Publisher>_<App>_runtime.zip. A runtime package is tied to the platform it
+# was exported on, so a bc28 package is not reused on 29 (see the PR that added the matrix for the evidence).
+# For the app's own major the BC version is app.json application major.minor (as below); for a later major it
+# is <major>.0 (29.0). An app whose application is newer than a major (application 29.x and bc28) fails that
+# major's job with a clear message. Bifrost dependencies come from the same major's public path, so Bifrost
+# Foundation's bc29 package must be public before an app's bc29 job can pass. The jobs do not wait for each
+# other (fail-fast off): a bc29 failure never blocks the bc28 upload, and the run is red until both pass.
+# Every rule below (artifact pick, Microsoft dependency floor, minor check, older-over-newer guard, timeouts)
+# applies per major and per public path. Input bcArtifactVersion only applies to the major it starts with.
+# Each job removes only its own container (by id): the Alpaca RemoveContainers action removes every container of
+# the run, which would remove the other major's container while it is still exporting.
+#
 # What is published (#1269): a real Business Central runtime package, never the release .app. The release
 # .app carries every .al source file, and the repositories are private. The job publishes the released product
 # .app (from the release's "-Apps-" asset, never rebuilt) to a COSMO Alpaca container of the BC version the
@@ -194,9 +208,15 @@ concurrency:
 
 jobs:
   RuntimePackage:
+    name: Runtime Package bc${{ matrix.bcMajor }}
     runs-on: ubuntu-latest
     timeout-minutes: 150
+    strategy:
+      fail-fast: false
+      matrix:
+        bcMajor: ['28', '29']
     env:
+      TARGET_BC_MAJOR: ${{ matrix.bcMajor }}
       RELEASE_TAG: ${{ inputs.tag || github.event.release.tag_name }}
       APP_FOLDER: ${{ inputs.appFolder || 'app' }}
       BC_ARTIFACT_VERSION: ${{ inputs.bcArtifactVersion || '' }}
@@ -297,8 +317,13 @@ jobs:
           if ($prefix -ne $env:RELEASE_TAG) { throw "App version $appVersion does not belong to release $($env:RELEASE_TAG)." }
 
           if ([string]$appJson.application -notmatch '^(\d+)\.(\d+)\.') { throw "app.json application '$($appJson.application)' is not a version." }
-          $major = $Matches[1]
-          $minor = $Matches[2]
+          $appMajor = [int]$Matches[1]
+          $appMinor = $Matches[2]
+          # This job's BC major (matrix): the app's own major uses app.json application major.minor, a later
+          # major uses <major>.0. An app that needs a newer BC than this major cannot be packaged for it.
+          $major = [string][int]$env:TARGET_BC_MAJOR
+          if ([int]$major -lt $appMajor) { throw "app.json application $($appJson.application) needs BC $appMajor or later; no runtime package for BC $major." }
+          $minor = if ([int]$major -eq $appMajor) { $appMinor } else { '0' }
           # The app's own identity goes into the export script, so it must pass the identity rules too.
           ./tooling/tools/New-BifrostRuntimePackage.ps1 -Locate -LocateId ([string]$appJson.id) -LocateName ([string]$appJson.name) -LocatePublisher ([string]$appJson.publisher) -LocateVersion $appVersion -BcMajor $major | Out-Null
           if ($LASTEXITCODE -ne 0) { throw 'The app identity in app.json does not pass the identity rules.' }
@@ -309,7 +334,7 @@ jobs:
           "publisher=$($appJson.publisher)" >> $env:GITHUB_OUTPUT
           "bcMajor=$major" >> $env:GITHUB_OUTPUT
           "bcMinor=$minor" >> $env:GITHUB_OUTPUT
-          Write-Host "Packaging $($appFile.Name) for release $($env:RELEASE_TAG) (application $($appJson.application))."
+          Write-Host "Packaging $($appFile.Name) for release $($env:RELEASE_TAG) (application $($appJson.application)) for BC $major.$minor."
 
       - name: Download the Bifrost dependency runtime packages
         id: deps
@@ -427,7 +452,9 @@ jobs:
         run: |
           $major = $env:BC_MAJOR
           $minor = $env:BC_MINOR
-          $requested = if ($env:BC_ARTIFACT_VERSION) { $env:BC_ARTIFACT_VERSION } else { "$major.$minor" }
+          # The bcArtifactVersion input belongs to the major it starts with; the other major's job ignores it.
+          $override = if ($env:BC_ARTIFACT_VERSION -and $env:BC_ARTIFACT_VERSION.Split('.')[0] -eq $major) { $env:BC_ARTIFACT_VERSION } else { '' }
+          $requested = if ($override) { $override } else { "$major.$minor" }
           $requestedParts = $requested.Split('.')
           if ($requestedParts[0] -ne $major -or ($requestedParts.Count -ge 2 -and $requestedParts[1] -ne $minor)) {
               throw "BC artifact version $requested is not BC $major.$minor. A runtime package for this app is exported on BC $major.$minor (app.json application) so it installs on every later build."
@@ -732,11 +759,14 @@ jobs:
           Write-Host "Exported $([System.IO.Path]::GetFileName($runtimeApp)) ($((Get-Item -LiteralPath $runtimeApp).Length) bytes)."
 
       - name: Remove the COSMO Alpaca container
-        if: always() && steps.container.outcome != 'skipped'
-        uses: cosmoconsult/Alpaca-Actions/Actions/RemoveContainers@v2.11
-        with:
-          shell: pwsh
-          token: ${{ github.token }}
+        if: always() && env.BIFROST_RUNTIME_CONTAINER_ID != ''
+        shell: pwsh
+        env:
+          _token: ${{ github.token }}
+        run: |
+          # Only this job's container (by id); the other major's job may still be exporting on its own.
+          Import-Module ./alpaca/Scripts/Modules/Alpaca.psd1 -DisableNameChecking
+          Remove-AlpacaContainer -Container ([pscustomobject]@{ Id = $env:BIFROST_RUNTIME_CONTAINER_ID; Project = '.'; BuildMode = 'Default' }) -Token $env:_token
 
       - name: Build the runtime zip
         id: zip
@@ -744,6 +774,7 @@ jobs:
         env:
           RUNTIME_APP_PATH: ${{ steps.export.outputs.path }}
           APP_VERSION: ${{ steps.app.outputs.version }}
+          BC_MAJOR: ${{ steps.app.outputs.bcMajor }}
         run: |
           # Exercise the genuine exported runtime as well as all malformed-input regressions.
           ./tooling/tools/New-BifrostRuntimePackage.ps1 -SelfTest -RuntimeFixturePath $env:RUNTIME_APP_PATH
@@ -754,6 +785,7 @@ jobs:
               RuntimeAppPath  = $env:RUNTIME_APP_PATH
               ExpectedVersion = $env:APP_VERSION
               OutputDirectory = 'out'
+              BcMajor         = $env:BC_MAJOR
           }
           $json = ./tooling/tools/New-BifrostRuntimePackage.ps1 @arguments | Select-Object -Last 1
           $result = $json | ConvertFrom-Json
@@ -766,7 +798,7 @@ jobs:
       - name: Keep the runtime zip
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: RuntimePackage-${{ env.RELEASE_TAG }}
+          name: RuntimePackage-${{ env.RELEASE_TAG }}-bc${{ matrix.bcMajor }}
           path: ${{ steps.zip.outputs.zip }}
           if-no-files-found: error
           retention-days: 30
@@ -815,12 +847,14 @@ jobs:
           BIFROST_RUNTIME_SAS: ${{ secrets.BIFROST_RUNTIME_SAS }}
           RUNTIME_APP_PATH: ${{ steps.export.outputs.path }}
           APP_VERSION: ${{ steps.app.outputs.version }}
+          BC_MAJOR: ${{ steps.app.outputs.bcMajor }}
         run: |
           $arguments = @{
               AppJsonPath       = "release/$($env:APP_FOLDER)/app.json"
               RuntimeAppPath    = $env:RUNTIME_APP_PATH
               ExpectedVersion   = $env:APP_VERSION
               OutputDirectory   = 'out'
+              BcMajor           = $env:BC_MAJOR
               CredentialEnvName = 'BIFROST_RUNTIME_SAS'
               Upload            = $true
           }

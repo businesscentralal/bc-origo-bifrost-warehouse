@@ -64,6 +64,8 @@ The list is the enum extension `Whse MsgType EnumExt ori` in
 | `Warehouse.Shipment.Reopen` | Inbound | Reopen a released warehouse shipment; refused while open picks exist | `BIFROST Full ori` |
 | `Warehouse.Request.Get` | Outbound | Read the warehouse requests at a location (source documents waiting for a receipt or shipment), with paging | `BIFROST Read ori` |
 | `Warehouse.Document.Get` | Outbound | Read open receipts and shipments with lines, outstanding quantities and picking progress; filter and page results. | `BIFROST Read ori` |
+| `Warehouse.Document.Update` | Inbound | Change header data (posting date, vendor shipment no., shipment date, shipping agent, external document no., assigned user, sorting method, default bin) and line zones and bins on an open receipt or shipment; all or nothing, a released shipment is refused. | `BIFROST Whse - Full ori` |
+| `Warehouse.Activity.Assign` | Inbound | Assign picks, put-aways and movements to any warehouse employee at the location (an empty user unassigns), re-sort them and set the line due date; all or nothing. | `BIFROST Whse - Full ori` |
 | `Warehouse.PostedDocument.Get` | Outbound | Read posted warehouse receipts or shipments, optionally with lines, with paging | `BIFROST Read ori` |
 | `Warehouse.RegisteredActivity.Get` | Outbound | Read registered picks, put-aways or movements, optionally with lines, with paging | `BIFROST Read ori` |
 | `Warehouse.Journal.Create` | Inbound | Insert warehouse item or reclassification journal lines (with lot, serial or package numbers) at a directed location | `BIFROST Full ori` |

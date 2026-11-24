@@ -1,5 +1,7 @@
 namespace Origo.Bifrost.Warehouse.Test;
 
+using Microsoft.Finance.GeneralLedger.Account;
+using Microsoft.Foundation.NoSeries;
 using Microsoft.Inventory.Item;
 using Microsoft.Inventory.Location;
 using Microsoft.Purchases.Document;
@@ -26,6 +28,7 @@ codeunit 97050 "Whse Jnl Test Helper ori"
         LibraryInventory: Codeunit "Library - Inventory";
         LibraryWarehouse: Codeunit "Library - Warehouse";
         LibraryUtility: Codeunit "Library - Utility";
+        GuidSeriesTok: Label 'GUID', Locked = true;
 
     /// <summary>Dispatches a message through the public dispatcher in the caller's transaction.</summary>
     /// <param name="MessageType">The message type.</param>
@@ -123,6 +126,78 @@ codeunit 97050 "Whse Jnl Test Helper ori"
     internal procedure CreateItem(var Item: Record Item)
     begin
         LibraryInventory.CreateItem(Item);
+    end;
+
+    /// <summary>
+    /// Moves the test library's GUID number series past the codes that committed G/L accounts already use.
+    /// Library - ERM names a new G/L account '1' + the next GUID code and checks uniqueness only in a temporary table,
+    /// so an account committed earlier on a reused tenant (while the series itself was rolled back) makes the fixture
+    /// fail with "G/L Account already exists". Rolled back with the test.
+    /// </summary>
+    internal procedure SkipCommittedGuidAccounts()
+    var
+        GLAccount: Record "G/L Account";
+        NoSeriesLine: Record "No. Series Line";
+        NoSeries: Codeunit "No. Series";
+        HighestUsed: Code[20];
+        Attempts: Integer;
+    begin
+        GLAccount.SetFilter("No.", '1GU*');
+        if not GLAccount.FindLast() then
+            exit;
+        HighestUsed := CopyStr(CopyStr(GLAccount."No.", 2, 10), 1, MaxStrLen(HighestUsed));
+        // Creates the GUID series when it does not exist yet.
+        LibraryUtility.GenerateGUID();
+        NoSeriesLine.SetRange("Series Code", GuidSeriesTok);
+        if NoSeriesLine.FindFirst() then
+            if NoSeriesLine."Last No. Used" < HighestUsed then begin
+                NoSeriesLine."Last No. Used" := HighestUsed;
+                NoSeriesLine.Modify(false);
+            end;
+        // Fallback for a series implementation that does not keep Last No. Used.
+        Attempts := 0;
+        while (NoSeries.PeekNextNo(GuidSeriesTok) <= HighestUsed) and (Attempts < 1000) do begin
+            LibraryUtility.GenerateGUID();
+            Attempts += 1;
+        end;
+    end;
+
+    /// <summary>
+    /// Closes a field for write for the current user through company Field Access (Foundation table 10077889,
+    /// restriction type Write). The table is internal to Foundation, so the row is written through a RecordRef.
+    /// Rolled back with the test.
+    /// </summary>
+    /// <param name="TableNo">The table.</param>
+    /// <param name="FieldNo">The field.</param>
+    internal procedure CloseFieldForWrite(TableNo: Integer; FieldNo: Integer)
+    var
+        FieldAccessRef: RecordRef;
+    begin
+        FieldAccessRef.Open(10077889);
+        FieldAccessRef.Init();
+        FieldAccessRef.Field(1).Value(UserSecurityId());
+        FieldAccessRef.Field(2).Value(TableNo);
+        FieldAccessRef.Field(3).Value(FieldNo);
+        // Restriction Type ori: 2 = Write.
+        FieldAccessRef.Field(10).Value(2);
+        FieldAccessRef.Insert(false);
+    end;
+
+    /// <summary>
+    /// Removes the Field Access row CloseFieldForWrite wrote. The test runner isolates per codeunit, so a test that closes
+    /// a field opens it again before its assertions, and the next test of the codeunit starts with the field open.
+    /// </summary>
+    /// <param name="TableNo">The table.</param>
+    /// <param name="FieldNo">The field.</param>
+    internal procedure OpenFieldForWrite(TableNo: Integer; FieldNo: Integer)
+    var
+        FieldAccessRef: RecordRef;
+    begin
+        FieldAccessRef.Open(10077889);
+        FieldAccessRef.Field(1).SetRange(UserSecurityId());
+        FieldAccessRef.Field(2).SetRange(TableNo);
+        FieldAccessRef.Field(3).SetRange(FieldNo);
+        FieldAccessRef.DeleteAll(false);
     end;
 
     /// <summary>Returns a new unique code.</summary>

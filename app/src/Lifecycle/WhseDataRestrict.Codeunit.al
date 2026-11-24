@@ -94,11 +94,15 @@ codeunit 10078458 "Whse Data Restrict ori"
         // These tables stay wholly write-restricted, so the table hint names the dedicated types that change them.
         case TableNo of
             Database::"Warehouse Shipment Header":
-                Hint := 'Warehouse.Shipment.Release, Warehouse.Shipment.Reopen, Warehouse.Shipment.GetSourceDocuments';
+                Hint := 'Warehouse.Document.Update, Warehouse.Shipment.Release, Warehouse.Shipment.Reopen, Warehouse.Shipment.GetSourceDocuments';
             Database::"Warehouse Receipt Line":
-                Hint := 'Warehouse.Receipt.Post, Warehouse.Receipt.GetSourceDocuments';
+                Hint := 'Warehouse.Document.Update, Warehouse.Receipt.Post, Warehouse.Receipt.GetSourceDocuments';
             Database::"Warehouse Shipment Line":
-                Hint := 'Warehouse.Shipment.Post, Warehouse.Shipment.GetSourceDocuments';
+                Hint := 'Warehouse.Document.Update, Warehouse.Shipment.Post, Warehouse.Shipment.GetSourceDocuments';
+            Database::"Warehouse Receipt Header":
+                Hint := 'Warehouse.Document.Update, Warehouse.Receipt.Post, Warehouse.Receipt.GetSourceDocuments';
+            Database::"Warehouse Activity Header":
+                Hint := 'Warehouse.Activity.Assign, Warehouse.Pick.Register, Warehouse.Putaway.Register, Warehouse.Movement.Register';
         end;
     end;
 

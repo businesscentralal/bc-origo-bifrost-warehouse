@@ -133,6 +133,8 @@ Test range: `97000–97099`.
 | 97065–97079 | Free |
 | 97080–97091 | Tests of #41-#47: `Whse Bin Get Tests ori`, `Whse Bin Create Tests ori`, `Whse DefBin Set Tests ori`, `Whse Movement Create Tests ori`, `Whse Movement Reg Tests ori`, `Whse InvtPick Create Tests ori`, `Whse InvtPick Post Tests ori`, `Whse InvtPut Create Tests ori`, `Whse InvtPut Post Tests ori`, `Whse InvtMove Create Tests ori`, `Whse InvtMove Reg Tests ori`, `Whse Bin Repl Tests ori` |
 | 97092 | `Whse Count Help Tests ori` (#97) |
-| 97093–97097 | Free |
+| 97093 | `Whse InvtPut ProdOut Tests ori` (#111) |
+| 97094 | `Whse Pick Source Tests ori` (#111) |
+| 97095–97097 | Free |
 | 97098 | `Whse IntPutAw Tests ori` (#106) |
 | 97099 | `Whse IntPick Tests ori` (#106) |

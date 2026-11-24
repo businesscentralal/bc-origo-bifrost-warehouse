@@ -145,7 +145,7 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
         Fields.Add(ContractMgt.ResponseField('postedPutawayNo', 'string', 'Posted inventory put-away number.'));
         Fields.Add(ContractMgt.ResponseField('sourceDocument', 'string', 'Source document type.'));
         Fields.Add(ContractMgt.ResponseField('sourceNo', 'string', 'Source document number.'));
-        Fields.Add(ContractMgt.ResponseField('postedDocumentNo', 'string', 'Posted receipt, return receipt or transfer receipt number. Empty when no such document is found for the source document.'));
+        Fields.Add(ContractMgt.ResponseField('postedDocumentNo', 'string', 'Posted receipt, return receipt or transfer receipt number. Empty when no such document is found for the source document, and for Prod. Output, which posts output entries instead of a document.'));
         Fields.Add(ContractMgt.ResponseField('postedInvoiceNo', 'string', 'Posted purchase invoice number when invoice was true. Otherwise empty.'));
         Fields.Add(ContractMgt.ResponseField('invoice', 'boolean', 'True when the purchase order was invoiced.'));
         Fields.Add(ContractMgt.ResponseField('postedQuantity', 'number', 'Posted quantity across the put-away lines.'));
@@ -270,6 +270,7 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
             'A line with quantity to handle for an item with item tracking needs a lot or serial number when the tracking code requires one for that kind of source document. It is refused before posting, also for lines you did not send; assign the numbers first with Warehouse.ActivityLine.AssignTracking. ' +
             'The call is refused when the total quantity to handle is zero. If any line fails, every problem is listed and nothing is written. ' +
             'invoice true receives and invoices a purchase order in one step; every other source document refuses it. Sales return orders and inbound transfers are received. ' +
+            'A Prod. Output put-away posts the output of the released production order and the put-away together, as Business Central does; postedDocumentNo is empty because output posts item ledger entries, not a document. ' +
             'The number must belong to an inventory put-away; a SystemId of another kind of activity is refused. Use Warehouse.Putaway.Register for a warehouse put-away.';
         exit(true);
     end;
@@ -662,7 +663,7 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
             exit(false);
         if Item."Item Tracking Code" = '' then
             exit(false);
-        TrackingCode.SetLoadFields(Code, "Lot Specific Tracking", "SN Specific Tracking", "Lot Purchase Inbound Tracking", "SN Purchase Inbound Tracking", "Lot Sales Inbound Tracking", "SN Sales Inbound Tracking", "Lot Transfer Tracking", "SN Transfer Tracking");
+        TrackingCode.SetLoadFields(Code, "Lot Specific Tracking", "SN Specific Tracking", "Lot Purchase Inbound Tracking", "SN Purchase Inbound Tracking", "Lot Sales Inbound Tracking", "SN Sales Inbound Tracking", "Lot Transfer Tracking", "SN Transfer Tracking", "Lot Manuf. Inbound Tracking", "SN Manuf. Inbound Tracking");
         if not TrackingCode.Get(Item."Item Tracking Code") then
             exit(false);
         case ActivityHeader."Source Document" of
@@ -680,6 +681,11 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
                 begin
                     NeedsLot := TrackingCode."Lot Transfer Tracking" or TrackingCode."Lot Specific Tracking";
                     NeedsSerial := TrackingCode."SN Transfer Tracking" or TrackingCode."SN Specific Tracking";
+                end;
+            ActivityHeader."Source Document"::"Prod. Output":
+                begin
+                    NeedsLot := TrackingCode."Lot Manuf. Inbound Tracking" or TrackingCode."Lot Specific Tracking";
+                    NeedsSerial := TrackingCode."SN Manuf. Inbound Tracking" or TrackingCode."SN Specific Tracking";
                 end;
         end;
         if NeedsLot and (ActivityLine."Lot No." = '') then begin

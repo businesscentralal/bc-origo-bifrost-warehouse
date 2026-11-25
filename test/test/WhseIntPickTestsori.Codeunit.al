@@ -23,6 +23,7 @@ codeunit 97099 "Whse IntPick Tests ori"
         Assert: Codeunit "Library Assert";
         LibraryInventory: Codeunit "Library - Inventory";
         LibraryWarehouse: Codeunit "Library - Warehouse";
+        JnlHelper: Codeunit "Whse Jnl Test Helper ori";
 
     /// <summary>AC03: an internal pick to a to-bin with createActivity gives a pick that Warehouse.Pick.Register registers.</summary>
     [Test]
@@ -186,7 +187,7 @@ codeunit 97099 "Whse IntPick Tests ori"
         LibraryWarehouse.CreateFullWMSLocation(Location, 2);
         EnsureDefaultDirectedEmployee(Location.Code);
         LibraryInventory.CreateItem(Item);
-        LibraryWarehouse.UpdateInventoryOnLocationWithDirectedPutAwayAndPick(Item."No.", Location.Code, Quantity, false);
+        JnlHelper.StockDirectedPickBin(Location, Item."No.", Quantity);
         ToBin.Get(Location.Code, Location."Shipment Bin Code");
     end;
 

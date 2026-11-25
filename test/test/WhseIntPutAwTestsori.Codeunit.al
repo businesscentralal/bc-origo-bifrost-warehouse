@@ -23,6 +23,7 @@ codeunit 97098 "Whse IntPutAw Tests ori"
         Assert: Codeunit "Library Assert";
         LibraryInventory: Codeunit "Library - Inventory";
         LibraryWarehouse: Codeunit "Library - Warehouse";
+        JnlHelper: Codeunit "Whse Jnl Test Helper ori";
 
     /// <summary>AC01: stock in a bin becomes a released internal put-away and a put-away that registers into a pick bin.</summary>
     [Test]
@@ -287,7 +288,7 @@ BinContent.SetRange("Location Code", Location.Code);
         // Business Central refuses a receive bin as the from-bin of an internal put-away, so the stock sits in a put-away and pick bin.
         LibraryWarehouse.FindZone(Zone, Location.Code, LibraryWarehouse.SelectBinType(false, false, true, true), false);
         LibraryWarehouse.FindBin(ReceiveBin, Location.Code, Zone.Code, 1);
-        LibraryWarehouse.UpdateWarehouseStockOnBin(ReceiveBin, Item."No.", Quantity, false);
+        JnlHelper.RegisterWarehouseStock(ReceiveBin, Item."No.", Quantity);
     end;
 
     local procedure ReplaceBinStockByTrackedStock(Bin: Record Bin; Item: Record Item; UntrackedQuantity: Decimal)

@@ -21,7 +21,6 @@ codeunit 97055 "Whse Adjustment Calc Tests ori"
         Helper: Codeunit "Whse Jnl Test Helper ori";
         ContractAssert: Codeunit "Whse Contract Assert ori";
         LibraryInventory: Codeunit "Library - Inventory";
-        LibraryWarehouse: Codeunit "Library - Warehouse";
 
     /// <summary>AC01: a registered warehouse adjustment becomes a positive item journal line.</summary>
     [Test]
@@ -37,7 +36,7 @@ codeunit 97055 "Whse Adjustment Calc Tests ori"
         Helper.CreateDirectedLocation(Location);
         Helper.CreateItem(Item);
         Helper.FindPickBin(Location.Code, 1, Bin);
-        LibraryWarehouse.UpdateWarehouseStockOnBin(Bin, Item."No.", 5, false);
+        Helper.RegisterWarehouseStock(Bin, Item."No.", 5);
         CreateItemJournalBatch(ItemJournalBatch);
 
         ResponseJson := Send(Request(ItemJournalBatch, ',"itemNo":"' + Item."No." + '","locationCode":"' + Location.Code + '","documentNo":"ADJ-01","postingDate":"2026-10-19"'));
@@ -202,7 +201,7 @@ codeunit 97055 "Whse Adjustment Calc Tests ori"
         Helper.CreateDirectedLocation(Location);
         Helper.CreateItem(Item);
         Helper.FindPickBin(Location.Code, 1, Bin);
-        LibraryWarehouse.UpdateWarehouseStockOnBin(Bin, Item."No.", 3, false);
+        Helper.RegisterWarehouseStock(Bin, Item."No.", 3);
         CreateItemJournalBatch(ItemJournalBatch);
         // The line Business Central leaves in a batch without a number series after Inventory.ItemJournal.Post.
         ItemJournalLine.Init();

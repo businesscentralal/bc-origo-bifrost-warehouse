@@ -86,6 +86,26 @@ def budget_check(deadline):
     require(time.monotonic() <= deadline, "Symbol measurement elapsed budget exceeded")
 
 
+# SHA-256 of an empty compiler log. PipelineInitialize pins this before any compile.
+EMPTY_LOG_SHA256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+
+def compiler_log_matches(root, state, *, reuse_app):
+    """The compiler log must still be the receipted prefix.
+
+    A skipped product compile (baseline reuse) never starts the compiler, and
+    AL-Go then does not create BuildOutput.txt. That absence is the empty log
+    Initialize pinned. A missing log after a receipted compile, or any log whose
+    bytes differ from the receipt, fails closed.
+    """
+    log_path = Path(root) / "BuildOutput.txt"
+    expected = state["logPrefixSha256"]
+    if reuse_app and not log_path.is_file():
+        require(expected == EMPTY_LOG_SHA256, "Compiler log missing after a receipted compile")
+        return
+    require(file_hash(log_path) == expected, "Unreceipted later compiler output")
+
+
 def file_hash(path, deadline=None):
     sha = hashlib.sha256()
     with Path(path).open("rb") as stream:
@@ -975,7 +995,7 @@ def reconcile(root, context, stage, signature=None, product_reuse=None):
         else:
             require(False, "Skipped/missing/unexpected compile hook")
     require(receipts == expected, "Skipped/missing/unexpected compile hook")
-    require(file_hash(root / "BuildOutput.txt") == state["logPrefixSha256"], "Unreceipted later compiler output")
+    compiler_log_matches(root, state, reuse_app=reuse_app)
     for relative, sha in state["hookHashes"].items():
         require(file_hash(root / relative) == sha, "Hook/tool displaced during pipeline")
     outputs = []

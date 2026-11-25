@@ -21,6 +21,7 @@ codeunit 97091 "Whse Bin Repl Tests ori"
         Assert: Codeunit "Library Assert";
         LibraryInventory: Codeunit "Library - Inventory";
         LibraryWarehouse: Codeunit "Library - Warehouse";
+        JnlHelper: Codeunit "Whse Jnl Test Helper ori";
 
     /// <summary>A fixed pick bin below its minimum gets one movement worksheet line from the bulk bin.</summary>
     [Test]
@@ -228,7 +229,7 @@ codeunit 97091 "Whse Bin Repl Tests ori"
         ToBin.Validate("Bin Ranking", 100);
         ToBin.Modify(true);
         LibraryInventory.CreateItem(Item);
-        LibraryWarehouse.UpdateWarehouseStockOnBin(FromBin, Item."No.", 8, false);
+        JnlHelper.RegisterWarehouseStock(FromBin, Item."No.", 8);
         LibraryWarehouse.CreateBinContent(ToContent, Location.Code, 'PICK', ToBin.Code, Item."No.", '', Item."Base Unit of Measure");
         ToContent.Validate(Fixed, true);
         ToContent.Validate("Min. Qty.", 4);

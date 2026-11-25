@@ -30,6 +30,7 @@ codeunit 97094 "Whse Pick Source Tests ori"
         LibraryUtility: Codeunit "Library - Utility";
         LibraryWarehouse: Codeunit "Library - Warehouse";
         Helper: Codeunit "Whse Shipment Test Helper ori";
+        JnlHelper: Codeunit "Whse Jnl Test Helper ori";
 
     /// <summary>sourceType productionOrder creates a pick for the component, and Warehouse.Pick.Register registers it.</summary>
     [Test]
@@ -281,7 +282,7 @@ codeunit 97094 "Whse Pick Source Tests ori"
         Helper.RegisterCurrentUserAsWarehouseEmployee(Location.Code);
         LibraryInventory.CreateItem(ComponentItem);
         LibraryWarehouse.FindBin(PickBin, Location.Code, 'PICK', 1);
-        LibraryWarehouse.UpdateInventoryInBinUsingWhseJournal(PickBin, ComponentItem."No.", 5, false);
+        JnlHelper.StockBin(PickBin, ComponentItem."No.", 5);
         CreateProductionOrderAt(Location.Code, ProductionOrder, ComponentItem, true);
     end;
 

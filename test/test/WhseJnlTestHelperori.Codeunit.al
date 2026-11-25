@@ -4,6 +4,7 @@ using Microsoft.Finance.GeneralLedger.Account;
 using Microsoft.Foundation.NoSeries;
 using Microsoft.Inventory.Item;
 using Microsoft.Inventory.Location;
+using Microsoft.Inventory.Tracking;
 using Microsoft.Purchases.Document;
 using Microsoft.Sales.Document;
 using Microsoft.Warehouse.Activity;
@@ -109,16 +110,85 @@ codeunit 97050 "Whse Jnl Test Helper ori"
     internal procedure StockBin(Bin: Record Bin; ItemNo: Code[20]; Quantity: Decimal)
     var
         Item: Record Item;
-        WarehouseJournalBatch: Record "Warehouse Journal Batch";
-        BatchText: Text;
     begin
-        // The library's warehouse journal opens the template selection page when several item templates exist, so stock goes through the message types.
-        CreateWhseJournalBatch("Warehouse Journal Template Type"::Item, Bin."Location Code", WarehouseJournalBatch);
-        BatchText := '"journalTemplateName":"' + WarehouseJournalBatch."Journal Template Name" + '","journalBatchName":"' + WarehouseJournalBatch.Name + '","locationCode":"' + Bin."Location Code" + '"';
-        AssertSuccess(RunType(Enum::"Message Type ori"::"Warehouse.Journal.Create", '', '{' + BatchText + ',"documentNo":"STOCK","lines":[{"itemNo":"' + ItemNo + '","binCode":"' + Bin.Code + '","quantity":' + Format(Quantity, 0, 9) + '}]}'));
-        AssertSuccess(RunType(Enum::"Message Type ori"::"Warehouse.Journal.Register", '', '{' + BatchText + '}'));
+        ClearBlankSourceReservations();
+        RegisterWarehouseStock(Bin, ItemNo, Quantity);
         Item.Get(ItemNo);
         LibraryWarehouse.PostWhseAdjustment(Item);
+        Item.CalcFields(Inventory);
+        Assert.IsTrue(Item.Inventory >= Quantity, 'The item ledger should hold the warehouse adjustment before a pick or movement is created.');
+    end;
+
+    /// <summary>
+    /// Stocks the first put-away and pick bin of a directed location, the bin the test libraries use,
+    /// and posts the item adjustment. Callers that pick or move from that bin no longer depend on demo inventory.
+    /// </summary>
+    /// <param name="Location">Directed put-away and pick location.</param>
+    /// <param name="ItemNo">The item.</param>
+    /// <param name="Quantity">The quantity.</param>
+    internal procedure StockDirectedPickBin(Location: Record Location; ItemNo: Code[20]; Quantity: Decimal)
+    var
+        Zone: Record Zone;
+        Bin: Record Bin;
+    begin
+        LibraryWarehouse.FindZone(Zone, Location.Code, LibraryWarehouse.SelectBinType(false, false, true, true), false);
+        LibraryWarehouse.FindBin(Bin, Location.Code, Zone.Code, 1);
+        StockBin(Bin, ItemNo, Quantity);
+    end;
+
+    /// <summary>
+    /// Registers a positive warehouse adjustment into the bin without opening the warehouse journal template page
+    /// and without posting the item ledger. Calculate-adjustment tests need the warehouse quantity only.
+    /// </summary>
+    /// <param name="Bin">The bin.</param>
+    /// <param name="ItemNo">The item.</param>
+    /// <param name="Quantity">The quantity.</param>
+    internal procedure RegisterWarehouseStock(Bin: Record Bin; ItemNo: Code[20]; Quantity: Decimal)
+    var
+        BinContent: Record "Bin Content";
+        WarehouseJournalLine: Record "Warehouse Journal Line";
+        WarehouseJournalTemplate: Record "Warehouse Journal Template";
+        WarehouseJournalBatch: Record "Warehouse Journal Batch";
+        WhseJnlRegisterBatch: Codeunit "Whse. Jnl.-Register Batch";
+        BatchText: Text;
+    begin
+        // A new item template on every call stays on a reused tenant once a later step commits, and the library
+        // then opens the template selection page. Reuse the first item template and add a batch for this location.
+        // Register through Business Central. Warehouse.Journal.Register demands BIFROST WhsePost ori, which the
+        // posting-gate tests do not hold while they build the fixture.
+        LibraryWarehouse.SelectWhseJournalTemplateName(WarehouseJournalTemplate, "Warehouse Journal Template Type"::Item);
+        LibraryWarehouse.CreateWhseJournalBatch(WarehouseJournalBatch, WarehouseJournalTemplate.Name, Bin."Location Code");
+        BatchText := '"journalTemplateName":"' + WarehouseJournalBatch."Journal Template Name" + '","journalBatchName":"' + WarehouseJournalBatch.Name + '","locationCode":"' + Bin."Location Code" + '"';
+        AssertSuccess(RunType(Enum::"Message Type ori"::"Warehouse.Journal.Create", '', '{' + BatchText + ',"documentNo":"STOCK","lines":[{"itemNo":"' + ItemNo + '","binCode":"' + Bin.Code + '","quantity":' + Format(Quantity, 0, 9) + '}]}'));
+        WarehouseJournalLine.SetRange("Journal Template Name", WarehouseJournalBatch."Journal Template Name");
+        WarehouseJournalLine.SetRange("Journal Batch Name", WarehouseJournalBatch.Name);
+        WarehouseJournalLine.SetRange("Location Code", Bin."Location Code");
+        WarehouseJournalLine.FindFirst();
+        WhseJnlRegisterBatch.Run(WarehouseJournalLine);
+        BinContent.SetRange("Location Code", Bin."Location Code");
+        BinContent.SetRange("Bin Code", Bin.Code);
+        BinContent.SetRange("Item No.", ItemNo);
+        Assert.IsTrue(BinContent.FindFirst(), 'The warehouse journal should leave bin content for the item.');
+        BinContent.CalcFields(Quantity);
+        Assert.IsTrue(BinContent.Quantity >= Quantity, 'The bin should hold the registered warehouse quantity.');
+    end;
+
+    /// <summary>
+    /// Removes reservation rows with no document. Create Pick treats a blank source as reserved when such rows exist
+    /// and then reports that the quantity is not in inventory yet, even after the fixture posted supply.
+    /// A fresh container has none. The delete follows the test transaction.
+    /// </summary>
+    internal procedure ClearBlankSourceReservations()
+    var
+        ReservationEntry: Record "Reservation Entry";
+    begin
+        ReservationEntry.SetRange("Source Type", 0);
+        ReservationEntry.SetRange("Source Subtype", 0);
+        ReservationEntry.SetRange("Source ID", '');
+        ReservationEntry.SetRange("Source Ref. No.", 0);
+        ReservationEntry.SetRange("Reservation Status", ReservationEntry."Reservation Status"::Reservation);
+        if not ReservationEntry.IsEmpty() then
+            ReservationEntry.DeleteAll(false);
     end;
 
     /// <summary>Creates an item.</summary>
@@ -219,6 +289,7 @@ codeunit 97050 "Whse Jnl Test Helper ori"
         ResponseJson: JsonObject;
     begin
         EnsureMovementWorksheetTemplate();
+        ClearBlankSourceReservations();
         ResponseJson := RunType(Enum::"Message Type ori"::"Warehouse.Movement.Create", '', '{"locationCode":"' + LocationCode + '","lines":[{"itemNo":"' + ItemNo + '","quantity":' + Format(Quantity, 0, 9) + ',"fromBin":"' + FromBin + '","toBin":"' + ToBin + '"}]}');
         AssertSuccess(ResponseJson);
         exit(CopyStr(TextValue(ResponseJson, 'movementNo'), 1, 20));

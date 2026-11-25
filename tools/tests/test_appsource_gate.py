@@ -761,6 +761,23 @@ class ProductReuse(unittest.TestCase):
             result = G.reconcile(self.root, self.context, "finalize", product_reuse=self.reuse())
         self.assertTrue(result["outputs"][0]["productReuse"])
 
+    def test_finalize_accepts_absent_compiler_log_on_default_reuse(self):
+        """AL-Go does not create BuildOutput.txt when the product compile is skipped."""
+        (self.root / "BuildOutput.txt").unlink()
+        with patch.object(G, "package_info", return_value=self._product_info()):
+            result = G.reconcile(self.root, self.context, "finalize", product_reuse=self.reuse())
+        self.assertTrue(result["outputs"][0]["productReuse"])
+
+    def test_finalize_rejects_missing_log_after_a_receipted_compile(self):
+        (self.root / "BuildOutput.txt").unlink()
+        state_path = self.root / ".buildartifacts/AppSourceGate/Default/state.json"
+        state = json.loads(state_path.read_text())
+        state["logPrefixSha256"] = "a" * 64
+        state_path.write_text(json.dumps(state))
+        with patch.object(G, "package_info", return_value=self._product_info()):
+            with self.assertRaises(G.GateError):
+                G.reconcile(self.root, self.context, "finalize", product_reuse=self.reuse())
+
     def test_finalize_still_requires_compile_when_app_touched_or_reuse_unverified(self):
         with self.assertRaises(G.GateError):
             G.reconcile(self.root, self.context, "finalize")

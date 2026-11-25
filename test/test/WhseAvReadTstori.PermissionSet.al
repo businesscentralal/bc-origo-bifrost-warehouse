@@ -7,6 +7,7 @@ using Microsoft.Inventory.Location;
 using Microsoft.Inventory.Tracking;
 using Microsoft.Warehouse.Activity;
 using Microsoft.Warehouse.Document;
+using Microsoft.Warehouse.Journal;
 using Microsoft.Warehouse.Ledger;
 using Microsoft.Warehouse.Structure;
 using Microsoft.Warehouse.Tracking;
@@ -21,6 +22,7 @@ permissionset 97007 "Whse AvRead Tst ori"
 
     Permissions =
         tabledata "Bin Content" = R,
+        tabledata "Warehouse Journal Line" = R,
         tabledata "Bin" = R,
         tabledata "Bin Type" = R,
         tabledata "Zone" = R,

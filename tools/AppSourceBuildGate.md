@@ -73,7 +73,10 @@ Container-only compilation needs a supported identity collector before acceptanc
 When a pull request does **not** touch `app/` and AL-Go incremental builds reuse the
 product package from the baseline workflow run (copied into `.buildartifacts/Apps`
 without a current-run product compile), Finalize/Pipeline may accept that package
-instead of an `app` compile receipt. Evidence collected at Finalize (not from
+instead of an `app` compile receipt. AL-Go does not create `BuildOutput.txt` on
+that path. Finalize treats the missing file as the empty log Initialize pinned,
+and still rejects a missing log once a compile has moved the receipted hash.
+Evidence collected at Finalize (not from
 `BuildOutput.txt`) is:
 
 - `_baselineWorkflowRunId` / `baselineWorkflowRunId`: non-empty numeric baseline run id

@@ -23,6 +23,7 @@ codeunit 97084 "Whse Movement Reg Tests ori"
         Assert: Codeunit "Library Assert";
         LibraryInventory: Codeunit "Library - Inventory";
         LibraryWarehouse: Codeunit "Library - Warehouse";
+        JnlHelper: Codeunit "Whse Jnl Test Helper ori";
 
     /// <summary>Registering a created movement returns the registered movement and leaves nothing open.</summary>
     [Test]
@@ -43,7 +44,7 @@ codeunit 97084 "Whse Movement Reg Tests ori"
         EnsureDefaultDirectedEmployee(Location.Code);
         EnsureMovementWorksheetTemplate();
         LibraryInventory.CreateItem(Item);
-        LibraryWarehouse.UpdateInventoryOnLocationWithDirectedPutAwayAndPick(Item."No.", Location.Code, 5, false);
+        JnlHelper.StockDirectedPickBin(Location, Item."No.", 5);
         LibraryWarehouse.FindZone(Zone, Location.Code, LibraryWarehouse.SelectBinType(false, false, true, true), false);
         LibraryWarehouse.FindBin(FromBin, Location.Code, Zone.Code, 1);
         LibraryWarehouse.FindBin(ToBin, Location.Code, Zone.Code, 2);
@@ -105,7 +106,7 @@ codeunit 97084 "Whse Movement Reg Tests ori"
         EnsureDefaultDirectedEmployee(Location.Code);
         EnsureMovementWorksheetTemplate();
         LibraryInventory.CreateItem(Item);
-        LibraryWarehouse.UpdateInventoryOnLocationWithDirectedPutAwayAndPick(Item."No.", Location.Code, 5, false);
+        JnlHelper.StockDirectedPickBin(Location, Item."No.", 5);
         LibraryWarehouse.FindZone(Zone, Location.Code, LibraryWarehouse.SelectBinType(false, false, true, true), false);
         LibraryWarehouse.FindBin(FromBin, Location.Code, Zone.Code, 1);
         LibraryWarehouse.FindBin(ToBin, Location.Code, Zone.Code, 2);
@@ -183,7 +184,7 @@ codeunit 97084 "Whse Movement Reg Tests ori"
         EnsureDefaultDirectedEmployee(Location.Code);
         EnsureMovementWorksheetTemplate();
         LibraryInventory.CreateItem(Item);
-        LibraryWarehouse.UpdateInventoryOnLocationWithDirectedPutAwayAndPick(Item."No.", Location.Code, 5, false);
+        JnlHelper.StockDirectedPickBin(Location, Item."No.", 5);
         LibraryWarehouse.FindZone(Zone, Location.Code, LibraryWarehouse.SelectBinType(false, false, true, true), false);
         LibraryWarehouse.FindBin(FromBin, Location.Code, Zone.Code, 1);
         LibraryWarehouse.FindBin(ToBin, Location.Code, Zone.Code, 2);
@@ -328,7 +329,7 @@ codeunit 97084 "Whse Movement Reg Tests ori"
         EnsureDefaultDirectedEmployee(Location.Code);
         EnsureMovementWorksheetTemplate();
         LibraryInventory.CreateItem(Item);
-        LibraryWarehouse.UpdateInventoryOnLocationWithDirectedPutAwayAndPick(Item."No.", Location.Code, 5, false);
+        JnlHelper.StockDirectedPickBin(Location, Item."No.", 5);
         LibraryWarehouse.FindZone(Zone, Location.Code, LibraryWarehouse.SelectBinType(false, false, true, true), false);
         LibraryWarehouse.FindBin(FromBin, Location.Code, Zone.Code, 1);
         LibraryWarehouse.FindBin(ToBin, Location.Code, Zone.Code, 2);

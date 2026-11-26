@@ -273,6 +273,7 @@ codeunit 10078444 "Whse Rcpt CrossDock Impl ori" implements "Msg Interface ori",
         Location: Record Location;
         Context: Codeunit "Whse Write Context ori";
         Lookup: Codeunit "Whse Record Lookup ori";
+        Values: Codeunit "Whse Msg Values ori";
         Payload: JsonObject;
         Request: JsonObject;
         Result: JsonObject;
@@ -302,6 +303,15 @@ codeunit 10078444 "Whse Rcpt CrossDock Impl ori" implements "Msg Interface ori",
             if not (KeyName in ['whseReceiptNo', 'systemId', 'id', 'lineNos', 'apply']) then begin
                 Argument.RespondWithError("Bifrost Error Code ori"::UnknownParameter, StrSubstNo(UnknownLbl, KeyName), KeyName, '', '', FormatNextStep());
                 exit;
+            end;
+        foreach KeyName in Request.Keys() do
+            if KeyName in ['systemId', 'id'] then begin
+                Request.Get(KeyName, Token);
+                if Token.AsValue().AsText() <> '' then
+                    if not Values.IsGuid(Token.AsValue().AsText()) then begin
+                        Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameterFormat, InvalidLbl, KeyName, Token.AsValue().AsText(), 'GUID', FormatNextStep());
+                        exit;
+                    end;
             end;
         Apply := true;
         if Request.Get('apply', Token) then begin

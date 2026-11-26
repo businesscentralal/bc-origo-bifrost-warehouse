@@ -528,9 +528,27 @@ codeunit 97035 "Whse CrossDock Tests ori"
     var
         ItemRegister: Record "Item Register";
         ItemEntry: Record "Item Ledger Entry";
+        ItemApplication: Record "Item Application Entry";
         WhseRegister: Record "Warehouse Register";
         WhseEntry: Record "Warehouse Entry";
     begin
+        // Receipt posting creates a positive self-application even before any item is shipped.
+        // Remove only applications pointing at this fixture's item entries before removing them.
+        ItemEntry.SetRange("Item No.", ItemNo);
+        if ItemEntry.FindSet() then
+            repeat
+                ItemApplication.SetRange("Item Ledger Entry No.", ItemEntry."Entry No.");
+                ItemApplication.DeleteAll(false);
+                Assert.IsTrue(ItemApplication.IsEmpty(), 'Fixture item applications are removed.');
+                ItemApplication.Reset();
+                ItemApplication.SetRange("Inbound Item Entry No.", ItemEntry."Entry No.");
+                ItemApplication.DeleteAll(false);
+                ItemApplication.Reset();
+                ItemApplication.SetRange("Outbound Item Entry No.", ItemEntry."Entry No.");
+                ItemApplication.DeleteAll(false);
+                ItemApplication.Reset();
+            until ItemEntry.Next() = 0;
+        ItemEntry.Reset();
         if ItemRegister.FindSet() then
             repeat
                 if ItemEntry.Get(ItemRegister."From Entry No.") then

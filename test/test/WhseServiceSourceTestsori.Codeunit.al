@@ -36,6 +36,39 @@ codeunit 97095 "Whse Service Source Tests ori"
         AssertServiceLine(ServiceHeader."No.");
     end;
 
+    /// <summary>AC01: a service order may carry its shipment location on the lines only.</summary>
+    [Test]
+    procedure AC01_ServiceLineLocationWithoutHeader()
+    var
+        ServiceHeader: Record "Service Header";
+        Location: Record Location;
+        ReleaseServiceDocument: Codeunit "Release Service Document";
+        Response: JsonObject;
+    begin
+        PrepareServiceOrder(ServiceHeader, Location, false);
+        ServiceHeader."Location Code" := '';
+        ServiceHeader.Modify(true);
+        ReleaseServiceDocument.PerformManualRelease(ServiceHeader);
+        RunCreate(ServiceHeader."No.", Response);
+        Assert.AreEqual('Success', TextValue(Response, 'status'), ResponseText(Response));
+        AssertServiceLine(ServiceHeader."No.");
+    end;
+
+    /// <summary>AC04: a conflicting location filter refuses the order without creating shipment lines.</summary>
+    [Test]
+    procedure AC04_ConflictingLocationIsRefused()
+    var
+        ServiceHeader: Record "Service Header";
+        Location: Record Location;
+        Response: JsonObject;
+    begin
+        PrepareServiceOrder(ServiceHeader, Location, true);
+        ShipmentHelper.RunMessage("Message Type ori"::"Warehouse.Shipment.Create", '', '{"sourceDocuments":[{"sourceType":"ServiceOrder","documentNo":"' + ServiceHeader."No." + '"}],"locationCode":"BIF112NONE"}', Response);
+        Assert.AreEqual('ConflictingIdentifiers', TextValue(Response, 'code'), ResponseText(Response));
+        Assert.IsTrue(TextValue(Response, 'nextStep') <> '', 'A location correction is required.');
+        AssertNoServiceLine(ServiceHeader."No.");
+    end;
+
     /// <summary>AC01/AC04: source-document selection adds service order lines.</summary>
     [Test]
     procedure AC01_GetServiceSourceDocuments()

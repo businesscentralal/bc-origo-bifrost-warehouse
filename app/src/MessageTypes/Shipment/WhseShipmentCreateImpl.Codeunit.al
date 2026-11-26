@@ -398,15 +398,16 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
             Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(NotReleasedLbl, DocumentNo), 'sourceDocuments.documentNo', DocumentNo, '', ReleaseNextStepLbl);
             exit(false);
         end;
-        if ((LocationFilter <> '') and (LocationFilter <> ServiceHeader."Location Code")) or
-           (not Location.Get(ServiceHeader."Location Code"))
-        then begin
+        if (LocationFilter <> '') and (LocationFilter <> ServiceHeader."Location Code") then begin
             Argument.RespondWithError("Bifrost Error Code ori"::ConflictingIdentifiers, StrSubstNo(LocationLbl, DocumentNo), 'locationCode', LocationFilter, ServiceHeader."Location Code", LocationNextStepLbl);
             exit(false);
         end;
-        if not Location."Require Shipment" then begin
-            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(LocationLbl, DocumentNo), 'locationCode', Location.Code, '', LocationNextStepLbl);
-            exit(false);
+        if ServiceHeader."Location Code" <> '' then begin
+            Location.Get(ServiceHeader."Location Code");
+            if not Location."Require Shipment" then begin
+                Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(LocationLbl, DocumentNo), 'locationCode', Location.Code, '', LocationNextStepLbl);
+                exit(false);
+            end;
         end;
         GetServiceSource.CreateFromServiceOrderHideDialog(ServiceHeader);
         CreatedHeaderNo := FindHeaderForSource(Database::"Service Line", ServiceHeader."Document Type".AsInteger(), DocumentNo);

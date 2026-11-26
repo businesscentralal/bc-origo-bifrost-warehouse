@@ -493,8 +493,11 @@ codeunit 97035 "Whse CrossDock Tests ori"
         if PutawayTemplate.Get(Location."Put-away Template Code") then
             PutawayTemplate.Delete(false);
         Location.Delete(false);
-        // Native ledger-delete subscribers can refresh the item while cleanup runs.
+        // All fixture ledger rows are gone. Do not start a native cost adjustment
+        // from the delete trigger for this fixture item that is about to be removed.
         Item.Get('W7XD-MCP');
+        Item."Cost is Adjusted" := true;
+        Item.Modify();
         Item.Delete(true);
         if Customer.Get(CustomerNo) then
             Customer.Delete(true);

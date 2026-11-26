@@ -133,7 +133,7 @@ codeunit 97035 "Whse CrossDock Tests ori"
         SeedOpportunity(Opportunity, OtherLine, 99998);
         Original := Format(Opportunity);
         OtherReceipt := Receipt;
-        OtherReceipt."No." := CopyStr('OTHER-' + Receipt."No.", 1, 20);
+        OtherReceipt."No." := CopyStr('X' + Format(CreateGuid(), 0, 4), 1, 20);
         OtherReceipt.Insert();
         OtherLine."No." := OtherReceipt."No.";
         OtherLine.Insert();
@@ -318,7 +318,7 @@ codeunit 97035 "Whse CrossDock Tests ori"
     begin
         Prepare(Location, Item, Receipt, PurchaseNo, SalesNo);
         Other := Receipt;
-        Other."No." := CopyStr('OTHER-' + Receipt."No.", 1, 20);
+        Other."No." := CopyStr('X' + Format(CreateGuid(), 0, 4), 1, 20);
         Other.Insert();
         Helper.ExpectError(Run(Receipt."No.", '{"id":"' + Format(Other.SystemId, 0, 4) + '"}'), 'ConflictingIdentifiers', '');
         Helper.AssertSuccess(Run('', '{"whseReceiptNo":"' + Receipt."No." + '","systemId":"' + Format(Receipt.SystemId, 0, 4) + '","id":"' + Format(Receipt.SystemId, 0, 4) + '"}'));
@@ -377,9 +377,13 @@ codeunit 97035 "Whse CrossDock Tests ori"
         Implementation.GetOverview(IcelandicOverview);
         GlobalLanguage(OriginalLanguage);
         Assert.AreEqual(EnglishOverview, IcelandicOverview, 'Help chapter stays English.');
-        Assert.IsTrue(ReceiptHelper.RunMessageInLanguage(Enum::"Message Type ori"::"Warehouse.Receipt.CalculateCrossDock", '', '{"apply":"false"}', Response, 1033), 'English response.');
+        GlobalLanguage(1033);
+        Response := Run('', '{"apply":"false"}');
+        GlobalLanguage(OriginalLanguage);
         Helper.ExpectError(Response, 'InvalidParameterFormat', 'Send text receipt identifiers, true or false for apply, and unique positive integers in lineNos; consult Warehouse.Document.Get.');
-        Assert.IsTrue(ReceiptHelper.RunMessageInLanguage(Enum::"Message Type ori"::"Warehouse.Receipt.CalculateCrossDock", '', '{"apply":"false"}', Response, 1039), 'Icelandic response.');
+        GlobalLanguage(1039);
+        Response := Run('', '{"apply":"false"}');
+        GlobalLanguage(OriginalLanguage);
         Helper.ExpectError(Response, 'InvalidParameterFormat', 'Sendu móttökuauðkenni sem texta, true eða false fyrir apply og einkvæmar jákvæðar heiltölur í lineNos; skoðaðu Warehouse.Document.Get.');
     end;
 

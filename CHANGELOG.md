@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-- #108: Align cross-dock unknown-parameter help with Foundation in English and Icelandic.
+- #108: Align cross-dock unknown-parameter help with Foundation in English and Icelandic. Make the acceptance fixtures use independent receipt identifiers and explicit dispatcher languages.
 
 - #108: Add `Warehouse.Receipt.CalculateCrossDock` for receipt-scoped cross-dock suggestions, optional line selection and an all-or-nothing preview (`apply=false`). Business Central replaces only its working suggestions; receipt documents and entries are preserved. Add implementation/enum value 10078444, manually bound scope subscriber 10078445 and acceptance test codeunit 97035; synchronize Icelandic discovery and refusal text.
 - #123: Requires Business Central 28.0 or later (was 28.3). `application` is 28.0.0.0 in `app/app.json` and `test/app.json`; no other app.json field changes and no code change. CI keeps the 28.5 artifact, the same as the other 28.0 apps (Shopify).

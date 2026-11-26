@@ -77,5 +77,6 @@
     ],
     "continuousDelivery": false
   },
-  "repoVersion": "1.0.4"
+  "repoVersion": "1.0.4",
+  "assignPremiumPlan": true
 }

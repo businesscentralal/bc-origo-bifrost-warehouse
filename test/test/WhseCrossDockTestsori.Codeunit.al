@@ -389,6 +389,7 @@ codeunit 97035 "Whse CrossDock Tests ori"
     var
         Location: Record Location;
         Item: Record Item;
+        SalesLine: Record "Sales Line";
         Receipt: Record "Warehouse Receipt Header";
         PurchaseNo: Code[20];
         SalesNo: Code[20];
@@ -398,6 +399,13 @@ codeunit 97035 "Whse CrossDock Tests ori"
         Location.Rename('W7XDMCP');
         Item.Rename('W7XD-MCP');
         PrepareSources(Location, Item, Receipt, PurchaseNo, SalesNo);
+        // Test runners and HTTP sessions may have different WorkDate values. An overdue
+        // self-made demand remains eligible in both sessions without changing user settings.
+        SalesLine.SetRange("Document Type", SalesLine."Document Type"::Order);
+        SalesLine.SetRange("Document No.", SalesNo);
+        SalesLine.FindFirst();
+        SalesLine."Shipment Date" := DMY2Date(1, 1, 2000);
+        SalesLine.Modify();
         Receipt."Vendor Shipment No." := 'WORKER7-108-MCP';
         Receipt.Modify();
         Commit();

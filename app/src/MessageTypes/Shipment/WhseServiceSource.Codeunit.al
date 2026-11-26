@@ -45,4 +45,25 @@ codeunit 10078444 "Whse Service Source ori"
     begin
         exit(NextStepLbl);
     end;
+    /// <summary>Collects the unsupported service inventory-pick refusal without reading service data.</summary>
+    internal procedure RefuseInventoryPick(var Argument: Record "Message Argument ori"; ParameterName: Text; SourceValue: Text)
+    begin
+        Argument.AddError("Bifrost Error Code ori"::PreconditionFailed, InventoryPickRefusalText(), ParameterName, SourceValue, '', ShipmentPickNextStepText());
+    end;
+
+    /// <summary>Returns the service inventory-pick limitation for runtime and help.</summary>
+    internal procedure InventoryPickRefusalText(): Text
+    var
+        RefusalLbl: Label 'Service orders do not support inventory picks.', Comment = 'is-IS=Þjónustupantanir styðja ekki birgðatínslu.';
+    begin
+        exit(RefusalLbl);
+    end;
+
+    /// <summary>Returns the supported service shipment and warehouse-pick workflow.</summary>
+    internal procedure ShipmentPickNextStepText(): Text
+    var
+        NextStepLbl: Label 'Use Warehouse.Shipment.Create or Warehouse.Shipment.GetSourceDocuments, then Warehouse.Pick.Create, Warehouse.Pick.Register and Warehouse.Shipment.Post for the service order.', Comment = 'is-IS=Notaðu Warehouse.Shipment.Create eða Warehouse.Shipment.GetSourceDocuments, síðan Warehouse.Pick.Create, Warehouse.Pick.Register og Warehouse.Shipment.Post fyrir þjónustupöntunina.';
+    begin
+        exit(NextStepLbl);
+    end;
 }

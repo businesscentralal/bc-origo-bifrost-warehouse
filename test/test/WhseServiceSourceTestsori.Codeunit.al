@@ -5,6 +5,7 @@ using Microsoft.Inventory.Location;
 using Microsoft.Sales.Customer;
 using Microsoft.Sales.Document;
 using Microsoft.Service.Document;
+using Microsoft.Warehouse.Activity;
 using Microsoft.Warehouse.Document;
 using Origo.Bifrost;
 using Origo.Bifrost.Warehouse;
@@ -234,6 +235,160 @@ codeunit 97095 "Whse Service Source Tests ori"
         Assert.IsTrue(CreateImpl.GetDescription().Contains('þjónustupöntun'), 'Icelandic create discovery.');
         Assert.IsTrue(SourcesImpl.GetSelectionDescription().Contains('þjónustupöntunum'), 'Icelandic selection discovery.');
         GlobalLanguage(OriginalLanguage);
+    end;
+
+    /// <summary>AC01/AC04: service parts are picked from a native warehouse shipment.</summary>
+    [Test]
+    procedure AC01_ServiceShipmentCreatesWarehousePick()
+    var
+        ServiceHeader: Record "Service Header";
+        ServiceLine: Record "Service Line";
+        Location: Record Location;
+        ShipmentLine: Record "Warehouse Shipment Line";
+        ActivityLine: Record "Warehouse Activity Line";
+        ReleaseServiceDocument: Codeunit "Release Service Document";
+        Response: JsonObject;
+    begin
+        // Story #112, AC01/AC04 | Time: WorkDate for stock posting | Risk: native service warehouse integration.
+        // [GIVEN] A service order with stock at a shipment-and-pick location.
+        PrepareServiceOrder(ServiceHeader, Location, false);
+        Location.Validate("Require Pick", true);
+        Location.Modify(true);
+        ServiceLine.Get(ServiceHeader."Document Type", ServiceHeader."No.", 10000);
+        ShipmentHelper.CreatePositiveAdjustment(ServiceLine."No.", Location.Code, 10);
+        ReleaseServiceDocument.PerformManualRelease(ServiceHeader);
+        RunCreate(ServiceHeader."No.", Response);
+        Assert.AreEqual('Success', TextValue(Response, 'status'), ResponseText(Response));
+        ShipmentLine.SetRange("Source Type", Database::"Service Line");
+        ShipmentLine.SetRange("Source No.", ServiceHeader."No.");
+        ShipmentLine.FindFirst();
+        // [WHEN] The user creates the warehouse pick through the public dispatcher.
+        Assert.IsTrue(ShipmentHelper.RunMessage("Message Type ori"::"Warehouse.Pick.Create", ShipmentLine."No.", '{}', Response), 'Pick JSON response.');
+        // [THEN] The created pick retains the service source and the complete requested quantity.
+        Assert.AreEqual('Success', TextValue(Response, 'status'), ResponseText(Response));
+        ActivityLine.SetRange("Activity Type", ActivityLine."Activity Type"::Pick);
+        ActivityLine.SetRange("No.", TextValue(Response, 'pickNo'));
+        ActivityLine.SetRange("Source Type", Database::"Service Line");
+        ActivityLine.SetRange("Source No.", ServiceHeader."No.");
+        ActivityLine.SetRange("Action Type", ActivityLine."Action Type"::Take);
+        Assert.IsTrue(ActivityLine.FindFirst(), 'Service pick take line exists.');
+        Assert.AreEqual(2, ActivityLine.Quantity, 'Service quantity to pick.');
+    end;
+
+    /// <summary>AC01/AC03: creating a service inventory pick refuses both source spellings in both languages.</summary>
+    [Test]
+    procedure AC01_ServiceInventoryCreateRefusedBilingually()
+    var
+        ActivityHeader: Record "Warehouse Activity Header";
+        Response: JsonObject;
+        BeforeCount: Integer;
+    begin
+        // Story #112, AC01/AC03 | Time: independent | Risk: none; no service data is read.
+        // [GIVEN] No service order is required to reject this unsupported source.
+        BeforeCount := ActivityHeader.Count();
+        // [WHEN] The caller requests an inventory pick, including a source with no identifier.
+        Assert.IsTrue(ShipmentHelper.RunLocalizedMessage("Message Type ori"::"Warehouse.InventoryPick.Create", '{"sourceDocument":"Service Order","sourceNo":"X112-NOT-FOUND"}', 1033, Response), 'English JSON response.');
+        AssertInventoryPickRefusal(Response, 1033);
+        Assert.IsTrue(ShipmentHelper.RunLocalizedMessage("Message Type ori"::"Warehouse.InventoryPick.Create", '{"sourceDocument":"ServiceOrder"}', 1039, Response), 'Icelandic JSON response.');
+        AssertInventoryPickRefusal(Response, 1039);
+        // [THEN] No pick is created and the supported alternative is given.
+        Assert.AreEqual(BeforeCount, ActivityHeader.Count(), 'Refusal must not create a pick.');
+    end;
+
+    /// <summary>AC01/AC04: imported service inventory picks cannot post, by number or SystemId.</summary>
+    [Test]
+    procedure AC01_ServiceInventoryPostRefusedBilingually()
+    var
+        ActivityHeader: Record "Warehouse Activity Header";
+        Response: JsonObject;
+    begin
+        // Story #112, AC01/AC03/AC04 | Time: independent | Risk: imported unsupported activities.
+        // [GIVEN] A deliberately invalid imported inventory-pick header with a service source.
+        SeedServiceInventoryPick(ActivityHeader);
+        // [WHEN] Post is invoked by each supported identifier form through the public dispatcher.
+        Assert.IsTrue(ShipmentHelper.RunLocalizedMessage("Message Type ori"::"Warehouse.InventoryPick.Post", '{"pickNo":"' + ActivityHeader."No." + '"}', 1033, Response), 'English JSON response.');
+        AssertInventoryPickRefusal(Response, 1033);
+        Assert.IsTrue(ShipmentHelper.RunLocalizedMessage("Message Type ori"::"Warehouse.InventoryPick.Post", '{"systemId":"' + Format(ActivityHeader.SystemId, 0, 4) + '"}', 1039, Response), 'Icelandic JSON response.');
+        AssertInventoryPickRefusal(Response, 1039);
+        // [THEN] The unsupported activity remains untouched.
+        ActivityHeader.Get(ActivityHeader.Type, ActivityHeader."No.");
+        Assert.AreEqual(ActivityHeader."Source Document"::"Service Order", ActivityHeader."Source Document", 'Header is unchanged.');
+    end;
+
+    /// <summary>AC04: a service line is refused even when its imported header has no service source.</summary>
+    [Test]
+    procedure AC04_ServiceInventoryLineOnlyRefused()
+    var
+        ActivityHeader: Record "Warehouse Activity Header";
+        ActivityLine: Record "Warehouse Activity Line";
+        Response: JsonObject;
+    begin
+        // Story #112, AC04 | Time: independent | Risk: inconsistent imported activities.
+        // [GIVEN] Only the line identifies the service source.
+        SeedServiceInventoryPick(ActivityHeader);
+        Clear(ActivityHeader."Source Document");
+        ActivityHeader.Modify();
+        ActivityLine.Init();
+        ActivityLine."Activity Type" := ActivityHeader.Type;
+        ActivityLine."No." := ActivityHeader."No.";
+        ActivityLine."Line No." := 10000;
+        ActivityLine."Source Type" := Database::"Service Line";
+        ActivityLine.Insert();
+        // [WHEN] Posting is requested.
+        Assert.IsTrue(ShipmentHelper.RunLocalizedMessage("Message Type ori"::"Warehouse.InventoryPick.Post", '{"pickNo":"' + ActivityHeader."No." + '"}', 1033, Response), 'JSON response.');
+        // [THEN] The service line is refused before quantity changes or posting.
+        AssertInventoryPickRefusal(Response, 1033);
+        ActivityLine.Get(ActivityHeader.Type, ActivityHeader."No.", 10000);
+        Assert.AreEqual(Database::"Service Line", ActivityLine."Source Type", 'Line is unchanged.');
+    end;
+
+    /// <summary>AC03: inventory-pick discovery and English error chapters explain the service alternative.</summary>
+    [Test]
+    procedure AC03_InventoryPickHelpNamesServiceFlow()
+    var
+        CreateImpl: Codeunit "Whse InvtPick Create Impl ori";
+        PostImpl: Codeunit "Whse InvtPick Post Impl ori";
+        Errors: JsonArray;
+        Written: Text;
+        OriginalLanguage: Integer;
+    begin
+        // Story #112, AC03 | Time: independent | Risk: none; discovery has no page surface.
+        OriginalLanguage := GlobalLanguage();
+        GlobalLanguage(1033);
+        Assert.IsTrue(CreateImpl.GetSelectionDescription().Contains('Service orders'), 'English create discovery.');
+        Assert.IsTrue(PostImpl.GetSelectionDescription().Contains('Service orders'), 'English post discovery.');
+        CreateImpl.GetErrors(Errors);
+        Errors.WriteTo(Written);
+        Assert.IsTrue(Written.Contains('Warehouse.Shipment.Create'), 'Create error chapter gives service alternative.');
+        Clear(Errors);
+        PostImpl.GetErrors(Errors);
+        Errors.WriteTo(Written);
+        Assert.IsTrue(Written.Contains('Warehouse.Pick.Register'), 'Post error chapter gives service alternative.');
+        GlobalLanguage(1039);
+        Assert.IsTrue(CreateImpl.GetSelectionDescription().Contains('Þjónustupantanir'), 'Icelandic create discovery.');
+        Assert.IsTrue(PostImpl.GetSelectionDescription().Contains('Þjónustupantanir'), 'Icelandic post discovery.');
+        GlobalLanguage(OriginalLanguage);
+    end;
+
+    local procedure SeedServiceInventoryPick(var ActivityHeader: Record "Warehouse Activity Header")
+    begin
+        ActivityHeader.Init();
+        ActivityHeader.Type := ActivityHeader.Type::"Invt. Pick";
+        ActivityHeader."No." := CopyStr('X' + DelChr(Format(CreateGuid(), 0, 4), '=', '{}-'), 1, MaxStrLen(ActivityHeader."No."));
+        ActivityHeader."Source Document" := ActivityHeader."Source Document"::"Service Order";
+        ActivityHeader.Insert();
+    end;
+
+    local procedure AssertInventoryPickRefusal(Response: JsonObject; LanguageId: Integer)
+    begin
+        Assert.AreEqual('PreconditionFailed', TextValue(Response, 'code'), ResponseText(Response));
+        Assert.IsTrue(TextValue(Response, 'nextStep').Contains('Warehouse.Shipment.Create'), 'Shipment next step.');
+        Assert.IsTrue(TextValue(Response, 'nextStep').Contains('Warehouse.Pick.Create'), 'Pick creation next step.');
+        Assert.IsTrue(TextValue(Response, 'nextStep').Contains('Warehouse.Pick.Register'), 'Pick registration next step.');
+        if LanguageId = 1039 then
+            Assert.IsTrue(TextValue(Response, 'nextStep').Contains('þjónustupöntunina'), 'Icelandic next step.')
+        else
+            Assert.IsTrue(TextValue(Response, 'nextStep').Contains('service order'), 'English next step.');
     end;
 
     local procedure PrepareServiceOrder(var ServiceHeader: Record "Service Header"; var Location: Record Location; ReleaseDocument: Boolean)

@@ -3,6 +3,7 @@ namespace Origo.Bifrost.Warehouse;
 using Microsoft.Inventory.Transfer;
 using Microsoft.Purchases.History;
 using Microsoft.Sales.History;
+using Microsoft.Service.Document;
 using Microsoft.Warehouse.Activity;
 using Microsoft.Warehouse.InventoryDocument;
 using Microsoft.Warehouse.Structure;
@@ -69,7 +70,7 @@ codeunit 10078424 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
     /// <returns>Selection description.</returns>
     procedure GetSelectionDescription(): Text
     var
-        SelectionLbl: Label 'Irreversible. Posts the inventory pick and the source document shipment. invoice true also invoices a sales order.', Comment = 'is-IS=Óafturkræft. Bókar birgðatínsluna og sendingu upprunaskjalsins. invoice true reikningsfærir einnig sölupöntun.';
+        SelectionLbl: Label 'Irreversible. Posts the inventory pick and the source document shipment. invoice true also invoices a sales order. Service orders use warehouse shipment and warehouse pick instead.', Comment = 'is-IS=Óafturkræft. Bókar birgðatínsluna og sendingu upprunaskjalsins. invoice true reikningsfærir einnig sölupöntun. Þjónustupantanir nota vöruhúsaafhendingu og vöruhúsatínslu í staðinn.';
     begin
         exit(SelectionLbl);
     end;
@@ -164,10 +165,12 @@ codeunit 10078424 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
     /// <returns>True when errors are declared.</returns>
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
+        ServiceSource: Codeunit "Whse Service Source ori";
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Entry: JsonObject;
         UnknownParameterNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, ServiceSource.InventoryPickRefusalText(), ServiceSource.ShipmentPickNextStepText());
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::InvalidLine, 'qtyToHandle exceeds the outstanding quantity or the bin content.', 'Lower qtyToHandle; read Warehouse.BinContent.Get.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'The activity is not an inventory pick, or there is nothing to post.', 'Send an inventory pick with a quantity to handle. Use Warehouse.Pick.Register for a warehouse pick.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MissingParameter, 'pickNo or systemId is missing, or a line has no lineNo or no qtyToHandle.', 'Send pickNo or systemId, and lineNo and qtyToHandle on every line.');
@@ -307,6 +310,8 @@ codeunit 10078424 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
         RefuseUnknownKeys(RequestJson, Argument);
         if not Argument.HasCollectedErrors() then
             ResolvePick(RequestJson, Argument, ActivityHeader);
+        if not Argument.HasCollectedErrors() then
+            CheckServiceSource(Argument, ActivityHeader);
         if not Argument.HasCollectedErrors() then
             ReadInvoice(RequestJson, Argument, ActivityHeader, Invoice);
         if not Argument.HasCollectedErrors() then
@@ -480,6 +485,24 @@ codeunit 10078424 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
         end;
         if FoundById and not FoundByNo then
             ActivityHeader := ById;
+    end;
+
+    local procedure CheckServiceSource(var Argument: Record "Message Argument ori"; ActivityHeader: Record "Warehouse Activity Header")
+    var
+        ActivityLine: Record "Warehouse Activity Line";
+        ServiceSource: Codeunit "Whse Service Source ori";
+    begin
+        if ActivityHeader."Source Document" = ActivityHeader."Source Document"::"Service Order" then begin
+            ServiceSource.RefuseInventoryPick(Argument, 'pickNo', ActivityHeader."No.");
+            exit;
+        end;
+        // Guard imported or inconsistent picks whose service source appears only on a line.
+        ActivityLine.ReadIsolation := IsolationLevel::ReadCommitted;
+        ActivityLine.SetRange("Activity Type", ActivityHeader.Type);
+        ActivityLine.SetRange("No.", ActivityHeader."No.");
+        ActivityLine.SetRange("Source Type", Database::"Service Line");
+        if not ActivityLine.IsEmpty() then
+            ServiceSource.RefuseInventoryPick(Argument, 'pickNo', ActivityHeader."No.");
     end;
 
     local procedure ReadInvoice(RequestJson: JsonObject; var Argument: Record "Message Argument ori"; ActivityHeader: Record "Warehouse Activity Header"; var Invoice: Boolean)

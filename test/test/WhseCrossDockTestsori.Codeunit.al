@@ -493,6 +493,8 @@ codeunit 97035 "Whse CrossDock Tests ori"
         if PutawayTemplate.Get(Location."Put-away Template Code") then
             PutawayTemplate.Delete(false);
         Location.Delete(false);
+        // Native ledger-delete subscribers can refresh the item while cleanup runs.
+        Item.Get('W7XD-MCP');
         Item.Delete(true);
         if Customer.Get(CustomerNo) then
             Customer.Delete(true);

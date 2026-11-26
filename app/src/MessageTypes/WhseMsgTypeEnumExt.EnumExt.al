@@ -431,4 +431,10 @@ enumextension 10078385 "Whse MsgType EnumExt ori" extends "Message Type ori"
         Caption = 'Warehouse.Activity.Assign', Locked = true;
         Implementation = "Msg Interface ori" = "Whse Activity Assign Impl ori", "Msg Contract ori" = "Whse Activity Assign Impl ori", "Msg Discovery ori" = "Whse Activity Assign Impl ori";
     }
+    /// <summary>Calculates cross-dock opportunities for a receipt.</summary>
+    value(10078444; "Warehouse.Receipt.CalculateCrossDock")
+    {
+        Caption = 'Warehouse.Receipt.CalculateCrossDock', Locked = true;
+        Implementation = "Msg Interface ori" = "Whse Rcpt CrossDock Impl ori", "Msg Contract ori" = "Whse Rcpt CrossDock Impl ori", "Msg Discovery ori" = "Whse Rcpt CrossDock Impl ori";
+    }
 }

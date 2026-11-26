@@ -5,7 +5,7 @@ using Origo.Bifrost;
 using System.Environment.Configuration;
 
 /// <summary>Checks service-source availability without changing plans or permissions.</summary>
-codeunit 10078444 "Whse Service Source ori"
+codeunit 10078469 "Whse Service Source ori"
 {
     Access = Internal;
 

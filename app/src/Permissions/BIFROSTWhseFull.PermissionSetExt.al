@@ -9,6 +9,8 @@ permissionsetextension 10078395 "BIFROST Whse - Full ori" extends "BIFROST Full 
 {
     Permissions =
         codeunit "Whse Service Source ori" = X,
+        codeunit "Whse Rcpt CrossDock Impl ori" = X,
+        codeunit "Whse CrossDock Scope ori" = X,
         page "Whse Setup Wizard ori" = X,
         codeunit "Whse Wizard Reg. ori" = X,
         codeunit "Whse Wizard Mgt ori" = X,

@@ -8,6 +8,7 @@ using Origo.Bifrost;
 permissionsetextension 10078394 "BIFROST Whse - Read ori" extends "BIFROST Read ori"
 {
     Permissions =
+        codeunit "Whse Rcpt CrossDock Impl ori" = X,
         page "Whse Setup Wizard ori" = X,
         codeunit "Whse Wizard Reg. ori" = X,
         codeunit "Whse Wizard Mgt ori" = X,

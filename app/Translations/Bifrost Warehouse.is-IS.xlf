@@ -6201,6 +6201,90 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Sendu númer eða SystemId vöruhúsafrágangs.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Putaway Register Impl ori - Method NotActivityNextStep - NamedType NextStepLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 3571782927 - NamedType 1773691126" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Unknown parameter %1.</source>
+          <target>Óþekkt færibreyta %1.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=Óþekkt færibreyta %1.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method ExecuteBifrostTask - NamedType UnknownLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to calculate cross-docking.</source>
+          <target>Þú hefur ekki heimild til að reikna gegnumstreymi.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að reikna gegnumstreymi.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method ExecuteBifrostTask - NamedType DeniedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 3571782927 - NamedType 2999628943" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The receipt location does not use cross-docking.</source>
+          <target>Staðsetning móttökunnar notar ekki gegnumstreymi.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Staðsetning móttökunnar notar ekki gegnumstreymi.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method ExecuteBifrostTask - NamedType SetupLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 3571782927 - NamedType 1066607173" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The cross-dock request has an invalid format.</source>
+          <target>Beiðnin um gegnumstreymi er á ógildu sniði.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Beiðnin um gegnumstreymi er á ógildu sniði.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method ExecuteBifrostTask - NamedType InvalidLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 3571782927 - NamedType 2852330165" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Preview requires an isolated transaction.</source>
+          <target>Forskoðun krefst einangraðrar færslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Forskoðun krefst einangraðrar færslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method ExecuteBifrostTask - NamedType IsolateLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 3789958634 - NamedType 680257497" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send text receipt identifiers, true or false for apply, and unique positive integers in lineNos; consult Warehouse.Document.Get.</source>
+          <target>Sendu móttökuauðkenni sem texta, true eða false fyrir apply og einkvæmar jákvæðar heiltölur í lineNos; skoðaðu Warehouse.Document.Get.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu móttökuauðkenni sem texta, true eða false fyrir apply og einkvæmar jákvæðar heiltölur í lineNos; skoðaðu Warehouse.Document.Get.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method FormatNextStep - NamedType NextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Calculates cross-dock opportunities on a warehouse receipt; optionally previews without saving.</source>
+          <target>Reiknar tækifæri til gegnumstreymis á vöruhúsamóttöku; getur forskoðað án þess að vista.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Reiknar tækifæri til gegnumstreymis á vöruhúsamóttöku; getur forskoðað án þess að vista.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
+          <source>cross-dock receipt, calculate cross docking, receipt demand, preview cross dock</source>
+          <target>gegnumstreymi móttöku, reikna gegnumstreymi, eftirspurn móttöku, forskoða gegnumstreymi</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=gegnumstreymi móttöku, reikna gegnumstreymi, eftirspurn móttöku, forskoða gegnumstreymi</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Changes data. Recalculates receipt cross-dock suggestions. Send apply false to preview and roll back.</source>
+          <target>Breytir gögnum. Endurreiknar tillögur um gegnumstreymi móttöku. Sendu apply false til að forskoða og afturkalla.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Breytir gögnum. Endurreiknar tillögur um gegnumstreymi móttöku. Sendu apply false til að forskoða og afturkalla.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 726736690 - NamedType 680257497" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Full ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method PermissionNextStep - NamedType NextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 3760188529 - NamedType 1066607173" size-unit="char" translate="yes" xml:space="preserve">
+          <source>lineNos must contain unique positive integer receipt line numbers.</source>
+          <target>lineNos verður að innihalda einkvæm jákvæð heiltölunúmer móttökulína.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=lineNos verður að innihalda einkvæm jákvæð heiltölunúmer móttökulína.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method ReadLines - NamedType InvalidLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 3760188529 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Receipt line %1 was not found on receipt %2.</source>
+          <target>Móttökulína %1 fannst ekki á móttöku %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line number, %2 = receipt number, is-IS=Móttökulína %1 fannst ekki á móttöku %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method ReadLines - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 1498720910 - NamedType 680257497" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check Use Cross-Docking on the receipt location and item, then retry without Omit Commit for preview; setup is never changed by this operation.</source>
+          <target>Athugaðu Nota gegnumstreymi á staðsetningu móttökunnar og vörunni og reyndu aftur án Omit Commit við forskoðun; þessi aðgerð breytir aldrei uppsetningu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu Nota gegnumstreymi á staðsetningu móttökunnar og vörunni og reyndu aftur án Omit Commit við forskoðun; þessi aðgerð breytir aldrei uppsetningu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method SetupNextStep - NamedType NextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3318992449 - Method 3522500136 - NamedType 2442600875" size-unit="char" translate="yes" xml:space="preserve">
           <source>Parameter %1 has the value %2, which is not one of the values listed in the help.</source>
           <target>Færibreytan %1 hefur gildið %2 sem er ekki eitt af gildunum sem talin eru upp í hjálpinni.</target>

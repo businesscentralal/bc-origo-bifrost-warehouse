@@ -6243,6 +6243,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Reiknar tækifæri til gegnumstreymis á vöruhúsamóttöku; getur forskoðað án þess að vista.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove this key or consult Help.Implementation.Get for the declared parameters.</source>
+          <target>Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method GetErrors - NamedType UnknownParameterNextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 1365322439 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>cross-dock receipt, calculate cross docking, receipt demand, preview cross dock</source>
           <target>gegnumstreymi móttöku, reikna gegnumstreymi, eftirspurn móttöku, forskoða gegnumstreymi</target>

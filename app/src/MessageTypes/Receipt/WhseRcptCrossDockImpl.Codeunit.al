@@ -173,10 +173,11 @@ codeunit 10078444 "Whse Rcpt CrossDock Impl ori" implements "Msg Interface ori",
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
         Values: Codeunit "Whse Msg Values ori";
+        UnknownParameterNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::MissingParameter, 'No receipt identifier was supplied.', 'Send whseReceiptNo, systemId or id, or the receipt as subject.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::InvalidParameterFormat, 'An identifier, apply or lineNos has the wrong format.', FormatNextStep());
-        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::UnknownParameter, 'An undeclared parameter was sent.', 'Remove the unknown parameter and consult Help.Implementation.Get.');
+        Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::UnknownParameter, 'An undeclared parameter was sent.', UnknownParameterNextStepLbl);
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::RecordNotFound, 'The receipt or one of its selected lines does not exist.', 'Read Warehouse.Document.Get and send identifiers from that receipt.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::ConflictingIdentifiers, 'Identifiers name different receipts.', 'Send identifiers for one receipt.');
         Values.AddDeclaredError(Errors, "Bifrost Error Code ori"::PermissionDenied, 'The caller cannot change receipt lines or cross-dock working suggestions.', PermissionNextStep());

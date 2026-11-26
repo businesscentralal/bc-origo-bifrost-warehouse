@@ -270,8 +270,10 @@ codeunit 97095 "Whse Service Source Tests ori"
         ActivityLine.SetRange("No.", TextValue(Response, 'pickNo'));
         ActivityLine.SetRange("Source Type", Database::"Service Line");
         ActivityLine.SetRange("Source No.", ServiceHeader."No.");
-        ActivityLine.SetRange("Action Type", ActivityLine."Action Type"::Take);
-        Assert.IsTrue(ActivityLine.FindFirst(), 'Service pick take line exists.');
+        // BC uses a blank action type at a location without mandatory bins.
+        Assert.RecordCount(ActivityLine, 1);
+        ActivityLine.FindFirst();
+        Assert.AreEqual(ActivityLine."Action Type"::" ", ActivityLine."Action Type", 'No-bin pick action.');
         Assert.AreEqual(2, ActivityLine.Quantity, 'Service quantity to pick.');
     end;
 
@@ -306,9 +308,9 @@ codeunit 97095 "Whse Service Source Tests ori"
         // [GIVEN] A deliberately invalid imported inventory-pick header with a service source.
         SeedServiceInventoryPick(ActivityHeader);
         // [WHEN] Post is invoked by each supported identifier form through the public dispatcher.
-        Assert.IsTrue(ShipmentHelper.RunLocalizedMessage("Message Type ori"::"Warehouse.InventoryPick.Post", '{"pickNo":"' + ActivityHeader."No." + '"}', 1033, Response), 'English JSON response.');
+        Assert.IsTrue(ShipmentHelper.RunLocalizedMessage("Message Type ori"::"Warehouse.InventoryPick.Post", '{"expectedCount":1,"pickNo":"' + ActivityHeader."No." + '"}', 1033, Response), 'English JSON response.');
         AssertInventoryPickRefusal(Response, 1033);
-        Assert.IsTrue(ShipmentHelper.RunLocalizedMessage("Message Type ori"::"Warehouse.InventoryPick.Post", '{"systemId":"' + Format(ActivityHeader.SystemId, 0, 4) + '"}', 1039, Response), 'Icelandic JSON response.');
+        Assert.IsTrue(ShipmentHelper.RunLocalizedMessage("Message Type ori"::"Warehouse.InventoryPick.Post", '{"expectedCount":1,"systemId":"' + Format(ActivityHeader.SystemId, 0, 4) + '"}', 1039, Response), 'Icelandic JSON response.');
         AssertInventoryPickRefusal(Response, 1039);
         // [THEN] The unsupported activity remains untouched.
         ActivityHeader.Get(ActivityHeader.Type, ActivityHeader."No.");
@@ -335,7 +337,7 @@ codeunit 97095 "Whse Service Source Tests ori"
         ActivityLine."Source Type" := Database::"Service Line";
         ActivityLine.Insert();
         // [WHEN] Posting is requested.
-        Assert.IsTrue(ShipmentHelper.RunLocalizedMessage("Message Type ori"::"Warehouse.InventoryPick.Post", '{"pickNo":"' + ActivityHeader."No." + '"}', 1033, Response), 'JSON response.');
+        Assert.IsTrue(ShipmentHelper.RunLocalizedMessage("Message Type ori"::"Warehouse.InventoryPick.Post", '{"expectedCount":1,"pickNo":"' + ActivityHeader."No." + '"}', 1033, Response), 'JSON response.');
         // [THEN] The service line is refused before quantity changes or posting.
         AssertInventoryPickRefusal(Response, 1033);
         ActivityLine.Get(ActivityHeader.Type, ActivityHeader."No.", 10000);

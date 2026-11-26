@@ -96,11 +96,11 @@ codeunit 10078458 "Whse Data Restrict ori"
             Database::"Warehouse Shipment Header":
                 Hint := 'Warehouse.Document.Update, Warehouse.Shipment.Release, Warehouse.Shipment.Reopen, Warehouse.Shipment.GetSourceDocuments';
             Database::"Warehouse Receipt Line":
-                Hint := 'Warehouse.Document.Update, Warehouse.Receipt.Post, Warehouse.Receipt.GetSourceDocuments';
+                Hint := 'Warehouse.Document.Update, Warehouse.Receipt.Post, Warehouse.Receipt.GetSourceDocuments, Warehouse.Receipt.CalculateCrossDock';
             Database::"Warehouse Shipment Line":
                 Hint := 'Warehouse.Document.Update, Warehouse.Shipment.Post, Warehouse.Shipment.GetSourceDocuments';
             Database::"Warehouse Receipt Header":
-                Hint := 'Warehouse.Document.Update, Warehouse.Receipt.Post, Warehouse.Receipt.GetSourceDocuments';
+                Hint := 'Warehouse.Document.Update, Warehouse.Receipt.Post, Warehouse.Receipt.GetSourceDocuments, Warehouse.Receipt.CalculateCrossDock';
             Database::"Warehouse Activity Header":
                 Hint := 'Warehouse.Activity.Assign, Warehouse.Pick.Register, Warehouse.Putaway.Register, Warehouse.Movement.Register';
         end;
@@ -108,7 +108,11 @@ codeunit 10078458 "Whse Data Restrict ori"
 
     [EventSubscriber(ObjectType::Table, Database::"Message Argument ori", 'OnGetDedicatedMessageTypeHintForField', '', false, false)]
     local procedure HintDocumentFlowField(TableNo: Integer; FieldNo: Integer; var Hint: Text)
+    var
+        ReceiptLine: Record "Warehouse Receipt Line";
     begin
+        if (TableNo = Database::"Warehouse Receipt Line") and (FieldNo in [ReceiptLine.FieldNo("Qty. to Cross-Dock"), ReceiptLine.FieldNo("Qty. to Cross-Dock (Base)")]) then
+            Hint := 'Warehouse.Receipt.CalculateCrossDock';
         if IsShipmentStatusField(TableNo, FieldNo) then
             Hint := 'Warehouse.Shipment.Release, Warehouse.Shipment.Reopen';
         if IsReceiptQuantityField(TableNo, FieldNo) then

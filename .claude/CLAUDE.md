@@ -86,7 +86,8 @@ App range: `10078385–10078484` (private block, 100 IDs).
 | 10078441 | `Whse Document Update Impl ori` and enum value `Warehouse.Document.Update` (#105) |
 | 10078442 | `Whse Activity Assign Impl ori` and enum value `Warehouse.Activity.Assign` (#105) |
 | 10078443 | `Whse Ship Date Confirm ori` (#105: noninteractive shipment date) |
-| 10078444–10078445 | Free (2 IDs) |
+| 10078444 | `Whse Rcpt CrossDock Impl ori` and enum value `Warehouse.Receipt.CalculateCrossDock` (#108) |
+| 10078445 | `Whse CrossDock Scope ori` (manually bound receipt-line scope, #108) |
 | 10078469–10078482 | Free (14 IDs; #106 took 10078483–10078484) |
 
 Test range: `97000–97099`.
@@ -115,7 +116,8 @@ Test range: `97000–97099`.
 | 97032 | `Whse Negative Paging Tests ori` |
 | 97033 | `Whse Test Confirmation ori` (#93) |
 | 97034 | `Whse Confirmation Tests ori` (#93) |
-| 97035–97039 | Free |
+| 97035 | `Whse CrossDock Tests ori` (#108) |
+| 97036–97039 | Free |
 | 97040 | `Whse Rcpt GetSrcDocs Tests ori` (#51) |
 | 97041 | `Whse Ship GetSrcDocs Tests ori` (#52) |
 | 97042 | `Whse Ship Release Tests ori` (#53) |

@@ -39,6 +39,7 @@ The list is the enum extension `Whse MsgType EnumExt ori` in
 | `Warehouse.Receipt.Create` | Inbound | Create a warehouse receipt from released source documents | `BIFROST Full ori` |
 | `Warehouse.Receipt.PreviewPost` | Outbound | Preview posting a warehouse receipt, rolled back | `BIFROST Read ori` |
 | `Warehouse.Receipt.Post` | Inbound | Post a warehouse receipt (received, not invoiced), optionally with a quantity to receive per line | `BIFROST WhsePost ori` |
+| `Warehouse.Receipt.CalculateCrossDock` | Inbound | Calculate cross-dock demand on selected receipt lines; `apply=false` previews and rolls back | `BIFROST Whse - Full ori` |
 | `Warehouse.Pick.Create` | Inbound | Create a pick for a warehouse shipment | `BIFROST Full ori` |
 | `Warehouse.Pick.Register` | Inbound | Register a pick | `BIFROST WhsePost ori` |
 | `Warehouse.Putaway.Create` | Inbound | Create (or return the open) put-away for a posted warehouse receipt | `BIFROST Full ori` |
@@ -323,3 +324,5 @@ locale pages in businesscentralal/bifrost.
 ## Set up with the wizard
 
 Open **Set up Bifrost Warehouse** from Assisted Setup for Warehouse operations, HTTP through Foundation, and user access. See [setup instructions](app/docs/setup-wizard.md).
+
+For #108 live MCP checks on an isolated development tenant, run `97035::Scenario_AC01_MCPSeed` with test isolation disabled. It creates only the named `W7XDMCP` / `W7XD-MCP` fixture. Locate its receipt by vendor shipment number `WORKER7-108-MCP`, verify calculation/preview in 1033 and 1039, then run `97035::Scenario_AC01_MCPCleanup` with isolation disabled. Cleanup is restricted to that fixture. Normal test runs keep their codeunit isolation.

@@ -4257,6 +4257,18 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu sourceDocument og skjalnúmer eða SystemId.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Create Impl ori - Method NotFound - NamedType NotFoundNextStepLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 3890069751 - Method 1553442668 - NamedType 2480365606" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check that the source document has open quantity to put away at an Inventory Put-away location; for Prod. Output, post output for the order first or post it without warehouse handling.</source>
+          <target>Athugaðu að upprunaskjalið hafi opið magn til frágangs á staðsetningu með Inventory Put-away; fyrir Prod. Output skaltu fyrst bóka frálag pöntunarinnar eða bóka það án vöruhúsameðhöndlunar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu að upprunaskjalið hafi opið magn til frágangs á staðsetningu með Inventory Put-away; fyrir Prod. Output skaltu fyrst bóka frálag pöntunarinnar eða bóka það án vöruhúsameðhöndlunar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Create Impl ori - Method NothingNextStep - NamedType NothingNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3890069751 - Method 1946877232 - NamedType 3917977900" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No inventory put-away was created: nothing is waiting to be put away.</source>
+          <target>Enginn birgðafrágangur var stofnaður: ekkert bíður frágangs.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Enginn birgðafrágangur var stofnaður: ekkert bíður frágangs.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Create Impl ori - Method NothingToPutAwayText - NamedType NothingErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3890069751 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
           <source>The inventory put-away create payload was empty.</source>
           <target>Gögnin til að stofna birgðafrágang voru tóm.</target>
@@ -4280,6 +4292,18 @@
           <target>Staðfestu skjalið fyrst, eða bókaðu það beint.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Staðfestu skjalið fyrst, eða bókaðu það beint.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Create Impl ori - Method RefuseNotReleased - NamedType NotReleasedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3890069751 - Method 2069378398 - NamedType 2007763471" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location %1 does not set Prod. Output Whse. Handling to Inventory Put-away.</source>
+          <target>Staðsetning %1 stillir ekki Prod. Output Whse. Handling á Inventory Put-away.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = location, is-IS=Staðsetning %1 stillir ekki Prod. Output Whse. Handling á Inventory Put-away.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Create Impl ori - Method RefuseOutputHandling - NamedType HandlingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3890069751 - Method 2069378398 - NamedType 1624980852" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set Prod. Output Whse. Handling on the location to Inventory Put-away, or post the output without warehouse handling.</source>
+          <target>Stilltu Prod. Output Whse. Handling á staðsetningunni á Inventory Put-away, eða bókaðu frálagið án vöruhúsameðhöndlunar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stilltu Prod. Output Whse. Handling á staðsetningunni á Inventory Put-away, eða bókaðu frálagið án vöruhúsameðhöndlunar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Create Impl ori - Method RefuseOutputHandling - NamedType HandlingNextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3890069751 - Method 3034430429 - NamedType 180623962" size-unit="char" translate="yes" xml:space="preserve">
           <source>Location %1 uses warehouse receipts.</source>
@@ -5757,6 +5781,30 @@
           <note from="Developer" annotates="general" priority="2">%1 = supplied value, %2 = comma list of valid values, is-IS=sortingMethod '%1' er ekki gilt. Væntanlegt er eitt af: %2.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method BuildInvalidSortingMethodErr - NamedType InvalidErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2230900036 - Method 2390288447 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No %1 %2 was found.</source>
+          <target>Ekkert %1 %2 fannst.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = source type, %2 = number, is-IS=Ekkert %1 %2 fannst.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method CheckOrderSource - NamedType NotFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2230900036 - Method 2390288447 - NamedType 3879076534" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 %2 is not released.</source>
+          <target>%1 %2 er ekki staðfest.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = source type, %2 = number, is-IS=%1 %2 er ekki staðfest.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method CheckOrderSource - NamedType NotReleasedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2230900036 - Method 2390288447 - NamedType 1406329809" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Release the order first, then send the request again.</source>
+          <target>Staðfestu pöntunina fyrst og sendu svo beiðnina aftur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Staðfestu pöntunina fyrst og sendu svo beiðnina aftur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method CheckOrderSource - NamedType NotReleasedNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2230900036 - Method 2979007805 - NamedType 680257497" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send either a shipment identifier or sourceType with sourceNo, not both.</source>
+          <target>Sendu annaðhvort afhendingarauðkenni eða sourceType með sourceNo, ekki hvort tveggja.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu annaðhvort afhendingarauðkenni eða sourceType með sourceNo, ekki hvort tveggja.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method ConflictNextStep - NamedType NextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2230900036 - Method 3571782927 - NamedType 3782878593" size-unit="char" translate="yes" xml:space="preserve">
           <source>Field %1 is restricted for write on table %2.</source>
           <target>Ekki er heimilt að skrifa í reitinn %1 í töflunni %2.</target>
@@ -5768,6 +5816,12 @@
           <target>%1 = true er ekki stutt í þessari útgáfu API. Aðeins sjálfgefin gildi BC (false) eru notuð.</target>
           <note from="Developer" annotates="general" priority="2">%1 = option name, is-IS=%1 = true er ekki stutt í þessari útgáfu API. Aðeins sjálfgefin gildi BC (false) eru notuð.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method ExecuteBifrostTask - NamedType UnsupportedOptionErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2230900036 - Method 78037220 - NamedType 2688787206" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Business Central created no warehouse pick for %1 %2.</source>
+          <target>Business Central stofnaði enga vöruhúsatínslu fyrir %1 %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = source type, %2 = number, is-IS=Business Central stofnaði enga vöruhúsatínslu fyrir %1 %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method ExecuteOrderPick - NamedType NoPickLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2230900036 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Creates a warehouse pick from a released warehouse shipment, the same as the Create Pick action on the shipment.</source>
@@ -5798,6 +5852,72 @@
           <target>Athugaðu að afhendingin sé útgefin, að staðsetning hennar krefjist tínslu og að línur hennar séu ekki þegar á tínslu.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu að afhendingin sé útgefin, að staðsetning hennar krefjist tínslu og að línur hennar séu ekki þegar á tínslu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method NoPickCreatedNextStep - NamedType NextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2230900036 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The pick create payload was empty.</source>
+          <target>Gögnin til að stofna tínslu voru tóm.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gögnin til að stofna tínslu voru tóm.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method OnRun - NamedType MissingPayloadErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2230900036 - Method 1899085245 - NamedType 680257497" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Release the order, set Prod. Consump. Whse. Handling, Asm. Consump. Whse. Handling or Job Consump. Whse. Handling on the location to Warehouse Pick and check that quantity is left to pick; or use Warehouse.Worksheet.GetDocuments and Warehouse.Worksheet.CreateActivities.</source>
+          <target>Staðfestu pöntunina, stilltu Prod. Consump. Whse. Handling, Asm. Consump. Whse. Handling eða Job Consump. Whse. Handling á staðsetningunni á Warehouse Pick og athugaðu að magn sé eftir til tínslu; eða notaðu Warehouse.Worksheet.GetDocuments og Warehouse.Worksheet.CreateActivities.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Staðfestu pöntunina, stilltu Prod. Consump. Whse. Handling, Asm. Consump. Whse. Handling eða Job Consump. Whse. Handling á staðsetningunni á Warehouse Pick og athugaðu að magn sé eftir til tínslu; eða notaðu Warehouse.Worksheet.GetDocuments og Warehouse.Worksheet.CreateActivities.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method OrderNoPickNextStep - NamedType NextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2230900036 - Method 300646356 - NamedType 680257497" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check sourceType and sourceNo.</source>
+          <target>Athugaðu sourceType og sourceNo.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu sourceType og sourceNo.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method OrderNotFoundNextStep - NamedType NextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2230900036 - Method 3603384833 - NamedType 20391969" size-unit="char" translate="yes" xml:space="preserve">
+          <source>sourceType %1 is not supported.</source>
+          <target>sourceType %1 er ekki stutt.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = sent value, is-IS=sourceType %1 er ekki stutt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method ReadSource - NamedType SourceTypeLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2230900036 - Method 3603384833 - NamedType 585510742" size-unit="char" translate="yes" xml:space="preserve">
+          <source>sourceNo is required when sourceType is %1.</source>
+          <target>sourceNo er nauðsynlegt þegar sourceType er %1.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = source type, is-IS=sourceNo er nauðsynlegt þegar sourceType er %1.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method ReadSource - NamedType SourceNoMissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2230900036 - Method 3603384833 - NamedType 2166389605" size-unit="char" translate="yes" xml:space="preserve">
+          <source>sourceNo needs sourceType.</source>
+          <target>sourceNo krefst sourceType.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=sourceNo krefst sourceType.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method ReadSource - NamedType SourceTypeMissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2230900036 - Method 3603384833 - NamedType 650235816" size-unit="char" translate="yes" xml:space="preserve">
+          <source>sourceType %1 cannot be combined with the shipment identifier %2.</source>
+          <target>Ekki er hægt að sameina sourceType %1 og afhendingarauðkennið %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = source type, %2 = key, is-IS=Ekki er hægt að sameina sourceType %1 og afhendingarauðkennið %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method ReadSource - NamedType ConflictLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2230900036 - Method 3603384833 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Parameter "%1" must be a JSON string.</source>
+          <target>Færibreytan "%1" verður að vera JSON-strengur.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = key, is-IS=Færibreytan "%1" verður að vera JSON-strengur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method ReadSource - NamedType FormatLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2230900036 - Method 3603384833 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send the value as a JSON string.</source>
+          <target>Sendu gildið sem JSON-streng.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu gildið sem JSON-streng.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method ReadSource - NamedType FormatNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2230900036 - Method 517106907 - NamedType 680257497" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send sourceNo with the order or project number.</source>
+          <target>Sendu sourceNo með númeri pöntunarinnar eða verksins.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu sourceNo með númeri pöntunarinnar eða verksins.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method SourceNoNextStep - NamedType NextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2230900036 - Method 1940601004 - NamedType 680257497" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send sourceType shipment, productionOrder, assemblyOrder or project.</source>
+          <target>Sendu sourceType shipment, productionOrder, assemblyOrder eða project.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu sourceType shipment, productionOrder, assemblyOrder eða project.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method SourceTypeNextStep - NamedType NextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3850251965 - Method 1665861916 - NamedType 3359697259" size-unit="char" translate="yes" xml:space="preserve">
           <source>Warehouse Shipment %1 has no lines to pick.</source>
@@ -6080,6 +6200,84 @@
           <target>Sendu númer eða SystemId vöruhúsafrágangs.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Sendu númer eða SystemId vöruhúsafrágangs.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Putaway Register Impl ori - Method NotActivityNextStep - NamedType NextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 3571782927 - NamedType 1773691126" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Unknown parameter %1.</source>
+          <target>Óþekkt færibreyta %1.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter, is-IS=Óþekkt færibreyta %1.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method ExecuteBifrostTask - NamedType UnknownLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 3571782927 - NamedType 286034047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to calculate cross-docking.</source>
+          <target>Þú hefur ekki heimild til að reikna gegnumstreymi.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að reikna gegnumstreymi.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method ExecuteBifrostTask - NamedType DeniedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 3571782927 - NamedType 2999628943" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The receipt location does not use cross-docking.</source>
+          <target>Staðsetning móttökunnar notar ekki gegnumstreymi.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Staðsetning móttökunnar notar ekki gegnumstreymi.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method ExecuteBifrostTask - NamedType SetupLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 3571782927 - NamedType 1066607173" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The cross-dock request has an invalid format.</source>
+          <target>Beiðnin um gegnumstreymi er á ógildu sniði.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Beiðnin um gegnumstreymi er á ógildu sniði.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method ExecuteBifrostTask - NamedType InvalidLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 3571782927 - NamedType 2852330165" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Preview requires an isolated transaction.</source>
+          <target>Forskoðun krefst einangraðrar færslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Forskoðun krefst einangraðrar færslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method ExecuteBifrostTask - NamedType IsolateLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 3789958634 - NamedType 680257497" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send text receipt identifiers, true or false for apply, and unique positive integers in lineNos; consult Warehouse.Document.Get.</source>
+          <target>Sendu móttökuauðkenni sem texta, true eða false fyrir apply og einkvæmar jákvæðar heiltölur í lineNos; skoðaðu Warehouse.Document.Get.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu móttökuauðkenni sem texta, true eða false fyrir apply og einkvæmar jákvæðar heiltölur í lineNos; skoðaðu Warehouse.Document.Get.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method FormatNextStep - NamedType NextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Calculates cross-dock opportunities on a warehouse receipt; optionally previews without saving.</source>
+          <target>Reiknar tækifæri til gegnumstreymis á vöruhúsamóttöku; getur forskoðað án þess að vista.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Reiknar tækifæri til gegnumstreymis á vöruhúsamóttöku; getur forskoðað án þess að vista.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
+          <source>cross-dock receipt, calculate cross docking, receipt demand, preview cross dock</source>
+          <target>gegnumstreymi móttöku, reikna gegnumstreymi, eftirspurn móttöku, forskoða gegnumstreymi</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=gegnumstreymi móttöku, reikna gegnumstreymi, eftirspurn móttöku, forskoða gegnumstreymi</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Changes data. Recalculates receipt cross-dock suggestions. Send apply false to preview and roll back.</source>
+          <target>Breytir gögnum. Endurreiknar tillögur um gegnumstreymi móttöku. Sendu apply false til að forskoða og afturkalla.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Breytir gögnum. Endurreiknar tillögur um gegnumstreymi móttöku. Sendu apply false til að forskoða og afturkalla.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 726736690 - NamedType 680257497" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to assign BIFROST Whse - Full ori.</source>
+          <target>Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að úthluta BIFROST Whse - Full ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method PermissionNextStep - NamedType NextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 3760188529 - NamedType 1066607173" size-unit="char" translate="yes" xml:space="preserve">
+          <source>lineNos must contain unique positive integer receipt line numbers.</source>
+          <target>lineNos verður að innihalda einkvæm jákvæð heiltölunúmer móttökulína.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=lineNos verður að innihalda einkvæm jákvæð heiltölunúmer móttökulína.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method ReadLines - NamedType InvalidLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 3760188529 - NamedType 1128910002" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Receipt line %1 was not found on receipt %2.</source>
+          <target>Móttökulína %1 fannst ekki á móttöku %2.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = line number, %2 = receipt number, is-IS=Móttökulína %1 fannst ekki á móttöku %2.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method ReadLines - NamedType MissingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1365322439 - Method 1498720910 - NamedType 680257497" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check Use Cross-Docking on the receipt location and item, then retry without Omit Commit for preview; setup is never changed by this operation.</source>
+          <target>Athugaðu Nota gegnumstreymi á staðsetningu móttökunnar og vörunni og reyndu aftur án Omit Commit við forskoðun; þessi aðgerð breytir aldrei uppsetningu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu Nota gegnumstreymi á staðsetningu móttökunnar og vörunni og reyndu aftur án Omit Commit við forskoðun; þessi aðgerð breytir aldrei uppsetningu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method SetupNextStep - NamedType NextStepLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3318992449 - Method 3522500136 - NamedType 2442600875" size-unit="char" translate="yes" xml:space="preserve">
           <source>Parameter %1 has the value %2, which is not one of the values listed in the help.</source>
@@ -8186,126 +8384,6 @@
           <target>Bókunarhlið vörugeymslu</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Bókunarhlið vörugeymslu</note>
           <note from="Xliff Generator" annotates="general" priority="3">PermissionSet BIFROST WhsePost ori - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 3890069751 - Method 1553442668 - NamedType 2480365606" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Check that the source document has open quantity to put away at an Inventory Put-away location; for Prod. Output, post output for the order first or post it without warehouse handling.</source>
-          <target>Athugaðu að upprunaskjalið hafi opið magn til frágangs á staðsetningu með Inventory Put-away; fyrir Prod. Output skaltu fyrst bóka frálag pöntunarinnar eða bóka það án vöruhúsameðhöndlunar.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu að upprunaskjalið hafi opið magn til frágangs á staðsetningu með Inventory Put-away; fyrir Prod. Output skaltu fyrst bóka frálag pöntunarinnar eða bóka það án vöruhúsameðhöndlunar.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Create Impl ori - Method NothingNextStep - NamedType NothingNextStepLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 3890069751 - Method 1946877232 - NamedType 3917977900" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No inventory put-away was created: nothing is waiting to be put away.</source>
-          <target>Enginn birgðafrágangur var stofnaður: ekkert bíður frágangs.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Enginn birgðafrágangur var stofnaður: ekkert bíður frágangs.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Create Impl ori - Method NothingToPutAwayText - NamedType NothingErr</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 3890069751 - Method 2069378398 - NamedType 2007763471" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Location %1 does not set Prod. Output Whse. Handling to Inventory Put-away.</source>
-          <target>Staðsetning %1 stillir ekki Prod. Output Whse. Handling á Inventory Put-away.</target>
-          <note from="Developer" annotates="general" priority="2">%1 = location, is-IS=Staðsetning %1 stillir ekki Prod. Output Whse. Handling á Inventory Put-away.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Create Impl ori - Method RefuseOutputHandling - NamedType HandlingLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 3890069751 - Method 2069378398 - NamedType 1624980852" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Set Prod. Output Whse. Handling on the location to Inventory Put-away, or post the output without warehouse handling.</source>
-          <target>Stilltu Prod. Output Whse. Handling á staðsetningunni á Inventory Put-away, eða bókaðu frálagið án vöruhúsameðhöndlunar.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Stilltu Prod. Output Whse. Handling á staðsetningunni á Inventory Put-away, eða bókaðu frálagið án vöruhúsameðhöndlunar.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Create Impl ori - Method RefuseOutputHandling - NamedType HandlingNextStepLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2230900036 - Method 2390288447 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No %1 %2 was found.</source>
-          <target>Ekkert %1 %2 fannst.</target>
-          <note from="Developer" annotates="general" priority="2">%1 = source type, %2 = number, is-IS=Ekkert %1 %2 fannst.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method CheckOrderSource - NamedType NotFoundLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2230900036 - Method 2390288447 - NamedType 3879076534" size-unit="char" translate="yes" xml:space="preserve">
-          <source>%1 %2 is not released.</source>
-          <target>%1 %2 er ekki staðfest.</target>
-          <note from="Developer" annotates="general" priority="2">%1 = source type, %2 = number, is-IS=%1 %2 er ekki staðfest.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method CheckOrderSource - NamedType NotReleasedLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2230900036 - Method 2390288447 - NamedType 1406329809" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Release the order first, then send the request again.</source>
-          <target>Staðfestu pöntunina fyrst og sendu svo beiðnina aftur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Staðfestu pöntunina fyrst og sendu svo beiðnina aftur.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method CheckOrderSource - NamedType NotReleasedNextStepLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2230900036 - Method 2979007805 - NamedType 680257497" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Send either a shipment identifier or sourceType with sourceNo, not both.</source>
-          <target>Sendu annaðhvort afhendingarauðkenni eða sourceType með sourceNo, ekki hvort tveggja.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sendu annaðhvort afhendingarauðkenni eða sourceType með sourceNo, ekki hvort tveggja.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method ConflictNextStep - NamedType NextStepLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2230900036 - Method 78037220 - NamedType 2688787206" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Business Central created no warehouse pick for %1 %2.</source>
-          <target>Business Central stofnaði enga vöruhúsatínslu fyrir %1 %2.</target>
-          <note from="Developer" annotates="general" priority="2">%1 = source type, %2 = number, is-IS=Business Central stofnaði enga vöruhúsatínslu fyrir %1 %2.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method ExecuteOrderPick - NamedType NoPickLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2230900036 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
-          <source>The pick create payload was empty.</source>
-          <target>Gögnin til að stofna tínslu voru tóm.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Gögnin til að stofna tínslu voru tóm.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method OnRun - NamedType MissingPayloadErr</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2230900036 - Method 1899085245 - NamedType 680257497" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Release the order, set Prod. Consump. Whse. Handling, Asm. Consump. Whse. Handling or Job Consump. Whse. Handling on the location to Warehouse Pick and check that quantity is left to pick; or use Warehouse.Worksheet.GetDocuments and Warehouse.Worksheet.CreateActivities.</source>
-          <target>Staðfestu pöntunina, stilltu Prod. Consump. Whse. Handling, Asm. Consump. Whse. Handling eða Job Consump. Whse. Handling á staðsetningunni á Warehouse Pick og athugaðu að magn sé eftir til tínslu; eða notaðu Warehouse.Worksheet.GetDocuments og Warehouse.Worksheet.CreateActivities.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Staðfestu pöntunina, stilltu Prod. Consump. Whse. Handling, Asm. Consump. Whse. Handling eða Job Consump. Whse. Handling á staðsetningunni á Warehouse Pick og athugaðu að magn sé eftir til tínslu; eða notaðu Warehouse.Worksheet.GetDocuments og Warehouse.Worksheet.CreateActivities.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method OrderNoPickNextStep - NamedType NextStepLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2230900036 - Method 300646356 - NamedType 680257497" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Check sourceType and sourceNo.</source>
-          <target>Athugaðu sourceType og sourceNo.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu sourceType og sourceNo.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method OrderNotFoundNextStep - NamedType NextStepLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2230900036 - Method 3603384833 - NamedType 20391969" size-unit="char" translate="yes" xml:space="preserve">
-          <source>sourceType %1 is not supported.</source>
-          <target>sourceType %1 er ekki stutt.</target>
-          <note from="Developer" annotates="general" priority="2">%1 = sent value, is-IS=sourceType %1 er ekki stutt.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method ReadSource - NamedType SourceTypeLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2230900036 - Method 3603384833 - NamedType 585510742" size-unit="char" translate="yes" xml:space="preserve">
-          <source>sourceNo is required when sourceType is %1.</source>
-          <target>sourceNo er nauðsynlegt þegar sourceType er %1.</target>
-          <note from="Developer" annotates="general" priority="2">%1 = source type, is-IS=sourceNo er nauðsynlegt þegar sourceType er %1.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method ReadSource - NamedType SourceNoMissingLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2230900036 - Method 3603384833 - NamedType 2166389605" size-unit="char" translate="yes" xml:space="preserve">
-          <source>sourceNo needs sourceType.</source>
-          <target>sourceNo krefst sourceType.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=sourceNo krefst sourceType.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method ReadSource - NamedType SourceTypeMissingLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2230900036 - Method 3603384833 - NamedType 650235816" size-unit="char" translate="yes" xml:space="preserve">
-          <source>sourceType %1 cannot be combined with the shipment identifier %2.</source>
-          <target>Ekki er hægt að sameina sourceType %1 og afhendingarauðkennið %2.</target>
-          <note from="Developer" annotates="general" priority="2">%1 = source type, %2 = key, is-IS=Ekki er hægt að sameina sourceType %1 og afhendingarauðkennið %2.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method ReadSource - NamedType ConflictLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2230900036 - Method 3603384833 - NamedType 2588563411" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Parameter "%1" must be a JSON string.</source>
-          <target>Færibreytan "%1" verður að vera JSON-strengur.</target>
-          <note from="Developer" annotates="general" priority="2">%1 = key, is-IS=Færibreytan "%1" verður að vera JSON-strengur.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method ReadSource - NamedType FormatLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2230900036 - Method 3603384833 - NamedType 26043952" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Send the value as a JSON string.</source>
-          <target>Sendu gildið sem JSON-streng.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sendu gildið sem JSON-streng.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method ReadSource - NamedType FormatNextStepLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2230900036 - Method 517106907 - NamedType 680257497" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Send sourceNo with the order or project number.</source>
-          <target>Sendu sourceNo með númeri pöntunarinnar eða verksins.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sendu sourceNo með númeri pöntunarinnar eða verksins.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method SourceNoNextStep - NamedType NextStepLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2230900036 - Method 1940601004 - NamedType 680257497" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Send sourceType shipment, productionOrder, assemblyOrder or project.</source>
-          <target>Sendu sourceType shipment, productionOrder, assemblyOrder eða project.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sendu sourceType shipment, productionOrder, assemblyOrder eða project.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method SourceTypeNextStep - NamedType NextStepLbl</note>
         </trans-unit>
       </group>
     </body>

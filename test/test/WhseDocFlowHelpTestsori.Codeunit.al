@@ -214,33 +214,13 @@ codeunit 97047 "Whse DocFlow Help Tests ori"
 
     local procedure ReadLocalizedRefusal(LanguageId: Integer; RequestText: Text; var ResponseJson: JsonObject)
     var
-        CompanyInformation: Record "Company Information";
-        Language: Record Language;
         ShipmentHelper: Codeunit "Whse Shipment Test Helper ori";
-        OriginalLanguageCode: Code[10];
-        TestLanguageCode: Code[10];
+        OriginalLanguageId: Integer;
         Succeeded: Boolean;
     begin
-        // The public dispatcher uses the company language when Foundation's default is blank.
-        if LanguageId = 1039 then
-            TestLanguageCode := 'DFIS'
-        else
-            TestLanguageCode := 'DFEN';
-        if not Language.Get(TestLanguageCode) then begin
-            Language.Init();
-            Language.Code := TestLanguageCode;
-            Language.Name := 'Owned document flow locale test';
-            Language.Insert();
-        end;
-        Language."Windows Language ID" := LanguageId;
-        Language.Modify();
-        CompanyInformation.Get();
-        OriginalLanguageCode := CompanyInformation."Default Language Code";
-        CompanyInformation."Default Language Code" := Language.Code;
-        CompanyInformation.Modify();
-        Succeeded := ShipmentHelper.RunMessage("Message Type ori"::"Warehouse.Shipment.Release", '', RequestText, ResponseJson, false);
-        CompanyInformation."Default Language Code" := OriginalLanguageCode;
-        CompanyInformation.Modify();
+        OriginalLanguageId := GlobalLanguage();
+        Succeeded := ShipmentHelper.RunLocalizedMessage("Message Type ori"::"Warehouse.Shipment.Release", RequestText, LanguageId, ResponseJson);
+        Assert.AreEqual(OriginalLanguageId, GlobalLanguage(), 'The native pipeline must restore the caller language.');
         Assert.IsTrue(Succeeded, 'Localized request must return JSON.');
     end;
 

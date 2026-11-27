@@ -88,7 +88,8 @@ App range: `10078385–10078484` (private block, 100 IDs).
 | 10078443 | `Whse Ship Date Confirm ori` (#105: noninteractive shipment date) |
 | 10078444 | `Whse Rcpt CrossDock Impl ori` and enum value `Warehouse.Receipt.CalculateCrossDock` (#108) |
 | 10078445 | `Whse CrossDock Scope ori` (manually bound receipt-line scope, #108) |
-| 10078469–10078482 | Free (14 IDs; #106 took 10078483–10078484) |
+| 10078469 | `Whse Service Source ori` (#112: service source availability) |
+| 10078470–10078482 | Free (13 IDs; #106 took 10078483–10078484) |
 
 Test range: `97000–97099`.
 
@@ -137,6 +138,7 @@ Test range: `97000–97099`.
 | 97092 | `Whse Count Help Tests ori` (#97) |
 | 97093 | `Whse InvtPut ProdOut Tests ori` (#111) |
 | 97094 | `Whse Pick Source Tests ori` (#111) |
-| 97095–97097 | Free |
+| 97095 | `Whse Service Source Tests ori` (#112) |
+| 97096–97097 | Free |
 | 97098 | `Whse IntPutAw Tests ori` (#106) |
 | 97099 | `Whse IntPick Tests ori` (#106) |

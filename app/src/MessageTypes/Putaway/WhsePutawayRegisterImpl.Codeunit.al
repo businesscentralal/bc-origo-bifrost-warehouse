@@ -30,7 +30,7 @@ codeunit 10078417 "Whse Putaway Register Impl ori" implements "Msg Interface ori
 
     procedure GetDescription() Description: Text[250]
     var
-        DescriptionLbl: Label 'Registers a warehouse put-away, the same as the Register Put-away action, and places the goods in their bins.', Comment = 'is-IS=Skráir vöruhúsafrágang, eins og aðgerðin Skrá frágang, og setur vörurnar í hólf sín.';
+        DescriptionLbl: Label 'Registers a warehouse put-away, the same as the Register Put-away action, and places the goods in their bins.', Comment = 'is-IS=Skráir vöruhúsafrágang, eins og aðgerðin Skrá frágang, og setur vörurnar í hólf sín. Leitarorð: skrá frágang, vörum gengið frá, frágangi lokið, staðfesta frágang.';
     begin
         exit(DescriptionLbl);
     end;

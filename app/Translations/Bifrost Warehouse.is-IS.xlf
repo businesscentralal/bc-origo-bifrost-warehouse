@@ -77,8 +77,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 3656480819 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Assigns picks, put-aways and movements to a warehouse employee and re-sorts them.</source>
-          <target>Úthlutar tínslum, frágangi og tilfærslum til starfsmanns vöruhúss og raðar þeim upp á nýtt.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Úthlutar tínslum, frágangi og tilfærslum til starfsmanns vöruhúss og raðar þeim upp á nýtt.</note>
+          <target>Úthlutar tínslum, frágangi og tilfærslum til starfsmanns vöruhúss og raðar þeim upp á nýtt. Leitarorð: úthluta tínslu, úthluta frágangi, úthluta vöruhúsaaðgerð, afturkalla úthlutun tínslu, starfsmaður vöruhúss, raða tínslu, endurraða aðgerð.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Úthlutar tínslum, frágangi og tilfærslum til starfsmanns vöruhúss og raðar þeim upp á nýtt. Leitarorð: úthluta tínslu, úthluta frágangi, úthluta vöruhúsaaðgerð, afturkalla úthlutun tínslu, starfsmaður vöruhúss, raða tínslu, endurraða aðgerð.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Activity Assign Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3656480819 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
@@ -149,8 +149,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 3969354362 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Reads open warehouse activities with optional header, document and line filters.</source>
-          <target>Les opnar vöruhúsaaðgerðir með valfrjálsum síum á haus, fylgiskjal og línur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Les opnar vöruhúsaaðgerðir með valfrjálsum síum á haus, fylgiskjal og línur.</note>
+          <target>Les opnar vöruhúsaaðgerðir með valfrjálsum síum á haus, fylgiskjal og línur. Leitarorð: vöruhúsavirkni, opin tínsla, opinn frágangur, vöruhúslínur, haus virkni, línur virkni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Les opnar vöruhúsaaðgerðir með valfrjálsum síum á haus, fylgiskjal og línur. Leitarorð: vöruhúsavirkni, opin tínsla, opinn frágangur, vöruhúslínur, haus virkni, línur virkni.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Activity Get Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3969354362 - Method 1158096087 - NamedType 3964979788" size-unit="char" translate="yes" xml:space="preserve">
@@ -257,8 +257,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 3189497968 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Changes the bin of one warehouse activity line.</source>
-          <target>Breytir hólfi einnar línu vöruhúsaaðgerðar.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Breytir hólfi einnar línu vöruhúsaaðgerðar.</note>
+          <target>Breytir hólfi einnar línu vöruhúsaaðgerðar. Leitarorð: breyta hólfi, taka úr öðru hólfi, setja í annað hólf, tínsluhólf, frágangshólf, hólfakóði.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Breytir hólfi einnar línu vöruhúsaaðgerðar. Leitarorð: breyta hólfi, taka úr öðru hólfi, setja í annað hólf, tínsluhólf, frágangshólf, hólfakóði.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine ChgBin Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3189497968 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
@@ -449,8 +449,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 504035205 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Sets the quantity to handle on warehouse activity lines, or fills or clears it on every line.</source>
-          <target>Setur magn til meðhöndlunar á línur vöruhúsaaðgerðar, eða fyllir eða hreinsar það á öllum línum.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Setur magn til meðhöndlunar á línur vöruhúsaaðgerðar, eða fyllir eða hreinsar það á öllum línum.</note>
+          <target>Setur magn til meðhöndlunar á línur vöruhúsaaðgerðar, eða fyllir eða hreinsar það á öllum línum. Leitarorð: magn til meðhöndlunar, fylla út magn til meðhöndlunar, eyða magni til meðhöndlunar, hlutatínsla, hlutafrágangur, vöntun í tínslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Setur magn til meðhöndlunar á línur vöruhúsaaðgerðar, eða fyllir eða hreinsar það á öllum línum. Leitarorð: magn til meðhöndlunar, fylla út magn til meðhöndlunar, eyða magni til meðhöndlunar, hlutatínsla, hlutafrágangur, vöntun í tínslu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine SetQty Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 504035205 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
@@ -557,8 +557,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 2646369881 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Splits a warehouse activity line so the rest of its quantity can go to another bin or lot.</source>
-          <target>Skiptir línu vöruhúsaaðgerðar svo afgangur magnsins geti farið í annað hólf eða aðra lotu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Skiptir línu vöruhúsaaðgerðar svo afgangur magnsins geti farið í annað hólf eða aðra lotu.</note>
+          <target>Skiptir línu vöruhúsaaðgerðar svo afgangur magnsins geti farið í annað hólf eða aðra lotu. Leitarorð: skipta línu, skipta tínslulínu, skipta frágangslínu, hluti í hólf, tvö hólf, skipta magni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skiptir línu vöruhúsaaðgerðar svo afgangur magnsins geti farið í annað hólf eða aðra lotu. Leitarorð: skipta línu, skipta tínslulínu, skipta frágangslínu, hluti í hólf, tvö hólf, skipta magni.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Split Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2646369881 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
@@ -683,8 +683,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 1320428310 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Assigns lot, serial and package numbers on warehouse activity lines, splitting a line per entry.</source>
-          <target>Úthlutar lotu-, rað- og pakkanúmerum á línur vöruhúsaaðgerðar og skiptir línu eftir færslum.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Úthlutar lotu-, rað- og pakkanúmerum á línur vöruhúsaaðgerðar og skiptir línu eftir færslum.</note>
+          <target>Úthlutar lotu-, rað- og pakkanúmerum á línur vöruhúsaaðgerðar og skiptir línu eftir færslum. Leitarorð: úthluta lotu, úthluta raðnúmeri, vörurakning í tínslu, lotunúmer, raðnúmer, pakkanúmer, fyrningardagsetning.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Úthlutar lotu-, rað- og pakkanúmerum á línur vöruhúsaaðgerðar og skiptir línu eftir færslum. Leitarorð: úthluta lotu, úthluta raðnúmeri, vörurakning í tínslu, lotunúmer, raðnúmer, pakkanúmer, fyrningardagsetning.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse ActLine Track Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 1320428310 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
@@ -875,8 +875,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 4252178793 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Calculates the warehouse adjustment of directed locations into an empty item journal batch.</source>
-          <target>Reiknar leiðréttingu vöruhúss á beinum staðsetningum inn í tóma keyrslu birgðabókar.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Reiknar leiðréttingu vöruhúss á beinum staðsetningum inn í tóma keyrslu birgðabókar.</note>
+          <target>Reiknar leiðréttingu vöruhúss á beinum staðsetningum inn í tóma keyrslu birgðabókar. Leitarorð: reikna leiðréttingu vöruhúss, leiðréttingarhólf, birgðabók, samstilla birgðahöfuðbók, vöruhús í birgðir.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Reiknar leiðréttingu vöruhúss á beinum staðsetningum inn í tóma keyrslu birgðabókar. Leitarorð: reikna leiðréttingu vöruhúss, leiðréttingarhólf, birgðabók, samstilla birgðahöfuðbók, vöruhús í birgðir.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Adjustment Calc Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 4252178793 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -995,8 +995,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 323364814 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Reads how much of an item can be picked at a location, per bin and per lot, serial or package.</source>
-          <target>Les hversu mikið af vöru er hægt að tína á staðsetningu, eftir hólfum og eftir lotu, raðnúmeri eða pakka.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Les hversu mikið af vöru er hægt að tína á staðsetningu, eftir hólfum og eftir lotu, raðnúmeri eða pakka.</note>
+          <target>Les hversu mikið af vöru er hægt að tína á staðsetningu, eftir hólfum og eftir lotu, raðnúmeri eða pakka. Leitarorð: tiltækt til tínslu, tínsluframboð, af hverju er tínslan of lítil, framboð í hólfum, framboð eftir lotu, birgðir á tínslu, læst hólf.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Les hversu mikið af vöru er hægt að tína á staðsetningu, eftir hólfum og eftir lotu, raðnúmeri eða pakka. Leitarorð: tiltækt til tínslu, tínsluframboð, af hverju er tínslan of lítil, framboð í hólfum, framboð eftir lotu, birgðir á tínslu, læst hólf.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Availability Get Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 323364814 - Method 1158096087 - NamedType 2408295350" size-unit="char" translate="yes" xml:space="preserve">
@@ -1121,8 +1121,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 293481984 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Creates one or more bins at a bin-mandatory location.</source>
-          <target>Stofnar eitt eða fleiri hólf á staðsetningu þar sem hólf eru skyld.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar eitt eða fleiri hólf á staðsetningu þar sem hólf eru skyld.</note>
+          <target>Stofnar eitt eða fleiri hólf á staðsetningu þar sem hólf eru skyld. Leitarorð: stofna hólf, nýtt hólf, uppsetning hólfs, bæta við hólfi, vöruhúsahólf, hólf staðsetningar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar eitt eða fleiri hólf á staðsetningu þar sem hólf eru skyld. Leitarorð: stofna hólf, nýtt hólf, uppsetning hólfs, bæta við hólfi, vöruhúsahólf, hólf staðsetningar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 293481984 - Method 1158096087 - NamedType 4244006160" size-unit="char" translate="yes" xml:space="preserve">
@@ -1565,8 +1565,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 406652802 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Reads bins at a location, with optional bin content.</source>
-          <target>Les hólf á staðsetningu, með valfrjálsu innihaldi hólfs.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Les hólf á staðsetningu, með valfrjálsu innihaldi hólfs.</note>
+          <target>Les hólf á staðsetningu, með valfrjálsu innihaldi hólfs. Leitarorð: hólf, hólfaskrá, hólf staðsetningar, vöruhúsahólf, hólfalisti, tómt hólf.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Les hólf á staðsetningu, með valfrjálsu innihaldi hólfs. Leitarorð: hólf, hólfaskrá, hólf staðsetningar, vöruhúsahólf, hólfalisti, tómt hólf.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Get Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 406652802 - Method 1158096087 - NamedType 2408295350" size-unit="char" translate="yes" xml:space="preserve">
@@ -1811,8 +1811,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 219040042 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Calculates bin replenishment into a movement worksheet.</source>
-          <target>Reiknar endurnýjun hólfa inn á færsluvinnublað.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Reiknar endurnýjun hólfa inn á færsluvinnublað.</note>
+          <target>Reiknar endurnýjun hólfa inn á færsluvinnublað. Leitarorð: endurnýjun hólfa, færsluvinnublað, bein innsetning og tínsla, lágmarksmagn, tínsluhólf.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Reiknar endurnýjun hólfa inn á færsluvinnublað. Leitarorð: endurnýjun hólfa, færsluvinnublað, bein innsetning og tínsla, lágmarksmagn, tínsluhólf.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Bin Repl Calc Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 219040042 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -1925,8 +1925,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 269741545 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Reads Bin Content rows with item, location, bin and variant filters.</source>
-          <target>Les birgðainnihald hólfa með síum á vöru, staðsetningu, hólf og afbrigði.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Les birgðainnihald hólfa með síum á vöru, staðsetningu, hólf og afbrigði.</note>
+          <target>Les birgðainnihald hólfa með síum á vöru, staðsetningu, hólf og afbrigði. Leitarorð: birgðainnihald hólfs, magn í hólfi, vara í hólfi, vöruhúsabirgðir, birgðir eftir hólfi, birgðir eftir staðsetningu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Les birgðainnihald hólfa með síum á vöru, staðsetningu, hólf og afbrigði. Leitarorð: birgðainnihald hólfs, magn í hólfi, vara í hólfi, vöruhúsabirgðir, birgðir eftir hólfi, birgðir eftir staðsetningu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse BinContent Get Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 269741545 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
@@ -2069,8 +2069,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 2355567171 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Sets the default bin for an item at a location.</source>
-          <target>Setur sjálfgefið hólf fyrir vöru á staðsetningu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Setur sjálfgefið hólf fyrir vöru á staðsetningu.</note>
+          <target>Setur sjálfgefið hólf fyrir vöru á staðsetningu. Leitarorð: sjálfgefið hólf, sjálfgefið vöruhólf, innihald hólfs, setja sjálfgefið, sjálfgefið vöruhús, fast hólf.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Setur sjálfgefið hólf fyrir vöru á staðsetningu. Leitarorð: sjálfgefið hólf, sjálfgefið vöruhólf, innihald hólfs, setja sjálfgefið, sjálfgefið vöruhús, fast hólf.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse DefaultBin Set Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2355567171 - Method 1158096087 - NamedType 1399190847" size-unit="char" translate="yes" xml:space="preserve">
@@ -2501,8 +2501,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 1975501152 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Reads open warehouse receipts or open warehouse shipments, optionally with lines.</source>
-          <target>Les opnar vöruhúsamóttökur eða opnar vöruhúsaafhendingar, valfrjálst með línum.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Les opnar vöruhúsamóttökur eða opnar vöruhúsaafhendingar, valfrjálst með línum.</note>
+          <target>Les opnar vöruhúsamóttökur eða opnar vöruhúsaafhendingar, valfrjálst með línum. Leitarorð: opin vöruhúsamóttaka, opin vöruhúsaafhending, óafgreidd móttaka, óafgreidd afhending, tínt magn, línur opinna skjala.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Les opnar vöruhúsamóttökur eða opnar vöruhúsaafhendingar, valfrjálst með línum. Leitarorð: opin vöruhúsamóttaka, opin vöruhúsaafhending, óafgreidd móttaka, óafgreidd afhending, tínt magn, línur opinna skjala.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Get Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 1975501152 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -2615,8 +2615,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 232874797 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Changes header data and line bins on an open warehouse receipt or shipment.</source>
-          <target>Breytir hausgögnum og hólfum lína á opinni vöruhúsamóttöku eða -afhendingu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Breytir hausgögnum og hólfum lína á opinni vöruhúsamóttöku eða -afhendingu.</note>
+          <target>Breytir hausgögnum og hólfum lína á opinni vöruhúsamóttöku eða -afhendingu. Leitarorð: uppfæra móttöku, uppfæra afhendingu, breyta bókunardagsetningu, afhendingarnúmer lánardrottins, flutningsaðili, ytra skjalanúmer, hólf móttöku, hólf afhendingar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Breytir hausgögnum og hólfum lína á opinni vöruhúsamóttöku eða -afhendingu. Leitarorð: uppfæra móttöku, uppfæra afhendingu, breyta bókunardagsetningu, afhendingarnúmer lánardrottins, flutningsaðili, ytra skjalanúmer, hólf móttöku, hólf afhendingar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Document Update Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 232874797 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
@@ -3017,8 +3017,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 4088920829 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Creates an internal pick to a bin at a directed location, and optionally the pick.</source>
-          <target>Stofnar innri tínslu í hólf á beinni staðsetningu og valfrjálst tínslu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar innri tínslu í hólf á beinni staðsetningu og valfrjálst tínslu.</note>
+          <target>Stofnar innri tínslu í hólf á beinni staðsetningu og valfrjálst tínslu. Leitarorð: innri tínsla, tína í hólf, fylla á framleiðsluhólf, taka til birgðir, bein tínsla.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar innri tínslu í hólf á beinni staðsetningu og valfrjálst tínslu. Leitarorð: innri tínsla, tína í hólf, fylla á framleiðsluhólf, taka til birgðir, bein tínsla.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse IntPick Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 4088920829 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -3071,8 +3071,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 768031591 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Creates an internal put-away for stock in a bin at a directed location, and optionally the put-away.</source>
-          <target>Stofnar innri frágang fyrir birgðir í hólfi á beinni staðsetningu og valfrjálst frágang.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar innri frágang fyrir birgðir í hólfi á beinni staðsetningu og valfrjálst frágang.</note>
+          <target>Stofnar innri frágang fyrir birgðir í hólfi á beinni staðsetningu og valfrjálst frágang. Leitarorð: innri frágangur, ganga frá úr hólfi, skila á lager, tæma móttökuhólf, leiðréttingarhólf, bein innsetning.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar innri frágang fyrir birgðir í hólfi á beinni staðsetningu og valfrjálst frágang. Leitarorð: innri frágangur, ganga frá úr hólfi, skila á lager, tæma móttökuhólf, leiðréttingarhólf, bein innsetning.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse IntPutAw Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 768031591 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -3173,8 +3173,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 301136191 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Creates an inventory movement from inline bin lines or from assembly consumption.</source>
-          <target>Stofnar birgðafærslu úr línum milli hólfa eða úr samsetningarnotkun.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar birgðafærslu úr línum milli hólfa eða úr samsetningarnotkun.</note>
+          <target>Stofnar birgðafærslu úr línum milli hólfa eða úr samsetningarnotkun. Leitarorð: birgðafærsla, færa milli hólfa, einfalt vöruhús, innri færsla, samsetningarnotkun.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar birgðafærslu úr línum milli hólfa eða úr samsetningarnotkun. Leitarorð: birgðafærsla, færa milli hólfa, einfalt vöruhús, innri færsla, samsetningarnotkun.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 301136191 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -3497,8 +3497,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 3229165659 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Registers an inventory movement and returns the registered quantity.</source>
-          <target>Skráir birgðafærslu og skilar skráða magninu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Skráir birgðafærslu og skilar skráða magninu.</note>
+          <target>Skráir birgðafærslu og skilar skráða magninu. Leitarorð: skrá birgðafærslu, færa birgðir, einfalt vöruhús, staðfesta hólfafærslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skráir birgðafærslu og skilar skráða magninu. Leitarorð: skrá birgðafærslu, færa birgðir, einfalt vöruhús, staðfesta hólfafærslu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtMove Reg Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3229165659 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -3731,8 +3731,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 656571471 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Creates an inventory pick from a released source document at a basic location that requires pick.</source>
-          <target>Stofnar birgðatínslu úr staðfestu upprunaskjali á einfaldri staðsetningu sem krefst tínslu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar birgðatínslu úr staðfestu upprunaskjali á einfaldri staðsetningu sem krefst tínslu.</note>
+          <target>Stofnar birgðatínslu úr staðfestu upprunaskjali á einfaldri staðsetningu sem krefst tínslu. Leitarorð: stofna birgðatínslu, birgðatínsla, tínsla úr sölupöntun, einföld vöruhúsatínsla, krefst tínslu, upprunaskjal.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar birgðatínslu úr staðfestu upprunaskjali á einfaldri staðsetningu sem krefst tínslu. Leitarorð: stofna birgðatínslu, birgðatínsla, tínsla úr sölupöntun, einföld vöruhúsatínsla, krefst tínslu, upprunaskjal.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPick Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 656571471 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -3947,8 +3947,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 3579358707 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Posts an inventory pick and ships the source document.</source>
-          <target>Bókar birgðatínslu og sendir upprunaskjalið.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Bókar birgðatínslu og sendir upprunaskjalið.</note>
+          <target>Bókar birgðatínslu og sendir upprunaskjalið. Leitarorð: bóka birgðatínslu, senda birgðatínslu, bókun birgðatínslu, bóka upprunaskjal, reikningsfæra birgðatínslu, einfalt vöruhús.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bókar birgðatínslu og sendir upprunaskjalið. Leitarorð: bóka birgðatínslu, senda birgðatínslu, bókun birgðatínslu, bóka upprunaskjal, reikningsfæra birgðatínslu, einfalt vöruhús.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPick Post Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3579358707 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -4217,8 +4217,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 3890069751 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Creates an inventory put-away from a released inbound source document at a basic location that requires put-away.</source>
-          <target>Stofnar birgðafrágang úr staðfestu innleiðsluupprunaskjali á einfaldri staðsetningu sem krefst frágangs.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar birgðafrágang úr staðfestu innleiðsluupprunaskjali á einfaldri staðsetningu sem krefst frágangs.</note>
+          <target>Stofnar birgðafrágang úr staðfestu innleiðsluupprunaskjali á einfaldri staðsetningu sem krefst frágangs. Leitarorð: stofna birgðafrágang, birgðafrágangur, frágangur úr innkaupapöntun, einfaldur vöruhúsafrágangur, krefst frágangs, upprunaskjal.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar birgðafrágang úr staðfestu innleiðsluupprunaskjali á einfaldri staðsetningu sem krefst frágangs. Leitarorð: stofna birgðafrágang, birgðafrágangur, frágangur úr innkaupapöntun, einfaldur vöruhúsafrágangur, krefst frágangs, upprunaskjal.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3890069751 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -4457,8 +4457,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 1222428267 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Posts an inventory put-away and receives the source document.</source>
-          <target>Bókar birgðafrágang og móttekur upprunaskjalið.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Bókar birgðafrágang og móttekur upprunaskjalið.</note>
+          <target>Bókar birgðafrágang og móttekur upprunaskjalið. Leitarorð: bóka birgðafrágang, móttaka birgðafrágangs, bókun birgðafrágangs, bóka upprunaskjal, reikningsfæra birgðafrágang, einfalt vöruhús.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bókar birgðafrágang og móttekur upprunaskjalið. Leitarorð: bóka birgðafrágang, móttaka birgðafrágangs, bókun birgðafrágangs, bóka upprunaskjal, reikningsfæra birgðafrágang, einfalt vöruhús.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPut Post Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 1222428267 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -4781,8 +4781,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 693199292 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Creates warehouse item journal or warehouse reclassification journal lines at a directed location.</source>
-          <target>Stofnar línur í birgðabók vöruhúss eða endurflokkunarbók vöruhúss á beinni staðsetningu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar línur í birgðabók vöruhúss eða endurflokkunarbók vöruhúss á beinni staðsetningu.</note>
+          <target>Stofnar línur í birgðabók vöruhúss eða endurflokkunarbók vöruhúss á beinni staðsetningu. Leitarorð: birgðabók vöruhúss, endurflokkunarbók vöruhúss, leiðrétting hólfs, jákvæð leiðrétting, neikvæð leiðrétting, færa milli hólfa, endurflokka lotu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar línur í birgðabók vöruhúss eða endurflokkunarbók vöruhúss á beinni staðsetningu. Leitarorð: birgðabók vöruhúss, endurflokkunarbók vöruhúss, leiðrétting hólfs, jákvæð leiðrétting, neikvæð leiðrétting, færa milli hólfa, endurflokka lotu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 693199292 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -5027,8 +5027,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 3917713592 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Registers a warehouse item or reclassification journal batch and returns the warehouse register.</source>
-          <target>Skráir keyrslu í birgðabók eða endurflokkunarbók vöruhúss og skilar vöruhúsaskránni.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Skráir keyrslu í birgðabók eða endurflokkunarbók vöruhúss og skilar vöruhúsaskránni.</note>
+          <target>Skráir keyrslu í birgðabók eða endurflokkunarbók vöruhúss og skilar vöruhúsaskránni. Leitarorð: skrá birgðabók vöruhúss, skrá leiðréttingu hólfs, skrá endurflokkun, vöruhúsaskrá, bóka birgðabók vöruhúss.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skráir keyrslu í birgðabók eða endurflokkunarbók vöruhúss og skilar vöruhúsaskránni. Leitarorð: skrá birgðabók vöruhúss, skrá leiðréttingu hólfs, skrá endurflokkun, vöruhúsaskrá, bóka birgðabók vöruhúss.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Journal Reg Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3917713592 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -5099,8 +5099,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 296295310 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Creates a warehouse movement from a movement worksheet or from inline lines.</source>
-          <target>Stofnar vöruhúsafærslu úr færslublaði eða úr línum í beiðninni.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar vöruhúsafærslu úr færslublaði eða úr línum í beiðninni.</note>
+          <target>Stofnar vöruhúsafærslu úr færslublaði eða úr línum í beiðninni. Leitarorð: stofna færslu, vöruhúsafærsla, færa milli hólfa, hólfaflutningur, bein færsla, færslublað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar vöruhúsafærslu úr færslublaði eða úr línum í beiðninni. Leitarorð: stofna færslu, vöruhúsafærsla, færa milli hólfa, hólfaflutningur, bein færsla, færslublað.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Movement Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 296295310 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -5351,8 +5351,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 3363668634 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Registers a warehouse movement and returns the registered movement number.</source>
-          <target>Skráir vöruhúsafærslu og skilar númeri skráðu færslunnar.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Skráir vöruhúsafærslu og skilar númeri skráðu færslunnar.</note>
+          <target>Skráir vöruhúsafærslu og skilar númeri skráðu færslunnar. Leitarorð: skrá færslu, bóka færslu, ljúka færslu, skráning vöruhúsafærslu, færa birgðir, staðfesta færslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skráir vöruhúsafærslu og skilar númeri skráðu færslunnar. Leitarorð: skrá færslu, bóka færslu, ljúka færslu, skráning vöruhúsafærslu, færa birgðir, staðfesta færslu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Movement Reg Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3363668634 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -5633,8 +5633,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 35908569 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Calculates the warehouse physical inventory of a directed location into a physical inventory journal batch.</source>
-          <target>Reiknar talningu vöruhúss á beinni staðsetningu inn í keyrslu talningarbókar.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Reiknar talningu vöruhúss á beinni staðsetningu inn í keyrslu talningarbókar.</note>
+          <target>Reiknar talningu vöruhúss á beinni staðsetningu inn í keyrslu talningarbókar. Leitarorð: talning vöruhúss, reikna birgðir, birgðatalning, reglubundin talning, talning hólfa, talningarbók.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Reiknar talningu vöruhúss á beinni staðsetningu inn í keyrslu talningarbókar. Leitarorð: talning vöruhúss, reikna birgðir, birgðatalning, reglubundin talning, talning hólfa, talningarbók.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Calc Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 35908569 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -5705,8 +5705,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 3419876046 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Writes counted quantities and registers a warehouse physical inventory journal batch.</source>
-          <target>Skrifar talið magn og skráir keyrslu talningarbókar vöruhúss.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Skrifar talið magn og skráir keyrslu talningarbókar vöruhúss.</note>
+          <target>Skrifar talið magn og skráir keyrslu talningarbókar vöruhúss. Leitarorð: skrá talningu, talið magn, niðurstaða birgðatalningar, vöruhúsatalning, skrá talningu vöruhúss.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skrifar talið magn og skráir keyrslu talningarbókar vöruhúss. Leitarorð: skrá talningu, talið magn, niðurstaða birgðatalningar, vöruhúsatalning, skrá talningu vöruhúss.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PhysInvt Reg Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3419876046 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -5825,8 +5825,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 2230900036 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Creates a warehouse pick from a released warehouse shipment, the same as the Create Pick action on the shipment.</source>
-          <target>Stofnar vöruhúsatínslu úr útgefinni vöruhúsaafhendingu, eins og aðgerðin Stofna tínslu á afhendingunni.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar vöruhúsatínslu úr útgefinni vöruhúsaafhendingu, eins og aðgerðin Stofna tínslu á afhendingunni.</note>
+          <target>Stofnar vöruhúsatínslu úr útgefinni vöruhúsaafhendingu, eins og aðgerðin Stofna tínslu á afhendingunni. Leitarorð: stofna tínslu, tínslulisti, tína, tína vörur, tínsla fyrir afhendingu, tína vörueiningar, tína í pöntun, tínslulisti fyrir pöntun.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar vöruhúsatínslu úr útgefinni vöruhúsaafhendingu, eins og aðgerðin Stofna tínslu á afhendingunni. Leitarorð: stofna tínslu, tínslulisti, tína, tína vörur, tínsla fyrir afhendingu, tína vörueiningar, tína í pöntun, tínslulisti fyrir pöntun.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2230900036 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
@@ -5939,8 +5939,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 662601231 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Registers a warehouse pick, the same as the Register Pick action, and updates the picked quantities on the warehouse shipment.</source>
-          <target>Skráir vöruhúsatínslu, eins og aðgerðin Skrá tínslu, og uppfærir tínt magn á vöruhúsaafhendingunni.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Skráir vöruhúsatínslu, eins og aðgerðin Skrá tínslu, og uppfærir tínt magn á vöruhúsaafhendingunni.</note>
+          <target>Skráir vöruhúsatínslu, eins og aðgerðin Skrá tínslu, og uppfærir tínt magn á vöruhúsaafhendingunni. Leitarorð: skrá tínslu, vörur tíndar, tínslu lokið, staðfesta tínslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skráir vöruhúsatínslu, eins og aðgerðin Skrá tínslu, og uppfærir tínt magn á vöruhúsaafhendingunni. Leitarorð: skrá tínslu, vörur tíndar, tínslu lokið, staðfesta tínslu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Pick Register Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 662601231 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
@@ -6017,8 +6017,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 3794917806 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Reads posted warehouse receipts or posted warehouse shipments, optionally with lines.</source>
-          <target>Les bókaðar vöruhúsamóttökur eða bókaðar vöruhúsaafhendingar, valfrjálst með línum.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Les bókaðar vöruhúsamóttökur eða bókaðar vöruhúsaafhendingar, valfrjálst með línum.</note>
+          <target>Les bókaðar vöruhúsamóttökur eða bókaðar vöruhúsaafhendingar, valfrjálst með línum. Leitarorð: bókuð vöruhúsamóttaka, bókuð vöruhúsaafhending, hvað var móttekið, hvað var afhent, vöruhúsasaga, línur bókaðrar móttöku.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Les bókaðar vöruhúsamóttökur eða bókaðar vöruhúsaafhendingar, valfrjálst með línum. Leitarorð: bókuð vöruhúsamóttaka, bókuð vöruhúsaafhending, hvað var móttekið, hvað var afhent, vöruhúsasaga, línur bókaðrar móttöku.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse PostedDoc Get Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3794917806 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -6125,8 +6125,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 344402154 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Creates a warehouse put-away from a posted warehouse receipt, or returns the open put-away that already exists for it.</source>
-          <target>Stofnar vöruhúsafrágang úr bókaðri vöruhúsamóttöku, eða skilar opna frágangnum sem er þegar til fyrir hana.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar vöruhúsafrágang úr bókaðri vöruhúsamóttöku, eða skilar opna frágangnum sem er þegar til fyrir hana.</note>
+          <target>Stofnar vöruhúsafrágang úr bókaðri vöruhúsamóttöku, eða skilar opna frágangnum sem er þegar til fyrir hana. Leitarorð: stofna frágang, ganga frá vörum, frágangur, setja vörur í hillur, geyma mótteknar vörur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar vöruhúsafrágang úr bókaðri vöruhúsamóttöku, eða skilar opna frágangnum sem er þegar til fyrir hana. Leitarorð: stofna frágang, ganga frá vörum, frágangur, setja vörur í hillur, geyma mótteknar vörur.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Putaway Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 344402154 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
@@ -6173,8 +6173,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 4263884365 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Registers a warehouse put-away, the same as the Register Put-away action, and places the goods in their bins.</source>
-          <target>Skráir vöruhúsafrágang, eins og aðgerðin Skrá frágang, og setur vörurnar í hólf sín.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Skráir vöruhúsafrágang, eins og aðgerðin Skrá frágang, og setur vörurnar í hólf sín.</note>
+          <target>Skráir vöruhúsafrágang, eins og aðgerðin Skrá frágang, og setur vörurnar í hólf sín. Leitarorð: skrá frágang, vörum gengið frá, frágangi lokið, staðfesta frágang.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skráir vöruhúsafrágang, eins og aðgerðin Skrá frágang, og setur vörurnar í hólf sín. Leitarorð: skrá frágang, vörum gengið frá, frágangi lokið, staðfesta frágang.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Putaway Register Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 4263884365 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
@@ -6239,8 +6239,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 1365322439 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Calculates cross-dock opportunities on a warehouse receipt; optionally previews without saving.</source>
-          <target>Reiknar tækifæri til gegnumstreymis á vöruhúsamóttöku; getur forskoðað án þess að vista.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Reiknar tækifæri til gegnumstreymis á vöruhúsamóttöku; getur forskoðað án þess að vista.</note>
+          <target>Reiknar tækifæri til gegnumstreymis á vöruhúsamóttöku; getur forskoðað án þess að vista. Leitarorð: gegnumstreymi móttöku, reikna gegnumstreymi, eftirspurn móttöku, forskoða gegnumstreymi.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Reiknar tækifæri til gegnumstreymis á vöruhúsamóttöku; getur forskoðað án þess að vista. Leitarorð: gegnumstreymi móttöku, reikna gegnumstreymi, eftirspurn móttöku, forskoða gegnumstreymi.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt CrossDock Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 1365322439 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -6353,8 +6353,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 3318992449 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Adds lines from released inbound source documents to a warehouse receipt, or to a new receipt at a location.</source>
-          <target>Bætir línum úr útgefnum innkomandi upprunaskjölum við vöruhúsamóttöku eða nýja móttöku á staðsetningu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Bætir línum úr útgefnum innkomandi upprunaskjölum við vöruhúsamóttöku eða nýja móttöku á staðsetningu.</note>
+          <target>Bætir línum úr útgefnum innkomandi upprunaskjölum við vöruhúsamóttöku eða nýja móttöku á staðsetningu. Leitarorð: sækja upprunaskjöl, bæta innkaupapöntunum við móttöku, draga pantanir í vöruhúsamóttöku, taka á móti mörgum pöntunum, sameina móttökur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bætir línum úr útgefnum innkomandi upprunaskjölum við vöruhúsamóttöku eða nýja móttöku á staðsetningu. Leitarorð: sækja upprunaskjöl, bæta innkaupapöntunum við móttöku, draga pantanir í vöruhúsamóttöku, taka á móti mörgum pöntunum, sameina móttökur.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt GetSrcDocs Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3318992449 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -6521,8 +6521,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 3353061649 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Simulates receiving a warehouse receipt and returns the entries it would create, such as item and value entries and the posted receipt, without saving anything.</source>
-          <target>Hermir móttöku vöruhúsamóttöku og skilar færslunum sem hún myndi búa til, svo sem birgða- og virðisfærslum og bókuðu móttökunni, án þess að vista neitt.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Hermir móttöku vöruhúsamóttöku og skilar færslunum sem hún myndi búa til, svo sem birgða- og virðisfærslum og bókuðu móttökunni, án þess að vista neitt.</note>
+          <target>Hermir móttöku vöruhúsamóttöku og skilar færslunum sem hún myndi búa til, svo sem birgða- og virðisfærslum og bókuðu móttökunni, án þess að vista neitt. Leitarorð: forskoða vöruhúsamóttöku, herma móttöku, hvað myndi móttakan bóka.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Hermir móttöku vöruhúsamóttöku og skilar færslunum sem hún myndi búa til, svo sem birgða- og virðisfærslum og bókuðu móttökunni, án þess að vista neitt. Leitarorð: forskoða vöruhúsamóttöku, herma móttöku, hvað myndi móttakan bóka.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Rcpt Post Prev. Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3353061649 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
@@ -6635,8 +6635,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 2572656007 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Creates Warehouse Receipt(s) from one or more released source documents (Sales Return Order, Purchase Order, Inbound Transfer Order).</source>
-          <target>Stofnar vöruhúsamóttökur úr einu eða fleiri útgefnum upprunaskjölum (vöruskilapöntun, innkaupapöntun, innleiðar-millifærslupöntun).</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar vöruhúsamóttökur úr einu eða fleiri útgefnum upprunaskjölum (vöruskilapöntun, innkaupapöntun, innleiðar-millifærslupöntun).</note>
+          <target>Stofnar vöruhúsamóttökur úr einu eða fleiri útgefnum upprunaskjölum (vöruskilapöntun, innkaupapöntun, innleiðar-millifærslupöntun). Leitarorð: vöruhúsamóttaka, stofna móttöku, von á vörum, undirbúa móttöku, innmóttaka, vörur á leiðinni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar vöruhúsamóttökur úr einu eða fleiri útgefnum upprunaskjölum (vöruskilapöntun, innkaupapöntun, innleiðar-millifærslupöntun). Leitarorð: vöruhúsamóttaka, stofna móttöku, von á vörum, undirbúa móttöku, innmóttaka, vörur á leiðinni.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2572656007 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
@@ -6695,8 +6695,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 3670300571 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Posts a Warehouse Receipt (receive), optionally with a quantity per line.</source>
-          <target>Bókar vöruhúsamóttöku (móttöku), valfrjálst með magni á hverja línu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Bókar vöruhúsamóttöku (móttöku), valfrjálst með magni á hverja línu.</note>
+          <target>Bókar vöruhúsamóttöku (móttöku), valfrjálst með magni á hverja línu. Leitarorð: móttaka, vörumóttaka, vörur komnar, vörur komu, vöruhúsamóttaka, bóka vöruhúsamóttöku.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bókar vöruhúsamóttöku (móttöku), valfrjálst með magni á hverja línu. Leitarorð: móttaka, vörumóttaka, vörur komnar, vörur komu, vöruhúsamóttaka, bóka vöruhúsamóttöku.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Receipt Post Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3670300571 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
@@ -6899,8 +6899,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 2572066034 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Reads registered picks, put-aways or movements, optionally with lines.</source>
-          <target>Les skráðar tínslur, frágang eða tilfærslur, valfrjálst með línum.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Les skráðar tínslur, frágang eða tilfærslur, valfrjálst með línum.</note>
+          <target>Les skráðar tínslur, frágang eða tilfærslur, valfrjálst með línum. Leitarorð: skráð tínsla, skráður frágangur, skráð tilfærsla, hvað var tínt, hvar var gengið frá, saga vöruhúsavirkni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Les skráðar tínslur, frágang eða tilfærslur, valfrjálst með línum. Leitarorð: skráð tínsla, skráður frágangur, skráð tilfærsla, hvað var tínt, hvar var gengið frá, saga vöruhúsavirkni.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse RegActivity Get Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2572066034 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -7013,8 +7013,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 916876614 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Reads the warehouse requests at a location: source documents waiting for a warehouse receipt or shipment.</source>
-          <target>Les vöruhúsabeiðnir á staðsetningu: upprunaskjöl sem bíða eftir vöruhúsamóttöku eða vöruhúsaafhendingu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Les vöruhúsabeiðnir á staðsetningu: upprunaskjöl sem bíða eftir vöruhúsamóttöku eða vöruhúsaafhendingu.</note>
+          <target>Les vöruhúsabeiðnir á staðsetningu: upprunaskjöl sem bíða eftir vöruhúsamóttöku eða vöruhúsaafhendingu. Leitarorð: vöruhúsabeiðni, hvað bíður, útgefnar pantanir, upprunaskjöl til móttöku, upprunaskjöl til afhendingar, opin vöruhúsavinna.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Les vöruhúsabeiðnir á staðsetningu: upprunaskjöl sem bíða eftir vöruhúsamóttöku eða vöruhúsaafhendingu. Leitarorð: vöruhúsabeiðni, hvað bíður, útgefnar pantanir, upprunaskjöl til móttöku, upprunaskjöl til afhendingar, opin vöruhúsavinna.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Request Get Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 916876614 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -7169,8 +7169,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 2400538300 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Adds lines from released outbound source documents to a warehouse shipment, or to a new shipment at a location.</source>
-          <target>Bætir línum úr útgefnum útleiðandi upprunaskjölum við vöruhúsaafhendingu eða nýja afhendingu á staðsetningu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Bætir línum úr útgefnum útleiðandi upprunaskjölum við vöruhúsaafhendingu eða nýja afhendingu á staðsetningu.</note>
+          <target>Bætir línum úr útgefnum útleiðandi upprunaskjölum við vöruhúsaafhendingu eða nýja afhendingu á staðsetningu. Leitarorð: sækja upprunaskjöl, bæta sölupöntunum við afhendingu, draga pantanir í vöruhúsaafhendingu, afhenda margar pantanir.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bætir línum úr útgefnum útleiðandi upprunaskjölum við vöruhúsaafhendingu eða nýja afhendingu á staðsetningu. Leitarorð: sækja upprunaskjöl, bæta sölupöntunum við afhendingu, draga pantanir í vöruhúsaafhendingu, afhenda margar pantanir.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Ship GetSrcDocs Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2400538300 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -7349,8 +7349,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 3796601114 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Simulates posting a warehouse shipment (ship and invoice) and returns the entries it would create, without saving anything.</source>
-          <target>Hermir bókun vöruhúsaafhendingar (afhending og reikningur) og skilar færslunum sem hún myndi búa til, án þess að vista neitt.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Hermir bókun vöruhúsaafhendingar (afhending og reikningur) og skilar færslunum sem hún myndi búa til, án þess að vista neitt.</note>
+          <target>Hermir bókun vöruhúsaafhendingar (afhending og reikningur) og skilar færslunum sem hún myndi búa til, án þess að vista neitt. Leitarorð: forskoða vöruhúsaafhendingu, herma afhendingu, hvað myndi afhendingin bóka.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Hermir bókun vöruhúsaafhendingar (afhending og reikningur) og skilar færslunum sem hún myndi búa til, án þess að vista neitt. Leitarorð: forskoða vöruhúsaafhendingu, herma afhendingu, hvað myndi afhendingin bóka.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Ship. Prev. Post Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3796601114 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
@@ -7469,8 +7469,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 2578593995 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Creates Warehouse Shipment(s) from one or more released source documents (Sales Order, Outbound Transfer Order, Service Order).</source>
-          <target>Stofnar vöruhúsaafhendingar úr einu eða fleiri útgefnum upprunaskjölum (sölupöntun, útleiðar-millifærslupöntun, þjónustupöntun).</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar vöruhúsaafhendingar úr einu eða fleiri útgefnum upprunaskjölum (sölupöntun, útleiðar-millifærslupöntun, þjónustupöntun).</note>
+          <target>Stofnar vöruhúsaafhendingar úr einu eða fleiri útgefnum upprunaskjölum (sölupöntun, útleiðar-millifærslupöntun, þjónustupöntun). Leitarorð: vöruhúsaafhending, stofna afhendingu, undirbúa afhendingu, senda pöntun frá vöruhúsi, útsending.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar vöruhúsaafhendingar úr einu eða fleiri útgefnum upprunaskjölum (sölupöntun, útleiðar-millifærslupöntun, þjónustupöntun). Leitarorð: vöruhúsaafhending, stofna afhendingu, undirbúa afhendingu, senda pöntun frá vöruhúsi, útsending.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2578593995 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
@@ -7529,8 +7529,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 2463241303 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Posts a Warehouse Shipment (ship, optionally invoice), optionally with a quantity per line.</source>
-          <target>Bókar vöruhúsaafhendingu (afhending, valfrjálst reikningur), valfrjálst með magni á hverja línu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Bókar vöruhúsaafhendingu (afhending, valfrjálst reikningur), valfrjálst með magni á hverja línu.</note>
+          <target>Bókar vöruhúsaafhendingu (afhending, valfrjálst reikningur), valfrjálst með magni á hverja línu. Leitarorð: bóka vöruhúsaafhendingu, afhenda vörur, vörur farnar úr vöruhúsi, senda vörur út, senda vörur af stað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bókar vöruhúsaafhendingu (afhending, valfrjálst reikningur), valfrjálst með magni á hverja línu. Leitarorð: bóka vöruhúsaafhendingu, afhenda vörur, vörur farnar úr vöruhúsi, senda vörur út, senda vörur af stað.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Post Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2463241303 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
@@ -7601,8 +7601,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 3470883688 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Releases a warehouse shipment so picks can be created.</source>
-          <target>Gefur út vöruhúsaafhendingu svo hægt sé að stofna tínslu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Gefur út vöruhúsaafhendingu svo hægt sé að stofna tínslu.</note>
+          <target>Gefur út vöruhúsaafhendingu svo hægt sé að stofna tínslu. Leitarorð: gefa út afhendingu, gefa út vöruhúsaafhendingu, tilbúið til tínslu, staða afhendingar útgefin, samþykkja afhendingu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gefur út vöruhúsaafhendingu svo hægt sé að stofna tínslu. Leitarorð: gefa út afhendingu, gefa út vöruhúsaafhendingu, tilbúið til tínslu, staða afhendingar útgefin, samþykkja afhendingu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Release Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3470883688 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -7679,8 +7679,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 4174471194 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Reopens a released warehouse shipment so it can be changed.</source>
-          <target>Opnar útgefna vöruhúsaafhendingu aftur svo hægt sé að breyta henni.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Opnar útgefna vöruhúsaafhendingu aftur svo hægt sé að breyta henni.</note>
+          <target>Opnar útgefna vöruhúsaafhendingu aftur svo hægt sé að breyta henni. Leitarorð: opna afhendingu aftur, opna vöruhúsaafhendingu aftur, breyta útgefinni afhendingu, staða afhendingar opin, afturkalla útgáfu afhendingar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opnar útgefna vöruhúsaafhendingu aftur svo hægt sé að breyta henni. Leitarorð: opna afhendingu aftur, opna vöruhúsaafhendingu aftur, breyta útgefinni afhendingu, staða afhendingar opin, afturkalla útgáfu afhendingar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Reopen Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 4174471194 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -7811,8 +7811,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 3297616556 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Creates picks or put-aways from the lines of a pick or put-away worksheet.</source>
-          <target>Stofnar tínslur eða frágang úr línum tínslu- eða frágangsvinnublaðs.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar tínslur eða frágang úr línum tínslu- eða frágangsvinnublaðs.</note>
+          <target>Stofnar tínslur eða frágang úr línum tínslu- eða frágangsvinnublaðs. Leitarorð: stofna tínslu úr vinnublaði, stofna frágang úr vinnublaði, tínsluvinnublað, frágangsvinnublað, bylgjutínsla, flokka tínslur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar tínslur eða frágang úr línum tínslu- eða frágangsvinnublaðs. Leitarorð: stofna tínslu úr vinnublaði, stofna frágang úr vinnublaði, tínsluvinnublað, frágangsvinnublað, bylgjutínsla, flokka tínslur.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh CreateAct Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3297616556 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">
@@ -7913,8 +7913,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 1247752009 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fills a pick or put-away worksheet from released warehouse documents.</source>
-          <target>Fyllir tínslu- eða frágangsvinnublað úr útgefnum vöruhúsaskjölum.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Fyllir tínslu- eða frágangsvinnublað úr útgefnum vöruhúsaskjölum.</note>
+          <target>Fyllir tínslu- eða frágangsvinnublað úr útgefnum vöruhúsaskjölum. Leitarorð: tínsluvinnublað, frágangsvinnublað, sækja vöruhúsaskjöl, skipuleggja tínslu, skipuleggja frágang, vinnublaðslínur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fyllir tínslu- eða frágangsvinnublað úr útgefnum vöruhúsaskjölum. Leitarorð: tínsluvinnublað, frágangsvinnublað, sækja vöruhúsaskjöl, skipuleggja tínslu, skipuleggja frágang, vinnublaðslínur.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Wksh GetDocs Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 1247752009 - Method 1158096087 - NamedType 2931850354" size-unit="char" translate="yes" xml:space="preserve">

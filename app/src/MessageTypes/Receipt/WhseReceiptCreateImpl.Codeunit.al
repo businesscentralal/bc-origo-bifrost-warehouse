@@ -34,7 +34,7 @@ codeunit 10078409 "Whse Receipt Create Impl ori" implements "Msg Interface ori",
 
     procedure GetDescription() Description: Text[250]
     var
-        DescriptionLbl: Label 'Creates Warehouse Receipt(s) from one or more released source documents (Sales Return Order, Purchase Order, Inbound Transfer Order).', Comment = 'is-IS=Stofnar vöruhúsamóttökur úr einu eða fleiri útgefnum upprunaskjölum (vöruskilapöntun, innkaupapöntun, innleiðar-millifærslupöntun).';
+        DescriptionLbl: Label 'Creates Warehouse Receipt(s) from one or more released source documents (Sales Return Order, Purchase Order, Inbound Transfer Order).', Comment = 'is-IS=Stofnar vöruhúsamóttökur úr einu eða fleiri útgefnum upprunaskjölum (vöruskilapöntun, innkaupapöntun, innleiðar-millifærslupöntun). Leitarorð: vöruhúsamóttaka, stofna móttöku, von á vörum, undirbúa móttöku, innmóttaka, vörur á leiðinni.';
     begin
         exit(DescriptionLbl);
     end;

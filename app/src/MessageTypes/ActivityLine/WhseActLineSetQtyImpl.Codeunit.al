@@ -79,7 +79,7 @@ codeunit 10078464 "Whse ActLine SetQty Impl ori" implements "Msg Interface ori",
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Sets the quantity to handle on warehouse activity lines, or fills or clears it on every line.', Comment = 'is-IS=Setur magn til meðhöndlunar á línur vöruhúsaaðgerðar, eða fyllir eða hreinsar það á öllum línum.';
+        DescriptionLbl: Label 'Sets the quantity to handle on warehouse activity lines, or fills or clears it on every line.', Comment = 'is-IS=Setur magn til meðhöndlunar á línur vöruhúsaaðgerðar, eða fyllir eða hreinsar það á öllum línum. Leitarorð: magn til meðhöndlunar, fylla út magn til meðhöndlunar, eyða magni til meðhöndlunar, hlutatínsla, hlutafrágangur, vöntun í tínslu.';
     begin
         exit(DescriptionLbl);
     end;

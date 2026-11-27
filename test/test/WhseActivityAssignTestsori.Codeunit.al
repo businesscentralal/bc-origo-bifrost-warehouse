@@ -209,7 +209,7 @@ codeunit 97008 "Whse Activity Assign Tests ori"
         English := Discovery.GetDescription();
         Assert.AreEqual('Assigns picks, put-aways and movements to a warehouse employee and re-sorts them.', English, 'English description.');
         GlobalLanguage(1039);
-        Assert.AreEqual('Úthlutar tínslum, frágangi og tilfærslum til starfsmanns vöruhúss og raðar þeim upp á nýtt.', Discovery.GetDescription(), 'Icelandic description.');
+        Assert.IsTrue(Discovery.GetDescription().StartsWith('Úthlutar tínslum, frágangi og tilfærslum til starfsmanns vöruhúss og raðar þeim upp á nýtt. Leitarorð:'), 'Icelandic description.');
         GlobalLanguage(OriginalLanguage);
         ResponseJson := Helper.RunTypeInLanguage(Enum::"Message Type ori"::"Warehouse.Activity.Assign", '', '{"activities":[{"activityType":"Pick","activityNo":"X"}]}', 1039);
         Helper.ExpectError(ResponseJson, 'MissingParameter', 'Sendu gildið sem vantar; Help.Implementation.Get sýnir viðföngin.');

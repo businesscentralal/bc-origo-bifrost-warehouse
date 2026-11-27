@@ -121,7 +121,7 @@ codeunit 10078461 "Whse Wksh CreateAct Impl ori" implements "Msg Interface ori",
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Creates picks or put-aways from the lines of a pick or put-away worksheet.', Comment = 'is-IS=Stofnar tínslur eða frágang úr línum tínslu- eða frágangsvinnublaðs.';
+        DescriptionLbl: Label 'Creates picks or put-aways from the lines of a pick or put-away worksheet.', Comment = 'is-IS=Stofnar tínslur eða frágang úr línum tínslu- eða frágangsvinnublaðs. Leitarorð: stofna tínslu úr vinnublaði, stofna frágang úr vinnublaði, tínsluvinnublað, frágangsvinnublað, bylgjutínsla, flokka tínslur.';
     begin
         exit(DescriptionLbl);
     end;

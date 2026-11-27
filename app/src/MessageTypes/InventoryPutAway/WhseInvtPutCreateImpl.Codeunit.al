@@ -54,7 +54,7 @@ codeunit 10078425 "Whse InvtPut Create Impl ori" implements "Msg Interface ori",
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Creates an inventory put-away from a released inbound source document at a basic location that requires put-away.', Comment = 'is-IS=Stofnar birgðafrágang úr staðfestu innleiðsluupprunaskjali á einfaldri staðsetningu sem krefst frágangs.';
+        DescriptionLbl: Label 'Creates an inventory put-away from a released inbound source document at a basic location that requires put-away.', Comment = 'is-IS=Stofnar birgðafrágang úr staðfestu innleiðsluupprunaskjali á einfaldri staðsetningu sem krefst frágangs. Leitarorð: stofna birgðafrágang, birgðafrágangur, frágangur úr innkaupapöntun, einfaldur vöruhúsafrágangur, krefst frágangs, upprunaskjal.';
     begin
         exit(DescriptionLbl);
     end;

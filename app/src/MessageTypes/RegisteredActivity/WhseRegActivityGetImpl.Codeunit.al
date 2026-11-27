@@ -33,7 +33,7 @@ codeunit 10078437 "Whse RegActivity Get Impl ori" implements "Msg Interface ori"
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Reads registered picks, put-aways or movements, optionally with lines.', Comment = 'is-IS=Les skráðar tínslur, frágang eða tilfærslur, valfrjálst með línum.';
+        DescriptionLbl: Label 'Reads registered picks, put-aways or movements, optionally with lines.', Comment = 'is-IS=Les skráðar tínslur, frágang eða tilfærslur, valfrjálst með línum. Leitarorð: skráð tínsla, skráður frágangur, skráð tilfærsla, hvað var tínt, hvar var gengið frá, saga vöruhúsavirkni.';
     begin
         exit(DescriptionLbl);
     end;

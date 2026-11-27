@@ -32,7 +32,7 @@ codeunit 10078435 "Whse Request Get Impl ori" implements "Msg Interface ori", "M
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Reads the warehouse requests at a location: source documents waiting for a warehouse receipt or shipment.', Comment = 'is-IS=Les vöruhúsabeiðnir á staðsetningu: upprunaskjöl sem bíða eftir vöruhúsamóttöku eða vöruhúsaafhendingu.';
+        DescriptionLbl: Label 'Reads the warehouse requests at a location: source documents waiting for a warehouse receipt or shipment.', Comment = 'is-IS=Les vöruhúsabeiðnir á staðsetningu: upprunaskjöl sem bíða eftir vöruhúsamóttöku eða vöruhúsaafhendingu. Leitarorð: vöruhúsabeiðni, hvað bíður, útgefnar pantanir, upprunaskjöl til móttöku, upprunaskjöl til afhendingar, opin vöruhúsavinna.';
     begin
         exit(DescriptionLbl);
     end;

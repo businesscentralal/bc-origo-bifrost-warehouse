@@ -52,7 +52,7 @@ codeunit 10078424 "Whse InvtPick Post Impl ori" implements "Msg Interface ori", 
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Posts an inventory pick and ships the source document.', Comment = 'is-IS=Bókar birgðatínslu og sendir upprunaskjalið.';
+        DescriptionLbl: Label 'Posts an inventory pick and ships the source document.', Comment = 'is-IS=Bókar birgðatínslu og sendir upprunaskjalið. Leitarorð: bóka birgðatínslu, senda birgðatínslu, bókun birgðatínslu, bóka upprunaskjal, reikningsfæra birgðatínslu, einfalt vöruhús.';
     begin
         exit(DescriptionLbl);
     end;

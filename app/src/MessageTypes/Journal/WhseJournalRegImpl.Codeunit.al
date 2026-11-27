@@ -53,7 +53,7 @@ codeunit 10078447 "Whse Journal Reg Impl ori" implements "Msg Interface ori", "M
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Registers a warehouse item or reclassification journal batch and returns the warehouse register.', Comment = 'is-IS=Skráir keyrslu í birgðabók eða endurflokkunarbók vöruhúss og skilar vöruhúsaskránni.';
+        DescriptionLbl: Label 'Registers a warehouse item or reclassification journal batch and returns the warehouse register.', Comment = 'is-IS=Skráir keyrslu í birgðabók eða endurflokkunarbók vöruhúss og skilar vöruhúsaskránni. Leitarorð: skrá birgðabók vöruhúss, skrá leiðréttingu hólfs, skrá endurflokkun, vöruhúsaskrá, bóka birgðabók vöruhúss.';
     begin
         exit(DescriptionLbl);
     end;

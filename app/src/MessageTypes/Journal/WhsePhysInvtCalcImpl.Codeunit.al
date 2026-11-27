@@ -74,7 +74,7 @@ codeunit 10078448 "Whse PhysInvt Calc Impl ori" implements "Msg Interface ori", 
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Calculates the warehouse physical inventory of a directed location into a physical inventory journal batch.', Comment = 'is-IS=Reiknar talningu vöruhúss á beinni staðsetningu inn í keyrslu talningarbókar.';
+        DescriptionLbl: Label 'Calculates the warehouse physical inventory of a directed location into a physical inventory journal batch.', Comment = 'is-IS=Reiknar talningu vöruhúss á beinni staðsetningu inn í keyrslu talningarbókar. Leitarorð: talning vöruhúss, reikna birgðir, birgðatalning, reglubundin talning, talning hólfa, talningarbók.';
     begin
         exit(DescriptionLbl);
     end;

@@ -280,6 +280,40 @@ codeunit 97031 "Whse Contract Parity Tests ori"
         Assert.IsTrue(TypeCount >= 42, 'Every Warehouse type is checked.');
     end;
 
+    /// <summary>The Icelandic catalogue description carries the Icelandic search phrases, because list_message_types searches the description and not the keywords (#129).</summary>
+    [Test]
+    procedure EveryType_IcelandicDescriptionCarriesSearchPhrases()
+    var
+        Implementation: Interface "Msg Interface ori";
+        Discovery: Interface "Msg Discovery ori";
+        MessageType: Enum "Message Type ori";
+        OriginalLanguage: Integer;
+        TypeName: Text;
+        Description: Text;
+        Phrase: Text;
+        PhraseCount: Integer;
+        TypeCount: Integer;
+    begin
+        OriginalLanguage := GlobalLanguage();
+        foreach MessageType in ContractAssert.WarehouseTypes() do begin
+            TypeName := ContractAssert.TypeName(MessageType);
+            Implementation := MessageType;
+            Discovery := MessageType;
+            GlobalLanguage(1039);
+            Description := LowerCase(Implementation.GetDescription());
+            Assert.IsTrue(StrLen(Description) <= 250, TypeName + ' Icelandic description fits 250 characters.');
+            PhraseCount := 0;
+            foreach Phrase in Discovery.GetKeywords().Split(',') do
+                if (DelChr(Phrase, '<>', ' ') <> '') and (StrPos(Description, LowerCase(DelChr(Phrase, '<>', ' '))) > 0) then
+                    PhraseCount += 1;
+            GlobalLanguage(OriginalLanguage);
+            Assert.IsTrue(PhraseCount > 0, TypeName + ' Icelandic description contains none of its Icelandic keywords.');
+            TypeCount += 1;
+        end;
+        GlobalLanguage(OriginalLanguage);
+        Assert.IsTrue(TypeCount >= 42, 'Every Warehouse type is checked.');
+    end;
+
     /// <summary>The notes and overview of every type name no AL object and no internal procedure.</summary>
     [Test]
     procedure NotesAndOverview_NameNoAlObjects()

@@ -59,7 +59,7 @@ codeunit 10078463 "Whse ActLine ChgBin Impl ori" implements "Msg Interface ori",
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Changes the bin of one warehouse activity line.', Comment = 'is-IS=Breytir hólfi einnar línu vöruhúsaaðgerðar.';
+        DescriptionLbl: Label 'Changes the bin of one warehouse activity line.', Comment = 'is-IS=Breytir hólfi einnar línu vöruhúsaaðgerðar. Leitarorð: breyta hólfi, taka úr öðru hólfi, setja í annað hólf, tínsluhólf, frágangshólf, hólfakóði.';
     begin
         exit(DescriptionLbl);
     end;

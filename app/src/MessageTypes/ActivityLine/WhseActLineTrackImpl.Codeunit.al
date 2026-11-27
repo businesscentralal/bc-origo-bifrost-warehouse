@@ -55,7 +55,7 @@ codeunit 10078465 "Whse ActLine Track Impl ori" implements "Msg Interface ori", 
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Assigns lot, serial and package numbers on warehouse activity lines, splitting a line per entry.', Comment = 'is-IS=Úthlutar lotu-, rað- og pakkanúmerum á línur vöruhúsaaðgerðar og skiptir línu eftir færslum.';
+        DescriptionLbl: Label 'Assigns lot, serial and package numbers on warehouse activity lines, splitting a line per entry.', Comment = 'is-IS=Úthlutar lotu-, rað- og pakkanúmerum á línur vöruhúsaaðgerðar og skiptir línu eftir færslum. Leitarorð: úthluta lotu, úthluta raðnúmeri, vörurakning í tínslu, lotunúmer, raðnúmer, pakkanúmer, fyrningardagsetning.';
     begin
         exit(DescriptionLbl);
     end;

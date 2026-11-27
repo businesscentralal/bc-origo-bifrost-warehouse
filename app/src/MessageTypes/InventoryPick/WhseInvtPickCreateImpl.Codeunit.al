@@ -55,7 +55,7 @@ codeunit 10078423 "Whse InvtPick Create Impl ori" implements "Msg Interface ori"
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Creates an inventory pick from a released source document at a basic location that requires pick.', Comment = 'is-IS=Stofnar birgðatínslu úr staðfestu upprunaskjali á einfaldri staðsetningu sem krefst tínslu.';
+        DescriptionLbl: Label 'Creates an inventory pick from a released source document at a basic location that requires pick.', Comment = 'is-IS=Stofnar birgðatínslu úr staðfestu upprunaskjali á einfaldri staðsetningu sem krefst tínslu. Leitarorð: stofna birgðatínslu, birgðatínsla, tínsla úr sölupöntun, einföld vöruhúsatínsla, krefst tínslu, upprunaskjal.';
     begin
         exit(DescriptionLbl);
     end;

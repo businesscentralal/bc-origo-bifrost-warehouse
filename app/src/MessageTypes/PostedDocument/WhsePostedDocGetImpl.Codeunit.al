@@ -34,7 +34,7 @@ codeunit 10078436 "Whse PostedDoc Get Impl ori" implements "Msg Interface ori", 
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Reads posted warehouse receipts or posted warehouse shipments, optionally with lines.', Comment = 'is-IS=Les bókaðar vöruhúsamóttökur eða bókaðar vöruhúsaafhendingar, valfrjálst með línum.';
+        DescriptionLbl: Label 'Reads posted warehouse receipts or posted warehouse shipments, optionally with lines.', Comment = 'is-IS=Les bókaðar vöruhúsamóttökur eða bókaðar vöruhúsaafhendingar, valfrjálst með línum. Leitarorð: bókuð vöruhúsamóttaka, bókuð vöruhúsaafhending, hvað var móttekið, hvað var afhent, vöruhúsasaga, línur bókaðrar móttöku.';
     begin
         exit(DescriptionLbl);
     end;

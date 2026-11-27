@@ -61,7 +61,7 @@ codeunit 10078407 "Whse Shipment Post Impl ori" implements "Msg Interface ori", 
 
     procedure GetDescription() Description: Text[250]
     var
-        DescriptionLbl: Label 'Posts a Warehouse Shipment (ship, optionally invoice), optionally with a quantity per line.', Comment = 'is-IS=Bókar vöruhúsaafhendingu (afhending, valfrjálst reikningur), valfrjálst með magni á hverja línu.';
+        DescriptionLbl: Label 'Posts a Warehouse Shipment (ship, optionally invoice), optionally with a quantity per line.', Comment = 'is-IS=Bókar vöruhúsaafhendingu (afhending, valfrjálst reikningur), valfrjálst með magni á hverja línu. Leitarorð: bóka vöruhúsaafhendingu, afhenda vörur, vörur farnar úr vöruhúsi, senda vörur út, senda vörur af stað.';
     begin
         exit(DescriptionLbl);
     end;

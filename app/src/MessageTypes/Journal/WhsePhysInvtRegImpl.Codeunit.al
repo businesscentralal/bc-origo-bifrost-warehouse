@@ -75,7 +75,7 @@ codeunit 10078449 "Whse PhysInvt Reg Impl ori" implements "Msg Interface ori", "
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Writes counted quantities and registers a warehouse physical inventory journal batch.', Comment = 'is-IS=Skrifar talið magn og skráir keyrslu talningarbókar vöruhúss.';
+        DescriptionLbl: Label 'Writes counted quantities and registers a warehouse physical inventory journal batch.', Comment = 'is-IS=Skrifar talið magn og skráir keyrslu talningarbókar vöruhúss. Leitarorð: skrá talningu, talið magn, niðurstaða birgðatalningar, vöruhúsatalning, skrá talningu vöruhúss.';
     begin
         exit(DescriptionLbl);
     end;

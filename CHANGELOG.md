@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- #129: The is-IS catalogue description of every Warehouse message type now ends with its everyday Icelandic search phrases ("Leitarorð: ...", within 250 characters), because `list_message_types` searches the description and not the keywords. English descriptions are unchanged; `Bifrost Warehouse.is-IS.xlf` is in sync. New test `EveryType_IcelandicDescriptionCarriesSearchPhrases` in 97031 fails when a type's is-IS description holds none of its is-IS keywords or exceeds 250 characters. No new objects.
+
 - #112: accept ServiceOrder on Warehouse.Shipment.Create and Service Order on Warehouse.Shipment.GetSourceDocuments through standard service warehouse APIs. Service sources require Premium and service read permissions, with localized refusals and nextStep. Service orders use shipment + warehouse pick; InventoryPick.Create/Post refuse them with a bilingual nextStep to that flow. Other sources remain available. New codeunit 10078469 `Whse Service Source ori`, tests 97095 `Whse Service Source Tests ori` cover shipment-to-pick, inventory-pick refusal, Premium refusal and unchanged sales behavior.
 - #108: Align cross-dock unknown-parameter help with Foundation in English and Icelandic. Make the acceptance fixtures use independent receipt identifiers and explicit dispatcher languages.
 

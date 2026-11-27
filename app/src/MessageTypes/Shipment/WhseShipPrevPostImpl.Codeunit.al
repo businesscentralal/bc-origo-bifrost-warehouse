@@ -39,7 +39,7 @@ codeunit 10078408 "Whse Ship. Prev. Post Impl ori" implements "Msg Interface ori
 
     procedure GetDescription() Description: Text[250]
     var
-        DescriptionLbl: Label 'Simulates posting a warehouse shipment (ship and invoice) and returns the entries it would create, without saving anything.', Comment = 'is-IS=Hermir bókun vöruhúsaafhendingar (afhending og reikningur) og skilar færslunum sem hún myndi búa til, án þess að vista neitt.';
+        DescriptionLbl: Label 'Simulates posting a warehouse shipment (ship and invoice) and returns the entries it would create, without saving anything.', Comment = 'is-IS=Hermir bókun vöruhúsaafhendingar (afhending og reikningur) og skilar færslunum sem hún myndi búa til, án þess að vista neitt. Leitarorð: forskoða vöruhúsaafhendingu, herma afhendingu, hvað myndi afhendingin bóka.';
     begin
         exit(DescriptionLbl);
     end;

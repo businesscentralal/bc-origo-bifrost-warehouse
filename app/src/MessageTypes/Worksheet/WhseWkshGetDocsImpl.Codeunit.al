@@ -82,7 +82,7 @@ codeunit 10078460 "Whse Wksh GetDocs Impl ori" implements "Msg Interface ori", "
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Fills a pick or put-away worksheet from released warehouse documents.', Comment = 'is-IS=Fyllir tínslu- eða frágangsvinnublað úr útgefnum vöruhúsaskjölum.';
+        DescriptionLbl: Label 'Fills a pick or put-away worksheet from released warehouse documents.', Comment = 'is-IS=Fyllir tínslu- eða frágangsvinnublað úr útgefnum vöruhúsaskjölum. Leitarorð: tínsluvinnublað, frágangsvinnublað, sækja vöruhúsaskjöl, skipuleggja tínslu, skipuleggja frágang, vinnublaðslínur.';
     begin
         exit(DescriptionLbl);
     end;

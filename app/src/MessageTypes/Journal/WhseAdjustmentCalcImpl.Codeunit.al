@@ -69,7 +69,7 @@ codeunit 10078450 "Whse Adjustment Calc Impl ori" implements "Msg Interface ori"
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Calculates the warehouse adjustment of directed locations into an empty item journal batch.', Comment = 'is-IS=Reiknar leiðréttingu vöruhúss á beinum staðsetningum inn í tóma keyrslu birgðabókar.';
+        DescriptionLbl: Label 'Calculates the warehouse adjustment of directed locations into an empty item journal batch.', Comment = 'is-IS=Reiknar leiðréttingu vöruhúss á beinum staðsetningum inn í tóma keyrslu birgðabókar. Leitarorð: reikna leiðréttingu vöruhúss, leiðréttingarhólf, birgðabók, samstilla birgðahöfuðbók, vöruhús í birgðir.';
     begin
         exit(DescriptionLbl);
     end;

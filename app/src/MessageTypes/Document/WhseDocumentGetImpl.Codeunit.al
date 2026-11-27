@@ -34,7 +34,7 @@ codeunit 10078439 "Whse Document Get Impl ori" implements "Msg Interface ori", "
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Reads open warehouse receipts or open warehouse shipments, optionally with lines.', Comment = 'is-IS=Les opnar vöruhúsamóttökur eða opnar vöruhúsaafhendingar, valfrjálst með línum.';
+        DescriptionLbl: Label 'Reads open warehouse receipts or open warehouse shipments, optionally with lines.', Comment = 'is-IS=Les opnar vöruhúsamóttökur eða opnar vöruhúsaafhendingar, valfrjálst með línum. Leitarorð: opin vöruhúsamóttaka, opin vöruhúsaafhending, óafgreidd móttaka, óafgreidd afhending, tínt magn, línur opinna skjala.';
     begin
         exit(DescriptionLbl);
     end;

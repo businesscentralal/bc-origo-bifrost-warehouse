@@ -57,7 +57,7 @@ codeunit 10078420 "Whse DefaultBin Set Impl ori" implements "Msg Interface ori",
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Sets the default bin for an item at a location.', Comment = 'is-IS=Setur sjálfgefið hólf fyrir vöru á staðsetningu.';
+        DescriptionLbl: Label 'Sets the default bin for an item at a location.', Comment = 'is-IS=Setur sjálfgefið hólf fyrir vöru á staðsetningu. Leitarorð: sjálfgefið hólf, sjálfgefið vöruhólf, innihald hólfs, setja sjálfgefið, sjálfgefið vöruhús, fast hólf.';
     begin
         exit(DescriptionLbl);
     end;

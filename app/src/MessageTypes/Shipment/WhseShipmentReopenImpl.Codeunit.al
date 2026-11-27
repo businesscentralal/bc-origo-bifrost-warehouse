@@ -50,7 +50,7 @@ codeunit 10078434 "Whse Shipment Reopen Impl ori" implements "Msg Interface ori"
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Reopens a released warehouse shipment so it can be changed.', Comment = 'is-IS=Opnar útgefna vöruhúsaafhendingu aftur svo hægt sé að breyta henni.';
+        DescriptionLbl: Label 'Reopens a released warehouse shipment so it can be changed.', Comment = 'is-IS=Opnar útgefna vöruhúsaafhendingu aftur svo hægt sé að breyta henni. Leitarorð: opna afhendingu aftur, opna vöruhúsaafhendingu aftur, breyta útgefinni afhendingu, staða afhendingar opin, afturkalla útgáfu afhendingar.';
     begin
         exit(DescriptionLbl);
     end;

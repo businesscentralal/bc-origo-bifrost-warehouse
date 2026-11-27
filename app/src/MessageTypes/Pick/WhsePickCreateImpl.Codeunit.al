@@ -53,7 +53,7 @@ codeunit 10078412 "Whse Pick Create Impl ori" implements "Msg Interface ori", "M
 
     procedure GetDescription() Description: Text[250]
     var
-        DescriptionLbl: Label 'Creates a warehouse pick from a released warehouse shipment, the same as the Create Pick action on the shipment.', Comment = 'is-IS=Stofnar vöruhúsatínslu úr útgefinni vöruhúsaafhendingu, eins og aðgerðin Stofna tínslu á afhendingunni.';
+        DescriptionLbl: Label 'Creates a warehouse pick from a released warehouse shipment, the same as the Create Pick action on the shipment.', Comment = 'is-IS=Stofnar vöruhúsatínslu úr útgefinni vöruhúsaafhendingu, eins og aðgerðin Stofna tínslu á afhendingunni. Leitarorð: stofna tínslu, tínslulisti, tína, tína vörur, tínsla fyrir afhendingu, tína vörueiningar, tína í pöntun, tínslulisti fyrir pöntun.';
     begin
         exit(DescriptionLbl);
     end;

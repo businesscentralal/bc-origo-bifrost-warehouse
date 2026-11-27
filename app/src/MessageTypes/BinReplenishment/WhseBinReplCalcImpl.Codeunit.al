@@ -81,7 +81,7 @@ codeunit 10078429 "Whse Bin Repl Calc Impl ori" implements "Msg Interface ori", 
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Calculates bin replenishment into a movement worksheet.', Comment = 'is-IS=Reiknar endurnýjun hólfa inn á færsluvinnublað.';
+        DescriptionLbl: Label 'Calculates bin replenishment into a movement worksheet.', Comment = 'is-IS=Reiknar endurnýjun hólfa inn á færsluvinnublað. Leitarorð: endurnýjun hólfa, færsluvinnublað, bein innsetning og tínsla, lágmarksmagn, tínsluhólf.';
     begin
         exit(DescriptionLbl);
     end;

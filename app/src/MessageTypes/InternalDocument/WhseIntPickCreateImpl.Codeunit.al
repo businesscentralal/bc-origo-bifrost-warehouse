@@ -50,7 +50,7 @@ codeunit 10078484 "Whse IntPick Create Impl ori" implements "Msg Interface ori",
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Creates an internal pick to a bin at a directed location, and optionally the pick.', Comment = 'is-IS=Stofnar innri tínslu í hólf á beinni staðsetningu og valfrjálst tínslu.';
+        DescriptionLbl: Label 'Creates an internal pick to a bin at a directed location, and optionally the pick.', Comment = 'is-IS=Stofnar innri tínslu í hólf á beinni staðsetningu og valfrjálst tínslu. Leitarorð: innri tínsla, tína í hólf, fylla á framleiðsluhólf, taka til birgðir, bein tínsla.';
     begin
         exit(DescriptionLbl);
     end;

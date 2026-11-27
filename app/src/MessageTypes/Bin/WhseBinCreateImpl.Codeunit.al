@@ -50,7 +50,7 @@ codeunit 10078419 "Whse Bin Create Impl ori" implements "Msg Interface ori", "Ms
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Creates one or more bins at a bin-mandatory location.', Comment = 'is-IS=Stofnar eitt eða fleiri hólf á staðsetningu þar sem hólf eru skyld.';
+        DescriptionLbl: Label 'Creates one or more bins at a bin-mandatory location.', Comment = 'is-IS=Stofnar eitt eða fleiri hólf á staðsetningu þar sem hólf eru skyld. Leitarorð: stofna hólf, nýtt hólf, uppsetning hólfs, bæta við hólfi, vöruhúsahólf, hólf staðsetningar.';
     begin
         exit(DescriptionLbl);
     end;

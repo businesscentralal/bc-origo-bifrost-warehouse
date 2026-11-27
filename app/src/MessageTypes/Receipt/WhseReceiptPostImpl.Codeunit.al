@@ -62,7 +62,7 @@ codeunit 10078410 "Whse Receipt Post Impl ori" implements "Msg Interface ori", "
 
     procedure GetDescription() Description: Text[250]
     var
-        DescriptionLbl: Label 'Posts a Warehouse Receipt (receive), optionally with a quantity per line.', Comment = 'is-IS=Bókar vöruhúsamóttöku (móttöku), valfrjálst með magni á hverja línu.';
+        DescriptionLbl: Label 'Posts a Warehouse Receipt (receive), optionally with a quantity per line.', Comment = 'is-IS=Bókar vöruhúsamóttöku (móttöku), valfrjálst með magni á hverja línu. Leitarorð: móttaka, vörumóttaka, vörur komnar, vörur komu, vöruhúsamóttaka, bóka vöruhúsamóttöku.';
     begin
         exit(DescriptionLbl);
     end;

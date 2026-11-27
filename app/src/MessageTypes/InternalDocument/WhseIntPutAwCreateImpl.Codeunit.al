@@ -50,7 +50,7 @@ codeunit 10078483 "Whse IntPutAw Create Impl ori" implements "Msg Interface ori"
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Creates an internal put-away for stock in a bin at a directed location, and optionally the put-away.', Comment = 'is-IS=Stofnar innri frágang fyrir birgðir í hólfi á beinni staðsetningu og valfrjálst frágang.';
+        DescriptionLbl: Label 'Creates an internal put-away for stock in a bin at a directed location, and optionally the put-away.', Comment = 'is-IS=Stofnar innri frágang fyrir birgðir í hólfi á beinni staðsetningu og valfrjálst frágang. Leitarorð: innri frágangur, ganga frá úr hólfi, skila á lager, tæma móttökuhólf, leiðréttingarhólf, bein innsetning.';
     begin
         exit(DescriptionLbl);
     end;

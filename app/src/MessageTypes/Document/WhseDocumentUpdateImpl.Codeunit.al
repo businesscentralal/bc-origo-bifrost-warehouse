@@ -44,7 +44,7 @@ codeunit 10078441 "Whse Document Update Impl ori" implements "Msg Interface ori"
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Changes header data and line bins on an open warehouse receipt or shipment.', Comment = 'is-IS=Breytir hausgögnum og hólfum lína á opinni vöruhúsamóttöku eða -afhendingu.';
+        DescriptionLbl: Label 'Changes header data and line bins on an open warehouse receipt or shipment.', Comment = 'is-IS=Breytir hausgögnum og hólfum lína á opinni vöruhúsamóttöku eða -afhendingu. Leitarorð: uppfæra móttöku, uppfæra afhendingu, breyta bókunardagsetningu, afhendingarnúmer lánardrottins, flutningsaðili, ytra skjalanúmer, hólf móttöku, hólf afhendingar.';
     begin
         exit(DescriptionLbl);
     end;

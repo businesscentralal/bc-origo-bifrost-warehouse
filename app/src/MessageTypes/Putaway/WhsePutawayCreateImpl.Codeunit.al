@@ -35,7 +35,7 @@ codeunit 10078415 "Whse Putaway Create Impl ori" implements "Msg Interface ori",
 
     procedure GetDescription() Description: Text[250]
     var
-        DescriptionLbl: Label 'Creates a warehouse put-away from a posted warehouse receipt, or returns the open put-away that already exists for it.', Comment = 'is-IS=Stofnar vöruhúsafrágang úr bókaðri vöruhúsamóttöku, eða skilar opna frágangnum sem er þegar til fyrir hana.';
+        DescriptionLbl: Label 'Creates a warehouse put-away from a posted warehouse receipt, or returns the open put-away that already exists for it.', Comment = 'is-IS=Stofnar vöruhúsafrágang úr bókaðri vöruhúsamóttöku, eða skilar opna frágangnum sem er þegar til fyrir hana. Leitarorð: stofna frágang, ganga frá vörum, frágangur, setja vörur í hillur, geyma mótteknar vörur.';
     begin
         exit(DescriptionLbl);
     end;

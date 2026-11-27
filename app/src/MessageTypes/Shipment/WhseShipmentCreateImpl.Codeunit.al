@@ -33,7 +33,7 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
 
     procedure GetDescription() Description: Text[250]
     var
-        DescriptionLbl: Label 'Creates Warehouse Shipment(s) from one or more released source documents (Sales Order, Outbound Transfer Order).', Comment = 'is-IS=Stofnar vöruhúsaafhendingar úr einu eða fleiri útgefnum upprunaskjölum (sölupöntun, útleiðar-millifærslupöntun).';
+        DescriptionLbl: Label 'Creates Warehouse Shipment(s) from one or more released source documents (Sales Order, Outbound Transfer Order).', Comment = 'is-IS=Stofnar vöruhúsaafhendingar úr einu eða fleiri útgefnum upprunaskjölum (sölupöntun, útleiðar-millifærslupöntun). Leitarorð: vöruhúsaafhending, stofna afhendingu, undirbúa afhendingu, senda pöntun frá vöruhúsi, útsending, senda af stað.';
     begin
         exit(DescriptionLbl);
     end;

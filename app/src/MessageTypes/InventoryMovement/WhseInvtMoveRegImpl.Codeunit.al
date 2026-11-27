@@ -65,7 +65,7 @@ codeunit 10078428 "Whse InvtMove Reg Impl ori" implements "Msg Interface ori", "
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Registers an inventory movement and returns the registered quantity.', Comment = 'is-IS=Skráir birgðafærslu og skilar skráða magninu.';
+        DescriptionLbl: Label 'Registers an inventory movement and returns the registered quantity.', Comment = 'is-IS=Skráir birgðafærslu og skilar skráða magninu. Leitarorð: skrá birgðafærslu, færa birgðir, einfalt vöruhús, staðfesta hólfafærslu.';
     begin
         exit(DescriptionLbl);
     end;

@@ -78,7 +78,7 @@ codeunit 10078432 "Whse Ship GetSrcDocs Impl ori" implements "Msg Interface ori"
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Adds lines from released outbound source documents to a warehouse shipment, or to a new shipment at a location.', Comment = 'is-IS=Bætir línum úr útgefnum útleiðandi upprunaskjölum við vöruhúsaafhendingu eða nýja afhendingu á staðsetningu.';
+        DescriptionLbl: Label 'Adds lines from released outbound source documents to a warehouse shipment, or to a new shipment at a location.', Comment = 'is-IS=Bætir línum úr útgefnum útleiðandi upprunaskjölum við vöruhúsaafhendingu eða nýja afhendingu á staðsetningu. Leitarorð: sækja upprunaskjöl, bæta sölupöntunum við afhendingu, draga pantanir í vöruhúsaafhendingu, afhenda margar pantanir.';
     begin
         exit(DescriptionLbl);
     end;

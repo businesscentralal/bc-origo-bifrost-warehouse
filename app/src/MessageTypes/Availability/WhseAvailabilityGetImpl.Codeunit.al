@@ -46,7 +46,7 @@ codeunit 10078440 "Whse Availability Get Impl ori" implements "Msg Interface ori
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Reads how much of an item can be picked at a location, per bin and per lot, serial or package.', Comment = 'is-IS=Les hversu mikið af vöru er hægt að tína á staðsetningu, eftir hólfum og eftir lotu, raðnúmeri eða pakka.';
+        DescriptionLbl: Label 'Reads how much of an item can be picked at a location, per bin and per lot, serial or package.', Comment = 'is-IS=Les hversu mikið af vöru er hægt að tína á staðsetningu, eftir hólfum og eftir lotu, raðnúmeri eða pakka. Leitarorð: tiltækt til tínslu, tínsluframboð, af hverju er tínslan of lítil, framboð í hólfum, framboð eftir lotu, birgðir á tínslu, læst hólf.';
     begin
         exit(DescriptionLbl);
     end;

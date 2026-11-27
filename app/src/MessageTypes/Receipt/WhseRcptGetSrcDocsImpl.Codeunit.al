@@ -78,7 +78,7 @@ codeunit 10078431 "Whse Rcpt GetSrcDocs Impl ori" implements "Msg Interface ori"
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Adds lines from released inbound source documents to a warehouse receipt, or to a new receipt at a location.', Comment = 'is-IS=Bætir línum úr útgefnum innkomandi upprunaskjölum við vöruhúsamóttöku eða nýja móttöku á staðsetningu.';
+        DescriptionLbl: Label 'Adds lines from released inbound source documents to a warehouse receipt, or to a new receipt at a location.', Comment = 'is-IS=Bætir línum úr útgefnum innkomandi upprunaskjölum við vöruhúsamóttöku eða nýja móttöku á staðsetningu. Leitarorð: sækja upprunaskjöl, bæta innkaupapöntunum við móttöku, draga pantanir í vöruhúsamóttöku, taka á móti mörgum pöntunum, sameina móttökur.';
     begin
         exit(DescriptionLbl);
     end;

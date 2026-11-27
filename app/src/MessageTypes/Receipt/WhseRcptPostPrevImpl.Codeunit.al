@@ -35,7 +35,7 @@ codeunit 10078411 "Whse Rcpt Post Prev. Impl ori" implements "Msg Interface ori"
 
     procedure GetDescription() Description: Text[250]
     var
-        DescriptionLbl: Label 'Simulates receiving a warehouse receipt and returns the entries it would create, such as item and value entries and the posted receipt, without saving anything.', Comment = 'is-IS=Hermir móttöku vöruhúsamóttöku og skilar færslunum sem hún myndi búa til, svo sem birgða- og virðisfærslum og bókuðu móttökunni, án þess að vista neitt.';
+        DescriptionLbl: Label 'Simulates receiving a warehouse receipt and returns the entries it would create, such as item and value entries and the posted receipt, without saving anything.', Comment = 'is-IS=Hermir móttöku vöruhúsamóttöku og skilar færslunum sem hún myndi búa til, svo sem birgða- og virðisfærslum og bókuðu móttökunni, án þess að vista neitt. Leitarorð: forskoða vöruhúsamóttöku, herma móttöku, hvað myndi móttakan bóka.';
     begin
         exit(DescriptionLbl);
     end;

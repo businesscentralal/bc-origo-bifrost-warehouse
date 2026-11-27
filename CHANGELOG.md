@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- #129: The is-IS catalogue description of every Warehouse message type now ends with its everyday Icelandic search phrases ("Leitarorð: ...", within 250 characters), because `list_message_types` searches the description and not the keywords. English descriptions are unchanged; `Bifrost Warehouse.is-IS.xlf` is in sync. New test `EveryType_IcelandicDescriptionCarriesSearchPhrases` in 97031 fails when a type's is-IS description holds none of its is-IS keywords or exceeds 250 characters. No new objects.
+
 - #108: Align cross-dock unknown-parameter help with Foundation in English and Icelandic. Make the acceptance fixtures use independent receipt identifiers and explicit dispatcher languages.
 
 - #108: Add `Warehouse.Receipt.CalculateCrossDock` for receipt-scoped cross-dock suggestions, optional line selection and an all-or-nothing preview (`apply=false`). Business Central replaces only its working suggestions; receipt documents and entries are preserved. Add implementation/enum value 10078444, manually bound scope subscriber 10078445 and acceptance test codeunit 97035; synchronize Icelandic discovery and refusal text.

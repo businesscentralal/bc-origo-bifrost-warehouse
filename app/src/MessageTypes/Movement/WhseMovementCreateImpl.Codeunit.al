@@ -53,7 +53,7 @@ codeunit 10078421 "Whse Movement Create Impl ori" implements "Msg Interface ori"
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Creates a warehouse movement from a movement worksheet or from inline lines.', Comment = 'is-IS=Stofnar vöruhúsafærslu úr færslublaði eða úr línum í beiðninni.';
+        DescriptionLbl: Label 'Creates a warehouse movement from a movement worksheet or from inline lines.', Comment = 'is-IS=Stofnar vöruhúsafærslu úr færslublaði eða úr línum í beiðninni. Leitarorð: stofna færslu, vöruhúsafærsla, færa milli hólfa, hólfaflutningur, bein færsla, færslublað.';
     begin
         exit(DescriptionLbl);
     end;

@@ -50,7 +50,7 @@ codeunit 10078433 "Whse Shipment Release Impl ori" implements "Msg Interface ori
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Releases a warehouse shipment so picks can be created.', Comment = 'is-IS=Gefur út vöruhúsaafhendingu svo hægt sé að stofna tínslu.';
+        DescriptionLbl: Label 'Releases a warehouse shipment so picks can be created.', Comment = 'is-IS=Gefur út vöruhúsaafhendingu svo hægt sé að stofna tínslu. Leitarorð: gefa út afhendingu, gefa út vöruhúsaafhendingu, tilbúið til tínslu, staða afhendingar útgefin, samþykkja afhendingu.';
     begin
         exit(DescriptionLbl);
     end;

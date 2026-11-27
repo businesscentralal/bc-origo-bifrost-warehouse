@@ -74,7 +74,7 @@ codeunit 10078446 "Whse Journal Create Impl ori" implements "Msg Interface ori",
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Creates warehouse item journal or warehouse reclassification journal lines at a directed location.', Comment = 'is-IS=Stofnar línur í birgðabók vöruhúss eða endurflokkunarbók vöruhúss á beinni staðsetningu.';
+        DescriptionLbl: Label 'Creates warehouse item journal or warehouse reclassification journal lines at a directed location.', Comment = 'is-IS=Stofnar línur í birgðabók vöruhúss eða endurflokkunarbók vöruhúss á beinni staðsetningu. Leitarorð: birgðabók vöruhúss, endurflokkunarbók vöruhúss, leiðrétting hólfs, jákvæð leiðrétting, neikvæð leiðrétting, færa milli hólfa, endurflokka lotu.';
     begin
         exit(DescriptionLbl);
     end;

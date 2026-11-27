@@ -46,7 +46,7 @@ codeunit 10078442 "Whse Activity Assign Impl ori" implements "Msg Interface ori"
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Assigns picks, put-aways and movements to a warehouse employee and re-sorts them.', Comment = 'is-IS=Úthlutar tínslum, frágangi og tilfærslum til starfsmanns vöruhúss og raðar þeim upp á nýtt.';
+        DescriptionLbl: Label 'Assigns picks, put-aways and movements to a warehouse employee and re-sorts them.', Comment = 'is-IS=Úthlutar tínslum, frágangi og tilfærslum til starfsmanns vöruhúss og raðar þeim upp á nýtt. Leitarorð: úthluta tínslu, úthluta frágangi, úthluta vöruhúsaaðgerð, afturkalla úthlutun tínslu, starfsmaður vöruhúss, raða tínslu, endurraða aðgerð.';
     begin
         exit(DescriptionLbl);
     end;

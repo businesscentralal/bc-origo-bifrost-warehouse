@@ -62,7 +62,7 @@ codeunit 10078427 "Whse InvtMove Create Impl ori" implements "Msg Interface ori"
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Creates an inventory movement from inline bin lines or from assembly consumption.', Comment = 'is-IS=Stofnar birgðafærslu úr línum milli hólfa eða úr samsetningarnotkun.';
+        DescriptionLbl: Label 'Creates an inventory movement from inline bin lines or from assembly consumption.', Comment = 'is-IS=Stofnar birgðafærslu úr línum milli hólfa eða úr samsetningarnotkun. Leitarorð: birgðafærsla, færa milli hólfa, einfalt vöruhús, innri færsla, samsetningarnotkun.';
     begin
         exit(DescriptionLbl);
     end;

@@ -32,7 +32,7 @@ codeunit 10078418 "Whse Bin Get Impl ori" implements "Msg Interface ori", "Msg C
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Reads bins at a location, with optional bin content.', Comment = 'is-IS=Les hólf á staðsetningu, með valfrjálsu innihaldi hólfs.';
+        DescriptionLbl: Label 'Reads bins at a location, with optional bin content.', Comment = 'is-IS=Les hólf á staðsetningu, með valfrjálsu innihaldi hólfs. Leitarorð: hólf, hólfaskrá, hólf staðsetningar, vöruhúsahólf, hólfalisti, tómt hólf.';
     begin
         exit(DescriptionLbl);
     end;

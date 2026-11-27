@@ -31,7 +31,7 @@ codeunit 10078388 "Whse BinContent Get Impl ori" implements "Msg Interface ori",
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Reads Bin Content rows with item, location, bin and variant filters.', Comment = 'is-IS=Les birgðainnihald hólfa með síum á vöru, staðsetningu, hólf og afbrigði.';
+        DescriptionLbl: Label 'Reads Bin Content rows with item, location, bin and variant filters.', Comment = 'is-IS=Les birgðainnihald hólfa með síum á vöru, staðsetningu, hólf og afbrigði. Leitarorð: birgðainnihald hólfs, magn í hólfi, vara í hólfi, vöruhúsabirgðir, birgðir eftir hólfi, birgðir eftir staðsetningu.';
     begin
         exit(DescriptionLbl);
     end;

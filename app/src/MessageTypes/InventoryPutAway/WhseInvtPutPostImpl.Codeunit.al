@@ -53,7 +53,7 @@ codeunit 10078426 "Whse InvtPut Post Impl ori" implements "Msg Interface ori", "
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Posts an inventory put-away and receives the source document.', Comment = 'is-IS=Bókar birgðafrágang og móttekur upprunaskjalið.';
+        DescriptionLbl: Label 'Posts an inventory put-away and receives the source document.', Comment = 'is-IS=Bókar birgðafrágang og móttekur upprunaskjalið. Leitarorð: bóka birgðafrágang, móttaka birgðafrágangs, bókun birgðafrágangs, bóka upprunaskjal, reikningsfæra birgðafrágang, einfalt vöruhús.';
     begin
         exit(DescriptionLbl);
     end;

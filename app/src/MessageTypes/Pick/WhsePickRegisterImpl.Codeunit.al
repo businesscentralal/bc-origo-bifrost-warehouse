@@ -30,7 +30,7 @@ codeunit 10078414 "Whse Pick Register Impl ori" implements "Msg Interface ori", 
 
     procedure GetDescription() Description: Text[250]
     var
-        DescriptionLbl: Label 'Registers a warehouse pick, the same as the Register Pick action, and updates the picked quantities on the warehouse shipment.', Comment = 'is-IS=Skráir vöruhúsatínslu, eins og aðgerðin Skrá tínslu, og uppfærir tínt magn á vöruhúsaafhendingunni.';
+        DescriptionLbl: Label 'Registers a warehouse pick, the same as the Register Pick action, and updates the picked quantities on the warehouse shipment.', Comment = 'is-IS=Skráir vöruhúsatínslu, eins og aðgerðin Skrá tínslu, og uppfærir tínt magn á vöruhúsaafhendingunni. Leitarorð: skrá tínslu, vörur tíndar, tínslu lokið, staðfesta tínslu.';
     begin
         exit(DescriptionLbl);
     end;

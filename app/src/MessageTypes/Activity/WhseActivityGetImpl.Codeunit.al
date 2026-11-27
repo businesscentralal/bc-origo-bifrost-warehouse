@@ -32,7 +32,7 @@ codeunit 10078390 "Whse Activity Get Impl ori" implements "Msg Interface ori", "
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Reads open warehouse activities with optional header, document and line filters.', Comment = 'is-IS=Les opnar vöruhúsaaðgerðir með valfrjálsum síum á haus, fylgiskjal og línur.';
+        DescriptionLbl: Label 'Reads open warehouse activities with optional header, document and line filters.', Comment = 'is-IS=Les opnar vöruhúsaaðgerðir með valfrjálsum síum á haus, fylgiskjal og línur. Leitarorð: vöruhúsavirkni, opin tínsla, opinn frágangur, vöruhúslínur, haus virkni, línur virkni.';
     begin
         exit(DescriptionLbl);
     end;

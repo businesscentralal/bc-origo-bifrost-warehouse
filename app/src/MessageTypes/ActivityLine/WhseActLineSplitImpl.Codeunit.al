@@ -57,7 +57,7 @@ codeunit 10078462 "Whse ActLine Split Impl ori" implements "Msg Interface ori", 
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Splits a warehouse activity line so the rest of its quantity can go to another bin or lot.', Comment = 'is-IS=Skiptir línu vöruhúsaaðgerðar svo afgangur magnsins geti farið í annað hólf eða aðra lotu.';
+        DescriptionLbl: Label 'Splits a warehouse activity line so the rest of its quantity can go to another bin or lot.', Comment = 'is-IS=Skiptir línu vöruhúsaaðgerðar svo afgangur magnsins geti farið í annað hólf eða aðra lotu. Leitarorð: skipta línu, skipta tínslulínu, skipta frágangslínu, hluti í hólf, tvö hólf, skipta magni.';
     begin
         exit(DescriptionLbl);
     end;

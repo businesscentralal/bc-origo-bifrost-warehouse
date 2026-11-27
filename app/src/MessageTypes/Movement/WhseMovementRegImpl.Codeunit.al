@@ -69,7 +69,7 @@ codeunit 10078422 "Whse Movement Reg Impl ori" implements "Msg Interface ori", "
     /// <returns>Description of this message type.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Registers a warehouse movement and returns the registered movement number.', Comment = 'is-IS=Skráir vöruhúsafærslu og skilar númeri skráðu færslunnar.';
+        DescriptionLbl: Label 'Registers a warehouse movement and returns the registered movement number.', Comment = 'is-IS=Skráir vöruhúsafærslu og skilar númeri skráðu færslunnar. Leitarorð: skrá færslu, bóka færslu, ljúka færslu, skráning vöruhúsafærslu, færa birgðir, staðfesta færslu.';
     begin
         exit(DescriptionLbl);
     end;

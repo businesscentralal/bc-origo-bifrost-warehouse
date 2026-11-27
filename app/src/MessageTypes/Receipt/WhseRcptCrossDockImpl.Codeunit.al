@@ -80,7 +80,7 @@ codeunit 10078444 "Whse Rcpt CrossDock Impl ori" implements "Msg Interface ori",
     /// <returns>A short description.</returns>
     procedure GetDescription(): Text[250]
     var
-        DescriptionLbl: Label 'Calculates cross-dock opportunities on a warehouse receipt; optionally previews without saving.', Comment = 'is-IS=Reiknar tækifæri til gegnumstreymis á vöruhúsamóttöku; getur forskoðað án þess að vista.';
+        DescriptionLbl: Label 'Calculates cross-dock opportunities on a warehouse receipt; optionally previews without saving.', Comment = 'is-IS=Reiknar tækifæri til gegnumstreymis á vöruhúsamóttöku; getur forskoðað án þess að vista. Leitarorð: gegnumstreymi móttöku, reikna gegnumstreymi, eftirspurn móttöku, forskoða gegnumstreymi.';
     begin
         exit(DescriptionLbl);
     end;

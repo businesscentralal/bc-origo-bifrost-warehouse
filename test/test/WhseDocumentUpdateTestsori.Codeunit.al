@@ -207,7 +207,7 @@ codeunit 97009 "Whse Document Update Tests ori"
         GlobalLanguage(1033);
         Assert.AreEqual('Changes header data and line bins on an open warehouse receipt or shipment.', Discovery.GetDescription(), 'English description.');
         GlobalLanguage(1039);
-        Assert.AreEqual('Breytir hausgögnum og hólfum lína á opinni vöruhúsamóttöku eða -afhendingu.', Discovery.GetDescription(), 'Icelandic description.');
+        Assert.IsTrue(Discovery.GetDescription().StartsWith('Breytir hausgögnum og hólfum lína á opinni vöruhúsamóttöku eða -afhendingu. Leitarorð:'), 'Icelandic description.');
         GlobalLanguage(OriginalLanguage);
         Helper.ExpectError(Helper.RunTypeInLanguage(Enum::"Message Type ori"::"Warehouse.Document.Update", '', '{"documentNo":"X","header":{}}', 1039), 'MissingParameter', 'Sendu gildið sem vantar; Help.Implementation.Get sýnir viðföngin.');
         Helper.ExpectError(Helper.RunTypeInLanguage(Enum::"Message Type ori"::"Warehouse.Document.Update", '', '{"documentNo":"X","header":{}}', 1033), 'MissingParameter', 'Send the missing value; Help.Implementation.Get lists the parameters.');

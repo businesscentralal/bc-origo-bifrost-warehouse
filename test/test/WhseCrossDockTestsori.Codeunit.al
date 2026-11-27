@@ -373,7 +373,7 @@ codeunit 97035 "Whse CrossDock Tests ori"
         Assert.AreEqual('Calculates cross-dock opportunities on a warehouse receipt; optionally previews without saving.', Implementation.GetDescription(), 'English discovery.');
         Implementation.GetOverview(EnglishOverview);
         GlobalLanguage(1039);
-        Assert.AreEqual('Reiknar tækifæri til gegnumstreymis á vöruhúsamóttöku; getur forskoðað án þess að vista.', Implementation.GetDescription(), 'Icelandic discovery.');
+        Assert.IsTrue(Implementation.GetDescription().StartsWith('Reiknar tækifæri til gegnumstreymis á vöruhúsamóttöku; getur forskoðað án þess að vista. Leitarorð:'), 'Icelandic discovery.');
         Implementation.GetOverview(IcelandicOverview);
         GlobalLanguage(OriginalLanguage);
         Assert.AreEqual(EnglishOverview, IcelandicOverview, 'Help chapter stays English.');

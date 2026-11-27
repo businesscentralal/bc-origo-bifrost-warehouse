@@ -9,6 +9,7 @@ using Microsoft.Warehouse.Activity;
 using Microsoft.Warehouse.Document;
 using Origo.Bifrost;
 using Origo.Bifrost.Warehouse;
+using System.Environment.Configuration;
 using System.TestLibraries.Utilities;
 
 /// <summary>Issue 112 shipment service-source tests through the public message dispatcher.</summary>
@@ -119,7 +120,7 @@ codeunit 97095 "Whse Service Source Tests ori"
     var
         Response: JsonObject;
     begin
-        LibraryApplicationArea.EnablePremiumSetup();
+        EnablePremiumExperience();
         RunCreate('BIF112-MISSING', Response);
         Assert.AreEqual('RecordNotFound', TextValue(Response, 'code'), ResponseText(Response));
     end;
@@ -393,6 +394,19 @@ codeunit 97095 "Whse Service Source Tests ori"
             Assert.IsTrue(TextValue(Response, 'nextStep').Contains('service order'), 'English next step.');
     end;
 
+    local procedure EnablePremiumExperience()
+    var
+        ApplicationAreaMgmtFacade: Codeunit "Application Area Mgmt. Facade";
+    begin
+        // CRONUS is an evaluation company. EnablePremiumSetup deletes the application areas and
+        // SaveExperienceTierCurrentCompany then returns without restoring them when the tier is
+        // already Premium, which is how CI leaves the company after assignPremiumPlan. Passing
+        // through Essential makes the Premium save rewrite the areas.
+        LibraryApplicationArea.EnableEssentialSetup();
+        LibraryApplicationArea.EnablePremiumSetup();
+        Assert.IsTrue(ApplicationAreaMgmtFacade.IsPremiumExperienceEnabled(), 'Premium experience must be enabled before a service source is used.');
+    end;
+
     local procedure PrepareServiceOrder(var ServiceHeader: Record "Service Header"; var Location: Record Location; ReleaseDocument: Boolean)
     var
         Item: Record Item;
@@ -400,7 +414,7 @@ codeunit 97095 "Whse Service Source Tests ori"
         ServiceLine: Record "Service Line";
         ReleaseServiceDocument: Codeunit "Release Service Document";
     begin
-        LibraryApplicationArea.EnablePremiumSetup();
+        EnablePremiumExperience();
         ShipmentHelper.SetupLocationAndItem(Location, Item, 0);
         ShipmentHelper.RegisterCurrentUserAsWarehouseEmployee(Location.Code);
         LibrarySales.CreateCustomer(Customer);

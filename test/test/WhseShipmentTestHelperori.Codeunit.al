@@ -174,4 +174,23 @@ codeunit 97021 "Whse Shipment Test Helper ori"
         Commit();
         exit(Confirmation.RunMessage(MessageType, Subject, RequestText, ResponseJson, OmitCommit));
     end;
+    /// <summary>Dispatches a locale assertion with an explicit LCID, independently of tenant defaults.</summary>
+    internal procedure RunLocalizedMessage(MessageType: Enum "Message Type ori"; RequestText: Text; LanguageId: Integer; var ResponseJson: JsonObject): Boolean
+    var
+        Dispatcher: Codeunit "Dispatcher ori";
+        RequestContent: BigText;
+        ResponseContent: BigText;
+        ResponseContentType: Text[100];
+        ResponseText: Text;
+        TaskId: Guid;
+        MessageId: Guid;
+        ResponseTime: Duration;
+    begin
+        Clear(ResponseJson);
+        RequestContent.AddText(RequestText);
+        Dispatcher.EnqueueAndProcess(MessageType, "Message Version ori"::"1.0", '', 'Bifrost Warehouse Tests', 'text/json', RequestContent,
+            TaskId, LanguageId, MessageId, ResponseContent, ResponseContentType, ResponseTime);
+        ResponseContent.GetSubText(ResponseText, 1, ResponseContent.Length());
+        exit(ResponseJson.ReadFrom(ResponseText));
+    end;
 }

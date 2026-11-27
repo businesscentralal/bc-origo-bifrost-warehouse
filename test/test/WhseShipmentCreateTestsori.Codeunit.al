@@ -174,37 +174,12 @@ codeunit 97011 "Whse Shipment Create Tests ori"
 
     local procedure ReadLocalizedRefusal(LanguageId: Integer; RequestText: Text; var ResponseJson: JsonObject)
     var
-        CompanyInformation: Record "Company Information";
-        Language: Record Language;
         ShipmentHelper: Codeunit "Whse Shipment Test Helper ori";
-        OriginalLanguageCode: Code[10];
-        TestLanguageCode: Code[10];
         OriginalLanguageId: Integer;
         Succeeded: Boolean;
     begin
-        // The public dispatcher uses the company language when Foundation's default is blank.
-        // Seed an owned language mapping; do not access Foundation Setup or licensing data.
-        if LanguageId = 1039 then
-            TestLanguageCode := 'W2IS'
-        else
-            TestLanguageCode := 'W2EN';
-        if not Language.Get(TestLanguageCode) then begin
-            Language.Init();
-            Language.Code := TestLanguageCode;
-            Language.Name := 'Owned W2 locale test';
-            Language.Insert();
-        end;
-        Language."Windows Language ID" := LanguageId;
-        Language.Modify();
-        CompanyInformation.Get();
-        OriginalLanguageCode := CompanyInformation."Default Language Code";
-        CompanyInformation."Default Language Code" := Language.Code;
-        CompanyInformation.Modify();
         OriginalLanguageId := GlobalLanguage();
-        Succeeded := ShipmentHelper.RunMessage("Message Type ori"::"Warehouse.Shipment.Create", '', RequestText, ResponseJson, false);
-        CompanyInformation."Default Language Code" := OriginalLanguageCode;
-        CompanyInformation.Modify();
-        // The orchestrator restores GlobalLanguage; company fixture state is restored before assertions.
+        Succeeded := ShipmentHelper.RunLocalizedMessage("Message Type ori"::"Warehouse.Shipment.Create", RequestText, LanguageId, ResponseJson);
         Assert.AreEqual(OriginalLanguageId, GlobalLanguage(), 'The native pipeline must restore the caller language.');
         Assert.IsTrue(Succeeded, 'Localized request must return JSON.');
     end;

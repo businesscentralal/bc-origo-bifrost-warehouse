@@ -73,7 +73,7 @@ codeunit 10078423 "Whse InvtPick Create Impl ori" implements "Msg Interface ori"
     /// <returns>Selection description.</returns>
     procedure GetSelectionDescription(): Text
     var
-        SelectionLbl: Label 'Business Central commits the inventory pick it creates. Use Warehouse.Shipment.Create and Warehouse.Pick.Create when the location uses warehouse shipments.', Comment = 'is-IS=Business Central staðfestir birgðatínsluna sem það stofnar. Notaðu Warehouse.Shipment.Create og Warehouse.Pick.Create þegar staðsetningin notar vöruhúsaafhendingar.';
+        SelectionLbl: Label 'Business Central commits the inventory pick it creates. Use Warehouse.Shipment.Create and Warehouse.Pick.Create when the location uses warehouse shipments. Service orders use warehouse shipment and warehouse pick instead.', Comment = 'is-IS=Business Central staðfestir birgðatínsluna sem það stofnar. Notaðu Warehouse.Shipment.Create og Warehouse.Pick.Create þegar staðsetningin notar vöruhúsaafhendingar. Þjónustupantanir nota vöruhúsaafhendingu og vöruhúsatínslu í staðinn.';
     begin
         exit(SelectionLbl);
     end;
@@ -175,10 +175,12 @@ codeunit 10078423 "Whse InvtPick Create Impl ori" implements "Msg Interface ori"
     /// <returns>True when errors are declared.</returns>
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
+        ServiceSource: Codeunit "Whse Service Source ori";
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Entry: JsonObject;
         UnknownParameterNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
+        AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, ServiceSource.InventoryPickRefusalText(), ServiceSource.ShipmentPickNextStepText());
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'The source document is not released, or the location does not require pick.', 'Release the document with Sales.Document.Release, or post the document directly.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::PreconditionFailed, 'The location uses warehouse shipments.', 'Use Warehouse.Shipment.Create and Warehouse.Pick.Create instead.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MissingParameter, 'sourceDocument, or a document number or SystemId, is missing.', 'Send sourceDocument and sourceNo or systemId.');
@@ -429,6 +431,7 @@ codeunit 10078423 "Whse InvtPick Create Impl ori" implements "Msg Interface ori"
 
     local procedure ResolveDocument(RequestJson: JsonObject; var Argument: Record "Message Argument ori"; var SourceDocument: Enum "Warehouse Request Source Document"; var DocumentNo: Code[20])
     var
+        ServiceSource: Codeunit "Whse Service Source ori";
         Context: Codeunit "Whse Write Context ori";
         Locations: List of [Code[10]];
         SourceText: Text;
@@ -453,6 +456,10 @@ codeunit 10078423 "Whse InvtPick Create Impl ori" implements "Msg Interface ori"
             exit;
         if not SourcePresent then begin
             RequireSourceDocument(Argument);
+            exit;
+        end;
+        if UpperCase(DelChr(SourceText, '=', ' ')) = 'SERVICEORDER' then begin
+            ServiceSource.RefuseInventoryPick(Argument, 'sourceDocument', SourceText);
             exit;
         end;
         if not TryParseSourceDocument(SourceText, SourceDocument) then begin

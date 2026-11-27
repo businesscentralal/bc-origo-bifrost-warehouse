@@ -11,6 +11,7 @@ namespace Origo.Bifrost.Warehouse;
 using Microsoft.Inventory.Location;
 using Microsoft.Inventory.Transfer;
 using Microsoft.Sales.Document;
+using Microsoft.Service.Document;
 using Microsoft.Warehouse.Document;
 using Microsoft.Warehouse.Request;
 
@@ -33,7 +34,7 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
 
     procedure GetDescription() Description: Text[250]
     var
-        DescriptionLbl: Label 'Creates Warehouse Shipment(s) from one or more released source documents (Sales Order, Outbound Transfer Order).', Comment = 'is-IS=Stofnar vöruhúsaafhendingar úr einu eða fleiri útgefnum upprunaskjölum (sölupöntun, útleiðar-millifærslupöntun). Leitarorð: vöruhúsaafhending, stofna afhendingu, undirbúa afhendingu, senda pöntun frá vöruhúsi, útsending, senda af stað.';
+        DescriptionLbl: Label 'Creates Warehouse Shipment(s) from one or more released source documents (Sales Order, Outbound Transfer Order, Service Order).', Comment = 'is-IS=Stofnar vöruhúsaafhendingar úr einu eða fleiri útgefnum upprunaskjölum (sölupöntun, útleiðar-millifærslupöntun, þjónustupöntun). Leitarorð: vöruhúsaafhending, stofna afhendingu, undirbúa afhendingu, senda pöntun frá vöruhúsi, útsending.';
     begin
         exit(DescriptionLbl);
     end;
@@ -47,7 +48,7 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
 
     procedure GetSelectionDescription(): Text
     var
-        SelectionLbl: Label 'Creates outbound warehouse shipments from released sales or transfer orders; use Warehouse.Shipment.Post to post one.', Comment = 'is-IS=Stofnar útleiðarafhendingar úr útgefnum sölu- eða millifærslupöntunum; notaðu Warehouse.Shipment.Post til að bóka afhendingu.';
+        SelectionLbl: Label 'Creates outbound warehouse shipments from released sales, transfer or service orders; use Warehouse.Shipment.Post to post one.', Comment = 'is-IS=Stofnar útleiðarafhendingar úr útgefnum sölu-, millifærslu- eða þjónustupöntunum; notaðu Warehouse.Shipment.Post til að bóka afhendingu.';
     begin
         exit(SelectionLbl);
     end;
@@ -66,7 +67,7 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        Target.Add(ContractMgt.TargetEntry('data.sourceDocuments[].documentNo', 'document no.', 'The released Sales Order or outbound Transfer Order from which a Warehouse Shipment is created.'));
+        Target.Add(ContractMgt.TargetEntry('data.sourceDocuments[].documentNo', 'document no.', 'The released Sales Order, outbound Transfer Order or Service Order from which a Warehouse Shipment is created.'));
         exit(true);
     end;
 
@@ -76,9 +77,9 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
         SourceChildren: JsonArray;
         SourceParameter: JsonObject;
     begin
-        SourceChildren.Add(ContractMgt.Parameter('sourceType', 'string', true, 'Kind of source document: SalesOrder or TransferOrder. Not case sensitive.'));
+        SourceChildren.Add(ContractMgt.Parameter('sourceType', 'string', true, 'Kind of source document: SalesOrder, TransferOrder or ServiceOrder. Not case sensitive.'));
         SourceChildren.Add(ContractMgt.Parameter('documentNo', 'string', true, 'No. of the released source document, at most 20 characters.'));
-        SourceParameter := ContractMgt.Parameter('sourceDocuments', 'array', true, 'One or more source documents. Each child has sourceType (SalesOrder or TransferOrder) and documentNo.');
+        SourceParameter := ContractMgt.Parameter('sourceDocuments', 'array', true, 'One or more source documents. Each child has sourceType (SalesOrder, TransferOrder or ServiceOrder) and documentNo.');
         SourceParameter.Add('children', SourceChildren);
         Parameters.Add(SourceParameter);
         Parameters.Add(ContractMgt.Parameter('locationCode', 'string', false, 'Optional source-location check. It does not override the source document.'));
@@ -104,8 +105,12 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
     var
         Context: Codeunit "Whse Write Context ori";
         Parts: Codeunit "Whse Contract Parts ori";
+        ServiceSource: Codeunit "Whse Service Source ori";
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        Parts.AddSourceDocumentErrors(Errors, 'SalesOrder, TransferOrder');
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, ServiceSource.UnavailableText(), ServiceSource.NextStepText()));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::ConflictingIdentifiers, 'The service order location does not match locationCode.', 'Use the service order location.'));
+        Parts.AddSourceDocumentErrors(Errors, 'SalesOrder, TransferOrder, ServiceOrder');
         Parts.AddDateErrors(Errors, 'postingDate', Context.IsoDateNextStep());
         exit(true);
     end;
@@ -157,7 +162,7 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
 
     procedure GetOverview(var Overview: Text): Boolean
     begin
-        Overview := 'Creates one Warehouse Shipment for each released Sales Order or outbound Transfer Order supplied in sourceDocuments.';
+        Overview := 'Creates one Warehouse Shipment for each released Sales Order, outbound Transfer Order or Service Order supplied in sourceDocuments.';
         exit(true);
     end;
 
@@ -166,7 +171,7 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
         Notes := 'One Warehouse Shipment is created per source document, in the order listed. If a later source is refused, the shipments already created for earlier sources are not rolled back by this type. ' +
             'Each source must exist and be Released, and its location (the Transfer-from location for a transfer order) must have Require Shipment set. ' +
             'locationCode is only a check against the source location and never moves the shipment; a mismatch is refused. ' +
-            'sourceType accepts SalesOrder and TransferOrder only, not case sensitive; other kinds such as a purchase return order are refused. ' +
+            'ServiceOrder requires Premium and Release Status Released to Ship. sourceType accepts SalesOrder, TransferOrder and ServiceOrder, not case sensitive; other kinds such as a purchase return order are refused. ' +
             'assignedUserId and postingDate are applied to each header after it is created, so a user that does not exist or a date Business Central refuses leaves the shipment created without that value. postingDate must be an ISO date (YYYY-MM-DD). ' +
             'If no shipment lines exist for a source afterwards (no lines left to ship, or pick already started) the call is refused. linesCreated counts every line on the shipment that is reported for the source. ' +
             'The shipment is only created here: nothing is picked or posted. Use Warehouse.Pick.Create when the location requires pick, and Warehouse.Shipment.Post to ship.';
@@ -248,7 +253,7 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
         CreatedHeaderNo: Code[20];
         ShipmentJson: JsonObject;
         InvalidSourceErr: Label 'Source #%1 is missing sourceType or documentNo (both required).', Comment = '%1 = source index, is-IS=Í uppruna nr. %1 vantar sourceType eða documentNo (hvort tveggja er nauðsynlegt).';
-        UnsupportedSourceErr: Label 'Unsupported sourceType ''%1''. Expected: SalesOrder, TransferOrder.', Comment = '%1 = sourceType value, is-IS=sourceType ''%1'' er ekki stutt. Væntanlegt er: SalesOrder, TransferOrder.';
+        UnsupportedSourceErr: Label 'Unsupported sourceType ''%1''. Expected: SalesOrder, TransferOrder, ServiceOrder.', Comment = '%1 = sourceType value, is-IS=sourceType ''%1'' er ekki stutt. Væntanlegt er: SalesOrder, TransferOrder, ServiceOrder.';
         NoShipmentCreatedErr: Label 'No Warehouse Shipment was created for %1 ''%2'' — already on an open shipment, no lines remain to ship, or pick already started.', Comment = '%1 = sourceType, %2 = documentNo, is-IS=Engin vöruhúsaafhending var stofnuð fyrir %1 ''%2'' — skjalið er þegar í opinni afhendingu, engar línur eru eftir til afhendingar eða tínsla er þegar hafin.';
     begin
         SourcesArray.Get(Index, SourceToken);
@@ -263,6 +268,9 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
         case UpperCase(SourceType) of
             'SALESORDER':
                 if not CreateFromSalesOrder(Argument, DocumentNo, LocationFilter, CreatedHeaderNo) then
+                    exit(false);
+            'SERVICEORDER':
+                if not CreateFromServiceOrder(Argument, DocumentNo, LocationFilter, CreatedHeaderNo) then
                     exit(false);
             'TRANSFERORDER':
                 if not CreateFromTransferOrder(Argument, DocumentNo, LocationFilter, CreatedHeaderNo) then
@@ -367,12 +375,51 @@ codeunit 10078406 "Whse Shipment Create Impl ori" implements "Msg Interface ori"
         exit(true);
     end;
 
+    local procedure CreateFromServiceOrder(var Argument: Record "Message Argument ori"; DocumentNo: Code[20]; LocationFilter: Code[10]; var CreatedHeaderNo: Code[20]): Boolean
+    var
+        ServiceHeader: Record "Service Header";
+        Location: Record Location;
+        ServiceSource: Codeunit "Whse Service Source ori";
+        GetServiceSource: Codeunit "Serv. Get Source Doc. Outbound";
+        NotReleasedLbl: Label 'Service Order %1 is not Released to Ship.', Comment = '%1 = service order no., is-IS=Þjónustupöntun %1 er ekki útgefin til afhendingar.';
+        ReleaseNextStepLbl: Label 'Release the service order to ship in Business Central and send the request again.', Comment = 'is-IS=Gefðu þjónustupöntunina út til afhendingar í Business Central og sendu beiðnina aftur.';
+        LocationLbl: Label 'Service Order %1 does not use the requested shipment location.', Comment = '%1 = service order no., is-IS=Þjónustupöntun %1 notar ekki umbeðna afhendingarstaðsetningu.';
+        LocationNextStepLbl: Label 'Use the service order location and enable Require Shipment on its Location card.', Comment = 'is-IS=Notaðu staðsetningu þjónustupöntunarinnar og virkjaðu Krefjast afhendingar á birgðageymsluspjaldinu.';
+    begin
+        if not ServiceSource.CheckAvailable(Argument, 'sourceDocuments.sourceType', 'ServiceOrder') then begin
+            Argument.RespondWithCollectedErrors("Bifrost Error Code ori"::PreconditionFailed, ServiceSource.UnavailableText());
+            exit(false);
+        end;
+        if not ServiceHeader.Get(ServiceHeader."Document Type"::Order, DocumentNo) then begin
+            Argument.RespondWithRecordNotFound(Database::"Service Header", DocumentNo, 'sourceDocuments.documentNo');
+            exit(false);
+        end;
+        if ServiceHeader."Release Status" <> ServiceHeader."Release Status"::"Released to Ship" then begin
+            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(NotReleasedLbl, DocumentNo), 'sourceDocuments.documentNo', DocumentNo, '', ReleaseNextStepLbl);
+            exit(false);
+        end;
+        if (LocationFilter <> '') and (LocationFilter <> ServiceHeader."Location Code") then begin
+            Argument.RespondWithError("Bifrost Error Code ori"::ConflictingIdentifiers, StrSubstNo(LocationLbl, DocumentNo), 'locationCode', LocationFilter, ServiceHeader."Location Code", LocationNextStepLbl);
+            exit(false);
+        end;
+        if ServiceHeader."Location Code" <> '' then begin
+            Location.Get(ServiceHeader."Location Code");
+            if not Location."Require Shipment" then begin
+                Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(LocationLbl, DocumentNo), 'locationCode', Location.Code, '', LocationNextStepLbl);
+                exit(false);
+            end;
+        end;
+        GetServiceSource.CreateFromServiceOrderHideDialog(ServiceHeader);
+        CreatedHeaderNo := FindHeaderForSource(Database::"Service Line", ServiceHeader."Document Type".AsInteger(), DocumentNo);
+        exit(true);
+    end;
+
     local procedure FindHeaderForSource(SourceTableNo: Integer; SourceSubtype: Integer; SourceDocumentNo: Code[20]): Code[20]
     var
         WhseShipmentLine: Record "Warehouse Shipment Line";
     begin
         WhseShipmentLine.SetRange("Source Type", SourceTableNo);
-        if SourceTableNo = Database::"Sales Line" then
+        if SourceTableNo in [Database::"Sales Line", Database::"Service Line"] then
             WhseShipmentLine.SetRange("Source Subtype", SourceSubtype);
         WhseShipmentLine.SetRange("Source No.", SourceDocumentNo);
         if not WhseShipmentLine.FindLast() then

@@ -3754,9 +3754,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPick Create Impl ori - Method GetOverview - NamedType OverviewLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 656571471 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Business Central commits the inventory pick it creates. Use Warehouse.Shipment.Create and Warehouse.Pick.Create when the location uses warehouse shipments.</source>
-          <target>Business Central staðfestir birgðatínsluna sem það stofnar. Notaðu Warehouse.Shipment.Create og Warehouse.Pick.Create þegar staðsetningin notar vöruhúsaafhendingar.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Business Central staðfestir birgðatínsluna sem það stofnar. Notaðu Warehouse.Shipment.Create og Warehouse.Pick.Create þegar staðsetningin notar vöruhúsaafhendingar.</note>
+          <source>Business Central commits the inventory pick it creates. Use Warehouse.Shipment.Create and Warehouse.Pick.Create when the location uses warehouse shipments. Service orders use warehouse shipment and warehouse pick instead.</source>
+          <target>Business Central staðfestir birgðatínsluna sem það stofnar. Notaðu Warehouse.Shipment.Create og Warehouse.Pick.Create þegar staðsetningin notar vöruhúsaafhendingar. Þjónustupantanir nota vöruhúsaafhendingu og vöruhúsatínslu í staðinn.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Business Central staðfestir birgðatínsluna sem það stofnar. Notaðu Warehouse.Shipment.Create og Warehouse.Pick.Create þegar staðsetningin notar vöruhúsaafhendingar. Þjónustupantanir nota vöruhúsaafhendingu og vöruhúsatínslu í staðinn.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPick Create Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 656571471 - Method 3133017589 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
@@ -3970,9 +3970,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPick Post Impl ori - Method GetOverview - NamedType OverviewLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3579358707 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Irreversible. Posts the inventory pick and the source document shipment. invoice true also invoices a sales order.</source>
-          <target>Óafturkræft. Bókar birgðatínsluna og sendingu upprunaskjalsins. invoice true reikningsfærir einnig sölupöntun.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Óafturkræft. Bókar birgðatínsluna og sendingu upprunaskjalsins. invoice true reikningsfærir einnig sölupöntun.</note>
+          <source>Irreversible. Posts the inventory pick and the source document shipment. invoice true also invoices a sales order. Service orders use warehouse shipment and warehouse pick instead.</source>
+          <target>Óafturkræft. Bókar birgðatínsluna og sendingu upprunaskjalsins. invoice true reikningsfærir einnig sölupöntun. Þjónustupantanir nota vöruhúsaafhendingu og vöruhúsatínslu í staðinn.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Óafturkræft. Bókar birgðatínsluna og sendingu upprunaskjalsins. invoice true reikningsfærir einnig sölupöntun. Þjónustupantanir nota vöruhúsaafhendingu og vöruhúsatínslu í staðinn.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse InvtPick Post Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3579358707 - Method 981175143 - NamedType 704880291" size-unit="char" translate="yes" xml:space="preserve">
@@ -7077,6 +7077,30 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Sendu eina staðsetningu: subject eða locationCode.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Request Get Impl ori - Method ResolveLocationCode - NamedType ConflictNextStepLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2489741983 - Method 2511029640 - NamedType 1805346340" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Service orders do not support inventory picks.</source>
+          <target>Þjónustupantanir styðja ekki birgðatínslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þjónustupantanir styðja ekki birgðatínslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Service Source ori - Method InventoryPickRefusalText - NamedType RefusalLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2489741983 - Method 2376344044 - NamedType 680257497" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to enable the Premium experience and assign a Premium plan and service document permissions, or use a supported non-service source.</source>
+          <target>Biddu stjórnanda um að virkja Premium-viðmót og úthluta Premium-áskrift og heimildum fyrir þjónustuskjöl, eða notaðu studdan uppruna sem er ekki þjónustupöntun.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu stjórnanda um að virkja Premium-viðmót og úthluta Premium-áskrift og heimildum fyrir þjónustuskjöl, eða notaðu studdan uppruna sem er ekki þjónustupöntun.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Service Source ori - Method NextStepText - NamedType NextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2489741983 - Method 3113922723 - NamedType 680257497" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use Warehouse.Shipment.Create or Warehouse.Shipment.GetSourceDocuments, then Warehouse.Pick.Create, Warehouse.Pick.Register and Warehouse.Shipment.Post for the service order.</source>
+          <target>Notaðu Warehouse.Shipment.Create eða Warehouse.Shipment.GetSourceDocuments, síðan Warehouse.Pick.Create, Warehouse.Pick.Register og Warehouse.Shipment.Post fyrir þjónustupöntunina.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notaðu Warehouse.Shipment.Create eða Warehouse.Shipment.GetSourceDocuments, síðan Warehouse.Pick.Create, Warehouse.Pick.Register og Warehouse.Shipment.Post fyrir þjónustupöntunina.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Service Source ori - Method ShipmentPickNextStepText - NamedType NextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2489741983 - Method 2742181673 - NamedType 2695284436" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Service orders require the Premium experience, a plan that permits service management and permission to read service documents.</source>
+          <target>Þjónustupantanir krefjast Premium-viðmóts, áskriftar sem heimilar þjónustustjórnun og heimildar til að lesa þjónustuskjöl.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þjónustupantanir krefjast Premium-viðmóts, áskriftar sem heimilar þjónustustjórnun og heimildar til að lesa þjónustuskjöl.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Service Source ori - Method UnavailableText - NamedType UnavailableLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2400538300 - Method 3522500136 - NamedType 2442600875" size-unit="char" translate="yes" xml:space="preserve">
           <source>Parameter %1 has the value %2, which is not one of the values listed in the help.</source>
           <target>Færibreytan %1 hefur gildið %2 sem er ekki eitt af gildunum sem talin eru upp í hjálpinni.</target>
@@ -7162,15 +7186,15 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Ship GetSrcDocs Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2400538300 - Method 2340569551 - NamedType 3593894611" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Adds lines from released outbound source documents (sales orders, purchase return orders, outbound transfers) to an open warehouse shipment, or to a new shipment when only locationCode is sent, the same as the Get Source Documents action. Filter by source document, source numbers, customer, shipment date and shipping agent. A released shipment is refused. Source lines already on another shipment are skipped and listed under skipped. Nothing is posted.</source>
-          <target>Bætir línum úr útgefnum útleiðandi upprunaskjölum (sölupöntunum, innkaupaskilapöntunum, útleiðandi flutningum) við opna vöruhúsaafhendingu, eða við nýja afhendingu þegar aðeins locationCode er sent, eins og aðgerðin Sækja upprunaskjöl. Síaðu eftir upprunaskjali, númerum upprunaskjala, viðskiptamanni, afhendingardegi og flutningsaðila. Útgefinni afhendingu er hafnað. Upprunalínum sem eru þegar á annarri afhendingu er sleppt og þær taldar upp undir skipped. Ekkert er bókað.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Bætir línum úr útgefnum útleiðandi upprunaskjölum (sölupöntunum, innkaupaskilapöntunum, útleiðandi flutningum) við opna vöruhúsaafhendingu, eða við nýja afhendingu þegar aðeins locationCode er sent, eins og aðgerðin Sækja upprunaskjöl. Síaðu eftir upprunaskjali, númerum upprunaskjala, viðskiptamanni, afhendingardegi og flutningsaðila. Útgefinni afhendingu er hafnað. Upprunalínum sem eru þegar á annarri afhendingu er sleppt og þær taldar upp undir skipped. Ekkert er bókað.</note>
+          <source>Adds lines from released outbound source documents (sales orders, purchase return orders, outbound transfers, service orders with Premium) to an open warehouse shipment, or to a new shipment when only locationCode is sent, the same as the Get Source Documents action. Filter by source document, source numbers, customer, shipment date and shipping agent. A released shipment is refused. Source lines already on another shipment are skipped and listed under skipped. Nothing is posted.</source>
+          <target>Bætir línum úr útgefnum útleiðandi upprunaskjölum (sölupöntunum, innkaupaskilapöntunum, útleiðandi flutningum, þjónustupöntunum með Premium) við opna vöruhúsaafhendingu, eða við nýja afhendingu þegar aðeins locationCode er sent, eins og aðgerðin Sækja upprunaskjöl. Síaðu eftir upprunaskjali, númerum upprunaskjala, viðskiptamanni, afhendingardegi og flutningsaðila. Útgefinni afhendingu er hafnað. Upprunalínum sem eru þegar á annarri afhendingu er sleppt og þær taldar upp undir skipped. Ekkert er bókað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bætir línum úr útgefnum útleiðandi upprunaskjölum (sölupöntunum, innkaupaskilapöntunum, útleiðandi flutningum, þjónustupöntunum með Premium) við opna vöruhúsaafhendingu, eða við nýja afhendingu þegar aðeins locationCode er sent, eins og aðgerðin Sækja upprunaskjöl. Síaðu eftir upprunaskjali, númerum upprunaskjala, viðskiptamanni, afhendingardegi og flutningsaðila. Útgefinni afhendingu er hafnað. Upprunalínum sem eru þegar á annarri afhendingu er sleppt og þær taldar upp undir skipped. Ekkert er bókað.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Ship GetSrcDocs Impl ori - Method GetOverview - NamedType OverviewLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2400538300 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Changes data. Adds lines from released sales orders, purchase return orders or outbound transfers to one open warehouse shipment. Use Warehouse.Request.Get to see what is waiting.</source>
-          <target>Breytir gögnum. Bætir línum úr útgefnum sölupöntunum, innkaupaskilapöntunum eða útleiðandi flutningum við eina opna vöruhúsaafhendingu. Notaðu Warehouse.Request.Get til að sjá hvað bíður.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Breytir gögnum. Bætir línum úr útgefnum sölupöntunum, innkaupaskilapöntunum eða útleiðandi flutningum við eina opna vöruhúsaafhendingu. Notaðu Warehouse.Request.Get til að sjá hvað bíður.</note>
+          <source>Changes data. Adds lines from released sales orders, purchase return orders, outbound transfers or service orders to one open warehouse shipment. Use Warehouse.Request.Get to see what is waiting.</source>
+          <target>Breytir gögnum. Bætir línum úr útgefnum sölupöntunum, innkaupaskilapöntunum, útleiðandi flutningum eða þjónustupöntunum við eina opna vöruhúsaafhendingu. Notaðu Warehouse.Request.Get til að sjá hvað bíður.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Breytir gögnum. Bætir línum úr útgefnum sölupöntunum, innkaupaskilapöntunum, útleiðandi flutningum eða þjónustupöntunum við eina opna vöruhúsaafhendingu. Notaðu Warehouse.Request.Get til að sjá hvað bíður.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Ship GetSrcDocs Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2400538300 - Method 1665861916 - NamedType 275001257" size-unit="char" translate="yes" xml:space="preserve">
@@ -7389,6 +7413,30 @@
           <note from="Developer" annotates="general" priority="2">%1 = location code, %2 = sales order no., is-IS=Birgðageymsla '%1' (úr sölupöntun '%2') krefst ekki afhendingar — veldu 'Krefjast afhendingar' á birgðageymsluspjaldinu til að virkja vöruhúsaafhendingar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method CreateFromSalesOrder - NamedType LocationNotRequireShipmentErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2578593995 - Method 224338899 - NamedType 3879076534" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Service Order %1 is not Released to Ship.</source>
+          <target>Þjónustupöntun %1 er ekki útgefin til afhendingar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = service order no., is-IS=Þjónustupöntun %1 er ekki útgefin til afhendingar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method CreateFromServiceOrder - NamedType NotReleasedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2578593995 - Method 224338899 - NamedType 1303476226" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Release the service order to ship in Business Central and send the request again.</source>
+          <target>Gefðu þjónustupöntunina út til afhendingar í Business Central og sendu beiðnina aftur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gefðu þjónustupöntunina út til afhendingar í Business Central og sendu beiðnina aftur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method CreateFromServiceOrder - NamedType ReleaseNextStepLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2578593995 - Method 224338899 - NamedType 3629245473" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Service Order %1 does not use the requested shipment location.</source>
+          <target>Þjónustupöntun %1 notar ekki umbeðna afhendingarstaðsetningu.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = service order no., is-IS=Þjónustupöntun %1 notar ekki umbeðna afhendingarstaðsetningu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method CreateFromServiceOrder - NamedType LocationLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2578593995 - Method 224338899 - NamedType 1017105382" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use the service order location and enable Require Shipment on its Location card.</source>
+          <target>Notaðu staðsetningu þjónustupöntunarinnar og virkjaðu Krefjast afhendingar á birgðageymsluspjaldinu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notaðu staðsetningu þjónustupöntunarinnar og virkjaðu Krefjast afhendingar á birgðageymsluspjaldinu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method CreateFromServiceOrder - NamedType LocationNextStepLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2578593995 - Method 2472984817 - NamedType 1189497330" size-unit="char" translate="yes" xml:space="preserve">
           <source>Transfer Order '%1' is not Released. Release it before creating a Warehouse Shipment.</source>
           <target>Flutningspöntun '%1' er ekki útgefin. Gefðu hana út áður en þú stofnar vöruhúsaafhendingu.</target>
@@ -7420,9 +7468,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method ExecuteBifrostTask - NamedType FieldWriteRestrictedErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 2578593995 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Creates Warehouse Shipment(s) from one or more released source documents (Sales Order, Outbound Transfer Order).</source>
-          <target>Stofnar vöruhúsaafhendingar úr einu eða fleiri útgefnum upprunaskjölum (sölupöntun, útleiðar-millifærslupöntun). Leitarorð: vöruhúsaafhending, stofna afhendingu, undirbúa afhendingu, senda pöntun frá vöruhúsi, útsending, senda af stað.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar vöruhúsaafhendingar úr einu eða fleiri útgefnum upprunaskjölum (sölupöntun, útleiðar-millifærslupöntun). Leitarorð: vöruhúsaafhending, stofna afhendingu, undirbúa afhendingu, senda pöntun frá vöruhúsi, útsending, senda af stað.</note>
+          <source>Creates Warehouse Shipment(s) from one or more released source documents (Sales Order, Outbound Transfer Order, Service Order).</source>
+          <target>Stofnar vöruhúsaafhendingar úr einu eða fleiri útgefnum upprunaskjölum (sölupöntun, útleiðar-millifærslupöntun, þjónustupöntun). Leitarorð: vöruhúsaafhending, stofna afhendingu, undirbúa afhendingu, senda pöntun frá vöruhúsi, útsending.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar vöruhúsaafhendingar úr einu eða fleiri útgefnum upprunaskjölum (sölupöntun, útleiðar-millifærslupöntun, þjónustupöntun). Leitarorð: vöruhúsaafhending, stofna afhendingu, undirbúa afhendingu, senda pöntun frá vöruhúsi, útsending.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2578593995 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
@@ -7432,9 +7480,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2578593995 - Method 79446908 - NamedType 895773054" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Creates outbound warehouse shipments from released sales or transfer orders; use Warehouse.Shipment.Post to post one.</source>
-          <target>Stofnar útleiðarafhendingar úr útgefnum sölu- eða millifærslupöntunum; notaðu Warehouse.Shipment.Post til að bóka afhendingu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar útleiðarafhendingar úr útgefnum sölu- eða millifærslupöntunum; notaðu Warehouse.Shipment.Post til að bóka afhendingu.</note>
+          <source>Creates outbound warehouse shipments from released sales, transfer or service orders; use Warehouse.Shipment.Post to post one.</source>
+          <target>Stofnar útleiðarafhendingar úr útgefnum sölu-, millifærslu- eða þjónustupöntunum; notaðu Warehouse.Shipment.Post til að bóka afhendingu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stofnar útleiðarafhendingar úr útgefnum sölu-, millifærslu- eða þjónustupöntunum; notaðu Warehouse.Shipment.Post til að bóka afhendingu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method GetSelectionDescription - NamedType SelectionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2578593995 - Method 3648765730 - NamedType 1465600059" size-unit="char" translate="yes" xml:space="preserve">
@@ -7444,9 +7492,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method ProcessSource - NamedType InvalidSourceErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 2578593995 - Method 3648765730 - NamedType 1105599607" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Unsupported sourceType '%1'. Expected: SalesOrder, TransferOrder.</source>
-          <target>sourceType '%1' er ekki stutt. Væntanlegt er: SalesOrder, TransferOrder.</target>
-          <note from="Developer" annotates="general" priority="2">%1 = sourceType value, is-IS=sourceType '%1' er ekki stutt. Væntanlegt er: SalesOrder, TransferOrder.</note>
+          <source>Unsupported sourceType '%1'. Expected: SalesOrder, TransferOrder, ServiceOrder.</source>
+          <target>sourceType '%1' er ekki stutt. Væntanlegt er: SalesOrder, TransferOrder, ServiceOrder.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = sourceType value, is-IS=sourceType '%1' er ekki stutt. Væntanlegt er: SalesOrder, TransferOrder, ServiceOrder.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Whse Shipment Create Impl ori - Method ProcessSource - NamedType UnsupportedSourceErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 2578593995 - Method 3648765730 - NamedType 4173875336" size-unit="char" translate="yes" xml:space="preserve">

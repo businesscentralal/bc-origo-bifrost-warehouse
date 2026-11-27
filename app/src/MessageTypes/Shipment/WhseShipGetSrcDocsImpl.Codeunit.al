@@ -96,7 +96,7 @@ codeunit 10078432 "Whse Ship GetSrcDocs Impl ori" implements "Msg Interface ori"
     /// <returns>Selection description.</returns>
     procedure GetSelectionDescription(): Text
     var
-        SelectionLbl: Label 'Changes data. Adds lines from released sales orders, purchase return orders or outbound transfers to one open warehouse shipment. Use Warehouse.Request.Get to see what is waiting.', Comment = 'is-IS=Breytir gögnum. Bætir línum úr útgefnum sölupöntunum, innkaupaskilapöntunum eða útleiðandi flutningum við eina opna vöruhúsaafhendingu. Notaðu Warehouse.Request.Get til að sjá hvað bíður.';
+        SelectionLbl: Label 'Changes data. Adds lines from released sales orders, purchase return orders, outbound transfers or service orders to one open warehouse shipment. Use Warehouse.Request.Get to see what is waiting.', Comment = 'is-IS=Breytir gögnum. Bætir línum úr útgefnum sölupöntunum, innkaupaskilapöntunum, útleiðandi flutningum eða þjónustupöntunum við eina opna vöruhúsaafhendingu. Notaðu Warehouse.Request.Get til að sjá hvað bíður.';
     begin
         exit(SelectionLbl);
     end;
@@ -138,7 +138,7 @@ codeunit 10078432 "Whse Ship GetSrcDocs Impl ori" implements "Msg Interface ori"
         Parameters.Add(ContractMgt.Parameter('shipmentNo', 'string', false, 'Existing open warehouse shipment. Required unless systemId, the subject or locationCode is sent.'));
         Parameters.Add(ContractMgt.Parameter('systemId', 'string', false, 'SystemId of the existing warehouse shipment.'));
         Parameters.Add(ContractMgt.Parameter('locationCode', 'string', false, 'Location of a new warehouse shipment when no shipment is named. With a shipment it must be the shipment location.'));
-        Parameters.Add(ContractMgt.Parameter('sourceDocument', 'string', false, 'Sales Order, Purchase Return Order or Outbound Transfer. Spaces and case are ignored. Defaults to all three.'));
+        Parameters.Add(ContractMgt.Parameter('sourceDocument', 'string', false, 'Sales Order, Purchase Return Order, Outbound Transfer or Service Order. Spaces and case are ignored. Defaults to available sources; Service Order requires Premium.'));
         Parameters.Add(ContractMgt.Parameter('sourceNos', 'array', false, 'Source document numbers to add. Each one must have a released warehouse request at the shipment location.'));
         Parameters.Add(ContractMgt.Parameter('customerNo', 'string', false, 'Only source documents for this customer.'));
         Parameters.Add(ContractMgt.Parameter('shipmentDateFrom', 'date', false, 'First shipment date, YYYY-MM-DD.'));
@@ -176,9 +176,11 @@ codeunit 10078432 "Whse Ship GetSrcDocs Impl ori" implements "Msg Interface ori"
         Context: Codeunit "Whse Write Context ori";
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         Parts: Codeunit "Whse Contract Parts ori";
+        ServiceSource: Codeunit "Whse Service Source ori";
         Entry: JsonObject;
         UnknownParameterNextStepLbl: Label 'Remove this key or consult Help.Implementation.Get for the declared parameters.', Comment = 'is-IS=Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng.';
     begin
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, ServiceSource.UnavailableText(), ServiceSource.NextStepText()));
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::MissingParameter, 'No shipment and no locationCode were sent.', 'Send shipmentNo for an existing shipment or locationCode for a new one.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::RecordNotFound, 'The warehouse shipment or the location does not exist.', 'Create it with Warehouse.Shipment.Create or pass locationCode.');
         AddDeclaredError(Errors, Entry, ContractMgt, "Bifrost Error Code ori"::ConflictingIdentifiers, 'Two identifiers name different shipments, locationCode is not the shipment location, or a named source document is at another location.', 'Use a shipment at the same location.');
@@ -258,7 +260,7 @@ codeunit 10078432 "Whse Ship GetSrcDocs Impl ori" implements "Msg Interface ori"
     /// <returns>True when an overview is declared.</returns>
     procedure GetOverview(var Overview: Text): Boolean
     var
-        OverviewLbl: Label 'Adds lines from released outbound source documents (sales orders, purchase return orders, outbound transfers) to an open warehouse shipment, or to a new shipment when only locationCode is sent, the same as the Get Source Documents action. Filter by source document, source numbers, customer, shipment date and shipping agent. A released shipment is refused. Source lines already on another shipment are skipped and listed under skipped. Nothing is posted.', Comment = 'is-IS=Bætir línum úr útgefnum útleiðandi upprunaskjölum (sölupöntunum, innkaupaskilapöntunum, útleiðandi flutningum) við opna vöruhúsaafhendingu, eða við nýja afhendingu þegar aðeins locationCode er sent, eins og aðgerðin Sækja upprunaskjöl. Síaðu eftir upprunaskjali, númerum upprunaskjala, viðskiptamanni, afhendingardegi og flutningsaðila. Útgefinni afhendingu er hafnað. Upprunalínum sem eru þegar á annarri afhendingu er sleppt og þær taldar upp undir skipped. Ekkert er bókað.';
+        OverviewLbl: Label 'Adds lines from released outbound source documents (sales orders, purchase return orders, outbound transfers, service orders with Premium) to an open warehouse shipment, or to a new shipment when only locationCode is sent, the same as the Get Source Documents action. Filter by source document, source numbers, customer, shipment date and shipping agent. A released shipment is refused. Source lines already on another shipment are skipped and listed under skipped. Nothing is posted.', Comment = 'is-IS=Bætir línum úr útgefnum útleiðandi upprunaskjölum (sölupöntunum, innkaupaskilapöntunum, útleiðandi flutningum, þjónustupöntunum með Premium) við opna vöruhúsaafhendingu, eða við nýja afhendingu þegar aðeins locationCode er sent, eins og aðgerðin Sækja upprunaskjöl. Síaðu eftir upprunaskjali, númerum upprunaskjala, viðskiptamanni, afhendingardegi og flutningsaðila. Útgefinni afhendingu er hafnað. Upprunalínum sem eru þegar á annarri afhendingu er sleppt og þær taldar upp undir skipped. Ekkert er bókað.';
     begin
         Overview := OverviewLbl;
         exit(true);
@@ -272,6 +274,7 @@ codeunit 10078432 "Whse Ship GetSrcDocs Impl ori" implements "Msg Interface ori"
         Notes := 'Send shipmentNo (or systemId, or the subject) to add lines to an existing shipment, or only locationCode to create a new shipment at that location; when a shipment is named, locationCode must be its location. A new location must have Require Shipment set. ' +
             'A released shipment is refused, because lines cannot be added to it: reopen it with Warehouse.Shipment.Reopen first and release it again with Warehouse.Shipment.Release when the lines are in place. ' +
             'Only released outbound source documents (sales orders, purchase return orders and outbound transfers) that are not completely handled and sit at the shipment location are considered. sourceDocument, sourceNos, customerNo, the shipment dates and shippingAgentCode narrow them. sourceNos is an array of text values, so send document numbers as strings. ' +
+            'Service Order requires Premium and Release Status Released to Ship. When sourceDocument is omitted, service orders are included only when available to the caller. ' +
             'Every sourceNos entry must have a released request at the shipment location. A number released at another location is refused as ConflictingIdentifiers and an unreleased one as PreconditionFailed; the refusal names the entry. ' +
             'If a new shipment would get no lines it is removed again, and the answer has an empty shipmentNo, created false and linesAdded 0. ' +
             'Source lines that already sit on another warehouse shipment are not added; they are listed under skipped with the shipment that holds them. When lines are added to an existing shipment, only the lines added by this call are counted in linesAdded and sourceDocuments. ' +
@@ -461,6 +464,7 @@ codeunit 10078432 "Whse Ship GetSrcDocs Impl ori" implements "Msg Interface ori"
     local procedure BuildRequestFilters(RequestJson: JsonObject; var Argument: Record "Message Argument ori"; var WarehouseRequest: Record "Warehouse Request"; LocationCode: Code[10]; var SourceNos: List of [Text]; var FilterKeys: Text)
     var
         Context: Codeunit "Whse Write Context ori";
+        ServiceSource: Codeunit "Whse Service Source ori";
         SourceDocumentText: Text;
         CustomerNo: Text;
         ShippingAgentCode: Text;
@@ -480,10 +484,18 @@ codeunit 10078432 "Whse Ship GetSrcDocs Impl ori" implements "Msg Interface ori"
         WarehouseRequest.SetRange(Type, WarehouseRequest.Type::Outbound);
         WarehouseRequest.SetRange("Document Status", WarehouseRequest."Document Status"::Released);
         WarehouseRequest.SetRange("Completely Handled", false);
-        if SourceDocumentText = '' then
-            WarehouseRequest.SetFilter("Source Document", '%1|%2|%3', WarehouseRequest."Source Document"::"Sales Order", WarehouseRequest."Source Document"::"Purchase Return Order", WarehouseRequest."Source Document"::"Outbound Transfer")
-        else
+        if SourceDocumentText = '' then begin
+            if ServiceSource.IsAvailable() then
+                WarehouseRequest.SetFilter("Source Document", '%1|%2|%3|%4', WarehouseRequest."Source Document"::"Sales Order", WarehouseRequest."Source Document"::"Purchase Return Order", WarehouseRequest."Source Document"::"Outbound Transfer", WarehouseRequest."Source Document"::"Service Order")
+            else
+                WarehouseRequest.SetFilter("Source Document", '%1|%2|%3', WarehouseRequest."Source Document"::"Sales Order", WarehouseRequest."Source Document"::"Purchase Return Order", WarehouseRequest."Source Document"::"Outbound Transfer");
+        end else
             case true of
+                Context.SameName(SourceDocumentText, 'Service Order'):
+                    begin
+                        ServiceSource.CheckAvailable(Argument, 'sourceDocument', SourceDocumentText);
+                        WarehouseRequest.SetRange("Source Document", WarehouseRequest."Source Document"::"Service Order");
+                    end;
                 Context.SameName(SourceDocumentText, 'Sales Order'):
                     WarehouseRequest.SetRange("Source Document", WarehouseRequest."Source Document"::"Sales Order");
                 Context.SameName(SourceDocumentText, 'Purchase Return Order'):
@@ -491,7 +503,7 @@ codeunit 10078432 "Whse Ship GetSrcDocs Impl ori" implements "Msg Interface ori"
                 Context.SameName(SourceDocumentText, 'Outbound Transfer'):
                     WarehouseRequest.SetRange("Source Document", WarehouseRequest."Source Document"::"Outbound Transfer");
                 else
-                    Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(ValueLbl, 'sourceDocument', SourceDocumentText), 'sourceDocument', SourceDocumentText, 'Sales Order, Purchase Return Order, Outbound Transfer', ValueNextStepLbl);
+                    Argument.AddError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(ValueLbl, 'sourceDocument', SourceDocumentText), 'sourceDocument', SourceDocumentText, 'Sales Order, Purchase Return Order, Outbound Transfer, Service Order', ValueNextStepLbl);
             end;
         if SourceNos.Count() > 0 then
             WarehouseRequest.SetFilter("Source No.", Context.LiteralFilter(SourceNos));
